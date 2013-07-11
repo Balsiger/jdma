@@ -190,7 +190,7 @@ public class BaseCampaign extends BaseEntry
     {
       net.ixitxachitls.input.ParseReader reader =
         new net.ixitxachitls.input.ParseReader
-        (new java.io.StringReader(s_text), "test");
+        (new java.io.StringReader(s_text), "test"); // $codepro.audit.disable
 
       return (BaseCampaign)AbstractEntry.read(reader);
     }

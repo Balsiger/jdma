@@ -370,12 +370,6 @@ public boolean doRead(ParseReader inReader)
    * @param       inTitle     the ISBN title part
    *
    * @return      the check number, or -1 if the given values are invalid
-   *
-   * @algorithm   just use the
-   *              <A HREF=
-   *              "http://www.isbn-international.org/html/userman/usm4.htm">
-   *              ISBN algorithm</A>
-   *
    */
   public static int compute(String inGroup, String inPublisher, String inTitle)
   {

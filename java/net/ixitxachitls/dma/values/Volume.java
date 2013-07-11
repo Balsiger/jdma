@@ -100,10 +100,6 @@ public class Volume extends Units<Volume>
    * @param       inPints   the number of pints
    * @param       inCups    the number of cups
    * @param       inOunces  the number of ounces
-   *
-   * @undefined   never (value is undefined if only undefined values are
-   *              given)
-   *
    */
   public Volume(@Nullable Rational inGallons, @Nullable Rational inQuarts,
                 @Nullable Rational inPints, @Nullable Rational inCups,
@@ -124,10 +120,6 @@ public class Volume extends Units<Volume>
    * @param       inCentiLiter the number of dl
    * @param       inDeciLiter  the number of cl
    * @param       inLiter      the number of l
-   *
-   * @undefined   never (value is undefined if only undefined values are
-   *              given)
-   *
    */
   public Volume(@Nullable Rational inLiter, @Nullable Rational inDeciLiter,
                 @Nullable Rational inCentiLiter)
@@ -715,12 +707,13 @@ public class Volume extends Units<Volume>
 
       for(int i = 0; i < texts.length; i += 2)
       {
-        ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test");
-
-        value = value.read(reader);
-        assertEquals("test " + i / 2, texts[i + 1],
-                     value.asMetric().toString());
+        try (ParseReader reader =
+          new ParseReader(new java.io.StringReader(texts[i]), "test"))
+        {
+          value = value.read(reader);
+          assertEquals("test " + i / 2, texts[i + 1],
+                       value.asMetric().toString());
+        }
       }
     }
 
@@ -746,11 +739,13 @@ public class Volume extends Units<Volume>
 
       for(int i = 0; i < texts.length; i += 2)
       {
-        ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test");
-
-        value = value.read(reader);
-        assertEquals("test " + i / 2, texts[i + 1], value.asFeet().toString());
+        try (ParseReader reader =
+          new ParseReader(new java.io.StringReader(texts[i]), "test"))
+        {
+          value = value.read(reader);
+          assertEquals("test " + i / 2, texts[i + 1],
+                       value.asFeet().toString());
+        }
       }
     }
 
@@ -776,12 +771,13 @@ public class Volume extends Units<Volume>
 
       for(int i = 0; i < texts.length; i += 2)
       {
-        ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test");
-
-        value = value.read(reader);
-        assertEquals("test " + i / 2,
-                     texts[i + 1], value.asGallons().toString());
+        try (ParseReader reader =
+          new ParseReader(new java.io.StringReader(texts[i]), "test"))
+        {
+          value = value.read(reader);
+          assertEquals("test " + i / 2,
+                       texts[i + 1], value.asGallons().toString());
+        }
       }
     }
 
@@ -807,12 +803,13 @@ public class Volume extends Units<Volume>
 
       for(int i = 0; i < texts.length; i += 2)
       {
-        ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test");
-
-        value = value.read(reader);
-        assertEquals("test " + i / 2,
-                     texts[i + 1], value.asLiters().toString());
+        try (ParseReader reader =
+          new ParseReader(new java.io.StringReader(texts[i]), "test"))
+        {
+          value = value.read(reader);
+          assertEquals("test " + i / 2,
+                       texts[i + 1], value.asLiters().toString());
+        }
       }
     }
 

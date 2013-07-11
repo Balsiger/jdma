@@ -557,7 +557,7 @@ public class Multiple extends Value<Multiple>
         if(delim)
         {
           if(m_elements[i].m_front == null)
-            result.append(" ");
+            result.append(' ');
 
           delim = false;
         }
@@ -600,7 +600,7 @@ public class Multiple extends Value<Multiple>
         if(delim)
         {
           if(m_elements[i].m_front == null)
-            result.append(" ");
+            result.append(' ');
 
           delim = false;
         }
@@ -628,7 +628,7 @@ public class Multiple extends Value<Multiple>
   @Override
   public String getChoices()
   {
-    ArrayList<String> list = new ArrayList<String>();
+    List<String> list = new ArrayList<String>();
 
     for(Iterator<Element> i = iterator(); i.hasNext(); )
     {

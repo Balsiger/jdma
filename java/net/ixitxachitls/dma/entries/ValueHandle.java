@@ -60,7 +60,7 @@ public abstract class ValueHandle<T extends ValueHandle<T>>
    * @param       inKey            the key of the value
    *
    */
-  public ValueHandle(String inKey)
+  protected ValueHandle(String inKey)
   {
     m_key = inKey;
     m_plural = m_key + "s";

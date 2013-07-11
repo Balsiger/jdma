@@ -62,7 +62,7 @@ public interface Grouping<T, G> extends Serializable
     * @return      the identification of the group
     *
     */
-  public G group(T inEntry);
+  G group(T inEntry);
 
   //........................................................................
 

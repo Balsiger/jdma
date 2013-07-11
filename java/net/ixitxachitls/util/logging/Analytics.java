@@ -66,7 +66,7 @@ public class Analytics
   private static class Tracker extends AsyncExecutor<String>
   {
     /** Create the tracker thread. */
-    public Tracker()
+    protected Tracker()
     {
       super(30 * 1000, 0, Config.get("web/analytics.trackers", 100));
 

@@ -180,7 +180,7 @@ public class Critical extends BaseNumber<Critical>
     if(m_threat.isDefined())
     {
       result.append(m_threat.toString());
-      result.append("/");
+      result.append('/');
     }
 
     result.append("x" + super.doToString());

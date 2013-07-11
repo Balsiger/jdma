@@ -101,9 +101,6 @@ public class Selection extends Value<Selection>
    *
    * @param       inSelections the selection inside this value
    * @param       inSelected   the value selected, given as a string
-   *
-   * @undefined   IllegalArgumentException if invalid selection is given
-   *
    */
   public Selection(String []inSelections, String inSelected)
   {

@@ -67,7 +67,7 @@ public abstract class Extension<T extends Entry<?>> extends AbstractExtension<T>
    * @param       inName   the name of the attachment
    *
    */
-  public Extension(T inEntry, String inName)
+  protected Extension(T inEntry, String inName)
   {
     super(inEntry, inName);
   }

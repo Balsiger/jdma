@@ -299,24 +299,25 @@ public class Remark implements Serializable
     @org.junit.Test
     public void read()
     {
-      ParseReader reader =
+      try (ParseReader reader =
         new ParseReader(new java.io.StringReader("{~,just a test}    "
                                                  + "{*} guru"),
-                        "test");
+                        "test"))
+      {
+        Remark remark = Remark.read(reader);
 
-      Remark remark = Remark.read(reader);
+        assertEquals("first", Type.ESTIMATION, remark.getType());
+        assertEquals("first", "just a test", remark.getComment());
+        assertEquals("first", "{~,just a test}", remark.toString());
 
-      assertEquals("first", Type.ESTIMATION, remark.getType());
-      assertEquals("first", "just a test", remark.getComment());
-      assertEquals("first", "{~,just a test}", remark.toString());
+        remark = Remark.read(reader);
 
-      remark = Remark.read(reader);
+        assertEquals("second", Type.HOUSE_RULE, remark.getType());
+        assertNull("second", remark.getComment());
+        assertEquals("second", "{*}", remark.toString());
 
-      assertEquals("second", Type.HOUSE_RULE, remark.getType());
-      assertNull("second", remark.getComment());
-      assertEquals("second", "{*}", remark.toString());
-
-      assertNull("last", Remark.read(reader));
+        assertNull("last", Remark.read(reader));
+      }
     }
 
     //......................................................................

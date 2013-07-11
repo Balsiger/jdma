@@ -63,7 +63,7 @@ public interface Extractor<T, V> extends Serializable
    * @return      the extracted data
    *
    */
-  public @Nullable V get(T inObject);
+  @Nullable V get(T inObject);
 
   //........................................................................
 

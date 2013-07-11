@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.util.logging;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -42,30 +43,7 @@ import net.ixitxachitls.util.Strings;
  * This is a logger capable of printing ANSI formatted messages.
  *
  * @file          ANSILogger.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
- * @example       <PRE>
- *
- * // add the logger
- * Log.add("test", new ANSILogger());
- *
- * // set the logging level
- * Log.setLevel(Log.Type.DEBUG);
- *
- * // add some logging messages
- * Log.fatal("This is a fatal error message");
- * Log.error("This is an error message");
- * Log.warning("This is a warning message");
- * Log.necessary("This is a necessary message");
- * Log.important("this is an important message");
- * Log.useful("This is a useful message");
- * Log.info("This is an information message");
- * Log.complete("This is a complete message");
- * Log.debug("This is a debug message, make it a bit longer to check " +
- *           "for breaking of lines.........");
- * </PRE>
- *
  */
 
 //..........................................................................
@@ -316,90 +294,97 @@ public class ANSILogger extends ASCIILogger
   {
     //----- print ----------------------------------------------------------
 
-    /** Test printing. */
+    /**
+     * Test printing.
+     *
+     * @throws IOException when closing loggers
+     */
     @org.junit.Test
-    public void print()
+    public void print() throws IOException
     {
-      ASCIILogger.Test.StreamMock mock = new ASCIILogger.Test.StreamMock();
-      ANSILogger ansi = new ANSILogger(mock);
+      try (ASCIILogger.Test.StreamMock mock = new ASCIILogger.Test.StreamMock();
+        ANSILogger ansi = new ANSILogger(mock))
+      {
+        ansi.setFormat(Log.Type.ERROR, "%<error %Y - %L: %>%T");
+        ansi.setFormat(Log.Type.INFO,  "%<info %Y - %L: %>%T");
+        ansi.setFormat(Log.Type.DEBUG, BLUE + "%<debug %Y - %L: %>"
+                       + BLACK + "%T");
 
-      ansi.setFormat(Log.Type.ERROR, "%<error %Y - %L: %>%T");
-      ansi.setFormat(Log.Type.INFO,  "%<info %Y - %L: %>%T");
-      ansi.setFormat(Log.Type.DEBUG, BLUE + "%<debug %Y - %L: %>"
-                     + BLACK + "%T");
+        Calendar current = new GregorianCalendar();
 
-      Calendar current = new GregorianCalendar();
+        // error test
+        mock.setExpected("error " + current.get(Calendar.YEAR)
+                         + " - ERROR    : just an error message\n");
+        ansi.print("just an error message", Log.Type.ERROR);
 
-      // error test
-      mock.setExpected("error " + current.get(Calendar.YEAR)
-                       + " - ERROR    : just an error message\n");
-      ansi.print("just an error message", Log.Type.ERROR);
+        mock.verify();
 
-      mock.verify();
+        // info test
+        mock.setExpected("info " + current.get(Calendar.YEAR)
+                         + " - INFO     : just some info message\n");
+        ansi.print("just some info message", Log.Type.INFO);
 
-      // info test
-      mock.setExpected("info " + current.get(Calendar.YEAR)
-                       + " - INFO     : just some info message\n");
-      ansi.print("just some info message", Log.Type.INFO);
+        mock.verify();
 
-      mock.verify();
+        // wrapped test
+        mock.setExpected
+          ("info " + current.get(Calendar.YEAR)
+           + " - INFO     : just some info message, but this time "
+           + "the message is long\n"
+           + "                       enough to require wrapping "
+           + "of the lines\n");
+        ansi.print("just some info message, but this time the message is "
+                   + "long enough to require wrapping of the lines",
+                   Log.Type.INFO);
 
-      // wrapped test
-      mock.setExpected("info " + current.get(Calendar.YEAR)
-                       + " - INFO     : just some info message, but this time "
-                       + "the message is long\n"
-                       + "                       enough to require wrapping "
-                       + "of the lines\n");
-      ansi.print("just some info message, but this time the message is "
-                 + "long enough to require wrapping of the lines",
-                 Log.Type.INFO);
+        mock.verify();
 
-      mock.verify();
+        // color test
+        mock.setExpected(BLUE + "debug " + current.get(Calendar.YEAR)
+                         + " - DEBUG    : " + BLACK + "some test\n");
+        ansi.print("some test", Log.Type.DEBUG);
 
-      // color test
-      mock.setExpected(BLUE + "debug " + current.get(Calendar.YEAR)
-                       + " - DEBUG    : " + BLACK + "some test\n");
-      ansi.print("some test", Log.Type.DEBUG);
+        mock.verify();
 
-      mock.verify();
+        // wrapped color test
+        mock.setExpected(BLUE + "debug " + current.get(Calendar.YEAR)
+                         + " - DEBUG    : " + BLACK + "some test, this time "
+                         + "somewhat larger to see if word     \n"
+                         + "                        wrapping works ok if the "
+                         + "text is longer than a line\n");
+        ansi.print("some test, this time somewhat larger to see if word "
+                   + "wrapping works ok if the text is longer than a line",
+                   Log.Type.DEBUG);
 
-      // wrapped color test
-      mock.setExpected(BLUE + "debug " + current.get(Calendar.YEAR)
-                       + " - DEBUG    : " + BLACK + "some test, this time "
-                       + "somewhat larger to see if word     \n"
-                       + "                        wrapping works ok if the "
-                       + "text is longer than a line\n");
-      ansi.print("some test, this time somewhat larger to see if word "
-                 + "wrapping works ok if the text is longer than a line",
-                 Log.Type.DEBUG);
+        mock.verify();
 
-      mock.verify();
+        // 80 character problem
+        mock.setExpected
+          (BLUE + "debug " + current.get(Calendar.YEAR)
+           + " - DEBUG    : " + BLACK
+           + "12345678901234567890123456789012345678901234567890"
+           + "123456\n"
+           + "                        789012345678901234567890\n");
+        ansi.print("12345678901234567890123456789012345678901234567890"
+                   + "123456789012345678901234567890", Log.Type.DEBUG);
 
-      // 80 character problem
-      mock.setExpected(BLUE + "debug " + current.get(Calendar.YEAR)
-                       + " - DEBUG    : " + BLACK
-                       + "12345678901234567890123456789012345678901234567890"
-                       + "123456\n"
-                       + "                        789012345678901234567890\n");
-      ansi.print("12345678901234567890123456789012345678901234567890"
-                 + "123456789012345678901234567890", Log.Type.DEBUG);
+        mock.verify();
 
-      mock.verify();
+        // object printing
+        mock.setExpected(BLUE + "debug " + current.get(Calendar.YEAR)
+                         + " - DEBUG    : " + BLACK + "ERROR\n");
+        ansi.print(Log.Type.ERROR, Log.Type.DEBUG);
 
-      // object printing
-      mock.setExpected(BLUE + "debug " + current.get(Calendar.YEAR)
-                       + " - DEBUG    : " + BLACK + "ERROR\n");
-      ansi.print(Log.Type.ERROR, Log.Type.DEBUG);
+        mock.verify();
 
-      mock.verify();
+        // status printing
+        mock.setExpected("some status text                                    "
+                         + "                          \r");
 
-      // status printing
-      mock.setExpected("some status text                                    "
-                       + "                          \r");
+        ansi.print("some status text", Log.Type.STATUS);
 
-      ansi.print("some status text", Log.Type.STATUS);
-
-      mock.verify();
+        mock.verify();
+      }
     }
 
     //......................................................................

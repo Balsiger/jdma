@@ -109,10 +109,10 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @param       inBases        the base items to take values from
    *
    */
-  public CampaignEntry(Type<? extends Entry<?>> inType,
-                       BaseType<? extends BaseEntry> inBaseType,
-                       Campaign inCampaign,
-                       String ... inBases)
+  protected CampaignEntry(Type<? extends Entry<?>> inType,
+                          BaseType<? extends BaseEntry> inBaseType,
+                          Campaign inCampaign,
+                          String ... inBases)
   {
     super(inType, inBaseType, inBases);
 
@@ -373,9 +373,6 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * Set the parent to the given key.
    *
    * @param   inParent the key of the parent entry
-   *
-   * @return
-   *
    */
   public void setParent(@Nullable EntryKey<?> inParent)
   {

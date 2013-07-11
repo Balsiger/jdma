@@ -970,7 +970,7 @@ public class SoyTemplate
                    + "third: first injected fourth: second injected "
                    + "fifth: jDMA",
                    renderer.render
-                   ("dma.commands.test",
+                   ("test.commands.test",
                     SoyTemplate.map("first", "first data",
                                     "second", "second data"),
                     SoyTemplate.map("first", "first injected",

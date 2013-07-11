@@ -58,6 +58,9 @@
     <property name="web.template.css.color_Encounter" value="#ccccff" />
     <property name="web.template.css.lightcolor_Encounter" value="#ddddff" />
     <property name="web.template.css.hilightcolor_Encounter" value="#aaaaff" />
+    <property name="web.template.css.color_Level" value="#ccccff" />
+    <property name="web.template.css.lightcolor_Level" value="#ddddff" />
+    <property name="web.template.css.hilightcolor_Level" value="#aaaaff" />
   </system-properties>
 
   <static-error-handlers>

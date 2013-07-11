@@ -124,12 +124,12 @@ public final class Files
    *                &        -> %26
    *                space    -> _
    *                &amp;    -> amp;
-   *                &ucirc;  -> Ã»
-   *                &Ucirc;  -> Ã
-   *                &ocirc;  -> Ã´
-   *                &Ocirc;  -> Ã
-   *                &eacute; -> Ã©
-   *                &Eacute; -> Ã
+   *                &ucirc;  -> ����
+   *                &Ucirc;  -> ��
+   *                &ocirc;  -> ����
+   *                &Ocirc;  -> ��
+   *                &eacute; -> ����
+   *                &Eacute; -> ��
    * </PRE>
    *
    * @param       inName the name to encode
@@ -145,12 +145,12 @@ public final class Files
       .replace("'", "-27-")
       .replace("&", "-26-")
       .replace("..", "-2E-.")
-      .replace("&ucirc;", "Ã»")
-      .replace("&Ucirc;", "Ã")
-      .replace("&ocirc;", "Ã´")
-      .replace("&Ocirc;", "Ã")
-      .replace("&eacute;", "Ã©")
-      .replace("&Eacute;", "Ã")
+      .replace("&ucirc;", "����")
+      .replace("&Ucirc;", "����")
+      .replace("&ocirc;", "����")
+      .replace("&Ocirc;", "����")
+      .replace("&eacute;", "����")
+      .replace("&Eacute;", "����")
       .replace("%20", "_")
       .replace(" ", "_");
   }
@@ -171,12 +171,12 @@ public final class Files
    *                .        <- %2E
    *                space    <- _
    *                &amp;    <- &
-   *                &ucirc;  <- Ã»
-   *                &Ucirc;  <- Ã
-   *                &ocirc;  <- Ã´
-   *                &Ocirc;  <- Ã
-   *                &eacute; <- Ã©
-   *                &Eacute; <- Ã
+   *                &ucirc;  <- ����
+   *                &Ucirc;  <- ��
+   *                &ocirc;  <- ����
+   *                &Ocirc;  <- ��
+   *                &eacute; <- ����
+   *                &Eacute; <- ��
    * </PRE>
    *
    * @param       inName the name to decode
@@ -192,12 +192,12 @@ public final class Files
       .replace("-26-", "&")
       .replace("-27-", "'")
       .replace("-2E-", ".")
-      .replace("Ã»", "&ucirc;")
-      .replace("Ã", "&Ucirc;")
-      .replace("Ã´", "&ocirc;")
-      .replace("Ã", "&Ocirc;")
-      .replace("Ã©", "&eacute;")
-      .replace("Ã", "&Eacute;")
+      .replace("����", "&ucirc;")
+      .replace("����", "&Ucirc;")
+      .replace("����", "&ocirc;")
+      .replace("����", "&Ocirc;")
+      .replace("����", "&eacute;")
+      .replace("����", "&Eacute;")
       .replace("_", " ");
   }
 
@@ -256,7 +256,7 @@ public final class Files
   {
     // check the path for both, unix styles and windows style, to allow right
     // treatment of unix files, like HTML names, under windows
-    int path = Math.max(inName.lastIndexOf("\\"), inName.lastIndexOf("/"));
+    int path = Math.max(inName.lastIndexOf('\\'), inName.lastIndexOf('/'));
 
     int ext = inName.lastIndexOf(EXTENSION_SEPARATOR);
     if(ext < 0 || ext <= path)
@@ -496,7 +496,7 @@ public final class Files
    */
   public static String mimeExtension(String inType)
   {
-    return inType.substring(inType.lastIndexOf("/") + 1);
+    return inType.substring(inType.lastIndexOf('/') + 1);
   }
 
   //........................................................................
@@ -576,7 +576,7 @@ public final class Files
     if("CVS".equals(file))
       return true;
 
-    if(file.startsWith("."))
+    if(file.charAt(0) == '.')
       return true;
 
     if(inName.endsWith("~"))
@@ -777,7 +777,7 @@ public final class Files
         assertTrue(deleteDirectory("build/backups"));
         assertFalse(new File("build/backup.test").delete());
       }
-      catch(Exception e)
+      catch(Exception e) // $codepro.audit.disable caughtExceptions
       {
         e.printStackTrace(System.out);
         fail("failed: " + e);

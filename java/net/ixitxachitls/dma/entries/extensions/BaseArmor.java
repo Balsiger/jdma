@@ -116,6 +116,63 @@ public class BaseArmor extends BaseExtension<BaseItem>
 
   //........................................................................
 
+  /** The possible armor proficiencies. */
+  public enum Proficiency implements EnumSelection.Named
+  {
+    /** Proficiency for light armor. */
+    LIGHT("Light"),
+
+    /** Proficiency for medium armor. */
+    MEDIUM("Medium"),
+
+    /** Proficiency for heavy armor. */
+    HESVY("Heavy"),
+
+    /** Proficiency for shields, but no tower shields. */
+    SHIELD("Shield"),
+
+    /** Proficiency for shields, but no tower shields. */
+    TOWER_SHIELD("Tower Shield"),
+
+    /** Proficiency for simple weapons. */
+    NONE("None");
+
+    /** The value's name. */
+    private String m_name;
+
+    /** Create the name.
+     *
+     * @param inName     the name of the value
+     *
+     */
+    private Proficiency(String inName)
+    {
+      m_name = constant("armor.proficiencies", inName);
+    }
+
+    /** Get the name of the value.
+     *
+     * @return the name of the value
+     *
+     */
+    @Override
+    public String getName()
+    {
+      return m_name;
+    }
+
+    /** Get the name of the value.
+     *
+     * @return the name of the value
+     *
+     */
+    @Override
+    public String toString()
+    {
+      return m_name;
+    }
+  };
+
   //........................................................................
 
   //--------------------------------------------------------- constructor(s)

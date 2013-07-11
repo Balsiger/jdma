@@ -18,6 +18,7 @@
  * along with Dungeon Master Assistant; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
+// $codepro.audit.disable closeWhereCreated
 
 //------------------------------------------------------------------ imports
 
@@ -116,7 +117,7 @@ public class DMAFile
   private boolean m_readOnly = false;
 
   /** The path for the backup files. */
-  private static final String s_backupPath =
+  private static final String BACKUP_PATH =
     Config.get("resource:web/dir.backup", "dma/Backups");
 
   //........................................................................
@@ -235,7 +236,6 @@ public class DMAFile
    * Read a dma file into the campaign.
    *
    * @return      true if read without error, false else
-   *
    */
   public synchronized boolean read()
   {
@@ -324,7 +324,7 @@ public class DMAFile
     Log.info("file '" + m_name + "' read");
 
     // close the file
-    reader.close();
+    reader.close(); // $codepro.audit.disable closeInFinally
 
     // check if we have to save any files because values were completed
     if(isChanged())
@@ -356,7 +356,7 @@ public class DMAFile
 
     // backup the old file
     String renamed = Files.backup(Files.concatenate(m_path, m_name),
-                                  s_backupPath);
+                                  BACKUP_PATH);
 
     if(renamed != null)
       Log.info("backed up file '" + m_name + "' to '" + renamed + "'");

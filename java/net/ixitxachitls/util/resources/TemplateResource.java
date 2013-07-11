@@ -24,6 +24,7 @@
 package net.ixitxachitls.util.resources;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 
@@ -112,7 +113,7 @@ public class TemplateResource extends FileResource
   public static Resource get(String inName, String inPrefix)
   {
     String name = inName;
-    if(!name.startsWith("/"))
+    if(name.charAt(0) != '/')
       name = "/" + name;
 
     URL url =
@@ -204,9 +205,13 @@ public class TemplateResource extends FileResource
   {
     //----- write ----------------------------------------------------------
 
-    /** The write Test. */
+    /**
+     * The write Test.
+     *
+     * @throws IOException when closing output buffer
+     */
     @org.junit.Test
-    public void write()
+    public void write() throws IOException
     {
       Resource resource =
         new TemplateResource("/css/jdma.css",
@@ -214,20 +219,21 @@ public class TemplateResource extends FileResource
                              .getResource("/css/jdma.css"),
                              "test/test/template");
 
-      ByteArrayOutputStream output = new ByteArrayOutputStream();
+      try (ByteArrayOutputStream output = new ByteArrayOutputStream())
+      {
+        System.setProperty("test/test/template.color_Monster", "single word");
+        m_logger.banClass(net.ixitxachitls.util.Strings.class);
+        assertTrue("writing", resource.write(output));
+        assertPattern("content",
+                      ".*A.Monster         \\{ color: single word \\}.*",
+                      output.toString());
 
-      System.setProperty("test/test/template.color_Monster", "single word");
-      m_logger.banClass(net.ixitxachitls.util.Strings.class);
-      assertTrue("writing", resource.write(output));
-      assertPattern("content",
-                    ".*A.Monster         \\{ color: single word \\}.*",
-                    output.toString());
+        // invalid resource
+        resource = new FileResource("guru", null);
+        assertFalse("writing", resource.write(output));
 
-      // invalid resource
-      resource = new FileResource("guru", null);
-      assertFalse("writing", resource.write(output));
-
-      m_logger.addExpected("WARNING: cannot obtain input stream for guru");
+        m_logger.addExpected("WARNING: cannot obtain input stream for guru");
+      }
     }
 
     //......................................................................

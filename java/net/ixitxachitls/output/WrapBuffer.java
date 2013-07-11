@@ -43,22 +43,6 @@ import net.ixitxachitls.util.Strings;
  * @file          WrapBuffer.java
  *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
- * @example       <PRE>
- * WrapBuffer buffer = new WrapBuffer(80);
- *
- * buffer.add("just some test\n");
- * buffer.add("of, course, sever lines, longer lines are " +
- *            "automatically wrapped over several lines, as " +
- *            "it should be.\n");
- *
- * // obtain the lines (we do nothing with them here...)
- * while(buffer.hasMoreLines())
- *   String line = buffer.getLine();
- *
- * String last = buffer.getLines(); // the rest of the buffer
- * </PRE>
- *
  */
 
 //..........................................................................
@@ -718,7 +702,9 @@ public class WrapBuffer implements Buffer
     if(!inNewline)
       // over read all the white spaces following the wrapped character
       for(; end < m_current.length() && m_current.charAt(end) == ' '; end++)
-        /* nothing to do here */;
+      {
+        // nothing to do here
+      }
 
     // delete all the text moved over
     m_current.delete(0, end);

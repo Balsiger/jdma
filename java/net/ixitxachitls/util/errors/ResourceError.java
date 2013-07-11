@@ -110,8 +110,14 @@ public class ResourceError extends BaseError
    *
    */
   @Override
-  public boolean equals(Object inOther)
+  public boolean equals(Object inOther) // $codepro.audit.disable
   {
+    if (this == inOther)
+      return true;
+
+    if(!(inOther instanceof ResourceError))
+      return false;
+
     return super.equals(inOther);
   }
 

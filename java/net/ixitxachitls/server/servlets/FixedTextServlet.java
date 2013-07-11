@@ -28,7 +28,6 @@ import java.io.IOException;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -65,9 +64,6 @@ public class FixedTextServlet extends BaseServlet
    *
    * @param       inText  the text to return (may contain html)
    * @param       inCode  the return code to return to a client
-   *
-   * @undefined   IllegalArgumentException if title or text is null
-   *
    */
   public FixedTextServlet(String inText, int inCode)
   {
@@ -83,9 +79,6 @@ public class FixedTextServlet extends BaseServlet
    * @param       inTitle the title to return (no html)
    * @param       inText  the text to return (may contain html)
    * @param       inCode  the return code to return to a client
-   *
-   * @undefined   IllegalArgumentException if title or text is null
-   *
    */
   public FixedTextServlet(@Nullable String inTitle, String inText, int inCode)
   {
@@ -184,24 +177,27 @@ protected SpecialResult handle(HttpServletRequest inRequest,
     {
       FixedTextServlet servlet = new FixedTextServlet("title", "text", 42);
 
-      java.io.PrintWriter writer =
-        EasyMock.createStrictMock(java.io.PrintWriter.class);
-      HttpServletRequest request =
-        EasyMock.createStrictMock(HttpServletRequest.class);
-      HttpServletResponse response =
-        EasyMock.createStrictMock(HttpServletResponse.class);
+      try (java.io.PrintWriter writer =
+        EasyMock.createStrictMock(java.io.PrintWriter.class))
+      {
+        HttpServletRequest request =
+          EasyMock.createStrictMock(HttpServletRequest.class);
+        HttpServletResponse response =
+          EasyMock.createStrictMock(HttpServletResponse.class);
 
-      response.addHeader("Content-Type", "text/html");
-      EasyMock.expect(response.getWriter()).andReturn(writer);
-      writer.println(EasyMock.matches("<html>.*title.*text.*</html>"));
-      writer.close();
-      response.setStatus(42);
+        response.addHeader("Content-Type", "text/html");
+        EasyMock.expect(response.getWriter()).andReturn(writer);
+        writer.println(EasyMock.matches("<html>.*title.*text.*</html>"));
+        writer.close();
+        EasyMock.expectLastCall().anyTimes();
+        response.setStatus(42);
 
-      EasyMock.replay(writer, request, response);
+        EasyMock.replay(writer, request, response);
 
-      servlet.handleAndCheck(request, response);
+        servlet.handleAndCheck(request, response);
 
-      EasyMock.verify(writer, request, response);
+        EasyMock.verify(writer, request, response);
+      }
     }
 
     //......................................................................

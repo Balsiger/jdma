@@ -245,27 +245,28 @@ public class FormattedText extends BaseFormattedText<FormattedText>
     @org.junit.Test
     public void failTest()
     {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader("guru "
-                                                 + "\"just \\\" a \\\" test"),
-                        "test");
+      try (java.io.StringReader sReader = new java.io.StringReader("guru "
+        + "\"just \\\" a \\\" test"))
+      {
+        ParseReader reader = new ParseReader(sReader, "test");
 
-      FormattedText text = new FormattedText().read(reader);
+        FormattedText text = new FormattedText().read(reader);
 
-      assertNull("text should not have been read", text);
+        assertNull("text should not have been read", text);
 
-      reader.read(' ');
+        reader.read(' ');
 
-      text = new FormattedText().read(reader);
-      assertTrue("text should have been read", text != null);
-      assertEquals("text does not match", "just \" a \" test", text.get());
-      assertEquals("converted text does not match",
-                   "\"just \\\" a \\\" test\"", text.toString());
+        text = new FormattedText().read(reader);
+        assertTrue("text should have been read", text != null);
+        assertEquals("text does not match", "just \" a \" test", text.get());
+        assertEquals("converted text does not match",
+                     "\"just \\\" a \\\" test\"", text.toString());
 
-      m_logger.addExpectedPattern("WARNING:.*\\(read till end of text\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.guru \">>>just \\\\\" a \\\\\" "
-                                  + "test\\.\\.\\.");
+        m_logger.addExpectedPattern("WARNING:.*\\(read till end of text\\) "
+          + "on line 1 in document 'test'."
+          + "\\.\\.\\.guru \">>>just \\\\\" a \\\\\" "
+          + "test\\.\\.\\.");
+      }
     }
 
     //......................................................................

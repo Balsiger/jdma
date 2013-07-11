@@ -97,10 +97,11 @@ public final class Classes
       new StringBuilder("" + Character.toUpperCase(inName.charAt(0)));
 
     // replace spaces (and following character to upper case
-    int pos, start;
-    for(pos = inName.indexOf(" ", 1), start = 1;
+    int pos;
+    int start;
+    for(pos = inName.indexOf(' ', 1), start = 1;
         pos >= 0;
-        start = pos + 2, pos = inName.indexOf(" ", start))
+        start = pos + 2, pos = inName.indexOf(' ', start))
     {
       result.append(inName.substring(start, pos));
       result.append(Character.toUpperCase(inName.charAt(pos + 1)));
@@ -128,10 +129,6 @@ public final class Classes
     * @param       inClass the class to convert from
     *
     * @return      the converted name
-    *
-    * @undefined   return null if a null name is given (but not with a null
-    *              package)
-    *
     */
   public static String fromClassName(Class<?> inClass)
   {
@@ -152,15 +149,12 @@ public final class Classes
     * @param       inClass the class to get the package name from
     *
     * @return      the package name of the class
-    *
-    * @undefined   if given class is null
-    *
     */
   public static String getPackage(Class<?> inClass)
   {
     String name = inClass.getName();
 
-    return name.substring(0, name.lastIndexOf("."));
+    return name.substring(0, name.lastIndexOf('.'));
   }
 
   //........................................................................

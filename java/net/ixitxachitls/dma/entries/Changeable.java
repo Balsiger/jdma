@@ -54,7 +54,7 @@ public interface Changeable
     * Set the state of the object to changed.
     *
     */
-  public void changed();
+  void changed();
 
   //........................................................................
 

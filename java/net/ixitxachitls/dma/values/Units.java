@@ -204,7 +204,10 @@ public class Units<T extends Units<T>> extends Value<T>
     @Override
     public boolean equals(@Nullable Object inOther)
     {
-      if(inOther == null || !(inOther instanceof Unit))
+      if(this == inOther)
+        return true;
+
+      if(!(inOther instanceof Unit))
         return false;
 
       Unit other = (Unit)inOther;
@@ -526,8 +529,8 @@ public class Units<T extends Units<T>> extends Value<T>
     @Override
     public boolean equals(@Nullable Object inOther)
     {
-      if(inOther == null)
-        return false;
+      if(inOther == this)
+        return true;
 
       if(!(inOther instanceof Set))
         return false;
@@ -711,7 +714,7 @@ public class Units<T extends Units<T>> extends Value<T>
 
       result.append(" (");
       result.append(m_multiplier);
-      result.append("/");
+      result.append('/');
       result.append(m_divisor);
       result.append("): ");
 
@@ -855,11 +858,6 @@ public class Units<T extends Units<T>> extends Value<T>
    * @param       inSimplifyLevel the maximal number to be allowed in
    *                              denominators before the value is
    *                              relegated to the next smaller unit
-   *
-   * @undefined   IllegalArgumentException if sets null or empty
-   * @undefined   IllegalArgumentException if values null
-   * @undefined   IllegalArgumentException if set null
-   *
    */
   public Units(Rational []inValues, Set []inSets, Set inSet,
                int inSimplifyLevel)
@@ -1476,7 +1474,9 @@ public class Units<T extends Units<T>> extends Value<T>
       return false;
 
     while(readSingleUnit(inReader) >= 0)
-      ;
+    {
+      // nothing to do
+    }
 
     return true;
   }

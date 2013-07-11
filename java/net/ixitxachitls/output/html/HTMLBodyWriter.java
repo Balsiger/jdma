@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.output.html;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -130,8 +131,8 @@ protected void ensureHead()
       Log.warning("writer closed, but tags " + m_tags + " not closed");
 
     m_writer.print(m_body.toString());
-    m_writer.close();
-    m_bodyWriter.close();
+    m_writer.close(); // $codepro.audit.disable closeInFinally
+    m_bodyWriter.close(); // $codepro.audit.disable closeInFinally
     m_inHTML = false;
   }
 
@@ -154,30 +155,37 @@ protected void ensureHead()
     @org.junit.Test
     public void simple()
     {
-      java.io.StringWriter contents = new java.io.StringWriter();
-      HTMLBodyWriter writer = new HTMLBodyWriter(new PrintWriter(contents));
+      try (java.io.StringWriter contents = new java.io.StringWriter())
+      {
+        try (HTMLBodyWriter writer =
+          new HTMLBodyWriter(new PrintWriter(contents)))
+        {
+          writer
+            .comment("This is a test.")
+            .begin("p")
+            .attribute("font", "Helvetica")
+            .attribute("selected", null)
+            .add("This is the body")
+            .begin("br")
+            .title("title")
+            .end("br")
+            .end("p");
+        }
 
-      writer
-        .comment("This is a test.")
-        .begin("p")
-        .attribute("font", "Helvetica")
-        .attribute("selected", null)
-        .add("This is the body")
-        .begin("br")
-        .title("title")
-        .end("br")
-        .end("p")
-        .close();
-
-      assertEquals("contents",
-                   "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      document.title = 'title';\n"
-                   + "    </SCRIPT>\n"
-                   + "    <!-- This is a test. -->\n"
-                   + "    <P font=\"Helvetica\" selected>\n"
-                   + "      This is the body\n"
-                   + "      <BR/>\n"
-                   + "    </P>\n", contents.toString());
+        assertEquals("contents",
+                     "    <SCRIPT type=\"text/javascript\">\n"
+                     + "      document.title = 'title';\n"
+                     + "    </SCRIPT>\n"
+                     + "    <!-- This is a test. -->\n"
+                     + "    <P font=\"Helvetica\" selected>\n"
+                     + "      This is the body\n"
+                     + "      <BR/>\n"
+                     + "    </P>\n", contents.toString());
+      }
+      catch(IOException e)
+      {
+        fail("Could not close writer:" + e);
+      }
     }
 
     //......................................................................

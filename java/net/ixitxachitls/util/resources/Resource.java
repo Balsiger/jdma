@@ -76,7 +76,7 @@ public abstract class Resource
    * @param       inURL  the url to the resource
    *
    */
-  public Resource(String inName, @Nullable URL inURL)
+  protected Resource(String inName, @Nullable URL inURL)
   {
     m_name = inName;
     m_url = inURL;

@@ -79,8 +79,8 @@ public class CommandLineParser
      * @param inDescription the help description of the option
      *
      */
-    public Option(@Nullable String inShort, @Nullable String inLong,
-                  String inDescription)
+    protected Option(@Nullable String inShort, @Nullable String inLong,
+                     String inDescription)
     {
       if(inShort == null && inLong == null)
         throw new IllegalArgumentException("must have at least a long or "
@@ -374,9 +374,6 @@ public class CommandLineParser
      * Get the integer value stored with this option.
      *
      * @return      the value given or the default value
-     *
-     * @undefined   never
-     *
      */
     public int get()
     {
@@ -871,7 +868,7 @@ public class CommandLineParser
       result.append(option.getLong());
       result.append(Strings.spaces(maxLong - option.getLong().length() + 2));
       result.append(option.getDescription());
-      result.append("\n");
+      result.append('\n');
     }
 
     return result.toString();
@@ -1156,7 +1153,9 @@ public class CommandLineParser
 
     if(inArguments != null)
       for(int i = 0; i < inArguments.length; i = parse(inArguments, i, rest))
-        ;
+      {
+        /* nothing to do */
+      }
 
     if(rest.length() == 0)
       return null;
@@ -1214,7 +1213,7 @@ public class CommandLineParser
     if(option == null)
     {
       ioRest.append(inArguments[inIndex]);
-      ioRest.append(" ");
+      ioRest.append(' ');
 
       return inIndex + 1;
     }

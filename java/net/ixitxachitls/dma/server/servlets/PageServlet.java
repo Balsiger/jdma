@@ -23,7 +23,9 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Locale;
 import java.util.Map;
 
@@ -111,22 +113,25 @@ public class PageServlet extends SoyServlet
     boolean bodyOnly = inRequest.isBodyOnly();
     String path = inRequest.getRequestURI();
 
-    java.io.StringWriter buffer = new java.io.StringWriter();
-    HTMLWriter writer;
-    if(bodyOnly)
-      writer = new HTMLBodyWriter(new PrintWriter(buffer));
-    else
-      writer = new HTMLWriter(new PrintWriter(buffer));
+    try (PrintWriter buffer = new PrintWriter(new StringWriter()))
+    {
+      if (bodyOnly)
+        try (HTMLWriter writer = new HTMLBodyWriter(buffer))
+        {
+          writeBody(writer, path, inRequest);
+        }
+      else
+        try (HTMLWriter writer = new HTMLWriter(buffer))
+        {
+          if(!bodyOnly)
+            writeHeader(writer, path, inRequest);
 
-    if(!bodyOnly)
-      writeHeader(writer, path, inRequest);
+          writeBody(writer, path, inRequest);
 
-    writeBody(writer, path, inRequest);
-
-    if(!bodyOnly)
-      writeFooter(writer, path, inRequest);
-
-    writer.close();
+          if(!bodyOnly)
+            writeFooter(writer, path, inRequest);
+        }
+    }
 
     if(!data.containsKey("content"))
       data.put("content", "No new content defined, yet.");
@@ -178,6 +183,7 @@ public class PageServlet extends SoyServlet
   protected void writeHeader(HTMLWriter inWriter, String inPath,
                              DMARequest inRequest)
   {
+    // nothing to do here, but maybe in derivations
   }
 
   //........................................................................
@@ -215,6 +221,7 @@ public class PageServlet extends SoyServlet
   protected void writeFooter(HTMLWriter inWriter, String inPath,
                              DMARequest inRequest)
   {
+    // nothing to do here, but maybe in derivations
   }
 
   //........................................................................
@@ -336,37 +343,39 @@ public class PageServlet extends SoyServlet
       DMARequest request = EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
-      MockServletOutputStream output = new MockServletOutputStream();
 
-      response.setHeader("Content-Type", "text/html");
-      response.setHeader("Cache-Control", "max-age=0");
-      EasyMock.expect(request.isBodyOnly()).andReturn(false).anyTimes();
-      EasyMock.expect(request.getUser()).andStubReturn(null);
-      EasyMock.expect(request.getOriginalPath()).andStubReturn("index.html");
-      EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
-      EasyMock.expect(request.getRequestURI()).andStubReturn("/about.html");
-      EasyMock.expect(request.hasUserOverride()).andStubReturn(false);
-      EasyMock.expect(response.getOutputStream()).andReturn(output);
-      EasyMock.replay(request, response);
+      try (MockServletOutputStream output = new MockServletOutputStream())
+      {
+        response.setHeader("Content-Type", "text/html");
+        response.setHeader("Cache-Control", "max-age=0");
+        EasyMock.expect(request.isBodyOnly()).andReturn(false).anyTimes();
+        EasyMock.expect(request.getUser()).andStubReturn(null);
+        EasyMock.expect(request.getOriginalPath()).andStubReturn("index.html");
+        EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
+        EasyMock.expect(request.getRequestURI()).andStubReturn("/about.html");
+        EasyMock.expect(request.hasUserOverride()).andStubReturn(false);
+        EasyMock.expect(response.getOutputStream()).andReturn(output);
+        EasyMock.replay(request, response);
 
-      PageServlet servlet = new PageServlet() {
-          private static final long serialVersionUID = 1L;
-          @Override
-          protected void writeBody(HTMLWriter inWriter,
-                                   @Nullable String inPath,
-                                   DMARequest inRequest)
-          {
-            super.writeBody(inWriter, inPath, inRequest);
-            inWriter.add("This is the body.");
-          }
-        };
+        PageServlet servlet = new PageServlet() {
+            /** Serial version id. */
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected void writeBody(HTMLWriter inWriter,
+                                     @Nullable String inPath,
+                                     DMARequest inRequest)
+            {
+              super.writeBody(inWriter, inPath, inRequest);
+              inWriter.add("This is the body.");
+            }
+          };
 
-      assertNull("handle", servlet.handle(request, response));
-      String content = output.toString();
-      assertPattern("content", ".*<title>DMA - Unknown</title>.*", content);
+        assertNull("handle", servlet.handle(request, response));
+        String content = output.toString();
+        assertPattern("content", ".*<title>DMA - Unknown</title>.*", content);
 
-      output.close();
-      EasyMock.verify(request, response);
+        EasyMock.verify(request, response);
+      }
     }
 
     //......................................................................
@@ -382,92 +391,103 @@ public class PageServlet extends SoyServlet
       DMARequest request = EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
-      MockServletOutputStream output = new MockServletOutputStream();
 
-      response.setHeader("Content-Type", "text/html");
-      response.setHeader("Cache-Control", "max-age=0");
-      EasyMock.expect(request.isBodyOnly()).andReturn(true).anyTimes();
-      EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
-      EasyMock.expect(request.getRequestURI()).andStubReturn("/about.html");
-      EasyMock.expect(request.getUser()).andStubReturn(null);
-      EasyMock.expect(request.hasUserOverride()).andStubReturn(false);
-      EasyMock.expect(request.getOriginalPath()).andStubReturn("/about.html");
-      EasyMock.expect(response.getOutputStream()).andReturn(output);
-      EasyMock.replay(request, response);
+      try (MockServletOutputStream output = new MockServletOutputStream())
+      {
+        response.setHeader("Content-Type", "text/html");
+        response.setHeader("Cache-Control", "max-age=0");
+        EasyMock.expect(request.isBodyOnly()).andReturn(true).anyTimes();
+        EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
+        EasyMock.expect(request.getRequestURI()).andStubReturn("/about.html");
+        EasyMock.expect(request.getUser()).andStubReturn(null);
+        EasyMock.expect(request.hasUserOverride()).andStubReturn(false);
+        EasyMock.expect(request.getOriginalPath()).andStubReturn("/about.html");
+        EasyMock.expect(response.getOutputStream()).andReturn(output);
+        EasyMock.replay(request, response);
 
-      PageServlet servlet = new PageServlet() {
-          private static final long serialVersionUID = 1L;
-          @Override
-          protected void writeBody(HTMLWriter inWriter,
-                                   @Nullable String inPath,
-                                   DMARequest inRequest)
-          {
-            super.writeBody(inWriter, inPath, inRequest);
-            inWriter.add("This is the body.");
-          }
-        };
+        PageServlet servlet = new PageServlet() {
+            /** Serial verison id. */
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected void writeBody(HTMLWriter inWriter,
+                                     @Nullable String inPath,
+                                     DMARequest inRequest)
+            {
+              super.writeBody(inWriter, inPath, inRequest);
+              inWriter.add("This is the body.");
+            }
+          };
 
-      assertNull("handle", servlet.handle(request, response));
-      assertEquals("content",
-                   "No new content defined, yet.\n",
-                   output.toString());
+        assertNull("handle", servlet.handle(request, response));
+        assertEquals("content",
+                     "No new content defined, yet.\n",
+                     output.toString());
 
-      output.close();
-      EasyMock.verify(request, response);
+        EasyMock.verify(request, response);
+      }
     }
 
     //......................................................................
     //----- navigation -----------------------------------------------------
 
-    /** The navigation Test. */
+    /** The navigation Test.
+     *
+     * @throws IOException when closing the output
+     */
     @org.junit.Test
-    public void navigation()
+    public void navigation() throws IOException
     {
-      java.io.ByteArrayOutputStream output =
-        new java.io.ByteArrayOutputStream();
-      HTMLWriter writer = new HTMLWriter(new PrintWriter(output));
+      try (java.io.ByteArrayOutputStream output =
+        new java.io.ByteArrayOutputStream())
+      {
+        PageServlet servlet = new PageServlet();
+        try (HTMLWriter writer = new HTMLWriter(new PrintWriter(output)))
+        {
+          servlet.addNavigation(writer, "s1", "l1", "s2", "l2", "s3", "l3");
+          writer.close();
+          assertEquals
+          ("3 sections",
+           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+             + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
+             + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+             + "\">\n"
+             + "<HTML xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+             + "  <BODY>\n"
+             + "    <SCRIPT type=\"text/javascript\">\n"
+             + "      $('#subnavigation').html(' &raquo; <a href=\"l1\" "
+             + "class=\"navigation-link\" "
+             + "onclick=\"return util.link(event, \\'l1\\');\" >s1</a> "
+             + "&raquo; <a href=\"l2\" class=\"navigation-link\" "
+             + "onclick=\"return util.link(event, \\'l2\\');\" >s2</a> "
+             + "&raquo; <a href=\"l3\" class=\"navigation-link\" "
+             + "onclick=\"return util.link(event, \\'l3\\');\" >s3</a>"
+             + "');\n"
+             + "    </SCRIPT>\n"
+             + "  </BODY>\n"
+             + "</HTML>\n", output.toString());
+        }
 
-      PageServlet servlet = new PageServlet();
+        output.reset();
 
-      servlet.addNavigation(writer, "s1", "l1", "s2", "l2", "s3", "l3");
-      writer.close();
-      assertEquals("3 sections",
-                   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                   + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
-                   + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-                   + "\">\n"
-                   + "<HTML xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-                   + "  <BODY>\n"
-                   + "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      $('#subnavigation').html(' &raquo; <a href=\"l1\" "
-                   + "class=\"navigation-link\" "
-                   + "onclick=\"return util.link(event, \\'l1\\');\" >s1</a> "
-                   + "&raquo; <a href=\"l2\" class=\"navigation-link\" "
-                   + "onclick=\"return util.link(event, \\'l2\\');\" >s2</a> "
-                   + "&raquo; <a href=\"l3\" class=\"navigation-link\" "
-                   + "onclick=\"return util.link(event, \\'l3\\');\" >s3</a>"
-                   + "');\n"
-                   + "    </SCRIPT>\n"
-                   + "  </BODY>\n"
-                   + "</HTML>\n", output.toString());
-
-      output = new java.io.ByteArrayOutputStream();
-      writer = new HTMLWriter(new PrintWriter(output));
-
-      servlet.addNavigation(writer);
-      writer.close();
-      assertEquals("no section",
-                   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                   + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
-                   + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-                   + "\">\n"
-                   + "<HTML xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-                   + "  <BODY>\n"
-                   + "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      $('#subnavigation').html('&nbsp;');\n"
-                   + "    </SCRIPT>\n"
-                   + "  </BODY>\n"
-                   + "</HTML>\n", output.toString());
+        try (HTMLWriter writer = new HTMLWriter(new PrintWriter(output)))
+        {
+          servlet.addNavigation(writer);
+          writer.close();
+          assertEquals
+          ("no section",
+           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+             + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
+             + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+             + "\">\n"
+             + "<HTML xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+             + "  <BODY>\n"
+             + "    <SCRIPT type=\"text/javascript\">\n"
+             + "      $('#subnavigation').html('&nbsp;');\n"
+             + "    </SCRIPT>\n"
+             + "  </BODY>\n"
+             + "</HTML>\n", output.toString());
+        }
+      }
     }
 
     //......................................................................

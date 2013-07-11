@@ -126,7 +126,7 @@ public class ExtensionVariable extends Variable
     catch(java.lang.IllegalAccessException e)
     {
       throw new UnsupportedOperationException
-        ("Cannot access field " + m_field.getName() + ": " + e);
+        ("Cannot access field " + m_field.getName(), e);
     }
   }
 
@@ -217,8 +217,7 @@ public class ExtensionVariable extends Variable
     catch(java.lang.IllegalAccessException e)
     {
       throw new UnsupportedOperationException
-        ("Cannot access field " + m_field.getName() + " for " + m_key
-         + ": " + e);
+        ("Cannot access field " + m_field.getName() + " for " + m_key, e);
     }
 
     inEntry.changed();

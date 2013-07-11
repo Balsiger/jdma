@@ -63,6 +63,8 @@ public class Combined<T extends Value<T>>
 
   /**
    * A node storing the collected value for an entry in the derivation chain.
+   *
+   * @param <U> the value stored in the node
    */
   @ParametersAreNonnullByDefault
   private static class Node<U extends Value<U>>
@@ -76,8 +78,8 @@ public class Combined<T extends Value<T>>
      * @param       inEntry       the entry where the value came from
      * @param       inDescription the description of the value collected
      */
-    public Node(@Nullable U inValue, AbstractEntry inEntry,
-                String inDescription)
+    protected Node(@Nullable U inValue, AbstractEntry inEntry,
+                   String inDescription)
     {
       m_value = inValue;
       m_entry = inEntry;
@@ -93,7 +95,7 @@ public class Combined<T extends Value<T>>
      * @param       inValue the value to build from
      * @param       inEntry the entry to build from
      */
-    public Node(@Nullable U inValue, AbstractEntry inEntry)
+    protected Node(@Nullable U inValue, AbstractEntry inEntry)
     {
       m_value = inValue;
       m_entry = inEntry;
@@ -271,7 +273,7 @@ public class Combined<T extends Value<T>>
    */
   @Immutable
   @ParametersAreNonnullByDefault
-  private class Contribution<V> implements Comparable<Contribution<V>>
+  private static class Contribution<V> implements Comparable<Contribution<V>>
   {
     //--------------------------- Contribution ---------------------------
 
@@ -282,7 +284,8 @@ public class Combined<T extends Value<T>>
      * @param    inGroup the group (entry, extension) contributing the value
      * @param    inText  the text describing why the value was contributed
      */
-    public Contribution(V inValue, ValueGroup inGroup, @Nullable String inText)
+    protected Contribution(V inValue, ValueGroup inGroup,
+                           @Nullable String inText)
     {
       m_value = inValue;
       m_group = inGroup;
@@ -403,8 +406,14 @@ public class Combined<T extends Value<T>>
      *
      */
     @Override
-    public boolean equals(Object inOther)
+    public boolean equals(Object inOther) // $codepro.audit.disable
     {
+      if(inOther == this)
+        return true;
+
+      if(!(inOther instanceof Combined))
+        return false;
+
       return super.equals(inOther);
     }
 

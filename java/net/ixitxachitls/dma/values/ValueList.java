@@ -176,9 +176,6 @@ public class ValueList<T extends Value<T>>
    *
    * @param       inValues the beginning values of the list
    * @param       inDelimiter the delimiter used between the elements
-   *
-   * @undefined   IllegalArgumentException if not types are given
-   *
    */
   @SuppressWarnings("unchecked") // heap pollution?
   public ValueList(String inDelimiter, T ... inValues)
@@ -234,7 +231,7 @@ public class ValueList<T extends Value<T>>
   protected T m_type;
 
   /** The values themselves. */
-  protected @Nullable ArrayList<T> m_values = null;
+  protected @Nullable List<T> m_values = null;
 
   /** The delimiter to use between the elements. */
   protected String m_delimiter = s_delimiter;
@@ -336,9 +333,6 @@ public class ValueList<T extends Value<T>>
    * Get a new entry for the list with the same type as current entries.
    *
    * @return      the newly created element, not yet in the list
-   *
-   * @undefined   never
-   *
    */
   public T newElement()
   {
@@ -814,11 +808,7 @@ public class ValueList<T extends Value<T>>
 
   //------------------------------------------------------------------- test
 
-  /** The test.
-   *
-   * @hidden
-   *
-   */
+  /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
     //----- init -----------------------------------------------------------
@@ -856,7 +846,7 @@ public class ValueList<T extends Value<T>>
       assertEquals("2", "how are", list.get(1).toString());
       assertEquals("3", "you",     list.get(2).toString());
 
-      ArrayList<Name> input = new ArrayList<Name>();
+      List<Name> input = new ArrayList<Name>();
 
       input.add(new Name("Hello"));
       input.add(new Name("how are"));
@@ -908,20 +898,20 @@ public class ValueList<T extends Value<T>>
     public void delimiter()
     {
       String text = "one:two   : three\n\n\n:four = ";
+      try (java.io.StringReader sReader = new java.io.StringReader(text))
+      {
+        ParseReader reader = new ParseReader(sReader, "test");
 
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader(text),
-                        "test");
+        // normal read
+        ValueList<Name> list = new ValueList<Name>(new Name(), ":");
 
-      // normal read
-      ValueList<Name> list = new ValueList<Name>(new Name(), ":");
+        list = list.read(reader);
+        assertTrue("list should have been read", list != null);
+        assertEquals("converted list does not match",
+                     "one:two:three:four", list.toString());
 
-      list = list.read(reader);
-      assertTrue("list should have been read", list != null);
-      assertEquals("converted list does not match",
-                   "one:two:three:four", list.toString());
-
-      assertEquals("expecting delimiter", true, reader.expect('='));
+        assertEquals("expecting delimiter", true, reader.expect('='));
+      }
     }
 
     //......................................................................

@@ -103,30 +103,29 @@ public class ConfigServlet extends BaseServlet
     inResponse.setHeader("Content-Type", "text/html");
     inResponse.setHeader("Cache-Control", "max-age=0");
 
-    HTMLWriter writer =
-      new HTMLWriter(new PrintWriter(inResponse.getOutputStream()));
-
-    writer
-      .title("DMA - Configuration")
-      .begin("h1").add("DMA Configuration").end("h1")
-      .begin("table").style("max-width:100%;word-wrap:break-word;");
-
-    for(String name : Config.getNames())
+    try (HTMLWriter writer =
+      new HTMLWriter(new PrintWriter(inResponse.getOutputStream())))
+    {
       writer
-        .begin("tr").style("vertical-align:top")
-        .begin("td").style("font-weight:bold").add(name).end("td")
-        .begin("td")
-        .begin("div")
-        .style("max-width:800px;")
-        .add(System.getProperty(name))
-        .end("div")
-        .end("td")
-        .end("tr");
+        .title("DMA - Configuration")
+        .begin("h1").add("DMA Configuration").end("h1")
+        .begin("table").style("max-width:100%;word-wrap:break-word;");
 
-    writer
-      .end("table");
+      for(String name : Config.getNames())
+        writer
+          .begin("tr").style("vertical-align:top")
+          .begin("td").style("font-weight:bold").add(name).end("td")
+          .begin("td")
+          .begin("div")
+          .style("max-width:800px;")
+          .add(System.getProperty(name))
+          .end("div")
+          .end("td")
+          .end("tr");
 
-    writer.close();
+      writer
+        .end("table");
+    }
 
     return null;
   }
@@ -157,21 +156,22 @@ public class ConfigServlet extends BaseServlet
         EasyMock.createMock(HttpServletRequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
-      MockServletOutputStream output = new MockServletOutputStream();
 
-      response.setHeader("Content-Type", "text/html");
-      response.setHeader("Cache-Control", "max-age=0");
-      EasyMock.expect(response.getOutputStream()).andReturn(output);
-      EasyMock.replay(request, response);
+      try (MockServletOutputStream output = new MockServletOutputStream())
+      {
+        response.setHeader("Content-Type", "text/html");
+        response.setHeader("Cache-Control", "max-age=0");
+        EasyMock.expect(response.getOutputStream()).andReturn(output);
+        EasyMock.replay(request, response);
 
-      ConfigServlet servlet = new ConfigServlet();
+        ConfigServlet servlet = new ConfigServlet();
 
-      assertNull("handle", servlet.handle(request, response));
-      assertTrue("content",
-                 output.toString().indexOf("DMA - Configuration") >= 0);
-      output.close();
+        assertNull("handle", servlet.handle(request, response));
+        assertTrue("content",
+                   output.toString().indexOf("DMA - Configuration") >= 0);
 
-      EasyMock.verify(request, response);
+        EasyMock.verify(request, response);
+      }
     }
 
     //......................................................................

@@ -62,7 +62,7 @@ import net.ixitxachitls.util.Pair;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public abstract class SoyAbstract extends SoyMapData
+public class SoyAbstract extends SoyMapData
 {
   //----------------------------------------------------------------- nested
 
@@ -156,8 +156,14 @@ public abstract class SoyAbstract extends SoyMapData
     }
 
     @Override
-    public boolean equals(Object inOther)
+    public boolean equals(Object inOther) // $codepro.audit.disable
     {
+      if (this == inOther)
+        return true;
+
+      if (!(inOther instanceof SoyAbstract))
+        return false;
+
       return super.equals(inOther);
     }
 

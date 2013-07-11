@@ -59,7 +59,7 @@ public interface Configuration
    * @return      the requested string
    *
    */
-  public String get(String inKey, @Nullable String inDefault);
+  String get(String inKey, @Nullable String inDefault);
 
   //........................................................................
   //-------------------------------- hasKey --------------------------------
@@ -71,11 +71,8 @@ public interface Configuration
    *
    * @return      true if there is already a configuration value with the
    *              given key
-   *
-   * @undefined   never
-   *
    */
-  public boolean hasKey(String inKey);
+  boolean hasKey(String inKey);
 
   //........................................................................
 
@@ -94,7 +91,7 @@ public interface Configuration
    * @return      true if save, false if not possible
    *
    */
-  public boolean set(String inKey, String inValue);
+  boolean set(String inKey, String inValue);
 
   //........................................................................
 
@@ -108,7 +105,7 @@ public interface Configuration
    * @return      true if removed, false if not possible
    *
    */
-  public boolean remove(String inKey);
+  boolean remove(String inKey);
 
   //........................................................................
 

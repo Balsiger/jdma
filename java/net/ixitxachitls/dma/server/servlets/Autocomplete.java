@@ -354,30 +354,32 @@ public class Autocomplete extends JSONServlet
         EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
-      MockServletOutputStream output = new MockServletOutputStream();
+      try (MockServletOutputStream output = new MockServletOutputStream())
+      {
+        EasyMock.expect(request.getMethod()).andReturn("POST");
+        EasyMock.expect(request.getRequestURI()).andStubReturn("uri");
+        response.setHeader("Content-Type", "application/json");
+        response.setHeader("Cache-Control", "max-age=0");
+        EasyMock.expect(response.getOutputStream()).andReturn(output);
+        EasyMock.replay(request, response);
 
-      EasyMock.expect(request.getMethod()).andReturn("POST");
-      EasyMock.expect(request.getRequestURI()).andStubReturn("uri");
-      response.setHeader("Content-Type", "application/json");
-      response.setHeader("Cache-Control", "max-age=0");
-      EasyMock.expect(response.getOutputStream()).andReturn(output);
-      EasyMock.replay(request, response);
+        Autocomplete servlet = new Autocomplete() {
+            /** Serial version id. */
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected void writeJson(DMARequest inRequest,
+                                     String inPath,
+                                     JsonWriter inWriter)
+            {
+              inWriter.add(inPath);
+            }
+          };
 
-      Autocomplete servlet = new Autocomplete() {
-          private static final long serialVersionUID = 1L;
-          @Override
-          protected void writeJson(DMARequest inRequest,
-                                   String inPath,
-                                   JsonWriter inWriter)
-          {
-            inWriter.add(inPath);
-          }
-        };
+        servlet.doPost(request, response);
+        assertEquals("post", "uri", output.toString());
 
-      servlet.doPost(request, response);
-      assertEquals("post", "uri", output.toString());
-
-      EasyMock.verify(request, response);
+        EasyMock.verify(request, response);
+      }
     }
 
     //......................................................................

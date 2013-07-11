@@ -76,7 +76,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      * @throws IOException if something does wrong
      */
-    public void send(HttpServletResponse inResponse) throws IOException;
+    void send(HttpServletResponse inResponse) throws IOException;
 
     /**
      * Convert to a string for debugging.
@@ -85,7 +85,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      */
     @Override
-    public String toString();
+    String toString();
   }
 
   //........................................................................
@@ -182,20 +182,20 @@ public abstract class BaseServlet extends HttpServlet
     {
       inResponse.addHeader("Content-Type", "text/html");
 
-      PrintWriter writer = inResponse.getWriter();
-
-      writer.println("<html>"
-                     + "<head><title>Error: " + m_title + "</title></head>"
-                     + "<body style=\"margin: 0\">"
-                     + "<h1 style=\"padding: 10px; background-color: #880000; "
-                     + "color: white; width: 100%; "
-                     + "border-bottom: 1px solid #FF0000\"; margin: 0>"
-                     + m_title + "</h1>"
-                     + "<div style=\"padding: 10px\">" + m_message + "</div>"
-                     + "</body>"
-                     + "</html>");
-
-      writer.close(); // needs to be closed for Chrome!
+      try (PrintWriter writer = inResponse.getWriter())
+      {
+        writer.println
+          ("<html>"
+            + "<head><title>Error: " + m_title + "</title></head>"
+            + "<body style=\"margin: 0\">"
+            + "<h1 style=\"padding: 10px; background-color: #880000; "
+            + "color: white; width: 100%; "
+            + "border-bottom: 1px solid #FF0000\"; margin: 0>"
+            + m_title + "</h1>"
+            + "<div style=\"padding: 10px\">" + m_message + "</div>"
+            + "</body>"
+            + "</html>");
+      }
 
       inResponse.setStatus(m_code);
     }
@@ -313,7 +313,7 @@ public abstract class BaseServlet extends HttpServlet
   /**
    * Create the base handler.
    */
-  public BaseServlet()
+  protected BaseServlet()
   {
   }
 
@@ -452,6 +452,7 @@ public abstract class BaseServlet extends HttpServlet
       EasyMock.replay(request, response);
 
       BaseServlet servlet = new BaseServlet() {
+          /** Serial version id. */
           private static final long serialVersionUID = 1L;
           @Override
           protected SpecialResult handle(HttpServletRequest inRequest,
@@ -480,37 +481,39 @@ public abstract class BaseServlet extends HttpServlet
         EasyMock.createMock(HttpServletRequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
-      java.io.StringWriter strWriter = new java.io.StringWriter();
-      PrintWriter writer = new PrintWriter(strWriter);
+      try (java.io.StringWriter strWriter = new java.io.StringWriter();
+        PrintWriter writer = new PrintWriter(strWriter))
+      {
+        response.addHeader("Content-Type", "text/html");
+        EasyMock.expect(response.getWriter()).andReturn(writer);
+        response.setStatus(200);
 
-      response.addHeader("Content-Type", "text/html");
-      EasyMock.expect(response.getWriter()).andReturn(writer);
-      response.setStatus(200);
+        EasyMock.replay(request, response);
 
-      EasyMock.replay(request, response);
+        BaseServlet servlet = new BaseServlet() {
+            /** Serial version id. */
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected SpecialResult handle(HttpServletRequest inRequest,
+                                           HttpServletResponse inResponse)
+            {
+              return new HTMLError(200, "title", "message");
+            }
+          };
 
-      BaseServlet servlet = new BaseServlet() {
-          private static final long serialVersionUID = 1L;
-          @Override
-          protected SpecialResult handle(HttpServletRequest inRequest,
-                                         HttpServletResponse inResponse)
-          {
-            return new HTMLError(200, "title", "message");
-          }
-        };
+        servlet.handleAndCheck(request, response);
 
-      servlet.handleAndCheck(request, response);
+        assertPattern("html", "<html>.*</html>\\s*", strWriter.toString());
+        assertPattern("head", ".*<head>.*</head>.*", strWriter.toString());
+        assertPattern("body", ".*<body.*?>.*</body>.*", strWriter.toString());
+        assertPattern("title", ".*<title>Error: title</title>.*",
+                      strWriter.toString());
+        assertPattern("title (h1)", ".*<h1.*?>title</h1>.*",
+                      strWriter.toString());
+        assertPattern("message", ".*message.*", strWriter.toString());
 
-      assertPattern("html", "<html>.*</html>\\s*", strWriter.toString());
-      assertPattern("head", ".*<head>.*</head>.*", strWriter.toString());
-      assertPattern("body", ".*<body.*?>.*</body>.*", strWriter.toString());
-      assertPattern("title", ".*<title>Error: title</title>.*",
-                    strWriter.toString());
-      assertPattern("title (h1)", ".*<h1.*?>title</h1>.*",
-                    strWriter.toString());
-      assertPattern("message", ".*message.*", strWriter.toString());
-
-      EasyMock.verify(request, response);
+        EasyMock.verify(request, response);
+      }
     }
 
     //......................................................................
@@ -532,6 +535,7 @@ public abstract class BaseServlet extends HttpServlet
       EasyMock.replay(request, response);
 
       BaseServlet servlet = new BaseServlet() {
+          /** Serial version id. */
           private static final long serialVersionUID = 1L;
           @Override
           protected SpecialResult handle(HttpServletRequest inRequest,
@@ -568,6 +572,7 @@ public abstract class BaseServlet extends HttpServlet
       final java.util.concurrent.atomic.AtomicBoolean handled =
         new java.util.concurrent.atomic.AtomicBoolean(false);
       BaseServlet servlet = new BaseServlet() {
+          /** Serial verison id. */
           private static final long serialVersionUID = 1L;
           @Override
           protected SpecialResult handle(HttpServletRequest inRequest,

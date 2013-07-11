@@ -234,8 +234,8 @@ public class TestCase extends org.junit.Assert
           || (actual != null && !actual.equals(value)))
         throw new org.junit.ComparisonFailure
           (inMessage + " [" + key + "]",
-           value != null ? value.toString() : "NULL",
-           actual != null ? actual.toString() : "NULL");
+           value != null ? value : "NULL",
+           actual != null ? actual : "NULL");
     }
   }
 
@@ -284,7 +284,7 @@ public class TestCase extends org.junit.Assert
   @org.junit.Before
   public void setUpTest()
   {
-    if (System.getProperty("os.name").startsWith("Windows"))
+    if(System.getProperty("os.name").startsWith("Windows"))
     {
       System.setProperty("line.separator", "\n");
     }

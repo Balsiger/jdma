@@ -257,7 +257,7 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
    */
   public boolean isNull()
   {
-    return (m_leader == 0 && m_nominator == 0 || m_denominator == 0);
+    return m_leader == 0 && m_nominator == 0 || m_denominator == 0;
   }
 
   //........................................................................

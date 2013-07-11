@@ -1328,20 +1328,20 @@ public class BaseSpell extends BaseEntry
     StringBuilder summary = new StringBuilder();
 
     summary.append(getShortDescription());
-    summary.append(" ");
+    summary.append(' ');
     summary.append(m_school);
     if(m_descriptor.isDefined())
     {
       summary.append(" [");
       summary.append(m_descriptor);
-      summary.append("]");
+      summary.append(']');
     }
 
     summary.append(", level ");
     summary.append(spellLevel);
     summary.append(" (caster ");
     summary.append(casterLevel);
-    summary.append(")");
+    summary.append(')');
 
     if(!m_castingTime.isStandardAction())
       summary.append(", CT " + m_castingTime.toShortString());
@@ -1402,12 +1402,12 @@ public class BaseSpell extends BaseEntry
       if(m_effect.get(0).isDefined())
       {
         summary.append(m_effect.get(0));
-        summary.append(" ");
+        summary.append(' ');
       }
       if(m_effect.get(1).isDefined())
       {
         summary.append(m_effect.get(1));
-        summary.append(" ");
+        summary.append(' ');
       }
 
       summary.append(((Text)m_effect.get(2)).get());
@@ -1433,10 +1433,6 @@ public class BaseSpell extends BaseEntry
         summary.append(m_duration);
       else
       {
-        System.out.println("duration: " + m_duration.get(0));
-        System.out.println(getName() + ": "
-                           + ((Union)m_duration.get(0)).get().getClass());
-        System.out.println("level: " + casterLevel + " / " + spellLevel);
         String prefix = "";
         Duration duration = null;
         if(((Union)m_duration.get(0)).get() instanceof Selection)
@@ -1630,12 +1626,12 @@ public class BaseSpell extends BaseEntry
 
         if(m_duration.get(1).isDefined())
         {
-          summary.append(" ");
+          summary.append(' ');
           summary.append(m_duration.get(1));
         }
         if(m_duration.get(2).isDefined())
         {
-          summary.append(" ");
+          summary.append(' ');
           summary.append(((Text)m_duration.get(2)).get());
         }
       }
@@ -1662,7 +1658,7 @@ public class BaseSpell extends BaseEntry
     summary.append(m_resistance);
     summary.append(" (");
     summary.append(Strings.COMMA_JOINER.join(getReferences()));
-    summary.append(")");
+    summary.append(')');
 
     Value<?> notes =
         inParameters != null ? inParameters.getValue("Notes") : null;
@@ -1670,7 +1666,7 @@ public class BaseSpell extends BaseEntry
     {
       summary.append(" (");
       summary.append(notes);
-      summary.append(")");
+      summary.append(')');
     }
 
     return summary.toString();
@@ -1765,10 +1761,12 @@ public class BaseSpell extends BaseEntry
      */
     public static AbstractEntry createBaseSpell()
     {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader(s_text), "test");
+      try (java.io.StringReader sReader = new java.io.StringReader(s_text))
+      {
+        ParseReader reader = new ParseReader(sReader, "test");
 
-      return BaseSpell.read(reader);
+        return BaseSpell.read(reader);
+      }
     }
 
     //......................................................................

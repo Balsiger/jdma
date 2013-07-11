@@ -18,11 +18,13 @@
  * along with Dungeon Master Assistant; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
+// $codepro.audit.disable closeInFinally
 
 //------------------------------------------------------------------ imports
 
 package net.ixitxachitls.output.html;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
@@ -51,7 +53,7 @@ import net.ixitxachitls.util.logging.Log;
 
 @NotThreadSafe
 @ParametersAreNonnullByDefault
-public class JsonWriter
+public class JsonWriter implements AutoCloseable
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -93,6 +95,12 @@ public class JsonWriter
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  @Override
+  public String toString()
+  {
+    return "JsonWriter";
+  }
 
   //------------------------------- strings --------------------------------
 
@@ -198,7 +206,7 @@ public class JsonWriter
     if(m_needsDelimiter)
     {
       m_needsDelimiter = false;
-      m_writer.print(",");
+      m_writer.print(',');
       newline();
     }
 
@@ -325,6 +333,7 @@ public class JsonWriter
    * Close the writer.
    *
    */
+  @Override
   public void close()
   {
     if(m_nestingLevel > 0)
@@ -351,123 +360,149 @@ public class JsonWriter
   {
     //----- empty ----------------------------------------------------------
 
-    /** The empty Test. */
+    /**
+     * The empty Test.
+     *
+     * @throws IOException when closing contents writer
+     */
     @org.junit.Test
-    public void empty()
+    public void empty() throws IOException
     {
-      java.io.StringWriter contents = new java.io.StringWriter();
-      JsonWriter writer = new JsonWriter(new PrintWriter(contents));
-
-      writer.close();
-
-      assertEquals("contents", "", contents.toString());
+      try (java.io.StringWriter contents = new java.io.StringWriter();
+        JsonWriter writer = new JsonWriter(new PrintWriter(contents)))
+      {
+        assertEquals("contents", "", contents.toString());
+      }
     }
 
     //......................................................................
     //----- add ------------------------------------------------------------
 
-    /** The empty Test. */
+    /** The empty Test.
+     *
+     * @throws IOException when closing contents writer
+     */
     @org.junit.Test
-    public void add()
+    public void add() throws IOException
     {
-      java.io.StringWriter contents = new java.io.StringWriter();
-      JsonWriter writer = new JsonWriter(new PrintWriter(contents));
+      try (java.io.StringWriter contents = new java.io.StringWriter();
+        JsonWriter writer = new JsonWriter(new PrintWriter(contents)))
+      {
+        writer.add("some\ntext");
 
-      writer.add("some\ntext").close();
-
-      assertEquals("contents", "some\ntext", contents.toString());
+        assertEquals("contents", "some\ntext", contents.toString());
+      }
     }
 
     //......................................................................
     //----- string ---------------------------------------------------------
 
-    /** The empty Test. */
+    /**
+     * The empty Test.
+     * @throws IOException when closing contents writer
+     */
     @org.junit.Test
-    public void string()
+    public void string() throws IOException
     {
-      java.io.StringWriter contents = new java.io.StringWriter();
-      JsonWriter writer = new JsonWriter(new PrintWriter(contents));
+      try (java.io.StringWriter contents = new java.io.StringWriter();
+        JsonWriter writer = new JsonWriter(new PrintWriter(contents)))
+      {
+        writer.string("just 'a' \"test\" string\n!");
 
-      writer.string("just 'a' \"test\" string\n!").close();
-
-      assertEquals("contents", "\"just 'a' \\\\\"test\\\\\" string\\n!\"",
-                   contents.toString());
+        assertEquals("contents", "\"just 'a' \\\\\"test\\\\\" string\\n!\"",
+                     contents.toString());
+      }
     }
 
     //......................................................................
     //----- value ----------------------------------------------------------
 
-    /** The empty Test. */
+    /**
+     * The empty Test.
+     *
+     * @throws IOException when closing contents writer
+     */
     @org.junit.Test
-    public void value()
+    public void value() throws IOException
     {
-      java.io.StringWriter contents = new java.io.StringWriter();
-      JsonWriter writer = new JsonWriter(new PrintWriter(contents));
+      try (java.io.StringWriter contents = new java.io.StringWriter();
+        JsonWriter writer = new JsonWriter(new PrintWriter(contents)))
+      {
+        writer.value("key", "value");
 
-      writer.value("key", "value").close();
-
-      assertEquals("contents", "key: value", contents.toString());
+        assertEquals("contents", "key: value", contents.toString());
+      }
     }
 
-    //......................................................................
+    // ......................................................................
     //----- arrays ---------------------------------------------------------
 
-    /** The empty Test. */
+    /**
+     * The empty Test.
+     *
+     * @throws IOException when closing contents writer
+     */
     @org.junit.Test
-    public void arrays()
+    public void arrays() throws IOException
     {
-      java.io.StringWriter contents = new java.io.StringWriter();
-      JsonWriter writer = new JsonWriter(new PrintWriter(contents));
+      try (java.io.StringWriter contents = new java.io.StringWriter();
+        JsonWriter writer = new JsonWriter(new PrintWriter(contents)))
+      {
+        writer
+          .startArray()
+          .add("5")
+          .next()
+          .startArray()
+          .add("55")
+          .next()
+          .add("23")
+          .next()
+          .endArray()
+          .endArray()
+          .close();
 
-      writer
-        .startArray()
-        .add("5")
-        .next()
-        .startArray()
-        .add("55")
-        .next()
-        .add("23")
-        .next()
-        .endArray()
-        .endArray()
-        .close();
-
-      assertEquals("contents",
-                   "[\n"
-                   + "  5,\n"
-                   + "  [\n"
-                   + "    55,\n"
-                   + "    23\n"
-                   + "  ]\n"
-                   + "]\n",
-                   contents.toString());
+        assertEquals("contents",
+                     "[\n"
+                     + "  5,\n"
+                     + "  [\n"
+                     + "    55,\n"
+                     + "    23\n"
+                     + "  ]\n"
+                     + "]\n",
+                     contents.toString());
+      }
     }
 
     //......................................................................
     //----- object ---------------------------------------------------------
 
-    /** The empty Test. */
+    /**
+     * The empty Test.
+     *
+     * @throws IOException when closing contents writer
+     */
     @org.junit.Test
-    public void object()
+    public void object() throws IOException
     {
-      java.io.StringWriter contents = new java.io.StringWriter();
-      JsonWriter writer = new JsonWriter(new PrintWriter(contents));
+      try (java.io.StringWriter contents = new java.io.StringWriter();
+        JsonWriter writer = new JsonWriter(new PrintWriter(contents)))
+      {
+        writer
+          .startObject()
+          .value("key1", "value1")
+          .next()
+          .value("key2", "value2")
+          .next()
+          .endObject()
+          .close();
 
-      writer
-        .startObject()
-        .value("key1", "value1")
-        .next()
-        .value("key2", "value2")
-        .next()
-        .endObject()
-        .close();
-
-      assertEquals("contents",
-                   "{\n"
-                   + "  key1: value1,\n"
-                   + "  key2: value2\n"
-                   + "}\n",
-                   contents.toString());
+        assertEquals("contents",
+                     "{\n"
+                     + "  key1: value1,\n"
+                     + "  key2: value2\n"
+                     + "}\n",
+                     contents.toString());
+      }
     }
 
     //......................................................................

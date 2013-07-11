@@ -653,9 +653,11 @@ public abstract class Expression implements Comparable<Expression>, Serializable
 
         if(isTrue(inEntry, condition))
         {
-          ParseReader reader =
-            new ParseReader(new StringReader(value), "switch");
-          return inValue.add(inValue.read(reader));
+          try (ParseReader reader =
+            new ParseReader(new StringReader(value), "switch"))
+          {
+            return inValue.add(inValue.read(reader));
+          }
         }
       }
 
@@ -1119,7 +1121,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
    * @param inPriority the priority of the expression for sorting
    *
    */
-  public Expression(int inPriority)
+  protected Expression(int inPriority)
   {
     m_priority = inPriority;
   }
@@ -1246,7 +1248,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
     if(!(inOther instanceof Expression))
       return false;
 
-    return toString().equals(inOther.toString());
+    return toString().equals(((Expression)inOther).toString());
   }
 
   //........................................................................
@@ -1352,26 +1354,15 @@ public abstract class Expression implements Comparable<Expression>, Serializable
     @org.junit.Test
     public void read()
     {
-      ParseReader reader = reader("[magic armor(42)]");
-
-      Expression expression = Expression.read(reader);
-      assertEquals("magic armor", "[magic armor(42)]", expression.toString());
+      try (ParseReader reader =
+        new ParseReader(new StringReader("[magic armor(42)]"), "test"))
+      {
+        Expression expression = Expression.read(reader);
+        assertEquals("magic armor", "[magic armor(42)]", expression.toString());
+      }
     }
 
     //......................................................................
-
-    /**
-     * Create the reader with the given input.
-     *
-     * @param  inInput the input the reader will read from
-     *
-     * @return the parse reader
-     *
-     */
-    private ParseReader reader(String inInput)
-    {
-      return new ParseReader(new java.io.StringReader(inInput), "test");
-    }
   }
 
   //........................................................................

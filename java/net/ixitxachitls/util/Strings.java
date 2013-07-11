@@ -140,7 +140,7 @@ public final class Strings
   private static final Pattern s_template = Pattern.compile("\\$(\\w+)");
 
   /** All the white spaces. */
-  private final static String s_whites =
+  private static final String s_whites =
     Config.get("resource:parser/white.spaces", " \t\r\n\f");
 
   /** The joiner to convert with newlines. */
@@ -214,9 +214,6 @@ public final class Strings
     * @param       inDefault   the default value
     *
     * @return      the object converted to a String or the default value
-    *
-    * @undefined   never, a null default value can be returned
-    *
     */
   public static String toString(Object []inValues, String inDelimiter,
                                 String inDefault)
@@ -302,9 +299,6 @@ public final class Strings
     * @param       inPattern the pattern to match (with or without the (/))
     *
     * @return      the text that matched or null if nothing matched
-    *
-    * @example     String matched = Files.getPattern("my text", "t.*t");
-    *
     */
   public static @Nullable String getPattern(String inText,
                                             @Nullable String inPattern)
@@ -313,7 +307,7 @@ public final class Strings
       return inText;
 
     String pattern = inPattern;
-    if(pattern.indexOf("(") < 0)
+    if(pattern.indexOf('(') < 0)
       pattern = "(" + pattern + ")";
 
     // check if we have a name
@@ -342,7 +336,7 @@ public final class Strings
     if(inPattern == null)
       return new String [] { inText };
 
-    if(inPattern.indexOf("(") < 0)
+    if(inPattern.indexOf('(') < 0)
     {
       String result = getPattern(inText, inPattern);
 
@@ -378,9 +372,6 @@ public final class Strings
    * @param       inPrefix the prefix to use to access variables in the config
    *
    * @return      the text with al templates replaced
-   *
-   * @example     String replaced = Files.replaceTemplate("my text");
-   *
    */
   public static String replaceTemplates(String inText, String inPrefix)
   {
@@ -498,9 +489,6 @@ public final class Strings
    * @param       inNumber the number to format
    *
    * @return      A string representing the number
-   *
-   * @undefined   never
-   *
    */
   public static String format(long inNumber)
   {
@@ -516,9 +504,6 @@ public final class Strings
    * @param       inNumber the number to format
    *
    * @return      A string representing the number
-   *
-   * @undefined   never
-   *
    */
   public static String format(double inNumber)
   {
@@ -594,7 +579,7 @@ public final class Strings
     StringBuilder switched = new StringBuilder(parts[parts.length - 1] + ",");
 
     for(int i = 0; i < parts.length - 1; i++)
-      switched.append(" ").append(parts[i]);
+      switched.append(' ').append(parts[i]);
 
     return switched.toString();
   }
@@ -621,7 +606,7 @@ public final class Strings
     StringBuilder switched = new StringBuilder(parts[parts.length - 1].trim());
 
     for(int i = 0; i < parts.length - 1; i++)
-      switched.append(" ").append(parts[i].trim());
+      switched.append(' ').append(parts[i].trim());
 
     return switched.toString();
   }

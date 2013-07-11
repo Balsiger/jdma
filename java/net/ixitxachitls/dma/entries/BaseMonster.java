@@ -3885,10 +3885,11 @@ public class BaseMonster extends BaseEntry
      */
     public static AbstractEntry createBaseMonster()
     {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader(s_text), "test");
-
-      return BaseMonster.read(reader);
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader(s_text), "test"))
+      {
+        return BaseMonster.read(reader);
+      }
     }
 
     //......................................................................

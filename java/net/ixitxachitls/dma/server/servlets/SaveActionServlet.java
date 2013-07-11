@@ -82,7 +82,7 @@ public class SaveActionServlet extends ActionServlet
      * @param inOwner       the owner of the entry/entries
      *
      */
-    public Changes(AbstractEntry.EntryKey<?> inKey, AbstractEntry inOwner)
+    protected Changes(AbstractEntry.EntryKey<?> inKey, AbstractEntry inOwner)
     {
       m_key = inKey;
       m_owner = inOwner;
@@ -148,7 +148,7 @@ public class SaveActionServlet extends ActionServlet
       else
         m_values.put(inKey, inValue);
 
-      if(inKey.indexOf("=") >= 0)
+      if(inKey.indexOf('=') >= 0)
         m_multiple = true;
     }
 
@@ -246,6 +246,13 @@ public class SaveActionServlet extends ActionServlet
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  @Override
+  public String toString()
+  {
+    return "SaveActionServlet";
+  }
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators

@@ -92,7 +92,7 @@ public class FileServlet extends BaseServlet
      * @param inMimeType  the mime type
      *
      */
-    public Type(String inExtension, String inMimeType)
+    protected Type(String inExtension, String inMimeType)
     {
       m_extension = inExtension;
       m_mimeType = inMimeType;
@@ -106,7 +106,7 @@ public class FileServlet extends BaseServlet
      * @param inImageFormat the image format for images
      *
      */
-    public Type(String inExtension, String inMimeType, String inImageFormat)
+    protected Type(String inExtension, String inMimeType, String inImageFormat)
     {
       this(inExtension, inMimeType);
 
@@ -394,43 +394,44 @@ public class FileServlet extends BaseServlet
     }
 
     // write the file to the output
-    OutputStream output = inResponse.getOutputStream();
-
-    // check if we are dealiong with an image and we have to scale it
-    if(m_type != null && m_type.isImage())
+    try (OutputStream output = inResponse.getOutputStream())
     {
-      Multimap<String, String> params = ServerUtils.extractParams(inRequest);
-      int width = -1;
-      int height = -1;
-
-      if(params.containsKey("h"))
-        height = Integer.parseInt(params.get("h").iterator().next());
-
-      if(params.containsKey("w"))
-        width = Integer.parseInt(params.get("w").iterator().next());
-
-      if(width > 0 || height > 0)
+      // check if we are dealiong with an image and we have to scale it
+      if(m_type != null && m_type.isImage())
       {
-        InputStream imageStream =
-          new BufferedInputStream(resource.getInput());
-        Image image = ImageIO.read(imageStream)
-          .getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        Multimap<String, String> params = ServerUtils.extractParams(inRequest);
+        int width = -1;
+        int height = -1;
 
-        BufferedImage out =
-          new BufferedImage(image.getWidth(null), image.getHeight(null),
-                            BufferedImage.TYPE_INT_ARGB);
-        Graphics graphics = out.getGraphics();
-        graphics.drawImage(image, 0, 0, null);
-        graphics.dispose();
-        ImageIO.write(out, m_type.getImageFormat(), output);
+        if(params.containsKey("h"))
+          height = Integer.parseInt(params.get("h").iterator().next());
 
-        output.close();
-        return null;
+        if(params.containsKey("w"))
+          width = Integer.parseInt(params.get("w").iterator().next());
+
+        if(width > 0 || height > 0)
+        {
+          try (InputStream imageStream =
+            new BufferedInputStream(resource.getInput()))
+          {
+            Image image = ImageIO.read(imageStream)
+              .getScaledInstance(width, height, Image.SCALE_SMOOTH);
+
+            BufferedImage out =
+              new BufferedImage(image.getWidth(null), image.getHeight(null),
+                                BufferedImage.TYPE_INT_ARGB);
+            Graphics graphics = out.getGraphics();
+            graphics.drawImage(image, 0, 0, null);
+            graphics.dispose();
+            ImageIO.write(out, m_type.getImageFormat(), output);
+
+            return null;
+          }
+        }
       }
-    }
 
-    resource.write(output);
-    output.close();
+      resource.write(output);
+    }
 
     return null;
   }
@@ -504,29 +505,31 @@ public class FileServlet extends BaseServlet
         EasyMock.createMock(HttpServletRequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
-      BaseServlet.Test.MockServletOutputStream output =
-        new BaseServlet.Test.MockServletOutputStream();
 
-      EasyMock.expect(request.getPathInfo())
-        .andReturn("/dma/BaseCharacters/Ixitxachitls.dma");
-      EasyMock.expect(request.getDateHeader("If-Modified-Since"))
-        .andReturn(0L);
-      response.setHeader("Cache-Control", "max-age=86400");
-      response.setDateHeader(EasyMock.eq("Last-Modified"),
-                             EasyMock.gt(new Date().getTime() - 10000));
-      response.setDateHeader(EasyMock.eq("Expires"),
-                             EasyMock.gt(new Date().getTime() - 10000));
-      response.setHeader("Content-Type", "text/plain");
-      EasyMock.expect(response.getOutputStream()).andReturn(output);
-      EasyMock.replay(request, response);
+      try (BaseServlet.Test.MockServletOutputStream output =
+        new BaseServlet.Test.MockServletOutputStream())
+      {
+        EasyMock.expect(request.getPathInfo())
+          .andReturn("/dma/BaseCharacters/Ixitxachitls.dma");
+        EasyMock.expect(request.getDateHeader("If-Modified-Since"))
+          .andReturn(0L);
+        response.setHeader("Cache-Control", "max-age=86400");
+        response.setDateHeader(EasyMock.eq("Last-Modified"),
+                               EasyMock.gt(new Date().getTime() - 10000));
+        response.setDateHeader(EasyMock.eq("Expires"),
+                               EasyMock.gt(new Date().getTime() - 10000));
+        response.setHeader("Content-Type", "text/plain");
+        EasyMock.expect(response.getOutputStream()).andReturn(output);
+        EasyMock.replay(request, response);
 
-      FileServlet servlet = new FileServlet("", "text/plain");
+        FileServlet servlet = new FileServlet("", "text/plain");
 
-      assertNull("handle", servlet.handle(request, response));
-      assertPattern("content", ".*base character Merlin.*", output.toString());
+        assertNull("handle", servlet.handle(request, response));
+        assertPattern("content", ".*base character Merlin.*",
+                      output.toString());
 
-      output.close();
-      EasyMock.verify(request, response);
+        EasyMock.verify(request, response);
+      }
     }
 
     //......................................................................
@@ -574,21 +577,23 @@ public class FileServlet extends BaseServlet
         EasyMock.createMock(HttpServletRequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
-      BaseServlet.Test.MockServletOutputStream output =
-        new BaseServlet.Test.MockServletOutputStream();
+      try (BaseServlet.Test.MockServletOutputStream output =
+        new BaseServlet.Test.MockServletOutputStream())
+      {
+        EasyMock.expect(request.getPathInfo())
+          .andReturn("/dma/BaseCharacters/Ixitxachitls.dma");
+        response.setHeader("Content-Type", "text/plain");
+        EasyMock.expect(response.getOutputStream()).andReturn(output);
+        EasyMock.replay(request, response);
 
-      EasyMock.expect(request.getPathInfo())
-        .andReturn("/dma/BaseCharacters/Ixitxachitls.dma");
-      response.setHeader("Content-Type", "text/plain");
-      EasyMock.expect(response.getOutputStream()).andReturn(output);
-      EasyMock.replay(request, response);
+        FileServlet servlet = new FileServlet("", "text/plain", false);
 
-      FileServlet servlet = new FileServlet("", "text/plain", false);
+        assertNull("handle", servlet.handle(request, response));
+        assertPattern("content", ".*base character Merlin.*",
+                      output.toString());
 
-      assertNull("handle", servlet.handle(request, response));
-      assertPattern("content", ".*base character Merlin.*", output.toString());
-
-      EasyMock.verify(request, response);
+        EasyMock.verify(request, response);
+      }
     }
 
     //......................................................................

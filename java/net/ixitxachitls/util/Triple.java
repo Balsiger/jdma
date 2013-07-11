@@ -38,15 +38,7 @@ import javax.annotation.concurrent.Immutable;
  * @param         <T3> The type of the third element
  *
  * @file          Triple.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
- * @example       Triple&lt;Integer, String&gt; triple =
- *                  new Triple&lt;Integer, String&gt;(42, "Hello there");
- *
- *                int    first  = triple.first();
- *                String second = triple.second();
- *
  */
 
 //..........................................................................

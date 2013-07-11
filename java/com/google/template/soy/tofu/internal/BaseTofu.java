@@ -1,4 +1,5 @@
 // CHECKSTYLE:OFF
+// $codepro.audit.disable
 /*
  * Copyright 2008 Google Inc.
  *
@@ -76,7 +77,7 @@ public class BaseTofu implements SoyTofu {
      * @param isCaching Whether this instance caches intermediate Soy trees after substitutions from
      *     the msgBundle and the cssRenamingMap.
      */
-    public BaseTofu create(SoyFileSetNode soyTree, boolean isCaching);
+    BaseTofu create(SoyFileSetNode soyTree, boolean isCaching);
   }
 
 
@@ -414,12 +415,12 @@ public class BaseTofu implements SoyTofu {
     public RendererImpl(BaseTofu baseTofu, String templateName) {
       this.baseTofu = baseTofu;
       this.templateName = templateName;
-      this.data = null;
-      this.ijData = null;
-      this.activeDelPackageNames = null;
-      this.msgBundle = null;
-      this.cssRenamingMap = null;
-      this.doAddToCache = true;
+      data = null;
+      ijData = null;
+      activeDelPackageNames = null;
+      msgBundle = null;
+      cssRenamingMap = null;
+      doAddToCache = true;
     }
 
     @Override public Renderer setData(Map<String, ?> data) {
@@ -444,7 +445,7 @@ public class BaseTofu implements SoyTofu {
 
     @Override public Renderer setActiveDelegatePackageNames(
         Set<String> activeDelegatePackageNames) {
-      this.activeDelPackageNames = activeDelegatePackageNames;
+      activeDelPackageNames = activeDelegatePackageNames;
       return this;
     }
 
@@ -459,7 +460,7 @@ public class BaseTofu implements SoyTofu {
     }
 
     @Override public Renderer setDontAddToCache(boolean dontAddToCache) {
-      this.doAddToCache = !dontAddToCache;
+      doAddToCache = !dontAddToCache;
       return this;
     }
 

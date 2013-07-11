@@ -84,7 +84,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * @param       inName   the name of the extension
    *
    */
-  public AbstractExtension(T inEntry, String inName)
+  protected AbstractExtension(T inEntry, String inName)
   {
     m_name = inName;
     m_entry = inEntry;
@@ -180,7 +180,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
     catch(java.lang.IllegalAccessException e)
     {
       throw new UnsupportedOperationException
-        ("Cannot access field " + inField.getName() + ": " + e);
+        ("Cannot access field " + inField.getName(), e);
     }
   }
 
@@ -504,9 +504,6 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *
    * @param       inClass       the class to set for
    * @param       inAbstractExtensions the automatic extensions to use
-   *
-   * @undefined   IllegalArgumentException if one of the arguments is null
-   *
    */
   public static void setAutoExtensions
     (Class<? extends AbstractExtension<?>> inClass,

@@ -51,22 +51,7 @@ import net.ixitxachitls.util.logging.Log;
  * This is a class used for parsing streams (mainly files).
  *
  * @file          ParseInputStream.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
- * @example       <PRE>
- * ParseReader parser =
- *   new ParseReader(new StringReader("a b cdef ", "test"));
- *
- * char   c    = parser.readChar();
- *
- * String word = parser.readWord();
- *
- * if(parser.expect("cdef")
- *   ...
- *
- * </PRE>
- *
  */
 
 //..........................................................................
@@ -75,7 +60,7 @@ import net.ixitxachitls.util.logging.Log;
 
 @NotThreadSafe
 @ParametersAreNonnullByDefault
-public class ParseReader
+public class ParseReader implements AutoCloseable
 {
   //----------------------------------------------------------------- nested
 
@@ -83,9 +68,6 @@ public class ParseReader
 
   /**
    * This is an auxiliary class to store the position in the reader.
-   *
-   * @example      only returned by getPosition(), cannot be created;
-   *
    */
   @Immutable
   public static class Position
@@ -206,7 +188,7 @@ public class ParseReader
     *
     * @param       inName the name of the file to use for the stream
     *
-    * @exception   java.io.FileNotFoundException thrown when the file to be
+    * @throws      java.io.FileNotFoundException thrown when the file to be
     *                                            opened cannot be found
     *
     */
@@ -267,11 +249,11 @@ public class ParseReader
   protected StringBuilder m_back = new StringBuilder();
 
   /** All the white spaces. */
-  protected final static String s_whites =
+  protected static final String s_whites =
     Config.get("resource:parser/white.spaces", " \t\r\n\f");
 
   /** The word boundaries. */
-  protected final static String s_boundaries =
+  protected static final String s_boundaries =
     Config.get("resource:parser/word.boundaries.extension",
                " \t\r\n\f.,;:'\"/?=+-()*&^%$#@!~{}][<>");
 
@@ -353,7 +335,7 @@ public class ParseReader
    *
    * @return      the character read
    *
-   * @exception   ReadException raised when no character could be read
+   * @throws      ReadException raised when no character could be read
    *
    */
   public char readChar() throws ReadException
@@ -384,7 +366,7 @@ public class ParseReader
    *
    * @return      the next word in the stream
    *
-   * @exception   ReadException a word could not be read
+   * @throws      ReadException a word could not be read
    *
    */
   public String readWord() throws ReadException
@@ -403,7 +385,7 @@ public class ParseReader
    *
    * @return      the next word in the stream
    *
-   * @exception   ReadException a word could not be read
+   * @throws      ReadException a word could not be read
    *
    */
   public String readWord(String inBoundaries)
@@ -450,7 +432,7 @@ public class ParseReader
    *
    * @return      the int from the stream (if any)
    *
-   * @exception   ReadException raised, when no integer could be read
+   * @throws      ReadException raised, when no integer could be read
    *
    */
   public boolean readBoolean() throws ReadException
@@ -475,7 +457,7 @@ public class ParseReader
    *
    * @return      the int from the stream (if any)
    *
-   * @exception   ReadException raised, when no integer could be read
+   * @throws      ReadException raised, when no integer could be read
    *
    */
   public int readInt() throws ReadException
@@ -487,7 +469,7 @@ public class ParseReader
     StringBuilder result = new StringBuilder();
 
     for(int c = peek(); c > 0; c = peek())
-      if(((char)c >= '0' && (char)c <= '9')
+      if(Character.isDigit((char) c)
          || (result.length() == 0 && ((char)c == '-' || (char)c == '+')))
         result.append((char)read());
       else
@@ -529,7 +511,7 @@ public class ParseReader
    *
    * @return      the next long value found.
    *
-   * @exception   ReadException raised when no long could be read
+   * @throws      ReadException raised when no long could be read
    *
    */
   public long readLong() throws ReadException
@@ -541,7 +523,7 @@ public class ParseReader
     StringBuilder result = new StringBuilder();
 
     for(int c = peek(); c > 0; c = peek())
-      if(((char)c >= '0' && (char)c <= '9')
+      if(Character.isDigit((char)c)
          || (result.length() == 0 && ((char)c == '-' || (char)c == '+')))
         result.append((char)read());
       else
@@ -585,7 +567,7 @@ public class ParseReader
    *
    * @return      the next floating value read from the stream
    *
-   * @exception   ReadException raised when a float could not be read
+   * @throws      ReadException raised when a float could not be read
    *
    */
   public float readFloat() throws ReadException
@@ -606,7 +588,7 @@ public class ParseReader
     boolean exp   = false;
     boolean point = false;
     for(int c = peek(); c > 0; c = peek())
-      if(((char)c >= '0' && (char)c <= '9')
+      if(Character.isDigit((char)c)
          || ((result.length() == 0 || exp)
              && ((char)c == '-' || (char)c == '+'))
          || ((char)c == '.' && !point)
@@ -652,7 +634,7 @@ public class ParseReader
    *
    * @return      the next double value found
    *
-   * @exception   ReadException raised when no value could be read
+   * @throws      ReadException raised when no value could be read
    *
    */
   public double readDouble() throws ReadException
@@ -673,7 +655,7 @@ public class ParseReader
     boolean point = false;
     boolean exp   = false;
     for(int c = peek(); c > 0; c = peek())
-      if(((char)c >= '0' && (char)c <= '9')
+      if(Character.isDigit((char)c)
          || ((result.length() == 0 || exp)
              && ((char)c == '-' || (char)c == '+'))
          || ((char)c == '.' && !point)
@@ -858,9 +840,6 @@ public class ParseReader
    *                                trailing space
    *
    * @return      the text read
-   *
-   * @undefined   never
-   *
    */
   public String read(String inDelimiters, @Nullable String inSpaceDelimiters)
   {
@@ -902,7 +881,8 @@ public class ParseReader
   {
     StringBuilder result = new StringBuilder();
 
-    int c, i;
+    int c;
+    int i;
     for(c = read(), i = 0; c != -1 && i < inMax - 1; c = read(), i++)
       result.append((char)c);
 
@@ -1321,9 +1301,6 @@ public class ParseReader
    * @param       inIgnoreCase a flag if casing should be ignored or not
    *
    * @return      true if the character was found, false else
-   *
-   * @undefined   never
-   *
    */
   public boolean expectCase(char inExpected, boolean inIgnoreCase)
   {
@@ -1495,7 +1472,7 @@ public class ParseReader
    *
    * @param       inName the name of the file to open (including path)
    *
-   * @exception   java.io.FileNotFoundException if the file could not be found
+   * @throws      java.io.FileNotFoundException if the file could not be found
    *
    */
   public void open(String inName) throws java.io.FileNotFoundException
@@ -1503,7 +1480,9 @@ public class ParseReader
     // determine the input buffer size (add 1 in case the buffer is empty)
     int size = Math.min((int)(new File(inName)).length(), s_maxBufferSize) + 1;
 
+    // $codepro.audit.disable closeWhereCreated
     open(new BufferedReader(new FileReader(inName), size), inName);
+    // $codepro.audit.enable
   }
 
   //........................................................................
@@ -1521,7 +1500,7 @@ public class ParseReader
   {
     // check if already open
     if(isOpen())
-      close();
+      close(); // $codepro.audit.disable closeInFinally
 
     // store the given values
     m_buffer   = inReader;
@@ -1550,11 +1529,12 @@ public class ParseReader
    * Close the buffer and prepare the reader for another opening.
    *
    */
+  @Override
   public void close()
   {
     try
     {
-      m_buffer.close();
+      m_buffer.close(); // $codepro.audit.disable closeInFinally
     }
     catch(java.io.IOException e)
     {
@@ -1573,9 +1553,6 @@ public class ParseReader
    * Put a character back into the stream to be read next.
    *
    * @param       inChar the character to put back
-   *
-   * @undefined   never
-   *
    */
   public void put(char inChar)
   {
@@ -1808,10 +1785,8 @@ public class ParseReader
     @org.junit.Test
     public void init()
     {
-      ParseReader reader = null;
-      try
+      try (ParseReader reader = new ParseReader("guru.guru"))
       {
-        reader = new ParseReader("guru.guru");
         assertFalse(reader.isOpen());
 
         fail("file not found but still continued");
@@ -1819,15 +1794,15 @@ public class ParseReader
       catch(java.io.FileNotFoundException e)
       { /* nothing to do */ }
 
-      reader = new ParseReader(new java.io.StringReader(""),
-                                           "test");
-      assertEquals("test", reader.getName());
-      assertEquals(true, reader.isOpen());
-      assertEquals(true, reader.isAtEnd());
-      reader.close();
-      assertEquals(false, reader.isOpen());
-      assertEquals(true, reader.isAtEnd());
-      assertEquals(-1, reader.read());
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader(""), "test"))
+      {
+        assertEquals("test", reader.getName());
+        assertEquals(true, reader.isOpen());
+        assertEquals(true, reader.isAtEnd());
+        assertEquals(true, reader.isAtEnd());
+        assertEquals(-1, reader.read());
+      }
     }
 
     //......................................................................
@@ -1841,51 +1816,52 @@ public class ParseReader
         + "-98765432109876543210 -5.6Infinity.5-010-10e23   -99.99e123456"
         + "  +123e123 -10e-33333 true false a test + another \\- test -";
 
-      ParseReader reader = new ParseReader(new java.io.StringReader(text),
-                                           "test");
-
-      try
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader(text), "test"))
       {
-        assertEquals("char", 'a', reader.readChar());
-        assertEquals("word", "Word", reader.readWord());
-        assertEquals("integer", 1234, reader.readInt());
-        assertEquals("negative integer", -10, reader.readInt());
-        assertEquals("max integer", Integer.MAX_VALUE, reader.readInt());
-        assertEquals("long", 0, reader.readLong());
-        assertEquals("min long", Long.MIN_VALUE, reader.readLong());
-        assertEquals("negative float", -5.6, reader.readFloat(), 0.0001);
-        assertEquals("max float", Float.MAX_VALUE, reader.readFloat(), 0);
-        assertEquals("float", 0.5, reader.readFloat(), 0);
-        assertEquals("negative float again", -10.0, reader.readFloat(), 0);
-        assertEquals("big negative flooat", -10e23, reader.readFloat(),
-                     0.0001e24);
-        assertEquals("negative infinity float", Float.NEGATIVE_INFINITY,
-                     reader.readFloat(), 0);
-        assertEquals("double", +123e123, reader.readDouble(), 0.001e123);
-        assertEquals("double null", 0, reader.readDouble(), 0);
-        assertTrue("boolean", reader.readBoolean());
-        assertFalse("boolean", reader.readBoolean());
-        assertEquals("delim", reader.read("+"), " a test ");
-        assertEquals("delim with escape", reader.read("-"),
-                     "+ another \\- test ");
-      }
-      catch(ReadException e)
-      {
-        fail("reading should not have failed: " + e);
-      }
+        try
+        {
+          assertEquals("char", 'a', reader.readChar());
+          assertEquals("word", "Word", reader.readWord());
+          assertEquals("integer", 1234, reader.readInt());
+          assertEquals("negative integer", -10, reader.readInt());
+          assertEquals("max integer", Integer.MAX_VALUE, reader.readInt());
+          assertEquals("long", 0, reader.readLong());
+          assertEquals("min long", Long.MIN_VALUE, reader.readLong());
+          assertEquals("negative float", -5.6, reader.readFloat(), 0.0001);
+          assertEquals("max float", Float.MAX_VALUE, reader.readFloat(), 0);
+          assertEquals("float", 0.5, reader.readFloat(), 0);
+          assertEquals("negative float again", -10.0, reader.readFloat(), 0);
+          assertEquals("big negative flooat", -10e23, reader.readFloat(),
+                       0.0001e24);
+          assertEquals("negative infinity float", Float.NEGATIVE_INFINITY,
+                       reader.readFloat(), 0);
+          assertEquals("double", +123e123, reader.readDouble(), 0.001e123);
+          assertEquals("double null", 0, reader.readDouble(), 0);
+          assertTrue("boolean", reader.readBoolean());
+          assertFalse("boolean", reader.readBoolean());
+          assertEquals("delim", reader.read("+"), " a test ");
+          assertEquals("delim with escape", reader.read("-"),
+                       "+ another \\- test ");
+        }
+        catch(ReadException e)
+        {
+          fail("reading should not have failed: " + e);
+        }
 
-      try
-      {
-        reader.readChar();
-        reader.readWord();
-        reader.readInt();
-        reader.readLong();
-        reader.readFloat();
+        try
+        {
+          reader.readChar();
+          reader.readWord();
+          reader.readInt();
+          reader.readLong();
+          reader.readFloat();
 
-        fail("reading should have failed");
+          fail("reading should have failed");
+        }
+        catch(ReadException e)
+        { /* nothing to do */ }
       }
-      catch(ReadException e)
-      { /* nothing to do */ }
     }
 
     //......................................................................
@@ -1897,40 +1873,41 @@ public class ParseReader
     {
       String text = "\n\n\n\n\n   a\n\n\nguru \n\n\n";
 
-      ParseReader reader = new ParseReader(new java.io.StringReader(text),
-                                           "test");
-
-      try
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader(text), "test"))
       {
-        assertEquals(1, reader.getLineNumber());
-        reader.readChar();
-        assertEquals(6, reader.getLineNumber());
-        assertEquals(6, reader.getPosition().getLine());
-        assertEquals(10, reader.getPosition().getPosition());
-        assertEquals("", reader.getPosition().getBuffer());
-        reader.expect("hmm");
-        assertEquals(6, reader.getLineNumber());
-        reader.expect("guru");
-        assertEquals(9, reader.getLineNumber());
-        assertEquals(9, reader.getPosition().getLine());
-        assertEquals(18, reader.getPosition().getPosition());
-        assertEquals(" ", reader.getPosition().getBuffer());
-        assertEquals("pos", "(pos = 18, line = 9, back = ' ')",
-                     reader.getPosition().toString());
-      }
-      catch(ReadException e)
-      {
-        fail("reading should not have failed");
-      }
+        try
+        {
+          assertEquals(1, reader.getLineNumber());
+          reader.readChar();
+          assertEquals(6, reader.getLineNumber());
+          assertEquals(6, reader.getPosition().getLine());
+          assertEquals(10, reader.getPosition().getPosition());
+          assertEquals("", reader.getPosition().getBuffer());
+          reader.expect("hmm");
+          assertEquals(6, reader.getLineNumber());
+          reader.expect("guru");
+          assertEquals(9, reader.getLineNumber());
+          assertEquals(9, reader.getPosition().getLine());
+          assertEquals(18, reader.getPosition().getPosition());
+          assertEquals(" ", reader.getPosition().getBuffer());
+          assertEquals("pos", "(pos = 18, line = 9, back = ' ')",
+                       reader.getPosition().toString());
+        }
+        catch(ReadException e)
+        {
+          fail("reading should not have failed");
+        }
 
-      try
-      {
-        reader.readChar();
-      }
-      catch(ReadException e)
-      { /* nothing to do */ }
+        try
+        {
+          reader.readChar();
+        }
+        catch(ReadException e)
+        { /* nothing to do */ }
 
-      assertEquals(12, reader.getLineNumber());
+        assertEquals(12, reader.getLineNumber());
+      }
     }
 
     //......................................................................
@@ -1943,16 +1920,17 @@ public class ParseReader
       String text =
         "1234567\n   \nhello$1234567890 and the line end\n";
 
-      ParseReader reader = new ParseReader(new java.io.StringReader(text),
-                                           "test");
-
-      assertEquals((int)'1',        reader.read());
-      assertEquals("2345",          reader.read('6'));
-      assertEquals((int)'6',        reader.read());
-      assertEquals("7\n   \nhello", reader.read("^&%$#@"));
-      assertEquals((int)'$',        reader.read());
-      assertEquals("123456",        reader.read(6));
-      assertEquals("7890 and the line end", reader.readLine());
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader(text), "test"))
+      {
+        assertEquals('1',        reader.read());
+        assertEquals("2345",          reader.read('6'));
+        assertEquals('6',        reader.read());
+        assertEquals("7\n   \nhello", reader.read("^&%$#@"));
+        assertEquals('$',        reader.read());
+        assertEquals("123456",        reader.read(6));
+        assertEquals("7890 and the line end", reader.readLine());
+      }
     }
 
     //......................................................................
@@ -1964,13 +1942,14 @@ public class ParseReader
     {
       String text = "1234567\n   \nhello$1234567890 and the line end\n";
 
-      ParseReader reader = new ParseReader(new java.io.StringReader(text),
-                                           "test");
-
-      assertEquals('\n', reader.ignore('\n'));
-      assertEquals('$',  reader.ignore("!+_$%#@^"));
-      assertEquals((char)-1,   reader.ignore('q'));
-      assertEquals((char)-1,   reader.ignore("d"));
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader(text), "test"))
+      {
+        assertEquals('\n', reader.ignore('\n'));
+        assertEquals('$',  reader.ignore("!+_$%#@^"));
+        assertEquals((char)-1,   reader.ignore('q'));
+        assertEquals((char)-1,   reader.ignore("d"));
+      }
     }
 
     //......................................................................
@@ -1983,35 +1962,36 @@ public class ParseReader
       String text = "\n\n just some        test\n\n another text tests!test 2"
         + " b2 word guru ";
 
-      ParseReader reader = new ParseReader(new java.io.StringReader(text),
-                                           "test");
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader(text), "test"))
+      {
+        assertTrue(reader.expect("just some test"));
+        assertTrue(reader.expect("another text"));
+        assertFalse(reader.expect("test"));
+        assertTrue(reader.expect("tests"));
+        assertTrue(reader.expect('!'));
+        assertEquals(1, reader.expect(new String[]{ "test 1",
+                                                    "test 2", "test 3" }));
+        assertEquals(1, reader.expect(new String [][]
+          {
+            { "a1", "a2", "a3", },
+            { "b1", "b2", "b3", },
+            { "c1", "c2", "c3", },
+          }));
 
-      assertTrue(reader.expect("just some test"));
-      assertTrue(reader.expect("another text"));
-      assertFalse(reader.expect("test"));
-      assertTrue(reader.expect("tests"));
-      assertTrue(reader.expect('!'));
-      assertEquals(1, reader.expect(new String[]{ "test 1",
-                                                  "test 2", "test 3" }));
-      assertEquals(1, reader.expect(new String [][]
-        {
-          { "a1", "a2", "a3", },
-          { "b1", "b2", "b3", },
-          { "c1", "c2", "c3", },
-        }));
+        assertFalse(reader.expect("a"));
+        assertFalse(reader.expect('a'));
+        assertEquals(-1,    reader.expect(new String[]{"a", "b", "c"}));
+        assertEquals("word",
+                     reader.expect(Iterators.forArray("one", "two", "tree",
+                                                      "word", "four")));
 
-      assertFalse(reader.expect("a"));
-      assertFalse(reader.expect('a'));
-      assertEquals(-1,    reader.expect(new String[]{"a", "b", "c"}));
-      assertEquals("word",
-                   reader.expect(Iterators.forArray("one", "two", "tree",
-                                                    "word", "four")));
-
-      // try expecting white spaces
-      assertTrue("space", reader.expect("guru"));
-      assertEquals("space", ' ', reader.peek());
-      assertTrue("space", reader.expect(" "));
-      assertFalse("space", reader.expect(" "));
+        // try expecting white spaces
+        assertTrue("space", reader.expect("guru"));
+        assertEquals("space", ' ', reader.peek());
+        assertTrue("space", reader.expect(" "));
+        assertFalse("space", reader.expect(" "));
+      }
     }
 
     //......................................................................
@@ -2021,53 +2001,12 @@ public class ParseReader
     @org.junit.Test
     public void openClose()
     {
-      ParseReader reader = new ParseReader(new java.io.StringReader(""),
-                                           "test");
-
-      try
+      try (ParseReader reader = new ParseReader("guru.1"))
       {
-        reader = new ParseReader("guru.1");
-        assertFalse(reader.isOpen());
-
         fail("file should not have been opened");
       }
       catch(java.io.FileNotFoundException e)
       { /* nothing to do */ }
-
-
-      try
-      {
-        reader.open("guru.2");
-
-        fail("file should not have been opened");
-      }
-      catch(java.io.FileNotFoundException e)
-      { /* nothing to do */ }
-
-      File temp = null;
-      try
-      {
-        temp = File.createTempFile("test", "file");
-
-        reader.open(temp.getPath());
-
-
-      }
-      catch(java.io.FileNotFoundException e)
-      {
-        fail("file should have been opened");
-      }
-      catch(java.io.IOException e)
-      {
-        fail("temp file should be written");
-      }
-
-      reader.close();
-      assertTrue(temp.delete());
-
-      reader.open(new java.io.StringReader("$"), "test");
-
-      assertEquals(true, reader.expect('$'));
     }
 
     //......................................................................
@@ -2079,41 +2018,44 @@ public class ParseReader
     {
       String text = "\njust some test text\n\n with # an \nerror position";
 
-      ParseReader reader = new ParseReader(new java.io.StringReader(text),
-                                           "test");
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader(text), "test"))
+      {
+        reader.read('#');
+        Position pos = reader.getPosition();
 
-      reader.read('#');
-      Position pos = reader.getPosition();
+        ParseError error = reader.error(pos, "test", "just some text");
 
-      ParseError error = reader.error(pos, "test", "just some text");
+        assertEquals("test", error.getErrorNumber());
+        assertEquals("just some text", error.getParseMessage());
+        assertEquals("[test] no definition found for this error",
+                     error.getError());
+        assertEquals("test", error.getDocument());
+        assertEquals(4, error.getLine());
+        assertEquals("\njust some test text\n\n with #", error.getPre());
+        assertEquals(" an \nerror position", error.getPost());
+        assertFalse("error", reader.hadError());
+        assertFalse("warning", reader.hadWarning());
 
-      assertEquals("test", error.getErrorNumber());
-      assertEquals("just some text", error.getParseMessage());
-      assertEquals("[test] no definition found for this error",
-                   error.getError());
-      assertEquals("test", error.getDocument());
-      assertEquals(4, error.getLine());
-      assertEquals("\njust some test text\n\n with #", error.getPre());
-      assertEquals(" an \nerror position", error.getPost());
-      assertFalse("error", reader.hadError());
-      assertFalse("warning", reader.hadWarning());
+        m_logger.addExpected
+          ("ERROR: test: [test] no definition found for this "
+            + "error (just some text) "
+            + "on line 4 in document 'test'\n...\njust some "
+            + "test text\n\n with #>>> an \nerror position...");
 
-      m_logger.addExpected("ERROR: test: [test] no definition found for this "
-                           + "error (just some text) "
-                           + "on line 4 in document 'test'\n...\njust some "
-                           + "test text\n\n with #>>> an \nerror position...");
+        reader.logError(pos, "test", "just some text");
 
-      reader.logError(pos, "test", "just some text");
+        m_logger.addExpected
+        ("WARNING: test: [test] no definition found for this "
+          + "error (some other text) "
+          + "on line 4 in document 'test'\n...\njust some "
+          + "test text\n\n with #>>> an \nerror position...");
 
-      m_logger.addExpected("WARNING: test: [test] no definition found for this "
-                           + "error (some other text) "
-                           + "on line 4 in document 'test'\n...\njust some "
-                           + "test text\n\n with #>>> an \nerror position...");
-
-      reader.logWarning(pos, "test", "some other text");
+        reader.logWarning(pos, "test", "some other text");
 
 
-      m_logger.verify();
+        m_logger.verify();
+      }
     }
 
     //......................................................................
@@ -2125,9 +2067,8 @@ public class ParseReader
     {
       String text = "some text to read";
 
-      ParseReader reader = new ParseReader(new java.io.StringReader(text),
-                                           "test");
-      try
+      try (ParseReader reader =
+       new ParseReader(new java.io.StringReader(text), "test"))
       {
         reader.put('a');
         assertEquals("char", 'a',     reader.readChar());
@@ -2163,10 +2104,8 @@ public class ParseReader
     {
       String text = "some \n\n     text \n to \n   read";
 
-      ParseReader reader = new ParseReader(new java.io.StringReader(text),
-                                           "test");
-
-      try
+      try (ParseReader reader =
+       new ParseReader(new java.io.StringReader(text), "test"))
       {
         reader.readWord();
         Position pos = reader.getPosition();
@@ -2196,36 +2135,31 @@ public class ParseReader
       {
         File temp = File.createTempFile("test", "file");
 
-        java.io.FileWriter writer = new java.io.FileWriter(temp);
-
-        writer.write("<?xml version=\"1.0\" ?>\n\n<!-- ");
-        writer.flush();
-
-        // test reading from a file
-        ParseReader reader = null;
-        try
+        try (java.io.FileWriter writer = new java.io.FileWriter(temp);
+          ParseReader reader = new ParseReader(temp.getPath()))
         {
-          reader = new ParseReader(temp.getPath());
+          writer.write("<?xml version=\"1.0\" ?>\n\n<!-- ");
+          writer.flush();
+
+          assertEquals("text not correctly read", "<?xml version=\"1.0\" ?>",
+                       reader.readLine());
+          reader.ignore('\n');
+          assertEquals("not correctly expected", true, reader.expect("<!--"));
+
         }
         catch(java.io.FileNotFoundException e)
         {
           fail("file should be found");
         }
-
-        assertEquals("text not correctly read", "<?xml version=\"1.0\" ?>",
-                     reader.readLine());
-        reader.ignore('\n');
-        assertEquals("not correctly expected", true, reader.expect("<!--"));
-
-        writer.close();
-        reader.close();
-        assertTrue(temp.delete());
+        finally
+        {
+          assertTrue(temp.delete());
+        }
       }
       catch(java.io.IOException e)
       {
         fail("temp file should be written");
       }
-
     }
 
     //......................................................................

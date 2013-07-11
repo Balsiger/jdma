@@ -26,6 +26,7 @@ package net.ixitxachitls.util.configuration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -44,16 +45,8 @@ import javax.annotation.concurrent.ThreadSafe;
  * system. The configuration values are backed with system properites and can
  * also be set that way (you have to set them before accessing them, though).w
  *
- *
  * @file          Config.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
- * @example       <PRE>
- * // get a value
- * Config.get("dir/file/key.subkey", "guru");
- * </PRE>
- *
  */
 
 //..........................................................................
@@ -667,6 +660,11 @@ public final class Config
     @org.junit.Test
     public void get()
     {
+      Properties properties = System.getProperties();
+      for(String key : properties.stringPropertyNames())
+        if(key.startsWith("Config$Test$MockConfiguration:test"))
+          System.clearProperty(key);
+
       assertEquals("get", "a test",
                    Config.get("Config$Test$MockConfiguration:test", "a test"));
       assertEquals("get", INT,

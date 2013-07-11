@@ -71,7 +71,7 @@ public class EnumSelection<T extends Enum<T>> extends Value<EnumSelection<T>>
      * @return the name of the value
      *
      */
-    public String getName();
+    String getName();
   }
 
   /** The interface for all enumeration values with short names. */
@@ -82,7 +82,7 @@ public class EnumSelection<T extends Enum<T>> extends Value<EnumSelection<T>>
      * @return the short name of the value
      *
      */
-    public String getShort();
+    String getShort();
   }
 
   //........................................................................

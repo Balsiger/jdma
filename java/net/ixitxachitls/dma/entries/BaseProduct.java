@@ -2692,107 +2692,108 @@ public class BaseProduct extends BaseEntry
     @org.junit.Test
     public void read()
     {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader(s_text), "test");
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader(s_text), "test"))
+      {
+        String result =
+          "#----- WTC 88567\n"
+          + "\n"
+          + "base product WTC 88567 =\n"
+          + "\n"
+          + "  title             \"Silver M\\hat{a}rches\";\n"
+          + "  leader            \"\";\n"
+          + "  subtitle          \"A Vast Frontier Fraught with Endless Peril\""
+          + ";\n"
+          + "  notes             \"test\";\n"
+          + "  author            \"Ed Greenwood\",\n"
+          + "                    \"Jason Carl\",\n"
+          + "                    \"Richard Baker\" developer;\n"
+          + "  editor            \"Kim Mohan\";\n"
+          + "  cover             \"Vance Kovacs\";\n"
+          + "  cartography       \"Dennis Kauth\",\n"
+          + "                    \"Rob Lazzaretti\";\n"
+          + "  illustrations     \"Matt Cavotta\",\n"
+          + "                    \"Michael Dubisch\",\n"
+          + "                    \"Jeff Easley\",\n"
+          + "                    \"Wayne England\",\n"
+          + "                    \"Raven Mimura\",\n"
+          + "                    \"Matt Mitchel\",\n"
+          + "                    \"Christopher Moeller\",\n"
+          + "                    \"Puddnhead\",\n"
+          + "                    \"Adam Rex\",\n"
+          + "                    \"Richard Sardinha\",\n"
+          + "                    \"Arnie Swekel\";\n"
+          + "  typography        \"Sonya Percival\";\n"
+          + "  management        \"Richard Baker\" creative direction,\n"
+          + "                    \"Bill Slavicsek\" vice-president RPG R&D,\n"
+          + "                    \"Mary Kirchoff\" vice-president publishing,\n"
+          + "                    \"Anthony Valterra\" business management,\n"
+          + "                    \"Martin Durham\" project management,\n"
+          + "                    \"Chas DeLong\" production management,\n"
+          + "                    \"Robert Raper\" art direction,\n"
+          + "                    \"Robert Campbell\" graphic design,\n"
+          + "                    \"Cynthia Fliege\" graphic design,\n"
+          + "                    \"Dee & Barnett\" graphic design;\n"
+          + "  date              July 2002;\n"
+          + "  ISBN              0-7869-2835-2;\n"
+          + "  pages             160;\n"
+          + "  system            D&D 3rd;\n"
+          + "  audience          DM;\n"
+          + "  product type      Accessory;\n"
+          + "  style             Soft Cover;\n"
+          + "  producer          TSR;\n"
+          + "  volume            XV;\n"
+          + "  number            42;\n"
+          + "  series            test series;\n"
+          + "  price             $38.95;\n"
+          + "  contents          Book 3,\n"
+          + "                    Poster \"color map\" 2;\n"
+          + "  requirements      DMA 007,\n"
+          + "                    DMA 42,\n"
+          + "                    DMA 3;\n"
+          + "  worlds            Forgotten Realms;\n"
+          + "  references        guru guru: 10,\n"
+          + "                    test,\n"
+          + "                    test: 304-330/400;\n"
+          + "  description       \"Haunted by malicious dragons, hordes of "
+          + "orcs, and other\n"
+          + "                    ferocious creatures, the relentless cold and "
+          + "unforgiving\n"
+          + "                    terrain of the \\Place{Silver Marches} "
+          + "promise undiscovered\n"
+          + "                    riches and unspeakable danger to those bold "
+          + "enough to\n"
+          + "                    venture there. Complete information on the "
+          + "towns and\n"
+          + "                    settlements of the burgeoning \\Place{Silver "
+          + "Marches} alliance\n"
+          + "                    and the many hazards that threaten it "
+          + "highlight this detailed\n"
+          + "                    survey of one of the most exciting regions in "
+          + "the\n"
+          + "                    \\Product[WTC 11836]{Forgotten Realms} game "
+          + "setting.\n"
+          + "                    \\list{6 new prestige classes}\n"
+          + "                    {Indigenous monster}\n"
+          + "                    {Poster map of the region}\n"
+          + "                    To use this accessory, you also need the\n"
+          + "                    \\Product[WTC 11836]{Forgotten Realms "
+          + "Campaign Setting}, the\n"
+          + "                    \\Product[WTC 11550]{Player's Handbook}, the\n"
+          + "                    \\Product[WTC 11551]{Dungeon Master's\n"
+          + "                    Guide}, and the \\Product[WTC 11552]{Monster "
+          + "Manual}.\";\n"
+          + "  name              WTC 88567.\n"
+          + "\n"
+          + "#.....\n";
 
-      String result =
-        "#----- WTC 88567\n"
-        + "\n"
-        + "base product WTC 88567 =\n"
-        + "\n"
-        + "  title             \"Silver M\\hat{a}rches\";\n"
-        + "  leader            \"\";\n"
-        + "  subtitle          \"A Vast Frontier Fraught with Endless Peril\""
-        + ";\n"
-        + "  notes             \"test\";\n"
-        + "  author            \"Ed Greenwood\",\n"
-        + "                    \"Jason Carl\",\n"
-        + "                    \"Richard Baker\" developer;\n"
-        + "  editor            \"Kim Mohan\";\n"
-        + "  cover             \"Vance Kovacs\";\n"
-        + "  cartography       \"Dennis Kauth\",\n"
-        + "                    \"Rob Lazzaretti\";\n"
-        + "  illustrations     \"Matt Cavotta\",\n"
-        + "                    \"Michael Dubisch\",\n"
-        + "                    \"Jeff Easley\",\n"
-        + "                    \"Wayne England\",\n"
-        + "                    \"Raven Mimura\",\n"
-        + "                    \"Matt Mitchel\",\n"
-        + "                    \"Christopher Moeller\",\n"
-        + "                    \"Puddnhead\",\n"
-        + "                    \"Adam Rex\",\n"
-        + "                    \"Richard Sardinha\",\n"
-        + "                    \"Arnie Swekel\";\n"
-        + "  typography        \"Sonya Percival\";\n"
-        + "  management        \"Richard Baker\" creative direction,\n"
-        + "                    \"Bill Slavicsek\" vice-president RPG R&D,\n"
-        + "                    \"Mary Kirchoff\" vice-president publishing,\n"
-        + "                    \"Anthony Valterra\" business management,\n"
-        + "                    \"Martin Durham\" project management,\n"
-        + "                    \"Chas DeLong\" production management,\n"
-        + "                    \"Robert Raper\" art direction,\n"
-        + "                    \"Robert Campbell\" graphic design,\n"
-        + "                    \"Cynthia Fliege\" graphic design,\n"
-        + "                    \"Dee & Barnett\" graphic design;\n"
-        + "  date              July 2002;\n"
-        + "  ISBN              0-7869-2835-2;\n"
-        + "  pages             160;\n"
-        + "  system            D&D 3rd;\n"
-        + "  audience          DM;\n"
-        + "  product type      Accessory;\n"
-        + "  style             Soft Cover;\n"
-        + "  producer          TSR;\n"
-        + "  volume            XV;\n"
-        + "  number            42;\n"
-        + "  series            test series;\n"
-        + "  price             $38.95;\n"
-        + "  contents          Book 3,\n"
-        + "                    Poster \"color map\" 2;\n"
-        + "  requirements      DMA 007,\n"
-        + "                    DMA 42,\n"
-        + "                    DMA 3;\n"
-        + "  worlds            Forgotten Realms;\n"
-        + "  references        guru guru: 10,\n"
-        + "                    test,\n"
-        + "                    test: 304-330/400;\n"
-        + "  description       \"Haunted by malicious dragons, hordes of orcs, "
-        + "and other\n"
-        + "                    ferocious creatures, the relentless cold and "
-        + "unforgiving\n"
-        + "                    terrain of the \\Place{Silver Marches} promise "
-        + "undiscovered\n"
-        + "                    riches and unspeakable danger to those bold "
-        + "enough to\n"
-        + "                    venture there. Complete information on the "
-        + "towns and\n"
-        + "                    settlements of the burgeoning \\Place{Silver "
-        + "Marches} alliance\n"
-        + "                    and the many hazards that threaten it highlight "
-        + "this detailed\n"
-        + "                    survey of one of the most exciting regions in "
-        + "the\n"
-        + "                    \\Product[WTC 11836]{Forgotten Realms} game "
-        + "setting.\n"
-        + "                    \\list{6 new prestige classes}\n"
-        + "                    {Indigenous monster}\n"
-        + "                    {Poster map of the region}\n"
-        + "                    To use this accessory, you also need the\n"
-        + "                    \\Product[WTC 11836]{Forgotten Realms Campaign "
-        + "Setting}, the\n"
-        + "                    \\Product[WTC 11550]{Player's Handbook}, the\n"
-        + "                    \\Product[WTC 11551]{Dungeon Master's\n"
-        + "                    Guide}, and the \\Product[WTC 11552]{Monster "
-        + "Manual}.\";\n"
-        + "  name              WTC 88567.\n"
-        + "\n"
-        + "#.....\n";
+        AbstractEntry entry = BaseProduct.read(reader);
 
-      AbstractEntry entry = BaseProduct.read(reader);
-
-      assertNotNull("base product should have been read", entry);
-      assertEquals("base product name does not match", "WTC 88567",
-                   entry.getName());
-      assertEquals("base product does not match", result, entry.toString());
+        assertNotNull("base product should have been read", entry);
+        assertEquals("base product name does not match", "WTC 88567",
+                     entry.getName());
+        assertEquals("base product does not match", result, entry.toString());
+      }
     }
 
     //......................................................................
@@ -2802,41 +2803,43 @@ public class BaseProduct extends BaseEntry
     @org.junit.Test
     public void persons()
     {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader(s_text), "test");
-      BaseProduct entry = (BaseProduct)BaseProduct.read(reader);
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader(s_text), "test"))
+      {
+        BaseProduct entry = (BaseProduct)BaseProduct.read(reader);
 
-      Set<String> persons = new java.util.TreeSet<String>();
-      entry.collectPersons(persons);
-      assertContent("persons", persons,
-                    "Adam Rex",
-                    "Anthony Valterra",
-                    "Arnie Swekel",
-                    "Bill Slavicsek",
-                    "Chas DeLong",
-                    "Christopher Moeller",
-                    "Cynthia Fliege",
-                    "Dee & Barnett",
-                    "Dennis Kauth",
-                    "Ed Greenwood",
-                    "Jason Carl",
-                    "Jeff Easley",
-                    "Kim Mohan",
-                    "Martin Durham",
-                    "Mary Kirchoff",
-                    "Matt Cavotta",
-                    "Matt Mitchel",
-                    "Michael Dubisch",
-                    "Puddnhead",
-                    "Raven Mimura",
-                    "Richard Baker",
-                    "Richard Sardinha",
-                    "Rob Lazzaretti",
-                    "Robert Campbell",
-                    "Robert Raper",
-                    "Sonya Percival",
-                    "Vance Kovacs",
-                    "Wayne England");
+        Set<String> persons = new java.util.TreeSet<String>();
+        entry.collectPersons(persons);
+        assertContent("persons", persons,
+                      "Adam Rex",
+                      "Anthony Valterra",
+                      "Arnie Swekel",
+                      "Bill Slavicsek",
+                      "Chas DeLong",
+                      "Christopher Moeller",
+                      "Cynthia Fliege",
+                      "Dee & Barnett",
+                      "Dennis Kauth",
+                      "Ed Greenwood",
+                      "Jason Carl",
+                      "Jeff Easley",
+                      "Kim Mohan",
+                      "Martin Durham",
+                      "Mary Kirchoff",
+                      "Matt Cavotta",
+                      "Matt Mitchel",
+                      "Michael Dubisch",
+                      "Puddnhead",
+                      "Raven Mimura",
+                      "Richard Baker",
+                      "Richard Sardinha",
+                      "Rob Lazzaretti",
+                      "Robert Campbell",
+                      "Robert Raper",
+                      "Sonya Percival",
+                      "Vance Kovacs",
+                      "Wayne England");
+      }
     }
 
     //......................................................................
@@ -2846,29 +2849,31 @@ public class BaseProduct extends BaseEntry
     @org.junit.Test
     public void jobs()
     {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader(s_text), "test");
-      BaseProduct entry = (BaseProduct)BaseProduct.read(reader);
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader(s_text), "test"))
+      {
+        BaseProduct entry = (BaseProduct)BaseProduct.read(reader);
 
-      Set<String> jobs = new java.util.TreeSet<String>();
-      entry.collectJobs(jobs);
-      assertContent("jobs", jobs,
-                    "art direction",
-                    "author",
-                    "business management",
-                    "cartographer",
-                    "cover",
-                    "creative direction",
-                    "developer",
-                    "editor",
-                    "graphic design",
-                    "illustrator",
-                    "management",
-                    "production management",
-                    "project management",
-                    "typographer",
-                    "vice-president RPG R&D",
-                    "vice-president publishing");
+        Set<String> jobs = new java.util.TreeSet<String>();
+        entry.collectJobs(jobs);
+        assertContent("jobs", jobs,
+                      "art direction",
+                      "author",
+                      "business management",
+                      "cartographer",
+                      "cover",
+                      "creative direction",
+                      "developer",
+                      "editor",
+                      "graphic design",
+                      "illustrator",
+                      "management",
+                      "production management",
+                      "project management",
+                      "typographer",
+                      "vice-president RPG R&D",
+                      "vice-president publishing");
+      }
     }
 
     //......................................................................

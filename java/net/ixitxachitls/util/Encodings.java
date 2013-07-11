@@ -247,9 +247,6 @@ public final class Encodings
     * @param       inText the text to encode
     *
     * @return      the encoded text
-    *
-    * @example     String encoded = Encodings.encodeHTMLAttribute("\"");
-    *
     */
   public static String encodeHTMLAttribute(String inText)
   {
@@ -458,7 +455,8 @@ public final class Encodings
       assertEquals("word", "Test", Encodings.toWordUpperCase("test"));
       assertEquals("word", "Test", Encodings.toWordUpperCase("Test"));
       // Does not work on the server
-      //assertEquals("word", "Faerûn", Encodings.toWordUpperCase("faerûn"));
+      //assertEquals("word", "Faer��n",
+      //Encodings.toWordUpperCase("faer��n"));
       assertEquals("brackets", "Test (Test)",
                    Encodings.toWordUpperCase("test (test)"));
       assertEquals("empty", "", Encodings.toWordUpperCase(""));

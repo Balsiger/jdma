@@ -79,19 +79,19 @@ public final class DMAFiles
   //-------------------------------------------------------------- variables
 
   /** The name of a default image. */
-  private static final String s_defaultImage =
+  private static final String DEFAULT_IMAGE =
     Config.get("files.default.image", "dummy.png");
 
   /** The base path to all dma files. */
-  private static final String s_basePath =
+  private static final String BASE_PATH =
     Config.get("files.path.base", "/files");
 
   /** The directory with the icons. */
-  private static final String s_dirIcons =
+  private static final String DIR_ICONS =
     Config.get("resource:html/dir.icons", "/icons");
 
   /** The special file names that we want to return first. */
-  private static final Set<String> s_specialImages =
+  private static final Set<String> SPECIAL_IMAGES =
     ImmutableSet.of("cover", "official", "unofficial", "main");
 
   //........................................................................
@@ -145,7 +145,7 @@ public final class DMAFiles
   private static @Nullable String mainImage(String inID, String inType)
   {
    Resource resources =
-     Resource.get(Files.concatenate(s_basePath, inType, inID));
+     Resource.get(Files.concatenate(BASE_PATH, inType, inID));
 
    List<String> files = resources.files();
 
@@ -158,22 +158,22 @@ public final class DMAFiles
       return null;
 
     if(files.size() == 1)
-      return Files.concatenate(s_basePath, inType, inID, files.get(0));
+      return Files.concatenate(BASE_PATH, inType, inID, files.get(0));
 
     for(String file : files)
       if(Files.file(file).equals(inID))
-        return Files.concatenate(s_basePath, inType, inID, file);
+        return Files.concatenate(BASE_PATH, inType, inID, file);
 
     for(String file : files)
       if(Files.file(file).contains(inID))
-        return Files.concatenate(s_basePath, inType, inID, file);
+        return Files.concatenate(BASE_PATH, inType, inID, file);
 
     for(String file : files)
-      if(s_specialImages.contains(Files.file(file)))
-        return Files.concatenate(s_basePath, inType, inID, file);
+      if(SPECIAL_IMAGES.contains(Files.file(file)))
+        return Files.concatenate(BASE_PATH, inType, inID, file);
 
     // As a fallback we return the first image that we find
-    return Files.concatenate(s_basePath, inType, inID, files.get(0));
+    return Files.concatenate(BASE_PATH, inType, inID, files.get(0));
   }
 
   //........................................................................
@@ -229,13 +229,13 @@ public final class DMAFiles
                                          String inType)
   {
     Resource resources =
-      Resource.get(Files.concatenate(s_basePath, inType, inID));
+      Resource.get(Files.concatenate(BASE_PATH, inType, inID));
 
     for(String file : resources.files())
       if(!Files.file(file).equals(Files.file(inMain))
          && !Files.isThumbnail(file)
          && !Files.isIgnored(file))
-        ioFiles.add(Files.concatenate(s_basePath, inType, inID, file));
+        ioFiles.add(Files.concatenate(BASE_PATH, inType, inID, file));
 
     return ioFiles;
   }
@@ -254,7 +254,7 @@ public final class DMAFiles
    */
   public static String defaultImage(String inType)
   {
-    return Files.concatenate(s_dirIcons, inType + "-" + s_defaultImage);
+    return Files.concatenate(DIR_ICONS, inType + "-" + DEFAULT_IMAGE);
   }
 
   //........................................................................

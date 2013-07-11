@@ -407,6 +407,9 @@ public class AbstractType<T extends AbstractEntry>
   @Override
   public boolean equals(Object inOther)
   {
+    if(this == inOther)
+      return true;
+
     if(inOther == null)
       return false;
 
@@ -554,7 +557,11 @@ public class AbstractType<T extends AbstractEntry>
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    /** A type for testing. */
+    /**
+     * A type for testing.
+     *
+     *  @param <T> the real type of entry
+     */
     public static class TestType<T extends AbstractEntry>
       extends AbstractType<T>
     {

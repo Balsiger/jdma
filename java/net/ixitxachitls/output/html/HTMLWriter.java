@@ -18,11 +18,13 @@
  * along with Dungeon Master Assistant; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
+// $codepro.audit.disable closeInFinally
 
 //------------------------------------------------------------------ imports
 
 package net.ixitxachitls.output.html;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayDeque;
@@ -57,7 +59,7 @@ import net.ixitxachitls.util.logging.Log;
 
 @NotThreadSafe
 @ParametersAreNonnullByDefault
-public class HTMLWriter
+public class HTMLWriter implements AutoCloseable
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -84,10 +86,14 @@ public class HTMLWriter
   protected PrintWriter m_writer;
 
   /** The writer containing the body. */
+  // $codepro.audit.disable closeWhereCreated
   protected StringWriter m_body = new StringWriter();
+  // $codepro.audit.enable
 
   /** The writer for the body. */
+  // $codepro.audit.disable closeWhereCreated
   protected PrintWriter m_bodyWriter = new PrintWriter(m_body);
+  // $codepro.audit.enable
 
   /** The current stack of tags. */
   protected Deque<String> m_tags = new ArrayDeque<String>();
@@ -107,6 +113,13 @@ public class HTMLWriter
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  @Override
+  public String toString()
+  {
+    return "HTMLWriter";
+  }
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -124,7 +137,7 @@ public class HTMLWriter
   public HTMLWriter begin(String inTag)
   {
     indent();
-    m_bodyWriter.print("<");
+    m_bodyWriter.print('<');
     m_bodyWriter.print(inTag.toUpperCase(Locale.US));
     m_tags.push(inTag);
     m_unclosed = true;
@@ -152,13 +165,13 @@ public class HTMLWriter
       return this;
     }
 
-    m_bodyWriter.print(" ");
+    m_bodyWriter.print(' ');
     m_bodyWriter.print(inName);
     if(inValue != null)
     {
       m_bodyWriter.print("=\"");
       m_bodyWriter.print(inValue);
-      m_bodyWriter.print("\"");
+      m_bodyWriter.print('\"');
     }
 
     return this;
@@ -422,7 +435,7 @@ public class HTMLWriter
 
       m_bodyWriter.print("</");
       m_bodyWriter.print(inTag.toUpperCase(Locale.US));
-      m_bodyWriter.println(">");
+      m_bodyWriter.println('>');
     }
 
     return this;
@@ -685,8 +698,8 @@ public class HTMLWriter
 
   /**
    * Close the writer.
-   *
    */
+  @Override
   public void close()
   {
     ensureHTML();
@@ -700,8 +713,20 @@ public class HTMLWriter
     m_writer.print(m_body.toString());
     m_writer.println("  </BODY>");
     m_writer.println("</HTML>");
-    m_writer.close();
-    m_bodyWriter.close();
+
+    try
+    {
+      // $codepro.audit.disable closeInFinally
+      m_writer.close();
+      m_body.close();
+      m_bodyWriter.close();
+      // $codepro.audit.disable closeInFinally
+    }
+    catch(IOException e)
+    {
+      Log.warning("Cannot close writers: " + e);
+    }
+
     m_inHTML = false;
   }
 
@@ -757,9 +782,9 @@ public class HTMLWriter
       return;
 
     if("a".equalsIgnoreCase(m_tags.peek()))
-      m_bodyWriter.print(">");
+      m_bodyWriter.print('>');
     else
-      m_bodyWriter.println(">");
+      m_bodyWriter.println('>');
 
     m_unclosed = false;
   }
@@ -808,45 +833,53 @@ public class HTMLWriter
   {
     //----- simple ---------------------------------------------------------
 
-    /** The simple Test. */
+    /**
+     * The simple Test.
+     *
+     * @throws IOException when closing content writer
+     */
     @org.junit.Test
-    public void simple()
+    public void simple() throws IOException
     {
-      java.io.StringWriter contents = new java.io.StringWriter();
-      HTMLWriter writer = new HTMLWriter(new PrintWriter(contents));
 
-      writer
-        .comment("This is a test.")
-        .begin("p")
-        .addCSSFile("jdma")
-        .attribute("font", "Helvetica")
-        .attribute("selected", null)
-        .add("This is the body")
-        .begin("br")
-        .title("title")
-        .end("br")
-        .end("p")
-        .close();
+      try (java.io.StringWriter contents = new java.io.StringWriter())
+      {
+        try (HTMLWriter writer = new HTMLWriter(new PrintWriter(contents)))
+        {
+          writer
+            .comment("This is a test.")
+            .begin("p")
+            .addCSSFile("jdma")
+            .attribute("font", "Helvetica")
+            .attribute("selected", null)
+            .add("This is the body")
+            .begin("br")
+            .title("title")
+            .end("br")
+            .end("p");
+        }
 
-      assertEquals("contents",
-                   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                   + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
-                   + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-                   + "\">\n"
-                   + "<HTML xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-                   + "  <HEAD>\n"
-                   + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
-                   + "href=\"/css/jdma.css\" />\n"
-                   + "    <TITLE>title</TITLE>\n"
-                   + "  </HEAD>\n"
-                   + "  <BODY>\n"
-                   + "    <!-- This is a test. -->\n"
-                   + "    <P font=\"Helvetica\" selected>\n"
-                   + "      This is the body\n"
-                   + "      <BR/>\n"
-                   + "    </P>\n"
-                   + "  </BODY>\n"
-                   + "</HTML>\n", contents.toString());
+        assertEquals
+          ("contents",
+           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+             + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
+             + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+             + "\">\n"
+             + "<HTML xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+             + "  <HEAD>\n"
+             + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
+             + "href=\"/css/jdma.css\" />\n"
+             + "    <TITLE>title</TITLE>\n"
+             + "  </HEAD>\n"
+             + "  <BODY>\n"
+             + "    <!-- This is a test. -->\n"
+             + "    <P font=\"Helvetica\" selected>\n"
+             + "      This is the body\n"
+             + "      <BR/>\n"
+             + "    </P>\n"
+             + "  </BODY>\n"
+             + "</HTML>\n", contents.toString());
+      }
     }
 
     //......................................................................

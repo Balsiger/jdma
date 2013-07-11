@@ -66,7 +66,7 @@ public abstract class RedirectFilter implements Filter
   /**
    * Create the filter.
    */
-  public RedirectFilter()
+  protected RedirectFilter()
   {
     // nothing to do
   }

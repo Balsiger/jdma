@@ -192,12 +192,12 @@ public final class Importer
     File file = new File(inFile);
     if(file.isDirectory())
     {
-      if("CVS".equals(file.getName()) || file.getName().startsWith("."))
+      if("CVS".equals(file.getName()) || file.getName().charAt(0) == '.')
         return;
 
       for(File entry : file.listFiles())
       {
-        if(entry.getName().startsWith("."))
+        if(entry.getName().charAt(0) == '.')
           continue;
 
         if(entry.getName().contains("_thumbnail."))
@@ -290,7 +290,7 @@ public final class Importer
         AbstractEntry entry = i.next();
         if(!entry.ensureBaseEntries())
         {
-          System.out.println("setting back " + entry.getName());
+          System.err.println("setting back " + entry.getName());
           continue;
         }
 
@@ -368,12 +368,10 @@ public final class Importer
       connection.setDoOutput(true);
       connection.setRequestMethod("POST");
       connection.connect();
-      OutputStream output = connection.getOutputStream();
 
-      FileInputStream input =
-        new FileInputStream(image.replace("\\ ", " "));
-
-      try
+      try (OutputStream output = connection.getOutputStream();
+        FileInputStream input =
+          new FileInputStream(image.replace("\\ ", " ")))
       {
         byte []buffer = new byte[1024 * 100];
         for(int read = input.read(buffer); read > 0; read = input.read(buffer))
@@ -382,10 +380,9 @@ public final class Importer
         output.flush();
 
         // Get the response
-        BufferedReader rd = new BufferedReader(new InputStreamReader
-                                               (connection.getInputStream(),
-                                               Charsets.UTF_8));
-        try
+        try (BufferedReader rd =
+          new BufferedReader(new InputStreamReader(connection.getInputStream(),
+                                                   Charsets.UTF_8)))
         {
           String line = rd.readLine();
           if(line != null && !"OK".equals(line) && !line.isEmpty())
@@ -394,18 +391,7 @@ public final class Importer
             for(; line != null; line = rd.readLine())
               Log.error(line);
           }
-
-          input.close();
-          output.close();
         }
-        finally
-        {
-          rd.close();
-        }
-      }
-      finally
-      {
-        input.close();
       }
     }
   }
@@ -506,7 +492,7 @@ public final class Importer
 
       importer.read();
     }
-    catch(Exception e)
+    catch(Exception e) // $codepro.audit.disable caughtExceptions
     {
       Log.error("Random error: " + e.toString());
       e.printStackTrace();

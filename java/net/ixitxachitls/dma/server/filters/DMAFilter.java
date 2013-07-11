@@ -179,30 +179,31 @@ public class DMAFilter implements Filter
     {
       DMAFilter filter = new DMAFilter();
 
-      java.io.BufferedReader reader =
-        new java.io.BufferedReader(new java.io.StringReader(""));
+      try (java.io.BufferedReader reader =
+        new java.io.BufferedReader(new java.io.StringReader("")))
+      {
+        HttpServletRequest request =
+          EasyMock.createMock(HttpServletRequest.class);
+        HttpServletResponse response =
+          EasyMock.createMock(HttpServletResponse.class);
+        FilterChain chain = EasyMock.createMock(FilterChain.class);
 
-      HttpServletRequest request =
-        EasyMock.createMock(HttpServletRequest.class);
-      HttpServletResponse response =
-        EasyMock.createMock(HttpServletResponse.class);
-      FilterChain chain = EasyMock.createMock(FilterChain.class);
+        EasyMock.expect(request.getParameterMap()).andStubReturn
+          (new java.util.HashMap<String, String []>());
+        EasyMock.expect(request.getReader()).andStubReturn(reader);
+        EasyMock.expect(request.getQueryString()).andStubReturn("");
+        EasyMock.expect(request.getCookies()).andStubReturn
+          (new javax.servlet.http.Cookie [0]);
+        chain.doFilter(EasyMock.anyObject(DMARequest.class),
+                       EasyMock.anyObject(HttpServletResponse.class));
+        EasyMock.expect(request.getServletPath()).andStubReturn("/");
 
-      EasyMock.expect(request.getParameterMap()).andStubReturn
-        (new java.util.HashMap<String, String []>());
-      EasyMock.expect(request.getReader()).andStubReturn(reader);
-      EasyMock.expect(request.getQueryString()).andStubReturn("");
-      EasyMock.expect(request.getCookies()).andStubReturn
-        (new javax.servlet.http.Cookie [0]);
-      chain.doFilter(EasyMock.anyObject(DMARequest.class),
-                     EasyMock.anyObject(HttpServletResponse.class));
-      EasyMock.expect(request.getServletPath()).andStubReturn("/");
+        EasyMock.replay(request, response, chain);
 
-      EasyMock.replay(request, response, chain);
+        filter.doFilter(request, response, chain);
 
-      filter.doFilter(request, response, chain);
-
-      EasyMock.verify(request, response, chain);
+        EasyMock.verify(request, response, chain);
+      }
     }
 
     //......................................................................

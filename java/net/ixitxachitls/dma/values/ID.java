@@ -205,7 +205,7 @@ public class ID extends BaseText<ID>
         read[i] = 0;
       }
 
-      if(read[i] > 'Z' || read[i] < 'A')
+      if(!Character.isUpperCase(read[i]))
       {
         inReader.seek(pos);
         return false;

@@ -659,7 +659,7 @@ public class Modifier extends Value<Modifier>
     StringBuilder result = new StringBuilder();
 
     if(m_value >= 0)
-      result.append("+");
+      result.append('+');
 
     result.append(m_value);
     result.append(" " + m_type);
@@ -672,7 +672,7 @@ public class Modifier extends Value<Modifier>
 
     if(m_next != null)
     {
-      result.append(" ");
+      result.append(' ');
       result.append(m_next.toString());
     }
 
@@ -997,7 +997,7 @@ public class Modifier extends Value<Modifier>
       assertEquals("stack self", true, first.stackOrMore(first));
       assertEquals("stack self", true, second.stackOrMore(second));
 
-      ArrayList<Modifier> list = new ArrayList<Modifier>();
+      List<Modifier> list = new ArrayList<Modifier>();
 
       list.add(new Modifier(2, Type.DODGE));
       list.add(new Modifier(4, Type.DODGE));

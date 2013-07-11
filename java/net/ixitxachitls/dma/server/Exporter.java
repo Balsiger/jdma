@@ -284,9 +284,8 @@ public final class Exporter
    * @param    inKey the key of the file's parent
    *
    * @return   the full path for the file, withouth filename
-   *
    */
-  protected static String extractFilePath(Key inKey)
+  private static String extractFilePath(Key inKey)
   {
     String id = inKey.getName();
     String type = inKey.getKind();

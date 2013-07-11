@@ -171,9 +171,6 @@ public class TaggedVariables extends Variables
    * @param       inVars the values
    *
    * @return      the TaggedValues object
-   *
-   * @undefined   null is returned if no values is given
-   *
    */
   public static Variables tag(String inTag, Variables inVars)
   {

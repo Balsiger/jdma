@@ -282,6 +282,9 @@
         ^/campaign/([^/]+)/([^/]+)/encounter/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/encounter/$3
 
+        ^/campaign/([^/]+)/([^/]+)/level/([^/]+)$
+        /_entry/base campaign/$1/campaign/$2/level/$3
+
         ^/campaign/([^/]+)/([^/]+)/monsters
         /_entries/base campaign/$1/campaign/$2/monster
 

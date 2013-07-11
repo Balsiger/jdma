@@ -72,7 +72,7 @@ public abstract class DMAServlet extends BaseServlet
    * Cerate the dma servlet.
    *
    */
-  public DMAServlet()
+  protected DMAServlet()
   {
     // nothing to do here
   }
@@ -262,8 +262,6 @@ public abstract class DMAServlet extends BaseServlet
    * @throws      ServletException general error when processing the page
    * @throws      IOException      writing to the page failed
    *
-   * @undefined   never
-   *
    */
   protected abstract @Nullable SpecialResult handle
     (DMARequest inRequest, HttpServletResponse inResponse)
@@ -288,7 +286,7 @@ public abstract class DMAServlet extends BaseServlet
      * @throws Exception too lazy to catch
      */
     @org.junit.Test
-    public void get() throws Exception
+    public void get() throws Exception  // $codepro.audit.disable
     {
       HttpServletRequest request =
         EasyMock.createMock(DMARequest.class);
@@ -302,6 +300,7 @@ public abstract class DMAServlet extends BaseServlet
       final java.util.concurrent.atomic.AtomicBoolean handled =
         new java.util.concurrent.atomic.AtomicBoolean(false);
       DMAServlet servlet = new DMAServlet() {
+          /** Serial version id. */
           private static final long serialVersionUID = 1L;
           @Override
           protected SpecialResult handle(DMARequest inRequest,

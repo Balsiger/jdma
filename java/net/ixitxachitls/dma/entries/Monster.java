@@ -193,7 +193,7 @@ public class Monster extends CampaignEntry<BaseMonster>
       else
         for(int i = 0; i < m_number; i++)
           value +=
-            s_random.nextInt((m_dice - 1) * m_multiplier) + m_multiplier;
+            RANDOM.nextInt((m_dice - 1) * m_multiplier) + m_multiplier;
 
       ioMoney.add(m_type, value);
     }
@@ -300,7 +300,7 @@ public class Monster extends CampaignEntry<BaseMonster>
         value = m_number;
       else
         for(int i = 0; i < m_number; i++)
-          value += s_random.nextInt(m_dice - 1);
+          value += RANDOM.nextInt(m_dice - 1);
 
       // determine the given objects from the campaign
       Item []result = new Item[value];
@@ -415,7 +415,7 @@ public class Monster extends CampaignEntry<BaseMonster>
         value = m_number;
       else
         for(int i = 0; i < m_number; i++)
-          value += s_random.nextInt(m_dice - 1);
+          value += RANDOM.nextInt(m_dice - 1);
 
       // determine the given objects from the campaign
       Item []result = new Item[value];
@@ -531,13 +531,13 @@ public class Monster extends CampaignEntry<BaseMonster>
     }
 
     /** All the different line for coins for this treasure. */
-    private ArrayList<Coins> m_coins = new ArrayList<Coins>();
+    private List<Coins> m_coins = new ArrayList<Coins>();
 
     /** All the different lines for items for this treasure. */
-    private ArrayList<Items> m_items = new ArrayList<Items>();
+    private List<Items> m_items = new ArrayList<Items>();
 
     /** All the different lines for goods for this treasure. */
-    private ArrayList<Goods> m_goods = new ArrayList<Goods>();
+    private List<Goods> m_goods = new ArrayList<Goods>();
 
     /** Determine the coins value to the given random value.
      *
@@ -699,16 +699,37 @@ public class Monster extends CampaignEntry<BaseMonster>
 
   //........................................................................
 
+  /**
+   * Constructor with a derviced type.
+   *
+   * @param inType the derived type
+   */
+  protected Monster(Type<? extends Monster> inType)
+  {
+    super(inType, BASE_TYPE);
+  }
+
+  /**
+   * Constructor for derivations.
+   *
+   * @param inName      the name of the monster
+   * @param inType      the type of the monster
+   */
+   protected Monster(String inName, Type<? extends Monster> inType)
+   {
+     super(inName, inType, BASE_TYPE);
+   }
+
   //........................................................................
 
   //-------------------------------------------------------------- variables
 
-  /** The type of this entry. */
-  public static final Type<Monster> TYPE =
-    new Type<Monster>(Monster.class, BaseMonster.TYPE);
+   /** The type of this entry. */
+   public static final Type<Monster> TYPE =
+     new Type<Monster>(Monster.class, BaseMonster.TYPE);
 
-  /** The type of the base entry to this entry. */
-  public static final BaseType<BaseMonster> BASE_TYPE = BaseMonster.TYPE;
+   /** The type of the base entry to this entry. */
+   public static final BaseType<BaseMonster> BASE_TYPE = BaseMonster.TYPE;
 
   //----- given name -------------------------------------------------------
 
@@ -905,7 +926,7 @@ public class Monster extends CampaignEntry<BaseMonster>
   // private static Random s_random = new Random();
 
   /** The treasures per level. */
-  private static ArrayList<Treasure> s_treasures = new ArrayList<Treasure>();
+  private static List<Treasure> s_treasures = new ArrayList<Treasure>();
 
   //----- treasure definition ----------------------------------------------
 
@@ -2265,8 +2286,8 @@ public class Monster extends CampaignEntry<BaseMonster>
     BaseMonster.Ability ability;
     BaseSpell.SpellClass spellClass;
     if(inClassParam != null && inClassParam.isDefined())
-      spellClass = ((EnumSelection<BaseSpell.SpellClass>)inClassParam).
-        getSelected();
+      spellClass = ((EnumSelection<BaseSpell.SpellClass>)inClassParam)
+      .getSelected();
     else
       spellClass = getSpellClass();
 

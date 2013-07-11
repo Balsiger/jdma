@@ -653,6 +653,7 @@ public abstract class ValueGroup implements Changeable
   {
     Variables variables = getVariables();
 
+    boolean first = inFirst;
     for(Variable var : variables)
     {
       // if the variable is not stored, skip it
@@ -669,8 +670,8 @@ public abstract class ValueGroup implements Changeable
         continue;
 
       // add the delimiter
-      if(inFirst)
-        inFirst = false;
+      if(first)
+        first = false;
       else
       {
         inAppend.append(s_keyDelimiter);
@@ -697,7 +698,7 @@ public abstract class ValueGroup implements Changeable
                          "\n" + Strings.spaces(inKeyWidth + s_keyIndent)));
     }
 
-    return !inFirst;
+    return !first;
   }
 
   //........................................................................
@@ -1303,13 +1304,16 @@ public abstract class ValueGroup implements Changeable
     public void read()
     {
       ValueGroup group = new TestGroup();
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader("guru gugus"), "test");
-
-      assertTrue("read",
-                 group.readVariable(reader, group.getVariable("simple value")));
-      assertEquals("value", "guru", group.getValue("simple value").toString());
-      assertTrue("expect", reader.expect("gugus"));
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader("guru gugus"), "test"))
+      {
+        assertTrue("read",
+                   group.readVariable(reader,
+                                      group.getVariable("simple value")));
+        assertEquals("value", "guru",
+                     group.getValue("simple value").toString());
+        assertTrue("expect", reader.expect("gugus"));
+      }
     }
 
     //......................................................................

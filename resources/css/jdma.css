@@ -1436,6 +1436,13 @@ A.library-title.type-image
   background-color: $color_Encounter;
 }
 
+.value.base-level .value-label-container,
+.value.level .value-label-container
+{
+  color:            white;
+  background-color: $color_Level;
+}
+
 /******************************************************************************
  * overlays
  *****************************************************************************/

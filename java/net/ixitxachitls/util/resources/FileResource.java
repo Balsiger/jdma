@@ -25,6 +25,7 @@ package net.ixitxachitls.util.resources;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -177,24 +178,29 @@ public class FileResource extends Resource
     //......................................................................
     //----- write ----------------------------------------------------------
 
-    /** The write Test. */
+    /**
+     * The write Test.
+     *
+     * @throws IOException when closing output buffer
+     */
     @org.junit.Test
-    public void write()
+    public void write() throws IOException
     {
       Resource resource =
         new FileResource("/css/jdma.css",
                          FileResource.class.getResource("/css"));
 
-      ByteArrayOutputStream output = new ByteArrayOutputStream();
+      try (ByteArrayOutputStream output = new ByteArrayOutputStream())
+      {
+        assertTrue("writing", resource.write(output));
+        assertPattern("content", ".*A\\.Product:hover.*", output.toString());
 
-      assertTrue("writing", resource.write(output));
-      assertPattern("content", ".*A\\.Product:hover.*", output.toString());
+        // invalid resource
+        resource = new FileResource("guru", null);
+        assertFalse("writing", resource.write(output));
 
-      // invalid resource
-      resource = new FileResource("guru", null);
-      assertFalse("writing", resource.write(output));
-
-      m_logger.addExpected("WARNING: cannot obtain input stream for guru");
+        m_logger.addExpected("WARNING: cannot obtain input stream for guru");
+      }
     }
 
     //......................................................................

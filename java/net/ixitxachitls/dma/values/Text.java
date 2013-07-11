@@ -336,27 +336,28 @@ public class Text extends BaseText<Text>
     @org.junit.Test
     public void failTest()
     {
-      ParseReader reader =
+      try (ParseReader reader =
         new ParseReader(new java.io.StringReader("guru "
                                                  + "\"just \\\" a \\\" test"),
-                        "test");
+                        "test"))
+      {
+        Text text = new Text().read(reader);
 
-      Text text = new Text().read(reader);
+        assertNull("text should not have been read", text);
 
-      assertNull("text should not have been read", text);
+        reader.read(' ');
 
-      reader.read(' ');
+        text = new Text().read(reader);
+        assertTrue("text should have been read", text != null);
+        assertEquals("text does not match", "just \" a \" test", text.get());
+        assertEquals("converted text does not match",
+                     "\"just \\\" a \\\" test\"", text.toString());
 
-      text = new Text().read(reader);
-      assertTrue("text should have been read", text != null);
-      assertEquals("text does not match", "just \" a \" test", text.get());
-      assertEquals("converted text does not match",
-                   "\"just \\\" a \\\" test\"", text.toString());
-
-      m_logger.addExpectedPattern("WARNING:.*\\(read till end of text\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.guru \">>>just \\\\\" a \\\\\" "
-                                  + "test\\.\\.\\.");
+        m_logger.addExpectedPattern("WARNING:.*\\(read till end of text\\) "
+                                    + "on line 1 in document 'test'."
+                                    + "\\.\\.\\.guru \">>>just \\\\\" a \\\\\" "
+                                    + "test\\.\\.\\.");
+      }
     }
 
     //......................................................................

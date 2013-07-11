@@ -159,6 +159,7 @@ public class Duration extends Units<Duration>
   protected static final Group<Duration, Long, String> s_timeGrouping =
     new Group<Duration, Long, String>(new Group.Extractor<Duration, Long>()
       {
+        /** Serial verison id. */
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -179,6 +180,7 @@ public class Duration extends Units<Duration>
   protected static final Group<Duration, Long, String> s_roundGrouping =
     new Group<Duration, Long, String>(new Group.Extractor<Duration, Long>()
       {
+        /** Serial version id. */
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -590,11 +592,12 @@ public class Duration extends Units<Duration>
 
       for(int i = 0; i < texts.length; i += 2)
       {
-        ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test");
-
-        value = value.read(reader);
-        assertEquals("test " + i, texts[i + 1], value.asMetric().toString());
+        try (ParseReader reader =
+          new ParseReader(new java.io.StringReader(texts[i]), "test"))
+        {
+          value = value.read(reader);
+          assertEquals("test " + i, texts[i + 1], value.asMetric().toString());
+        }
       }
     }
 
@@ -617,12 +620,13 @@ public class Duration extends Units<Duration>
 
       for(int i = 0; i < texts.length; i += 2)
       {
-        ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test");
-
-        value = value.read(reader);
-        assertEquals("test " + i / 2, texts[i + 1],
-                     value.asRounds().toString());
+        try (ParseReader reader =
+          new ParseReader(new java.io.StringReader(texts[i]), "test"))
+        {
+          value = value.read(reader);
+          assertEquals("test " + i / 2, texts[i + 1],
+                       value.asRounds().toString());
+        }
       }
     }
 

@@ -65,7 +65,7 @@ public interface DMAData
    * A simple representation for a file associated with an entry.
    */
   @ParametersAreNonnullByDefault
-  public static class File //implements Serializable
+  static class File //implements Serializable
   {
     /**
      * Create the file with all its data.
@@ -76,7 +76,7 @@ public interface DMAData
      * @param inIcon   the icon or thumbnail to show for the file
      *
      */
-    public File(String inName, String inType, String inPath, String inIcon)
+    protected File(String inName, String inType, String inPath, String inIcon)
     {
       m_name = inName;
       m_type = inType;
@@ -168,7 +168,7 @@ public interface DMAData
    * @return   a map with id and type
    *
    */
-  public <T extends AbstractEntry> List<T>
+  <T extends AbstractEntry> List<T>
             getEntries(AbstractType<T> inType,
                        @Nullable AbstractEntry.EntryKey
                        <? extends AbstractEntry> inParent,
@@ -185,7 +185,7 @@ public interface DMAData
    * @return   a multi map from owner to ids
    *
    */
-  public abstract Multimap<String, String> getOwners(String inID);
+  Multimap<String, String> getOwners(String inID);
 
   //........................................................................
   //-------------------------------- getIDs --------------------------------
@@ -199,7 +199,7 @@ public interface DMAData
    * @return      all the ids
    *
    */
-  public abstract List<String> getIDs
+  List<String> getIDs
     (AbstractType<? extends AbstractEntry> inType,
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent);
 
@@ -216,7 +216,7 @@ public interface DMAData
    * @return      the recent ids
    *
    */
-  public abstract <T extends AbstractEntry>
+  <T extends AbstractEntry>
     List<T> getRecentEntries
       (AbstractType<T> inType,
        @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent);
@@ -234,7 +234,7 @@ public interface DMAData
    * @return     the entry found, if any
    *
    */
-  public abstract @Nullable <T extends AbstractEntry> T getEntry
+  @Nullable <T extends AbstractEntry> T getEntry
                                (AbstractEntry.EntryKey<T> inKey);
 
   //........................................................................
@@ -252,7 +252,7 @@ public interface DMAData
    * @return     the entry found, if any
    *
    */
-  public @Nullable <T extends AbstractEntry> T
+  @Nullable <T extends AbstractEntry> T
                       getEntry(AbstractType<T> inType, String inKey,
                                String inValue);
 
@@ -272,7 +272,7 @@ public interface DMAData
    * @return     the entries found
    *
    */
-  public abstract @Nullable <T extends AbstractEntry> List<T>
+  @Nullable <T extends AbstractEntry> List<T>
                                getEntries(AbstractType<T> inType,
                                           String inKey, String inValue);
 
@@ -294,7 +294,7 @@ public interface DMAData
    * @return   the entries matching the given index
    *
    */
-  public <T extends AbstractEntry> List<T> getIndexEntries
+  <T extends AbstractEntry> List<T> getIndexEntries
     (String inIndex, AbstractType<T> inType,
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent,
      String inGroup, int inStart, int inSize);
@@ -315,7 +315,7 @@ public interface DMAData
    * @return      a list with all the names
    *
    */
-  public SortedSet<String> getIndexNames
+  SortedSet<String> getIndexNames
     (String inIndex,
      AbstractType<? extends AbstractEntry> inType, boolean inCached,
      String ... inFilters);
@@ -333,7 +333,7 @@ public interface DMAData
    *              in the order they were specificed
    *
    */
-  public abstract List<List<String>> getMultiValues
+  List<List<String>> getMultiValues
     (AbstractType<? extends AbstractEntry> inType,
      String ... inFields);
 
@@ -350,7 +350,7 @@ public interface DMAData
    *              in the order they were specificed
    *
    */
-  public abstract SortedSet<String> getValues
+  SortedSet<String> getValues
     (AbstractType<? extends AbstractEntry> inType,
      String inField);
 

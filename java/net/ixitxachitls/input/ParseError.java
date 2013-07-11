@@ -256,10 +256,13 @@ public class ParseError extends BaseError
   @Override
   public boolean equals(Object inOther)
   {
-    if(inOther == null)
+    if(inOther == this)
+      return true;
+
+    if(!(inOther instanceof ParseError))
       return false;
 
-    return toString().equals(inOther.toString());
+    return toString().equals(((ParseError)inOther).toString());
   }
 
   //........................................................................

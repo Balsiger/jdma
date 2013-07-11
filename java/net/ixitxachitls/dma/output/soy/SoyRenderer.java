@@ -139,6 +139,9 @@ public class SoyRenderer
   private static final Map<String, String> s_specialNames =
     new HashMap<String, String>();
 
+  /** The prefix for commands rendered. */
+  private String m_commandPrefix = "dma.commands";
+
   static
   {
     // fill in the default special names
@@ -242,7 +245,7 @@ public class SoyRenderer
     {
       return m_template.render(inName, data, m_injected, inDelegates);
     }
-    catch(Exception e)
+    catch(Exception e) // $codepro.audit.disable caughtExceptions
     {
       // In case there is an error, we always want to recompile on dev.
       if(SystemProperty.environment.value()
@@ -461,7 +464,7 @@ public class SoyRenderer
       try
       {
         builder.append(m_template.render
-                       ("dma.commands." + name,
+                       (m_commandPrefix + "." + name,
                         new SoyMapData("opt", optionals, "arg", arguments),
                         null, null));
       }
@@ -623,6 +626,7 @@ public class SoyRenderer
       SoyRenderer renderer =
         new SoyRenderer(new SoyTemplate("lib/test/soy/test"));
 
+      renderer.m_commandPrefix = "test.commands";
       assertEquals("empty", "", renderer.renderCommands(""));
       assertEquals("text", "just a text",
                    renderer.renderCommands("just a text"));
@@ -640,12 +644,13 @@ public class SoyRenderer
       SoyRenderer renderer =
         new SoyRenderer(new SoyTemplate("lib/test/soy/test"));
 
+      renderer.m_commandPrefix = "test.commands";
       assertEquals("render",
                    "first: first data second: second data "
                    + "third: first injected fourth: second injected "
                    + "fifth: jDMA",
                    renderer.render
-                   ("dma.commands.test",
+                   ("test.commands.test",
                     SoyTemplate.map("first", "first data",
                                     "second", "second data"),
                     SoyTemplate.map("first", "first injected",

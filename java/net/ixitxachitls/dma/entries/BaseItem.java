@@ -1140,7 +1140,7 @@ public class BaseItem extends BaseEntry
 
       int random = 0;
       if(total > 0)
-        random = (int)(s_random.nextInt(total) * inFactor);
+        random = (int)(RANDOM.nextInt(total) * inFactor);
 
       for(Iterator<Multiple> i = m_appearances.iterator(); i.hasNext(); )
       {
@@ -1630,10 +1630,12 @@ public class BaseItem extends BaseEntry
      */
     public static AbstractEntry createBaseItem()
     {
-      ParseReader reader =
-         new ParseReader(new java.io.StringReader(s_text), "test");
+      try (java.io.StringReader sReader = new java.io.StringReader(s_text))
+      {
+        ParseReader reader = new ParseReader(sReader, "test");
 
-      return BaseItem.read(reader);
+        return BaseItem.read(reader);
+      }
     }
 
     //......................................................................

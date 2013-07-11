@@ -39,25 +39,7 @@ import net.ixitxachitls.util.configuration.Config;
  * This is a simple convenience class for logging to a file.
  *
  * @file          FileLogger.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
- * @example       <PRE>
- * // add the logger
- * Log.add("test", new FileLogger("file_%D-%M.log"));
- *
- * // set the logging level
- * Log.setLevel(Log.Type.COMPLETE);
- *
- * // log some message
- * Log.fatal("this is just a test");
- * Log.error("this is just a test");
- * Log.warning("this is just a test");
- * Log.necessary("this is just a test");
- * </PRE>
- *
- * @derivation    possible
- *
  */
 
 //..........................................................................
@@ -156,7 +138,7 @@ public class FileLogger extends ASCIILogger
     {
       try
       {
-        m_file.close();
+        m_file.close(); // $codepro.audit.disable closeInFinally
       }
       catch(java.io.IOException e)
       {
@@ -168,8 +150,10 @@ public class FileLogger extends ASCIILogger
 
     try
     {
+      // $codepro.audit.disable closeWhereCreated
       m_file = new FileOutputStream(m_name, true);
       m_out  = new BufferedOutputStream(m_file);
+      // $codepro.audit.enable
     }
     catch(java.io.FileNotFoundException e)
     {
@@ -237,79 +221,81 @@ public class FileLogger extends ASCIILogger
       Log.setLevel(Log.Type.COMPLETE);
 
       java.io.File temp = java.io.File.createTempFile("test", ".file");
-
-      FileLogger file = new FileLogger(temp.getPath(), "%<%Y - %L: %>%T");
-
       java.util.Calendar current = new java.util.GregorianCalendar();
 
-      file.print("just an error message", Log.Type.ERROR);
+      try (FileLogger file = new FileLogger(temp.getPath(), "%<%Y - %L: %>%T"))
+      {
+        file.print("just an error message", Log.Type.ERROR);
 
-      // wrapped test
-      file.print("just some info message, but this time the message is "
-                 + "long enough to require wrapping of the lines",
-                 Log.Type.INFO);
+        // wrapped test
+        file.print("just some info message, but this time the message is "
+                   + "long enough to require wrapping of the lines",
+                   Log.Type.INFO);
 
-      //close output stream (prevent windows file lock on temp file)
-      if (file.m_out != null)
-        file.m_out.close();
+        //close output stream (prevent windows file lock on temp file)
+        if (file.m_out != null)
+          file.m_out.close(); // $codepro.audit.disable closeInFinally
+      }
 
       // constructor with name only
-      file = new FileLogger(temp.getPath());
-
-      file.print("printing to name constructor", Log.Type.INFO);
-
-      // status printing
-      file.print("some status message", Log.Type.STATUS);
-
-      java.io.BufferedReader input = null;
-      try
+      try (FileLogger file = new FileLogger(temp.getPath()))
       {
-        input = new java.io.BufferedReader(new java.io.InputStreamReader
-                                           (new java.io.FileInputStream
-                                            (temp)));
+        file.print("printing to name constructor", Log.Type.INFO);
 
-        assertEquals("first",
-                     current.get(java.util.Calendar.YEAR)
-                     + " - ERROR    : just an error message",
-                     input.readLine());
+        // status printing
+        file.print("some status message", Log.Type.STATUS);
 
-        assertEquals("second",
-                     current.get(java.util.Calendar.YEAR)
-                     + " - INFO     : just some info message, but this time "
-                     + "the message is long enough to require wrapping of the "
-                     + "lines",
-                     input.readLine());
-
-        String line = input.readLine();
-        assertNotNull("third (null)", line);
-        assertEquals("third",
-                     " - INFO     : printing to name constructor",
-                     line.substring(19));
-
-        assertNull("end", input.readLine());
-      }
-      catch(java.io.IOException e)
-      {
-        fail("exception " + e);
-      }
-      finally
-      {
+        java.io.BufferedReader input = null;
         try
         {
-          if(input != null)
-            input.close();
+          input = new java.io.BufferedReader(new java.io.InputStreamReader
+                                             (new java.io.FileInputStream
+                                              (temp)));
+
+          assertEquals("first",
+                       current.get(java.util.Calendar.YEAR)
+                       + " - ERROR    : just an error message",
+                       input.readLine());
+
+          assertEquals
+            ("second",
+             current.get(java.util.Calendar.YEAR)
+             + " - INFO     : just some info message, but this time "
+             + "the message is long enough to require wrapping of the "
+             + "lines",
+             input.readLine());
+
+          String line = input.readLine();
+          assertNotNull("third (null)", line);
+          assertEquals("third",
+                       " - INFO     : printing to name constructor",
+                       line.substring(19));
+
+          assertNull("end", input.readLine());
         }
         catch(java.io.IOException e)
         {
           fail("exception " + e);
         }
+        finally
+        {
+          try
+          {
+            if(input != null)
+              input.close();
+          }
+          catch(java.io.IOException e)
+          {
+            fail("exception " + e);
+          }
+        }
+
+        //close output stream (prevent windows file lock on temp file)
+        if (file.m_out != null)
+          file.m_out.close(); // $codepro.audit.disable closeInFinally
+
+        assertTrue("cleanup", temp.delete());
       }
-
-      //close output stream (prevent windows file lock on temp file)
-      if (file.m_out != null)
-        file.m_out.close();
-
-      assertTrue("cleanup", temp.delete());
     }
 
     //......................................................................
@@ -326,53 +312,54 @@ public class FileLogger extends ASCIILogger
     {
       java.io.File temp = java.io.File.createTempFile("test", ".file");
 
-      FileLogger logger =
-        new FileLogger(temp.getPath().replaceAll(".file", "-%s.file"));
+      try (FileLogger logger =
+        new FileLogger(temp.getPath().replaceAll(".file", "-%s.file")))
+      {
+        logger.print("just a test", Log.Type.WARNING);
 
-      logger.print("just a test", Log.Type.WARNING);
+        Thread.sleep(1 * 1000);
 
-      Thread.sleep(1 * 1000);
+        logger.print("another test", Log.Type.ERROR);
 
-      logger.print("another test", Log.Type.ERROR);
+        // check that the files were properly written
+        String path = net.ixitxachitls.util.Files.path(temp.getPath());
+        java.io.File dir = new java.io.File(path);
 
-      // check that the files were properly written
-      String path = net.ixitxachitls.util.Files.path(temp.getPath());
-      java.io.File dir = new java.io.File(path);
+        assertTrue("dir", dir.isDirectory());
 
-      assertTrue("dir", dir.isDirectory());
-
-      java.io.File []files = dir.listFiles(new java.io.FilenameFilter()
-        {
-          @Override
-          public boolean accept(java.io.File inDir, String inName)
+        java.io.File []files = dir.listFiles(new java.io.FilenameFilter()
           {
-            if(inName == null)
-              return false;
+            @Override
+            public boolean accept(java.io.File inDir, String inName)
+            {
+              if(inName == null)
+                return false;
 
-            return inName.matches("test.*-\\d\\d\\.file");
-          }
-        });
+              return inName.matches("test.*-\\d\\d\\.file");
+            }
+          });
 
-      assertEquals("length of directory " + dir, 2, files.length);
+        assertEquals("length of directory " + dir, 2, files.length);
 
-      assertEquals
-        ("diff", 1,
-         (Integer.parseInt
-          (net.ixitxachitls.util.Strings.getPattern(files[1].getPath(),
-                                                    "-(\\d\\d).file$"))
-          - Integer.parseInt
-          (net.ixitxachitls.util.Strings.getPattern(files[0].getPath(),
-                                                    "-(\\d\\d).file$"))
-          + 60) % 60);
+        assertEquals
+          ("diff", 1,
+           (Integer.parseInt
+            (net.ixitxachitls.util.Strings.getPattern(files[1].getPath(),
+                                                      "-(\\d\\d).file$"))
+            - Integer.parseInt
+            (net.ixitxachitls.util.Strings.getPattern(files[0].getPath(),
+                                                      "-(\\d\\d).file$"))
+            + 60) % 60);
 
-      //close output stream (prevent windows file lock on temp file)
-      if (logger.m_out != null)
-        logger.m_out.close();
+        //close output stream (prevent windows file lock on temp file)
+        if (logger.m_out != null)
+          logger.m_out.close(); // $codepro.audit.disable closeInFinally
 
-      // delete the files
-      assertTrue("cleanup", temp.delete());
-      assertTrue("cleanup", files[0].delete());
-      assertTrue("cleanup", files[1].delete());
+        // delete the files
+        assertTrue("cleanup", temp.delete());
+        assertTrue("cleanup", files[0].delete());
+        assertTrue("cleanup", files[1].delete());
+      }
     }
 
     //......................................................................

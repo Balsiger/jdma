@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.util.logging;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -45,28 +46,7 @@ import net.ixitxachitls.util.configuration.Config;
  * This is the logger to print ASCII messages.
  *
  * @file          ASCIILogger.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
- * @example       <PRE>
- * // add the logger to write to
- * Log.add("test", new ASCIILogger());
- *
- * // set the logging level
- * Log.setLevel(Log.Type.DEBUG);
- *
- * // print various log messages
- * Log.fatal("This is a fatal error message");
- * Log.error("This is an error message");
- * Log.warning("This is a warning message");
- * Log.necessary("This is a necessary message");
- * Log.important("this is an important message");
- * Log.useful("This is a useful message");
- * Log.info("This is an information message");
- * Log.complete("This is a complete message");
- * Log.debug("This is a debug message");
- * </PRE>
- *
  */
 
 //..........................................................................
@@ -203,6 +183,20 @@ public class ASCIILogger implements Logger
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  @Override
+  public void close()
+  {
+    try
+    {
+      m_out.close(); // $codepro.audit.disable closeInFinally
+    }
+    catch(IOException e)
+    {
+      Log.warning("Could not close output for logger: " + e);
+    }
+  }
+
   //........................................................................
 
   //------------------------------------------------- other member functions
@@ -445,120 +439,137 @@ public void print(Object inObject, Log.Type inType)
 
     //----- print ----------------------------------------------------------
 
-    /** Test printing. */
+    /**
+     * Test printing.
+     *
+     * @throws Exception when closing loggers
+     */
     @org.junit.Test
-    public void print()
+    public void print() throws Exception
     {
-      StreamMock mock = new StreamMock();
-      Logger ascii = new ASCIILogger(mock, "%<test %Y - %L: %>%T", -1);
+      try (StreamMock mock = new StreamMock();
+        Logger ascii = new ASCIILogger(mock, "%<test %Y - %L: %>%T", -1))
+      {
+        Calendar current = new GregorianCalendar();
 
-      Calendar current = new GregorianCalendar();
+        // error test
+        mock.setExpected("test " + current.get(Calendar.YEAR)
+                         + " - ERROR    : "
+                         + "just an error message\n");
+        ascii.print("just an error message", Log.Type.ERROR);
 
-      // error test
-      mock.setExpected("test " + current.get(Calendar.YEAR)
-                       + " - ERROR    : "
-                       + "just an error message\n");
-      ascii.print("just an error message", Log.Type.ERROR);
+        mock.verify();
 
-      mock.verify();
+        // info test
+        mock.setExpected("test " + current.get(Calendar.YEAR)
+                         + " - INFO     : "
+                         + "just some info \\ message\n");
+        ascii.print("just some info \\ message", Log.Type.INFO);
 
-      // info test
-      mock.setExpected("test " + current.get(Calendar.YEAR)
-                       + " - INFO     : "
-                       + "just some info \\ message\n");
-      ascii.print("just some info \\ message", Log.Type.INFO);
+        mock.verify();
 
-      mock.verify();
+        // wrapped test
+        mock.setExpected("test " + current.get(Calendar.YEAR)
+                         + " - INFO     : "
+                         + "just some info message, but this time the message "
+                         + "is long\n"
+                         + "                       "
+                         + "enough to require wrapping of the lines\n");
+        ascii.print("just some info message, but this time the message is "
+                    + "long enough to require wrapping of the lines",
+                    Log.Type.INFO);
 
-      // wrapped test
-      mock.setExpected("test " + current.get(Calendar.YEAR)
-                       + " - INFO     : "
-                       + "just some info message, but this time the message "
-                       + "is long\n"
-                       + "                       "
-                       + "enough to require wrapping of the lines\n");
-      ascii.print("just some info message, but this time the message is "
-                  + "long enough to require wrapping of the lines",
-                  Log.Type.INFO);
+        mock.verify();
 
-      mock.verify();
+        // special characters
+        mock.setExpected("test " + current.get(Calendar.YEAR)
+                         + " - INFO     : "
+                         + "%$#*&^@\n");
+        ascii.print("%$#*&^@", Log.Type.INFO);
 
-      // special characters
-      mock.setExpected("test " + current.get(Calendar.YEAR)
-                       + " - INFO     : "
-                       + "%$#*&^@\n");
-      ascii.print("%$#*&^@", Log.Type.INFO);
+        mock.verify();
 
-      mock.verify();
+        // object printing
+        mock.setExpected("test " + current.get(Calendar.YEAR)
+                         + " - INFO     : ERROR\n");
+        ascii.print(Log.Type.ERROR, Log.Type.INFO);
 
-      // object printing
-      mock.setExpected("test " + current.get(Calendar.YEAR)
-                       + " - INFO     : ERROR\n");
-      ascii.print(Log.Type.ERROR, Log.Type.INFO);
-
-      mock.verify();
+        mock.verify();
+      }
     }
 
     //......................................................................
     //----- indent ---------------------------------------------------------
 
-    /** Test indenting. */
+    /**
+     * Test indenting.
+     *
+     * @throws Exception when closing loggers
+     */
     @org.junit.Test
-    public void indent()
+    public void indent() throws Exception
     {
-      StreamMock mock = new StreamMock();
-      Logger ascii = new ASCIILogger(mock,
-                                     "%<this is just a very long and very "
-                                     + "useless indentation, that's just used "
-                                     + "only to make some problems: %>%T", -1);
+      try (StreamMock mock = new StreamMock();
+        Logger ascii =
+          new ASCIILogger(mock,
+                          "%<this is just a very long and very "
+                            + "useless indentation, that's just used "
+                            + "only to make some problems: %>%T", -1))
+      {
+        mock.setExpected
+          ("this is just a very long and very useless "
+            + "indentation, that's just used only to make some "
+            + "problems: \n"
+            + "                    just some test, of course "
+            + "somewhat larger to see if wrapping\n"
+            + "                    of lines works here as well!\n");
+        ascii.print("just some test, of course somewhat larger to see "
+                    + "if wrapping of lines works here as well!",
+                    Log.Type.INFO);
 
-
-      mock.setExpected("this is just a very long and very useless "
-                       + "indentation, that's just used only to make some "
-                       + "problems: \n"
-                       + "                    just some test, of course "
-                       + "somewhat larger to see if wrapping\n"
-                       + "                    of lines works here as well!\n");
-      ascii.print("just some test, of course somewhat larger to see "
-                  + "if wrapping of lines works here as well!", Log.Type.INFO);
-
-      mock.verify();
+        mock.verify();
+      }
     }
 
     //......................................................................
     //----- formatting -----------------------------------------------------
 
-    /** Test the formatting of messages. */
+    /**
+     * Test the formatting of messages.
+     *
+     * @throws IOException when closing loggers
+     */
     @org.junit.Test
-    public void formatting()
+    public void formatting() throws IOException
     {
-      StreamMock mock = new StreamMock();
-      ASCIILogger ascii = new ASCIILogger(mock, "", 20);
+      try (StreamMock mock = new StreamMock();
+        ASCIILogger ascii = new ASCIILogger(mock, "", 20))
+      {
+        // border cases
+        assertEquals("empty", "", ascii.format("", Log.Type.INFO, "%T"));
+        assertEquals("empty", "", ascii.format("a message", Log.Type.INFO, ""));
 
-      // border cases
-      assertEquals("empty", "", ascii.format("", Log.Type.INFO, "%T"));
-      assertEquals("empty", "", ascii.format("a message", Log.Type.INFO, ""));
+        // simple case
+        assertEquals("simple", "a message - INFO     ",
+                     ascii.format("a message", Log.Type.INFO, "%T - %L"));
 
-      // simple case
-      assertEquals("simple", "a message - INFO     ",
-                   ascii.format("a message", Log.Type.INFO, "%T - %L"));
+        // date
+        assertEquals("date", "1969-69-05-17-23-42-00",
+                     ascii.format("message", Log.Type.WARNING,
+                                  "%Y-%y-%M-%D-%h-%m-%s",
+                                  new GregorianCalendar(1969, 4, 17, 23, 42,
+                                                        0)));
 
-      // date
-      assertEquals("date", "1969-69-05-17-23-42-00",
-                   ascii.format("message", Log.Type.WARNING,
-                                "%Y-%y-%M-%D-%h-%m-%s",
-                                new GregorianCalendar(1969, 4, 17, 23, 42,
-                                                      0)));
-
-      // indentation and wrapping
-      assertEquals("indentation",
-                   // the first line is too long here, because the prompt
-                   // contains printable characters that are not in the indent
-                     "Hello there: a large text \n"
-                   + "     that is surely \n"
-                   + "     wrapped",
-                   ascii.format("a large text that is surely wrapped",
-                                Log.Type.WARNING, "Hello %<there%>: %T"));
+        // indentation and wrapping
+        assertEquals("indentation",
+                     // the first line is too long here, because the prompt
+                     // contains printable characters that are not in the indent
+                       "Hello there: a large text \n"
+                     + "     that is surely \n"
+                     + "     wrapped",
+                     ascii.format("a large text that is surely wrapped",
+                                  Log.Type.WARNING, "Hello %<there%>: %T"));
+      }
     }
 
     //......................................................................

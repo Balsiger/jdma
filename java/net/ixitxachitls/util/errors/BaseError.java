@@ -156,8 +156,8 @@ public class BaseError implements Serializable
   @Override
 public boolean equals(Object inOther)
   {
-    if(inOther == null)
-      return false;
+    if(inOther == this)
+      return true;
 
     if(inOther instanceof BaseError)
       return m_message.equals(((BaseError)inOther).m_message);

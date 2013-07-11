@@ -149,14 +149,15 @@ public class Multiuse extends Counted
         + "item with multiuse item = value 100 gp; campaign FR / campaign; "
         + "count 20.\n";
 
-      net.ixitxachitls.input.ParseReader reader =
+      try (net.ixitxachitls.input.ParseReader reader =
         new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
-                                               "container test");
+                                               "container test"))
+      {
+        addEntry(net.ixitxachitls.dma.entries.Campaign.read(reader));
+        Item item = (Item)Item.read(reader);
 
-      addEntry(net.ixitxachitls.dma.entries.Campaign.read(reader));
-      Item item = (Item)Item.read(reader);
-
-      assertEquals("value", 2000.0, item.getGoldValue(), 0.5);
+        assertEquals("value", 2000.0, item.getGoldValue(), 0.5);
+      }
     }
 
     //......................................................................

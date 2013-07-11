@@ -217,6 +217,9 @@ public class SoyCombined extends SoyValue
   @Override
   public boolean equals(Object inOther)
   {
+    if (this == inOther)
+      return true;
+
     if(!(inOther instanceof SoyCombined))
       return false;
 

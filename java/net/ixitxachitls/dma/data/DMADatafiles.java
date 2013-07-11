@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Set;
 import java.util.SortedSet;
@@ -108,11 +109,11 @@ public class DMADatafiles implements DMAData
   protected List<String> m_names = new ArrayList<String>();
 
   /** The files for all the data. */
-  protected ArrayList<DMAFile> m_files = new ArrayList<DMAFile>();
+  protected List<DMAFile> m_files = new ArrayList<DMAFile>();
 
   /** All the entries, by type and by id. */
-  protected HashMap<AbstractType<? extends AbstractEntry>,
-                    NavigableMap<String, AbstractEntry>> m_entries =
+  protected Map<AbstractType<? extends AbstractEntry>,
+                NavigableMap<String, AbstractEntry>> m_entries =
     new HashMap<AbstractType<? extends AbstractEntry>,
                                NavigableMap<String, AbstractEntry>>();
 
@@ -844,7 +845,9 @@ public class DMADatafiles implements DMAData
       {
         int i;
         for(i = 1; entries.containsKey("TEMPORARY-" + i); i++)
-          ;
+        {
+          // nothing to do
+        }
 
         name = "TEMPORARY-" + i;
         Log.warning("duplicate id detected for '" + name

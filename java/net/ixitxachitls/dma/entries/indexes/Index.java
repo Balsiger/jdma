@@ -478,6 +478,9 @@ public class Index implements Serializable, Comparable<Index>
   @Override
   public boolean equals(Object inOther)
   {
+    if(this == inOther)
+      return true;
+
     if(inOther == null)
       return false;
 

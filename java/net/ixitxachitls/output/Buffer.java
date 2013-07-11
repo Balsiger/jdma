@@ -156,7 +156,7 @@ public interface Buffer
    * @return      a String with the complete contents of the buffer
    *
    */
-  public String getContents();
+  String getContents();
 
   //........................................................................
   //------------------------------ newBuffer -------------------------------
@@ -167,7 +167,7 @@ public interface Buffer
    * @return      a new buffer
    *
    */
-  public Buffer newBuffer();
+  Buffer newBuffer();
 
   //........................................................................
   //------------------------------ newBuffer -------------------------------
@@ -180,7 +180,7 @@ public interface Buffer
    * @return      a new buffer
    *
    */
-  public Buffer newBuffer(int inWidth);
+  Buffer newBuffer(int inWidth);
 
   //........................................................................
 
@@ -196,7 +196,7 @@ public interface Buffer
    * @param       inObject the object to add
    *
    */
-  public void append(@Nullable Object inObject);
+  void append(@Nullable Object inObject);
 
   //........................................................................
 
@@ -207,7 +207,7 @@ public interface Buffer
    * with a newline, nothing is done, otherwise a newline is added.
    *
    */
-  public void endLine();
+  void endLine();
 
   //........................................................................
 

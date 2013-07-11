@@ -63,7 +63,7 @@ public interface Collector<T, V> extends Serializable
    * @return      the collected data
    *
    */
-  public V collect(V ioCollected, T inObject);
+  V collect(V ioCollected, T inObject);
 
   //........................................................................
 

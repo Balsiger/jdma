@@ -195,7 +195,7 @@ public class FilteredIterator<T> implements Iterator<T>
               if(inEntry == null)
                 return false;
 
-              return inEntry.startsWith("+");
+              return inEntry.charAt(0) == '+';
             }
           });
 

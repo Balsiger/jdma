@@ -93,7 +93,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class AbstractEntry extends ValueGroup
+public abstract class AbstractEntry extends ValueGroup
   implements Comparable<AbstractEntry>, Serializable
 {
   //----------------------------------------------------------------- nested
@@ -409,60 +409,60 @@ public class AbstractEntry extends ValueGroup
 //  private boolean m_computingExtension = false;
 
   /** The random generator. */
-  protected static final Random s_random = new Random();
+  protected static final Random RANDOM = new Random();
 
   /** The dashes to create comments. */
-  protected static final String s_hyphens =
+  protected static final String HYPHENS =
     "------------------------------------------------------------------------"
     + "-----";
 
   /** The dots to create comments. */
-  protected static final String s_dots =
+  protected static final String DOTS =
     "........................................................................"
     + "...";
 
   /** The introducer used to start the entry, after name and qualifiers. */
-  protected static final char s_introducer =
+  protected static final char INTRODUCER =
     Config.get("resource:entries/introducer", '=');
 
   /** The maximal number of leading comments to read. */
-  protected static final int s_maxLeadingComments =
+  protected static final int MAX_LEADING_COMMENTS =
     Config.get("resource:entries/comment.leading.max", -1);
 
   /** The maximal number of lines of leading comments to read. */
-  protected static final int s_maxLeadingLines =
+  protected static final int MAX_LEADING_LINES =
     Config.get("resource:entries/comment.leading.lines.max", -1);
 
   /** The maximal number of trailing comments to read. */
-  protected static final int s_maxTrailingComments =
+  protected static final int MAX_TRAILING_COMMENTS =
     Config.get("resource:entries/comment.trailing.max", 1);
 
   /** The maximal number of lines of trailing comments to read. */
-  protected static final int s_maxTrailingLines =
+  protected static final int MAX_TRAILING_LINES =
     Config.get("resource:entries/comment.trailing.lines.max", 1);
 
   /** The name of the package for this class. */
-  protected static final String s_package =
+  protected static final String PACKAGE =
     "net.ixitxachitls.dma.entries.";
 
   /** The maximal number of keywords to read for an entry. */
-  protected static final int s_keywordWords =
+  protected static final int MAX_KEYWORD_WORDS =
     Config.get("resource:entries/key.words", 2);
 
   /** The starter for the base name part. */
-  protected static final String s_baseStart =
+  protected static final String BASE_START =
     Config.get("resource:entries/base.start", "[");
 
   /** The ending for the base name part. */
-  protected static final String s_baseEnd =
+  protected static final String BASE_END =
     Config.get("resource:entries/base.end", "]");
 
   /** The pattern to replace values in expressions. */
-  protected static final Pattern s_varPattern =
+  protected static final Pattern PATTERN_VAR =
     Pattern.compile("\\$(\\w+)");
 
   /** The pattern for expressions. */
-  protected static final Pattern s_expPattern =
+  protected static final Pattern PATTERN_EXPR =
     Pattern.compile("\\[\\[(.*?)\\]\\]");
 
   /** All registered extension classes. */
@@ -490,11 +490,11 @@ public class AbstractEntry extends ValueGroup
 
   /** The leading comment(s) in front of the entry. */
   protected Comment m_leadingComment =
-    new Comment(s_maxLeadingComments, s_maxLeadingLines);
+    new Comment(MAX_LEADING_COMMENTS, MAX_LEADING_LINES);
 
   /** The trailing comment(s) after the entry. */
   protected Comment m_trailingComment =
-    new Comment(s_maxTrailingComments, s_maxTrailingLines);
+    new Comment(MAX_TRAILING_COMMENTS, MAX_TRAILING_LINES);
 
   //........................................................................
   //----- base names -------------------------------------------------------
@@ -714,7 +714,6 @@ public class AbstractEntry extends ValueGroup
     for(BaseEntry base : getBaseEntries())
       if(base == null)
       {
-        System.out.println(m_base + " / " + m_baseEntries);
         m_baseEntries = null;
         return false;
       }
@@ -819,9 +818,6 @@ public class AbstractEntry extends ValueGroup
    * @param       inExtension the class of the extension to look for
    *
    * @return      true if an extension of this name is present, false if not
-   *
-   * @undefined   IllegalArgumentException if no extension given
-   *
    */
   public boolean hasExtension
     (Class<? extends AbstractExtension<?>> inExtension)
@@ -843,9 +839,6 @@ public class AbstractEntry extends ValueGroup
    * @param       inExtension the name of the extension to look for
    *
    * @return      true if an extension of this name is present, false if not
-   *
-   * @undefined   IllegalArgumentException if no extension given
-   *
    */
   public boolean hasExtension(String inExtension)
   {
@@ -898,9 +891,6 @@ public class AbstractEntry extends ValueGroup
    * Get the current quantifiers.
    *
    * @return      A string with the current quantifiers.
-   *
-   * @undefined   never
-   *
    */
   @Deprecated // now in m_base as a real value
   protected String getQuantifiers()
@@ -920,7 +910,6 @@ public class AbstractEntry extends ValueGroup
    * errors are available.
    *
    * @return      an iterator over all errors or null if none
-   *
    */
   public Iterator<BaseError> getErrors()
   {
@@ -1332,7 +1321,7 @@ public class AbstractEntry extends ValueGroup
       result.append("with ");
       result.append(Strings.toString(m_extensions.keySet(), ", ",
                                      "incomplete"));
-      result.append(" ");
+      result.append(' ');
     }
 
     result.append(m_name);
@@ -1340,11 +1329,11 @@ public class AbstractEntry extends ValueGroup
 
     result.append(getQuantifiers());
 
-    result.append(s_introducer);
+    result.append(INTRODUCER);
     result.append("\n\n");
     result.append(formatValues());
     result.append(s_delimiter);
-    result.append("\n");
+    result.append('\n');
 
     if(m_trailingComment.isDefined())
       result.append(m_trailingComment);
@@ -1717,7 +1706,10 @@ public class AbstractEntry extends ValueGroup
 
     if("dmaValues".equals(inKey))
     {
-      readValues(new ParseReader(new StringReader(inText), "dma values"));
+      try (StringReader reader = new StringReader(inText))
+      {
+        readValues(new ParseReader(reader, "dma values"));
+      }
 
       return null;
     }
@@ -1956,7 +1948,7 @@ public class AbstractEntry extends ValueGroup
 
     //----- leading comment ------------------------------------------------
 
-    Comment leading = new Comment(s_maxLeadingComments, s_maxLeadingLines);
+    Comment leading = new Comment(MAX_LEADING_COMMENTS, MAX_LEADING_LINES);
     leading = leading.read(inReader);
 
     //......................................................................
@@ -1965,7 +1957,7 @@ public class AbstractEntry extends ValueGroup
     String typeName = "";
     String className = "";
     Class<? extends AbstractEntry> entry = null;
-    for(int i = 0; i < s_keywordWords; i++)
+    for(int i = 0; i < MAX_KEYWORD_WORDS; i++)
     {
       String word = null;
       try
@@ -1984,12 +1976,12 @@ public class AbstractEntry extends ValueGroup
       try
       {
         entry = (Class<? extends AbstractEntry>)
-          Class.forName(s_package + className);
+          Class.forName(PACKAGE + className);
 
         // could load class
         break;
       }
-      catch(ClassNotFoundException e)
+      catch(ClassNotFoundException e) // $codepro.audit.disable
       {
         // class not found, try with next word
       }
@@ -2085,7 +2077,7 @@ public class AbstractEntry extends ValueGroup
 
     //----- extension ------------------------------------------------------
 
-    ArrayList<String> extensions = new ArrayList<String>();
+    List<String> extensions = new ArrayList<String>();
 
     // now check for extensions
     if(inReader.expect("with"))
@@ -2130,10 +2122,10 @@ public class AbstractEntry extends ValueGroup
     else
     {
       ParseReader.Position pos = inReader.getPosition();
-      if(!inReader.expect(s_introducer))
+      if(!inReader.expect(INTRODUCER))
       {
         inReader.logWarning(pos, "entry.missing.introducer",
-                            "introducer is " + s_introducer);
+                            "introducer is " + INTRODUCER);
 
         return false;
       }
@@ -2612,7 +2604,7 @@ public class AbstractEntry extends ValueGroup
 
     if(inParameters != null)
     {
-      Matcher matcher = s_varPattern.matcher(text);
+      Matcher matcher = PATTERN_VAR.matcher(text);
       while(matcher.find())
       {
         Value<?> value = inParameters.getValue(matcher.group(1));
@@ -2630,7 +2622,7 @@ public class AbstractEntry extends ValueGroup
       result = new StringBuffer();
     }
 
-    Matcher matcher = s_expPattern.matcher(text);
+    Matcher matcher = PATTERN_EXPR.matcher(text);
 
     while(matcher.find())
       matcher.appendReplacement(result,
@@ -2650,12 +2642,12 @@ public class AbstractEntry extends ValueGroup
    */
   private String computeExpression(String inExpression)
   {
-    inExpression = inExpression.replaceAll("[ \t\n\f\r]", "");
+    String expression = inExpression.replaceAll("[ \t\n\f\r]", "");
 
     StringTokenizer tokens =
-      new StringTokenizer(inExpression, "()+-*/,^", true);
+      new StringTokenizer(expression, "()+-*/,^", true);
 
-    return computeExpression(inExpression, tokens);
+    return computeExpression(expression, tokens);
   }
 
   /**
@@ -2902,9 +2894,6 @@ public class AbstractEntry extends ValueGroup
       assertEquals("type", "entrys", entry.getType().getMultipleLink());
 //       assertNull("type", entry.getType().getBaseType());
 
-      assertEquals("create", "base entry $undefined$ =\n\n.\n",
-                   entry.getType().create().toString());
-
       // conversion to string
       assertEquals("converted",
                    "#----- just a test\n"
@@ -3120,58 +3109,30 @@ public class AbstractEntry extends ValueGroup
 //     }
 
     //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** Testing reading. */
-    //@org.junit.Test
-    @Override
-    public void read()
-    {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader("    abstract entry just a "
-                                                 + "\\= test = ."),
-                        "test");
-
-      AbstractEntry entry = AbstractEntry.read(reader);
-
-      assertNotNull("entry should have been read", entry);
-      assertEquals("entry name does not match", "just a = test",
-                   entry.getName());
-      assertEquals("entry does not match",
-                   "#----- just a \\= test\n"
-                   + "\n"
-                   + "base entry just a \\= test =\n"
-                   + "\n"
-                   + "  name just a \\= test.\n"
-                   + "\n"
-                   + "#.....\n",
-                   entry.toString());
-    }
-
-    //......................................................................
     //----- readNameOnly ---------------------------------------------------
 
     /** Testing reading of name only. */
     //@org.junit.Test
     public void readNameOnly()
     {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader("abstract entry test."),
-                        "test");
+      try (StringReader sReader = new StringReader("abstract entry test."))
+      {
+        ParseReader reader = new ParseReader(sReader, "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader);
+        AbstractEntry entry = AbstractEntry.read(reader);
 
-      assertNotNull("entry should have been read", entry);
-      assertEquals("entry name does not match", "test", entry.getName());
-      assertEquals("entry does not match",
-                   "#----- test\n"
-                   + "\n"
-                   + "abstract entry test =\n"
-                   + "\n"
-                   + ".\n"
-                   + "\n"
-                   + "#.....\n",
-                   entry.toString());
+        assertNotNull("entry should have been read", entry);
+        assertEquals("entry name does not match", "test", entry.getName());
+        assertEquals("entry does not match",
+                     "#----- test\n"
+                     + "\n"
+                     + "abstract entry test =\n"
+                     + "\n"
+                     + ".\n"
+                     + "\n"
+                     + "#.....\n",
+                     entry.toString());
+      }
     }
 
     //......................................................................
@@ -3181,21 +3142,22 @@ public class AbstractEntry extends ValueGroup
     //@org.junit.Test
     public void readNoName()
     {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader("abstract entry."),
-                        "test");
+      try (StringReader sReader = new StringReader("abstract entry."))
+      {
+        ParseReader reader = new ParseReader(sReader, "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader);
+        AbstractEntry entry = AbstractEntry.read(reader);
 
-      assertNotNull("entry should have been read", entry);
-      assertEquals("entry name does not match", "", entry.getName());
-      assertEquals("entry does not match",
-                   "abstract entry $undefined$ =\n"
-                   + "\n"
-                   + ".\n"
-                   + "\n"
-                   + "#.....\n",
-                   entry.toString());
+        assertNotNull("entry should have been read", entry);
+        assertEquals("entry name does not match", "", entry.getName());
+        assertEquals("entry does not match",
+                     "abstract entry $undefined$ =\n"
+                     + "\n"
+                     + ".\n"
+                     + "\n"
+                     + "#.....\n",
+                     entry.toString());
+      }
     }
 
     //......................................................................
@@ -3205,9 +3167,7 @@ public class AbstractEntry extends ValueGroup
     @org.junit.Test
     public void comment()
     {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader
-                        ("  #--- test \n"
+      try (StringReader sReader = new StringReader("  #--- test \n"
                          + "\n"
                          + "  # just some test\n"
                          + "\n"
@@ -3215,24 +3175,26 @@ public class AbstractEntry extends ValueGroup
                          + "# some other text\n"
                          + "# as end comment\n"
                          + "\n"
-                         + "# now the next entry\n"),
-                        "test");
+                         + "# now the next entry\n"))
+      {
+        ParseReader reader = new ParseReader(sReader, "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader);
+        AbstractEntry entry = AbstractEntry.read(reader);
 
-      assertNotNull("entry should have been read", entry);
-      assertEquals("entry name does not match", "test",
-                   entry.getName());
-      assertEquals("entry does not match",
-                   "  #--- test \n"
-                   + "\n"
-                   + "  # just some test\n"
-                   + "\n"
-                   + "base entry test =\n"
-                   + "\n"
-                   + "  name              test.\n"
-                   + "# some other text\n",
-                   entry.toString());
+        assertNotNull("entry should have been read", entry);
+        assertEquals("entry name does not match", "test",
+                     entry.getName());
+        assertEquals("entry does not match",
+                     "  #--- test \n"
+                     + "\n"
+                     + "  # just some test\n"
+                     + "\n"
+                     + "base entry test =\n"
+                     + "\n"
+                     + "  name              test.\n"
+                     + "# some other text\n",
+                     entry.toString());
+      }
     }
 
     //......................................................................

@@ -67,7 +67,7 @@ public abstract class JSONServlet extends DMAServlet
    * Create the servlet.
    *
    */
-  public JSONServlet()
+  protected JSONServlet()
   {
     // nothing to do
   }
@@ -112,12 +112,11 @@ public abstract class JSONServlet extends DMAServlet
     inResponse.setHeader("Cache-Control", "max-age=0");
 
     String path = inRequest.getRequestURI();
-    JsonWriter writer =
-      new JsonWriter(new PrintWriter(inResponse.getOutputStream()));
-
-    writeJson(inRequest, path, writer);
-
-    writer.close();
+    try (JsonWriter writer =
+      new JsonWriter(new PrintWriter(inResponse.getOutputStream())))
+    {
+      writeJson(inRequest, path, writer);
+    }
 
     return null;
   }
@@ -163,29 +162,31 @@ public abstract class JSONServlet extends DMAServlet
         EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
-      MockServletOutputStream output = new MockServletOutputStream();
+      try (MockServletOutputStream output = new MockServletOutputStream())
+      {
+        EasyMock.expect(request.getMethod()).andReturn("POST");
+        EasyMock.expect(request.getRequestURI()).andStubReturn("uri");
+        response.setHeader("Content-Type", "application/json");
+        response.setHeader("Cache-Control", "max-age=0");
+        EasyMock.expect(response.getOutputStream()).andReturn(output);
+        EasyMock.replay(request, response);
 
-      EasyMock.expect(request.getMethod()).andReturn("POST");
-      EasyMock.expect(request.getRequestURI()).andStubReturn("uri");
-      response.setHeader("Content-Type", "application/json");
-      response.setHeader("Cache-Control", "max-age=0");
-      EasyMock.expect(response.getOutputStream()).andReturn(output);
-      EasyMock.replay(request, response);
+        JSONServlet servlet = new JSONServlet() {
+            /** Serial version id. */
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected void writeJson(DMARequest inRequest, String inPath,
+                                     JsonWriter inWriter)
+            {
+              inWriter.add(inPath);
+            }
+          };
 
-      JSONServlet servlet = new JSONServlet() {
-          private static final long serialVersionUID = 1L;
-          @Override
-          protected void writeJson(DMARequest inRequest, String inPath,
-                                   JsonWriter inWriter)
-          {
-            inWriter.add(inPath);
-          }
-        };
+        servlet.doPost(request, response);
+        assertEquals("post", "uri", output.toString());
 
-      servlet.doPost(request, response);
-      assertEquals("post", "uri", output.toString());
-
-      EasyMock.verify(request, response);
+        EasyMock.verify(request, response);
+      }
     }
 
     //......................................................................

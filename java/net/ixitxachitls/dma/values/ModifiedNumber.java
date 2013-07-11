@@ -181,9 +181,11 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
     {
       int i = 1;
       while(m_modifiers.containsKey(name + " (" + i++ + ")"))
-        ;
+      {
+        // nothing to do
+      }
 
-      name = name + " (" + i + ")";
+      name += " (" + i + ")";
     }
 
     m_modifiers.put(name, inModifier);

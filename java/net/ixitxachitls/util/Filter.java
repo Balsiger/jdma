@@ -46,8 +46,12 @@ import javax.annotation.Nullable;
 
 public interface Filter<T>
 {
-  /** The filter to accept no objects. */
-  public static class None<T> implements Filter<T>
+  /**
+   * The filter to accept no objects.
+   *
+   * @param <T> the type of entry to filter
+   */
+  static class None<T> implements Filter<T>
   {
     @Override
     public boolean accept(T inEntry)
@@ -56,8 +60,12 @@ public interface Filter<T>
     }
   }
 
-  /** The filter to accept all objects. */
-  public static class All<T> implements Filter<T>
+  /**
+   * The filter to accept all objects.
+   *
+   * @param <T> the type of entry to filter
+   */
+  static class All<T> implements Filter<T>
   {
     @Override
     public boolean accept(T inEntry)
@@ -66,8 +74,12 @@ public interface Filter<T>
     }
   }
 
-  /** The filter to accept non null objects only. */
-  public static class NonNull<T> implements Filter<T>
+  /**
+   * The filter to accept non null objects only.
+   *
+   * @param <T> the type of entry to filter
+   */
+  static class NonNull<T> implements Filter<T>
   {
     @Override
     public boolean accept(@Nullable T inEntry)
@@ -88,7 +100,7 @@ public interface Filter<T>
     * @return      true if accepted in the filter, false if not
     *
     */
-  public boolean accept(@Nullable T inEntry);
+  boolean accept(@Nullable T inEntry);
 
   //........................................................................
 

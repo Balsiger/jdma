@@ -465,10 +465,11 @@ public class BaseSkill extends BaseEntry
      */
     public static AbstractEntry createBaseSkill()
     {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader(s_text), "test");
-
-      return BaseSkill.read(reader);
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader(s_text), "test"))
+      {
+        return BaseSkill.read(reader);
+      }
     }
 
     //......................................................................

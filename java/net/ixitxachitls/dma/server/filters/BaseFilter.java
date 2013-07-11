@@ -72,7 +72,7 @@ public abstract class BaseFilter implements Filter
      * @param   inCode    the error code
      * @param   inMessage the message printed for the error
      */
-    public Error(int inCode, String inMessage)
+    protected Error(int inCode, String inMessage)
     {
       m_code = inCode;
       m_message = inMessage;
@@ -113,7 +113,7 @@ public abstract class BaseFilter implements Filter
      * @param   inMessage the message printed on the page
      *
      */
-    public HTMLError(int inCode, String inTitle, String inMessage)
+    protected HTMLError(int inCode, String inTitle, String inMessage)
     {
       super(inCode, inMessage);
 
@@ -144,7 +144,8 @@ public abstract class BaseFilter implements Filter
                      + m_message
                      + "</body>"
                      + "</html>");
-      writer.close(); // needs to be closed for Chrome!
+      // needs to be closed for Chrome!
+      writer.close();  // $codepro.audit.disable closeInFinally
 
       inResponse.setStatus(m_code);
     }
@@ -162,7 +163,7 @@ public abstract class BaseFilter implements Filter
    * Create the filter.
    *
    */
-  public BaseFilter()
+  protected BaseFilter()
   {
   }
 

@@ -115,7 +115,7 @@ public class Variable extends ValueHandle<Variable>
     catch(java.lang.IllegalAccessException e)
     {
       throw new UnsupportedOperationException
-        ("Cannot access field " + m_field.getName() + ": " + e);
+        ("Cannot access field " + m_field.getName(), e);
     }
   }
 
@@ -282,8 +282,7 @@ public class Variable extends ValueHandle<Variable>
     catch(java.lang.IllegalAccessException e)
     {
       throw new UnsupportedOperationException
-        ("Cannot access field " + m_field.getName() + " for " + m_key
-         + ": " + e);
+        ("Cannot access field " + m_field.getName() + " for " + m_key, e);
     }
 
     inEntry.changed();
@@ -313,10 +312,7 @@ public class Variable extends ValueHandle<Variable>
     {
       Value value = get(inEntry);
       if(value == null)
-      {
-        System.out.println("cannot get value for " + this + " in " + inEntry);
         return inValue;
-      }
 
       set(inEntry, value.create());
 
@@ -325,26 +321,27 @@ public class Variable extends ValueHandle<Variable>
     else
     {
       // init the reader
-      StringReader string = new StringReader(inValue);
-      ParseReader reader  = new ParseReader(string, "set");
+      try (StringReader string = new StringReader(inValue);
+        ParseReader reader  = new ParseReader(string, "set"))
+      {
+        Value<?> value = get(inEntry);
+        if(value == null)
+          return inValue;
 
-      Value<?> value = get(inEntry);
-      if(value == null)
-        return inValue;
+        value = value.read(reader);
 
-      value = value.read(reader);
+        if(value == null)
+          return inValue;
 
-      if(value == null)
-        return inValue;
+        set(inEntry, value);
 
-      set(inEntry, value);
+        // return the part that was not read
+        rest = reader.read(inValue.length());
+      }
 
-      // return the part that was not read
-      rest = reader.read(inValue.length());
+      if(rest.isEmpty() || rest.matches("\\s*"))
+        return null;
     }
-
-    if(rest.isEmpty() || rest.matches("\\s*"))
-      return null;
 
     return rest;
   }

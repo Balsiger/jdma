@@ -317,6 +317,9 @@ public class SoyValue extends SoyAbstract
   @Override
   public boolean equals(Object inOther)
   {
+    if(inOther == this)
+      return true;
+
     if(!(inOther instanceof SoyValue))
       return false;
 

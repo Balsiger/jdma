@@ -173,27 +173,28 @@ public class TemplateServlet extends FileServlet
         EasyMock.createMock(HttpServletRequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
-      BaseServlet.Test.MockServletOutputStream output =
-        new BaseServlet.Test.MockServletOutputStream();
 
-      EasyMock.expect(request.getPathInfo())
-        .andReturn("/css/jdma.css");
-      response.setHeader("Content-Type", "text/plain");
-      EasyMock.expect(response.getOutputStream()).andReturn(output);
-      EasyMock.replay(request, response);
+      try (BaseServlet.Test.MockServletOutputStream output =
+        new BaseServlet.Test.MockServletOutputStream())
+      {
+        EasyMock.expect(request.getPathInfo())
+          .andReturn("/css/jdma.css");
+        response.setHeader("Content-Type", "text/plain");
+        EasyMock.expect(response.getOutputStream()).andReturn(output);
+        EasyMock.replay(request, response);
 
-      TemplateServlet servlet =
-        new TemplateServlet("", "text/plain", "test/test/template");
+        TemplateServlet servlet =
+          new TemplateServlet("", "text/plain", "test/test/template");
 
-      System.setProperty("test/test/template.color_Monster", "single word");
-      m_logger.banClass(net.ixitxachitls.util.Strings.class);
-      assertNull("handle", servlet.handle(request, response));
-      assertPattern("content",
-                    ".*A.Monster         \\{ color: single word \\}.*",
-                    output.toString());
+        System.setProperty("test/test/template.color_Monster", "single word");
+        m_logger.banClass(net.ixitxachitls.util.Strings.class);
+        assertNull("handle", servlet.handle(request, response));
+        assertPattern("content",
+                      ".*A.Monster         \\{ color: single word \\}.*",
+                      output.toString());
 
-      output.close();
-      EasyMock.verify(request, response);
+        EasyMock.verify(request, response);
+      }
     }
 
     //......................................................................

@@ -469,29 +469,30 @@ public class BaseCharacter extends BaseEntry
         + "  group         user.\n"
         + "\n";
 
-      net.ixitxachitls.input.ParseReader reader =
+      try (net.ixitxachitls.input.ParseReader reader =
         new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
-                                               "test");
+                                               "test"))
+      {
+        BaseCharacter character = (BaseCharacter)BaseCharacter.read(reader);
 
-      BaseCharacter character = (BaseCharacter)BaseCharacter.read(reader);
-
-      assertNotNull("base character should have been read", character);
-      assertEquals("base character name does not match", "Me",
-                   character.getName());
-      assertEquals("base character does not match",
-                   "#----- Me\n"
-                   + "\n"
-                   + "base character Me =\n"
-                   + "\n"
-                   + "  real name         \"Roger Rabbit\";\n"
-                   + "  email             "
-                   + "\"roger@acme.com <'Roger Rabbit'>\";\n"
-                   + "  last action       \"today\";\n"
-                   + "  group             User;\n"
-                   + "  name              Me.\n"
-                   + "\n"
-                   + "#.....\n",
-                   character.toString());
+        assertNotNull("base character should have been read", character);
+        assertEquals("base character name does not match", "Me",
+                     character.getName());
+        assertEquals("base character does not match",
+                     "#----- Me\n"
+                     + "\n"
+                     + "base character Me =\n"
+                     + "\n"
+                     + "  real name         \"Roger Rabbit\";\n"
+                     + "  email             "
+                     + "\"roger@acme.com <'Roger Rabbit'>\";\n"
+                     + "  last action       \"today\";\n"
+                     + "  group             User;\n"
+                     + "  name              Me.\n"
+                     + "\n"
+                     + "#.....\n",
+                     character.toString());
+      }
     }
 
     //......................................................................

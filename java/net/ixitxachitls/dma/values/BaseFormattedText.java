@@ -112,7 +112,7 @@ public class BaseFormattedText<T extends BaseFormattedText<T>>
   //-------------------------------------------------------------- variables
 
   /** The delimiters for ending the text. */
-  protected static final String s_nameDelimiters =
+  protected static final String NAME_DELIMITERS =
     Config.get("resource:values/name.delimiter", "\":,.;=[]{}|/");
 
   /** The pattern for the delimiters (escaped). */

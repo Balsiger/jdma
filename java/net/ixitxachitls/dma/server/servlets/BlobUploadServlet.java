@@ -148,157 +148,153 @@ public class BlobUploadServlet extends BaseServlet
     inResponse.setHeader("Content-Type", "text/html");
     inResponse.setHeader("Cache-Control", "max-age=0");
 
-    HTMLWriter writer =
-      new HTMLWriter(new PrintWriter(inResponse.getOutputStream()));
-
-    if(request.getParam("form") == null)
+    try (HTMLWriter writer =
+      new HTMLWriter(new PrintWriter(inResponse.getOutputStream())))
     {
-      String keyName = request.getParam("key");
-      if(keyName == null)
-        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "no key given");
-
-      AbstractEntry.EntryKey<?> key = DMAServlet.extractKey(keyName);
-      if(key == null)
-        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "invalid key given");
-
-      DMADatastore store = (DMADatastore)DMADataFactory.get();
-      AbstractEntry entry = store.getEntry(key);
-
-      if(entry == null)
-        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "could not find " + keyName);
-
-      store.uncacheEntry(key);
-
-      String file = request.getParam("filename");
-      String name = request.getParam("name");
-      String filename = name;
-      if(file != null && !"main".equals(name))
-        filename = Files.file(file);
-
-      if(name == null)
-        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "no name given");
-
-      if(request.getParam("delete") != null)
+      if(request.getParam("form") == null)
       {
-        store.removeFile(entry, filename);
+        String keyName = request.getParam("key");
+        if(keyName == null)
+          return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                               "no key given");
 
+        AbstractEntry.EntryKey<?> key = DMAServlet.extractKey(keyName);
+        if(key == null)
+          return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                               "invalid key given");
+
+        DMADatastore store = (DMADatastore)DMADataFactory.get();
+        AbstractEntry entry = store.getEntry(key);
+
+        if(entry == null)
+          return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                               "could not find " + keyName);
+
+        store.uncacheEntry(key);
+
+        String file = request.getParam("filename");
+        String name = request.getParam("name");
+        String filename = name;
+        if(file != null && !"main".equals(name))
+          filename = Files.file(file);
+
+        if(name == null)
+          return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                               "no name given");
+
+        if(request.getParam("delete") != null)
+        {
+          store.removeFile(entry, filename);
+
+          writer
+            .script("parent.window.edit.updateImage('file-" + filename
+                    + "', '/icons/products-dummy.png', null, 'upload-" + name
+                    + "');");
+
+          return null;
+        }
+
+        Map<String, List<BlobKey>> blobs = m_blobs.getUploads(inRequest);
+        List<BlobKey> blobKeys = blobs.get("file");
+
+        if(blobKeys == null)
+          return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                               "No file uploaded");
+
+        if(file == null)
+          return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                               "no file name given");
+
+        if(blobKeys.size() > 1)
+          return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                               "expected a single blob key only");
+
+        BlobKey blobKey = blobKeys.get(0);
+
+        String fileType =
+          URLConnection.getFileNameMap().getContentTypeFor(file);
+
+        store.addFile(entry, filename, fileType, blobKey);
+
+        Log.event(request.getUser().getName(), "upload",
+                  "Uploaded " + fileType + " file " + file + " for " + key);
+
+
+        String url =
+          m_image.getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKey));
         writer
-          .script("parent.window.edit.updateImage('file-" + filename
-                  + "', '/icons/products-dummy.png', null, 'upload-" + name
-                  + "');");
-
-        writer.close();
-        return null;
+          .script("parent.window.edit.updateImage('file-" + filename + "', '"
+                  + url + "=s300', 'util.link(event, \"" + url + "\");', "
+                  + "'upload-" + name + "');");
       }
+      else
+      {
+        // return the form to upload
+        if(request.getParam("key") == null)
+          return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                               "invalid arguments given");
 
-      Map<String, List<BlobKey>> blobs = m_blobs.getUploads(inRequest);
-      List<BlobKey> blobKeys = blobs.get("file");
+       writer
+          .addCSSFile("jdma")
+          .addJSFile("jdma")
+          .begin("div").classes("file-upload")
 
-      if(blobKeys == null)
-        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "No file uploaded");
+          .begin("div")
+          .classes("sprite image-cancel")
+          .attribute("title", "Cancel")
+          .attribute("onclick",
+                     "parent.window.edit.updateImage('file-"
+                     + request.getParam("name") + "', null, "
+                     + "null, 'upload-" + request.getParam("name") + "');")
+          .end("div")
 
-      if(file == null)
-        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "no file name given");
+          .begin("form")
+          .attribute("action", m_blobs.createUploadUrl("/fileupload"))
+          .attribute("method", "post")
+          .attribute("enctype", "multipart/form-data")
+          .classes("upload")
 
-      if(blobKeys.size() > 1)
-        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "expected a single blob key only");
+          .begin("input")
+          .attribute("type", "file")
+          .attribute("name", "file")
+          .attribute("onchange",
+                     "this.parentNode['filename'].value = this.value; "
+                     + "this.parentNode.submit();")
+          .end("input")
 
-      BlobKey blobKey = blobKeys.get(0);
-
-      String fileType = URLConnection.getFileNameMap().getContentTypeFor(file);
-
-      store.addFile(entry, filename, fileType, blobKey);
-
-      Log.event(request.getUser().getName(), "upload",
-                "Uploaded " + fileType + " file " + file + " for " + key);
-
-
-      String url =
-        m_image.getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKey));
-      writer
-        .script("parent.window.edit.updateImage('file-" + filename + "', '"
-                + url + "=s300', 'util.link(event, \"" + url + "\");', "
-                + "'upload-" + name + "');");
-        ;
-
-      writer.close();
-    }
-    else
-    {
-      // return the form to upload
-      if(request.getParam("key") == null)
-        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "invalid arguments given");
-
-     writer
-        .addCSSFile("jdma")
-        .addJSFile("jdma")
-        .begin("div").classes("file-upload")
-
-        .begin("div")
-        .classes("sprite image-cancel")
-        .attribute("title", "Cancel")
-        .attribute("onclick",
-                   "parent.window.edit.updateImage('file-"
-                   + request.getParam("name") + "', null, "
-                   + "null, 'upload-" + request.getParam("name") + "');")
-        .end("div")
-
-        .begin("form")
-        .attribute("action", m_blobs.createUploadUrl("/fileupload"))
-        .attribute("method", "post")
-        .attribute("enctype", "multipart/form-data")
-        .classes("upload")
-
-        .begin("input")
-        .attribute("type", "file")
-        .attribute("name", "file")
-        .attribute("onchange",
-                   "this.parentNode['filename'].value = this.value; "
-                   + "this.parentNode.submit();")
-        .end("input")
-
-        .begin("input")
-        .attribute("type", "hidden")
-        .attribute("name", "key")
-        .attribute("value", request.getParam("key"))
-        .end("input")
-
-        .begin("input")
-        .attribute("type", "hidden")
-        .attribute("name", "filename")
-        .attribute("value", "")
-        .end("input");
-
-      if(request.getParam("name") != null)
-        writer
           .begin("input")
           .attribute("type", "hidden")
-          .attribute("name", "name")
-          .attribute("value", request.getParam("name"))
-          .end("input");
+          .attribute("name", "key")
+          .attribute("value", request.getParam("key"))
+          .end("input")
 
-      if("main".equals(request.getParam("name")))
-        writer
           .begin("input")
-          .attribute("type", "submit")
-          .attribute("name", "delete")
-          .attribute("value", "Remove")
-          .classes("submit")
+          .attribute("type", "hidden")
+          .attribute("name", "filename")
+          .attribute("value", "")
           .end("input");
 
-      writer
-        .end("form")
-        .end("div");
+        if(request.getParam("name") != null)
+          writer
+            .begin("input")
+            .attribute("type", "hidden")
+            .attribute("name", "name")
+            .attribute("value", request.getParam("name"))
+            .end("input");
 
-      writer.close();
+        if("main".equals(request.getParam("name")))
+          writer
+            .begin("input")
+            .attribute("type", "submit")
+            .attribute("name", "delete")
+            .attribute("value", "Remove")
+            .classes("submit")
+            .end("input");
+
+        writer
+          .end("form")
+          .end("div");
+        }
     }
 
     return null;

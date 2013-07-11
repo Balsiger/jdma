@@ -150,7 +150,9 @@ public final class ServerUtils
 
               for(line = reader.readLine(); line != null && line.isEmpty();
                   line = reader.readLine())
-                ;
+              {
+                // nothing to do
+              }
 
               if(line != null)
                 values.put(form[0], line);
@@ -266,7 +268,9 @@ public final class ServerUtils
        */
       public MockServletInputStream(String inContents)
       {
+        // $codepro.audit.disable closeWhereCreated
         m_contents = new java.io.ByteArrayInputStream(inContents.getBytes());
+        // $codepro.audit.enable
       }
 
       /** The contents of the stream. */
@@ -296,8 +300,10 @@ public final class ServerUtils
       }
 
       /** The text printed. */
+      // $codepro.audit.disable closeWhereCreated
       private java.io.ByteArrayOutputStream m_contents =
         new java.io.ByteArrayOutputStream();
+      // $codepro.audit.enable
 
       /**
        * Wrie a character to the string.
@@ -337,32 +343,34 @@ public final class ServerUtils
     {
       HttpServletRequest request =
         EasyMock.createMock(HttpServletRequest.class);
-      java.io.BufferedReader reader = new java.io.BufferedReader
+      try (java.io.BufferedReader reader = new java.io.BufferedReader
         (new java.io.StringReader("post_1=val_3\npost_2=\n"
                                   + "post_3=val_4\npost_3=val_4a\n"
-                                  + "both=val_5a"));
+                                  + "both=val_5a")))
+      {
+        EasyMock.expect(request.getParameterMap()).andStubReturn
+          (new java.util.HashMap<String, String []>());
+        EasyMock.expect(request.getReader()).andStubReturn(reader);
+        EasyMock.expect(request.getQueryString())
+          .andReturn("url_1=val_1&url_2&url_3=val_2&url_3=val_2a"
+                     + "&both=val_5b&both=val_5c").times(2);
+        EasyMock.expect(request.getServletPath()).andStubReturn("/");
 
-      EasyMock.expect(request.getParameterMap()).andStubReturn
-        (new java.util.HashMap<String, String []>());
-      EasyMock.expect(request.getReader()).andStubReturn(reader);
-      EasyMock.expect(request.getQueryString())
-        .andReturn("url_1=val_1&url_2&url_3=val_2&url_3=val_2a"
-                   + "&both=val_5b&both=val_5c").times(2);
-      EasyMock.expect(request.getServletPath()).andStubReturn("/");
+        EasyMock.replay(request);
 
-      EasyMock.replay(request);
+        Multimap<String, String> params = extractParams(request);
+        assertContent("url_1", params.get("url_1"), "val_1");
+        assertContent("url_2", params.get("url_2"), "");
+        assertContentAnyOrder("url_3", params.get("url_3"), "val_2", "val_2a");
+        assertContent("post_1", params.get("post_1"), "val_3");
+        assertContent("post_2", params.get("post_2"), "");
+        assertContentAnyOrder("post_3", params.get("post_3"), "val_4",
+                              "val_4a");
+        assertContentAnyOrder("both", params.get("both"), "val_5a", "val_5b",
+                              "val_5c");
 
-      Multimap<String, String> params = extractParams(request);
-      assertContent("url_1", params.get("url_1"), "val_1");
-      assertContent("url_2", params.get("url_2"), "");
-      assertContentAnyOrder("url_3", params.get("url_3"), "val_2", "val_2a");
-      assertContent("post_1", params.get("post_1"), "val_3");
-      assertContent("post_2", params.get("post_2"), "");
-      assertContentAnyOrder("post_3", params.get("post_3"), "val_4", "val_4a");
-      assertContentAnyOrder("both", params.get("both"), "val_5a", "val_5b",
-                            "val_5c");
-
-      EasyMock.verify(request);
+        EasyMock.verify(request);
+      }
     }
 
     //......................................................................

@@ -172,18 +172,23 @@ public class JarResource extends Resource
     //......................................................................
     //----- write ----------------------------------------------------------
 
-    /** The write Test. */
+    /**
+     * The write Test.
+     *
+     * @throws IOException when closing output buffer
+     */
     @org.junit.Test
-    public void write()
+    public void write() throws IOException
     {
       Resource resource =
         new FileResource("/dir/readme.txt",
                          FileResource.class.getResource("/dir/readme.txt"));
 
-      ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-      assertTrue("writing", resource.write(output));
-      assertPattern("content", ".*70x200 points.*", output.toString());
+      try (ByteArrayOutputStream output = new ByteArrayOutputStream())
+      {
+        assertTrue("writing", resource.write(output));
+        assertPattern("content", ".*70x200 points.*", output.toString());
+      }
     }
 
     //......................................................................

@@ -35,11 +35,8 @@ import net.ixitxachitls.dma.entries.BaseCampaign;
 /**
  * Data for campaign specific information.
  *
- *
  * @file          CampaignData.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
 //..........................................................................

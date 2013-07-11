@@ -46,6 +46,7 @@ import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.server.ServerUtils;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -352,9 +353,10 @@ public class EntryServlet extends PageServlet
       public void setUp()
     {
       m_request = EasyMock.createMock(DMARequest.class);
-      m_response = EasyMock.createMock(HttpServletResponse.class);;
+      m_response = EasyMock.createMock(HttpServletResponse.class);
       m_output =
-        new net.ixitxachitls.server.ServerUtils.Test.MockServletOutputStream();
+        new ServerUtils.Test // $codepro.audit.disable closeWhereCreated
+        .MockServletOutputStream();
     }
 
     //......................................................................
@@ -368,7 +370,7 @@ public class EntryServlet extends PageServlet
     @org.junit.After
     public void cleanup() throws Exception
     {
-      m_output.close();
+      m_output.close(); // $codepro.audit.disable closeInFinally
     }
 
     //......................................................................
@@ -410,6 +412,7 @@ public class EntryServlet extends PageServlet
 
       return new EntryServlet()
         {
+          /** Serial version id. */
           private static final long serialVersionUID = 1L;
 
           @Override

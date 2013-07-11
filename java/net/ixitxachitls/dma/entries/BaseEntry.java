@@ -896,7 +896,7 @@ public class BaseEntry extends AbstractEntry
     //----- text -----------------------------------------------------------
 
     /** Test text. */
-    private static String s_text =
+    private static final String TEXT =
       "base entry test = \n"
       + "\n"
       + "  synonyms      \"blanket, winter\", \"guru\";\n"
@@ -928,44 +928,47 @@ public class BaseEntry extends AbstractEntry
     @org.junit.Test
     public void read()
     {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader(s_text), "test");
-      BaseEntry entry = (BaseEntry)BaseEntry.read(reader);
+      try (java.io.StringReader sReader = new java.io.StringReader(TEXT))
+      {
+        ParseReader reader = new ParseReader(sReader, "test");
+        BaseEntry entry = (BaseEntry)BaseEntry.read(reader);
 
-      m_logger.verify();
+        m_logger.verify();
 
-      assertNotNull("entry should have been read", entry);
-      assertEquals("entry name does not match", "test",
-                   entry.getName());
-      assertEquals("entry does not match",
-                   "#----- test\n"
-                   + "\n"
-                   + "base entry test =\n"
-                   + "\n"
-                   + "  references        a: 10,\n"
-                   + "                    b: 5-10/20;\n"
-                   + "  description       "
-                   + "\"A thick, quilted, wool blanket.\";\n"
-                   + "  short description \"A cozy, warm blanket.\";\n"
-                   + "  synonyms          \"blanket, winter\",\n"
-                   + "                    \"guru\";\n"
-                   + "  categories        dagger,\n"
-                   + "                    weapon,\n"
-                   + "                    guru,\n"
-                   + "                    test;\n"
-                   + "  name              test.\n"
-                   + "\n"
-                   + "#.....\n",
-                   entry.toString());
+        assertNotNull("entry should have been read", entry);
+        assertEquals("entry name does not match", "test",
+                     entry.getName());
+        assertEquals("entry does not match",
+                     "#----- test\n"
+                     + "\n"
+                     + "base entry test =\n"
+                     + "\n"
+                     + "  references        a: 10,\n"
+                     + "                    b: 5-10/20;\n"
+                     + "  description       "
+                     + "\"A thick, quilted, wool blanket.\";\n"
+                     + "  short description \"A cozy, warm blanket.\";\n"
+                     + "  synonyms          \"blanket, winter\",\n"
+                     + "                    \"guru\";\n"
+                     + "  categories        dagger,\n"
+                     + "                    weapon,\n"
+                     + "                    guru,\n"
+                     + "                    test;\n"
+                     + "  name              test.\n"
+                     + "\n"
+                     + "#.....\n",
+                     entry.toString());
 
-      assertTrue("category dagger", entry.hasCategory("dagger"));
-      assertTrue("category weapon", entry.hasCategory("weapon"));
-      assertFalse("category gugus", entry.hasCategory("gugus"));
-      assertEquals("short description", "A cozy, warm blanket.",
-                   entry.getShortDescription());
-      assertTrue("is base", entry.isBase());
-//       assertEquals("synonyms 0", "blanket, winter", entry.getSynonyms()[0]);
-//       assertEquals("synonyms 1", "guru", entry.getSynonyms()[1]);
+        assertTrue("category dagger", entry.hasCategory("dagger"));
+        assertTrue("category weapon", entry.hasCategory("weapon"));
+        assertFalse("category gugus", entry.hasCategory("gugus"));
+        assertEquals("short description", "A cozy, warm blanket.",
+                     entry.getShortDescription());
+        assertTrue("is base", entry.isBase());
+        // assertEquals("synonyms 0", "blanket, winter",
+        //              entry.getSynonyms()[0]);
+        // assertEquals("synonyms 1", "guru", entry.getSynonyms()[1]);
+      }
     }
 
     //......................................................................

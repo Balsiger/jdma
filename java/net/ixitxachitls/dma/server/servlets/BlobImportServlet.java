@@ -151,17 +151,18 @@ public class BlobImportServlet extends HttpServlet
           FileService fileService = FileServiceFactory.getFileService();
           AppEngineFile file = fileService.createNewBlobFile(type, name);
 
-          InputStream input = inRequest.getInputStream();
-          byte []buffer = new byte[1024 * 100];
-          FileWriteChannel channel = fileService.openWriteChannel(file, true);
+          try (InputStream input = inRequest.getInputStream())
+          {
+            byte []buffer = new byte[1024 * 100];
+            FileWriteChannel channel = fileService.openWriteChannel(file, true);
 
-          for(int read = input.read(buffer); read > 0;
-              read = input.read(buffer))
-            channel.write(ByteBuffer.wrap(buffer, 0, read));
+            for(int read = input.read(buffer); read > 0;
+                read = input.read(buffer))
+              channel.write(ByteBuffer.wrap(buffer, 0, read));
 
-          // cleanup
-          channel.closeFinally();
-          input.close();
+            // cleanup
+            channel.closeFinally();
+          }
 
           // Add a reference to the path to the datastore.
           store.addFile(entry, name, type, fileService.getBlobKey(file));

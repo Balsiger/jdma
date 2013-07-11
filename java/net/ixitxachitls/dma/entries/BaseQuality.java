@@ -543,11 +543,12 @@ public class BaseQuality extends BaseEntry
      */
     public static AbstractEntry createBaseQuality()
     {
-      net.ixitxachitls.input.ParseReader reader =
+      try (net.ixitxachitls.input.ParseReader reader =
         new net.ixitxachitls.input.ParseReader
-        (new java.io.StringReader(s_text), "test");
-
-      return BaseQuality.read(reader);
+        (new java.io.StringReader(s_text), "test"))
+      {
+        return BaseQuality.read(reader);
+      }
     }
 
     //......................................................................

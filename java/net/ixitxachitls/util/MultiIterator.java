@@ -59,9 +59,6 @@ public class MultiIterator<T> implements Iterator<T>
    * Create the iterator with the multiple given iterators.
    *
    * @param       inIterators the iterators to iterator over
-   *
-   * @undefined   never
-   *
    */
   @SuppressWarnings("unchecked") // see below
   public MultiIterator(Iterator<?> ... inIterators)
@@ -185,12 +182,12 @@ public void remove()
     @org.junit.Test
     public void remove()
     {
-      java.util.ArrayList<String> list1 = new java.util.ArrayList<String>();
+      java.util.List<String> list1 = new java.util.ArrayList<String>();
       list1.add("1");
       list1.add("2");
       list1.add("3");
 
-      java.util.ArrayList<String> list2 = new java.util.ArrayList<String>();
+      java.util.List<String> list2 = new java.util.ArrayList<String>();
       list2.add("4");
       list2.add("5");
 

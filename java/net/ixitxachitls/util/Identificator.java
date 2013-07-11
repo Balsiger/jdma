@@ -61,7 +61,7 @@ public interface Identificator<T>
     * @return      the list of ids
     *
     */
-  public List<String> id(T inEntry);
+  List<String> id(T inEntry);
 
   //........................................................................
 

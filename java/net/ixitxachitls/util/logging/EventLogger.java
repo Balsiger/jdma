@@ -145,40 +145,23 @@ public class EventLogger extends FileLogger
 
       java.io.File temp = java.io.File.createTempFile("test", ".file");
 
-      EventLogger file = new EventLogger(temp.getPath(), "%<%L: %>%T");
-
-      file.print("just an error message", Log.Type.ERROR);
-      file.print("just some event message", Log.Type.EVENT);
-      file.print("just some info message", Log.Type.INFO);
-
-      java.io.BufferedReader input = null;
-      try
+      try (EventLogger file = new EventLogger(temp.getPath(), "%<%L: %>%T"))
       {
-        input =
-          new java.io.BufferedReader(new java.io.
-                                     InputStreamReader(new java.io.
-                                                       FileInputStream(temp)));
+        file.print("just an error message", Log.Type.ERROR);
+        file.print("just some event message", Log.Type.EVENT);
+        file.print("just some info message", Log.Type.INFO);
 
-        assertEquals("event", "EVENT    : just some event message",
-                     input.readLine());
+        try (java.io.BufferedReader input =
+          new java.io.BufferedReader(new java.io.InputStreamReader
+                                     (new java.io.FileInputStream(temp))))
+        {
+          assertEquals("event", "EVENT    : just some event message",
+                       input.readLine());
 
-        assertNull("end", input.readLine());
+          assertNull("end", input.readLine());
+          assertTrue("cleanup", temp.delete());
+        }
       }
-      catch(java.io.IOException e)
-      {
-        fail("exception " + e);
-      }
-      finally
-      {
-        if(input != null)
-          input.close();
-
-        //close output stream (prevent windows file lock on temp file)
-        if(file.m_out != null)
-          file.m_out.close();
-      }
-
-      assertTrue("cleanup", temp.delete());
     }
 
     //......................................................................

@@ -59,7 +59,7 @@ public interface UniqueIdentificator<T>
     * @return      the list of ids
     *
     */
-  public String id(T inEntry);
+  String id(T inEntry);
 
   //........................................................................
 

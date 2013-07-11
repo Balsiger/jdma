@@ -40,7 +40,7 @@ package net.ixitxachitls.util.logging;
 
 //__________________________________________________________________________
 
-public interface Logger
+public interface Logger extends AutoCloseable
 {
   //-------------------------------------------------------------- accessors
   //........................................................................
@@ -60,7 +60,7 @@ public interface Logger
     * @param       inType the logging level to print
     *
     */
-  public void print(String inText, Log.Type inType);
+  void print(String inText, Log.Type inType);
 
   //........................................................................
   //-------------------------------- print ---------------------------------
@@ -73,7 +73,7 @@ public interface Logger
     * @param       inType   the type (level) printing
     *
     */
-  public void print(Object inObject, Log.Type inType);
+  void print(Object inObject, Log.Type inType);
 
   //........................................................................
 

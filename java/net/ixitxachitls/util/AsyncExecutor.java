@@ -18,6 +18,7 @@
  * along with Dungeon Master Assistant; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
+// $codepro.audit.disable abstractSpecialization
 
 //------------------------------------------------------------------ imports
 
@@ -65,7 +66,7 @@ public abstract class AsyncExecutor<T> extends Thread
    *                    blocked
    *
    */
-  public AsyncExecutor(long inDelayFull, long inDelayEach, int inSize)
+  protected AsyncExecutor(long inDelayFull, long inDelayEach, int inSize)
   {
     m_fullDelay = inDelayFull;
     m_eachDelay = inDelayEach;
@@ -217,8 +218,7 @@ public abstract class AsyncExecutor<T> extends Thread
     @org.junit.Test
     public void execution() throws Exception
     {
-      final java.util.ArrayList<String> results =
-        new java.util.ArrayList<String>();
+      final java.util.List<String> results = new java.util.ArrayList<String>();
 
       AsyncExecutor<String> executor = new AsyncExecutor<String>(0, 0, 4)
         {
@@ -226,7 +226,9 @@ public abstract class AsyncExecutor<T> extends Thread
           public void execute(String inValue)
           {
             while(!m_done)
-              ;
+            {
+              // nothing to do
+            }
 
             results.add(inValue);
          }
@@ -269,8 +271,7 @@ public abstract class AsyncExecutor<T> extends Thread
     @org.junit.Test
     public void capacity() throws Exception
     {
-      final java.util.ArrayList<String> results =
-        new java.util.ArrayList<String>();
+      final java.util.List<String> results = new java.util.ArrayList<String>();
 
       AsyncExecutor<String> executor = new AsyncExecutor<String>(0, 0, 2)
         {
@@ -278,7 +279,9 @@ public abstract class AsyncExecutor<T> extends Thread
           public void execute(String inValue)
           {
             while(!m_done)
-              ;
+            {
+              // notning to do
+            }
 
             results.add(inValue);
           }

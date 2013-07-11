@@ -408,23 +408,24 @@ public class Contents extends Extension<Item>
         + "   hp 2;\n"
         + "   contents .\n";
 
-      net.ixitxachitls.input.ParseReader reader =
+      try (net.ixitxachitls.input.ParseReader reader =
         new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
-                                               "container test");
+                                               "container test"))
+      {
+        Item item = (Item)Item.read(reader);
 
-      Item item = (Item)Item.read(reader);
-
-      assertNotNull("item should have been read", item);
-      assertEquals("container text",
-                   "#----- Container\n"
-                   + "\n"
-                   + "item with contents Container =\n"
-                   + "\n"
-                   + "  hp           2;\n"
-                   + "  name         Container.\n"
-                   + "\n"
-                   + "#.....\n",
-                   item.toString());
+        assertNotNull("item should have been read", item);
+        assertEquals("container text",
+                     "#----- Container\n"
+                     + "\n"
+                     + "item with contents Container =\n"
+                     + "\n"
+                     + "  hp           2;\n"
+                     + "  name         Container.\n"
+                     + "\n"
+                     + "#.....\n",
+                     item.toString());
+      }
     }
 
     //......................................................................
@@ -438,23 +439,25 @@ public class Contents extends Extension<Item>
       String text =
         "item with contents Container = contents item1, item2.";
 
-      net.ixitxachitls.input.ParseReader reader =
+      try (net.ixitxachitls.input.ParseReader reader =
         new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
-                                               "container test");
-      Item item = (Item)Item.read(reader);
+                                               "container test"))
+      {
+        Item item = (Item)Item.read(reader);
 
-      assertNotNull("item should have been read", item);
-      assertEquals("container text",
-                   "#----- Container\n"
-                   + "\n"
-                   + "item with contents Container =\n"
-                   + "\n"
-                   + "  name         Container;\n"
-                   + "  contents     item1,\n"
-                   + "               item2.\n"
-                   + "\n"
-                   + "#.....\n",
-                   item.toString());
+        assertNotNull("item should have been read", item);
+        assertEquals("container text",
+                     "#----- Container\n"
+                     + "\n"
+                     + "item with contents Container =\n"
+                     + "\n"
+                     + "  name         Container;\n"
+                     + "  contents     item1,\n"
+                     + "               item2.\n"
+                     + "\n"
+                     + "#.....\n",
+                     item.toString());
+      }
     }
 
     //......................................................................
@@ -470,17 +473,18 @@ public class Contents extends Extension<Item>
         + "item with contents container = value 25 gp; campaign FR / campaign; "
         + "contents item1, item2.\n";
 
-      net.ixitxachitls.input.ParseReader reader =
+      try (net.ixitxachitls.input.ParseReader reader =
         new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
-                                               "container test");
+                                               "container test"))
+      {
+        addEntry(net.ixitxachitls.dma.entries.Campaign.read(reader));
+        addEntry(Item.read(reader));
+        addEntry(Item.read(reader));
 
-      addEntry(net.ixitxachitls.dma.entries.Campaign.read(reader));
-      addEntry(Item.read(reader));
-      addEntry(Item.read(reader));
+        Item container = (Item)Item.read(reader);
 
-      Item container = (Item)Item.read(reader);
-
-      assertEquals("value", 375.0, container.getGoldValue(), 0.5);
+        assertEquals("value", 375.0, container.getGoldValue(), 0.5);
+      }
     }
 
     //......................................................................
@@ -499,21 +503,22 @@ public class Contents extends Extension<Item>
         + "item with contents container = base base_container; "
         + "campaign FR / campaign; contents item1, item2.\n";
 
-      net.ixitxachitls.input.ParseReader reader =
+      try (net.ixitxachitls.input.ParseReader reader =
         new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
-                                               "container test");
+                                               "container test"))
+      {
+        addEntry(net.ixitxachitls.dma.entries.Campaign.read(reader));
+        addEntry(net.ixitxachitls.dma.entries.BaseItem.read(reader));
+        addEntry(Item.read(reader));
+        addEntry(net.ixitxachitls.dma.entries.BaseItem.read(reader));
+        addEntry(Item.read(reader));
+        addEntry(net.ixitxachitls.dma.entries.BaseCampaign.read(reader));
 
-      addEntry(net.ixitxachitls.dma.entries.Campaign.read(reader));
-      addEntry(net.ixitxachitls.dma.entries.BaseItem.read(reader));
-      addEntry(Item.read(reader));
-      addEntry(net.ixitxachitls.dma.entries.BaseItem.read(reader));
-      addEntry(Item.read(reader));
-      addEntry(net.ixitxachitls.dma.entries.BaseCampaign.read(reader));
+        Item container = (Item)Item.read(reader);
 
-      Item container = (Item)Item.read(reader);
-
-      assertEquals("weight", 16.0,
-                   container.getTotalWeight().getAsPounds().getValue(), 0.5);
+        assertEquals("weight", 16.0,
+                     container.getTotalWeight().getAsPounds().getValue(), 0.5);
+      }
     }
 
     //......................................................................

@@ -138,6 +138,16 @@ public class DMARequest extends HttpServletRequestWrapper
 
   //-------------------------------------------------------------- accessors
 
+  @Override
+  public String toString()
+  {
+    return "DMA Request (" + m_start + "): "
+      + (m_user == null ? "no user" : m_user.getName())
+      + (m_userOverride == null ? "" : " (" + m_userOverride.getName() + ")")
+      + ", params " + m_params;
+
+  }
+
   //------------------------------- hasUser --------------------------------
 
   /**
@@ -666,6 +676,10 @@ public class DMARequest extends HttpServletRequestWrapper
       Log.warning("could not properly initialize base encounter type");
     if(net.ixitxachitls.dma.entries.Encounter.TYPE == null)
       Log.warning("could not properly initialize encounter type");
+    if(net.ixitxachitls.dma.entries.BaseLevel.TYPE == null)
+      Log.warning("could not properly initialize base level type");
+    if(net.ixitxachitls.dma.entries.Level.TYPE == null)
+      Log.warning("could not properly initialize level type");
   }
 
   //........................................................................
@@ -691,8 +705,8 @@ public class DMARequest extends HttpServletRequestWrapper
 
       DMARequest request =
         new DMARequest(mockRequest,
-                       com.google.common.collect.HashMultimap.
-                       <String, String>create());
+                       com.google.common.collect.HashMultimap
+                       .<String, String>create());
 
       assertEquals("page size", def_pageSize, request.getPageSize());
 
@@ -718,8 +732,8 @@ public class DMARequest extends HttpServletRequestWrapper
 
       DMARequest request =
         new DMARequest(mockRequest,
-                       com.google.common.collect.HashMultimap.
-                       <String, String>create());
+                       com.google.common.collect.HashMultimap
+                       .<String, String>create());
 
       assertEquals("user", user, request.getUser());
 

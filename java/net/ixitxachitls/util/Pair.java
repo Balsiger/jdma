@@ -60,9 +60,6 @@ public class Pair<T1, T2> implements Serializable
    *
    * @param       inFirst  the first value of the pair
    * @param       inSecond the second value of the pair
-   *
-   * @undefined   never (null is accepted and returned as well)
-   *
    */
   public Pair(@Nullable T1 inFirst, @Nullable T2 inSecond)
   {

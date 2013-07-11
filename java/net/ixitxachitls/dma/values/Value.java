@@ -37,7 +37,6 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Grouping;
-import net.ixitxachitls.util.PublicCloneable;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -62,7 +61,7 @@ import net.ixitxachitls.util.configuration.Config;
 @Immutable
 @ParametersAreNonnullByDefault
 public abstract class Value<T extends Value<T>>
-  implements Comparable<Object>, PublicCloneable, Serializable
+  implements Comparable<Object>, Serializable
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -115,33 +114,6 @@ public abstract class Value<T extends Value<T>>
     inNew.m_templateArguments = m_templateArguments;
 
     return inNew;
-  }
-
-  //........................................................................
-  //-------------------------------- clone ---------------------------------
-
-  /**
-   * Make a copy of the value and return it. If necessary, this is a deep
-   * copy, although type relevant values are never copied, because these
-   * are immutable.
-   *
-   * @return      a copy of the current value
-   *
-   */
-  @Override
-  @SuppressWarnings("unchecked")
-  @Deprecated // do we still need this??
-  public T clone()
-  {
-    try
-    {
-      return (T)super.clone();
-    }
-    catch(CloneNotSupportedException e)
-    {
-      throw new UnsupportedOperationException("Strange, clone should be "
-                                              + "supported: " + e);
-    }
   }
 
   //........................................................................
@@ -351,7 +323,7 @@ public abstract class Value<T extends Value<T>>
   protected @Nullable String m_template = null;
 
   /** The arguments to the template. */
-  protected @Nullable ImmutableList<String> m_templateArguments = null;
+  protected @Nullable List<String> m_templateArguments = null;
 
   //........................................................................
 
@@ -508,11 +480,8 @@ public abstract class Value<T extends Value<T>>
     if(this == inOther)
       return true;
 
-    if(inOther == null)
-      return false;
-
     if(inOther instanceof Value)
-      return toString().equals(inOther.toString());
+      return toString().equals(((Value)inOther).toString());
 
     return false;
   }
@@ -893,10 +862,12 @@ public abstract class Value<T extends Value<T>>
    */
   public @Nullable T read(String inText)
   {
-    StringReader string = new StringReader(inText);
-    ParseReader reader  = new ParseReader(string, "set");
+    try (StringReader string = new StringReader(inText))
+    {
+      ParseReader reader  = new ParseReader(string, "set");
 
-    return read(reader);
+      return read(reader);
+    }
   }
 
   //........................................................................
@@ -986,31 +957,34 @@ public abstract class Value<T extends Value<T>>
 
       for(int i = 0; i < inTests.length; i += 4)
       {
-        ParseReader reader =
-          new ParseReader(new java.io.StringReader(inTests[i + 1]), "test");
-
-        Value<?> value = inValue.read(reader);
-
-        if(inTests[i + 2] == null)
-          assertNull(i / 4 + ": " + inTests[i]
-                      + ", should not have been read",
-                      value);
-        else
+        try (java.io.StringReader sReader =
+          new java.io.StringReader(inTests[i + 1]))
         {
-          assertTrue(i / 4 + ": " + inTests[i] + ", should have been read",
-                     value != null);
-          assertEquals(i / 4 + ": " + inTests[i] + ", does not match",
-                       inTests[i + 2], value.toString());
+          ParseReader reader = new ParseReader(sReader, "test");
+
+          Value<?> value = inValue.read(reader);
+
+          if(inTests[i + 2] == null)
+            assertNull(i / 4 + ": " + inTests[i]
+                        + ", should not have been read",
+                        value);
+          else
+          {
+            assertTrue(i / 4 + ": " + inTests[i] + ", should have been read",
+                       value != null);
+            assertEquals(i / 4 + ": " + inTests[i] + ", does not match",
+                         inTests[i + 2], value.toString());
+          }
+
+          String rest = reader.readLine();
+
+          if(inTests[i + 3] != null)
+            assertEquals(i / 4 + ": " + inTests[i] + ", rest does not match",
+                         inTests[i + 3], rest);
+          else
+            assertTrue(i / 4 + ": " + inTests[i] + ", still having rest '"
+                       + rest + "'", rest.length() == 0);
         }
-
-        String rest = reader.readLine();
-
-        if(inTests[i + 3] != null)
-          assertEquals(i / 4 + ": " + inTests[i] + ", rest does not match",
-                       inTests[i + 3], rest);
-        else
-          assertTrue(i / 4 + ": " + inTests[i] + ", still having rest '"
-                     + rest + "'", rest.length() == 0);
       }
     }
 
@@ -1038,14 +1012,6 @@ public abstract class Value<T extends Value<T>>
                    inValue.m_editType, newValue.m_editType);
       assertEquals("new value not same choices",
                    inValue.m_choices, newValue.m_choices);
-
-      // clone the value
-      Value<?> clone = inValue.clone();
-
-      assertEquals("clone not defined", true, clone.isDefined());
-      assertEquals("not correctly cloned", 0, inValue.compareTo(clone));
-      assertEquals("not correctly cloned", inValue.toString(),
-                   clone.toString());
     }
 
     //......................................................................
@@ -1065,11 +1031,17 @@ public abstract class Value<T extends Value<T>>
       {
       }
 
+      /**
+       * Create the test value.
+       *
+       * @param inDefined true if the value is defined, false if not
+       */
       public TestValue(boolean inDefined)
       {
         m_defined = inDefined;
       }
 
+      /** Flag if value was defined or not. */
       private boolean m_defined = false;
 
       @Override
@@ -1079,6 +1051,7 @@ public abstract class Value<T extends Value<T>>
         return m_defined;
       }
 
+      /** Reset the value to an undefined state. */
       public void reset()
       {
         m_defined = false;
@@ -1091,7 +1064,7 @@ public abstract class Value<T extends Value<T>>
       }
 
       @Override
-	public String doToString()
+	    public String doToString()
       {
         return "guru";
       }
@@ -1099,9 +1072,7 @@ public abstract class Value<T extends Value<T>>
       @Override
       public TestValue create()
       {
-        TestValue copy = this.clone();
-        copy.reset();
-        return copy;
+        return new TestValue();
       }
     };
     // CHECKSTYLE:ON

@@ -227,10 +227,13 @@ public class AdminServlet extends SoyServlet
 
       int size = DMADataFactory.get().rebuild(type);
 
-      PrintWriter writer = new PrintWriter(inResponse.getOutputStream());
-      writer.println("gui.info('The indexes for " + reset
-                     + " have been rebuilt! " + size + " entries updated.');");
-      writer.close();
+      try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
+      {
+        writer.println("gui.info('The indexes for " + reset
+                       + " have been rebuilt! " + size
+                       + " entries updated.');");
+      }
+
       Log.event(user.getName(), "admin index reset",
                 "index " + reset + " was reset for " + size + " entries");
       return null;
@@ -254,9 +257,10 @@ public class AdminServlet extends SoyServlet
       Log.event(user.getName(), "admin clear cache",
                 "All caches have been cleared");
 
-      PrintWriter writer = new PrintWriter(inResponse.getOutputStream());
-      writer.println("gui.info('All the caches have been cleared');");
-      writer.close();
+      try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
+      {
+        writer.println("gui.info('All the caches have been cleared');");
+      }
       return null;
     }
 
@@ -278,10 +282,11 @@ public class AdminServlet extends SoyServlet
       Log.event(user.getName(), "admin refresh " + refresh,
                 size + "the entries of " + refresh + " have been refreshed.");
 
-      PrintWriter writer = new PrintWriter(inResponse.getOutputStream());
-      writer.println("gui.info('" + size + " entries for " + refresh
-                     + " have been refreshed');");
-      writer.close();
+      try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
+      {
+        writer.println("gui.info('" + size + " entries for " + refresh
+                       + " have been refreshed');");
+      }
       return null;
     }
 

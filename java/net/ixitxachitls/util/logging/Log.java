@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -315,7 +316,7 @@ public final class Log
       return false;
 
     String name = inLogger;
-    if(name.indexOf(".") < 0)
+    if(name.indexOf('.') < 0)
       name = "net.ixitxachitls.util.logging." + name;
 
     try
@@ -950,11 +951,7 @@ public final class Log
 
   //------------------------------------------------------------------- test
 
-  /** The Test class for the logging stuff.
-   *
-   * @hidden
-   *
-   */
+  /** The Test class for the logging stuff. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
     /** The name of the test logger. */
@@ -966,10 +963,10 @@ public final class Log
     public static class MockLogger implements Logger
     {
       /** The messages expected to be logged. */
-      private ArrayList<String> m_expected = new ArrayList<String>();
+      private List<String> m_expected = new ArrayList<String>();
 
       /** The messages obtained while logging. */
-      private ArrayList<String> m_obtained = new ArrayList<String>();
+      private List<String> m_obtained = new ArrayList<String>();
 
       /** The classes that are banned. */
       private Set<String> m_banned = new HashSet<String>();
@@ -1040,7 +1037,7 @@ public final class Log
       @Override
       public void print(@Nullable String inText, Type inType)
       {
-        StackTraceElement []stack = new Throwable().getStackTrace();
+        StackTraceElement []stack = new Throwable("stack").getStackTrace();
 
         for(StackTraceElement element : stack)
           if(m_banned.contains(element.getClassName()))
@@ -1161,6 +1158,11 @@ public final class Log
 
         m_expected.clear();
         m_obtained.clear();
+      }
+
+      @Override
+      public void close() throws Exception
+      {
       }
     }
 
@@ -1290,113 +1292,118 @@ public final class Log
     //......................................................................
     //----- mock -----------------------------------------------------------
 
-    /** Testing the mock. */
+    /**
+     * Testing the mock.
+     *
+     * @throws Exception when closing logger
+     */
     @org.junit.Test
-    public void mock()
+    public void mock() throws Exception
     {
-      final MockLogger logger = new MockLogger();
+      try (final MockLogger logger = new MockLogger())
+      {
+        // simple message
+        logger.print("test", Type.WARNING);
+        logger.addExpected("WARNING: test");
 
-      // simple message
-      logger.print("test", Type.WARNING);
-      logger.addExpected("WARNING: test");
+        logger.verify();
 
-      logger.verify();
+        // ignored message
+        logger.print("info", Type.INFO);
 
-      // ignored message
-      logger.print("info", Type.INFO);
+        logger.verify();
 
-      logger.verify();
+        // banned class
+        logger.banClass(Log.Test.class);
 
-      // banned class
-      logger.banClass(Log.Test.class);
+        // it is usually called from a higher level, thus we have to simulate
+        // that here
+        new Object() {
+          public void f()
+          {
+            new Object() {
+              public void f()
+              {
+                logger.print("banned", Type.FATAL);
+              }
+            } .f();
+          }
+        } .f();
 
-      // it is usually called from a higher level, thus we have to simulate
-      // that here
-      new Object() {
-        public void f()
-        {
-          new Object() {
-            public void f()
-            {
-              logger.print("banned", Type.FATAL);
-            }
-          } .f();
-        }
-      } .f();
+        logger.verify();
+        logger.m_banned.clear();
 
-      logger.verify();
-      logger.m_banned.clear();
+        // banned class by string
+        logger.banClass("net.ixitxachitls.util.logging.Log$Test");
+        logger.banClass((String)null);
 
-      // banned class by string
-      logger.banClass("net.ixitxachitls.util.logging.Log$Test");
-      logger.banClass((String)null);
+        new Object() {
+          public void f()
+          {
+            new Object() {
+              public void f()
+              {
+                logger.print("banned", Type.FATAL);
+              }
+            } .f();
+          }
+        } .f();
 
-      new Object() {
-        public void f()
-        {
-          new Object() {
-            public void f()
-            {
-              logger.print("banned", Type.FATAL);
-            }
-          } .f();
-        }
-      } .f();
+        logger.verify();
+        logger.m_banned.clear();
 
-      logger.verify();
-      logger.m_banned.clear();
+        // logged class
+        logger.logClass(Log.Test.class);
 
-      // logged class
-      logger.logClass(Log.Test.class);
+        new Object() {
+          public void f()
+          {
+            new Object() {
+              public void f()
+              {
+                logger.print("info test", Type.INFO);
+              }
+            } .f();
+          }
+        } .f();
 
-      new Object() {
-        public void f()
-        {
-          new Object() {
-            public void f()
-            {
-              logger.print("info test", Type.INFO);
-            }
-          } .f();
-        }
-      } .f();
+        logger.addExpected("INFO: info test");
 
-      logger.addExpected("INFO: info test");
+        logger.verify();
+        logger.m_logged.clear();
 
-      logger.verify();
-      logger.m_logged.clear();
+        // logged class by string
+        logger.logClass("net.ixitxachitls.util.logging.Log$Test");
 
-      // logged class by string
-      logger.logClass("net.ixitxachitls.util.logging.Log$Test");
+        new Object() {
+          public void f()
+          {
+            new Object() {
+              public void f()
+              {
+                logger.print("info test", Type.INFO);
+              }
+            } .f();
+          }
+        } .f();
 
-      new Object() {
-        public void f()
-        {
-          new Object() {
-            public void f()
-            {
-              logger.print("info test", Type.INFO);
-            }
-          } .f();
-        }
-      } .f();
+        logger.addExpected("INFO: info test");
 
-      logger.addExpected("INFO: info test");
+        logger.verify();
+        logger.m_logged.clear();
 
-      logger.verify();
-      logger.m_logged.clear();
+        // expected file
+        logger.addExpectedFile("WARNING: some /path/file.ext");
 
-      // expected file
-      logger.addExpectedFile("WARNING: some /path/file.ext");
+        logger.print("some \\path\\file.ext", Type.WARNING);
 
-      logger.print("some \\path\\file.ext", Type.WARNING);
+        // expected pattern
+        logger.addExpectedPattern("WARNING: some .*");
 
-      // expected pattern
-      logger.addExpectedPattern("WARNING: some .*");
+        logger.print("some with something", Type.WARNING);
 
-      logger.print("some with something", Type.WARNING);
-
-      logger.verify();
+        logger.verify();
+      }
     }
 
     //......................................................................

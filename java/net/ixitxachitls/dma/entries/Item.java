@@ -104,9 +104,6 @@ public class Item extends CampaignEntry<BaseItem>
    *
    * @param       inCampaign  the campaign this entry is in
    * @param       inBases     the base items to take values from
-   *
-   * @undefined   never
-   *
    */
   public Item(Campaign inCampaign, String ... inBases)
   {

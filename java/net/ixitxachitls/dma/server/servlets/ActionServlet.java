@@ -68,7 +68,7 @@ public abstract class ActionServlet extends DMAServlet
    * Create the servlet for actions.
    *
    */
-  public ActionServlet()
+  protected ActionServlet()
   {
   }
 
@@ -145,10 +145,10 @@ public abstract class ActionServlet extends DMAServlet
       {
         String text = doAction(inRequest, inResponse);
 
-        PrintStream print = new PrintStream(inResponse.getOutputStream());
-
-        print.print(text);
-        print.close();
+        try (PrintStream print = new PrintStream(inResponse.getOutputStream()))
+        {
+          print.print(text);
+        }
       }
     }
     catch(java.io.IOException e)
@@ -250,6 +250,7 @@ public abstract class ActionServlet extends DMAServlet
       EasyMock.replay(request, response);
 
       ActionServlet servlet = new ActionServlet() {
+          /** Serial version id. */
           private static final long serialVersionUID = 1L;
           @Override
           protected String doAction(DMARequest inRequest,
@@ -279,29 +280,31 @@ public abstract class ActionServlet extends DMAServlet
         EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
-      MockServletOutputStream output = new MockServletOutputStream();
+      try (MockServletOutputStream output = new MockServletOutputStream())
+      {
+        EasyMock.expect(request.getMethod()).andReturn("POST");
+        EasyMock.expect(request.getRequestURI()).andReturn("uri");
+        response.setHeader("Content-Type", "text/javascript");
+        response.setHeader("Cache-Control", "max-age=0");
+        EasyMock.expect(response.getOutputStream()).andReturn(output);
+        EasyMock.replay(request, response);
 
-      EasyMock.expect(request.getMethod()).andReturn("POST");
-      EasyMock.expect(request.getRequestURI()).andReturn("uri");
-      response.setHeader("Content-Type", "text/javascript");
-      response.setHeader("Cache-Control", "max-age=0");
-      EasyMock.expect(response.getOutputStream()).andReturn(output);
-      EasyMock.replay(request, response);
+        ActionServlet servlet = new ActionServlet() {
+            /** Serial version id. */
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected String doAction(DMARequest inRequest,
+                                      HttpServletResponse inResponse)
+            {
+              return "done";
+            }
+          };
 
-      ActionServlet servlet = new ActionServlet() {
-          private static final long serialVersionUID = 1L;
-          @Override
-          protected String doAction(DMARequest inRequest,
-                                    HttpServletResponse inResponse)
-          {
-            return "done";
-          }
-        };
+        servlet.doPost(request, response);
+        assertEquals("post", "done", output.toString());
 
-      servlet.doPost(request, response);
-      assertEquals("post", "done", output.toString());
-
-      EasyMock.verify(request, response);
+        EasyMock.verify(request, response);
+      }
     }
 
     //......................................................................
@@ -319,6 +322,7 @@ public abstract class ActionServlet extends DMAServlet
       EasyMock.replay(response);
 
       ActionServlet servlet = new ActionServlet() {
+          /** Serial version id. */
           private static final long serialVersionUID = 1L;
           @Override
           protected String doAction(DMARequest inRequest,
@@ -342,6 +346,7 @@ public abstract class ActionServlet extends DMAServlet
     {
       ActionServlet servlet = new ActionServlet()
         {
+          /** Serial version id. */
           private static final long serialVersionUID = 1L;
           @Override
           protected String doAction(DMARequest inRequest,

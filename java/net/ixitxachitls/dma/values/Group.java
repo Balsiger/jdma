@@ -66,8 +66,8 @@ public class Group<T extends Value<?>,
   /**
    * The interface for exracting data.
    *
-   * @param K the type of values to extract from
-   * @param V the type of grouping value extracted
+   * @param <K> the type of values to extract from
+   * @param <V> the type of grouping value extracted
    */
   public interface Extractor<K extends Value<?>, V extends Comparable<V>>
     extends Serializable
@@ -81,7 +81,7 @@ public class Group<T extends Value<?>,
      * @return the value to compare with
      *
      */
-    public V extract(K inValue);
+    V extract(K inValue);
 
     //......................................................................
   }

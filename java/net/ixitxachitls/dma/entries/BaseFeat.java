@@ -348,10 +348,11 @@ public class BaseFeat extends BaseEntry
      */
     public static AbstractEntry createBaseFeat()
     {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader(s_text), "test");
-
-      return BaseFeat.read(reader);
+      try (ParseReader reader =
+        new ParseReader(new java.io.StringReader(s_text), "test"))
+      {
+        return BaseFeat.read(reader);
+      }
     }
 
     //......................................................................

@@ -269,9 +269,6 @@ public class Area extends Units<Area>
    * @param       inSquareInches the number of square inches
    *
    * @return      the value as feet
-   *
-   * @undefined   never
-   *
    */
   public Area asFeet(@Nullable Rational inSquareYards,
                      @Nullable Rational inSquareFeet,
@@ -414,12 +411,13 @@ public class Area extends Units<Area>
 
       for(int i = 0; i < texts.length; i += 2)
       {
-        ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test");
-
-        value = value.read(reader);
-        assertEquals("test " + i / 2, texts[i + 1],
-                     value.asMetric().toString());
+        try (ParseReader reader =
+          new ParseReader(new java.io.StringReader(texts[i]), "test"))
+        {
+          value = value.read(reader);
+          assertEquals("test " + i / 2, texts[i + 1],
+                       value.asMetric().toString());
+        }
       }
     }
 
@@ -445,11 +443,13 @@ public class Area extends Units<Area>
 
       for(int i = 0; i < texts.length; i += 2)
       {
-        ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test");
-
-        value = value.read(reader);
-        assertEquals("test " + i / 2, texts[i + 1], value.asFeet().toString());
+        try (ParseReader reader =
+          new ParseReader(new java.io.StringReader(texts[i]), "test"))
+        {
+          value = value.read(reader);
+          assertEquals("test " + i / 2, texts[i + 1],
+                       value.asFeet().toString());
+        }
       }
     }
 

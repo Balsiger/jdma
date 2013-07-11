@@ -91,7 +91,7 @@ public class SoyServlet extends DMAServlet
   private static final long serialVersionUID = 1L;
 
   /** The template to render a page. */
-  protected static final SoyTemplate s_template =
+  protected static final SoyTemplate TEMPLATE =
      new SoyTemplate("page", "errors", "about", "main", "navigation", "entry",
                      "commands", "value", "admin", "cards",
                      "basecharacter", "character",
@@ -103,7 +103,7 @@ public class SoyServlet extends DMAServlet
                      "baseskill",
                      "basespell",
                      "basemonster", "monster",
-                     "baseencounter", "encounter"
+                     "baseencounter", "encounter",
                      "baselevel", "level");
 
   //........................................................................
@@ -150,6 +150,12 @@ public class SoyServlet extends DMAServlet
 
   //........................................................................
 
+  @Override
+  public String toString()
+  {
+    return "soy servlet with template " + TEMPLATE;
+  }
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -179,7 +185,7 @@ public class SoyServlet extends DMAServlet
     if(FileServlet.wasReloaded() && isDev())
     {
       Log.important("recompiling soy templates on dev");
-      s_template.recompile();
+      TEMPLATE.recompile();
       SoyValue.COMMAND_RENDERER.recompile();
       SoyTemplate.COMMAND_RENDERER.recompile();
     }
@@ -188,15 +194,17 @@ public class SoyServlet extends DMAServlet
     inResponse.setHeader("Content-Type", "text/html");
     inResponse.setHeader("Cache-Control", "max-age=0");
 
-    SoyRenderer renderer = new SoyRenderer(s_template);
+    SoyRenderer renderer = new SoyRenderer(TEMPLATE);
     // we have to collect injected data before other data to have it available
     // when collecting
     renderer.setInjected(collectInjectedData(inRequest, renderer));
     renderer.setData(collectData(inRequest, renderer));
 
-    PrintWriter print = new PrintWriter(inResponse.getOutputStream());
-    print.println(renderer.render(getTemplateName(inRequest)));
-    print.close();
+
+    try (PrintWriter print = new PrintWriter(inResponse.getOutputStream()))
+    {
+      print.println(renderer.render(getTemplateName(inRequest)));
+    }
 
     return null;
   }

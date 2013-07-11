@@ -233,16 +233,13 @@ public class Weight extends Units<Weight>
   /**
    * Get the value as an approximate equivalent of pounds.
    *
-   * @return      the ounces
-   *
-   * @algorithm   just compute the value, using a simplified conversion:
-   *
    *                1  t = 33000 ounces
    *                1 kg =    32 ounces
    *                1 lb =    16 ounces
    *               30  g =     1 ounce
    *              150 ct =     1 ounce
    *
+   * @return      the ounces
    */
   public Rational getAsPounds()
   {
@@ -261,16 +258,13 @@ public class Weight extends Units<Weight>
   /**
    * Get the value as an approximate equivalent of kilograms.
    *
-   * @return      the grams
-   *
-   * @algorithm   just compute the value, using a simplified conversion:
-   *
    *                1  t = 1000000 grams
    *                1 kg =    1000 grams
    *                1 lb =     500 grams
    *                1 oz =      30 grams
    *                5 ct =       1 gram
    *
+   * @return      the grams
    */
   public Rational getAsKilograms()
   {
@@ -289,16 +283,13 @@ public class Weight extends Units<Weight>
   /**
    * Get the value as an approximate equivalent of carats.
    *
-   * @return      the carats
-   *
-   * @algorithm   just compute the value, using a simplified conversion:
-   *
    *                1  t = 5000000 carats
    *                1 kg =    5000 carats
    *                1 lb =    2500 carats
    *                1 oz =     150 carats
    *                1  g =       5 carats
    *
+   * @return      the carats
    */
   public Rational getAsCarats()
   {
@@ -633,12 +624,13 @@ public class Weight extends Units<Weight>
 
       for(int i = 0; i < texts.length; i += 2)
       {
-        ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test");
-
-        value = value.read(reader);
-        assertEquals("test " + i / 2, texts[i + 1],
-                     value.asMetric().toString());
+        try (ParseReader reader =
+          new ParseReader(new java.io.StringReader(texts[i]), "test"))
+        {
+          value = value.read(reader);
+          assertEquals("test " + i / 2, texts[i + 1],
+                       value.asMetric().toString());
+        }
       }
     }
 
@@ -666,12 +658,13 @@ public class Weight extends Units<Weight>
 
       for(int i = 0; i < texts.length; i += 2)
       {
-        ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test");
-
-        value = value.read(reader);
-        assertEquals("test " + i / 2, texts[i + 1],
-                     value.asPound().toString());
+        try (ParseReader reader =
+          new ParseReader(new java.io.StringReader(texts[i]), "test"))
+        {
+          value = value.read(reader);
+          assertEquals("test " + i / 2, texts[i + 1],
+                       value.asPound().toString());
+        }
       }
     }
 
@@ -695,12 +688,13 @@ public class Weight extends Units<Weight>
 
       for(int i = 0; i < texts.length; i += 2)
       {
-        ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test");
-
-        value = value.read(reader);
-        assertEquals("test " + i / 2, texts[i + 1],
-                     value.asCarat().toString());
+        try (ParseReader reader =
+          new ParseReader(new java.io.StringReader(texts[i]), "test"))
+        {
+          value = value.read(reader);
+          assertEquals("test " + i / 2, texts[i + 1],
+                       value.asCarat().toString());
+        }
       }
     }
 
