@@ -56,7 +56,6 @@ import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Reference;
-import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.util.Pair;
@@ -67,13 +66,10 @@ import net.ixitxachitls.util.Strings;
 //------------------------------------------------------------------- header
 
 /**
- *
  * This is a real monster.
  *
  * @file          Monster.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
 
 //..........................................................................
@@ -595,60 +591,6 @@ public class Monster extends CampaignEntry<BaseMonster>
   }
 
   //........................................................................
-  //----- Gender ---------------------------------------------------------
-
-  /** The possible gender types in the game. */
-  public enum Gender implements EnumSelection.Named
-  {
-    /** Male. */
-    MALE("Male"),
-
-    /** Female. */
-    FEMALE("Female"),
-
-    /** Not known. */
-    UNKNOWN("Unknown"),
-
-    /** Other. */
-    OTHER("Other");
-
-    /** The value's name. */
-    private String m_name;
-
-    /** Create the enum value.
-     *
-     * @param inName the name of the value
-     *
-     */
-    private Gender(String inName)
-    {
-      m_name = constant("monster.gender", inName);
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-  }
-
-  //........................................................................
 
   //........................................................................
 
@@ -731,21 +673,6 @@ public class Monster extends CampaignEntry<BaseMonster>
    /** The type of the base entry to this entry. */
    public static final BaseType<BaseMonster> BASE_TYPE = BaseMonster.TYPE;
 
-  //----- given name -------------------------------------------------------
-
-  /** A special name for the monster, if any. */
-  @Key("given name")
-  protected Text m_givenName = new Text();
-
-  //........................................................................
-  //----- gender -----------------------------------------------------------
-
-  /** The gender of the monster. */
-  @Key("gender")
-  protected EnumSelection<Gender> m_gender =
-    new EnumSelection<Gender>(Gender.class);
-
-  //........................................................................
   //----- possessions ------------------------------------------------------
 
   /** The possessions value. */
@@ -2580,11 +2507,7 @@ public class Monster extends CampaignEntry<BaseMonster>
     if(parts.isEmpty())
       parts.add(getName());
 
-    String name = Strings.COMMA_JOINER.join(parts);
-    if(m_givenName.isDefined())
-      name = m_givenName.get() + " - " + name;
-
-    return name;
+    return Strings.COMMA_JOINER.join(parts);
   }
 
   //........................................................................

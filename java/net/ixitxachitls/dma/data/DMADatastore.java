@@ -112,8 +112,8 @@ public class DMADatastore implements DMAData
 
   //-------------------------------------------------------------- variables
 
-  /** The access to the datastore. */
-  private DataStore m_data = new DataStore();
+  /** The access to the datastore. Don't use this except in the AdminServlet! */
+  public DataStore m_data = new DataStore();
 
   /** The access to the datastore. */
   private DatastoreService m_store;

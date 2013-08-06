@@ -22,10 +22,31 @@
 /*
  * Templates for base monsters.
  */
-{delpackage monster}
-{namespace dma.entry.monster autoescape="false"}
+{delpackage npc}
+{namespace dma.entry.npc autoescape="false"}
 
 // @function len 1 0
+
+/**
+ * The entry title.
+ *
+ * @param entry The entry rendered.
+ */
+{deltemplate dma.entry.title}
+  <h1>
+    {call dma.value.editable}
+      {param canEdit: $ij.isDM /}
+      {param name: 'given name' /}
+      {param value: $entry.given_name.edit /}
+      {param key: $entry.key /}
+      {param type: 'string' /}
+      {param content: $entry.dmName + ' (' + $entry.name + ')' /}
+    {/call}
+  </h1>
+  {call dma.page.title}
+    {param title: $ij.isDM ? $entry.dmName : $entry.playerName /}
+  {/call}
+{/deltemplate}
 
 /**
  * The values for the entry.
@@ -56,6 +77,11 @@
     {param name: 'Extensions' /}
     {param value: $entry.extensions /}
     {param access: 'dm' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Gender' /}
+    {param value: $entry.gender /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
@@ -276,13 +302,15 @@
     {param entry: $entry /}
     {param name: 'Possesions' /}
     {param content}
-      {foreach $item in $entry.possesions.list}
-        {call dma.card.item_tiny}
-          {param entry: entry($entry.campaign.key + '/item/' + $item.print) /}
-        {/call}
-      {ifempty}
+      {if isList($entry.possessions.list)}
+        {foreach $item in $entry.possesions.list}
+          {call dma.card.item_tiny}
+            {param entry: entry($entry.campaign.key + '/item/' + $item.print) /}
+          {/call}
+        {/foreach}
+      {else}
         No items stored.
-      {/foreach}
+      {/if}
       {if $ij.isDM}
       {sp}|{sp}
       {call dma.page.link}

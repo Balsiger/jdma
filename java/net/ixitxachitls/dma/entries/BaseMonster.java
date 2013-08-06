@@ -1779,28 +1779,28 @@ public class BaseMonster extends BaseEntry
   @WithBases
   @SuppressWarnings("rawtypes") // raw condition
   protected ValueList<Multiple> m_specialQualities =
-    new ValueList<Multiple>
-    (", ",
-     new Multiple(new Multiple.Element []
-       {
-         new Multiple.Element
-         (new Reference<BaseQuality>(BaseQuality.TYPE)
-          .withParameter("Range", new Distance(), Parameters.Type.MAX)
-          .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
-          .withParameter("Summary", new Name(), Parameters.Type.ADD)
-          .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
-          .withParameter("SpellLevel", new Number(0, 100), Parameters.Type.ADD)
-          .withParameter("Racial",
-                         new Number(-50, 50, true), Parameters.Type.ADD)
-          .withParameter("Value", new Number(0, 100), Parameters.Type.ADD)
-          .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
-          .withTemplate("reference", "/quality/"), false),
-         new Multiple.Element(new Condition()
-                              .withEditType("string[condition]"),
-                              true, " if ", null),
-         new Multiple.Element(new Number(1, 100)
-                              .withEditType("name[per day]"), true, "/", null),
-       }));
+  new ValueList<Multiple>
+  (", ",
+   new Multiple(new Multiple.Element []
+     {
+       new Multiple.Element
+       (new Reference<BaseQuality>(BaseQuality.TYPE)
+        .withParameter("Range", new Distance(), Parameters.Type.MAX)
+        .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
+        .withParameter("Summary", new Name(), Parameters.Type.ADD)
+        .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
+        .withParameter("SpellLevel", new Number(0, 100), Parameters.Type.ADD)
+        .withParameter("Racial",
+                       new Number(-50, 50, true), Parameters.Type.ADD)
+        .withParameter("Value", new Number(0, 100), Parameters.Type.ADD)
+        .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
+        .withTemplate("reference", "/quality/"), false),
+       new Multiple.Element(new Condition()
+                            .withEditType("string[condition]"),
+                            true, " if ", null),
+       new Multiple.Element(new Number(1, 100)
+                            .withEditType("name[per day]"), true, "/", null),
+     }));
 
 
   //........................................................................

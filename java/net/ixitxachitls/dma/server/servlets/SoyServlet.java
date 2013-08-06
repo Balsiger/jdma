@@ -103,6 +103,7 @@ public class SoyServlet extends DMAServlet
                      "baseskill",
                      "basespell",
                      "basemonster", "monster",
+                     "npc",
                      "baseencounter", "encounter",
                      "baselevel", "level");
 

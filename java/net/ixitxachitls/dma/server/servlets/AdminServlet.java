@@ -36,9 +36,13 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
@@ -290,40 +294,41 @@ public class AdminServlet extends SoyServlet
       return null;
     }
 
-//    String upgrade = request.getParam("upgrade");
-//    if(upgrade != null)
-//    {
-      // DMADatastore store = ((DMADatastore)DMADataFactory.get());
+    String upgrade = request.getParam("upgrade");
+    if(upgrade != null)
+    {
+      inResponse.setHeader("Content-Type", "text/html");
+      inResponse.setHeader("Cache-Control", "max-age=0");
 
-      // int count = 0;
-      // int i;
-      // for(i = 0; count < 500; i += 100)
-      // {
-      //   Iterable<Entity> entities =
-      //     store.m_data.getEntities("file", null, null, i, 100);
-      //   if(!entities.iterator().hasNext())
-      //     break;
+      DMADatastore store = ((DMADatastore)DMADataFactory.get());
 
-      //   for(Entity entity : entities)
-      //   {
-      //     Entity upgraded = new Entity(upgradeKey(entity.getKey()));
-      //     upgraded.setPropertiesFrom(entity);
-      //     if (!upgraded.getKey().equals(entity.getKey()))
-      //     {
-      //       store.m_data.m_store.put(upgraded);
-      //       store.m_data.m_store.delete(entity.getKey());
-      //       System.out.println("entity: " + entity);
-      //       System.out.println("upgraded: " + upgraded);
-      //       count++;
-      //     }
-      //   }
-      // }
+      Key campaign =
+        KeyFactory.createKey(KeyFactory.createKey("base_campaign", "fr"),
+                             "campaign", "city of the spider queen");
+      Entity monster =
+        store.m_data.getEntity(KeyFactory.createKey(campaign, "monster",
+                                                    upgrade));
+      if (monster != null)
+      {
+        Entity npc = new Entity("npc", upgrade, campaign);
+        npc.setPropertiesFrom(monster);
+        store.m_data.update(npc);
 
-      // PrintWriter writer = new PrintWriter(inResponse.getOutputStream());
-      // writer.println("gui.info('" + count
-      // + " entities upgraded (" + i +"')");
-      // writer.close();
-//    }
+        try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
+        {
+          writer.println("gui.info('monster " + upgrade + " moved to npc');");
+        }
+      }
+      else
+      {
+        try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
+        {
+          writer.println("gui.alert('Could not find monster " + upgrade
+                         + "');");
+        }
+      }
+      return null;
+    }
 
     return super.handle(inRequest, inResponse);
   }

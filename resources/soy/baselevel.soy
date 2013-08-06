@@ -107,6 +107,16 @@
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
+    {param name: 'Special Attaacks' /}
+    {param value: $entry.special_attacks /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Special Qualities' /}
+    {param value: $entry.special_qualities /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
     {param name: 'References' /}
     {param value: $entry.references /}
   {/delcall}

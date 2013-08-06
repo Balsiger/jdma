@@ -165,6 +165,9 @@ public class BaseQuality extends BaseEntry
     /** A modifier to damage. */
     DAMAGE("Damage", "Dmg"),
 
+    /** A modifier to Speed. */
+    SPEED("Speed", "Spd"),
+
     /** A modifier to the hit points. */
     HP("Hit Points", "HP");
 

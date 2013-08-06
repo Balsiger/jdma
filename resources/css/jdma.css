@@ -1401,6 +1401,19 @@ A.library-title.type-image
   background-color: $color_Monster;
 }
 
+.value.base-npc .value-label-container,
+.value.npc .value-label-container
+{
+  color:            white;
+  background-color: $color_NPC;
+}
+
+.value.base-npc:hover .value-label-container,
+.value.npc:hover .value-label-container
+{
+  background-color: #888;
+}
+
 .value.base-quality .value-label-container,
 .value.quality .value-label-container
 {

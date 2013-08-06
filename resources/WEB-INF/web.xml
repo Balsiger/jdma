@@ -276,11 +276,17 @@
         ^/campaign/([^/]+)/([^/]+)/encounters
         /_entries/base campaign/$1/campaign/$2/encounter
 
+        ^/campaign/([^/]+)/([^/]+)/npcs
+        /_entries/base campaign/$1/campaign/$2/NPC
+
         ^/campaign/([^/]+)/([^/]+)/item/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/item/$3
 
         ^/campaign/([^/]+)/([^/]+)/encounter/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/encounter/$3
+
+        ^/campaign/([^/]+)/([^/]+)/npc/([^/]+)$
+        /_entry/base campaign/$1/campaign/$2/npc/$3
 
         ^/campaign/([^/]+)/([^/]+)/level/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/level/$3

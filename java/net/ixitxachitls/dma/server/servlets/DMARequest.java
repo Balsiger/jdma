@@ -680,6 +680,8 @@ public class DMARequest extends HttpServletRequestWrapper
       Log.warning("could not properly initialize base level type");
     if(net.ixitxachitls.dma.entries.Level.TYPE == null)
       Log.warning("could not properly initialize level type");
+    if(net.ixitxachitls.dma.entries.NPC.TYPE == null)
+      Log.warning("could not properly initialize npc type");
   }
 
   //........................................................................
