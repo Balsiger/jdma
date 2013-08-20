@@ -22,8 +22,20 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
+
+import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.EnumSelection;
+import net.ixitxachitls.dma.values.Number;
+import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Text;
+import net.ixitxachitls.dma.values.Union;
+import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.ValueList;
 
 
 /**
@@ -118,14 +130,20 @@ public class NPC extends Monster
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
-  /** The gender of the monster. */
+  /** The gender of the npc. */
   @Key("gender")
   protected EnumSelection<Gender> m_gender =
     new EnumSelection<Gender>(Gender.class);
 
-  /** A special name for the monster, if any. */
+  /** A special name for the npc, if any. */
   @Key("given name")
   protected Text m_givenName = new Text();
+
+  /** THe levels the npc has. */
+  @Key("levels")
+  protected ValueList<Reference<BaseLevel>> m_levels =
+    new ValueList<Reference<BaseLevel>>(", ",
+      new Reference<BaseLevel>(BaseLevel.TYPE));
 
   static
   {
@@ -139,5 +157,78 @@ public class NPC extends Monster
       return m_givenName.get() + " - " + super.dmName();
 
     return super.dmName();
+  }
+
+  /**
+   * Get an overview of class levels.
+   *
+   * @return All the level abbreviation with the count attached
+   */
+  public SortedSet<String> levelsOverview()
+  {
+    Multiset<String> abbreviations = HashMultiset.create();
+
+    for(Reference<BaseLevel> level : m_levels)
+    {
+      BaseLevel baseLevel = level.getEntry();
+      if (baseLevel == null)
+        abbreviations.add("invalid " + level);
+      else
+        abbreviations.add(baseLevel.getAbbreviation());
+    }
+
+    SortedSet<String> classes = new TreeSet<>();
+    for(String abbreviation : abbreviations)
+      classes.add(abbreviation + abbreviations.count(abbreviation));
+
+    return classes;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  protected <T extends Value<T>> void collect(String inName,
+                                              Combined<T> ioCombined)
+  {
+    super.collect(inName, ioCombined);
+
+    Multiset<String> levels = HashMultiset.create();
+    for(Reference<BaseLevel> level : m_levels)
+    {
+      levels.add(level.getName());
+      if(level.hasEntry())
+         level.getEntry().collect(levels.count(level.getName()), inName,
+                                  ioCombined,
+                                  level.getName() + " "
+                                  + levels.count(level.getName()));
+    }
+
+    switch(inName)
+    {
+      case "hit dice":
+        for(Reference<BaseLevel> level : m_levels)
+          if(level.hasEntry())
+          {
+            BaseLevel baseLevel = level.getEntry();
+            ioCombined.addValue((T)baseLevel.getHitDie(), baseLevel,
+                                baseLevel.getAbbreviation());
+          }
+
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  @Override
+  public int getLevel()
+  {
+    int totalAdjustment = 0;
+    Combined<Union> adjustments = collect("level adjustment");
+    for (Union adjustment : adjustments.valuesOnly())
+      if(adjustment.get() instanceof Number)
+        totalAdjustment += ((Number)adjustment.get()).get();
+
+    return m_levels.size() + totalAdjustment;
   }
 }

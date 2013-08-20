@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,6 +38,7 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.util.Pair;
+import net.ixitxachitls.util.Strings;
 
 //..........................................................................
 
@@ -585,10 +587,14 @@ public class Combined<T extends Value<T>>
   /**
    * Get all the values stored.
    *
+   * @param   inIgnoreLastNumber if the last number in the values should be
+   *                             ignored as it will be added to modifiers
    * @return  the values as a list of pairs with a value and a list of nodes
    *          where the value was added from
    */
-  private List<Pair<T, List<Node<T>>>> values()
+  // TODO: don't do removing of last value anymore, but instead add modifiers
+  // better.
+  private List<Pair<T, List<Node<T>>>> values(boolean inIgnoreLastNumber)
   {
     if(m_root == null)
       return Lists.newArrayList();
@@ -599,7 +605,8 @@ public class Combined<T extends Value<T>>
       return values;
 
     // We will add the last values to the modifiers.
-    if(values.get(values.size() - 1).first().getClass() == Number.class)
+    if(inIgnoreLastNumber
+      && values.get(values.size() - 1).first().getClass() == Number.class)
       values.remove(values.size() - 1);
 
     return values;
@@ -617,7 +624,7 @@ public class Combined<T extends Value<T>>
   {
     List<T> values = Lists.newArrayList();
 
-    for(Pair<T, List<Node<T>>> value : values())
+    for(Pair<T, List<Node<T>>> value : values(true))
       values.add(value.first());
 
     for(Contribution<T> value : m_values)
@@ -634,10 +641,11 @@ public class Combined<T extends Value<T>>
    *
    * @return      a list of value and description pairs
    */
+  // TODO: use an own object instead of pair
   public List<Pair<T, List<Pair<T, String>>>> valuesWithDescriptions()
   {
     List<Pair<T, List<Pair<T, String>>>> values = Lists.newArrayList();
-    for(Pair<T, List<Node<T>>> value : values())
+    for(Pair<T, List<Node<T>>> value : values(true))
     {
       List<Pair<T, String>> descriptions = Lists.newArrayList();
       for(Node<T> node : value.second())
@@ -680,6 +688,8 @@ public class Combined<T extends Value<T>>
     if(total instanceof Units)
       total = (T)((Units)total).simplify();
 
+    // TODO: modifiers?
+
     return total;
   }
 
@@ -720,7 +730,7 @@ public class Combined<T extends Value<T>>
   public @Nullable T min()
   {
     T min = null;
-    for (Pair<T, List<Node<T>>> value : values())
+    for (Pair<T, List<Node<T>>> value : values(false))
       if(min == null)
         min = value.first();
       else if(value.first().compareTo(min) < 0)
@@ -745,7 +755,7 @@ public class Combined<T extends Value<T>>
   public @Nullable T max()
   {
     T max = null;
-    for (Pair<T, List<Node<T>>> value : values())
+    for (Pair<T, List<Node<T>>> value : values(false))
       if(max == null)
         max = value.first();
       else if(value.first().compareTo(max) > 0)
@@ -769,10 +779,29 @@ public class Combined<T extends Value<T>>
   @SuppressWarnings({ "rawtypes" })
   public ModifiedNumber modifier()
   {
-    ModifiedNumber modifier = new ModifiedNumber(0);
+    ModifiedNumber modifier = new ModifiedNumber(0, true);
+
+    if(!m_modifiers.isEmpty())
+    {
+      List<Pair<T, List<Node<T>>>> values = values(false);
+      if(!values.isEmpty())
+      {
+        Pair<T, List<Node<T>>> last = values.get(values.size() - 1);
+        if(last.first().getClass() == Number.class)
+        {
+          List<String> descriptions = new ArrayList<>();
+          for (Node<T> node : last.second())
+            descriptions.add(node.getDescription());
+
+          modifier.withModifier(new Modifier((int)((Number)last.first()).get()),
+                                Strings.COMMA_JOINER.join(descriptions));
+        }
+      }
+    }
 
     for (Contribution<Modifier> contribution : m_modifiers)
-      modifier.withModifier(contribution.getValue(), contribution.getText());
+      modifier.withModifier(contribution.getValue(),
+                            contribution.getDescription());
 
     return modifier;
   }
@@ -952,6 +981,39 @@ public class Combined<T extends Value<T>>
   }
 
   //........................................................................
+
+  /**
+   * Get the maximally possible number value.
+   *
+   * @return  the maximally possible value if the combined represents a number
+   */
+  public int getMaxValue()
+  {
+    int max = (int) modifier().getMaxValue();
+
+    for(T value : valuesOnly())
+      if (value instanceof BaseNumber)
+        max += (int) ((BaseNumber)value).get();
+
+    return max;
+  }
+
+  /**
+   * Get the minimally possible number value.
+   *
+   * @return  the minimally possible value if the combined represents a number
+   */
+  public int getMinValue()
+  {
+    int min = (int) modifier().getMinValue();
+
+    for(T value : valuesOnly())
+      if (value instanceof BaseNumber)
+        min += (int) ((BaseNumber)value).get();
+
+    return min;
+  }
+
 
   //........................................................................
 

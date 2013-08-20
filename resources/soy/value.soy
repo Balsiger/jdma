@@ -891,7 +891,7 @@
           {$content}
           {if $postfix}{$postfix}{/if}
         {else}
-          {if $prefix and $value.hasValue}{$prefix}{/if}
+          {if $prefix}{$prefix}{/if}
           {if def($value.remark)}
             {call dma.value.remark}
               {param value: $value /}
@@ -928,7 +928,7 @@
               {$value.modifier |print}
             {/if}
           {/if}
-          {if $postfix and $value.hasValue}{$postfix}{/if}
+          {if $postfix}{$postfix}{/if}
         {/if}
       {/param}
     {/call}

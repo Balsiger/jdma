@@ -289,6 +289,16 @@ public class Reference<T extends AbstractEntry> extends Value<Reference<T>>
 
   //........................................................................
 
+  /**
+   * Determine if the reference points to a valid, existing entry.
+   *
+   * @return true if there is an entry, false if not
+   */
+  public boolean hasEntry()
+  {
+    return getEntry() != null;
+  }
+
   //------------------------------ doToString ------------------------------
 
   /**
@@ -394,8 +404,8 @@ public class Reference<T extends AbstractEntry> extends Value<Reference<T>>
   public Reference<T> add(Reference<T> inOther)
   {
     if(!getName().equals(inOther.getName()))
-      throw new IllegalStateException("cannot add references with different "
-                                      + "names");
+      throw new UnsupportedOperationException
+        ("cannot add references with different names");
 
     Reference<T> ref = new Reference<T>(m_type, getName());
     if(m_parameters == null)

@@ -691,7 +691,6 @@ DIV.card DIV.title
 {
   font-weight: bold;
   text-align: center;
-  display: inline-block;
   width: 100%;
 }
 
@@ -1137,12 +1136,12 @@ DIV.ability DIV.ability-title.spell
   background-color: $color_Spell;
 }
 
-DIV.ability DIV.ability-numbers
+DIV.ability DIV.ability-numbers, DIV.quality.card DIV.numbers
 {
   float: left;
 }
 
-DIV.ability DIV.ability-number
+DIV.ability DIV.ability-number, DIV.quality.card DIV.numbers DIV.number
 {
   background-color: white;
   border-radius: 3px;
@@ -1613,7 +1612,7 @@ DIV.edit-list-element
 
 DIV.edit-list-remove
 {
-  background-position: -182px;
+  background-position: -195px;
   position:            absolute;
   right:               -9px;
   top:                 0;
@@ -1621,7 +1620,7 @@ DIV.edit-list-remove
 
 DIV.edit-list-add
 {
-  background-position: -169px;
+  background-position: -182px;
   position:            absolute;
   right:               -9px;
   bottom:              0;

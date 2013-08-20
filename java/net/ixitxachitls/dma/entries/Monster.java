@@ -727,7 +727,6 @@ public class Monster extends CampaignEntry<BaseMonster>
 
   /** The feats. */
   @Key("feats")
-  @SuppressWarnings("unchecked") // generic array creation
   protected ValueList<Reference<BaseFeat>> m_feats =
     new ValueList<Reference<BaseFeat>>
     (", ", new Reference<BaseFeat>(BaseFeat.TYPE)
@@ -1194,12 +1193,11 @@ public class Monster extends CampaignEntry<BaseMonster>
    *
    * @param       inAbility the ability score to get
    *
-   * @return      the ability score
-   *
+   * @return      the combined ability score
    */
-  public ModifiedNumber ability(BaseMonster.Ability inAbility)
+  public Combined<Number> ability(BaseMonster.Ability inAbility)
   {
-    return collect(inAbility.toString().toLowerCase(Locale.US)).modifier();
+   return collect(inAbility.toString().toLowerCase(Locale.US));
   }
 
   //........................................................................
@@ -1215,14 +1213,9 @@ public class Monster extends CampaignEntry<BaseMonster>
   {
     ModifiedNumber initiative = collect("initiative").modifier();
 
-    ModifiedNumber dexterity = ability(BaseMonster.Ability.DEXTERITY);
-    if(dexterity.hasConditions())
-      throw new UnsupportedOperationException("cannot handle conditional "
-                                              + "dexterity for initiative");
-
+    int dexterity = ability(BaseMonster.Ability.DEXTERITY).getMaxValue();
     initiative.withModifier
-      (new Modifier(abilityModifier((int)dexterity.getMaxValue()),
-                    Modifier.Type.ABILITY),
+      (new Modifier(abilityModifier(dexterity), Modifier.Type.ABILITY),
        "Dex of " + dexterity);
 
     return initiative;
@@ -1295,9 +1288,8 @@ public class Monster extends CampaignEntry<BaseMonster>
    */
   public int dexterityModifierForAC()
   {
-    ModifiedNumber dex = ability(BaseMonster.Ability.DEXTERITY);
-
-    int max = abilityModifier((int)dex.getMaxValue());
+    int dex =
+      abilityModifier(ability(BaseMonster.Ability.DEXTERITY).getMaxValue());
 
     // TODO: we should actually only consider worn items.
     for(Name name : m_possessions)
@@ -1308,16 +1300,11 @@ public class Monster extends CampaignEntry<BaseMonster>
 
       Combined<Number> combinedMaxDex = item.collect("max dexterity");
       Number maxDex = combinedMaxDex.min();
-      if(maxDex != null && maxDex.isDefined() && maxDex.get() < max)
-        max = (int)maxDex.get();
+      if(maxDex != null && maxDex.isDefined() && maxDex.get() < dex)
+        dex = (int)maxDex.get();
     }
 
-    if(dex.hasConditions() && abilityModifier((int)dex.getMinValue()) < max)
-      throw new UnsupportedOperationException("Got a conditional value for "
-                                              + "dexterity but can return only "
-                                              + "a single value");
-
-    return max;
+    return dex;
   }
 
   //........................................................................
@@ -1469,22 +1456,17 @@ public class Monster extends CampaignEntry<BaseMonster>
    * Compute the grapple check.
    *
    * @return      the modified number with the grapple check.
-   *
    */
   @SuppressWarnings("unchecked")
   public ModifiedNumber grapple()
   {
-    Combined<Number> combinedAttack = collect("base attack");
-    Number combinedAttackTotal = combinedAttack.total();
-    long baseAttack = 0;
-    if (combinedAttackTotal != null)
-      baseAttack = combinedAttackTotal.get();
-
-    ModifiedNumber grapple = new ModifiedNumber(baseAttack);
-    ModifiedNumber strength = ability(BaseMonster.Ability.STRENGTH);
+    long baseAttack = collect("base attack").getMaxValue();
+    ModifiedNumber grapple = new ModifiedNumber(0);
+    grapple.withModifier(new Modifier((int)baseAttack), "base attack");
+    int strength = ability(BaseMonster.Ability.STRENGTH).getMaxValue();
     grapple.withModifier
-      (new Modifier(abilityModifier((int)strength.getMaxValue()),
-                    Modifier.Type.ABILITY), "Str of " + strength);
+      (new Modifier(abilityModifier(strength), Modifier.Type.ABILITY),
+       "Str of " + strength);
 
     Combined<Multiple> combinedSize = collect("size");
     List<Pair<Multiple, List<Pair<Multiple, String>>>> sizesPerGroup =
@@ -1599,11 +1581,11 @@ public class Monster extends CampaignEntry<BaseMonster>
   {
     ModifiedNumber modified = new ModifiedNumber(inBaseAttack);
 
-    ModifiedNumber strength = ability(inKeyAbility);
+    int strength = ability(inKeyAbility).getMaxValue();
 
     int abilityModifier;
     if (inKeyAbility == BaseMonster.Ability.STRENGTH)
-      abilityModifier = abilityModifier((int)strength.getMaxValue());
+      abilityModifier = abilityModifier(strength);
     else
       abilityModifier = dexterityModifierForAC();
 
@@ -1843,7 +1825,7 @@ public class Monster extends CampaignEntry<BaseMonster>
               (new Modifier(dexterityModifierForAC()), "Dexterity");
           else
             modifier.withModifier
-              (new Modifier(abilityModifier((int)ability(ability)
+              (new Modifier(abilityModifier(ability(ability)
                                             .getMinValue()),
                             Modifier.Type.ABILITY),
                skill.getAbility().toString());
@@ -1959,15 +1941,11 @@ public class Monster extends CampaignEntry<BaseMonster>
 
     if(saveAbility != null)
     {
-      ModifiedNumber ability = ability(saveAbility);
-      if(ability.hasConditions())
-        throw new UnsupportedOperationException
-          ("cannot handle conditional values for abiliies for saves");
-
-      if(ability.getMaxValue() >= 0)
+      int ability = ability(saveAbility).getMaxValue();
+      if(ability >= 0)
         ioCombined.addModifier
-          (new Modifier(abilityModifier((int)ability.getMaxValue())),
-            this, saveAbility.getShort() + " of " + ability.getMaxValue());
+          (new Modifier(abilityModifier(ability)), this,
+                        saveAbility.getShort() + " of " + ability);
     }
 
     for(Name name : m_possessions)
@@ -1995,27 +1973,24 @@ public class Monster extends CampaignEntry<BaseMonster>
       {
         int bonus = abilityModifier(constitution);
 
-        for(Value<?> value : ioCombined.valuesOnly())
-        {
-          int level = ((Dice)value).getNumber();
-          ioCombined.addModifier
-            (new Modifier(level * bonus, Modifier.Type.GENERAL),
-             this, "Con of " + constitution + " (" + (bonus > 0 ? "+" : "")
-             + bonus + " and level " + level + ")");
-        }
+        int level = getLevel();
+        ioCombined.addModifier
+          (new Modifier(level * bonus, Modifier.Type.GENERAL),
+           this, "Con of " + constitution + " (" + (bonus > 0 ? "+" : "")
+           + bonus + " and level " + level + ")");
       }
     }
 
     if("armor class".equals(inName))
     {
       // limit this with max dex of items
-      ModifiedNumber dexterity = ability(BaseMonster.Ability.DEXTERITY);
+      int dexterity = ability(BaseMonster.Ability.DEXTERITY).getMaxValue();
       int modifier = dexterityModifierForAC();
 
       ioCombined.addModifier
         (new Modifier(modifier, Modifier.Type.ABILITY),
          this, "Dex of " + dexterity
-         + (abilityModifier((int)dexterity.getMaxValue()) == modifier
+         + (abilityModifier(dexterity) == modifier
             ? "" : " (capped for armor)"));
 
       Combined<Multiple> combinedSize = collect("size");
@@ -2053,7 +2028,7 @@ public class Monster extends CampaignEntry<BaseMonster>
       return inDamage;
 
     int modifier =
-      abilityModifier((int)ability(BaseMonster.Ability.STRENGTH).getMaxValue());
+      abilityModifier(ability(BaseMonster.Ability.STRENGTH).getMaxValue());
 
     if(inSecondary)
       modifier /= 2;
@@ -2156,7 +2131,6 @@ public class Monster extends CampaignEntry<BaseMonster>
       entries.add(item);
     }
 
-
     return entries;
   }
 
@@ -2168,18 +2142,13 @@ public class Monster extends CampaignEntry<BaseMonster>
    * Get the level of the monster.
    *
    * @return      the monster's level
-   *
    */
   public int getLevel()
   {
-    Combined<Dice> hitDice = collect("hit dice");
+    // Don't use 'hit dice' here, as this will in turn use level (for con).
+    Combined<?> combinedLevel = collect("level");
 
-    int level = 0;
-    for(Value<?> value : hitDice.valuesOnly())
-      if(value instanceof Dice)
-        level += ((Dice)value).getNumber();
-
-    return level;
+    return (int) combinedLevel.modifier().getMaxValue();
   }
 
   //........................................................................
@@ -2237,7 +2206,7 @@ public class Monster extends CampaignEntry<BaseMonster>
         ability = BaseMonster.Ability.CHARISMA;
     }
 
-    return abilityModifier((int)ability(ability).getMaxValue());
+    return abilityModifier(ability(ability).getMaxValue());
   }
 
   //........................................................................

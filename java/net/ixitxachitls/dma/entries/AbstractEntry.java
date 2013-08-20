@@ -686,7 +686,7 @@ public abstract class AbstractEntry extends ValueGroup
   @Override
   public List<BaseEntry> getBaseEntries()
   {
-    if(m_baseEntries.isEmpty())
+    if(m_baseEntries == null || m_baseEntries.isEmpty())
     {
       m_baseEntries = new ArrayList<BaseEntry>();
 

@@ -607,12 +607,20 @@
  * @param entry Quality set.
  * @param name The name of the quality.
  * @param? summary Summary of the specific feat.
- * @param? description Description of the feat
+ * @param? description Description of the feat.
+ * @param? number The number of times per day this quality can be used.
  */
 {template .quality}
   {if $entry.name}
     <div class="quality card small">
       <div class="header">
+        {if $number and $number > 0}
+          <div class="numbers">
+            {for $i in range($number)}
+              <div class="number"></div>
+            {/for}
+          </div>
+        {/if}
         <div class="title">
           {$entry.name}{if $summary} {$summary}{/if}
         </div>

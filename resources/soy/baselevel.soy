@@ -72,18 +72,63 @@
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
-    {param name: 'XP' /}
-    {param value: $entry.xp /}
+    {param name: 'Abbreviation' /}
+    {param value: $entry.abbreviation /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
-    {param name: 'Feat Levels' /}
-    {param value: $entry.feat_levels /}
+    {param name: 'Adventures' /}
+    {param value: $entry.adventures /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
-    {param name: 'Ability Levels' /}
-    {param value: $entry.ability_levels /}
+    {param name: 'Characteristics' /}
+    {param value: $entry.characteristics /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Alignment' /}
+    {param value: $entry.alignment_options /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Religion' /}
+    {param value: $entry.religion /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Background' /}
+    {param value: $entry.background /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Races' /}
+    {param value: $entry.races /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Other Classes' /}
+    {param value: $entry.other_classes /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Role' /}
+    {param value: $entry.role /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Abilities' /}
+    {param value: $entry.important_abilities /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Allowed Alignemtns' /}
+    {param value: $entry.allowed_alignments /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Hit Die' /}
+    {param value: $entry.hit_die /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
@@ -107,13 +152,33 @@
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
-    {param name: 'Special Attaacks' /}
+    {param name: 'Special Attacks' /}
     {param value: $entry.special_attacks /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
     {param name: 'Special Qualities' /}
     {param value: $entry.special_qualities /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Base Attacks' /}
+    {param value: $entry.base_attacks /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'For Saves' /}
+    {param value: $entry.fortitude_saves /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Ref Saves' /}
+    {param value: $entry.reflex_saves /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Will Saves' /}
+    {param value: $entry.will_saves /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}

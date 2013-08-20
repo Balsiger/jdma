@@ -177,7 +177,7 @@ public class ValueList<T extends Value<T>>
    * @param       inValues the beginning values of the list
    * @param       inDelimiter the delimiter used between the elements
    */
-  @SuppressWarnings("unchecked") // heap pollution?
+  @SafeVarargs
   public ValueList(String inDelimiter, T ... inValues)
   {
     if(inValues.length <= 0)
@@ -207,7 +207,6 @@ public class ValueList<T extends Value<T>>
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // casting result
   public ValueList<T> create()
   {
     // the value is added to the list if it is defined !
@@ -654,20 +653,51 @@ public class ValueList<T extends Value<T>>
 
     // only add the same value once
     for(T value : m_values)
-      if(!added.contains(value.toString()))
-      {
-        added.add(value.toString());
-        values.add(value);
-      }
+      add(values, added, value);
 
     for(T value : inValue.m_values)
-      if(!added.contains(value.toString()))
-      {
-        added.add(value.toString());
-        values.add(value);
-      }
+      add(values, added, value);
 
     return as(values);
+  }
+
+  /**
+   * Add the given value to the list.
+   *
+   * @param ioValues  the list of values to add to
+   * @param ioAdded   the strings of text values added already (to prevent
+   *                  adding them multiple times)
+   * @param inValue   the value to add
+   */
+  private void add(List<T> ioValues, Set<String> ioAdded, T inValue)
+  {
+    if(inValue instanceof BaseText)
+    {
+      if(!ioAdded.contains(inValue.toString()))
+      {
+        ioAdded.add(inValue.toString());
+        ioValues.add(inValue);
+      }
+    }
+    else
+    {
+      // try to add it to one of the existing values
+      for(int i = 0; i < ioValues.size(); i++)
+      {
+        try
+        {
+          ioValues.set(i, ioValues.get(i).add(inValue));
+          return;
+        }
+        catch(UnsupportedOperationException e)
+        {
+          // nothing to do
+        }
+      }
+
+      // adding to existing values failed, add normally
+      ioValues.add(inValue);
+    }
   }
 
   //........................................................................

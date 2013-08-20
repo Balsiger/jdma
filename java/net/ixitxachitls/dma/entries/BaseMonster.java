@@ -1420,7 +1420,6 @@ public class BaseMonster extends BaseEntry
 
   /** The monster type and subtype. */
   @Key("type")
-  @SuppressWarnings("unchecked") // unchecked generic array creation
   protected Multiple m_monsterType =
     new Multiple(new Multiple.Element []
     {
@@ -1827,7 +1826,6 @@ public class BaseMonster extends BaseEntry
 
   /** The feats. */
   @Key("feats")
-  @SuppressWarnings("unchecked") // unchecked generic array creation
   protected ValueList<Reference<BaseFeat>> m_feats =
     new ValueList<Reference<BaseFeat>>
     (", ", new Reference<BaseFeat>(BaseFeat.TYPE)
@@ -2314,6 +2312,7 @@ public class BaseMonster extends BaseEntry
 
     for(Multiple multiple : m_specialQualities)
     {
+      // TODO: also use base values? See collectedSpecialQualities?
       Reference<BaseQuality> reference =
         (Reference<BaseQuality>)multiple.get(0);
       BaseQuality quality = reference.getEntry();
@@ -2322,7 +2321,7 @@ public class BaseMonster extends BaseEntry
         continue;
 
       Condition<?> condition = (Condition<?>)multiple.get(1);
-      quality.collect(inName, ioCombined, reference.getParameters(),
+      quality.collect(inName, ioCombined, null, reference.getParameters(),
                       condition.isDefined() ? condition : null);
     }
 
@@ -2333,6 +2332,12 @@ public class BaseMonster extends BaseEntry
         continue;
 
       feat.collect(inName, ioCombined, reference.getParameters());
+    }
+
+    if("level".equals(inName))
+    {
+      if(m_hitDice.isDefined())
+        ioCombined.addModifier(new Modifier(m_hitDice.getNumber()), this, null);
     }
   }
 

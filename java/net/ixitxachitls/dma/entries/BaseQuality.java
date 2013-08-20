@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -37,6 +39,7 @@ import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Parameters;
+import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.conditions.Condition;
@@ -287,6 +290,7 @@ public class BaseQuality extends BaseEntry
       { new Multiple.Element(new EnumSelection<Affects>(Affects.class), false),
         new Multiple.Element(new Name(), true),
         new Multiple.Element(new Modifier(), true, ": ", null),
+        new Multiple.Element(new Text(), true, " = ", null),
       }));
 
   static
@@ -422,6 +426,7 @@ public class BaseQuality extends BaseEntry
    *
    * @param       inName          the name of the value to collect
    * @param       ioCombined      the value collected so far (to add to)
+   * @param       inDescription   the description why collecting the value
    * @param       inParameters    the parameters for collecting values
    * @param       inCondition     the condition for collecting
    * @param       <T>             the type of value collected
@@ -429,6 +434,7 @@ public class BaseQuality extends BaseEntry
   @SuppressWarnings("unchecked")
   protected <T extends Value<T>> void
                collect(String inName, Combined<T> ioCombined,
+                       String inDescription,
                        Parameters inParameters,
                        @Nullable Condition<?> inCondition)
   {
@@ -445,31 +451,46 @@ public class BaseQuality extends BaseEntry
                                                  inParameters)))
          || (affects == Affects.DAMAGE && "damage".equals(inName))
          || (affects == Affects.AC && "armor class".equals(inName))
+         || (affects == Affects.SPEED && "speed".equals(inName))
          || (affects == Affects.ATTACK && "attack".equals(inName)))
       {
         Modifier modifier = (Modifier)multiple.get(2);
-        modifier.withCondition(inCondition);
-        if(modifier.getExpression() instanceof Expression.Expr)
+        if(modifier.isDefined())
         {
-          String expression =
-            computeExpressions(((Expression.Expr)modifier.getExpression())
-                               .getText(), inParameters);
-
-          Modifier computed = modifier.read(expression);
-          if(computed != null)
+          modifier.withCondition(inCondition);
+          if(modifier.getExpression() instanceof Expression.Expr)
           {
-            computed.withCondition(inCondition);
-            computed.withCondition(modifier.getCondition());
-            ioCombined.addModifier(computed, this, null);
+            String expression =
+              computeExpressions(((Expression.Expr)modifier.getExpression())
+                                 .getText(), inParameters);
+
+            Modifier computed = modifier.read(expression);
+            if(computed != null)
+            {
+              computed.withCondition(inCondition);
+              computed.withCondition(modifier.getCondition());
+              ioCombined.addModifier(computed, this, inDescription);
+            }
+            else
+              ioCombined.addModifier
+                (modifier.as(Integer.valueOf(expression.replace('+', '0')),
+                             modifier.getType(), modifier.getCondition(), null),
+                  this, null);
           }
           else
-            ioCombined.addModifier
-              (modifier.as(Integer.valueOf(expression.replace('+', '0')),
-                           modifier.getType(), modifier.getCondition(), null),
-                this, null);
+            ioCombined.addModifier(modifier, this, null);
         }
-        else
-          ioCombined.addModifier(modifier, this, null);
+
+        Text valueText = (Text)multiple.get(3);
+        if(valueText.isDefined())
+        {
+          List<T> values = ioCombined.valuesOnly();
+          if(!values.isEmpty())
+          {
+            String text = computeExpressions(valueText.get(), inParameters);
+            ioCombined.addValue(values.get(0).read(text), this, inDescription);
+          }
+        }
       }
     }
   }

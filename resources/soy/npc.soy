@@ -85,6 +85,11 @@
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
+    {param name: 'Levels' /}
+    {param value: $entry.levels /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
     {param name: 'Synonyms' /}
     {param value: $entry.synonyms /}
   {/delcall}
@@ -97,6 +102,11 @@
     {param entry: $entry /}
     {param name: 'Categoeries' /}
     {param value: $entry.categories /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Levels' /}
+    {param value: $entry.levels /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
@@ -444,13 +454,16 @@
       {$entry.gender.print}{sp}
     {/if}
     {$entry.base.print}
+    {foreach $level in $entry.levels_overview}
+      {sp}{$level}
+    {/foreach}
     <div class="par">
+    CR{sp}
     {call dma.entry.overviewValue}
-      {param prefix: 'CR' /}
-      {param postfix: '; ' /}
       {param entry: $entry /}
-      {param value: $entry.challenge_rating.combined /}
+      {param value: $entry.level /}
     {/call}
+    ;
     {call dma.entry.overviewValue}
       {param entry: $entry /}
       {param value: $entry.__size /}
@@ -491,7 +504,7 @@
       {param value: $entry.speed.combined /}
     {/call}
     {call dma.entry.overviewValue}
-      {param prefix: 'AC' /}
+      {param prefix: 'AC ' /}
       {param postfix: ', ' /}
       {param entry: $entry /}
       {param value: $entry.armorClass /}
@@ -595,22 +608,10 @@
           {/if}
         {/foreach}
         {sp}(base{sp}
-        <span class="windowed">
-          +{$entry.attacks.base[0]}
-          <span class="window base">
-            {foreach $base in $entry.attacks.bases}
-              <div class="base-entry">
-                <div class="base-value">
-                  {$base.first |firstline}
-                </div>
-                :{sp}
-                <div class="base-name">
-                  {$base.second}
-                </div>
-              </div>
-            {/foreach}
-          </span>
-        </span>
+        {call dma.value.combined}
+          {param entry: $entry/}
+          {param value: $entry.base_attack.combined /}
+        {/call} 
         , grapple +{$entry.attacks.grapple |print})
       {/param}
     {/call}
@@ -705,6 +706,7 @@
           {param name: $attack.name /}
           {param entry: entry('base quality/' + $attack.name) /}
           {param summary: $attack.params /}
+          {param number: $attack.number /}
           {param description: $attack.summary /}
         {/call}
       {/foreach}
@@ -758,3 +760,4 @@
     </script>
   {/literal}
 {/deltemplate}
+

@@ -23,7 +23,6 @@
 
 package net.ixitxachitls.dma.output.soy;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -233,10 +232,10 @@ public class SoyAbstract extends SoyMapData
     if(inObject instanceof Combined)
       return new SoyCombined((Combined)inObject);
 
-    if(inObject instanceof List)
+    if(inObject instanceof Iterable)
     {
       SoyListData list = new SoyListData();
-      for(Object element : (List)inObject)
+      for(Object element : (Iterable)inObject)
         list.add(convert(inName + "_list", element));
 
       return list;

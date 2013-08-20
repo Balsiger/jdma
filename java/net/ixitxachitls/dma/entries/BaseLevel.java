@@ -21,21 +21,28 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.extensions.BaseArmor;
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.extensions.BaseWeapon;
+import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
+import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Reference;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.conditions.Condition;
 
@@ -45,6 +52,7 @@ import net.ixitxachitls.dma.values.conditions.Condition;
  * @file   BaseLevel.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
+@ParametersAreNonnullByDefault
 public class BaseLevel extends BaseEntry
 {
   /**
@@ -72,20 +80,56 @@ public class BaseLevel extends BaseEntry
   /** Serialize version id. */
   private static final long serialVersionUID = 1L;
 
-  /** The xp per level. */
-  @Key("xp")
-  protected ValueList<Number> m_xp =
-    new ValueList<>(new Number(0, 1_000_000));
+  /** The short name for the class. */
+  @Key("abbreviation")
+  protected Name m_abbreviation = new Name();
 
-  /** The level at which to gain a feat. */
-  @Key("feat levels")
-  protected ValueList<Number> m_featLevels =
-    new ValueList<>(new Number(0, 100));
+  /** The adventures typical for the class. */
+  @Key("adventures")
+  protected LongFormattedText m_adventures = new LongFormattedText();
 
-  /** The level at which to gain an ability increase. */
-  @Key("ability levels")
-  protected ValueList<Number> m_abilityLevels =
-    new ValueList<>(new Number(0, 100));
+  /** The characteristics of the class. */
+  @Key("characteristics")
+  protected LongFormattedText m_characteristics = new LongFormattedText();
+
+  /** The alignment options for this class. */
+  @Key("alignment options")
+  protected LongFormattedText m_alignmentOptioons = new LongFormattedText();
+
+  /** The religious views of the class. */
+  @Key("religion")
+  protected LongFormattedText m_religion = new LongFormattedText();
+
+  /** The usual backgrounds for the class. */
+  @Key("background")
+  protected LongFormattedText m_background = new LongFormattedText();
+
+  /** The races suited for this class. */
+  @Key("races")
+  protected LongFormattedText m_races = new LongFormattedText();
+
+  /** The relation to other classes. */
+  @Key("other classes")
+  protected LongFormattedText m_otherClasses = new LongFormattedText();
+
+  /** The role of the class. */
+  @Key("role")
+  protected LongFormattedText m_role = new LongFormattedText();
+
+  /** The important abilities for the class. */
+  @Key("important abilities")
+  protected LongFormattedText m_importantAbilities = new LongFormattedText();
+
+  /** The alignemts allowed for the class. */
+  @Key("allowed alignments")
+  protected ValueList<EnumSelection<BaseMonster.Alignment>>
+    m_allowedAlignments = new ValueList<EnumSelection<BaseMonster.Alignment>>
+      (", ",
+        new EnumSelection<BaseMonster.Alignment>(BaseMonster.Alignment.class));
+
+  /** The hit die. */
+  @Key("hit die")
+  protected Dice m_hitDie = new Dice();
 
   /** Skill points per level (x4 at first level, +Int modifier). */
   @Key("skill points")
@@ -117,42 +161,45 @@ public class BaseLevel extends BaseEntry
   new ValueList<Multiple>
   (", ",
     new Multiple(new Multiple.Element []
-      {
+    {
       new Multiple.Element(new Number(1, 100).withEditType("number[level]"),
                            false),
-      new Multiple.Element
-        (new Reference<BaseQuality>(BaseQuality.TYPE)
-         .withParameter("Range", new Distance(), Parameters.Type.MAX)
-         .withParameter("Increment", new Distance(), Parameters.Type.MAX)
-         .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
-         .withParameter("Summary", new Name(), Parameters.Type.ADD)
-         .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
-         .withParameter("SpellLevel", new Number(0, 100), Parameters.Type.ADD)
-         .withParameter("Value", new Number(1, 100), Parameters.Type.ADD)
-         .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
-         .withParameter("Dice", new Dice(), Parameters.Type.ADD)
-         .withParameter("Times", new Number(1, 100), Parameters.Type.ADD)
-         .withParameter("Class", new EnumSelection<BaseSpell.SpellClass>
-                        (BaseSpell.SpellClass.class), Parameters.Type.ADD)
-         .withParameter("Ability", new Number(0, 100), Parameters.Type.MAX)
-         .withParameter("Type", new Name(), Parameters.Type.UNIQUE)
-         .withParameter("Duration", new Name(), Parameters.Type.ADD)
-         .withParameter("Initial", new Name(), Parameters.Type.UNIQUE)
-         .withParameter("Secondary", new Name(), Parameters.Type.UNIQUE)
-         .withParameter("Damage", new Damage(), Parameters.Type.ADD)
-         .withParameter("Incubation", new Name(), Parameters.Type.MIN)
-         .withParameter("DC", new Number(1, 100), Parameters.Type.MAX)
-         .withParameter("HP", new Number(1, 1000), Parameters.Type.MAX)
-         .withParameter("Burst", new Number(1, 100), Parameters.Type.MAX)
-         .withParameter("Str", new Number(-100, 100), Parameters.Type.ADD)
-         .withParameter("Dex", new Number(-100, 100), Parameters.Type.ADD)
-         .withParameter("Con", new Number(-100, 100), Parameters.Type.ADD)
-         .withParameter("Wis", new Number(-100, 100), Parameters.Type.ADD)
-         .withParameter("Int", new Number(-100, 100), Parameters.Type.ADD)
-         .withParameter("Cha", new Number(-100, 100), Parameters.Type.ADD)
-         .withTemplate("reference", "/quality/"), false),
-      new Multiple.Element(new Number(1, 100)
-        .withEditType("name[per day]"), true, "/", null)
+      new Multiple.Element(new Multiple(new Multiple.Element []
+      {
+        new Multiple.Element
+          (new Reference<BaseQuality>(BaseQuality.TYPE)
+           .withParameter("Range", new Distance(), Parameters.Type.MAX)
+           .withParameter("Increment", new Distance(), Parameters.Type.MAX)
+           .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
+           .withParameter("Summary", new Name(), Parameters.Type.ADD)
+           .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
+           .withParameter("SpellLevel", new Number(0, 100), Parameters.Type.ADD)
+           .withParameter("Value", new Number(1, 100), Parameters.Type.ADD)
+           .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
+           .withParameter("Dice", new Dice(), Parameters.Type.ADD)
+           .withParameter("Times", new Number(1, 100), Parameters.Type.ADD)
+           .withParameter("Class", new EnumSelection<BaseSpell.SpellClass>
+                          (BaseSpell.SpellClass.class), Parameters.Type.ADD)
+           .withParameter("Ability", new Number(0, 100), Parameters.Type.MAX)
+           .withParameter("Type", new Name(), Parameters.Type.UNIQUE)
+           .withParameter("Duration", new Name(), Parameters.Type.ADD)
+           .withParameter("Initial", new Name(), Parameters.Type.UNIQUE)
+           .withParameter("Secondary", new Name(), Parameters.Type.UNIQUE)
+           .withParameter("Damage", new Damage(), Parameters.Type.ADD)
+           .withParameter("Incubation", new Name(), Parameters.Type.MIN)
+           .withParameter("DC", new Number(1, 100), Parameters.Type.MAX)
+           .withParameter("HP", new Number(1, 1000), Parameters.Type.MAX)
+           .withParameter("Burst", new Number(1, 100), Parameters.Type.MAX)
+           .withParameter("Str", new Number(-100, 100), Parameters.Type.ADD)
+           .withParameter("Dex", new Number(-100, 100), Parameters.Type.ADD)
+           .withParameter("Con", new Number(-100, 100), Parameters.Type.ADD)
+           .withParameter("Wis", new Number(-100, 100), Parameters.Type.ADD)
+           .withParameter("Int", new Number(-100, 100), Parameters.Type.ADD)
+           .withParameter("Cha", new Number(-100, 100), Parameters.Type.ADD)
+           .withTemplate("reference", "/quality/"), false),
+        new Multiple.Element(new Number(1, 100)
+          .withEditType("name[per day]"), true, "/", null)
+        }), false),
       }));
 
   /** Special qualities. */
@@ -164,23 +211,48 @@ public class BaseLevel extends BaseEntry
     {
       new Multiple.Element(new Number(1, 100).withEditType("number[level]"),
                            false, null, ": "),
-      new Multiple.Element
-        (new Reference<BaseQuality>(BaseQuality.TYPE)
-         .withParameter("Range", new Distance(), Parameters.Type.MAX)
-         .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
-         .withParameter("Summary", new Name(), Parameters.Type.ADD)
-         .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
-         .withParameter("SpellLevel", new Number(0, 100), Parameters.Type.ADD)
-         .withParameter("Racial",
-                        new Number(-50, 50, true), Parameters.Type.ADD)
-         .withParameter("Value", new Number(0, 100), Parameters.Type.ADD)
-         .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
-         .withTemplate("reference", "/quality/"), false),
-      new Multiple.Element(new Condition().withEditType("string[condition]"),
-                           true, " :if ", null),
-      new Multiple.Element(new Number(1, 100).withEditType("name[per day]"),
-                           true, "/", null),
+      new Multiple.Element(new Multiple(new Multiple.Element []
+      {
+        new Multiple.Element
+          (new Reference<BaseQuality>(BaseQuality.TYPE)
+           .withParameter("Range", new Distance(), Parameters.Type.MAX)
+           .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
+           .withParameter("Summary", new Name(), Parameters.Type.ADD)
+           .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
+           .withParameter("SpellLevel", new Number(0, 100),
+                          Parameters.Type.ADD)
+           .withParameter("Racial",
+                          new Number(-50, 50, true), Parameters.Type.ADD)
+           .withParameter("Value", new Number(0, 100), Parameters.Type.ADD)
+           .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
+           .withTemplate("reference", "/quality/"), false),
+        new Multiple.Element(new Condition()
+                             .withEditType("string[condition]"),
+                             true, " :if ", null),
+        new Multiple.Element(new Number(1, 100).withEditType("name[per day]"),
+                             true, "/", null),
+      }), false, null, null),
     }));
+
+  /** The base attack bonuses per level. */
+  @Key("base attacks")
+  protected ValueList<Number> m_baseAttacks =
+    new ValueList<Number>(new Number(0, 20));
+
+  /** The fortitude saves per level. */
+  @Key("fortitude saves")
+  protected ValueList<Number> m_fortitudeSaves =
+    new ValueList<Number>(new Number(0, 20));
+
+  /** The reflex saves per level. */
+  @Key("reflex saves")
+  protected ValueList<Number> m_reflexSaves =
+    new ValueList<Number>(new Number(0, 20));
+
+  /** The will saves per level. */
+  @Key("will saves")
+  protected ValueList<Number> m_willSaves =
+    new ValueList<Number>(new Number(0, 20));
 
   static
   {
@@ -195,6 +267,181 @@ public class BaseLevel extends BaseEntry
       return false;
 
     return inUser.hasAccess(BaseCharacter.Group.DM);
+  }
+
+  /**
+   * Computes the minimal number of xp used to reach the given level.
+   *
+   * @param inLevel the level to compute for
+   * @return the XP minimally required for the given level
+   */
+  public static int xpPerLevel(int inLevel)
+  {
+    return 500 * inLevel * (inLevel + 1);
+  }
+
+  /**
+   * Returns the maximal number of skill ranks a character of the given
+   * level can have.
+   *
+   * @param inLevel  the character level
+   * @return the maximal number of skill ranks
+   */
+  public static int maxSkillRanks(int inLevel)
+  {
+    return inLevel + 3;
+  }
+
+  /**
+   * Returns the maximal number of skill ranks a character can have in a cross
+   * class skill.
+   *
+   * @param inLevel  the character level
+   * @return the maximal cross skill points
+   */
+  public static int maxCrossSkillRanks(int inLevel)
+  {
+    return maxSkillRanks(inLevel) / 2;
+  }
+
+  /**
+   * Returns the number of standard feats a character of the given level has.
+   *
+   * @param inLevel  the character level
+   * @return the number of standard feats available
+   */
+  public static int standardFeats(int inLevel)
+  {
+    return 1 + inLevel / 3;
+  }
+
+  /**
+   * Checks whether the given level gives an ability increase.
+   *
+   * @param inLevel  the character level
+   * @return true if the level gives an ability increase, false if not
+   */
+  public static boolean abilityIncrease(int inLevel)
+  {
+    return (inLevel / 4) * 4 == inLevel;
+  }
+
+  /**
+   * Get the abbreviation of the level.
+   *
+   * @return the level abbreviation
+   */
+  public String getAbbreviation()
+  {
+    return m_abbreviation.get();
+  }
+
+  /**
+   * Get the hit die for the level.
+   *
+   * @return  the hit die
+   */
+  public Dice getHitDie()
+  {
+    return m_hitDie;
+  }
+
+  /**
+   * Collect data for a specific level of this base level.
+   *
+   * @param inLevel       the number of this level
+   * @param inName        the name of the value to collect
+   * @param ioCombined    the combined value to add to
+   * @param inDescription the description for what to collect the data
+   * @param <T>           the type of value to be collected
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends Value<T>> void collect(int inLevel, String inName,
+                                           Combined<T> ioCombined,
+                                           String inDescription)
+  {
+    for(Reference<BaseQuality> quality : collectSpecialQualities(inLevel))
+      if(quality.hasEntry())
+        // TODO: add conditions and maybe counts
+        quality.getEntry().collect(inName, ioCombined, inDescription,
+                                   quality.getParameters(), null);
+
+    switch(inName)
+    {
+      case "base attack":
+        if(m_baseAttacks.get(inLevel - 1).get() > 0)
+          ioCombined.addModifier
+            (new Modifier((int)m_baseAttacks.get(inLevel - 1).get()), this,
+             getAbbreviation() + inLevel);
+        break;
+
+      case "fortitude save":
+        if(m_fortitudeSaves.get(inLevel - 1).get() > 0)
+          ioCombined.addModifier
+            (new Modifier((int)m_fortitudeSaves.get(inLevel - 1).get()), this,
+             getAbbreviation() + inLevel);
+        break;
+
+      case "reflex save":
+        if(m_reflexSaves.get(inLevel - 1).get() > 0)
+          ioCombined.addModifier
+            (new Modifier((int)m_reflexSaves.get(inLevel - 1).get()), this,
+             getAbbreviation() + inLevel);
+        break;
+
+      case "will save":
+        if(m_willSaves.get(inLevel - 1).get() > 0)
+          ioCombined.addModifier
+            (new Modifier((int)m_willSaves.get(inLevel - 1).get()), this,
+             getAbbreviation() + inLevel);
+        break;
+
+      case "special qualities":
+        List<Multiple> qualities = new ArrayList<>();
+        for(Multiple quality : m_specialQualities)
+          if(((Number)quality.get(0)).get() == inLevel)
+            qualities.add((Multiple)quality.get(1));
+
+          ioCombined.addValue((T)m_specialQualities.as(qualities), this,
+                              getAbbreviation() + inLevel);
+      break;
+
+      case "special attacks":
+        qualities = new ArrayList<>();
+        for(Multiple quality : m_specialAttacks)
+          if(((Number)quality.get(0)).get() == inLevel)
+            qualities.add((Multiple)quality.get(1));
+
+        ioCombined.addValue((T)m_specialAttacks.as(qualities), this,
+                            getAbbreviation() + inLevel);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  /**
+   * Collect special qualities from all levels.
+   *
+   * @param  inLevel the level for which to compute qualities
+   * @return all the special quality references for the given level
+   */
+  @SuppressWarnings("unchecked")
+  public List<Reference<BaseQuality>> collectSpecialQualities(int inLevel)
+  {
+    List<Reference<BaseQuality>> qualities = new ArrayList<>();
+
+    for(Multiple specialQuality : m_specialQualities)
+      if(((Number)specialQuality.get(0)).get() == inLevel)
+        qualities.add((Reference<BaseQuality>)
+                      ((Multiple)specialQuality.get(1)).get(0));
+
+    for(BaseEntry base : getBaseEntries())
+      if(base instanceof BaseLevel)
+        qualities.addAll(((BaseLevel)base).collectSpecialQualities(inLevel));
+
+    return qualities;
   }
 }
 
