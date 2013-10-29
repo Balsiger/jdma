@@ -504,7 +504,7 @@ public class DMARequest extends HttpServletRequestWrapper
   //--------------------------- timeIsRunningOUt ---------------------------
 
   /**
-   * Check if the time for the requesrt is running out. There is a time limit
+   * Check if the time for the request is running out. There is a time limit
    * of 60s on an appengine request.
    *
    * @return true if time is running out, false if not
@@ -512,6 +512,9 @@ public class DMARequest extends HttpServletRequestWrapper
    */
   public boolean timeIsRunningOut()
   {
+    if (DMAServlet.isDev())
+      return false;
+
     return new Date().getTime() - m_start.getTime() > 55 * 1000;
   }
 

@@ -23,15 +23,20 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Expression;
@@ -43,6 +48,7 @@ import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.conditions.Condition;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -75,13 +81,13 @@ public class BaseQuality extends BaseEntry
   public enum EffectType implements EnumSelection.Named, EnumSelection.Short
   {
     /** Extraordinary effects. */
-    EXTRAORDINARY("Extraordinary", "Ex"),
+    EXTRAORDINARY("Extraordinary", "Ex", BaseQualityProto.Type.EXTRAORDINARY),
 
     /** Spell like effects. */
-    SPELL_LIKE("Spell-like", "Sp"),
+    SPELL_LIKE("Spell-like", "Sp", BaseQualityProto.Type.SPELL_LIKE),
 
     /** Supernatural effects. */
-    SUPERNATURAL("Supernatural", "Su");
+    SUPERNATURAL("Supernatural", "Su", BaseQualityProto.Type.SUPERNATURAL);
 
     /** The value's name. */
     private String m_name;
@@ -89,16 +95,21 @@ public class BaseQuality extends BaseEntry
     /** The value's short name. */
     private String m_short;
 
+    /** The enum proto value. */
+    private BaseQualityProto.Type m_proto;
+
     /** Create the effect type.
      *
      * @param inName      the name of the value
      * @param inShort     the short name of the value
-     *
+     * @param inProto     the proto enum value
      */
-    private EffectType(String inName, String inShort)
+    private EffectType(String inName, String inShort,
+                       BaseQualityProto.Type inProto)
     {
       m_name = constant("type", inName);
       m_short = constant("type.short", inShort);
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -133,7 +144,32 @@ public class BaseQuality extends BaseEntry
     {
       return m_short;
     }
-  };
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseQualityProto.Type getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static EffectType fromProto(BaseQualityProto.Type inProto)
+    {
+      for(EffectType type : values())
+        if(type.m_proto == inProto)
+          return type;
+
+      throw new IllegalStateException("invalid proto type: " + inProto);
+    }
+  }
 
   //........................................................................
   //----- affects ----------------------------------------------------------
@@ -142,54 +178,81 @@ public class BaseQuality extends BaseEntry
   public enum Affects implements EnumSelection.Named, EnumSelection.Short
   {
     /** The fortitude save. */
-    FORTITUDE_SAVE("Fortitude Save", "Fort"),
+    FORTITUDE_SAVE("Fortitude Save", "Fort",
+                   BaseQualityProto.Effect.Affects.FORTITUDE_SAVE),
 
     /** The reflex save. */
-    REFLEX_SAVE("Reflex Save", "Ref"),
+    REFLEX_SAVE("Reflex Save", "Ref",
+                BaseQualityProto.Effect.Affects.REFLEX_SAVE),
 
     /** The will save. */
-    WILL_SAVE("Will Save", "Will"),
+    WILL_SAVE("Will Save", "Will", BaseQualityProto.Effect.Affects.WILL_SAVE),
 
     /** The skill. */
-    SKILL("Skill", "Skill"),
+    SKILL("Skill", "Skill", BaseQualityProto.Effect.Affects.SKILL),
 
     /** A grapple modifier. */
-    GRAPPLE("Grapple", "Grp"),
+    GRAPPLE("Grapple", "Grp", BaseQualityProto.Effect.Affects.GRAPPLE),
 
     /** An initiative modifier. */
-    INIT("Initiative", "Init"),
+    INIT("Initiative", "Init", BaseQualityProto.Effect.Affects.INIT),
 
     /** A modifier to the armor class. */
-    AC("Armor Class", "AC"),
+    AC("Armor Class", "AC", BaseQualityProto.Effect.Affects.AC),
 
     /** A modifier to the attack roll. */
-    ATTACK("Attack", "Atk"),
+    ATTACK("Attack", "Atk", BaseQualityProto.Effect.Affects.ATTACK),
 
     /** A modifier to damage. */
-    DAMAGE("Damage", "Dmg"),
+    DAMAGE("Damage", "Dmg", BaseQualityProto.Effect.Affects.DAMAGE),
 
     /** A modifier to Speed. */
-    SPEED("Speed", "Spd"),
+    SPEED("Speed", "Spd", BaseQualityProto.Effect.Affects.SPEED),
 
     /** A modifier to the hit points. */
-    HP("Hit Points", "HP");
+    HP("Hit Points", "HP", BaseQualityProto.Effect.Affects.HP),
+
+    /** A modifier to strength. */
+    STRENGTH("Strength", "Str", BaseQualityProto.Effect.Affects.STRENGTH),
+
+    /** A modifier to dexterity. */
+    DEXTERITY("Dexterity", "Dex", BaseQualityProto.Effect.Affects.DEXTERITY),
+
+    /** A modifier to constitution. */
+    CONSTITUTION("Constitution", "Con",
+                 BaseQualityProto.Effect.Affects.CONSTITUTION),
+
+    /** A modifier to intelligence. */
+    INTELLIGENCE("Intelligence", "Int",
+                 BaseQualityProto.Effect.Affects.INTELLIGENCE),
+
+    /** A modifier to wisdom. */
+    WISDOM("Wisdom", "Wis", BaseQualityProto.Effect.Affects.WISDOM),
+
+    /** A modifier to strength. */
+    CHARISMA("Charisma", "Cha", BaseQualityProto.Effect.Affects.CHARISMA);
 
     /** The value's name. */
-    private String m_name;
+    private final String m_name;
 
     /** The value's short name. */
-    private String m_short;
+    private final String m_short;
+
+    /** The proto enum value. */
+    private final BaseQualityProto.Effect.Affects m_proto;
 
     /** Create the name.
      *
      * @param inName      the name of the value
      * @param inShort     the short name of the value
-     *
+     * @param inProto     the prot enum value
      */
-    private Affects(String inName, String inShort)
+    private Affects(String inName, String inShort,
+                    BaseQualityProto.Effect.Affects inProto)
     {
       m_name = constant("affects", inName);
       m_short = constant("affects.short", inShort);
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -224,7 +287,32 @@ public class BaseQuality extends BaseEntry
     {
       return m_short;
     }
-  };
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseQualityProto.Effect.Affects getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static Affects fromProto(BaseQualityProto.Effect.Affects inProto)
+    {
+      for(Affects affects : values())
+        if(affects.m_proto == inProto)
+          return affects;
+
+      throw new IllegalStateException("invalid proto affects: " + inProto);
+    }
+  }
 
   //........................................................................
 
@@ -446,6 +534,12 @@ public class BaseQuality extends BaseEntry
       if(("fortitude save".equals(inName) && affects == Affects.FORTITUDE_SAVE)
          || ("reflex save".equals(inName) && affects == Affects.REFLEX_SAVE)
          || ("will save".equals(inName) && affects == Affects.WILL_SAVE)
+         || ("strength".equals(inName) && affects == Affects.STRENGTH)
+         || ("dexterity".equals(inName) && affects == Affects.DEXTERITY)
+         || ("constitution".equals(inName) && affects == Affects.CONSTITUTION)
+         || ("widsom".equals(inName) && affects == Affects.WISDOM)
+         || ("intelligence".equals(inName) && affects == Affects.INTELLIGENCE)
+         || ("charisma".equals(inName) && affects == Affects.CHARISMA)
          || (affects == Affects.SKILL
              && inName.equals(computeExpressions(multiple.get(1).toString(),
                                                  inParameters)))
@@ -547,6 +641,104 @@ public class BaseQuality extends BaseEntry
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Message toProto()
+  {
+    BaseQualityProto.Builder builder = BaseQualityProto.newBuilder();
+
+    builder.setBase((BaseEntryProto)super.toProto());
+
+    if(m_qualityType.isDefined())
+      builder.setType(m_qualityType.getSelected().getProto());
+
+    if(m_effects.isDefined())
+      for(Multiple effect : m_effects)
+      {
+        BaseQualityProto.Effect.Builder effectBuilder =
+          BaseQualityProto.Effect.newBuilder();
+
+        effectBuilder.setAffects
+          (((EnumSelection<Affects>)effect.get(0)).getSelected().getProto());
+        if(effect.get(1).isDefined())
+          effectBuilder.setReference(((Name)effect.get(1)).get());
+        if(effect.get(2).isDefined())
+          effectBuilder.setModifier(((Modifier)effect.get(2)).toProto());
+        if(effect.get(3).isDefined())
+          effectBuilder.setText(((Text)effect.get(3)).get());
+
+        builder.addEffect(effectBuilder.build());
+      }
+
+    if(m_qualifier.isDefined())
+      builder.setQualifier(m_qualifier.get());
+
+    BaseQualityProto proto = builder.build();
+    return proto;
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseQualityProto))
+    {
+      Log.warning("cannot parse proto " + inProto);
+      return;
+    }
+
+    BaseQualityProto proto = (BaseQualityProto)inProto;
+
+    super.fromProto(proto.getBase());
+
+    if(proto.hasType())
+      m_qualityType = m_qualityType.as(EffectType.fromProto(proto.getType()));
+
+    if(proto.getEffectCount() > 0)
+    {
+      List<Multiple> effects = new ArrayList<>();
+      for(BaseQualityProto.Effect effect : proto.getEffectList())
+      {
+        Multiple multiple = m_effects.createElement();
+        multiple = multiple.as(((EnumSelection<Affects>)multiple.get(0))
+                               .as(Affects.fromProto(effect.getAffects())),
+                               effect.hasReference()
+                               ? ((Name)multiple.get(1))
+                                 .as(effect.getReference())
+                               : multiple.get(1),
+                               effect.hasModifier()
+                               ? ((Modifier)multiple.get(2))
+                                 .fromProto(effect.getModifier())
+                               : multiple.get(2),
+                               effect.hasText()
+                               ? ((Text)multiple.get(3))
+                                 .as(effect.getText())
+                               : multiple.get(3));
+
+        effects.add(multiple);
+      }
+
+      if(proto.hasQualifier())
+        m_qualifier = m_qualifier.as(proto.getQualifier());
+
+      m_effects = m_effects.as(effects);
+    }
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(BaseQualityProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
+
   //........................................................................
 
   //------------------------------------------------- other member functions

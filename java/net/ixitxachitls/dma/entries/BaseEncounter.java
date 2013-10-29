@@ -23,13 +23,22 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
+
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
+import net.ixitxachitls.dma.proto.Entries.BaseEncounterProto;
+import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.util.logging.Log;
 
 //.............................................................................
 
@@ -128,5 +137,129 @@ public class BaseEncounter extends BaseEntry
       return false;
 
     return inUser.hasAccess(BaseCharacter.Group.DM);
+  }
+
+  @Override
+  public Message toProto()
+  {
+    BaseEncounterProto.Builder builder = BaseEncounterProto.newBuilder();
+
+    builder.setBase((BaseEntryProto)super.toProto());
+
+    if(m_adventure.isDefined())
+      builder.setAdventure(m_adventure.get());
+
+    if(m_location.isDefined())
+      for(Name location : m_location)
+        builder.addLocation(location.get());
+
+    if(m_doors.isDefined())
+      builder.setDoors(m_doors.get());
+
+    if(m_floor.isDefined())
+      builder.setFloor(m_floor.get());
+
+    if(m_ceiling.isDefined())
+      builder.setCeiling(m_ceiling.get());
+
+    if(m_walls.isDefined())
+      builder.setWalls(m_walls.get());
+
+    if(m_feel.isDefined())
+      builder.setFeel(m_feel.get());
+
+    if(m_sound.isDefined())
+      builder.setSound(m_sound.get());
+
+    if(m_smell.isDefined())
+      builder.setSmell(m_smell.get());
+
+    if(m_taste.isDefined())
+      builder.setTaste(m_taste.get());
+
+    if(m_light.isDefined())
+      builder.setLight(m_light.get());
+
+    if(m_skills.isDefined())
+      for(Name skill : m_skills)
+        builder.addSkill(skill.get());
+
+    BaseEncounterProto proto = builder.build();
+    return proto;
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseEncounterProto))
+    {
+      Log.warning("cannot parse proto " + inProto);
+      return;
+    }
+
+    BaseEncounterProto proto = (BaseEncounterProto)inProto;
+
+    super.fromProto(proto.getBase());
+
+    if(proto.hasAdventure())
+      m_adventure = m_adventure.as(proto.getAdventure());
+
+    if(proto.getLocationCount() > 0)
+    {
+      List<Name> locations = new ArrayList<>();
+      for(String location : proto.getLocationList())
+        locations.add(m_location.createElement().as(location));
+
+      m_location = m_location.as(locations);
+    }
+
+    if(proto.hasDoors())
+      m_doors = m_doors.as(proto.getDoors());
+
+    if(proto.hasFloor())
+      m_floor = m_floor.as(proto.getFloor());
+
+    if(proto.hasCeiling())
+      m_ceiling = m_ceiling.as(proto.getCeiling());
+
+    if(proto.hasWalls())
+      m_walls = m_walls.as(proto.getWalls());
+
+    if(proto.hasFeel())
+      m_feel = m_feel.as(proto.getFeel());
+
+    if(proto.hasSound())
+      m_sound = m_sound.as(proto.getSound());
+
+    if(proto.hasSmell())
+      m_smell = m_smell.as(proto.getSmell());
+
+    if(proto.hasTaste())
+      m_taste = m_taste.as(proto.getTaste());
+
+    if(proto.hasLight())
+      m_light = m_light.as(proto.getLight());
+
+    if(proto.getSkillCount() > 0)
+    {
+      List<Name> skills = new ArrayList<>();
+      for(String skill : proto.getSkillList())
+        skills.add(m_skills.createElement().as(skill));
+
+      m_skills = m_skills.as(skills);
+    }
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(BaseEncounterProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
   }
 }

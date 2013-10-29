@@ -137,9 +137,8 @@ public abstract class DMAServlet extends BaseServlet
    * Checks wether we are running on dev or not.
    *
    * @return      true if running on a dev system
-   *
    */
-  public boolean isDev()
+  public static boolean isDev()
   {
     return SystemProperty.environment.value()
       == SystemProperty.Environment.Value.Development;

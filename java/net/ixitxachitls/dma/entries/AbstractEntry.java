@@ -49,6 +49,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -56,6 +58,7 @@ import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.values.BaseText;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Comment;
@@ -2849,6 +2852,67 @@ public abstract class AbstractEntry extends ValueGroup
     }
   }
 
+  /**
+   * Create a proto representing the entry.
+   *
+   * @return the proto representation
+   */
+  public Message toProto()
+  {
+    AbstractEntryProto.Builder builder = AbstractEntryProto.newBuilder();
+
+    builder.setName(m_name.get());
+    builder.setType(m_type.toString());
+    for (Name base : m_base)
+      builder.addBase(base.get());
+    for (String name : m_extensions.keySet())
+      builder.addExtensions(name);
+
+    return builder.build();
+  }
+
+  /**
+   * Read the values for the entry from the given proto.
+   *
+   * @param   inProto  the proto buffer with all the data
+   */
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof AbstractEntryProto))
+    {
+      Log.warning("Cannot parse from proto " + inProto.getClass());
+      return;
+    }
+
+    AbstractEntryProto proto = (AbstractEntryProto)inProto;
+
+    // Type and id are taken from the entity key.
+    m_name = m_name.as(proto.getName());
+
+    List<Name> bases = new ArrayList<>();
+    for (String base : proto.getBaseList())
+      bases.add(new Name(base));
+
+    m_base = m_base.as(bases);
+  }
+
+  /**
+   * Parse the proto buffer values from the given bytes.
+   *
+   * @param inBytes  the bytes to parse
+   */
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(AbstractEntryProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
+
   //........................................................................
 
   //........................................................................
@@ -2935,178 +2999,6 @@ public abstract class AbstractEntry extends ValueGroup
 //       assertEquals("converted", "abstract entry name =\n\n.\n",
 //                    entry.toString());
     }
-
-    //......................................................................
-    //----- access ---------------------------------------------------------
-
-    /** Check access to the object. */
-//     @org.junit.Test
-//     public void access()
-//     {
-//       AbstractEntry entry = new AbstractEntry("name");
-
-//       assertTrue("unrestricted",
-//                  entry.getType().allows(BaseCharacter.Group.GUEST));
-//       assertTrue("unrestricted",
-//                  entry.getType().allows(BaseCharacter.Group.USER));
-//       assertTrue("unrestricted",
-//                  entry.getType().allows(BaseCharacter.Group.DM));
-//       assertTrue("unrestricted",
-//                  entry.getType().allows(BaseCharacter.Group.ADMIN));
-
-//       entry.getType().withAccess(BaseCharacter.Group.DM);
-
-//       assertFalse("restricted",
-//                   entry.getType().allows(BaseCharacter.Group.GUEST));
-//       assertFalse("restricted",
-//                   entry.getType().allows(BaseCharacter.Group.USER));
-//       assertTrue("restricted",
-//                  entry.getType().allows(BaseCharacter.Group.DM));
-//       assertTrue("restricted",
-//                  entry.getType().allows(BaseCharacter.Group.ADMIN));
-//     }
-
-    //......................................................................
-    //----- indices --------------------------------------------------------
-
-    /** Test index generation. */
-//     @org.junit.Test
-//     public void indices()
-//     {
-//       BaseCampaign.GLOBAL.m_bases.clear();
-
-//       BaseEntry entry1 = new BaseItem("name1");
-//       BaseEntry entry2 = new BaseItem("name2");
-
-//       entry1.addError(new BaseError("error id"));
-//       entry2.addAttachment("weapon");
-//       entry2.store(new net.ixitxachitls.dma.data
-//                    .DMAFile("name-file", null, BaseCampaign.GLOBAL));
-
-//       BaseCampaign.GLOBAL.add(entry1);
-//       // entry 2 added by store above
-
-//       // compare
-//       assertEquals("compare", 0, entry1.compareTo(entry1));
-//       assertEquals("compare", 0, entry2.compareTo(entry2));
-//       assertEquals("compare", -1, entry1.compareTo(entry2));
-//       assertEquals("compare", +1, entry2.compareTo(entry1));
-
-//       // storage
-//       assertNull("storage", entry1.getStorage());
-//       assertNotNull("storage", entry2.getStorage());
-
-//       // errors
-//       Iterator<BaseError> i = entry1.getErrors();
-//       assertEquals("error",
-//                  "Base Error: [error id] no definition found for this error",
-//                    i.next().toString());
-//       assertFalse("error", i.hasNext());
-//       assertTrue("has errors", entry1.hasErrors());
-//       assertFalse("has errors", entry2.hasErrors());
-
-//       m_logger.addExpected("WARNING: cannot find file 'name-file'");
-//       m_logger.verify();
-
-//       for(net.ixitxachitls.dma.entries.indexes.Index<?> index : s_indexes)
-//       {
-//         if("General".equals(index.getGroup())
-//            && "Attachments".equals(index.getTitle()))
-//         {
-//           assertEquals("attachments", 1,
-//                        index.buildNames
-//                        (BaseCampaign.GLOBAL.getAbstractEntries()).size());
-//           assertEquals("attachments", "weapon",
-//                        index.buildNames
-//                        (BaseCampaign.GLOBAL.getAbstractEntries()).iterator()
-//                        .next());
-
-//           assertFalse("attachments", index.matchesName("weapon", entry1));
-//           assertTrue("attachments", index.matchesName("weapon", entry2));
-//           assertFalse("attachments", index.matchesName("armor", entry1));
-
-//           continue;
-//         }
-
-//         if("Index".equals(index.getGroup())
-//            && "Index".equals(index.getTitle()))
-//         {
-//           assertEquals("index", 1,
-//                        index.buildNames
-//                        (BaseCampaign.GLOBAL.getAbstractEntries()).size());
-//           assertEquals("index", "base items",
-//                        index.buildNames
-//                        (BaseCampaign.GLOBAL.getAbstractEntries()).iterator()
-//                        .next());
-
-//           assertTrue("index", index.matchesName("base items", entry1));
-//           assertTrue("index", index.matchesName("base items", entry2));
-//           assertFalse("index", index.matchesName("base item", entry1));
-
-//           continue;
-//         }
-
-//         if("General".equals(index.getGroup())
-//            && "Errors".equals(index.getTitle()))
-//         {
-//           assertEquals("errors", 1,
-//                        index.buildNames
-//                        (BaseCampaign.GLOBAL.getAbstractEntries()).size());
-//           assertEquals("errors", "index",
-//                        index.buildNames
-//                        (BaseCampaign.GLOBAL.getAbstractEntries()).iterator()
-//                        .next());
-
-//           assertTrue("errors", index.matchesName("index", entry1));
-//           assertFalse("errors", index.matchesName("index", entry2));
-//           assertFalse("errors", index.matchesName("error", entry1));
-
-//           continue;
-//         }
-
-//         if("General".equals(index.getGroup())
-//            && "Files".equals(index.getTitle()))
-//         {
-//           assertEquals("files", 1,
-//                        index.buildNames
-//                        (BaseCampaign.GLOBAL.getAbstractEntries()).size());
-//           assertEquals("files", "name-file",
-//                        index.buildNames
-//                        (BaseCampaign.GLOBAL.getAbstractEntries())
-//                        .iterator().next());
-
-//           assertFalse("files", index.matchesName("name-file", entry1));
-//           assertTrue("files", index.matchesName("name-file", entry2));
-//           assertFalse("files", index.matchesName("other-file", entry2));
-
-//           continue;
-//         }
-//       }
-
-//       BaseCampaign.GLOBAL.m_bases.clear();
-//     }
-
-    //......................................................................
-    //----- variables ------------------------------------------------------
-
-    /** Test reading of varialbles. */
-//     @org.junit.Test
-//     public void variables()
-//     {
-//     // we only have attachments for base items, thus we have to use one here
-//       BaseItem entry = new BaseItem("entry name");
-
-//       // direct variable
-//       assertEquals("name", "var name",
-//                    entry.getVariable("name").second().toString());
-//       assertNull("unknown", entry.getVariable("damage"));
-
-//       // variable from attachment
-//       entry.addAttachment("weapon");
-
-//       assertEquals("damage", "var damage",
-//                    entry.getVariable("damage").second().toString());
-//     }
 
     //......................................................................
     //----- readNameOnly ---------------------------------------------------
@@ -3196,192 +3088,6 @@ public abstract class AbstractEntry extends ValueGroup
                      entry.toString());
       }
     }
-
-    //......................................................................
-    //----- printing -------------------------------------------------------
-
-    /** Testing the output. */
-//     @org.junit.Test
-//     public void printing()
-//     {
-//       AbstractEntry entry = new AbstractEntry("name", TYPE);
-
-//       // name
-//       assertEquals("name (dm)",
-//                 "\\bold{\\color{subtitle}{\\editable{name}{name}{name}{name}"
-//                    + "{name}}}", entry.asCommand(true, "name"));
-//       assertEquals("name (player)", "", entry.asCommand(false, "name"));
-
-//       // title
-//       assertEquals("title (dm)",
-//                    "\\title[title][\\link[/index/abstractentries]"
-//                    + "{abstract entry}]{\\editable{name}{name}{name}{name}"
-//                    + "{name}}",
-//                    entry.asCommand(true, "title"));
-//       assertEquals("title (player)",
-//                    "\\title[title][\\link[/index/abstractentries]"
-//                    + "{abstract entry}]{\\editable{name}{name}{name}{name}"
-//                    + "{name}}",
-//                    entry.asCommand(false, "title"));
-
-//       // errors
-//       entry.addError(new BaseError("first error"));
-//       entry.addError(new BaseError("second error"));
-//       entry.addError(new BaseError("third error"));
-//       assertEquals("errors (dm)",
-//                    "Base Error: [third error] no definition found for this "
-//                    + "error\\linebreak "
-//                  + "Base Error: [second error] no definition found for this "
-//                    + "error\\linebreak "
-//                  + "Base Error: [first error] no definition found for this "
-//                    + "error",
-//                    entry.asCommand(true, "errors"));
-//       assertEquals("errors (player)",
-//                    "", entry.asCommand(false, "errors"));
-
-//       // file
-//       assertEquals("file (dm)",
-//                    "\\editable{name}{}{_file}{<please select>}{selection}",
-//                    entry.asCommand(true, "file"));
-//       assertEquals("file (player)"
-//                    "", entry.asCommand(false, "file"));
-
-//       // script
-//       String script = "\\script{gui.addAction('Report', function()";
-//       assertEquals("scripts (dm)", script,
-//                    entry.asCommand(true, "scripts").toString()
-//                    .substring(0, script.length()));
-//       assertEquals("scripts (player)", script,
-//                    entry.asCommand(false, "scripts").toString()
-//                    .substring(0, script.length()));
-//     }
-
-    //......................................................................
-    //----- attachment -----------------------------------------------------
-
-    /** Testing attachments. */
-//     @org.junit.Test
-//     public void testAttachment()
-//     {
-//       // normal
-//       String text = "base item with light test = .";
-
-//       ParseReader reader =
-//         new ParseReader(new java.io.StringReader(text), "test");
-
-//       AbstractEntry entry = AbstractEntry.read(reader);
-
-//       assertNotNull("entry should have been read", entry);
-//       assertEquals("entry name does not match", "test",
-//                    entry.getName());
-//       assertEquals("entry does not match",
-//                    "base item with light test =\n\n"
-//                    + "  probability       Common.\n",
-//                    entry.toString());
-//       assertTrue("has",
-//                  entry.hasAttachment(net.ixitxachitls.dma.entries.attachments
-//                                      .BaseLight.class));
-//      assertNotNull("attachment",
-//                  entry.getAttachment(net.ixitxachitls.dma.entries.attachments
-//                                         .BaseLight.class));
-//       assertFalse("has",
-//                  entry.hasAttachment(net.ixitxachitls.dma.entries.attachments
-//                                       .BaseWeapon.class));
-
-//       // double attachments
-//       text = "base item with light, light test = .";
-
-//       reader = new ParseReader(new java.io.StringReader(text), "test");
-
-//       entry = AbstractEntry.read(reader);
-
-//       assertNotNull("entry should have been read", entry);
-//       assertEquals("entry name does not match", "test",
-//                    entry.getName());
-//       assertEquals("entry does not match",
-//                    "base item with light test =\n\n"
-//                    + "  probability       Common.\n",
-//                    entry.toString());
-
-//       // tags
-//       text = "base item with light, test:light test = .";
-
-//       reader = new ParseReader(new java.io.StringReader(text), "test");
-
-//       entry = AbstractEntry.read(reader);
-
-//       assertNotNull("entry should have been read", entry);
-//       assertEquals("entry name does not match", "test",
-//                    entry.getName());
-//       assertEquals("entry does not match",
-//                    "base item with light, test:light test =\n\n"
-//                    + "  probability        Common.\n",
-//                    entry.toString());
-
-//       m_logger.verify();
-
-//       // unknown class
-//       text = "abstract entry with guru test = .";
-
-//       reader = new ParseReader(new java.io.StringReader(text), "test");
-
-//       entry = AbstractEntry.read(reader);
-
-//       assertNotNull("entry should have been read", entry);
-//       assertEquals("entry name does not match", "test",
-//                    entry.getName());
-//       assertEquals("entry does not match", "abstract entry test =\n\n.\n",
-//                    entry.toString());
-
-//       m_logger.addExpected("WARNING: could not find class for attachment "
-//                            + "guru, attachment ignored");
-//       m_logger.verify();
-
-//       // value
-//       text = "base item with light test = bright light 2m sphere; "
-//         + "shadowy light 4m cone.";
-
-//       reader = new ParseReader(new java.io.StringReader(text), "test");
-
-//       entry = AbstractEntry.read(reader);
-
-//       assertNotNull("entry should have been read", entry);
-//       assertEquals("entry name does not match", "test",
-//                    entry.getName());
-//       assertEquals("entry does not match",
-//                    "base item with light test =\n\n"
-//                    + "  bright light      2 m Sphere;\n"
-//                    + "  shadowy light     4 m Cone;\n"
-//                    + "  probability       Common.\n",
-//                    entry.toString());
-
-//       m_logger.verify();
-//       // value
-
-//       text = "base item with light, test:light test = "
-//         + "bright light 2m sphere; shadowy light 3m cone; "
-//         + "test:bright light 4 m cone; test:shadowy light 8m sphere.";
-
-//       //Log.add("test", new net.ixitxachitls.util.logging.ANSILogger());
-
-//       reader = new ParseReader(new java.io.StringReader(text), "test");
-
-//       entry = AbstractEntry.read(reader);
-
-//       assertNotNull("entry should have been read", entry);
-//       assertEquals("entry name does not match", "test",
-//                    entry.getName());
-//       assertEquals("entry does not match",
-//                    "base item with light, test:light test =\n\n"
-//                    + "  bright light       2 m Sphere;\n"
-//                    + "  shadowy light      3 m Cone;\n"
-//                    + "  test:bright light  4 m Cone;\n"
-//                    + "  test:shadowy light 8 m Sphere;\n"
-//                    + "  probability        Common.\n",
-//                    entry.toString());
-
-//       m_logger.verify();
-//     }
 
     //......................................................................
   }

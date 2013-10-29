@@ -32,22 +32,26 @@
  * @param entry The entry rendered.
  */
 {template .item_tiny}
-  <div class="item card tiny" onclick="details('{$entry.path}')">
-    <div class="contents">
-      {delcall dma.entry.files.main}
-        {param entry: $entry /}
-      {/delcall}
+  {if $entry.path}
+    <div class="item card tiny" onclick="details('{$entry.path}')">
+      <div class="contents">
+        {delcall dma.entry.files.main}
+          {param entry: $entry /}
+        {/delcall}
 
-      <div class="title">
-        {if $ij.isDM}
-          {$entry.dmName}
-        {else}
-          {$entry.playerName}
-        {/if}
-        <br />{$entry.name}
+        <div class="title">
+          {if $ij.isDM}
+            {$entry.dmName}
+          {else}
+            {$entry.playerName}
+          {/if}
+          <br />{$entry.name}
+        </div>
       </div>
     </div>
-  </div>
+  {else}
+    {$entry}
+  {/if}
 {/template}
 
 /**

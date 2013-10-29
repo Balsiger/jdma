@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.proto.Values.DurationProto;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -420,6 +421,121 @@ public class Duration extends Units<Duration>
   }
 
   //........................................................................
+
+  /**
+   * Create a proto for the value.
+   *
+   * @return the proto representation
+   */
+  public DurationProto toProto()
+  {
+    DurationProto.Builder builder = DurationProto.newBuilder();
+
+    if(m_set == m_sets[0])
+      if(m_values != null && m_values.length == 4)
+      {
+        DurationProto.Metric.Builder metric = DurationProto.Metric.newBuilder();
+
+        if(m_values[0] != null)
+          metric.setDays(m_values[0].toProto());
+        if(m_values[1] != null)
+          metric.setHours(m_values[1].toProto());
+        if(m_values[2] != null)
+          metric.setMinutes(m_values[2].toProto());
+        if(m_values[3] != null)
+          metric.setSeconds(m_values[3].toProto());
+
+        builder.setMetric(metric.build());
+      }
+
+    if(m_set == m_sets[1])
+      if(m_values != null && m_values.length == 1)
+        if(m_values[0] != null)
+          builder.setRounds(m_values[0].toProto());
+
+    if(m_set == m_sets[2])
+      if(m_values != null && m_values.length == 6)
+      {
+        DurationProto.Actions.Builder actions =
+          DurationProto.Actions.newBuilder();
+
+        if(m_values[0] != null)
+          actions.setRounds(m_values[0].toProto());
+        if(m_values[1] != null)
+          actions.setStandardActions(m_values[1].toProto());
+        if(m_values[2] != null)
+          actions.setMoveActions(m_values[2].toProto());
+        if(m_values[3] != null)
+          actions.setSwiftActions(m_values[3].toProto());
+        if(m_values[4] != null)
+          actions.setFreeActions(m_values[4].toProto());
+        if(m_values[5] != null)
+          actions.setMinutes(m_values[5].toProto());
+
+        builder.setActions(actions.build());
+      }
+
+    return builder.build();
+  }
+
+  /**
+   * Create a new duration similar to the current but with data from the
+   * given proto.
+   *
+   * @param inProto  the proto with the data
+   * @return the newly created duration
+   */
+  public Duration fromProto(DurationProto inProto)
+  {
+    Duration result = create();
+
+    if(inProto.hasMetric())
+    {
+      result.m_values = new Rational[4];
+      if(inProto.getMetric().hasDays())
+        result.m_values[0] = Rational.fromProto(inProto.getMetric().getDays());
+      if(inProto.getMetric().hasHours())
+        result.m_values[1] = Rational.fromProto(inProto.getMetric().getHours());
+      if(inProto.getMetric().hasMinutes())
+        result.m_values[2] =
+          Rational.fromProto(inProto.getMetric().getMinutes());
+      if(inProto.getMetric().hasSeconds())
+        result.m_values[3] =
+          Rational.fromProto(inProto.getMetric().getSeconds());
+      result.m_set = result.m_sets[0];
+    }
+    else if(inProto.hasRounds())
+    {
+      result.m_values = new Rational[1];
+      result.m_values[0] = Rational.fromProto(inProto.getRounds());
+      result.m_set = result.m_sets[1];
+    }
+    else if(inProto.hasActions())
+    {
+      result.m_values = new Rational[6];
+      if(inProto.getActions().hasRounds())
+        result.m_values[0] =
+          Rational.fromProto(inProto.getActions().getRounds());
+      if(inProto.getActions().hasStandardActions())
+        result.m_values[1] =
+          Rational.fromProto(inProto.getActions().getStandardActions());
+      if(inProto.getActions().hasMoveActions())
+        result.m_values[2] =
+          Rational.fromProto(inProto.getActions().getMoveActions());
+      if(inProto.getActions().hasSwiftActions())
+        result.m_values[3] =
+          Rational.fromProto(inProto.getActions().getSwiftActions());
+      if(inProto.getActions().hasFreeActions())
+        result.m_values[4] =
+          Rational.fromProto(inProto.getActions().getFreeActions());
+      if(inProto.getActions().hasMinutes())
+        result.m_values[5] =
+          Rational.fromProto(inProto.getActions().getMinutes());
+      result.m_set = result.m_sets[2];
+    }
+
+    return result;
+  }
 
   //........................................................................
 

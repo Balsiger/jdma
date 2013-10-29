@@ -141,6 +141,17 @@ public class Union extends Value<Union>
     return m_values[m_index];
   }
 
+  /**
+   * Get the value with the given index, selected or not.
+   *
+   * @param inIndex  the index of the value to get
+   * @return the value requested
+   */
+  public Value get(int inIndex)
+  {
+    return m_values[inIndex];
+  }
+
   //........................................................................
   //------------------------------- getIndex -------------------------------
 
@@ -283,6 +294,23 @@ public class Union extends Value<Union>
   }
 
   //........................................................................
+
+  /**
+   * Create new union like this one with new data.
+   *
+   * @param inIndex  the index of the value selected
+   * @param inValue  the value selected
+   * @return a new union with the new data
+   */
+  public Union as(int inIndex, Value inValue)
+  {
+    Union result = create();
+
+    result.m_index = inIndex;
+    result.m_values[inIndex] = inValue;
+
+    return result;
+  }
 
   //........................................................................
 

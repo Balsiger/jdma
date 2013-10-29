@@ -23,13 +23,21 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
+import net.ixitxachitls.dma.entries.BaseQuality.Affects;
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Expression;
@@ -41,6 +49,7 @@ import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -72,34 +81,39 @@ public class BaseFeat extends BaseEntry
   public enum Type implements EnumSelection.Named
   {
     /** A general feat. */
-    GENERAL("General"),
+    GENERAL("General", BaseFeatProto.Type.GENERAL),
 
     /** An item creation feat. */
-    ITEM_CREATION("Item Creation"),
+    ITEM_CREATION("Item Creation", BaseFeatProto.Type.ITEM_CREATION),
 
     /** A metamagic feat. */
-    METAMAGIC("Metamagic"),
+    METAMAGIC("Metamagic", BaseFeatProto.Type.METAMAGIC),
 
     /** A regional feat. */
-    REGIONAL("Regional"),
+    REGIONAL("Regional", BaseFeatProto.Type.REGIONAL),
 
     /** A special feat. */
-    SPECIAL("Special"),
+    SPECIAL("Special", BaseFeatProto.Type.SPECIAL),
 
     /** A fighter feat. */
-    FIGHTER("Fighter");
+    FIGHTER("Fighter", BaseFeatProto.Type.FIGHTER);
 
     /** The value's name. */
     private String m_name;
 
+    /** The proto enum value. */
+    private BaseFeatProto.Type m_proto;
+
     /** Create the name.
      *
      * @param inName     the name of the value
+     * @param inProto    the proto enum value
      *
      */
-    private Type(String inName)
+    private Type(String inName, BaseFeatProto.Type inProto)
     {
       m_name = constant("feat.type", inName);
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -123,7 +137,32 @@ public class BaseFeat extends BaseEntry
     {
       return m_name;
     }
-  };
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseFeatProto.Type getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static Type fromProto(BaseFeatProto.Type inProto)
+    {
+      for(Type type: values())
+        if(type.m_proto == inProto)
+          return type;
+
+      throw new IllegalStateException("invalid proto type: " + inProto);
+    }
+  }
 
   //........................................................................
 
@@ -331,6 +370,117 @@ public class BaseFeat extends BaseEntry
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Message toProto()
+  {
+    BaseFeatProto.Builder builder = BaseFeatProto.newBuilder();
+
+    builder.setBase((BaseEntryProto)super.toProto());
+
+    if(m_featType.isDefined())
+      builder.setType(m_featType.getSelected().getProto());
+
+    if(m_benefit.isDefined())
+      builder.setBenefit(m_benefit.get());
+
+    if(m_special.isDefined())
+      builder.setSpecial(m_special.get());
+
+    if(m_normal.isDefined())
+      builder.setNormal(m_normal.get());
+
+    if(m_prerequisites.isDefined())
+      builder.setPrerequisites(m_prerequisites.get());
+
+    if(m_effects.isDefined())
+      for(Multiple effect : m_effects)
+      {
+        BaseFeatProto.Effect.Builder effectBuilder =
+          BaseFeatProto.Effect.newBuilder();
+
+        effectBuilder.setAffects
+          (((EnumSelection<Affects>)effect.get(0)).getSelected().getProto());
+        if(effect.get(1).isDefined())
+          effectBuilder.setReference(((Name)effect.get(1)).get());
+        if(effect.get(2).isDefined())
+          effectBuilder.setModifier(((Modifier)effect.get(2)).toProto());
+
+        builder.addEffect(effectBuilder.build());
+      }
+
+    BaseFeatProto proto = builder.build();
+    System.out.println(proto);
+    System.out.println(this);
+    return proto;
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseFeatProto))
+    {
+      Log.warning("cannot parse proto " + inProto.getClass());
+      return;
+    }
+
+    BaseFeatProto proto = (BaseFeatProto)inProto;
+
+    super.fromProto(proto.getBase());
+
+    if(proto.hasType())
+      m_featType = m_featType.as(Type.fromProto(proto.getType()));
+
+    if(proto.hasBenefit())
+      m_benefit = m_benefit.as(proto.getBenefit());
+
+    if(proto.hasSpecial())
+      m_special = m_special.as(proto.getSpecial());
+
+    if(proto.hasNormal())
+      m_normal = m_normal.as(proto.getNormal());
+
+    if(proto.hasPrerequisites())
+      m_prerequisites = m_prerequisites.as(proto.getPrerequisites());
+
+    if(proto.getEffectCount() > 0)
+    {
+      List<Multiple> effects = new ArrayList<>();
+      for(BaseFeatProto.Effect effect : proto.getEffectList())
+      {
+        Multiple multiple = m_effects.createElement();
+        multiple = multiple.as(((EnumSelection<Affects>)multiple.get(0))
+                               .as(Affects.fromProto(effect.getAffects())),
+                               effect.hasReference()
+                               ? ((Name)multiple.get(1))
+                                 .as(effect.getReference())
+                               : multiple.get(1),
+                               effect.hasModifier()
+                               ? ((Modifier)multiple.get(2))
+                                 .fromProto(effect.getModifier())
+                               : multiple.get(2));
+
+        effects.add(multiple);
+      }
+
+      m_effects = m_effects.as(effects);
+    }
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(BaseFeatProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
 
   //........................................................................
 

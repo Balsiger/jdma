@@ -23,10 +23,16 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.BaseMonster;
+import net.ixitxachitls.dma.proto.Entries.BaseMagicProto;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Modifier;
@@ -34,6 +40,7 @@ import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -187,6 +194,67 @@ public class BaseMagic extends BaseExtension<BaseItem>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Message toProto()
+  {
+    BaseMagicProto.Builder builder = BaseMagicProto.newBuilder();
+
+    if(m_ability.isDefined())
+      builder.setAbilityModifier
+        (BaseMagicProto.AbilityModifier.newBuilder()
+         .setAbility(((EnumSelection<BaseMonster.Ability>)m_ability.get(0))
+                     .getSelected().getProto())
+         .setModifier(((Modifier)m_ability.get(1)).toProto())
+         .build());
+
+    if(m_modifier.isDefined())
+      for(Multiple modifier : m_modifier)
+        builder.addModifier(BaseMagicProto.Modifier.newBuilder()
+                            .setName(((Name)modifier.get(0)).get())
+                            .setModifier(((Modifier)modifier.get(1)).toProto())
+                            .build());
+
+    return builder.build();
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseMagicProto))
+    {
+      Log.warning("cannot parse base magic proto " + inProto.getClass());
+      return;
+    }
+
+    BaseMagicProto proto = (BaseMagicProto)inProto;
+
+    if(proto.hasAbilityModifier())
+      m_ability =
+        m_ability.as(((EnumSelection<BaseMonster.Ability>)m_ability.get(0))
+                     .as(BaseMonster.Ability
+                         .fromProto(proto.getAbilityModifier().getAbility())),
+                     ((Modifier)m_ability.get(1))
+                     .fromProto(proto.getAbilityModifier().getModifier()));
+
+    if(proto.getModifierCount() > 0)
+    {
+      List<Multiple> modifiers = new ArrayList<>();
+      for(BaseMagicProto.Modifier modifier : proto.getModifierList())
+      {
+        Multiple multiple = m_modifier.createElement();
+        multiple = multiple.as(((Name)multiple.get(0)).as(modifier.getName()),
+                               ((Modifier)multiple.get(1))
+                               .fromProto(modifier.getModifier()));
+        modifiers.add(multiple);
+      }
+
+      m_modifier = m_modifier.as(modifiers);
+    }
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

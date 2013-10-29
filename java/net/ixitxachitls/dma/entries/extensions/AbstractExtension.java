@@ -35,6 +35,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -520,6 +521,28 @@ public abstract class AbstractExtension<T extends AbstractEntry>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  /**
+   * Create a proto representing the entry.
+   *
+   * @return the proto representation
+   */
+  public Message toProto()
+  {
+    throw new IllegalStateException("must be derived");
+  }
+
+
+  /**
+   * Read the values for the entry from the given proto.
+   *
+   * @param   inProto  the proto buffer with all the data
+   */
+  public void fromProto(Message inProto)
+  {
+    throw new IllegalStateException("must be derived");
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

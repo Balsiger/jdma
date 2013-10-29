@@ -247,153 +247,21 @@ public class Selection extends Value<Selection>
 
   //----------------------------------------------------------- manipulators
 
-  //----------------------------- setSelected ------------------------------
-
   /**
-   * Set the value of the selection that is set.
+   * Create a new selection with new value.
    *
-   * @param       inValue the value to select
-   *
-   * @return      true if set, false if value is invalid
-   *
+   * @param inSelected the new value selected (0 for none)
+   * @return the newly created selection
    */
-//   public boolean setSelected(int inValue)
-//   {
-//     if(inValue < 0 || inValue >= m_selections.length)
-//       return false;
+  public Selection as(int inSelected)
+  {
+    Selection result = create();
 
-//     m_stored   = true;
-//     m_selected = inValue;
+    if(result.check(inSelected))
+      result.m_selected = inSelected;
 
-//     return true;
-//   }
-
-  //........................................................................
-  //----------------------------- setSelected ------------------------------
-
-  /**
-   * Set the value of the selection that is set (using a String).
-   *
-   * @param       inValue the value to select
-   *
-   * @return      true if set, false if value is invalid
-   *
-   */
-//   public boolean setSelected(String inValue)
-//   {
-//     if(inValue == null)
-//       return false;
-
-//     m_stored = true;
-//     for(int i = 0; i < m_selections.length; i++)
-//       if(m_selections[i].equalsIgnoreCase(inValue))
-//       {
-//         m_selected = i;
-
-//         return true;
-//       }
-
-//     return false;
-//   }
-
-  //........................................................................
-
-  //--------------------------------- add ----------------------------------
-
-  /**
-   * Add the given value to the beginning of the current one.
-   *
-   * @param       inValue the value to add to this one
-   *
-   */
-//   public T add(T inValue)
-//   {
-//     if(isDefined())
-//       throw new IllegalStateException("cannot add to a defined value");
-
-//     return inValue.clone();
-//   }
-
-  //........................................................................
-  //------------------------------- multiply -------------------------------
-
-  /**
-   * Multiply the selection. This will increase the current index in the
-   * available selection by maximally the given amount.
-   *
-   * @param       inValue the multiplication factor
-   *
-   * @return      true if multiplied, false if not
-   *
-   */
-//   public T multiply(long inValue)
-//   {
-//     T result = create();
-
-//     if(m_selected < 0)
-//       return result;
-
-//     result.m_selected += inValue;
-
-//     if(result.m_selected >= result.m_selections.length)
-//       result.m_selected = result.m_selections.length - 1;
-
-//     return result;
-//   }
-
-  //........................................................................
-  //-------------------------------- divide --------------------------------
-
-  /**
-   * Divide the dice. This decreases the selection by maximally the given
-   * number.
-   *
-   * @param       inValue the division factor
-   *
-   * @return      true if divided, false if not
-   *
-   */
-//   public T divide(long inValue)
-//   {
-//     T result = create();
-
-//     if(m_selected < 0)
-//       return result;
-
-//     result.m_selected -= inValue;
-
-//     if(result.m_selected < 0)
-//       result.m_selected = 0;
-
-//     return result;
-//   }
-
-  //........................................................................
-  //-------------------------------- modify --------------------------------
-
-  /**
-   *
-   * Modify the value.
-   *
-   * @param       inModify the modifier to apply to this value
-   *
-   * @return      true if modified, false if not
-   *
-   */
-  // TODO: remove this
-//   public boolean modify(ValueGroup.Modifier inModify)
-//   {
-//     if(inModify.getType() == ValueGroup.Modifier.Type.MULTIPLY)
-//       return multiply(inModify.getFactor());
-
-//     if(inModify.getType() == ValueGroup.Modifier.Type.DIVIDE)
-//       return divide(inModify.getFactor());
-
-//     throw new UnsupportedOperationException("the modification " + inModify
-//                                             + " is not supported");
-//   }
-
-  //........................................................................
+    return result;
+  }
 
   //........................................................................
 
@@ -459,6 +327,25 @@ public class Selection extends Value<Selection>
   }
 
   //........................................................................
+
+  /**
+   * Create a new selection with the given value selected.
+   *
+   * @param  inValue  the value to select
+   * @return the new selection
+   */
+  public Selection as(String inValue)
+  {
+    Selection selection = create();
+    for(int i = 0; i < m_selections.length; i++)
+      if(m_selections[i].equalsIgnoreCase(inValue))
+      {
+        selection.m_selected = i;
+        break;
+      }
+
+    return selection;
+  }
 
   //........................................................................
 

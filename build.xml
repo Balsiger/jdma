@@ -21,14 +21,16 @@
   <property name="version" value="astraldeva" />
 
   <!-- Google App Engine -->
-  <property name="gae.version" value="1.8.1.1" />
+  <property name="gae.version" value="1.8.6" />
   <property name="gae.dir" location="../../appengine-java-sdk-${gae.version}" />
   <import file="${gae.dir}/config/user/ant-macros.xml" />
 
   <!-- constants for the directory structure -->
   <property name="source.dir"     location="java"                            />
+  <property name="gen.dir"        location="build/gen"                       />
   <property name="build.dir"      location="build"                           />
   <property name="build.test.dir" location="${build.dir}/test"               />
+  <property name="gen.dir"        location="${build.dir}/gen"                />
   <property name="war.dir"        location="${build.dir}/war"                />
   <property name="webinf.dir"     location="${war.dir}/WEB-INF"              />
   <property name="classes.dir"    location="${build.dir}/classes"            />
@@ -41,6 +43,7 @@
   <property name="resources.dir"  location="resources"                       />
   <property name="files.dir"      location="${resources.dir}/files"          />
   <property name="files-int.dir"  location="${resources.dir}/files-internal" />
+  <property name="proto.dir"      location="${resources.dir}/proto"          />
   <property name="coverage.dir"   location="${build.dir}/coverage"           />
   <property name="coverage.instr.dir" location="${coverage.dir}/instr"       />
   <property name="dma.dir"        location="../DnD/Information"              />
@@ -132,19 +135,12 @@
     <!-- somehow required probably because checkstyle does not handle -->
     <!-- build.sysclasspath... -->
     <pathelement location="${lib.build.dir}/checkstyle-5.6-all.jar"  />
-    <!-- cassandra
-    <pathelement location="${lib.dir}/apache-cassandra-0.6.0-rc1.jar" />
-    <pathelement location="${lib.dir}/libthrift-r917130.jar" />
-    <pathelement location="${lib.dir}/slf4j-api-1.5.8.jar" />
-    <pathelement location="${lib.dir}/slf4j-log4j12-1.5.8.jar" />
-    <pathelement location="${lib.dir}/log4j-1.2.14.jar" />
-    -->
     <!-- Google App Engine -->
     <fileset dir="${gae.dir}/lib">
       <include name="shared/**/*.jar" />
     </fileset>
-    <pathelement location="${lib.dir}/appengine-remote-api.jar" />
-    <pathelement location="${lib.dir}/appengine-api-1.0-sdk-${gae.version}.jar" />
+    <pathelement location="${gae.dir}/lib/appengine-remote-api.jar" />
+    <pathelement location="${gae.dir}/lib/user/appengine-api-1.0-sdk-${gae.version}.jar" />
   </path>
 
   <!-- define also as property for printing -->
@@ -167,6 +163,7 @@
       <format property="today" pattern="yyyy-MM-dd HH:mm:ss" locale="en"/>
     </tstamp>
     <mkdir dir="${build.dir}" />
+    <mkdir dir="${gen.dir}" />
     <mkdir dir="${war.dir}" />
     <mkdir dir="${war.dir}/static" />
     <mkdir dir="${war.dir}/icons" />
@@ -178,12 +175,11 @@
     <property name="project.stem"
               value="${project.name}-${project.version}-${today.file}" />
     <copy todir="${webinf.dir}/lib" flatten="true">
-      <fileset dir="${gae.dir}/lib/user">
+     <fileset dir="${gae.dir}/lib/user">
         <include name="**/*.jar" />
       </fileset>
       <fileset dir="${lib.dir}">
         <include name="*.jar" />
-        <exclude name="**/jetty-*.jar" />
       </fileset>
     </copy>
     <copy todir="${webinf.dir}" flatten="true">
@@ -194,7 +190,7 @@
         <include name="*.properties" />
       </fileset>
     </copy>
-    <!-- html files are rendered using the page renderer, thus we use htm-->
+    <!-- html files are rendered using the page renderer, thus we use htm -->
     <!-- for really static files. -->
     <copy todir="${war.dir}/static" flatten="false">
       <fileset dir="${resources.dir}/static">
@@ -315,8 +311,17 @@
   </target>
 
   <!-- compile the whole project -->
-  <target name="compile" depends="prepare"
+  <target name="compile" depends="prepare,proto"
           description="compile all the source files of the project">
+    <javac srcdir="${source.dir}:${gen.dir}" destdir="${classes.dir}"
+           includes="net/ixitxachitls/dma/proto/*.java,com/google/**/*.java"
+           debug="on" optimize="on" encoding="utf-8"
+           debuglevel="lines,vars,source" source="1.7">
+      <classpath>
+        <path refid="classpath" />
+      </classpath>
+      <compilerarg line="-Xlint:none"/>
+    </javac>
     <javac srcdir="${source.dir}" destdir="${classes.dir}"
            deprecation="${warnings.deprecation}"
            debug="on" optimize="on" encoding="utf-8"
@@ -345,14 +350,17 @@
     </dev_appserver>
   </target>
 
-  <target name="gae-debug" depends="compile,icons"
-      description="Starts the development server.">
-    <dev_appserver war="${war.dir}" port="8888">
-      <options>
-        <arg value="--jvm_flag=-Xmx512m"/>
-        <arg value="--jvm_flag=-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044" />
-      </options>
-    </dev_appserver>
+  <target name="proto" depends="prepare">
+    <apply executable="protoc" verbose="true">
+      <arg value="--proto_path=${proto.dir}"/>
+      <arg value="--java_out=${gen.dir}"/>
+      <regexpmapper from="(.*)\.proto"
+                    to="${gen.dir}/net/ixitxachitls/dma/proto/\1.java"
+                  handledirsep="yes" />
+      <fileset dir="${proto.dir}">
+        <include name="*.proto" />
+      </fileset>
+    </apply>
   </target>
 
   <target name="gae-update" depends="compile,icons"
@@ -590,19 +598,6 @@
   <target name="dist" description="Create distribution files"
 depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist-dma">
     <echo>Don't use this for web!</echo>
-  </target>
-
-  <!-- the web server -->
-  <target name="web" description="DMA web server" depends="compile">
-    <jar jarfile="${dist.dir}/${project.stem}.jar" update="false">
-      <fileset dir="${classes.dir}" />
-      <manifest>
-        <attribute name="Main-Class"
-                   value="net.ixitxachitls.dma.server.WebServer" />
-        <attribute name="Class-Path"
-               value=". resources/ ${project.stem}-resources.jar ${project.name}-${project.version}-resources.jar ${project.stem}-files.jar ${project.name}-${project.version}-files.jar ${project.stem}-files-internal.jar ${project.name}-${project.version}-files-internal.jar jetty-6.1.5.jar jetty-util-6.1.5.jar servlet-api-2.5-6.1.5.jar iText.jar ujac.jar commons-logging.jar" />
-      </manifest>
-    </jar>
   </target>
 
   <!-- create the disrtibution source package -->

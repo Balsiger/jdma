@@ -174,7 +174,7 @@ public class Reference<T extends AbstractEntry> extends Value<Reference<T>>
   /** The type of entry referenced. */
   private AbstractType<T> m_type;
 
-  /** The name of the refernce. */
+  /** The name of the reference. */
   private Name m_name;
 
   /** The parameters for the reference, if any. */
@@ -462,6 +462,20 @@ public class Reference<T extends AbstractEntry> extends Value<Reference<T>>
   }
 
   //........................................................................
+
+  /**
+   * Create a new reference similar to the current one but with a different
+   * name.
+   *
+   * @param   inName  the new name of the reference
+   * @return  the newly created reference
+   */
+  public Reference<T> as(String inName)
+  {
+    Reference<T> reference = create();
+    reference.m_name = reference.m_name.as(inName);
+    return reference;
+  }
 
   //........................................................................
 

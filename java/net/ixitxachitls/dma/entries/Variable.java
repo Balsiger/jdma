@@ -430,5 +430,19 @@ public class Variable extends ValueHandle<Variable>
     //......................................................................
   }
 
+  /**
+   * Flag the variable as searchable.
+   *
+   * @param   inSearchable true if searchable, false if not
+   *
+   * @return  this value, for chaining
+   */
+  public ValueHandle<Variable> withSearchable(boolean inSearchable)
+  {
+    m_searchable = inSearchable;
+
+    return this;
+  }
+
   //........................................................................
 }

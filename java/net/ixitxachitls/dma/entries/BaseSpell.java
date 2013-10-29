@@ -23,13 +23,21 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
+import net.ixitxachitls.dma.proto.Values.SharedProto;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Duration;
 import net.ixitxachitls.dma.values.EnumSelection;
@@ -75,34 +83,38 @@ public class BaseSpell extends BaseEntry
   public enum School implements EnumSelection.Named, EnumSelection.Short
   {
     /** Abjuration. */
-    ABJURATION("Abjuration", "Abjur"),
+    ABJURATION("Abjuration", "Abjur", BaseSpellProto.School.ABJURATION),
 
     /** Conjuration. */
-    CONJURATION("Conjuration", "Conj"),
+    CONJURATION("Conjuration", "Conj", BaseSpellProto.School.CONJURATION),
 
     /** Divination. */
-    DIVINATION("Divination", "Div"),
+    DIVINATION("Divination", "Div", BaseSpellProto.School.DIVINATION),
 
     /** Enchantment. */
-    ENCHANTMENT("Enchantment", "Ench"),
+    ENCHANTMENT("Enchantment", "Ench", BaseSpellProto.School.ENCHANTMENT),
 
     /** Evocation. */
-    EVOCATION("Evocation", "Evoc"),
+    EVOCATION("Evocation", "Evoc", BaseSpellProto.School.EVOACATION),
 
     /** Illusion. */
-    ILLUSION("Illusion", "Illus"),
+    ILLUSION("Illusion", "Illus", BaseSpellProto.School.ILLUSION),
 
     /** Necromancy. */
-    NECROMANCY("Necromancy", "Necro"),
+    NECROMANCY("Necromancy", "Necro", BaseSpellProto.School.NECROMANCY),
 
     /** Transmutation. */
-    TRANSMUTATION("Transmutation", "Trans"),
+    TRANSMUTATION("Transmutation", "Trans",
+                  BaseSpellProto.School.TRANSMUTATION),
 
     /** Universal. */
-    UNIVERSAL("Universal", "Univ");
+    UNIVERSAL("Universal", "Univ", BaseSpellProto.School.UNIVERSAL);
 
     /** The value's name. */
     private String m_name;
+
+    /** The proto enum value. */
+    private BaseSpellProto.School m_proto;
 
     /** The value's short name. */
     private String m_short;
@@ -111,12 +123,14 @@ public class BaseSpell extends BaseEntry
      *
      * @param inName       the name of the value
      * @param inShort      the short name of the value
+     * @param inProto      the proto enum value
      *
      */
-    private School(String inName, String inShort)
+    private School(String inName, String inShort, BaseSpellProto.School inProto)
     {
       m_name = constant("school.name", inName);
       m_short = constant("school.short", inShort);
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -150,6 +164,31 @@ public class BaseSpell extends BaseEntry
     public String toString()
     {
       return m_name;
+    }
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseSpellProto.School getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static School fromProto(BaseSpellProto.School inProto)
+    {
+      for(School school: values())
+        if(school.m_proto == inProto)
+          return school;
+
+      throw new IllegalStateException("invalid proto school: " + inProto);
     }
   }
 
@@ -160,67 +199,71 @@ public class BaseSpell extends BaseEntry
   public enum Subschool implements EnumSelection.Named
   {
     /** None. */
-    NONE("None"),
+    NONE("None", BaseSpellProto.Subschool.NONE),
 
     /** Calling. */
-    CALLING("Calling"),
+    CALLING("Calling", BaseSpellProto.Subschool.CALLING),
 
     /** Creation or Calling. */
-    CREATION_OR_CALLING("Creation or Calling"),
+    CREATION_OR_CALLING("Creation or Calling",
+                        BaseSpellProto.Subschool.CREATION_OR_CALLING),
 
     /** Creation. */
-    CREATION("Creation"),
+    CREATION("Creation", BaseSpellProto.Subschool.CREATION),
 
     /** Healing. */
-    HEALING("Healing"),
+    HEALING("Healing", BaseSpellProto.Subschool.HEALING),
 
     /** Summoning. */
-    SUMMONING("Summoning"),
+    SUMMONING("Summoning", BaseSpellProto.Subschool.SUMMONING),
 
     /** Teleportation. */
-    TELEPORTATION("Teleportation"),
+    TELEPORTATION("Teleportation", BaseSpellProto.Subschool.TELEPORTATION),
 
     /** Scrying. */
-    SCRYING("Scrying"),
+    SCRYING("Scrying", BaseSpellProto.Subschool.SCRYING),
 
     /** Charmn. */
-    CHARM("Charm"),
+    CHARM("Charm", BaseSpellProto.Subschool.CHARM),
 
     /** Compulsion. */
-    COMPULSION("Compulsion"),
+    COMPULSION("Compulsion", BaseSpellProto.Subschool.COMPULSION),
 
     /** Figment or Glamer. */
-    FIGMENT_OR_GLAMER("Figment or Glamer"),
+    FIGMENT_OR_GLAMER("Figment or Glamer",
+                      BaseSpellProto.Subschool.FIGMENT_OR_GLAMER),
 
     /** Figment. */
-    FIGMENT("Figment"),
+    FIGMENT("Figment", BaseSpellProto.Subschool.FIGMENT),
 
     /** Glamer. */
-    GLAMER("Glamer"),
-
-    /** A figment. */
-    FIGMENT_GLAMER("Figment, Glamer"),
+    GLAMER("Glamer", BaseSpellProto.Subschool.GLAMER),
 
     /** Pattern. */
-    PATTERN("Pattern"),
+    PATTERN("Pattern", BaseSpellProto.Subschool.PATTERN),
 
     /** Phantasm. */
-    PHANTASM("Phantasm"),
+    PHANTASM("Phantasm", BaseSpellProto.Subschool.PHANTASM),
 
     /** Shadow. */
-    SHADOW("Shadow");
+    SHADOW("Shadow", BaseSpellProto.Subschool.SHADOW);
 
     /** The value's name. */
     private String m_name;
 
+    /** The proto enum value. */
+    private BaseSpellProto.Subschool m_proto;
+
     /** Create the name.
      *
      * @param inName       the name of the value
+     * @param inProto      the proto enum value
      *
      */
-    private Subschool(String inName)
+    private Subschool(String inName, BaseSpellProto.Subschool inProto)
     {
       m_name = constant("subschool.name", inName);
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -243,6 +286,31 @@ public class BaseSpell extends BaseEntry
     public String toString()
     {
       return m_name;
+    }
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseSpellProto.Subschool getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static Subschool fromProto(BaseSpellProto.Subschool inProto)
+    {
+      for(Subschool subschool: values())
+        if(subschool.m_proto == inProto)
+          return subschool;
+
+      throw new IllegalStateException("invalid proto subschool: " + inProto);
     }
   }
 
@@ -253,73 +321,77 @@ public class BaseSpell extends BaseEntry
   public enum Descriptor implements EnumSelection.Named
   {
     /** Acid. */
-    ACID("Acid"),
+    ACID("Acid", BaseSpellProto.Descriptor.ACID),
 
     /** Air. */
-    AIR("Air"),
+    AIR("Air", BaseSpellProto.Descriptor.AIR),
 
     /** Chaotic. */
-    CHAOTIC("Chaotic"),
+    CHAOTIC("Chaotic", BaseSpellProto.Descriptor.CHAOTIC),
 
     /** Cold. */
-    COLD("Cold"),
+    COLD("Cold", BaseSpellProto.Descriptor.COLD),
 
     /** Darkness. */
-    DARKNESS("Darkness"),
+    DARKNESS("Darkness", BaseSpellProto.Descriptor.DARKNESS),
 
     /** Death. */
-    DEATH("Death"),
+    DEATH("Death", BaseSpellProto.Descriptor.DEATH),
 
     /** Earth. */
-    EARTH("Earth"),
+    EARTH("Earth", BaseSpellProto.Descriptor.EARTH),
 
     /** Electricity. */
-    ELECTRICITY("Electricity"),
+    ELECTRICITY("Electricity", BaseSpellProto.Descriptor.ELECTRICITY),
 
     /** Evil. */
-    EVIL("Evil"),
+    EVIL("Evil", BaseSpellProto.Descriptor.EVIL),
 
     /** Fear. */
-    FEAR("Fear"),
+    FEAR("Fear", BaseSpellProto.Descriptor.FEAR),
 
     /** Fire or Cold. */
-    FIRE_OR_COLD("Fire or Cold"),
+    FIRE_OR_COLD("Fire or Cold", BaseSpellProto.Descriptor.FIRE_OR_COLD),
 
     /** Fire. */
-    FIRE("Fire"),
+    FIRE("Fire", BaseSpellProto.Descriptor.FIRE),
 
     /** Force. */
-    FORCE("Force"),
+    FORCE("Force", BaseSpellProto.Descriptor.FORCE),
 
     /** Good. */
-    GOOD("Good"),
+    GOOD("Good", BaseSpellProto.Descriptor.GOOD),
 
     /** Language-dependent. */
-    LANGUAGE_DEPENDENT("Language-dependent"),
+    LANGUAGE_DEPENDENT("Language-dependent",
+                       BaseSpellProto.Descriptor.LANGUAGE_DEPENDENT),
 
     /** Lawful. */
-    LAWFUL("Lawful"),
+    LAWFUL("Lawful", BaseSpellProto.Descriptor.LAWFUL),
 
     /** Light. */
-    LIGHT("Light"),
+    LIGHT("Light", BaseSpellProto.Descriptor.LIGHT),
 
     /** Mind-affecting. */
-    MIND_AFFECTING("Mind-affecting"),
+    MIND_AFFECTING("Mind-affecting", BaseSpellProto.Descriptor.MIND_AFFECTING),
 
     /** Scrying. */
-    SCRYING("Scrying"),
+    SCRYING("Scrying", BaseSpellProto.Descriptor.SCRYING_DESCRIPTOR),
 
     /** Sonic. */
-    SONIC("Sonic"),
+    SONIC("Sonic", BaseSpellProto.Descriptor.SONIC),
 
     /** Water. */
-    WATER("Water"),
+    WATER("Water", BaseSpellProto.Descriptor.WATER),
 
     /** See Text. */
-    SEE_TEXT("See Text");
+    SEE_TEXT("See Text", BaseSpellProto.Descriptor.SEE_TEXT);
 
     /** The value's name. */
     private String m_name;
+
+    /** The proto enum value. */
+    private BaseSpellProto.Descriptor m_proto;
 
     /** The value's short name. */
     @SuppressWarnings("unused")
@@ -328,11 +400,13 @@ public class BaseSpell extends BaseEntry
     /** Create the name.
      *
      * @param inName       the name of the value
+     * @param inProto      the proto enum value
      *
      */
-    private Descriptor(String inName)
+    private Descriptor(String inName, BaseSpellProto.Descriptor inProto)
     {
       m_name = constant("descriptor.name", inName);
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -355,6 +429,31 @@ public class BaseSpell extends BaseEntry
     public String toString()
     {
       return m_name;
+    }
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseSpellProto.Descriptor getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static Descriptor fromProto(BaseSpellProto.Descriptor inProto)
+    {
+      for(Descriptor descriptor : values())
+        if(descriptor.m_proto == inProto)
+          return descriptor;
+
+      throw new IllegalStateException("invalid proto descriptor: " + inProto);
     }
   }
 
@@ -365,100 +464,105 @@ public class BaseSpell extends BaseEntry
   public enum SpellClass implements EnumSelection.Named, EnumSelection.Short
   {
     /** Assassin. */
-    ASSASSIN("Assassin", "Asn"),
+    ASSASSIN("Assassin", "Asn", SharedProto.SpellClass.ASSASSIN),
 
     /** Bard. */
-    BARD("Bard", "Brd"),
+    BARD("Bard", "Brd", SharedProto.SpellClass.BARD),
 
     /** Clecric. */
-    CLERIC("Cleric", "Clr"),
+    CLERIC("Cleric", "Clr", SharedProto.SpellClass.CLERIC),
 
     /** Druid. */
-    DRUID("Druid", "Drd"),
+    DRUID("Druid", "Drd", SharedProto.SpellClass.DRUID),
 
     /** Paladin. */
-    PALADIN("Paladin", "Pal"),
+    PALADIN("Paladin", "Pal", SharedProto.SpellClass.PALADIN),
 
     /** Ranger. */
-    RANGER("Ranger", "Rgr"),
+    RANGER("Ranger", "Rgr", SharedProto.SpellClass.RANGER),
 
     /** Sorcerer. */
-    SORCERER("Sorcerer", "Sor"),
+    SORCERER("Sorcerer", "Sor", SharedProto.SpellClass.SORCERER),
 
     /** Wizard. */
-    WIZARD("Wizard", "Wiz"),
+    WIZARD("Wizard", "Wiz", SharedProto.SpellClass.WIZARD),
 
     /** Air. */
-    AIR("Air", "Air"),
+    AIR("Air", "Air", SharedProto.SpellClass.AIR),
 
     /** Animal. */
-    ANIMAL("Animal", "Animal"),
+    ANIMAL("Animal", "Animal", SharedProto.SpellClass.ANIMAL),
 
     /** Chaos. */
-    CHAOS("Chaos", "Chaos"),
+    CHAOS("Chaos", "Chaos", SharedProto.SpellClass.CHAOS),
 
     /** Death. */
-    DEATH("Death", "Death"),
+    DEATH("Death", "Death", SharedProto.SpellClass.DEATH),
 
     /** Destruction. */
-    DESTRUCTION("Destruction", "Destruction"),
+    DESTRUCTION("Destruction", "Destruction",
+                SharedProto.SpellClass.DESTRUCTION),
 
     /** Drow. */
-    DROW("Drow", "Drow"),
+    DROW("Drow", "Drow", SharedProto.SpellClass.DROW),
 
     /** Earth. */
-    EARTH("Earth", "Earth"),
+    EARTH("Earth", "Earth", SharedProto.SpellClass.EARTH),
 
     /** Evil. */
-    EVIL("Evil", "Evil"),
+    EVIL("Evil", "Evil", SharedProto.SpellClass.EVIL),
 
     /** Fire. */
-    FIRE("Fire", "Fire"),
+    FIRE("Fire", "Fire", SharedProto.SpellClass.FIRE),
 
     /** Good. */
-    GOOD("Good", "Good"),
+    GOOD("Good", "Good", SharedProto.SpellClass.GOOD),
 
     /** Healing. */
-    HEALING("Healing", "Healing"),
+    HEALING("Healing", "Healing", SharedProto.SpellClass.HEALING),
 
     /** Knowledge. */
-    KNOWLEDGE("Knowledge", "Knowledge"),
+    KNOWLEDGE("Knowledge", "Knowledge", SharedProto.SpellClass.KNOWLEDGE),
 
     /** Law. */
-    LAW("Law", "Law"),
+    LAW("Law", "Law", SharedProto.SpellClass.LAW),
 
     /** Luck. */
-    LUCK("Luck", "Luck"),
+    LUCK("Luck", "Luck", SharedProto.SpellClass.LUCK),
 
     /** Magic. */
-    MAGIC("Magic", "Magic"),
+    MAGIC("Magic", "Magic", SharedProto.SpellClass.MAGIC),
 
     /** Plant. */
-    PLANT("Plant", "Plant"),
+    PLANT("Plant", "Plant", SharedProto.SpellClass.PLANT),
 
     /** Protection. */
-    PROTECTION("Protection", "Protection"),
+    PROTECTION("Protection", "Protection",
+               SharedProto.SpellClass.PROTECTION),
 
     /** Strength. */
-    STRENGTH("Strength", "Strength"),
+    STRENGTH("Strength", "Strength", SharedProto.SpellClass.STRENGTH),
 
     /** Sun. */
-    SUN("Sun", "Sun"),
+    SUN("Sun", "Sun", SharedProto.SpellClass.SUN),
 
     /** Travel. */
-    TRAVEL("Travel", "Travel"),
+    TRAVEL("Travel", "Travel", SharedProto.SpellClass.TRAVEL),
 
     /** Trickery. */
-    TRICKERY("Trickery", "Trickery"),
+    TRICKERY("Trickery", "Trickery", SharedProto.SpellClass.TRICKERY),
 
     /** War. */
-    WAR("War", "War"),
+    WAR("War", "War", SharedProto.SpellClass.WAR),
 
     /** Water. */
-    Water("Water", "Water");
+    Water("Water", "Water", SharedProto.SpellClass.WATER);
 
     /** The value's name. */
     private String m_name;
+
+    /** The proto enum value. */
+    private SharedProto.SpellClass m_proto;
 
     /** The value's short name. */
     private String m_short;
@@ -467,12 +571,15 @@ public class BaseSpell extends BaseEntry
      *
      * @param inName       the name of the value
      * @param inShort      the short name of the value
+     * @param inProto      the proto enum value
      *
      */
-    private SpellClass(String inName, String inShort)
+    private SpellClass(String inName, String inShort,
+                       SharedProto.SpellClass inProto)
     {
       m_name = constant("spellclass.name", inName);
       m_short = constant("spellclass.short", inShort);
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -498,15 +605,40 @@ public class BaseSpell extends BaseEntry
     }
 
     /** Get the save as string.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
+    *
+    * @return the name of the value
+    *
+    */
+   @Override
+   public String toString()
+   {
+     return m_name;
+   }
+
+   /**
+    * Get the proto value for this value.
+    *
+    * @return the proto enum value
+    */
+   public SharedProto.SpellClass getProto()
+   {
+     return m_proto;
+   }
+
+   /**
+    * Get the group matching the given proto value.
+    *
+    * @param  inProto     the proto value to look for
+    * @return the matched enum (will throw exception if not found)
+    */
+   public static SpellClass fromProto(SharedProto.SpellClass inProto)
+   {
+     for(SpellClass spellClass: values())
+       if(spellClass.m_proto == inProto)
+         return spellClass;
+
+     throw new IllegalStateException("invalid proto class: " + inProto);
+   }
   }
 
   //........................................................................
@@ -516,28 +648,31 @@ public class BaseSpell extends BaseEntry
   public enum Components implements EnumSelection.Named, EnumSelection.Short
   {
     /** Verbose. */
-    VERBOSE("Verbose", "V"),
+    VERBOSE("Verbose", "V", BaseSpellProto.Components.VERBOSE),
 
     /** Somatic. */
-    SOMATIC("Somatic", "S"),
+    SOMATIC("Somatic", "S", BaseSpellProto.Components.SOMATIC),
 
     /** Material/Divine Focus. */
-    MATERIAL_DEVINE_FOCUS("Material/Divine Focus", "M/DF"),
+    MATERIAL_DEVINE_FOCUS("Material/Divine Focus", "M/DF",
+                          BaseSpellProto.Components.MATERIAL_DEVINE_FOCUS),
 
     /** Material. */
-    MATERIAL("Material", "M"),
+    MATERIAL("Material", "M", BaseSpellProto.Components.MATERIAL),
 
     /** Focus/Divine Focus. */
-    FOCUS_DIVINE_FOCUS("Focus/Divine Focus", "F/DF"),
+    FOCUS_DIVINE_FOCUS("Focus/Divine Focus", "F/DF",
+                       BaseSpellProto.Components.FOCUS_DIVINE_FOCUS),
 
     /** Focus. */
-    FOCUS("Focus", "F"),
+    FOCUS("Focus", "F", BaseSpellProto.Components.FOCUS),
 
     /** Divine Focus. */
-    DIVINE_FOCUS("Divine Focus", "DF"),
+    DIVINE_FOCUS("Divine Focus", "DF", BaseSpellProto.Components.DIVINE_FOCUS),
 
     /** Experience points. */
-    EXPERIENCE_POINTS("Experience Points", "XP");
+    EXPERIENCE_POINTS("Experience Points", "XP",
+                      BaseSpellProto.Components.EXPERIENCE_POINTS);
 
     /** The value's name. */
     private String m_name;
@@ -545,16 +680,22 @@ public class BaseSpell extends BaseEntry
     /** The value's short name. */
     private String m_short;
 
+    /** The proto enum value. */
+    private BaseSpellProto.Components m_proto;
+
     /** Create the name.
      *
      * @param inName       the name of the value
      * @param inShort      the short name of the value
+     * @param inProto      the proto enum value
      *
      */
-    private Components(String inName, String inShort)
+    private Components(String inName, String inShort,
+                       BaseSpellProto.Components inProto)
     {
       m_name = constant("school.name", inName);
       m_short = constant("school.short", inShort);
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -588,6 +729,31 @@ public class BaseSpell extends BaseEntry
     public String toString()
     {
       return m_name;
+    }
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseSpellProto.Components getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static Components fromProto(BaseSpellProto.Components inProto)
+    {
+      for(Components components : values())
+        if(components.m_proto == inProto)
+          return components;
+
+      throw new IllegalStateException("invalid proto components: " + inProto);
     }
   }
 
@@ -598,58 +764,70 @@ public class BaseSpell extends BaseEntry
   public enum Range implements EnumSelection.Named
   {
     /** Personal or Touch. */
-    PERSONAL_OR_TOUCH("Personal or Touch"),
+    PERSONAL_OR_TOUCH("Personal or Touch",
+                      BaseSpellProto.Range.PERSONAL_OR_TOUCH),
 
     /** Personal and Touch. */
-    PERSONAL_AND_TOUCH("Personal and Touch"),
+    PERSONAL_AND_TOUCH("Personal and Touch",
+                       BaseSpellProto.Range.PERSONAL_AND_TOUCH),
 
     /** Personal or Close. */
-    PERSONAL_OR_CLOSE("Personal or Close"),
+    PERSONAL_OR_CLOSE("Personal or Close",
+                      BaseSpellProto.Range.PERSONAL_OR_CLOSE),
 
     /** Personal. */
-    PERSONAL("Personal"),
+    PERSONAL("Personal", BaseSpellProto.Range.PERSONAL),
 
     /** Touch. */
-    TOUCH("Touch"),
+    TOUCH("Touch", BaseSpellProto.Range.TOUCH),
 
     /** Close. */
-    CLOSE("Close"),
+    CLOSE("Close", BaseSpellProto.Range.CLOSE),
 
     /** Medium. */
-    MEDIUM("Medium"),
+    MEDIUM("Medium", BaseSpellProto.Range.MEDIUM),
 
     /** Long. */
-    LONG("Long"),
+    LONG("Long", BaseSpellProto.Range.LONG),
 
     /** Unlimited. */
-    UNLIMITED("Unlimited"),
+    UNLIMITED("Unlimited", BaseSpellProto.Range.UNLIMITED),
 
     /** 40 ft/level. */
-    FOURTY_FEET_PER_LEVEL("40 ft/level"),
+    FOURTY_FEET_PER_LEVEL("40 ft/level",
+                          BaseSpellProto.Range.FOURTY_FEET_PER_LEVEL),
 
     /** See Text. */
-    SEE_TEXT("See Text"),
+    SEE_TEXT("See Text", BaseSpellProto.Range.SEE_TEXT_RANGE),
 
     /** Anywhere within the area to be warded. */
-    ANYWHERE_WITHIN_AREA_WARDED("Anywhere within the area to be warded"),
+    ANYWHERE_WITHIN_AREA_WARDED
+      ("Anywhere within the area to be warded",
+       BaseSpellProto.Range.ANYWHERE_WITHIN_AREA_WARDED),
 
     /** Up to 10 ft/level. */
-    UP_TO_TEN_FEET_PER_LEVEL("Up to 10 ft/level"),
+    UP_TO_TEN_FEET_PER_LEVEL("Up to 10 ft/level",
+                             BaseSpellProto.Range.UP_TO_TEN_FEE_PER_LEVEL),
 
     /** 1 mile/level. */
-    ONE_MILE_PER_LEVEL("1 mile/level");
+    ONE_MILE_PER_LEVEL("1 mile/level", BaseSpellProto.Range.ONE_MILE_PER_LEVEL);
 
     /** The value's name. */
     private String m_name;
 
+    /** The prot enum value. */
+    private BaseSpellProto.Range m_proto;
+
     /** Create the name.
      *
      * @param inName       the name of the value
+     * @param inProto      the proto enum value
      *
      */
-    private Range(String inName)
+    private Range(String inName, BaseSpellProto.Range inProto)
     {
       m_name = constant("range.name", inName);
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -672,6 +850,31 @@ public class BaseSpell extends BaseEntry
     public String toString()
     {
       return m_name;
+    }
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseSpellProto.Range getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static Range fromProto(BaseSpellProto.Range inProto)
+    {
+      for(Range range : values())
+        if(range.m_proto == inProto)
+          return range;
+
+      throw new IllegalStateException("invalid proto range: " + inProto);
     }
   }
 
@@ -682,22 +885,26 @@ public class BaseSpell extends BaseEntry
   public enum Effect implements EnumSelection.Named
   {
     /** Ray. */
-    RAY("Ray"),
+    RAY("Ray", BaseSpellProto.Effect.Type.RAY),
 
     /** Spread. */
-    SPREAD("Spread");
+    SPREAD("Spread", BaseSpellProto.Effect.Type.SPREAD);
 
     /** The value's name. */
-    private String m_name;
+    private final String m_name;
+
+    /** The proto enum value. */
+    private final BaseSpellProto.Effect.Type m_proto;
 
     /** Create the name.
      *
      * @param inName       the name of the value
-     *
+     * @param inProto      the proto enum value
      */
-    private Effect(String inName)
+    private Effect(String inName, BaseSpellProto.Effect.Type inProto)
     {
       m_name = constant("effect.name", inName);
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -720,6 +927,31 @@ public class BaseSpell extends BaseEntry
     public String toString()
     {
       return m_name;
+    }
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseSpellProto.Effect.Type getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static Effect fromProto(BaseSpellProto.Effect.Type inProto)
+    {
+      for(Effect effect : values())
+        if(effect.m_proto == inProto)
+          return effect;
+
+      throw new IllegalStateException("invalid proto effect: " + inProto);
     }
   }
 
@@ -1745,6 +1977,326 @@ public class BaseSpell extends BaseEntry
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Message toProto()
+  {
+    BaseSpellProto.Builder builder = BaseSpellProto.newBuilder();
+
+    builder.setBase((BaseEntryProto)super.toProto());
+
+    if(m_school.isDefined())
+    {
+      builder.setSchool(((EnumSelection<School>)m_school.get(0)).getSelected()
+                        .getProto());
+      for(EnumSelection<Subschool> subschool
+        : ((ValueList<EnumSelection<Subschool>>)m_school.get(1)))
+        if(subschool.isDefined())
+          builder.addSubschool(subschool.getSelected().getProto());
+    }
+
+    if(m_summary.isDefined())
+      builder.setSummary(m_summary.get());
+
+    if(m_descriptor.isDefined())
+      for(EnumSelection<Descriptor> descriptor : m_descriptor)
+        builder.addDescriptor(descriptor.getSelected().getProto());
+
+    if(m_level.isDefined())
+      for(Multiple level : m_level)
+        builder.addLevel
+          (BaseSpellProto.Level.newBuilder()
+           .setSpellClass(((EnumSelection<SpellClass>)level.get(0))
+                          .getSelected().getProto())
+           .setLevel((int)((Number)level.get(1)).get())
+           .build());
+
+    if(m_components.isDefined())
+      for(EnumSelection<Components> components : m_components)
+        builder.addComponents(components.getSelected().getProto());
+
+    if(m_material.isDefined())
+      for(Multiple material : m_material)
+      {
+        BaseSpellProto.Material.Builder materialBuilder =
+          BaseSpellProto.Material.newBuilder();
+
+        materialBuilder.setUse(((Name)material.get(0)).get());
+        for(Text component : (ValueList<Text>)material.get(1))
+          materialBuilder.addComponent(component.get());
+
+        builder.addMaterial(materialBuilder.build());
+      }
+
+    if(m_focus.isDefined())
+    {
+      BaseSpellProto.Material.Builder materialBuilder =
+        BaseSpellProto.Material.newBuilder();
+
+      materialBuilder.setUse(((Name)m_focus.get(0)).get());
+      for(Text component : (ValueList<Text>)m_focus.get(1))
+        materialBuilder.addComponent(component.get());
+
+      builder.setFocus(materialBuilder.build());
+    }
+
+    if(m_castingTime.isDefined())
+      builder.setCastingTime(m_castingTime.toProto());
+
+    if(m_range.isDefined())
+      if(m_range.getIndex() == 0)
+        builder.setSpecialRange(((EnumSelection<Range>)m_range.get())
+                                .getSelected().getProto());
+      else
+       builder.setRange(((Distance)m_range.get()).toProto());
+
+    if(m_effect.isDefined())
+    {
+      BaseSpellProto.Effect.Builder effect = BaseSpellProto.Effect.newBuilder();
+
+      if(m_effect.get(0).isDefined())
+        effect.setDistance(((Distance)m_effect.get(0)).toProto());
+      if(m_effect.get(1).isDefined())
+        effect.setType(((EnumSelection<Effect>)m_effect.get(1))
+                       .getSelected().getProto());
+      if(m_effect.get(2).isDefined())
+        effect.setDescription(((Text)m_effect.get(2)).get());
+
+      builder.setEffect(effect.build());
+    }
+
+    if(m_target.isDefined())
+      builder.setTarget(m_target.get());
+
+    if(m_area.isDefined())
+      builder.setArea(m_area.get());
+
+    if(m_duration.isDefined())
+    {
+      BaseSpellProto.Duration.Builder duration =
+        BaseSpellProto.Duration.newBuilder();
+
+      if(m_duration.get(0).isDefined())
+        if(((Union)m_duration.get(0)).getIndex() == 0)
+          duration.setDurationDescription
+            (((Union)m_duration.get(0)).get().toString());
+        else
+        {
+          Multiple multiple = (Multiple)((Union)m_duration.get(0)).get();
+          if(multiple.get(0).isDefined())
+            duration.setDuration(((Duration)multiple.get(0)).toProto());
+          if(multiple.get(1).isDefined())
+            duration.setLevels(((Selection)multiple.get(1)).toString());
+          if(multiple.get(2).isDefined())
+            duration.setAdditionalDuration(((Duration)multiple.get(2))
+                                           .toProto());
+        }
+
+      if(m_duration.get(1).isDefined())
+        duration.setFlags(((Selection)m_duration.get(1)).toString());
+
+      if(m_duration.get(2).isDefined())
+        duration.setDescription(((Text)m_duration.get(2)).get());
+
+      builder.setDuration(duration.build());
+    }
+
+    if(m_savingThrow.isDefined())
+      builder.setSavingThrow(m_savingThrow.toString());
+
+    if(m_resistance.isDefined())
+      builder.setSpellResistance(m_resistance.toString());
+
+    BaseSpellProto proto = builder.build();
+    return proto;
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseSpellProto))
+    {
+      Log.warning("cannot parse proto " + inProto.getClass());
+      return;
+    }
+
+    BaseSpellProto proto = (BaseSpellProto)inProto;
+
+    super.fromProto(proto.getBase());
+
+    if(proto.hasSchool())
+    {
+      ValueList<EnumSelection<Subschool>> subschoolsList =
+        (ValueList<EnumSelection<Subschool>>)m_school.get(1);
+      List<EnumSelection<Subschool>> subschools = new ArrayList<>();
+      for (BaseSpellProto.Subschool subschool : proto.getSubschoolList())
+        subschools.add(subschoolsList.createElement()
+                       .as(Subschool.fromProto(subschool)));
+
+      m_school =
+        m_school.as(((EnumSelection<School>)m_school.get(0))
+                    .as(School.fromProto(proto.getSchool())),
+                    subschoolsList.as(subschools));
+    }
+
+    if(proto.hasSummary())
+      m_summary = m_summary.as(proto.getSummary());
+
+    if(proto.getDescriptorCount() > 0)
+    {
+      List<EnumSelection<Descriptor>> descriptors = new ArrayList<>();
+      for(BaseSpellProto.Descriptor descriptor : proto.getDescriptorList())
+        descriptors.add(m_descriptor.createElement()
+                        .as(Descriptor.fromProto(descriptor)));
+
+      m_descriptor = m_descriptor.as(descriptors);
+    }
+
+    if(proto.getLevelCount() > 0)
+    {
+      Multiple example = m_level.createElement();
+      List<Multiple> levels = new ArrayList<>();
+      for(BaseSpellProto.Level level : proto.getLevelList())
+        levels.add(example.as(((EnumSelection<SpellClass>)example.get(0))
+                              .as(SpellClass.fromProto(level.getSpellClass())),
+                              ((Number)example.get(1)).as(level.getLevel())));
+
+      m_level = m_level.as(levels);
+    }
+
+    if(proto.getComponentsCount() > 0)
+    {
+      List<EnumSelection<Components>> components = new ArrayList<>();
+      for(BaseSpellProto.Components component : proto.getComponentsList())
+        components.add(m_components.createElement()
+                       .as(Components.fromProto(component)));
+
+      m_components = m_components.as(components);
+    }
+
+    if(proto.getMaterialCount() > 0)
+    {
+      List<Multiple> materials = new ArrayList<>();
+      for(BaseSpellProto.Material material : proto.getMaterialList())
+      {
+        List<Text> components = new ArrayList<>();
+        for(String component : material.getComponentList())
+          components.add(new Text(component));
+
+        Multiple multiple = m_material.createElement();
+        materials.add(multiple
+                      .as(((Name)multiple.get(0)).as(material.getUse()),
+                          ((ValueList<Text>)multiple.get(1)).as(components)));
+      }
+
+      m_material = m_material.as(materials);
+    }
+
+    if(proto.hasFocus())
+    {
+      List<Text> components = new ArrayList<>();
+      for(String component : proto.getFocus().getComponentList())
+        components.add(new Text(component));
+
+      m_focus =
+        m_focus.as(((Name)m_focus.get(0)).as(proto.getFocus().getUse()),
+                   ((ValueList<Text>)m_focus.get(1)).as(components));
+    }
+
+    if(proto.hasCastingTime())
+      m_castingTime = m_castingTime.fromProto(proto.getCastingTime());
+
+    if(proto.hasSpecialRange())
+      m_range = m_range.as(0, ((EnumSelection<Range>)m_range.get(0))
+                              .as(Range.fromProto(proto.getSpecialRange())));
+    else if(proto.hasRange())
+      m_range = m_range.as(1, ((Distance)m_range.get(1))
+                              .fromProto(proto.getRange()));
+
+    if(proto.hasEffect())
+      m_effect = m_effect.as(proto.getEffect().hasDistance()
+                             ? ((Distance)m_effect.get(0))
+                               .fromProto(proto.getEffect().getDistance())
+                             : m_effect.get(0),
+                             proto.getEffect().hasType()
+                             ? ((EnumSelection<Effect>)m_effect.get(1))
+                               .as(Effect.fromProto
+                                   (proto.getEffect().getType()))
+                             : m_effect.get(1),
+                             proto.getEffect().hasDescription()
+                             ? ((Text)m_effect.get(2))
+                               .as(proto.getEffect().getDescription())
+                             : m_effect.get(2));
+
+    if(proto.hasTarget())
+      m_target = m_target.as(proto.getTarget());
+
+    if(proto.hasArea())
+      m_area = m_area.as(proto.getArea());
+
+    if(proto.hasDuration())
+    {
+      Value []values = new Value[3];
+
+      if(proto.getDuration().hasDurationDescription())
+        values[0] = ((Union)m_duration.get(0))
+          .as(0, ((Selection)((Union)m_duration.get(0)).get(0))
+              .as(proto.getDuration().getDurationDescription()));
+      else
+      {
+        Multiple old = (Multiple)((Union)m_duration.get(0)).get(1);
+        values[0] = ((Union)m_duration.get(0))
+          .as(1, old.as(proto.getDuration().hasDuration()
+                        ? ((Duration)old.get(0))
+                          .fromProto(proto.getDuration().getDuration())
+                        : old.get(0),
+                        proto.getDuration().hasLevels()
+                        ? ((Selection)old.get(1))
+                          .as(proto.getDuration().getLevels())
+                        : old.get(1),
+                        proto.getDuration().hasAdditionalDuration()
+                        ? ((Duration)old.get(2)).fromProto
+                          (proto.getDuration().getAdditionalDuration())
+                        : old.get(2)));
+      }
+
+      if(proto.getDuration().hasFlags())
+        values[1] =
+          ((Selection)m_duration.get(1)).as(proto.getDuration().getFlags());
+      else
+        values[1] = m_duration.get(1);
+
+      if(proto.getDuration().hasDescription())
+        values[2] =
+          ((Text)m_duration.get(2)).as(proto.getDuration().getDescription());
+      else
+        values[2] = m_duration.get(2);
+
+      m_duration = m_duration.as(values);
+    }
+
+    if(proto.hasSavingThrow())
+      m_savingThrow = m_savingThrow.as(proto.getSavingThrow());
+
+    if(proto.hasSpellResistance())
+      m_resistance = m_resistance.as(proto.getSpellResistance());
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(BaseSpellProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

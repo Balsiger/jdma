@@ -26,10 +26,16 @@ package net.ixitxachitls.dma.entries;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
+
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.Extension;
+import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
+import net.ixitxachitls.dma.proto.Entries.EntryProto;
 import net.ixitxachitls.dma.values.ID;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -229,5 +235,43 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    EntryProto.Builder builder = EntryProto.newBuilder();
+
+    builder.setAbstract((AbstractEntryProto)super.toProto());
+
+    return builder.build();
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof EntryProto))
+    {
+      Log.warning("cannot parse proto " + inProto);
+      return;
+    }
+
+    EntryProto proto = (EntryProto)inProto;
+
+    super.fromProto(proto.getAbstract());
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(EntryProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
+
   //........................................................................
 }

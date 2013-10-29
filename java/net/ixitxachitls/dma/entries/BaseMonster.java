@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,9 +33,18 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
+import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Attack.Mode;
+import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Attack.Style;
+import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Subtype;
+import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Type;
+import net.ixitxachitls.dma.proto.Values.ParametersProto;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
@@ -57,6 +67,7 @@ import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.conditions.Condition;
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -87,86 +98,105 @@ public class BaseMonster extends BaseEntry
 
   /** The possible monster types in the game. */
   @ParametersAreNonnullByDefault
-  public enum MonsterType implements EnumSelection.Named
+  public enum MonsterType implements EnumSelection.Named,
+    EnumSelection.Proto<BaseMonsterProto.Type>
   {
     /** Aberration. */
-    ABERRATION("Aberration"),
+    ABERRATION("Aberration", BaseMonsterProto.Type.ABERRATION),
 
     /** Animal. */
-    ANIMAL("Animal"),
+    ANIMAL("Animal", BaseMonsterProto.Type.ANIMAL),
 
     /** Construct. */
-    CONSTRUCT("Construct"),
+    CONSTRUCT("Construct", BaseMonsterProto.Type.CONSTRUCT),
 
     /** Dragon. */
-    DRAGON("Dragon"),
+    DRAGON("Dragon", BaseMonsterProto.Type.DRAGON),
 
     /** Elemental. */
-    ELEMENTAL("Elemental"),
+    ELEMENTAL("Elemental", BaseMonsterProto.Type.ELEMENTAL),
 
     /** Fey. */
-    FEY("Fey"),
+    FEY("Fey", BaseMonsterProto.Type.FEY),
 
     /** Giant. */
-    GIANT("Giant"),
+    GIANT("Giant", BaseMonsterProto.Type.GIANT),
 
     /** Humanoid. */
-    HUMANOID("Humanoid"),
+    HUMANOID("Humanoid", BaseMonsterProto.Type.HUMANOID),
 
     /** Magical Beast. */
-    MAGICAL_BEAST("Magical Beast"),
+    MAGICAL_BEAST("Magical Beast", BaseMonsterProto.Type.MAGICAL_BEAST),
 
     /** Monstrous Humanoid. */
-    MONSTROUS_HUMANOID("Monstrous Humanoid"),
+    MONSTROUS_HUMANOID("Monstrous Humanoid",
+                       BaseMonsterProto.Type.MONSTROUS_HUMANOID),
 
     /** Ooze. */
-    OOZE("Ooze"),
+    OOZE("Ooze", BaseMonsterProto.Type.OOZE),
 
     /** Outsider. */
-    OUTSIDER("Outsider"),
+    OUTSIDER("Outsider", BaseMonsterProto.Type.OUTSIDER),
 
     /** Plant. */
-    PLANT("Plant"),
+    PLANT("Plant", BaseMonsterProto.Type.PLANT),
 
     /** Undead. */
-    UNDEAD("Undead"),
+    UNDEAD("Undead", BaseMonsterProto.Type.UNDEAD),
 
     /** Vermin. */
-    VERMIN("Vermin");
+    VERMIN("Vermin", BaseMonsterProto.Type.VERMIN);
 
     /** The value's name. */
     private String m_name;
 
-    /** Create the enum value.
+    /** The proto enum value. */
+    private BaseMonsterProto.Type m_proto;
+
+    /**
+     * Create the enum value.
      *
-     * @param inName the name of the value
-     *
+     * @param inName  the name of the value
+     * @param inProto the proto enum value
      */
-    private MonsterType(String inName)
+    private MonsterType(String inName, BaseMonsterProto.Type inProto)
     {
       m_name = constant("monster.type", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
+    }
+
+    @Override
+    public Type toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the monster type corresponding to the given proto enum value.
+     *
+     * @param inProto the proto value to get for
+     * @return the corresponding enum value
+     */
+    public static MonsterType fromProto(BaseMonsterProto.Type inProto)
+    {
+      for(MonsterType type : values())
+        if(type.m_proto == inProto)
+          return type;
+
+      throw new IllegalArgumentException("cannot convert monster type:"
+        + inProto);
     }
   }
 
@@ -175,119 +205,137 @@ public class BaseMonster extends BaseEntry
 
   /** The possible monster sub types in the game. */
   @ParametersAreNonnullByDefault
-  public enum MonsterSubtype implements EnumSelection.Named
+  public enum MonsterSubtype implements EnumSelection.Named,
+    EnumSelection.Proto<BaseMonsterProto.Subtype>
   {
     /** None. */
-    NONE("None"),
+    NONE("None", BaseMonsterProto.Subtype.NONE_SUBTYPE),
 
     /** Air. */
-    AIR("Air"),
+    AIR("Air", BaseMonsterProto.Subtype.AIR),
 
     /** Aquatic. */
-    AQUATIC("Aquatic"),
+    AQUATIC("Aquatic", BaseMonsterProto.Subtype.AQUATIC),
 
     /** Archon. */
-    ARCHON("Archon"),
+    ARCHON("Archon", BaseMonsterProto.Subtype.ARCHON),
 
     /** Augmented. */
-    AUGMENTED("Augmented"),
+    AUGMENTED("Augmented", BaseMonsterProto.Subtype.AUGMENTED),
 
     /** Baatezu. */
-    BAATEZU("Baatezu"),
+    BAATEZU("Baatezu", BaseMonsterProto.Subtype.BAATEZU),
 
     /** Chaotic. */
-    CHAOTIC("Chaotic"),
+    CHAOTIC("Chaotic", BaseMonsterProto.Subtype.CHAOTIC),
 
     /** Cold. */
-    COLD("Cold"),
+    COLD("Cold", BaseMonsterProto.Subtype.COLD),
 
     /** Earth. */
-    EARTH("Earth"),
+    EARTH("Earth", BaseMonsterProto.Subtype.EARTH),
 
     /** Eladrin. */
-    ELADRIN("Eladrin"),
+    ELADRIN("Eladrin", BaseMonsterProto.Subtype.ELADRIN),
 
     /** Elf. */
-    ELF("Elf"),
+    ELF("Elf", BaseMonsterProto.Subtype.ELF),
 
     /** Evil. */
-    EVIL("Evil"),
+    EVIL("Evil", BaseMonsterProto.Subtype.EVIL),
 
     /** Extraplanar. */
-    EXTRAPLANAR("Extraplanar"),
+    EXTRAPLANAR("Extraplanar", BaseMonsterProto.Subtype.EXTRAPLANAR),
 
     /** Fire. */
-    FIRE("Fire"),
+    FIRE("Fire", BaseMonsterProto.Subtype.FIRE),
 
     /** Goblinoid. */
-    GOBLINOID("Goblinoid"),
+    GOBLINOID("Goblinoid", BaseMonsterProto.Subtype.GOBLINOID),
 
     /** Good. */
-    GOOD("Good"),
+    GOOD("Good", BaseMonsterProto.Subtype.GOOD),
 
     /** Guardinal. */
-    GUARDINAL("Guardinal"),
+    GUARDINAL("Guardinal", BaseMonsterProto.Subtype.GUARDINAL),
 
     /** Human. */
-    HUMAN("Human"),
+    HUMAN("Human", BaseMonsterProto.Subtype.HUMAN),
 
     /** Incorporeal. */
-    INCORPOREAL("Incorporeal"),
+    INCORPOREAL("Incorporeal", BaseMonsterProto.Subtype.INCORPOREAL),
 
     /** Lawful. */
-    LAWFUL("Lawful"),
+    LAWFUL("Lawful", BaseMonsterProto.Subtype.LAEFUL),
 
     /** Native. */
-    NATIVE("Native"),
+    NATIVE("Native", BaseMonsterProto.Subtype.NATIVE),
 
     /** Orc. */
-    ORC("Orc"),
+    ORC("Orc", BaseMonsterProto.Subtype.ORC),
 
     /** Reptilian. */
-    REPTILIAN("Reptilian"),
+    REPTILIAN("Reptilian", BaseMonsterProto.Subtype.REPTILIAN),
 
     /** Shapechanger. */
-    SHAPECHANGER("Shapechanger"),
+    SHAPECHANGER("Shapechanger", BaseMonsterProto.Subtype.SHAPECHANGER),
 
     /** Swarm. */
-    SWARM("Swarm"),
+    SWARM("Swarm", BaseMonsterProto.Subtype.SWARM),
 
     /** Water. */
-    WATER("Water");
+    WATER("Water", BaseMonsterProto.Subtype.WATER);
 
     /** The value's name. */
     private String m_name;
 
-    /** Create the enum value.
+    /** The corresponding proto enum value. */
+    private BaseMonsterProto.Subtype m_proto;
+
+    /**
+     * Create the enum value.
      *
      * @param inName the name of the value
-     *
+     * @param inProto the corresponding proto value
      */
-    private MonsterSubtype(String inName)
+    private MonsterSubtype(String inName, BaseMonsterProto.Subtype inProto)
     {
       m_name = constant("monster.type", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
+    }
+
+    @Override
+    public Subtype toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the subtype corresponding to the given proto value.
+     *
+     * @param inProto the proto value to get for
+     * @return the corresponding subtype
+     */
+    public static MonsterSubtype fromProto(BaseMonsterProto.Subtype inProto)
+    {
+      for(MonsterSubtype type : values())
+        if(type.m_proto == inProto)
+          return type;
+
+      throw new IllegalArgumentException("cannot convert monster subtype: "
+                                         + inProto);
     }
   }
 
@@ -296,56 +344,74 @@ public class BaseMonster extends BaseEntry
 
   /** The possible movement modes in the game. */
   @ParametersAreNonnullByDefault
-  public enum MovementMode implements EnumSelection.Named
+  public enum MovementMode implements EnumSelection.Named,
+    EnumSelection.Proto<BaseMonsterProto.Speed.Mode>
   {
     /** Burrowing movement. */
-    BURROW("Burrow"),
+    BURROW("Burrow", BaseMonsterProto.Speed.Mode.BURROW),
 
     /** Climbing. */
-    CLIMB("Climb"),
+    CLIMB("Climb", BaseMonsterProto.Speed.Mode.CLIMB),
 
     /** Flying. */
-    FLY("Fly"),
+    FLY("Fly", BaseMonsterProto.Speed.Mode.FLY),
 
     /** Swimming. */
-    SWIM("Swim"),
+    SWIM("Swim", BaseMonsterProto.Speed.Mode.SWIM),
 
     /** Running. */
-    RUN("");
+    RUN("", BaseMonsterProto.Speed.Mode.RUN);
 
     /** The value's name. */
     private String m_name;
 
-    /** Create the enum value.
+    /** The proto enum value. */
+    private BaseMonsterProto.Speed.Mode m_proto;
+
+    /**
+     * Create the enum value.
      *
      * @param inName the name of the value
-     *
+     * @param inProto the corresponding proto value
      */
-    private MovementMode(String inName)
+    private MovementMode(String inName, BaseMonsterProto.Speed.Mode inProto)
     {
       m_name = constant("movement.mode", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
+    }
+
+    @Override
+    public BaseMonsterProto.Speed.Mode toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the proto value to the corresponding enum value.
+     *
+     * @param inProto the proto to convert
+     * @return the corresponding enum value
+     */
+    public static MovementMode fromProto(BaseMonsterProto.Speed.Mode inProto)
+    {
+      for(MovementMode mode : values())
+        if(mode.m_proto == inProto)
+          return mode;
+
+      throw new IllegalArgumentException("cannot convert movement mode: "
+                                         + inProto);
     }
   }
 
@@ -354,59 +420,79 @@ public class BaseMonster extends BaseEntry
 
   /** The possible movement modes in the game. */
   @ParametersAreNonnullByDefault
-  public enum Maneuverability implements EnumSelection.Named
+  public enum Maneuverability implements EnumSelection.Named,
+    EnumSelection.Proto<BaseMonsterProto.Speed.Maneuverability>
   {
     /** Perfect maneuverability. */
-    PERFECT("Pefect"),
+    PERFECT("Pefect", BaseMonsterProto.Speed.Maneuverability.PERFECT),
 
     /** Good maneuverability. */
-    GOOD("Good"),
+    GOOD("Good", BaseMonsterProto.Speed.Maneuverability.GOOD),
 
     /** Average maneuverability. */
-    AVERAGE("Average"),
+    AVERAGE("Average", BaseMonsterProto.Speed.Maneuverability.AVERAGE),
 
     /** Poor maneuverability. */
-    POOR("Poor"),
+    POOR("Poor", BaseMonsterProto.Speed.Maneuverability.POOR),
 
     /** Clumsy maneuverability. */
-    CLUMSY("Clumsy"),
+    CLUMSY("Clumsy", BaseMonsterProto.Speed.Maneuverability.CLUMSY),
 
     /** Clumsy maneuverability. */
-    NONE("");
+    NONE("", BaseMonsterProto.Speed.Maneuverability.NONE);
 
     /** The value's name. */
     private String m_name;
 
-    /** Create the enum value.
+    /** The proto enum value. */
+    private BaseMonsterProto.Speed.Maneuverability m_proto;
+
+    /**
+     * Create the enum value.
      *
      * @param inName the name of the value
-     *
+     * @param inProto the proto value
      */
-    private Maneuverability(String inName)
+    private Maneuverability(String inName,
+                            BaseMonsterProto.Speed.Maneuverability inProto)
     {
       m_name = constant("maneuverability", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
+    }
+
+    @Override
+    public BaseMonsterProto.Speed.Maneuverability toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the proto value into the corresponding enum value.
+     *
+     * @param inProto the proto value to convert
+     * @return the corresponding enum value
+     */
+    public static Maneuverability
+      fromProto(BaseMonsterProto.Speed.Maneuverability inProto)
+    {
+      for(Maneuverability maneuverability : values())
+        if(maneuverability.m_proto == inProto)
+          return maneuverability;
+
+      throw new IllegalArgumentException("cannot convert maneuverability: "
+                                         + inProto);
     }
   }
 
@@ -415,53 +501,72 @@ public class BaseMonster extends BaseEntry
 
   /** The possible climates in the game. */
   @ParametersAreNonnullByDefault
-  public enum Climate implements EnumSelection.Named
+  public enum Climate implements EnumSelection.Named,
+    EnumSelection.Proto<BaseMonsterProto.Climate>
   {
     /** Warm climate. */
-    WARM("Warm"),
+    WARM("Warm", BaseMonsterProto.Climate.WARM),
 
     /** Cold climate. */
-    COLD("cold"),
+    COLD("cold", BaseMonsterProto.Climate.COLD_CLIMATE),
 
     /** Any climate. */
-    ANY("Any"),
+    ANY("Any", BaseMonsterProto.Climate.ANY),
 
     /** Temparete climate. */
-    TEMPERATE("Temperate");
+    TEMPERATE("Temperate", BaseMonsterProto.Climate.TEMPERATE);
 
     /** The value's name. */
     private String m_name;
 
+    /** The proto enum value. */
+    private BaseMonsterProto.Climate m_proto;
+
     /** Create the enum value.
      *
-     * @param inName the name of the value
-     *
+     * @param inName  the name of the value
+     * @param inProto the proto enum value
      */
-    private Climate(String inName)
+    private Climate(String inName, BaseMonsterProto.Climate inProto)
     {
       m_name = constant("climate", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
+    }
+
+    @Override
+    public net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Climate
+      toProto()
+    {
+      return m_proto;
+    }
+
+
+    /**
+     * Create a enum value from a given proto.
+     *
+     * @param inProto the proto to convert
+     * @return the corresponding enum value
+     */
+    public static Climate fromProto(BaseMonsterProto.Climate inProto)
+    {
+      for(Climate climate : values())
+        if(climate.m_proto == inProto)
+          return climate;
+
+      throw new IllegalArgumentException("cannot convert climate: "
+                                         + inProto);
     }
   }
 
@@ -470,89 +575,116 @@ public class BaseMonster extends BaseEntry
 
   /** The possible terrains in the game. */
   @ParametersAreNonnullByDefault
-  public enum Terrain implements EnumSelection.Named
+  public enum Terrain implements EnumSelection.Named,
+    EnumSelection.Proto<BaseMonsterProto.Terrain>
   {
     /** Forest terrain. */
-    FOREST("Forest"),
+    FOREST("Forest", BaseMonsterProto.Terrain.FOREST),
 
     /** Marsh terrain. */
-    MARSH("Marsh"),
+    MARSH("Marsh", BaseMonsterProto.Terrain.MARSH),
 
     /** Hills terrain. */
-    HILLS("Hills"),
+    HILLS("Hills", BaseMonsterProto.Terrain.HILLS),
 
     /** Mountain terrain. */
-    MOUNTAIN("Mountain"),
+    MOUNTAIN("Mountain", BaseMonsterProto.Terrain.MOUNTAIN),
 
     /** Desert terrain. */
-    DESERT("Desert"),
+    DESERT("Desert", BaseMonsterProto.Terrain.DESERT),
 
     /** Plains terrain. */
-    PLAINS("Plains"),
+    PLAINS("Plains", BaseMonsterProto.Terrain.PLAINS),
 
     /** Aquatic terrain. */
-    AQUATIC("Aquatic"),
+    AQUATIC("Aquatic", BaseMonsterProto.Terrain.AQUATIC_TERRAIN),
 
     /** Underground terrain. */
-    UNDERGROUND("Underground"),
+    UNDERGROUND("Underground", BaseMonsterProto.Terrain.UNDERGROUND),
 
     /** Infernal Battlefield of Acheron terrain. */
-    INFENRAL_BATTLEFIELD_OF_ACHERON("Infernal Battlefield of Acheron"),
+    INFENRAL_BATTLEFIELD_OF_ACHERON
+    ("Infernal Battlefield of Acheron",
+     BaseMonsterProto.Terrain.INFERNAL_BATTLEFIELD_OF_ACHERON),
 
     /** Infinite Layers of the Abyss terrain. */
-    INFINITE_LAYERS_OF_THE_ABYSS("Infinite Layers of the Abyss"),
+    INFINITE_LAYERS_OF_THE_ABYSS
+    ("Infinite Layers of the Abyss",
+     BaseMonsterProto.Terrain.INFINITE_LAYERS_OF_THE_ABYSS),
 
     /** Elemental Plane of Air. */
-    ELEMENTAL_PLANE_OF_AIR("Elemental Plane of Air"),
+    ELEMENTAL_PLANE_OF_AIR("Elemental Plane of Air",
+                           BaseMonsterProto.Terrain.ELEMENTAL_PLANE_OF_AIR),
 
     /** Elemental Plane of Earth. */
-    ELEMENTAL_PLANE_OF_EARTH("Elemental Plane of Earth"),
+    ELEMENTAL_PLANE_OF_EARTH("Elemental Plane of Earth",
+                             BaseMonsterProto.Terrain.ELEMENTAL_PLANE_OF_EARTH),
 
     /** Elemental Plane of Fire. */
-    ELEMENTAL_PLANE_OF_FIRE("Elemental Plane of Fire"),
+    ELEMENTAL_PLANE_OF_FIRE("Elemental Plane of Fire",
+                            BaseMonsterProto.Terrain.ELEMENTAL_PLANE_OF_FIRE),
 
     /** Elemental Plane of Water. */
-    ELEMENTAL_PLANE_OF_WATER("Elemental Plane of Water"),
+    ELEMENTAL_PLANE_OF_WATER("Elemental Plane of Water",
+                             BaseMonsterProto.Terrain.ELEMENTAL_PLANE_OF_WATER),
 
     /** Windswept dephts of pandemonium. */
-    WINDSWEPT_DEPTHS_OF_PANDEMONIUM("Windswept Depths of Pandemonium"),
+    WINDSWEPT_DEPTHS_OF_PANDEMONIUM
+    ("Windswept Depths of Pandemonium",
+     BaseMonsterProto.Terrain.WINDSWEPT_DEPTHS_OF_PANDEMONIUM),
 
     /** Any terrain. */
-    ANY("Any");
+    ANY("Any", BaseMonsterProto.Terrain.ANY_TERRAIN);
 
     /** The value's name. */
     private String m_name;
 
-    /** Create the enum value.
+    /** The proto enum value. */
+    private BaseMonsterProto.Terrain m_proto;
+
+    /**
+     * Create the enum value.
      *
      * @param inName the name of the value
-     *
+     * @param inProto the proto enum value
      */
-    private Terrain(String inName)
+    private Terrain(String inName, BaseMonsterProto.Terrain inProto)
     {
       m_name = constant("terrain", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
+    }
+
+    @Override
+    public BaseMonsterProto.Terrain toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the proto to the corresponding enum value.
+     *
+     * @param inProto the proto to convert
+     * @return the corresponding enum value
+     */
+    public static Terrain fromProto(BaseMonsterProto.Terrain inProto)
+    {
+      for(Terrain terrain : values())
+        if(terrain.m_proto == inProto)
+          return terrain;
+
+      throw new IllegalArgumentException("cannot convert terrain: " + inProto);
     }
   }
 
@@ -561,104 +693,119 @@ public class BaseMonster extends BaseEntry
 
   /** The possible terrains in the game. */
   @ParametersAreNonnullByDefault
-  public enum Organization implements EnumSelection.Named
+  public enum Organization implements EnumSelection.Named,
+    EnumSelection.Proto<BaseMonsterProto.Organization.Type>
   {
     /** Any organization. */
-    ANY("Any"),
+    ANY("Any", BaseMonsterProto.Organization.Type.ANY),
 
     /** Band organization. */
-    BAND("Band"),
+    BAND("Band", BaseMonsterProto.Organization.Type.BAND),
 
     /** Brood organization. */
-    BROOD("Brood"),
+    BROOD("Brood", BaseMonsterProto.Organization.Type.BROOD),
 
     /** Colony organization. */
-    COLONY("Colony"),
+    COLONY("Colony", BaseMonsterProto.Organization.Type.COLONY),
 
     /** Covey organization. */
-    COVEY("Covey"),
+    COVEY("Covey", BaseMonsterProto.Organization.Type.COVEY),
 
     /** Flight organization. */
-    FLIGHT("Flight"),
+    FLIGHT("Flight", BaseMonsterProto.Organization.Type.FLIGHT),
 
     /** Flock organization. */
-    FLOCK("Flock"),
+    FLOCK("Flock", BaseMonsterProto.Organization.Type.FLOCK),
 
     /** Gang organization. */
-    GANG("Gang"),
+    GANG("Gang", BaseMonsterProto.Organization.Type.GANG),
 
     /** Herd organization. */
-    HERD("Herd"),
+    HERD("Herd", BaseMonsterProto.Organization.Type.HERD),
 
     /** Infestation organization. */
-    INFESTATION("Infestation"),
+    INFESTATION("Infestation", BaseMonsterProto.Organization.Type.INFESTATION),
 
     /** Nest organization. */
-    NEST("Nest"),
+    NEST("Nest", BaseMonsterProto.Organization.Type.NEST),
 
     /** Pack organization. */
-    PACK("Pack"),
+    PACK("Pack", BaseMonsterProto.Organization.Type.PACK),
 
     /** Pair organization. */
-    PAIR("Pair"),
+    PAIR("Pair", BaseMonsterProto.Organization.Type.PAIR),
 
     /** Patrol organization. */
-    PATROL("Patrol"),
+    PATROL("Patrol", BaseMonsterProto.Organization.Type.PATROL),
 
     /** Slaver Brood organization. */
-    SLAVER_BROOD("Slaver Brood"),
+    SLAVER_BROOD("Slaver Brood",
+                 BaseMonsterProto.Organization.Type.SLAVER_BROOD),
 
     /** Solitary organization. */
-    SOLITARY("Solitary"),
+    SOLITARY("Solitary", BaseMonsterProto.Organization.Type.SOLITARY),
 
     /** Squad organization. */
-    SQUAD("Qquad"),
+    SQUAD("Qquad", BaseMonsterProto.Organization.Type.SQUAD),
 
     /** Storm organization. */
-    STORM("Storm"),
+    STORM("Storm", BaseMonsterProto.Organization.Type.STORM),
 
     /** Swarm organization. */
-    SWARM("Swarm"),
+    SWARM("Swarm", BaseMonsterProto.Organization.Type.SWARM),
 
     /** Tangle organization. */
-    TANGLE("Tangle"),
+    TANGLE("Tangle", BaseMonsterProto.Organization.Type.TANGLE),
 
     /** Troupe organization. */
-    TROUPE("Troupe");
+    TROUPE("Troupe", BaseMonsterProto.Organization.Type.TROUPE);
 
     /** The value's name. */
     private String m_name;
 
-    /** Create the enum value.
+    /** The proto enum value. */
+    private BaseMonsterProto.Organization.Type m_proto;
+
+    /**
+     * Create the enum value.
      *
      * @param inName the name of the value
-     *
+     * @param inProto the proto enum value
      */
-    private Organization(String inName)
+    private Organization(String inName,
+                         BaseMonsterProto.Organization.Type inProto)
     {
       m_name = constant("organization", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
+    }
+
+    @Override
+    public BaseMonsterProto.Organization.Type toProto()
+    {
+      return m_proto;
+    }
+
+    public static Organization
+      fromProto(BaseMonsterProto.Organization.Type inProto)
+    {
+      for(Organization organization : values())
+        if(organization.m_proto == inProto)
+          return organization;
+
+      throw new IllegalArgumentException("cannot convert organization: "
+                                         + inProto);
     }
   }
 
@@ -667,101 +814,121 @@ public class BaseMonster extends BaseEntry
 
   /** The possible attack styles in the game. */
   @ParametersAreNonnullByDefault
-  public enum AttackStyle implements EnumSelection.Named
+  public enum AttackStyle implements EnumSelection.Named,
+    EnumSelection.Proto<BaseMonsterProto.Attack.Style>
   {
     /** A melee attack. */
-    MELEE("melee"),
+    MELEE("melee", BaseMonsterProto.Attack.Style.MELEE),
 
     /** A ranged attack. */
-    RANGED("ranged");
+    RANGED("ranged", BaseMonsterProto.Attack.Style.RANGED);
 
     /** The value's name. */
     private String m_name;
 
-    /** Create the name.
+    /** The proto enum value. */
+    private BaseMonsterProto.Attack.Style m_proto;
+
+    /**
+     * Create the name.
      *
      * @param inName       the name of the value
-     *
+     * @param inProto      the proto enum value
      */
-    private AttackStyle(String inName)
+    private AttackStyle(String inName, BaseMonsterProto.Attack.Style inProto)
     {
       m_name = constant("attack.style", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
-  };
+
+    @Override
+    public Style toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the proto enum value to its enum value.
+     *
+     * @param inProto  the proto value to convert
+     * @return         the corresponding enum value
+     */
+    public static AttackStyle fromProto(BaseMonsterProto.Attack.Style inProto)
+    {
+      for(AttackStyle style : values())
+        if(style.m_proto == inProto)
+          return style;
+
+      throw new IllegalArgumentException("cannot convert attack style: "
+                                         + inProto);
+    }
+  }
 
   //........................................................................
   //----- attack mode -----------------------------------------------------
 
   /** The possible attack styles in the game. */
   @ParametersAreNonnullByDefault
-  public enum AttackMode implements EnumSelection.Named
+  public enum AttackMode implements EnumSelection.Named,
+    EnumSelection.Proto<BaseMonsterProto.Attack.Mode>
   {
     /** A tentacle attack. */
-    TENTACLE("Tentacle", false),
+    TENTACLE("Tentacle", false, BaseMonsterProto.Attack.Mode.TENTACLE),
 
     /** A claw attack. */
-    CLAW("Claw", false),
+    CLAW("Claw", false, BaseMonsterProto.Attack.Mode.CLAW),
 
     /** A bite attack. */
-    BITE("bite", false),
+    BITE("bite", false, BaseMonsterProto.Attack.Mode.BITE),
 
     /** A fist attack. */
-    FIST("Fist", false),
+    FIST("Fist", false, BaseMonsterProto.Attack.Mode.FIST),
 
     /** A quill attack. */
-    QUILL("Quill", true),
+    QUILL("Quill", true, BaseMonsterProto.Attack.Mode.QUILL),
 
     /** A weapon attack. */
-    WEAPON("Weapon", false),
+    WEAPON("Weapon", false, BaseMonsterProto.Attack.Mode.WEAPON),
 
     /** A touch attack. */
-    TOUCH("Touch", true),
+    TOUCH("Touch", true, BaseMonsterProto.Attack.Mode.TOUCH),
 
     /** An incorporeal touch attack. */
-    INCORPOREAL_TOUCH("Incorporeal Touch", true),
+    INCORPOREAL_TOUCH("Incorporeal Touch", true,
+                      BaseMonsterProto.Attack.Mode.INCORPOREAL_TOUCH),
 
     /** A slam attack. */
-    SLAM("Slam", false),
+    SLAM("Slam", false, BaseMonsterProto.Attack.Mode.SLAM),
 
     /** A sting attack. */
-    STING("Sting", false),
+    STING("Sting", false, BaseMonsterProto.Attack.Mode.STING),
 
     /** A swarm attack. */
-    SWARM("Swarm", false),
+    SWARM("Swarm", false, BaseMonsterProto.Attack.Mode.SWARM),
 
     /** A ray attack. */
-    RAY("Ray", true),
+    RAY("Ray", true, BaseMonsterProto.Attack.Mode.RAY),
 
     /** A hoof attack. */
-    HOOF("Hoof", true),
+    HOOF("Hoof", true, BaseMonsterProto.Attack.Mode.HOOF),
 
     /** A snakes attack. */
-    SNAKES("Snakes", true),
+    SNAKES("Snakes", true, BaseMonsterProto.Attack.Mode.SNAKES),
 
     /** A web attack. */
-    WEB("Web", true);
+    WEB("Web", true, BaseMonsterProto.Attack.Mode.WEB);
 
     /** The value's name. */
     private String m_name;
@@ -769,34 +936,30 @@ public class BaseMonster extends BaseEntry
     /** Flag if to use dexterity when attacking. */
     private boolean m_dexterity;
 
+    /** The proto enum value. */
+    private BaseMonsterProto.Attack.Mode m_proto;
+
     /**
      * Create the name.
      *
      * @param inName       the name of the value
      * @param inDexterity  whether dexterity is used for the attack
+     * @param inProto      the proto enum value
      */
-    private AttackMode(String inName, boolean inDexterity)
+    private AttackMode(String inName, boolean inDexterity,
+                       BaseMonsterProto.Attack.Mode inProto)
     {
       m_name = constant("attack.mode", inName);
       m_dexterity = inDexterity;
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
@@ -812,29 +975,52 @@ public class BaseMonster extends BaseEntry
     {
       return m_dexterity;
     }
-  };
+
+    @Override
+    public Mode toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the proto value to an enum value.
+     *
+     * @param inProto  the proto value to convert
+     * @return the corresponding enum value
+     */
+    public static AttackMode fromProto(BaseMonsterProto.Attack.Mode inProto)
+    {
+      for(AttackMode mode : values())
+        if(mode.m_proto == inProto)
+          return mode;
+
+      throw new IllegalArgumentException("cannot convert attack mode: "
+                                         + inProto);
+    }
+  }
 
   //........................................................................
   //----- treasure ---------------------------------------------------------
 
   /** The possible sizes in the game. */
   @ParametersAreNonnullByDefault
-  public enum Treasure implements EnumSelection.Named
+  public enum Treasure implements EnumSelection.Named,
+    EnumSelection.Proto<BaseMonsterProto.Treasure>
   {
     /** No treasure at all. */
-    NONE("none", 0),
+    NONE("none", 0, BaseMonsterProto.Treasure.NONE_TREASURE),
 
     /** Standard treasure. */
-    STANDARD("standard", 1),
+    STANDARD("standard", 1, BaseMonsterProto.Treasure.STANDARD),
 
     /** Double the standard treasure. */
-    DOUBLE("double standard", 2),
+    DOUBLE("double standard", 2, BaseMonsterProto.Treasure.DOUBLE),
 
     /** Triple the standard treasure. */
-    TRIPLE("triple standard", 3),
+    TRIPLE("triple standard", 3, BaseMonsterProto.Treasure.TRIPLE),
 
     /** Quadruple the standard treasure. */
-    QUADRUPLE("quadruple standard", 4);
+    QUADRUPLE("quadruple standard", 4, BaseMonsterProto.Treasure.QUADRUPLE);
 
     /** The value's name. */
     private String m_name;
@@ -842,97 +1028,117 @@ public class BaseMonster extends BaseEntry
     /** The multiplier for treasures. */
     private int m_multiplier;
 
-    /** Create the name.
+    /** The proto enum value. */
+    private BaseMonsterProto.Treasure m_proto;
+
+    /**
+     * Create the name.
      *
      * @param inName       the name of the value
      * @param inMultiplier how much treasure we get
+     * @param inProto      the proto enum value
      */
-    private Treasure(String inName, int inMultiplier)
+    private Treasure(String inName, int inMultiplier,
+                     BaseMonsterProto.Treasure inProto)
     {
-      m_name      = constant("skill.modifier", inName);
-      m_multiplier    = inMultiplier;
+      m_name = constant("skill.modifier", inName);
+      m_multiplier = inMultiplier;
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /**
-     * Convert to a string.
-     *
-     * @return the name of the value
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
 
-    /** Get the multiplier for this treasure type.
+    /**
+     * Get the multiplier for this treasure type.
      *
      * @return the multiplier to use for computing treasure amounts
-     *
      */
     public int multiplier()
     {
       return m_multiplier;
     }
-  };
+
+    @Override
+    public BaseMonsterProto.Treasure toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the treasure value associated with the given proto value.
+     *
+     * @param inProto the proto to convert
+     * @return the converted treasure value
+     */
+    public static Treasure fromProto(BaseMonsterProto.Treasure inProto)
+    {
+      for(Treasure treasure : values())
+        if(treasure.m_proto == inProto)
+          return treasure;
+
+      throw new IllegalArgumentException("cannot convert treasure: " + inProto);
+    }
+  }
 
   //........................................................................
   //----- alignment --------------------------------------------------------
 
   /** The possible sizes in the game. */
   @ParametersAreNonnullByDefault
-  public enum Alignment implements EnumSelection.Named, EnumSelection.Short
+  public enum Alignment implements EnumSelection.Named, EnumSelection.Short,
+    EnumSelection.Proto<BaseMonsterProto.Alignment>
   {
     /** Lawful Evil. */
-    LE("Lawful Evil", "LE"),
+    LE("Lawful Evil", "LE", BaseMonsterProto.Alignment.LAEWFUL_EVIL),
 
     /** Lawful Neutral. */
-    LN("Lawful Neutral", "LN"),
+    LN("Lawful Neutral", "LN", BaseMonsterProto.Alignment.LAWFUL_NEUTRAL),
 
     /** Lawful Good. */
-    LG("Lawful Good", "LG"),
+    LG("Lawful Good", "LG", BaseMonsterProto.Alignment.LAWFUL_GOOD),
 
     /** Chaotic Evil. */
-    CE("Chaotic Evil", "CE"),
+    CE("Chaotic Evil", "CE", BaseMonsterProto.Alignment.CHAOTIC_EVIL),
 
     /** Chaotic Neutral. */
-    CN("Chaotic Neutral", "CN"),
+    CN("Chaotic Neutral", "CN", BaseMonsterProto.Alignment.CHOATIC_NETURAL),
 
     /** Chaotic Good. */
-    CG("Chaotic Good", "CG"),
+    CG("Chaotic Good", "CG", BaseMonsterProto.Alignment.CHAOTIC_GOOD),
 
     /** Neutral Evil. */
-    NE("Neutral Evil", "NE"),
+    NE("Neutral Evil", "NE", BaseMonsterProto.Alignment.NEUTRAL_EVIL),
 
     /** True Neutral. */
-    N("Neutral", "N"),
+    N("Neutral", "N", BaseMonsterProto.Alignment.TRUE_NEUTRAL),
 
     /** Neutral Good. */
-    NG("Neutral Good", "NG"),
+    NG("Neutral Good", "NG", BaseMonsterProto.Alignment.NEUTRAL_GOOD),
 
-    /** Any chatic alignment. */
-    ANY_CHAOTIC("Any Chaotic", "AC"),
+    /** Any chaotic alignment. */
+    ANY_CHAOTIC("Any Chaotic", "AC", BaseMonsterProto.Alignment.ANY_CHAOTIC),
 
     /** Any evil alignment. */
-    ANY_EVIL("Any Evil", "AE"),
+    ANY_EVIL("Any Evil", "AE", BaseMonsterProto.Alignment.ANY_EVIL),
 
     /** Any good alignment. */
-    ANY_GOOD("Any Good", "AG"),
+    ANY_GOOD("Any Good", "AG", BaseMonsterProto.Alignment.ANY_GOOD),
 
     /** Any lawful alignment. */
-    ANY_LAWFUL("Any Lawful", "AL"),
+    ANY_LAWFUL("Any Lawful", "AL", BaseMonsterProto.Alignment.ANY_LAWFUL),
 
     /** Any alignment. */
-    ANY("Any", "A");
+    ANY("Any", "A", BaseMonsterProto.Alignment.ANY_ALIGNMENT);
 
     /** The value's name. */
     private String m_name;
@@ -940,289 +1146,354 @@ public class BaseMonster extends BaseEntry
     /** The value's short name. */
     private String m_short;
 
-    /** Create the name.
+    /** The proto enum value. */
+    private BaseMonsterProto.Alignment m_proto;
+
+    /**
+     * Create the name.
      *
      * @param inName      the name of the value
      * @param inShort     the short name of the value
-     *
+     * @param inProto     the proto value
      */
-    private Alignment(String inName, String inShort)
+    private Alignment(String inName, String inShort,
+                      BaseMonsterProto.Alignment inProto)
     {
-      m_name      = constant("alignment",       inName);
-      m_short     = constant("alignment.short", inShort);
+      m_name = constant("alignment",       inName);
+      m_short = constant("alignment.short", inShort);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
 
-    /** Get the short name of the value.
-     *
-     * @return the short name of the value
-     *
-     */
     @Override
     public String getShort()
     {
       return m_short;
     }
-  };
+
+    @Override
+    public BaseMonsterProto.Alignment toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the proto to the corresponding enum value.
+     *
+     * @param inProto the proto to convert
+     * @return the corresponding enum value
+     */
+    public static Alignment fromProto(BaseMonsterProto.Alignment inProto)
+    {
+      for(Alignment alignment : values())
+        if(alignment.m_proto == inProto)
+          return alignment;
+
+      throw new IllegalArgumentException("cannot convert alignment: "
+                                         + inProto);
+    }
+  }
 
   //........................................................................
   //----- alignment status -------------------------------------------------
 
   /** The possible alignment modifiers in the game. */
   @ParametersAreNonnullByDefault
-  public enum AlignmentStatus implements EnumSelection.Named
+  public enum AlignmentStatus implements EnumSelection.Named,
+    EnumSelection.Proto<BaseMonsterProto.AlignmentStatus>
   {
     /** Always. */
-    ALWAYS("Always"),
+    ALWAYS("Always", BaseMonsterProto.AlignmentStatus.ALWAYS),
 
     /** Usually. */
-    USUALLY("Usually"),
+    USUALLY("Usually", BaseMonsterProto.AlignmentStatus.USUALLY),
 
     /** Often. */
-    OFTEN("Often");
+    OFTEN("Often", BaseMonsterProto.AlignmentStatus.OFTEN);
 
     /** The value's name. */
     private String m_name;
 
-    /** Create the name.
+    /** The proto value. */
+    private BaseMonsterProto.AlignmentStatus m_proto;
+
+    /**
+     * Create the name.
      *
      * @param inName      the name of the value
-     *
+     * @param inProto     the proto value
      */
-    private AlignmentStatus(String inName)
+    private AlignmentStatus(String inName,
+                            BaseMonsterProto.AlignmentStatus inProto)
     {
       m_name = constant("alignment.status", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
-  };
+
+    @Override
+    public BaseMonsterProto.AlignmentStatus toProto()
+    {
+      return m_proto;
+    }
+
+    private static AlignmentStatus
+      fromProto(BaseMonsterProto.AlignmentStatus inProto)
+    {
+      for(AlignmentStatus status : values())
+        if(status.m_proto == inProto)
+          return status;
+
+      throw new IllegalArgumentException("cannot convert alignment status: "
+                                         + inProto);
+    }
+  }
 
   //........................................................................
   //----- language ---------------------------------------------------------
 
   /** The possible sizes in the game. */
   @ParametersAreNonnullByDefault
-  public enum Language implements EnumSelection.Named
+  public enum Language implements EnumSelection.Named,
+    EnumSelection.Proto<BaseMonsterProto.Language.Name>
   {
     /** Aboleth. */
-    ABOLETH("Aboleth"),
+    ABOLETH("Aboleth", BaseMonsterProto.Language.Name.ABOLETH),
 
     /** Abyssal. */
-    ABYSSAL("Abyssal"),
+    ABYSSAL("Abyssal", BaseMonsterProto.Language.Name.ABYSSAL),
 
     /** Aquan. */
-    AQUAN("Aquan"),
+    AQUAN("Aquan", BaseMonsterProto.Language.Name.AQUAN),
 
     /** Auran. */
-    AURAN("Auran"),
+    AURAN("Auran", BaseMonsterProto.Language.Name.AURAN),
 
     /** Celestial. */
-    CELESTIAL("Celestial"),
+    CELESTIAL("Celestial", BaseMonsterProto.Language.Name.CELESTIAL),
 
     /** Common. */
-    COMMON("Common"),
+    COMMON("Common", BaseMonsterProto.Language.Name.COMMON),
 
     /** Draconic. */
-    DRACONIC("Draconic"),
+    DRACONIC("Draconic", BaseMonsterProto.Language.Name.DRACONIC),
 
     /** Drow Sign Language. */
-    DROW_SIGN("Drow Sign"),
+    DROW_SIGN("Drow Sign", BaseMonsterProto.Language.Name.DROW_SIGN),
 
     /** Druidic. */
-    DRUIDIC("Druidic"),
+    DRUIDIC("Druidic", BaseMonsterProto.Language.Name.DRUIDIC),
 
     /** Dwarven. */
-    DWARVEN("Dwarven"),
+    DWARVEN("Dwarven", BaseMonsterProto.Language.Name.DWARVEN),
 
     /** Elven. */
-    ELVEN("Elven"),
+    ELVEN("Elven", BaseMonsterProto.Language.Name.ELVEN),
 
     /** Giant. */
-    GIANT("Giant"),
+    GIANT("Giant", BaseMonsterProto.Language.Name.GIANT),
 
     /** Gnome. */
-    GNOME("Gnome"),
+    GNOME("Gnome", BaseMonsterProto.Language.Name.GNOME),
 
     /** Goblin. */
-    GOBLIN("Goblin"),
+    GOBLIN("Goblin", BaseMonsterProto.Language.Name.GOBLIN),
 
     /** Gnoll. */
-    GNOLL("Gnoll"),
+    GNOLL("Gnoll", BaseMonsterProto.Language.Name.GNOLL),
 
     /** Halfling. */
-    HALFLING("Halfling"),
+    HALFLING("Halfling", BaseMonsterProto.Language.Name.HALFLING),
 
     /** Ignan. */
-    IGNAN("Ignan"),
+    IGNAN("Ignan", BaseMonsterProto.Language.Name.IGNAN),
 
     /** Infernal. */
-    INFERNAL("Infernal"),
+    INFERNAL("Infernal", BaseMonsterProto.Language.Name.INFERNAL),
 
     /** Kuo-toa. */
-    KUO_TOA("Kuo-toa"),
+    KUO_TOA("Kuo-toa", BaseMonsterProto.Language.Name.KUO_TOA),
 
     /** Orc. */
-    ORC("Orc"),
+    ORC("Orc", BaseMonsterProto.Language.Name.ORC),
 
     /** Sylvan. */
-    SYLVAN("Sylvan"),
+    SYLVAN("Sylvan", BaseMonsterProto.Language.Name.SYLVAN),
 
     /** Terran. */
-    TERRAN("Terran"),
+    TERRAN("Terran", BaseMonsterProto.Language.Name.TERRAN),
 
     /** Undercommon. */
-    UNDERCOMMON("Undercommon"),
+    UNDERCOMMON("Undercommon", BaseMonsterProto.Language.Name.UNDERCOMMON),
 
     /** None. */
-    NONE("-");
+    NONE("-", BaseMonsterProto.Language.Name.NONE);
 
     /** The value's name. */
     private String m_name;
 
-    /** Create the name.
+    /** The proto enum value. */
+    private BaseMonsterProto.Language.Name m_proto;
+
+    /**
+     * Create the name.
      *
      * @param inName       the name of the value
-     *
+     * @param inProto      the proto enum value
      */
-    private Language(String inName)
+    private Language(String inName, BaseMonsterProto.Language.Name inProto)
     {
       m_name = constant("language", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
-  };
+
+    @Override
+    public BaseMonsterProto.Language.Name toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the given proto value to the corresponding enum value.
+     *
+     * @param inProto the proto value to convert
+     * @return the corresponding enum value
+     */
+    public static Language fromProto(BaseMonsterProto.Language.Name inProto)
+    {
+      for(Language language : values())
+        if(language.m_proto == inProto)
+          return language;
+
+      throw new IllegalArgumentException("cannot convert language: " + inProto);
+    }
+  }
 
   //........................................................................
   //----- language modifier ------------------------------------------------
 
   /** The possible sizes in the game. */
   @ParametersAreNonnullByDefault
-  public enum LanguageModifier implements EnumSelection.Named
+  public enum LanguageModifier implements EnumSelection.Named,
+    EnumSelection.Proto<BaseMonsterProto.Language.Modifier>
   {
     /** Automatic. */
-    AUTOMATIC("Automatic"),
+    AUTOMATIC("Automatic", BaseMonsterProto.Language.Modifier.AUTOMATIC),
 
     /** Bonus. */
-    BONUS("Bonus"),
+    BONUS("Bonus", BaseMonsterProto.Language.Modifier.BONUS),
 
     /** Some. */
-    SOME("Some"),
+    SOME("Some", BaseMonsterProto.Language.Modifier.SOME),
 
     /** Understand. */
-    UNDERSTAND("Understand");
+    UNDERSTAND("Understand", BaseMonsterProto.Language.Modifier.UNDERSTAND);
 
     /** The value's name. */
     private String m_name;
 
-    /** Create the name.
+    /** The proto enum value. */
+    private BaseMonsterProto.Language.Modifier m_proto;
+
+    /**
+     * Create the name.
      *
      * @param inName       the name of the value
-     *
+     * @param inProto      the proto value
      */
-    private LanguageModifier(String inName)
+    private LanguageModifier(String inName,
+                             BaseMonsterProto.Language.Modifier inProto)
     {
       m_name = constant("language.modifier", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
-  };
+
+    @Override
+    public BaseMonsterProto.Language.Modifier toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert a proto value to the enum value.
+     *
+     * @param inProto the proto value to convert
+     * @return the corresponding enum value
+     */
+    public static LanguageModifier
+      fromProto(BaseMonsterProto.Language.Modifier inProto)
+    {
+      for(LanguageModifier modifier : values())
+        if(modifier.m_proto == inProto)
+          return modifier;
+
+      throw new IllegalArgumentException("cannot convert language modifier: "
+                                         + inProto);
+    }
+  }
 
   //........................................................................
   //----- save ------------------------------------------------------------
 
   /** The possible sizes in the game. */
   @ParametersAreNonnullByDefault
-  public enum Save implements EnumSelection.Named, EnumSelection.Short
+  public enum Save implements EnumSelection.Named, EnumSelection.Short,
+    EnumSelection.Proto<BaseMonsterProto.Save>
   {
     /** Fortitude. */
-    FORTITUDE("Fortitude", "For"),
+    FORTITUDE("Fortitude", "For", BaseMonsterProto.Save.FORTITUDE),
 
     /** Reflex. */
-    REFLEX("Reflex", "Ref"),
+    REFLEX("Reflex", "Ref", BaseMonsterProto.Save.REFLEX),
 
     /** Wisdom. */
-    WISDOM("Wisdom", "Wis");
+    WISDOM("Wisdom", "Wis", BaseMonsterProto.Save.WISDOM_SAVE);
 
     /** The value's name. */
     private String m_name;
@@ -1230,51 +1501,56 @@ public class BaseMonster extends BaseEntry
     /** The value's short name. */
     private String m_short;
 
-    /** Create the name.
+    /** The proto enum value. */
+    private BaseMonsterProto.Save m_proto;
+
+    /**
+     * Create the name.
      *
      * @param inName       the name of the value
      * @param inShort      the short name of the value
-     *
+     * @param inProto      the proto value
      */
-    private Save(String inName, String inShort)
+    private Save(String inName, String inShort, BaseMonsterProto.Save inProto)
     {
       m_name = constant("save.name", inName);
       m_short = constant("save.short", inShort);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the short name of the value
-     *
-     */
     @Override
     public String getShort()
     {
       return m_short;
     }
 
-    /** Get the save as string.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
-  };
+
+    @Override
+    public BaseMonsterProto.Save toProto()
+    {
+      return m_proto;
+    }
+
+    public static Save fromProto(BaseMonsterProto.Save inProto)
+    {
+      for(Save save : values())
+        if(save.m_proto == inProto)
+          return save;
+
+      throw new IllegalArgumentException("cannot convert save: " + inProto);
+    }
+  }
 
   //........................................................................
   //----- ability ---------------------------------------------------------
@@ -1284,25 +1560,25 @@ public class BaseMonster extends BaseEntry
   public enum Ability implements EnumSelection.Named, EnumSelection.Short
   {
     /** Strength. */
-    STRENGTH("Strength", "Str"),
+    STRENGTH("Strength", "Str", BaseMonsterProto.Ability.STRENGTH),
 
     /** Dexterity. */
-    DEXTERITY("Dexterity", "Dex"),
+    DEXTERITY("Dexterity", "Dex", BaseMonsterProto.Ability.DEXTERITY),
 
     /** Constitution. */
-    CONSTITUTION("Constitution", "Con"),
+    CONSTITUTION("Constitution", "Con", BaseMonsterProto.Ability.CONSTITUTION),
 
     /** Intelligence. */
-    INTELLIGENCE("Intelligence", "Int"),
+    INTELLIGENCE("Intelligence", "Int", BaseMonsterProto.Ability.INTELLIGENCE),
 
     /** Wisdom. */
-    WISDOM("Wisdom", "Wis"),
+    WISDOM("Wisdom", "Wis", BaseMonsterProto.Ability.WISDOM),
 
     /** Charisma. */
-    CHARISMA("Charisma", "Cha"),
+    CHARISMA("Charisma", "Cha", BaseMonsterProto.Ability.CHARISMA),
 
     /** No ability. */
-    NONE("None", "-");
+    NONE("None", "-", BaseMonsterProto.Ability.NONE);
 
     /** The value's name. */
     private String m_name;
@@ -1310,16 +1586,22 @@ public class BaseMonster extends BaseEntry
     /** The value's short name. */
     private String m_short;
 
+    /** The proto enum value. */
+    private BaseMonsterProto.Ability m_proto;
+
     /** Create the name.
      *
      * @param inName       the name of the value
      * @param inShort      the short name of the value
+     * @param inProto      the proto enum value
      *
      */
-    private Ability(String inName, String inShort)
+    private Ability(String inName, String inShort,
+                    BaseMonsterProto.Ability inProto)
     {
       m_name = constant("ability.name", inName);
       m_short = constant("ability.short", inShort);
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -1353,6 +1635,31 @@ public class BaseMonster extends BaseEntry
     public String toString()
     {
       return m_name;
+    }
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseMonsterProto.Ability getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static Ability fromProto(BaseMonsterProto.Ability inProto)
+    {
+      for(Ability ability : values())
+        if(ability.m_proto == inProto)
+          return ability;
+
+      throw new IllegalStateException("invalid proto ability: " + inProto);
     }
   };
 
@@ -1438,22 +1745,6 @@ public class BaseMonster extends BaseEntry
 
   //........................................................................
   //----- hit dice ---------------------------------------------------------
-
-  /** The formatter for hit dices. */
-  // ValueFormatter<Dice> s_hdFormatter = new ValueFormatter<Dice>() {
-  //   public Command format(Dice inValue) {
-  //     return new Command(new Object []
-  //       {
-  //         new Link(inValue.getNumber(),
-  //                  "/index/monsterhds/" + inValue.getNumber()),
-  //         "d",
-  //         new Link(inValue.getDice(),
-  //                  "/index/monsterdices/" + inValue.getDice()),
-  //         inValue.getModifier() > 0 ? "+" + inValue.getModifier()
-  //         : inValue.getModifier() < 0 ? inValue.getModifier() : "",
-  //       });
-  //   }
-  // };
 
   /** The monster's hit dice. */
   @Key("hit dice")
@@ -1589,7 +1880,7 @@ public class BaseMonster extends BaseEntry
   //........................................................................
   //----- fortitude save ---------------------------------------------------
 
-  /** The monster's Charisma. */
+  /** The monster's fortitude save. */
   @Key("fortitude save")
   protected Number m_fortitudeSave = new Number(-1, 100, true);
 
@@ -1601,7 +1892,7 @@ public class BaseMonster extends BaseEntry
   //........................................................................
   //----- will save --------------------------------------------------------
 
-  /** The monster's Charisma. */
+  /** The monster's will save. */
   @Key("will save")
   protected Number m_willSave = new Number(-1, 100, true);
 
@@ -1613,7 +1904,7 @@ public class BaseMonster extends BaseEntry
   //........................................................................
   //----- reflex save ------------------------------------------------------
 
-  /** The monster's Charisma. */
+  /** The monster's reflex save. */
   @Key("reflex save")
   protected Number m_reflexSave = new Number(-1, 100, true);
 
@@ -1878,10 +2169,6 @@ public class BaseMonster extends BaseEntry
   //........................................................................
   //----- challenge rating -------------------------------------------------
 
-  /** The formatter for organizations. */
-  // protected static ValueFormatter<Rational> s_crFormatter =
-  //   new LinkFormatter<Rational>("/index/crs/");
-
   /** The monsters challenge rating. */
   @Key("challenge rating")
   protected Rational m_cr = new Rational();
@@ -1893,11 +2180,6 @@ public class BaseMonster extends BaseEntry
 
   //........................................................................
   //----- treasure ---------------------------------------------------------
-
-  /** The formatter for the treasure. */
-  // protected static ValueFormatter<EnumSelection<Treasure>>
-  //s_treasureFormatter =
-  //   new LinkFormatter<EnumSelection<Treasure>>("/index/treasures/");
 
   /** The monster's possible treasure. */
   @Key("treasure")
@@ -1945,11 +2227,6 @@ public class BaseMonster extends BaseEntry
   //........................................................................
   //----- level adjustment -------------------------------------------------
 
-  /** The formatter for the treasure. */
-  // protected static ValueFormatter<ValueSelection>
-  //   s_levelAdjustmentFormatter =
-  //   new LinkFormatter<ValueSelection>("/index/leveladjustments/");
-
   /** The monsters level adjustment. */
   @Key("level adjustment")
   protected Union m_levelAdjustment =
@@ -1964,11 +2241,6 @@ public class BaseMonster extends BaseEntry
 
   //........................................................................
   //----- languages --------------------------------------------------------
-
-  /** The formatter for the treasure. */
-  // protected static ValueFormatter<EnumSelection<Language>>
-  //   s_languageFormatter =
-  //   new LinkFormatter<EnumSelection<Language>>("/index/languages/");
 
   /** The monsters languages. */
   @Key("languages")
@@ -2052,67 +2324,6 @@ public class BaseMonster extends BaseEntry
     extractVariables(BaseMonster.class);
     extractVariables(BaseMonster.class, BaseIncomplete.class);
   }
-
-  //----- commands ---------------------------------------------------------
-
-  //----- page -------------------------------------------------------------
-
-  // public static Command PAGE_COMMAND = new Command(new Object []
-  //   {
-  //     new TocEntry("$name"),
-  //     new Divider("center",
-  //                 new Command("#world #size #attachment #categories")),
-  //     "$title",
-  //     new Textblock(new Command(new Object []
-  //       {
-  //         "${+description}",
-  //         new Hrule(),
-  //         "${short description}",
-  //       }), "desc"),
-  //     new OverviewFiles("$image"),
-  //     new Table("description", "f" + "Illustrations: ".length()
-  //               + ":L(desc-label);100:L(desc-text)",
-  //               new Command("%base %synonyms %type %{hit dice} %speed "
-  //                           + "%{natural armor} "
-  //                           + "%strength %dexterity %constitution "
-  //                           + "%intelligence %wisdom %charisma "
-  //                           + "%{base attack} "
-  //                           + "%{primary attacks} %{secondary attacks} "
-  //                           + "%{special attacks} "
-  //                           + "%space %reach "
-  //                           + "%{special qualities} "
-  //                           + "%{class skills} %feats %{good saves}"
-  //                           + "%advancements %{level adjustment}"
-  //                           + "%alignment %languages "
-  //                         + "%environment %organization %{challenge rating} "
-  //                           + "%treasure %possessions "
-  //                           // incomplete
-  //                           + "%incomplete "
-  //                           // admin
-  //                           + "%{+references} %file")),
-  //     new Divider("clear", " "),
-  //     //new Table("texts", "100:B", new Object [] {
-  //     new Block(new Command(new Object []
-  //       {
-  //         new Par(),
-  //         new Italic("$encounter"),
-  //         new Par(),
-  //         new Right(new Scriptsize(new Italic(new Color("color-light",
-  //                                                       "Combat")))),
-  //         "$combat",
-  //         new Right(new Scriptsize(new Italic(new Color("color-light",
-  //                                                       "Tactics")))),
-  //         "$tactics",
-  //         new Right(new Scriptsize(new Italic(new Color("color-light",
-  //                                                       "Character")))),
-  //         "$character",
-  //         new Right(new Scriptsize(new Italic(new Color("color-light",
-  //                                                       "Reproduction")))),
-  //         "$reproduction",
-  //       })),
-  //   });
-
-  //........................................................................
 
   //........................................................................
 
@@ -3872,6 +4083,769 @@ public class BaseMonster extends BaseEntry
   // }
 
   //........................................................................
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Message toProto()
+  {
+    BaseMonsterProto.Builder builder = BaseMonsterProto.newBuilder();
+
+    builder.setBase((BaseEntryProto)super.toProto());
+
+    if(m_size.isDefined())
+    {
+      builder.setSize(((EnumSelection<BaseItem.Size>)m_size.get(0))
+                      .getSelected().getProto());
+      builder.setSizeModifier(((EnumSelection<BaseItem.SizeModifier>)
+                              m_size.get(1)).getSelected().toProto());
+    }
+
+    if(m_monsterType.isDefined())
+    {
+      builder.setType(((EnumSelection<MonsterType>)m_monsterType.get(0))
+                      .getSelected().toProto());
+      for(EnumSelection<MonsterSubtype> subtype
+        : (ValueList<EnumSelection<MonsterSubtype>>)m_monsterType.get(1))
+        builder.addSubtype(subtype.getSelected().toProto());
+    }
+
+    if(m_hitDice.isDefined())
+      builder.setHitDice(m_hitDice.toProto());
+
+    if(m_speed.isDefined())
+      for(Multiple speed : m_speed)
+      {
+        BaseMonsterProto.Speed.Builder speedBuilder =
+          BaseMonsterProto.Speed.newBuilder();
+
+        if(speed.get(0).isDefined())
+          speedBuilder.setMode(((EnumSelection<MovementMode>)speed.get(0))
+                               .getSelected().toProto());
+
+        speedBuilder.setDistance(((Distance)speed.get(1)).toProto());
+
+        if(speed.get(2).isDefined())
+          speedBuilder.setManeuverability(((EnumSelection<Maneuverability>)
+                                          speed.get(2))
+                                          .getSelected().toProto());
+
+        builder.addSpeed(speedBuilder.build());
+      }
+
+    if(m_natural.isDefined())
+      builder.setNaturalArmor(m_natural.toProto());
+
+    if(m_attack.isDefined())
+      builder.setBaseAttack((int)m_attack.get());
+
+    if(m_strength.isDefined())
+      builder.setStrength((int)m_strength.get());
+
+    if(m_dexterity.isDefined())
+      builder.setDexterity((int)m_dexterity.get());
+
+    if(m_constitution.isDefined())
+      builder.setConstitution((int)m_constitution.get());
+
+    if(m_wisdom.isDefined())
+      builder.setWisdom((int)m_wisdom.get());
+
+    if(m_intelligence.isDefined())
+      builder.setIntelligence((int)m_intelligence.get());
+
+    if(m_charisma.isDefined())
+      builder.setCharisma((int)m_charisma.get());
+
+    if(m_fortitudeSave.isDefined())
+      builder.setFortitudeSave((int)m_fortitudeSave.get());
+
+    if(m_willSave.isDefined())
+      builder.setWillSave((int)m_willSave.get());
+
+    if(m_reflexSave.isDefined())
+      builder.setReflexSave((int)m_reflexSave.get());
+
+    if(m_primaryAttacks.isDefined())
+      for(Multiple attack : m_primaryAttacks)
+      {
+        BaseMonsterProto.Attack.Builder attackBuilder =
+          BaseMonsterProto.Attack.newBuilder();
+
+        if(attack.get(0).isDefined())
+          attackBuilder.setAttacks(((Dice)attack.get(0)).toProto());
+
+        if(attack.get(1).isDefined())
+          attackBuilder.setMode(((EnumSelection<AttackMode>)attack.get(1))
+                                .getSelected().toProto());
+
+        if(attack.get(2).isDefined())
+          attackBuilder.setStyle(((EnumSelection<AttackStyle>)attack.get(2))
+                                 .getSelected().toProto());
+
+        if(attack.get(3).isDefined())
+          attackBuilder.setDamage(((Damage)attack.get(3)).toProto());
+
+        builder.addPrimaryAttack(attackBuilder.build());
+      }
+
+    if(m_secondaryAttacks.isDefined())
+      for(Multiple attack : m_secondaryAttacks)
+      {
+        BaseMonsterProto.Attack.Builder attackBuilder =
+          BaseMonsterProto.Attack.newBuilder();
+
+        if(attack.get(0).isDefined())
+          attackBuilder.setAttacks(((Dice)attack.get(0)).toProto());
+
+        if(attack.get(1).isDefined())
+          attackBuilder.setMode(((EnumSelection<AttackMode>)attack.get(1))
+                                .getSelected().toProto());
+
+        if(attack.get(2).isDefined())
+          attackBuilder.setStyle(((EnumSelection<AttackStyle>)attack.get(2))
+                                 .getSelected().toProto());
+
+        if(attack.get(3).isDefined())
+          attackBuilder.setDamage(((Damage)attack.get(3)).toProto());
+
+        builder.addSecondaryAttack(attackBuilder.build());
+      }
+
+    if(m_space.isDefined())
+      builder.setSpace(m_space.toProto());
+
+    if(m_reach.isDefined())
+      builder.setReach(m_reach.toProto());
+
+    if(m_specialAttacks.isDefined())
+      for(Multiple special : m_specialAttacks)
+      {
+        BaseMonsterProto.QualityReference.Builder reference =
+          BaseMonsterProto.QualityReference.newBuilder();
+
+        Reference<BaseQuality> ref = (Reference<BaseQuality>)special.get(0);
+        reference.setReference
+        (BaseMonsterProto.Reference.newBuilder()
+         .setName(ref.getName())
+         .setParameters(ref.getParameters() != null
+         ? ParametersProto.getDefaultInstance()
+         : ref.getParameters().toProto())
+         .build());
+
+        if(special.get(1).isDefined())
+          reference.setPerDay((int)((Number)special.get(1)).get());
+
+        builder.addSpecialAttack(reference.build());
+      }
+
+    if(m_specialQualities.isDefined())
+      for(Multiple special : m_specialQualities)
+      {
+        BaseMonsterProto.QualityReference.Builder reference =
+          BaseMonsterProto.QualityReference.newBuilder();
+
+        Reference<BaseQuality> ref = (Reference<BaseQuality>)special.get(0);
+        reference.setReference
+        (BaseMonsterProto.Reference.newBuilder()
+         .setName(ref.getName())
+         .setParameters(ref.getParameters() != null
+         ? ParametersProto.getDefaultInstance()
+         : ref.getParameters().toProto())
+         .build());
+
+        if(special.get(1).isDefined())
+          reference.setCondition(((Condition)special.get(1)).getDescription());
+        if(special.get(2).isDefined())
+          reference.setPerDay((int)((Number)special.get(2)).get());
+
+        builder.addSpecialQuality(reference.build());
+      }
+
+    if(m_classSkills.isDefined())
+      for(Multiple skill : m_classSkills)
+      {
+        BaseMonsterProto.SkillReference.Builder reference =
+          BaseMonsterProto.SkillReference.newBuilder();
+
+        Reference<BaseSkill> ref = (Reference<BaseSkill>)skill.get(0);
+        reference.setReference
+        (BaseMonsterProto.Reference.newBuilder()
+         .setName(ref.getName())
+         .setParameters(ref.getParameters() != null
+         ? ParametersProto.getDefaultInstance()
+         : ref.getParameters().toProto())
+         .build());
+
+        if(skill.get(1).isDefined())
+          reference.setModifier(((Modifier)skill.get(1)).toProto());
+
+        builder.addClassSkill(reference);
+      }
+
+    if(m_feats.isDefined())
+      for(Reference<BaseFeat> feat : m_feats)
+      {
+        BaseMonsterProto.Reference.Builder reference =
+          BaseMonsterProto.Reference.newBuilder();
+
+        reference.setName(feat.getName());
+        if(feat.getParameters() != null)
+          reference.setParameters(feat.getParameters().toProto());
+
+        builder.addFeat(reference);
+      }
+
+    if(m_environment.get(0).isDefined())
+      builder.setClimate(((EnumSelection<Climate>)m_environment.get(0))
+                         .getSelected().toProto());
+
+    if(m_environment.get(1).isDefined())
+      builder.setTerrain(((EnumSelection<Terrain>)m_environment.get(1))
+                         .getSelected().toProto());
+
+    if(m_organizations.isDefined())
+      for(Multiple organization : m_organizations)
+      {
+        BaseMonsterProto.Organization.Builder org =
+          BaseMonsterProto.Organization.newBuilder();
+
+        if(organization.get(0).isDefined())
+          org.setType(((EnumSelection<Organization>)organization.get(0))
+                      .getSelected().toProto());
+        if(organization.get(1).isDefined())
+          org.setNumber(((Dice)organization.get(1)).toProto());
+        if(organization.get(2).isDefined())
+          for(Multiple plus : (ValueList<Multiple>)organization.get(2))
+            org.addPlus(BaseMonsterProto.Organization.Plus.newBuilder()
+                        .setNumber(((Dice)plus.get(0)).toProto())
+                        .setText(((Name)plus.get(1)).get())
+                        .build());
+
+        builder.addOrganization(org.build());
+      }
+
+    if(m_cr.isDefined())
+      builder.setChallengeRating(m_cr.toProto());
+
+    if(m_treasure.isDefined())
+      builder.setTreasure(m_treasure.getSelected().toProto());
+
+    if(m_alignment.isDefined() && m_alignment.get(0).isDefined())
+      builder.setAlignmentStatus(((EnumSelection<AlignmentStatus>)
+                                 m_alignment.get(0)).getSelected().toProto());
+    if(m_alignment.isDefined() && m_alignment.get(1).isDefined())
+      builder.setAlignment(((EnumSelection<Alignment>)m_alignment.get(1))
+                           .getSelected().toProto());
+
+    if(m_advancements.isDefined())
+      for(Multiple advancement : m_advancements)
+        builder.addAdvancement
+          (BaseMonsterProto.Advancement.newBuilder()
+           .setRange(((Range)advancement.get(0)).toProto())
+           .setSize(((EnumSelection<BaseItem.Size>)advancement.get(1))
+                    .getSelected().getProto())
+           .build());
+
+    if(m_levelAdjustment.isDefined())
+      if(m_levelAdjustment.getIndex() == 0)
+        builder.setLevelAdjustment(0);
+      else
+        builder.setLevelAdjustment((int)((Number)m_levelAdjustment.get())
+                                   .get());
+
+    if(m_languages.isDefined())
+      for(Multiple language : m_languages)
+      {
+        BaseMonsterProto.Language.Builder lang =
+          BaseMonsterProto.Language.newBuilder();
+        lang.setName(((EnumSelection<Language>)language.get(1))
+                     .getSelected().toProto());
+        if(language.get(0).isDefined())
+          lang.setModifier(((EnumSelection<LanguageModifier>)language.get(0))
+                           .getSelected().toProto());
+
+        builder.addLanguage(lang.build());
+      }
+
+    if(m_encounter.isDefined())
+      builder.setEncounter(m_encounter.get());
+
+    if(m_combat.isDefined())
+      builder.setCombat(m_combat.get());
+
+    if(m_tactics.isDefined())
+      builder.setTactics(m_tactics.get());
+
+    if(m_character.isDefined())
+      builder.setCharacter(m_character.get());
+
+    if(m_reproduction.isDefined())
+      builder.setReproduction(m_reproduction.get());
+
+    if(m_possessions.isDefined())
+      for(Multiple possession : m_possessions)
+      {
+        if(!possession.isDefined() ||
+          (!possession.get(0).isDefined() && !possession.get(1).isDefined()))
+          continue;
+
+        BaseMonsterProto.Possession.Builder pos =
+          BaseMonsterProto.Possession.newBuilder();
+
+        if(possession.get(0).isDefined())
+          pos.setName(((Name)possession.get(0)).get());
+        if(possession.get(1).isDefined())
+          pos.setText(((Text)possession.get(1)).get());
+
+        builder.addPossession(pos.build());
+      }
+
+    if(m_goodSaves.isDefined())
+      for(EnumSelection<Save> save : m_goodSaves)
+        builder.addGoodSave(save.getSelected().toProto());
+
+    BaseMonsterProto proto = builder.build();
+    return proto;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseMonsterProto))
+    {
+      Log.warning("cannot parse proto " + inProto.getClass());
+      return;
+    }
+
+    BaseMonsterProto proto = (BaseMonsterProto)inProto;
+
+    if(proto.hasSize() && proto.hasSizeModifier())
+      m_size =
+        m_size.as(((EnumSelection<BaseItem.Size>)m_size.get(0))
+                  .as(BaseItem.Size.fromProto(proto.getSize())),
+                  ((EnumSelection<BaseItem.SizeModifier>)m_size.get(1))
+                  .as(BaseItem.SizeModifier
+                      .fromProto(proto.getSizeModifier())));
+
+    if(proto.hasType())
+    {
+      List<EnumSelection<MonsterSubtype>> subtypes = new ArrayList<>();
+      for(BaseMonsterProto.Subtype subtype : proto.getSubtypeList())
+        subtypes.add(((ValueList<EnumSelection<MonsterSubtype>>)
+                     m_monsterType.get(1)).createElement()
+                     .as(MonsterSubtype.fromProto(subtype)));
+
+      m_monsterType =
+        m_monsterType.as(((EnumSelection<MonsterType>)m_monsterType.get(0))
+                         .as(MonsterType.fromProto(proto.getType())),
+                         ((ValueList<EnumSelection<MonsterSubtype>>)
+                           m_monsterType.get(1))
+                           .as(subtypes));
+    }
+
+    if(proto.hasHitDice())
+      m_hitDice = m_hitDice.fromProto(proto.getHitDice());
+
+    if(proto.getSpeedCount() > 0)
+    {
+      List<Multiple> speeds = new ArrayList<>();
+      for(BaseMonsterProto.Speed speed : proto.getSpeedList())
+      {
+        Multiple multiple = m_speed.createElement();
+        multiple = multiple.as(speed.hasMode()
+                               ? ((EnumSelection<MovementMode>)multiple.get(0))
+                                 .as(MovementMode.fromProto(speed.getMode()))
+                               : multiple.get(0),
+                               ((Distance)multiple.get(1))
+                               .fromProto(speed.getDistance()),
+                               speed.hasManeuverability()
+                               ? ((EnumSelection<Maneuverability>)
+                                 multiple.get(2))
+                                 .as(Maneuverability
+                                     .fromProto(speed.getManeuverability()))
+                               : multiple.get(2));
+        speeds.add(multiple);
+      }
+
+      m_speed = m_speed.as(speeds);
+    }
+
+    if(proto.hasNaturalArmor())
+      m_natural = m_natural.fromProto(proto.getNaturalArmor());
+
+    if(proto.hasBaseAttack())
+      m_attack = m_attack.as(proto.getBaseAttack());
+
+    if(proto.hasStrength())
+      m_strength = m_strength.as(proto.getStrength());
+
+    if(proto.hasDexterity())
+      m_dexterity = m_dexterity.as(proto.getDexterity());
+
+    if(proto.hasConstitution())
+      m_constitution = m_constitution.as(proto.getConstitution());
+
+    if(proto.hasIntelligence())
+      m_intelligence = m_intelligence.as(proto.getIntelligence());
+
+    if(proto.hasWisdom())
+      m_wisdom = m_wisdom.as(proto.getWisdom());
+
+    if(proto.hasCharisma())
+      m_charisma = m_charisma.as(proto.getCharisma());
+
+    if(proto.hasFortitudeSave())
+      m_fortitudeSave = m_fortitudeSave.as(proto.getFortitudeSave());
+
+    if(proto.hasWillSave())
+      m_willSave = m_willSave.as(proto.getWillSave());
+
+    if(proto.hasReflexSave())
+      m_reflexSave = m_reflexSave.as(proto.getReflexSave());
+
+    if(proto.getPrimaryAttackCount() > 0)
+    {
+      List<Multiple> attacks = new ArrayList<>();
+      Multiple multiple = m_primaryAttacks.createElement();
+
+      for(BaseMonsterProto.Attack attack : proto.getPrimaryAttackList())
+      {
+        multiple =
+          multiple.as(attack.hasAttacks()
+                      ? ((Dice)multiple.get(0)).fromProto(attack.getAttacks())
+                      : multiple.get(0),
+                      attack.hasMode()
+                      ? ((EnumSelection<AttackMode>)multiple.get(1))
+                        .as(AttackMode.fromProto(attack.getMode()))
+                      : multiple.get(1),
+                      attack.hasStyle()
+                      ? ((EnumSelection<AttackStyle>)multiple.get(2))
+                        .as(AttackStyle.fromProto(attack.getStyle()))
+                      : multiple.get(2),
+                      attack.hasDamage()
+                      ? ((Damage)multiple.get(3)).fromProto(attack.getDamage())
+                      : multiple.get(3));
+        attacks.add(multiple);
+      }
+
+      m_primaryAttacks = m_primaryAttacks.as(attacks);
+    }
+
+    if(proto.getSecondaryAttackCount() > 0)
+    {
+      List<Multiple> attacks = new ArrayList<>();
+      Multiple multiple = m_secondaryAttacks.createElement();
+
+      for(BaseMonsterProto.Attack attack : proto.getSecondaryAttackList())
+      {
+        multiple =
+          multiple.as(attack.hasAttacks()
+                      ? ((Dice)multiple.get(0)).fromProto(attack.getAttacks())
+                      : multiple.get(0),
+                      attack.hasMode()
+                      ? ((EnumSelection<AttackMode>)multiple.get(1))
+                        .as(AttackMode.fromProto(attack.getMode()))
+                      : multiple.get(1),
+                      attack.hasStyle()
+                      ? ((EnumSelection<AttackStyle>)multiple.get(2))
+                        .as(AttackStyle.fromProto(attack.getStyle()))
+                      : multiple.get(2),
+                      attack.hasDamage()
+                      ? ((Damage)multiple.get(3)).fromProto(attack.getDamage())
+                      : multiple.get(3));
+        attacks.add(multiple);
+      }
+
+      m_secondaryAttacks = m_secondaryAttacks.as(attacks);
+    }
+
+    if(proto.hasSpace())
+      m_space = m_space.fromProto(proto.getSpace());
+
+    if(proto.hasReach())
+      m_reach = m_reach.fromProto(proto.getReach());
+
+    if(proto.getSpecialAttackCount() > 0)
+    {
+      List<Multiple> references = new ArrayList<>();
+      for(BaseMonsterProto.QualityReference reference
+        : proto.getSpecialAttackList())
+      {
+        Multiple multiple = m_specialAttacks.createElement();
+
+        Reference<BaseQuality> ref = (Reference<BaseQuality>)multiple.get(0);
+        multiple =
+          multiple.as(ref.as(reference.getReference().getName())
+                      .withParameters(ref.getParameters()
+                                      .fromProto(reference.getReference()
+                                                 .getParameters())),
+                      reference.hasPerDay()
+                      ? ((Number)multiple.get(1)).as(reference.getPerDay())
+                      : multiple.get(1));
+
+        references.add(multiple);
+      }
+
+      m_specialAttacks = m_specialAttacks.as(references);
+    }
+
+    if(proto.getSpecialQualityCount() > 0)
+    {
+      List<Multiple> references = new ArrayList<>();
+      for(BaseMonsterProto.QualityReference reference
+        : proto.getSpecialQualityList())
+      {
+        Multiple multiple = m_specialQualities.createElement();
+
+        Reference<BaseQuality> ref = (Reference<BaseQuality>)multiple.get(0);
+        multiple =
+          multiple.as(ref.as(reference.getReference().getName())
+                      .withParameters(ref.getParameters()
+                                      .fromProto(reference.getReference()
+                                                 .getParameters())),
+                      reference.hasCondition()
+                      ? new Condition(reference.getCondition())
+                      : multiple.get(1),
+                      reference.hasPerDay()
+                      ? ((Number)multiple.get(2)).as(reference.getPerDay())
+                      : multiple.get(2));
+
+        references.add(multiple);
+      }
+
+      m_specialQualities = m_specialQualities.as(references);
+    }
+
+    if(proto.getClassSkillCount() > 0)
+    {
+      List<Multiple> references = new ArrayList<>();
+      for(BaseMonsterProto.SkillReference reference
+        : proto.getClassSkillList())
+      {
+        Multiple multiple = m_classSkills.createElement();
+
+        Reference<BaseSkill> ref = (Reference<BaseSkill>)multiple.get(0);
+        multiple =
+          multiple.as(ref.as(reference.getReference().getName())
+                      .withParameters(ref.getParameters()
+                                      .fromProto(reference.getReference()
+                                                 .getParameters())),
+                      reference.hasModifier()
+                      ? ((Modifier)multiple.get(1))
+                        .fromProto(reference.getModifier())
+                      : multiple.get(1));
+
+        references.add(multiple);
+      }
+
+      m_classSkills = m_classSkills.as(references);
+    }
+
+    if(proto.getFeatCount() > 0)
+    {
+      List<Reference<BaseFeat>> references = new ArrayList<>();
+      for(BaseMonsterProto.Reference feat : proto.getFeatList())
+      {
+        Reference<BaseFeat> ref = m_feats.createElement();
+        ref = ref.as(feat.getName())
+          .withParameters(ref.getParameters().fromProto(feat.getParameters()));
+        references.add(ref);
+      }
+
+      m_feats = m_feats.as(references);
+    }
+
+    if(proto.hasClimate() && proto.hasTerrain())
+      m_environment = m_environment
+        .as(((EnumSelection<Climate>)m_environment.get(0))
+            .as(Climate.fromProto(proto.getClimate())),
+            ((EnumSelection<Terrain>)m_environment.get(1))
+            .as(Terrain.fromProto(proto.getTerrain())));
+    else if(proto.hasClimate())
+      m_environment = m_environment
+        .as(((EnumSelection<Climate>)m_environment.get(0))
+            .as(Climate.fromProto(proto.getClimate())),
+            m_environment.get(1));
+    else if(proto.hasTerrain())
+      m_environment = m_environment
+        .as(m_environment.get(0),
+            ((EnumSelection<Terrain>)m_environment.get(1))
+            .as(Terrain.fromProto(proto.getTerrain())));
+
+    if(proto.getOrganizationCount() > 0)
+    {
+      List<Multiple> organizations = new ArrayList<>();
+      for(BaseMonsterProto.Organization org : proto.getOrganizationList())
+      {
+        Multiple multiple = m_organizations.createElement();
+        List<Multiple> pluses = new ArrayList<>();
+        for(BaseMonsterProto.Organization.Plus plus : org.getPlusList())
+        {
+          Multiple plusMultiple =
+            ((ValueList<Multiple>)multiple.get(2)).createElement();
+          pluses.add(plusMultiple.as(((Dice)plusMultiple.get(0))
+                                     .fromProto(plus.getNumber()),
+                                     ((Name)plusMultiple.get(1))
+                                     .as(plus.getText())));
+        }
+
+        multiple = multiple.as(org.hasType()
+                               ? ((EnumSelection<Organization>)multiple.get(0))
+                                 .as(Organization.fromProto(org.getType()))
+                               : multiple.get(0),
+                               org.hasNumber()
+                               ? ((Dice)multiple.get(1))
+                                 .fromProto(org.getNumber())
+                               : multiple.get(1),
+                               pluses.isEmpty()
+                               ? multiple.get(2)
+                               : ((ValueList<Multiple>)multiple.get(2))
+                                 .as(pluses));
+        organizations.add(multiple);
+      }
+
+      m_organizations = m_organizations.as(organizations);
+    }
+
+    if(proto.hasChallengeRating())
+      m_cr = Rational.fromProto(proto.getChallengeRating());
+
+    if(proto.hasTreasure())
+      m_treasure = m_treasure.as(Treasure.fromProto(proto.getTreasure()));
+
+    if(proto.hasAlignment() && proto.hasAlignmentStatus())
+      m_alignment = m_alignment.as
+      (((EnumSelection<AlignmentStatus>)m_alignment.get(0))
+       .as(AlignmentStatus.fromProto(proto.getAlignmentStatus())),
+       ((EnumSelection<Alignment>)m_alignment.get(1))
+       .as(Alignment.fromProto(proto.getAlignment())));
+    else if(proto.hasAlignmentStatus())
+      m_alignment = m_alignment.as
+      (((EnumSelection<AlignmentStatus>)m_alignment.get(0))
+       .as(AlignmentStatus.fromProto(proto.getAlignmentStatus())),
+       m_alignment.get(1));
+    else if(proto.hasAlignment())
+      m_alignment = m_alignment.as
+       (m_alignment.get(0),
+       ((EnumSelection<Alignment>)m_alignment.get(1))
+       .as(Alignment.fromProto(proto.getAlignment())));
+
+    if(proto.getAdvancementCount() > 0)
+    {
+      List<Multiple> advancements = new ArrayList<>();
+      for(BaseMonsterProto.Advancement advancement : proto.getAdvancementList())
+      {
+        Multiple multiple = m_advancements.createElement();
+        multiple =
+          multiple.as(((Range)multiple.get(0))
+                      .fromProto(advancement.getRange()),
+                      ((EnumSelection<BaseItem.Size>)multiple.get(1))
+                      .as(BaseItem.Size.fromProto(advancement.getSize())));
+        advancements.add(multiple);
+      }
+
+      m_advancements = m_advancements.as(advancements);
+    }
+
+    if(proto.hasLevelAdjustment())
+      if(proto.getLevelAdjustment() == 0)
+        m_levelAdjustment =
+          m_levelAdjustment.as(0, ((Selection)m_levelAdjustment.get(0))
+                               .as(0));
+      else
+        m_levelAdjustment =
+          m_levelAdjustment.as(1, ((Number)m_levelAdjustment.get(1))
+                               .as(proto.getLevelAdjustment()));
+
+    if(proto.getLanguageCount() > 0)
+    {
+      List<Multiple> languages = new ArrayList<>();
+      for(BaseMonsterProto.Language language : proto.getLanguageList())
+      {
+        Multiple multiple = m_languages.createElement();
+        if(language.hasModifier())
+          multiple =
+            multiple.as(((EnumSelection<LanguageModifier>)multiple.get(0))
+                        .as(LanguageModifier.fromProto(language.getModifier())),
+                        ((EnumSelection<Language>)multiple.get(1))
+                        .as(Language.fromProto(language.getName())));
+        else
+          multiple =
+            multiple.as(multiple.get(0),
+                        ((EnumSelection<Language>)multiple.get(1))
+                        .as(Language.fromProto(language.getName())));
+
+        languages.add(multiple);
+      }
+
+      m_languages = m_languages.as(languages);
+    }
+
+    if(proto.hasEncounter())
+      m_encounter = m_encounter.as(proto.getEncounter());
+
+    if(proto.hasCombat())
+      m_combat = m_combat.as(proto.getCombat());
+
+    if(proto.hasTactics())
+      m_tactics = m_tactics.as(proto.getTactics());
+
+    if(proto.hasCharacter())
+      m_character = m_character.as(proto.getCharacter());
+
+    if(proto.hasReproduction())
+      m_reproduction = m_reproduction.as(proto.getReproduction());
+
+    if(proto.getPossessionCount() > 0)
+    {
+      List<Multiple> possessions = new ArrayList<>();
+      for(BaseMonsterProto.Possession possession : proto.getPossessionList())
+      {
+        Multiple multiple = m_possessions.createElement();
+        if(possession.hasName() && possession.hasText())
+          multiple =
+            multiple.as(((Name)multiple.get(0)).as(possession.getName()),
+                       ((Text)multiple.get(1)).as(possession.getText()));
+        else if(possession.hasName())
+          multiple =
+            multiple.as(((Name)multiple.get(0)).as(possession.getName()),
+                        multiple.get(1));
+        else if(possession.hasText())
+          multiple =
+            multiple.as(multiple.get(0),
+                       ((Text)multiple.get(1)).as(possession.getText()));
+
+        possessions.add(multiple);
+      }
+
+      m_possessions = m_possessions.as(possessions);
+    }
+
+    if(proto.getGoodSaveCount() > 0)
+    {
+      List<EnumSelection<Save>> saves = new ArrayList<>();
+      for(BaseMonsterProto.Save save : proto.getGoodSaveList())
+        saves.add(m_goodSaves.createElement().as(Save.fromProto(save)));
+
+      m_goodSaves = m_goodSaves.as(saves);
+    }
+
+    super.fromProto(proto.getBase());
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(BaseMonsterProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
 
   //........................................................................
 

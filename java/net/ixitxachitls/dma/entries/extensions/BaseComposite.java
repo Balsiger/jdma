@@ -23,11 +23,18 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.protobuf.Message;
+
 import net.ixitxachitls.dma.entries.BaseItem;
+import net.ixitxachitls.dma.proto.Entries.BaseCompositeProto;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -112,6 +119,53 @@ public class BaseComposite extends BaseExtension<BaseItem>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    BaseCompositeProto.Builder builder = BaseCompositeProto.newBuilder();
+
+    if(m_contains.isDefined())
+      for(ValueList<Name> names : m_contains)
+      {
+        BaseCompositeProto.Or.Builder or = BaseCompositeProto.Or.newBuilder();
+        for(Name name : names)
+          or.addName(name.get());
+
+        builder.addContains(or.build());
+      }
+
+    return builder.build();
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseCompositeProto))
+    {
+      Log.warning("cannot parse base composite proto " + inProto.getClass());
+      return;
+    }
+
+    BaseCompositeProto proto = (BaseCompositeProto)inProto;
+
+    if(proto.getContainsCount() > 0)
+    {
+      List<ValueList<Name>> contains = new ArrayList<>();
+      for(BaseCompositeProto.Or or : proto.getContainsList())
+      {
+        List<Name> names = new ArrayList<>();
+        ValueList<Name> list = m_contains.createElement();
+        for(String name : or.getNameList())
+          names.add(list.createElement().as(name));
+
+        contains.add(list.as(names));
+      }
+
+      m_contains = m_contains.as(contains);
+    }
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

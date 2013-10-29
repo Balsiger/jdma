@@ -26,9 +26,12 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseArmorProto;
+import net.ixitxachitls.dma.proto.Entries.BaseArmorProto.Type;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
@@ -38,6 +41,7 @@ import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Percent;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -47,9 +51,7 @@ import net.ixitxachitls.dma.values.Value;
  * This is the weapon extension for all the entries.
  *
  * @file          BaseArmor.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
 
 //..........................................................................
@@ -66,112 +68,76 @@ public class BaseArmor extends BaseExtension<BaseItem>
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
-  /** The possible areas to affect (cf. PHB 175). */
-  public enum ArmorTypes implements EnumSelection.Named
+  /** The possible armor types. */
+  public enum ArmorTypes implements EnumSelection.Named,
+    EnumSelection.Proto<BaseArmorProto.Type>
   {
     /** Light armor. */
-    LIGHT("Light Armor"),
+    LIGHT("Light Armor", BaseArmorProto.Type.LIGHT),
     /** Medium armor. */
-    MEDIUM("Medium Armor"),
+    MEDIUM("Medium Armor", BaseArmorProto.Type.MEDIUM),
     /** Heavy armor. */
-    HEAVY("Heavy Armor"),
+    HEAVY("Heavy Armor", BaseArmorProto.Type.HEAVY),
     /** A shield. */
-    SHIELD("Shield");
+    SHIELD("Shield", BaseArmorProto.Type.SHIELD),
+    /** A shield. */
+    TOWER_SHIELD("Tower Shield", BaseArmorProto.Type.TOWER_SHIELD),
+    /** A shield. */
+    None("None", BaseArmorProto.Type.NONE);
 
     /** The value's name. */
     private String m_name;
 
+    /** The proto enum value. */
+    private BaseArmorProto.Type m_proto;
+
     /** Create the name.
      *
      * @param inName     the name of the value
-     *
+     * @param inProto    the prot enum value
      */
-    private ArmorTypes(String inName)
+    private ArmorTypes(String inName, BaseArmorProto.Type inProto)
     {
       m_name = constant("armor.types", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
-  };
+
+    @Override
+    public Type toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the given proto into the corresponding enum value.
+     *
+     * @param inProto  the proto value to convert
+     * @return  the converted enum value
+     */
+    public static ArmorTypes fromProto(BaseArmorProto.Type inProto)
+    {
+      for(ArmorTypes type : values())
+        if(type.m_proto == inProto)
+          return type;
+
+      throw new IllegalArgumentException("cannot convert armor type: "
+        + inProto);
+    }
+  }
 
   //........................................................................
-
-  /** The possible armor proficiencies. */
-  public enum Proficiency implements EnumSelection.Named
-  {
-    /** Proficiency for light armor. */
-    LIGHT("Light"),
-
-    /** Proficiency for medium armor. */
-    MEDIUM("Medium"),
-
-    /** Proficiency for heavy armor. */
-    HESVY("Heavy"),
-
-    /** Proficiency for shields, but no tower shields. */
-    SHIELD("Shield"),
-
-    /** Proficiency for shields, but no tower shields. */
-    TOWER_SHIELD("Tower Shield"),
-
-    /** Proficiency for simple weapons. */
-    NONE("None");
-
-    /** The value's name. */
-    private String m_name;
-
-    /** Create the name.
-     *
-     * @param inName     the name of the value
-     *
-     */
-    private Proficiency(String inName)
-    {
-      m_name = constant("armor.proficiencies", inName);
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-  };
 
   //........................................................................
 
@@ -447,6 +413,61 @@ public class BaseArmor extends BaseExtension<BaseItem>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    BaseArmorProto.Builder builder = BaseArmorProto.newBuilder();
+
+    if(m_bonus.isDefined())
+      builder.setAcBonus(m_bonus.toProto());
+    if(m_type.isDefined())
+      builder.setType(m_type.getSelected().toProto());
+    if(m_maxDex.isDefined())
+      builder.setMaxDexterity((int)m_maxDex.get());
+    if(m_checkPenalty.isDefined())
+      builder.setCheckPenalty((int)m_checkPenalty.get());
+    if(m_arcane.isDefined())
+      builder.setArcaneFailure((int)m_arcane.get());
+    if(m_speed.isDefined())
+    {
+      builder.setSpeedFast(((Distance)m_speed.get(0)).toProto());
+      builder.setSpeedSlow(((Distance)m_speed.get(1)).toProto());
+    }
+
+    return builder.build();
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseArmorProto))
+    {
+      Log.warning("cannot parse base armor proto " + inProto.getClass());
+      return;
+    }
+
+    BaseArmorProto proto = (BaseArmorProto)inProto;
+
+    if(proto.hasAcBonus())
+      m_bonus = m_bonus.fromProto(proto.getAcBonus());
+    if(proto.hasType())
+      m_type = m_type.as(ArmorTypes.fromProto(proto.getType()));
+    if(proto.hasMaxDexterity())
+      m_maxDex = m_maxDex.as(proto.getMaxDexterity());
+    if(proto.hasCheckPenalty())
+      m_checkPenalty = m_checkPenalty.as(proto.getCheckPenalty());
+    if(proto.hasArcaneFailure())
+      m_arcane = m_arcane.as(proto.getArcaneFailure());
+    if(proto.hasSpeedFast() && proto.hasSpeedSlow())
+      m_speed = m_speed.as(((Distance)m_speed.get(0))
+                           .fromProto(proto.getSpeedFast()),
+                           ((Distance)m_speed.get(0))
+                           .fromProto(proto.getSpeedSlow()));
+
+
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

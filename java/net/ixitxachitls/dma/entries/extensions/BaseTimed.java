@@ -26,10 +26,13 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseTimedProto;
 import net.ixitxachitls.dma.values.RandomDuration;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -136,6 +139,33 @@ public class BaseTimed extends BaseExtension<BaseItem>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    BaseTimedProto.Builder builder = BaseTimedProto.newBuilder();
+
+    if(m_duration.isDefined())
+      builder.setDuration(m_duration.toRProto());
+
+    return builder.build();
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseTimedProto))
+    {
+      Log.warning("cannot parse base timed proto " + inProto.getClass());
+      return;
+    }
+
+    BaseTimedProto proto = (BaseTimedProto)inProto;
+
+    if(proto.hasDuration())
+      m_duration = m_duration.fromProto(proto.getDuration());
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

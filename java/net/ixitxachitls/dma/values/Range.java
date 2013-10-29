@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.values;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.proto.Values.RangeProto;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.logging.Log;
 
@@ -168,7 +169,7 @@ public class Range extends BaseNumber<Range>
    *
    */
   @Override
-protected String doToString()
+  protected String doToString()
   {
     if(m_number != m_end)
       return super.doToString() + "-" + m_end;
@@ -187,12 +188,50 @@ protected String doToString()
    *
    */
   @Override
-public boolean isDefined()
+  public boolean isDefined()
   {
     return m_defined;
   }
 
   //........................................................................
+
+  /**
+   * Create a proto for the value.
+   *
+   * @return the proto representation
+   */
+  public RangeProto toProto()
+  {
+    return RangeProto.newBuilder()
+      .setLow(m_number)
+      .setHigh(m_end)
+      .build();
+  }
+
+  /**
+   * Create a new range similar to the current one with the values from the
+   * proto.
+   *
+   * @param inProto the proto with the values
+   * @return the newly created range
+   */
+  public Range fromProto(RangeProto inProto)
+  {
+    Range result = create();
+
+    if(inProto.hasLow())
+    {
+      result.m_number = inProto.getLow();
+      result.m_defined = true;
+    }
+    if(inProto.hasHigh())
+    {
+      result.m_end = inProto.getHigh();
+      result.m_defined = true;
+    }
+
+    return result;
+  }
 
   //........................................................................
 

@@ -38,11 +38,16 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.extensions.BaseWeapon;
 import net.ixitxachitls.dma.entries.extensions.Weapon;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
+import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
+import net.ixitxachitls.dma.proto.Entries.MonsterProto;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Critical;
 import net.ixitxachitls.dma.values.Damage;
@@ -60,6 +65,7 @@ import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -776,7 +782,7 @@ public class Monster extends CampaignEntry<BaseMonster>
   //........................................................................
   //----- fortitude save ---------------------------------------------------
 
-  /** The monster's Charisma. */
+  /** The monster's fortitude save. */
   @Key("fortitude save")
   protected Number m_fortitudeSave = new Number(-1, 100, true);
 
@@ -788,7 +794,7 @@ public class Monster extends CampaignEntry<BaseMonster>
   //........................................................................
   //----- will save --------------------------------------------------------
 
-  /** The monster's Charisma. */
+  /** The monster's will save. */
   @Key("will save")
   protected Number m_willSave = new Number(-1, 100, true);
 
@@ -800,7 +806,7 @@ public class Monster extends CampaignEntry<BaseMonster>
   //........................................................................
   //----- reflex save ------------------------------------------------------
 
-  /** The monster's Charisma. */
+  /** The monster's reflex. */
   @Key("reflex save")
   protected Number m_reflexSave = new Number(-1, 100, true);
 
@@ -2146,7 +2152,7 @@ public class Monster extends CampaignEntry<BaseMonster>
   public int getLevel()
   {
     // Don't use 'hit dice' here, as this will in turn use level (for con).
-    Combined<?> combinedLevel = collect("level");
+    Combined<Number> combinedLevel = collect("level");
 
     return (int) combinedLevel.modifier().getMaxValue();
   }
@@ -2360,71 +2366,6 @@ public class Monster extends CampaignEntry<BaseMonster>
 
     return ranks;
   }
-
-  //........................................................................
-  //-------------------------- getAbilityModifier --------------------------
-
-  /**
-   * Get the current modifier for the given ability.
-   *
-   * @param       inAbility the ability to get the modifier for
-   *
-   * @return      the ability modifier
-   *
-   */
-  // public int getAbilityModifier(Global.Ability inAbility)
-  // {
-  //   if(inAbility == null)
-  //     throw new IllegalArgumentException("must have an ability here");
-
-//     if(m_base != null)
-//     {
-//       // check armor max dexterity
-//       int max = m_base.getAbilityModifier(inAbility);
-
-//       if(inAbility == Global.Ability.DEXTERITY)
-//       {
-//         for(EntryValue<Item> value : m_possessions)
-//         {
-//           Item armor = value.get();
-
-//           if(!armor.hasAttachment(Armor.class))
-//             continue;
-
-//           max =
-//             Math.min(max,
-//                      (int)((Number)armor
-//                            .getValue("max dexterity")).get());
-//         }
-//       }
-
-//       return max;
-//     }
-
-  //   return 0;
-  // }
-
-  //........................................................................
-  //------------------------------- getSpeed -------------------------------
-
-  /**
-   * Get the land speed of the monster.
-   *
-   * @return      the speed in feet
-   *
-   */
-  // public int getSpeed()
-  // {
-//     if(m_base == null)
-//       return 0;
-
-//     for(Multiple mult : m_base.m_speed)
-//       if(!mult.get(0).get().isDefined())
-//         // we have the land speed
-//         return (int)((Distance)mult.get(1).get()).getAsFeet().getValue();
-
-  //   return 0;
-  // }
 
   //........................................................................
   //-------------------------------- getSize -------------------------------
@@ -3659,6 +3600,199 @@ public class Monster extends CampaignEntry<BaseMonster>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    MonsterProto.Builder builder = MonsterProto.newBuilder();
+
+    builder.setBase((CampaignEntryProto)super.toProto());
+
+    if(m_possessions.isDefined())
+      for(Name possession : m_possessions)
+        builder.addPossession(possession.get());
+
+    if(m_strength.isDefined())
+      builder.setStrength((int)m_strength.get());
+
+    if(m_dexterity.isDefined())
+      builder.setDexterity((int)m_dexterity.get());
+
+    if(m_constitution.isDefined())
+      builder.setConstitution((int)m_constitution.get());
+
+    if(m_intelligence.isDefined())
+      builder.setIntelligence((int)m_intelligence.get());
+
+    if(m_wisdom.isDefined())
+      builder.setWisdom((int)m_wisdom.get());
+
+    if(m_charisma.isDefined())
+      builder.setCharisma((int)m_charisma.get());
+
+    if(m_feats.isDefined())
+      for(Reference<BaseFeat> feat : m_feats)
+      {
+        BaseMonsterProto.Reference.Builder reference =
+          BaseMonsterProto.Reference.newBuilder();
+
+        reference.setName(feat.getName());
+        if(feat.getParameters() != null)
+          reference.setParameters(feat.getParameters().toProto());
+
+        builder.addFeat(reference);
+      }
+
+    if(m_maxHP.isDefined())
+      builder.setMaxHitPoints((int)m_maxHP.get());
+
+    if(m_hp.isDefined())
+      builder.setHitPoints((int)m_hp.get());
+
+    if(m_skills.isDefined())
+      for(Multiple multiple : m_skills)
+      {
+        BaseMonsterProto.Reference.Builder reference =
+          BaseMonsterProto.Reference.newBuilder();
+
+        @SuppressWarnings("unchecked")
+        Reference<BaseSkill> ref = (Reference<BaseSkill>)multiple.get(0);
+        reference.setName(ref.getName());
+        if(ref.getParameters() != null)
+          reference.setParameters(ref.getParameters().toProto());
+
+        MonsterProto.Skill.Builder skill = MonsterProto.Skill.newBuilder();
+        skill.setSkill(reference.build());
+
+        if(multiple.get(1).isDefined())
+          skill.setRanks((int)((Number)multiple.get(1)).get());
+
+        builder.addSkill(skill.build());
+      }
+
+    if(m_alignment.isDefined())
+      builder.setAlignment(m_alignment.getSelected().toProto());
+
+    if(m_fortitudeSave.isDefined())
+      builder.setFortitudeSave((int)m_fortitudeSave.get());
+
+    if(m_willSave.isDefined())
+      builder.setWillSave((int)m_willSave.get());
+
+    if(m_reflexSave.isDefined())
+      builder.setReflexSave((int)m_reflexSave.get());
+
+    MonsterProto proto = builder.build();
+    return proto;
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof MonsterProto))
+    {
+      Log.warning("cannot parse proto " + inProto);
+      return;
+    }
+
+    MonsterProto proto = (MonsterProto)inProto;
+
+    super.fromProto(proto.getBase());
+
+    if(proto.getPossessionCount() > 0)
+    {
+      List<Name> possessions = new ArrayList<>();
+      for(String possession : proto.getPossessionList())
+        possessions.add(m_possessions.createElement().as(possession));
+
+      m_possessions = m_possessions.as(possessions);
+    }
+
+    if(proto.hasStrength())
+      m_strength = m_strength.as(proto.getStrength());
+
+    if(proto.hasDexterity())
+      m_dexterity = m_dexterity.as(proto.getDexterity());
+
+    if(proto.hasConstitution())
+      m_constitution = m_constitution.as(proto.getConstitution());
+
+    if(proto.hasIntelligence())
+      m_intelligence = m_intelligence.as(proto.getIntelligence());
+
+    if(proto.hasWisdom())
+      m_wisdom = m_wisdom.as(proto.getWisdom());
+
+    if(proto.hasCharisma())
+      m_charisma = m_charisma.as(proto.getCharisma());
+
+    if(proto.getFeatCount() > 0)
+    {
+      List<Reference<BaseFeat>> references = new ArrayList<>();
+      for(BaseMonsterProto.Reference feat : proto.getFeatList())
+      {
+        Reference<BaseFeat> ref = m_feats.createElement();
+        ref = ref.as(feat.getName())
+          .withParameters(ref.getParameters().fromProto(feat.getParameters()));
+        references.add(ref);
+      }
+
+      m_feats = m_feats.as(references);
+    }
+
+    if(proto.hasMaxHitPoints())
+      m_maxHP = m_maxHP.as(proto.getMaxHitPoints());
+
+    if(proto.hasHitPoints())
+      m_hp = m_hp.as(proto.getHitPoints());
+
+    if(proto.getSkillCount() > 0)
+    {
+      List<Multiple> skills = new ArrayList<>();
+      for(MonsterProto.Skill skill : proto.getSkillList())
+      {
+        Multiple multiple = m_skills.createElement();
+        @SuppressWarnings("unchecked")
+        Reference<BaseSkill> ref = (Reference<BaseSkill>)multiple.get(0);
+        multiple =
+          multiple.as(ref.as(skill.getSkill().getName())
+                      .withParameters(ref.getParameters()
+                                      .fromProto(skill.getSkill()
+                                                 .getParameters())),
+                      ((Number)multiple.get(1)).as(skill.getRanks()));
+
+        skills.add(multiple);
+      }
+
+      m_skills = m_skills.as(skills);
+    }
+
+    if(proto.hasAlignment())
+      m_alignment =
+        m_alignment.as(BaseMonster.Alignment.fromProto(proto.getAlignment()));
+
+    if(proto.hasFortitudeSave())
+      m_fortitudeSave = m_fortitudeSave.as(proto.getFortitudeSave());
+
+    if(proto.hasWillSave())
+      m_willSave = m_willSave.as(proto.getWillSave());
+
+    if(proto.hasReflexSave())
+      m_reflexSave = m_reflexSave.as(proto.getReflexSave());
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(MonsterProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
 
   //........................................................................
 

@@ -30,12 +30,17 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.proto.Entries.EntryProto;
+import net.ixitxachitls.dma.proto.Entries.ProductProto;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Text;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -65,113 +70,141 @@ public class Product extends Entry<BaseProduct>
   private static final long serialVersionUID = 1L;
 
   /** The product status. */
-  public enum Status implements EnumSelection.Named
+  public enum Status implements EnumSelection.Named,
+    EnumSelection.Proto<ProductProto.Status>
   {
     /** The product is available in the library. */
-    AVAILABLE("available"),
+    AVAILABLE("available", ProductProto.Status.AVAILABLE),
     /** A highly desired product. */
-    DESIRED1("desired 1"),
+    DESIRED1("desired 1", ProductProto.Status.DESIRED_1),
     /** A desired product. */
-    DESIRED2("desired 2"),
+    DESIRED2("desired 2", ProductProto.Status.DESIRED_2),
     /** A marginally desired product. */
-    DESIRED3("desired 3");
+    DESIRED3("desired 3", ProductProto.Status.DESIRED_3);
 
     /** The value's name. */
     private String m_name;
+
+    /** The proto enum value. */
+    private ProductProto.Status m_proto;
 
     /**
      * Create the name.
      *
      * @param inName     the name of the value
-     *
+     * @param inProto    the proto enum value
      */
-    private Status(String inName)
+    private Status(String inName, ProductProto.Status inProto)
     {
       m_name = constant("product.status", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Convert to human readable string.
-     *
-     * @return a human readable string representation
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
-  };
+
+    @Override
+    public ProductProto.Status toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the proto value into the corresponding enum value.
+     *
+     * @param inProto the proto to convert
+     * @return the corresponding enum value
+     */
+    public static Status fromProto(ProductProto.Status inProto)
+    {
+      for(Status status : values())
+        if(status.m_proto == inProto)
+          return status;
+
+      throw new IllegalArgumentException("cannot convert status proto: "
+                                         + inProto);
+    }
+  }
 
   //........................................................................
   //----- conditions -------------------------------------------------------
 
   /** The product condition. */
-  public enum Condition implements EnumSelection.Named
+  public enum Condition implements EnumSelection.Named,
+    EnumSelection.Proto<ProductProto.Condition>
   {
     /** The product is as good as new and has not been or only carefully
      * read. */
-    MINT("mint"),
+    MINT("mint", ProductProto.Condition.MINT),
     /** The product is in good shape but was read. */
-    GOOD("good"),
+    GOOD("good", ProductProto.Condition.GOOD),
     /** The product is used, but in good shape. Might have some pencil marks
      * or the like. */
-    USED("used"),
+    USED("used", ProductProto.Condition.USED),
     /** The product is usable in play but might not look too nice. */
-    USABLE("usable"),
+    USABLE("usable", ProductProto.Condition.USABLE),
     /** Some part of the product is missing. */
-    PARTIAL("partial"),
+    PARTIAL("partial", ProductProto.Condition.PARTIAL),
     /** The product is not really usable. */
-    CRAP("crap"),
+    CRAP("crap", ProductProto.Condition.CRAP),
     /** Nothing defined. */
-    none("none");
+    none("none", ProductProto.Condition.NONE);
 
     /** The value's name. */
     private String m_name;
+
+    /** The enum proto value. */
+    private ProductProto.Condition m_proto;
 
     /**
      * Create the name.
      *
      * @param inName     the name of the value
-     *
+     * @param inProto    the proto value
      */
-    private Condition(String inName)
+    private Condition(String inName, ProductProto.Condition inProto)
     {
       m_name = constant("product.condition", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Convert to human readable string.
-     *
-     * @return a human readable string representation
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
-  };
+
+    @Override
+    public ProductProto.Condition toProto()
+    {
+      return m_proto;
+    }
+
+    public static Condition fromProto(ProductProto.Condition inProto)
+    {
+      for(Condition condition : values())
+        if(condition.m_proto == inProto)
+          return condition;
+
+      throw new IllegalArgumentException("cannot convert condition: "
+                                         + inProto);
+    }
+  }
 
   //........................................................................
 
@@ -659,6 +692,88 @@ public class Product extends Entry<BaseProduct>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Message toProto()
+  {
+    ProductProto.Builder builder = ProductProto.newBuilder();
+
+    builder.setBase((EntryProto)super.toProto());
+
+    if(m_edition.isDefined())
+      builder.setEdition(m_edition.get());
+
+    if(m_printing.isDefined())
+      builder.setPrinting(m_printing.get());
+
+    if(m_owner.isDefined())
+      builder.setOwner(m_owner.get());
+
+    if(m_status.isDefined())
+      builder.setStatus(m_status.getSelected().toProto());
+
+    if(m_condition.get(0).isDefined())
+      builder.setCondition(((EnumSelection<Condition>)m_condition.get(0))
+                           .getSelected().toProto());
+
+    if(m_condition.get(1).isDefined())
+      builder.setConditionComment(((Text)m_condition.get(1)).get());
+
+    return builder.build();
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof ProductProto))
+    {
+      Log.warning("cannot parse proto " + inProto);
+      return;
+    }
+
+    ProductProto proto = (ProductProto)inProto;
+
+    if(proto.hasEdition())
+      m_edition = m_edition.as(proto.getEdition());
+
+    if(proto.hasPrinting())
+      m_printing = m_printing.as(proto.getPrinting());
+
+    if(proto.hasOwner())
+      m_owner = m_owner.as(proto.getOwner());
+
+    if(proto.hasStatus())
+      m_status = m_status.as(Status.fromProto(proto.getStatus()));
+
+    if(proto.hasCondition() || proto.hasConditionComment())
+      m_condition =
+        m_condition.as(proto.hasCondition()
+                       ? ((EnumSelection<Condition>)m_condition.get(0))
+                         .as(Condition.fromProto(proto.getCondition()))
+                       : m_condition.get(0),
+                       proto.hasConditionComment()
+                       ? ((Text)m_condition.get(1))
+                         .as(proto.getConditionComment())
+                       : m_condition.get(1));
+
+    super.fromProto(proto.getBase());
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(ProductProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

@@ -22,12 +22,18 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
+import net.ixitxachitls.dma.proto.Entries.MonsterProto;
+import net.ixitxachitls.dma.proto.Entries.NPCProto;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Number;
@@ -36,6 +42,7 @@ import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Union;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.util.logging.Log;
 
 
 /**
@@ -50,53 +57,64 @@ public class NPC extends Monster
   //----- Gender ---------------------------------------------------------
 
   /** The possible gender types in the game. */
-  public enum Gender implements EnumSelection.Named
+  public enum Gender implements EnumSelection.Named,
+    EnumSelection.Proto<NPCProto.Gender>
   {
     /** Male. */
-    MALE("Male"),
+    MALE("Male", NPCProto.Gender.MALE),
 
     /** Female. */
-    FEMALE("Female"),
+    FEMALE("Female", NPCProto.Gender.FEMALE),
 
     /** Not known. */
-    UNKNOWN("Unknown"),
+    UNKNOWN("Unknown", NPCProto.Gender.UNKNOWN),
 
     /** Other. */
-    OTHER("Other");
+    OTHER("Other", NPCProto.Gender.OTHER);
 
     /** The value's name. */
     private String m_name;
 
-    /** Create the enum value.
+    /** The proto enum value. */
+    NPCProto.Gender m_proto;
+
+    /**
+     * Create the enum value.
      *
-     * @param inName the name of the value
-     *
+     * @param inName  the name of the value
+     * @param inProto the proto enum value
      */
-    private Gender(String inName)
+    private Gender(String inName, NPCProto.Gender inProto)
     {
       m_name = constant("monster.gender", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
+    }
+
+    @Override
+    public NPCProto.Gender toProto()
+    {
+      return m_proto;
+    }
+
+    public static Gender fromProto(NPCProto.Gender inProto)
+    {
+      for(Gender gender : values())
+        if(gender.m_proto == inProto)
+          return gender;
+
+      throw new IllegalArgumentException("cannot convert gender: " + inProto);
     }
   }
 
@@ -230,5 +248,69 @@ public class NPC extends Monster
         totalAdjustment += ((Number)adjustment.get()).get();
 
     return m_levels.size() + totalAdjustment;
+  }
+
+  @Override
+  public Message toProto()
+  {
+    NPCProto.Builder builder = NPCProto.newBuilder();
+
+    builder.setBase((MonsterProto)super.toProto());
+
+    if(m_gender.isDefined())
+      builder.setGender(m_gender.getSelected().toProto());
+
+    if(m_givenName.isDefined())
+      builder.setGivenName(m_givenName.get());
+
+    if(m_levels.isDefined())
+      for(Reference<BaseLevel> level : m_levels)
+        builder.addLevel(level.getName());
+
+    NPCProto proto = builder.build();
+    System.out.println(proto);
+    return proto;
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof NPCProto))
+    {
+      Log.warning("cannot parse proto " + inProto);
+      return;
+    }
+
+    NPCProto proto = (NPCProto)inProto;
+
+    super.fromProto(proto.getBase());
+
+    if(proto.hasGender())
+      m_gender = m_gender.as(Gender.fromProto(proto.getGender()));
+
+    if(proto.hasGivenName())
+      m_givenName = m_givenName.as(proto.getGivenName());
+
+    if(proto.getLevelCount() > 0)
+    {
+      List<Reference<BaseLevel>> levels = new ArrayList<>();
+      for(String level : proto.getLevelList())
+        levels.add(m_levels.createElement().as(level));
+
+      m_levels = m_levels.as(levels);
+    }
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(NPCProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
   }
 }

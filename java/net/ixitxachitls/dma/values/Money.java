@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.proto.Values.MoneyProto;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -431,6 +432,58 @@ public class Money extends Units<Money>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  /**
+   * Create a proto for the value.
+   *
+   * @return the proto representation
+   */
+  public MoneyProto toProto()
+  {
+    MoneyProto.Builder builder = MoneyProto.newBuilder();
+
+    if(m_set == m_sets[0])
+      if(m_values != null && m_values.length == 4)
+      {
+        if(m_values[0] != null)
+          builder.setPlatinum(getPlatinum());
+        if(m_values[1] != null)
+          builder.setGold(getGold());
+        if(m_values[2] != null)
+          builder.setSilver(getSilver());
+        if(m_values[3] != null)
+          builder.setCopper(getCopper());
+      }
+
+    return builder.build();
+  }
+
+  /**
+   * Create a new money similar to the current but with data from the
+   * given proto.
+   *
+   *
+   * @param inProto  the proto with the data
+   * @return the newly created money
+   */
+  public Money fromProto(MoneyProto inProto)
+  {
+    Money result = create();
+
+    result.m_values = new Rational[4];
+    if(inProto.hasCopper())
+      result.m_values[0] = new Rational(inProto.getCopper());
+    if(inProto.hasSilver())
+      result.m_values[1] = new Rational(inProto.getSilver());
+    if(inProto.hasGold())
+      result.m_values[2] = new Rational(inProto.getGold());
+    if(inProto.hasPlatinum())
+      result.m_values[3] = new Rational(inProto.getPlatinum());
+    result.m_set = m_sets[0];
+
+    return result;
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

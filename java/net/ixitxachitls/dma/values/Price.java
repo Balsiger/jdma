@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.values;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.proto.Values.PriceProto;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -153,6 +154,20 @@ public class Price extends Decimal<Price>
     return m_currency + super.doToString();
   }
 
+  /**
+   * Create a proto for the value.
+   *
+   * @return the proto representation
+   */
+  public PriceProto toProto()
+  {
+    return PriceProto.newBuilder()
+      .setCurrency(m_currency)
+      .setNumber((int)m_number)
+      .setPrecision(m_precision)
+      .build();
+  }
+
   //........................................................................
 
   //........................................................................
@@ -245,6 +260,44 @@ public class Price extends Decimal<Price>
   }
 
   //........................................................................
+
+  /**
+   * Create a new price similar to this one with new data.
+   *
+   * @param  inCurrency   the new currency of the price
+   * @param  inPrecision  the new precision of the price
+   * @param  inNumber     the new value of the price
+   * @return the newly generated price
+   */
+  public Price as(String inCurrency, int inPrecision, int inNumber)
+  {
+    Price result = create();
+
+    result.m_currency = inCurrency;
+    result.m_precision = inPrecision;
+    result.m_number = inNumber;
+    result.m_defined = true;
+
+    return result;
+  }
+
+  /**
+   * Create a new price as this one but with the data from the proto.
+   *
+   * @param inProto  the proto with the data
+   * @return a new price with new data but some formatting
+   */
+  public Price as(PriceProto inProto)
+  {
+    Price result = create();
+
+    result.m_currency = inProto.getCurrency();
+    result.m_precision = inProto.getPrecision();
+    result.m_number = inProto.getNumber();
+    result.m_defined = true;
+
+    return result;
+  }
 
   //........................................................................
 

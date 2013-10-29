@@ -29,9 +29,15 @@ import java.util.List;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
+
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.proto.Entries.BaseCampaignProto;
+import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -42,9 +48,7 @@ import net.ixitxachitls.dma.values.ValueList;
  * where all the base entries are finally stored..
  *
  * @file          Basecampaign.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
 
 //..........................................................................
@@ -159,6 +163,45 @@ public class BaseCampaign extends BaseEntry
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    BaseCampaignProto.Builder builder = BaseCampaignProto.newBuilder();
+
+    builder.setBase((BaseEntryProto)super.toProto());
+
+    BaseCampaignProto proto = builder.build();
+    return proto;
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseCampaignProto))
+    {
+      Log.warning("cannot parse proto " + inProto.getClass());
+      return;
+    }
+
+    BaseCampaignProto proto = (BaseCampaignProto)inProto;
+
+    super.fromProto(proto.getBase());
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(BaseCampaignProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

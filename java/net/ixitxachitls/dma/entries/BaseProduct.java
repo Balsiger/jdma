@@ -35,9 +35,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 import net.ixitxachitls.dma.values.Date;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
@@ -55,6 +59,7 @@ import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -141,68 +146,73 @@ public class BaseProduct extends BaseEntry
   public enum Part implements EnumSelection.Named
   {
     /** A game board. */
-    BOARD("Board"),
+    BOARD("Board", BaseProductProto.Content.Part.BOARD),
     /** A normal book. */
-    BOOK("Book"),
+    BOOK("Book", BaseProductProto.Content.Part.BOOK),
     /** A booklet. */
-    BOOKLET("Booklet"),
+    BOOKLET("Booklet", BaseProductProto.Content.Part.BOOKLET),
     /** Some kind of box. */
-    BOX("Box"),
+    BOX("Box", BaseProductProto.Content.Part.BOX),
     /** A playing card or an item card. */
-    CARD("Card"),
+    CARD("Card", BaseProductProto.Content.Part.CARD),
     /** A cd with music or programs. */
-    CD("CD"),
+    CD("CD", BaseProductProto.Content.Part.CD),
     /** Some kind of counter. */
-    COUNTER("Counter"),
+    COUNTER("Counter", BaseProductProto.Content.Part.COUNTER),
     /** A cover for a book or booklet (separate). */
-    COVER("Cover"),
+    COVER("Cover", BaseProductProto.Content.Part.COVER),
     /** Some dice, normal or special. */
-    DICE("Dice"),
+    DICE("Dice", BaseProductProto.Content.Part.DICE),
     /** A flyer, basically a piece of paper with something on it. */
-    FLYER("Flyer"),
+    FLYER("Flyer", BaseProductProto.Content.Part.FLYER),
     /** A fold to organize things in it. */
-    FOLDER("Folder"),
+    FOLDER("Folder", BaseProductProto.Content.Part.FOLDER),
     /** Like a cover with a booklet it in, but the cover can be folded out. */
-    GATEFOLD("Gatefold"),
+    GATEFOLD("Gatefold", BaseProductProto.Content.Part.GATEFOLD),
     /** A magnet with some special design. */
-    MAGNET("Magnet"),
+    MAGNET("Magnet", BaseProductProto.Content.Part.MAGNET),
     /** A map used for playing (battle map) or for showing the lay of the
      *  environment. */
-    MAP("Map"),
+    MAP("Map", BaseProductProto.Content.Part.MAP),
     /** Some miniature figure that can be used for play or for decoration. */
-    MINIATURE("Miniature"),
+    MINIATURE("Miniature", BaseProductProto.Content.Part.MINIATURE),
     /** Something not covered in any of the other categories. */
-    MISC("Misc"),
+    MISC("Misc", BaseProductProto.Content.Part.MISC),
     /** An transparent or partially transparent sheet that is used as an
      *  overlay over something else (e.g. a map). */
-    OVERLAY("Overlay"),
+    OVERLAY("Overlay", BaseProductProto.Content.Part.OVERLAY),
     /** A pack o other things, usually cards. */
-    PACK("Pack"),
+    PACK("Pack", BaseProductProto.Content.Part.PACK),
     /** A page of paper. */
-    PAGE("Page"),
+    PAGE("Page", BaseProductProto.Content.Part.PAGE),
     /** A playing piece other than a miniature. */
-    PLAYING_PIECE("Playing Piece"),
+    PLAYING_PIECE("Playing Piece", BaseProductProto.Content.Part.PLAYING_PIECE),
     /** A poster other than a map. */
-    POSTER("Poster"),
+    POSTER("Poster", BaseProductProto.Content.Part.POSTER),
     /** A screen the DM can be used to not be observed too closely. */
-    SCREEN("Screen"),
+    SCREEN("Screen", BaseProductProto.Content.Part.SCREEN),
     /** A sheet of paper, e.g. a handout. */
-    SHEET("Sheet"),
+    SHEET("Sheet", BaseProductProto.Content.Part.SHEET),
     /** A sticker. */
-    STICKER("Sticker");
+    STICKER("Sticker", BaseProductProto.Content.Part.STICKER);
 
     /** The value's name. */
     private String m_name;
+
+    /** The proto value. */
+    private BaseProductProto.Content.Part m_proto;
 
     /**
      * Create the name.
      *
      * @param inName     the name of the value
+     * @param inPart     the proto value
      *
      */
-    private Part(String inName)
+    private Part(String inName, BaseProductProto.Content.Part inPart)
     {
       m_name = constant("product.part", inName);
+      m_proto = inPart;
     }
 
     /**
@@ -227,6 +237,31 @@ public class BaseProduct extends BaseEntry
     public String toString()
     {
         return m_name;
+    }
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseProductProto.Content.Part getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inPart     the proto value to look for
+     * @return the matched group (will throw exception if not found)
+     */
+    public static Part fromProto(BaseProductProto.Content.Part inPart)
+    {
+      for(Part part : values())
+        if(part.m_proto == inPart)
+          return part;
+
+      throw new IllegalStateException("invalid proto part: " + inPart);
     }
   };
 
@@ -237,31 +272,35 @@ public class BaseProduct extends BaseEntry
   public enum Layout implements EnumSelection.Named
   {
     /** A product with full color on most pages. */
-    FULL_COLOR("Full Color"),
+    FULL_COLOR("Full Color", BaseProductProto.Layout.FULL_COLOR),
     /** A product that uses 4 colors on most pages. */
-    FOUR_COLOR("4 Color"),
+    FOUR_COLOR("4 Color", BaseProductProto.Layout.FOUR_COLOR),
     /** A product that uses a two color print. */
-    TWO_COLOR("2 Color"),
+    TWO_COLOR("2 Color", BaseProductProto.Layout.TWO_COLOR),
     /** A product that is basically black & white but has a color cover. */
-    COLOR_COVER("Color Cover"),
+    COLOR_COVER("Color Cover", BaseProductProto.Layout.COLOR_COVER),
     /** The product is completely in black & white. */
-    BLACK_AND_WHITE("Black & White"),
+    BLACK_AND_WHITE("Black & White", BaseProductProto.Layout.BLACK_AND_WHITE),
     /** The product is mixed between different layout, with none really
      *  dominant (otherwise use the dominant layout). */
-    MIXED("Mixed");
+    MIXED("Mixed", BaseProductProto.Layout.MIXED);
 
     /** The value's name. */
     private String m_name;
+
+    /** The layout proto value. */
+    private BaseProductProto.Layout m_proto;
 
     /**
      * Create the name.
      *
      * @param inName     the name of the value
-     *
+     * @param inProto    the proto enum value
      */
-    private Layout(String inName)
+    private Layout(String inName, BaseProductProto.Layout inProto)
     {
       m_name = constant("product.layout", inName);
+      m_proto = inProto;
     }
 
     /**
@@ -287,7 +326,32 @@ public class BaseProduct extends BaseEntry
     {
         return m_name;
     }
-  };
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseProductProto.Layout getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inLayout    the proto value to look for
+     * @return the matched group (will throw exception if not found)
+     */
+    public static Layout fromProto(BaseProductProto.Layout inLayout)
+    {
+      for(Layout layout : values())
+        if(layout.m_proto == inLayout)
+          return layout;
+
+      throw new IllegalStateException("invalid proto layout: " + inLayout);
+    }
+};
 
   //........................................................................
   //----- system -----------------------------------------------------------
@@ -296,103 +360,119 @@ public class BaseProduct extends BaseEntry
   public enum System implements EnumSelection.Named
   {
     /** No game system, e.g. for novels. */
-    NONE("None", null),
+    NONE("None", BaseProductProto.System.NONE, null),
     /** Chainmail. */
-    CHAINMAIL("Chainmail", null),
+    CHAINMAIL("Chainmail", BaseProductProto.System.CHAINMAIL, null),
     /** Dungeons & Dragons, original edition. */
-    DnD_1ST("D&D 1st", "D&D 1st"),
+    DnD_1ST("D&D 1st", BaseProductProto.System.DND_1ST
+            , "D&D 1st"),
     /** Advanced Dungeon & Dragons, first edition. */
-    ADnD_1ST("AD&D 1st", "AD&D 1st"),
+    ADnD_1ST("AD&D 1st", BaseProductProto.System.ADND_1ST, "AD&D 1st"),
     /** Advanced Dungeon & Dragons, second edition, together with the Saga
      * rules. */
-    ADnD_2ND_SAGA("AD&D 2nd & Saga", "AD&D 2nd"),
+    ADnD_2ND_SAGA("AD&D 2nd & Saga", BaseProductProto.System.ADND_2ND_SAGA,
+                  "AD&D 2nd"),
     /** Advanced Dungeon & Dragons, second edition. */
-    ADnD_2ND("AD&D 2nd", "AD&D 2nd"),
+    ADnD_2ND("AD&D 2nd", BaseProductProto.System.ADND_2ND, "AD&D 2nd"),
     /** Advanced Dungeon & Dragons, second but revised edition (new logo). */
-    ADnD_REVISED("AD&D revised", "AD&D 2nd"),
+    ADnD_REVISED("AD&D revised", BaseProductProto.System.ADND_REVISED,
+                 "AD&D 2nd"),
     /** Dungeons & Dragons, third edition. */
-    DnD_3RD("D&D 3rd", "D&D 3rd"),
+    DnD_3RD("D&D 3rd", BaseProductProto.System.DND_3RD, "D&D 3rd"),
     /** Dungeons & Dragons, version 3.5. */
-    DnD_3_5("D&D 3.5", "D&D 3rd"),
+    DnD_3_5("D&D 3.5", BaseProductProto.System.DND_3_5, "D&D 3rd"),
     /** Dungeon & Dragons, fourth edition. */
-    DnD_4("D&D 4th", "D&D 4th"),
+    DnD_4("D&D 4th", BaseProductProto.System.DND_4, "D&D 4th"),
     /** Games with d20 modern rules. */
-    D20_MODERN("d20 Modern", null),
+    D20_MODERN("d20 Modern", BaseProductProto.System.D20_MODERN, null),
     /** Games with d20 future rules. */
-    D20_FUTURE("d20 Future", null),
+    D20_FUTURE("d20 Future", BaseProductProto.System.D20_FUTUTRE, null),
     /** Games with the d20 fantasy rules. */
-    D20("d20", null),
+    D20("d20", BaseProductProto.System.D20, null),
     /** Games with the science-fition rules of Alternaty. */
-    ALTERNITY("Alternity", null),
+    ALTERNITY("Alternity", BaseProductProto.System.ALTERNITY, null),
     /** Amazing Engine games. */
-    AMAZING_ENGINE("Amazing Engine", null),
+    AMAZING_ENGINE("Amazing Engine", BaseProductProto.System.AMAZING_ENGINE,
+                   null),
     /** The Blood Wars card game rules. */
-    BLOOD_WARS("Blood Wars", null),
+    BLOOD_WARS("Blood Wars", BaseProductProto.System.BLOOD_WARS, null),
     /** Games using the Chaosium rules. */
-    CHAOSIUM("Chaosium", null),
+    CHAOSIUM("Chaosium", BaseProductProto.System.CHAOSIUM, null),
     /** Miniatures from the Dark Heaven line. */
-    DARK_HEAVEN("Dark Heaven", null),
+    DARK_HEAVEN("Dark Heaven", BaseProductProto.System.DARK_HEAVEN, null),
     /** Dragon Dice game system. */
-    DRAGON_DICE("Dragon Dice", null),
+    DRAGON_DICE("Dragon Dice", BaseProductProto.System.DRAGON_DICE, null),
     /** Dragon Strike game system. */
-    DRAGON_STRIKE("Dragon Strike", null),
+    DRAGON_STRIKE("Dragon Strike", BaseProductProto.System.DRAGON_STRIKE, null),
     /** Duel Master games. */
-    DUEL_MASTER("Duel Master", null),
+    DUEL_MASTER("Duel Master", BaseProductProto.System.DUEL_MASTER, null),
     /** Books with the Endless Quest system. */
-    ENDLESS_QUEST("Endless Quest", null),
+    ENDLESS_QUEST("Endless Quest", BaseProductProto.System.ENDLESS_QUEST, null),
     /** First Quest introductory games. */
-    FIRST_QUEST("First Quest", null),
+    FIRST_QUEST("First Quest", BaseProductProto.System.FIRST_QUEST, null),
     /** Games with the Gamma World rule. */
-    GAMMA_WORLD("Gamma World", null),
+    GAMMA_WORLD("Gamma World", BaseProductProto.System.GAMMA_WORLD, null),
     /** Games with the Ganbusters rules. */
-    GANGBUSTERS("Gangbusters", null),
+    GANGBUSTERS("Gangbusters", BaseProductProto.System.GANGBUSTERS, null),
     /** The legend of the Five Rings oriental fantasy rules. */
-    LEGEND_OF_THE_FIVE_RINGS("Legend of the Five Rings", null),
+    LEGEND_OF_THE_FIVE_RINGS("Legend of the Five Rings",
+                             BaseProductProto.System.LEGEND_OF_THE_FIVE_RINGS,
+                             null),
     /** Card games with the Magic: the Gathering rules. */
-    MAGIC_THE_GAHTERING("Magic: The Gathering", null),
+    MAGIC_THE_GAHTERING("Magic: The Gathering",
+                        BaseProductProto.System.MAGIC_THE_GATHERING, null),
     /** The Marvel Super Dice rules. */
-    MARVEL_SUPER_DICE("Marvel Super Dice", null),
+    MARVEL_SUPER_DICE("Marvel Super Dice",
+                      BaseProductProto.System.MARVEL_SUPER_DICE, null),
     /** Games using the Marvel Super Heroes rules. */
-    MARVEL_SUPER_HEROES("Marvel Super Heroes", null),
+    MARVEL_SUPER_HEROES("Marvel Super Heroes",
+                        BaseProductProto.System.MARVEL_SUPER_HEROES, null),
     /** Card games according to the MLB Showdown 2002 rules. */
-    MLB_SHOWDOWN_2002("MLB Showdown 2002", null),
+    MLB_SHOWDOWN_2002("MLB Showdown 2002",
+                      BaseProductProto.System.MLB_SHOWDOWN_2002, null),
     /** Card games according to the MLB Showdown 2003 rules. */
-    MLB_SHOWDOWN_2003("MLB Showdown 2003", null),
+    MLB_SHOWDOWN_2003("MLB Showdown 2003",
+                      BaseProductProto.System.MLB_SHOWDOWN_2003, null),
     /** Card games according to the MLB Showdown rules. */
-    MLB_SHOWDOWN("MLB Showdown", null),
+    MLB_SHOWDOWN("MLB Showdown", BaseProductProto.System.MLB_SHOWDOWN, null),
     /** Books with the Neopets rules. */
-    NEOPETS("Neopets", null),
+    NEOPETS("Neopets", BaseProductProto.System.NEOPETS, null),
     /** Games with 1 on 1 rules. */
-    ONE_ON_ONE("1 on 1", null),
+    ONE_ON_ONE("1 on 1", BaseProductProto.System.ONE_ON_ONE, null),
     /** Games inside the Pokemon universe. */
-    POKEMON("Pokemon", null),
+    POKEMON("Pokemon", BaseProductProto.System.POKEMON, null),
     /** Games using the Saga narrative rules. */
-    SAGA("Saga", null),
+    SAGA("Saga", BaseProductProto.System.SAGA, null),
     /** Games using special rules (e.g. not covered by other systems). */
-    SPECIAL("Special", null),
+    SPECIAL("Special", BaseProductProto.System.SPECIAL, null),
     /** The spellfire card game. */
-    SPELLFIRE("Spellfire", null),
+    SPELLFIRE("Spellfire", BaseProductProto.System.SPELLFIRE, null),
     /** The star wars trading card game rules. */
-    STAR_WARS_TCG("Star Wars TCG", null),
+    STAR_WARS_TCG("Star Wars TCG", BaseProductProto.System.STAR_WARS_TCG, null),
     /** Games for the star wars role playing game. */
-    STAR_WARS("Star Wars", null),
+    STAR_WARS("Star Wars", BaseProductProto.System.STAR_WARS, null),
     /** Books with the super endless quest system. */
-    SUPER_ENDLESS_QUEST("Super Endless Quest", null),
+    SUPER_ENDLESS_QUEST("Super Endless Quest",
+                        BaseProductProto.System.SUPER_ENDLESS_QUEST, null),
     /** Games for the Sword & Sorcery rules. */
-    SWORD_SORCERY("Sword & Sorcery", null),
+    SWORD_SORCERY("Sword & Sorcery", BaseProductProto.System.SWORD_AND_SORCERY,
+                  null),
     /** Games using the Terror Tracks system. */
-    TERROR_TRACKS("Terror Tracks", null),
+    TERROR_TRACKS("Terror Tracks", BaseProductProto.System.TERROR_TRACKS, null),
     /** Gemes using the Terror T.R.A.X. system. */
-    TERROR_TRAX("Terror T.R.A.X.", null),
+    TERROR_TRAX("Terror T.R.A.X.", BaseProductProto.System.TERROR_TRAX, null),
     /** Games for Wild Space. */
-    WILD_SPACE("Wild Space", null),
+    WILD_SPACE("Wild Space", BaseProductProto.System.WILD_SPACE, null),
     /** Games for World War II. */
-    WORLD_WAR_II("World War II", null),
+    WORLD_WAR_II("World War II", BaseProductProto.System.WORLD_WAR_II, null),
     /** Games for the XXVC sci-fi game. */
-    XXVC("XXVC", null);
+    XXVC("XXVC", BaseProductProto.System.XXVC, null);
 
     /** The value's name. */
     private String m_name;
+
+    /** The proto enum value. */
+    private BaseProductProto.System m_proto;
 
     /** The group of styles, if any. */
     private @Nullable String m_group;
@@ -401,12 +481,16 @@ public class BaseProduct extends BaseEntry
      * Create the name.
      *
      * @param inName     the name of the value
+     * @param inProto    the proto enumv value
      * @param inGroup    the group (if any) to use when sorting by system.
      *
      */
-    private System(String inName, @Nullable String inGroup)
+    private System(String inName, BaseProductProto.System inProto,
+                   @Nullable String inGroup)
     {
       m_name  = constant("system.name",  inName);
+      m_proto = inProto;
+
       if(inGroup != null)
         m_group = constant("system.group", inName, inGroup);
     }
@@ -470,6 +554,31 @@ public class BaseProduct extends BaseEntry
 
       return null;
     }
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseProductProto.System getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inSystem the proto value to look for
+     * @return the matched group (will throw exception if not found)
+     */
+    public static System fromProto(BaseProductProto.System inSystem)
+    {
+      for(System system : values())
+        if(system.m_proto == inSystem)
+          return system;
+
+      throw new IllegalStateException("invalid proto system: " + inSystem);
+    }
   };
 
   //........................................................................
@@ -479,60 +588,68 @@ public class BaseProduct extends BaseEntry
   public enum ProductType implements EnumSelection.Named
   {
     /** A game accessory, e.g. an optional product enhancing the game. */
-    ACCESSORY("Accessory", "Accessories"),
+    ACCESSORY("Accessory", BaseProductProto.Type.ACCESSORY, "Accessories"),
     /** A game adventure. */
-    ADVENTURE("Adventure", "Adventures"),
+    ADVENTURE("Adventure", BaseProductProto.Type.ADVENTURE, "Adventures"),
     /** A board game, usually outside of rpg. */
-    BOARD_GAME("Board Game", null),
+    BOARD_GAME("Board Game", BaseProductProto.Type.BOARD_GAME, null),
     /** A booster pack for a trading card or miniature game. */
-    BOOSTER_PACK("Booster Pack", null),
+    BOOSTER_PACK("Booster Pack", BaseProductProto.Type.BOOSTER_PACK, null),
     /** A calendar (no game). */
-    CALENDAR("Calendar", null),
+    CALENDAR("Calendar", BaseProductProto.Type.CALENDAR, null),
     /** An expansion to a campaign. */
-    CAMPAIGN_EXPANSION("Campaign Expansion", "Accessories"),
+    CAMPAIGN_EXPANSION("Campaign Expansion",
+                       BaseProductProto.Type.CAMPAIGN_EXPANSION, "Accessories"),
     /** The base rules and description of a campaign. */
-    CAMPAIGN_SETTING("Campaign Setting", "Accessories"),
+    CAMPAIGN_SETTING("Campaign Setting",
+                     BaseProductProto.Type.CAMPAIGN_SETTING, "Accessories"),
     /** A card game. */
-    CARD_GAME("Card Game", null),
+    CARD_GAME("Card Game", BaseProductProto.Type.CARD_GAME, null),
     /** A bunch of cards that are part of something else. */
-    CARDS("Cards", null),
+    CARDS("Cards", BaseProductProto.Type.CARDS_TYPE, null),
     /** A catalog listing products. */
-    CATALOG("Catalog", "Others"),
+    CATALOG("Catalog", BaseProductProto.Type.CATALOG, "Others"),
     /** A collection of other things. */
-    COLLECTION("Collection", null),
+    COLLECTION("Collection", BaseProductProto.Type.COLLECTION, null),
     /** A comics book. */
-    COMICS("Comics", "Comics"),
+    COMICS("Comics", BaseProductProto.Type.COMICS, "Comics"),
     /** A book with cooking recipies. */
-    COOKBOOK("Cookbook", null),
+    COOKBOOK("Cookbook", BaseProductProto.Type.COOKBOOK, null),
     /** One or more dice. */
-    DICE("Dice", null),
+    DICE("Dice", BaseProductProto.Type.DICE, null),
     /** Additional information in electronic form (not programs). */
-    ELECTRONIC_ACCESSORY("Electronic Accessory", null),
+    ELECTRONIC_ACCESSORY("Electronic Accessory",
+                         BaseProductProto.Type.ELECTRONIC_ACCESSORY, null),
     /** A guide for a game or something else. */
-    GUIDE("Guide", null),
+    GUIDE("Guide", BaseProductProto.Type.GUIDE, null),
     /** A gaming magazine. */
-    MAGAZINE("Magazine", "Magazines"),
+    MAGAZINE("Magazine", BaseProductProto.Type.MAGAZINE, "Magazines"),
     /** One ore more miniatures. */
-    MINIATURE("Miniature", null),
+    MINIATURE("Miniature", BaseProductProto.Type.MINIATURE, null),
     /** A compendium with monsters. */
-    MONSTER_COMPENDIUM("Monster Compendium", "Accessories"),
+    MONSTER_COMPENDIUM("Monster Compendium",
+                       BaseProductProto.Type.MONSTER_COMPENDIUM, "Accessories"),
     /** A novel. */
-    NOVEL("Novel", "Novels"),
+    NOVEL("Novel", BaseProductProto.Type.NOVEL, "Novels"),
     /** A promotional product. */
-    PROMOTION("Promotion", "Others"),
+    PROMOTION("Promotion", BaseProductProto.Type.PROMOTION, "Others"),
     /** A book with basic rules (usually the core rules books). */
-    RULEBOOK("Rulebook", "Rulebooks"),
+    RULEBOOK("Rulebook", BaseProductProto.Type.RULEBOOK, "Rulebooks"),
     /** A supplement with addtional rules. */
-    RULES_SUPPLEMENT("Rules Supplement", "Accessories"),
+    RULES_SUPPLEMENT("Rules Supplement",
+                     BaseProductProto.Type.RULES_SUPPLEMENT, "Accessories"),
     /** A software tool to support the game. */
-    SOFTWARE("Software", null),
+    SOFTWARE("Software", BaseProductProto.Type.SOFTWARE, null),
     /** A source book about rules and descriptions of real world things. */
-    SOURCEBOOK("Sourcebook", "Accessories"),
+    SOURCEBOOK("Sourcebook", BaseProductProto.Type.SOURCEBOOK, "Accessories"),
     /** Something not covered by all the other types. */
-    SPECIAL_BOOK("Special Book", "Others");
+    SPECIAL_BOOK("Special Book", BaseProductProto.Type.SPECIAL_BOOK, "Others");
 
     /** The value's name. */
     private String m_name;
+
+    /** The proto enum. */
+    private BaseProductProto.Type m_proto;
 
     /** The group of styles, if any. */
     private @Nullable String m_group = null;
@@ -540,12 +657,15 @@ public class BaseProduct extends BaseEntry
     /** Create the name.
      *
      * @param inName     the name of the value
+     * @param inProto    the prot enum value
      * @param inGroup    the group used for sorting
      *
      */
-    private ProductType(String inName, @Nullable String inGroup)
+    private ProductType(String inName, BaseProductProto.Type inProto,
+                        @Nullable String inGroup)
     {
       m_name  = constant("product.type.name",  inName);
+      m_proto = inProto;
       if(inGroup != null)
         m_group = constant("product.type.group", inName, inGroup);
     }
@@ -584,6 +704,31 @@ public class BaseProduct extends BaseEntry
     {
       return m_name;
     }
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseProductProto.Type getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto the proto value to look for
+     * @return the matched group (will throw exception if not found)
+     */
+    public static ProductType fromProto(BaseProductProto.Type inProto)
+    {
+      for(ProductType type : values())
+        if(type.m_proto == inProto)
+          return type;
+
+      throw new IllegalStateException("invalid proto type: " + inProto);
+    }
   };
 
   //........................................................................
@@ -593,40 +738,43 @@ public class BaseProduct extends BaseEntry
   public enum Style implements EnumSelection.Named
   {
     /** A booklet, i.e. a small, stapled book. */
-    BOOKLET("Booklet", null),
+    BOOKLET("Booklet", BaseProductProto.Style.BOOKLET, null),
     /** A large box (A4 or bigger). */
-    BOX("Box", "Boxes"),
+    BOX("Box", BaseProductProto.Style.BOX, "Boxes"),
     /** A set of cards. */
-    CARDS("Cards", null),
+    CARDS("Cards", BaseProductProto.Style.CARDS_STYLE, null),
     /** A sheet of paper. */
-    FLYER("Flyer", null),
+    FLYER("Flyer", BaseProductProto.Style.FLYER, null),
     /** A folder to store other things. */
-    FOLDER("Folder", null),
+    FOLDER("Folder", BaseProductProto.Style.FOLDER, null),
     /** A hardcover book. */
-    HARDCOVER("Hardcover", null),
+    HARDCOVER("Hardcover", BaseProductProto.Style.HARDCOVER, null),
     /** A map. */
-    MAP("Map", null),
+    MAP("Map", BaseProductProto.Style.MAP, null),
     /** A medium box, roughly A5 or similar. */
-    MEDIUM_BOX("Medium Box", "Medium Boxes"),
+    MEDIUM_BOX("Medium Box", BaseProductProto.Style.MEDIUM_BOX, "Medium Boxes"),
     /** A pack of cards or miniatures. */
-    PACK("Pack", null),
+    PACK("Pack", BaseProductProto.Style.PACK, null),
     /** A normal paperback book. */
-    PAPERBAKC("Paperback", null),
+    PAPERBAKC("Paperback", BaseProductProto.Style.PAPERBACK, null),
     /** A poster. */
-    POSTER("Poster", null),
+    POSTER("Poster", BaseProductProto.Style.POSTER, null),
     /** A screen for the DM to guard his secrets. */
-    SCREEN("Screen", null),
+    SCREEN("Screen", BaseProductProto.Style.SCREEN, null),
     /** A bunch of sheets. */
-    SHEETS("Sheets", null),
+    SHEETS("Sheets", BaseProductProto.Style.SHEETS, null),
     /** A small box, usually for miniatures or similar. */
-    SMALL_BOX("Small Box", "Small Boxes"),
+    SMALL_BOX("Small Box", BaseProductProto.Style.SMALL_BOX, "Small Boxes"),
     /** A bound book with a soft cover. */
-    SOFT_COVER("Soft Cover", null),
+    SOFT_COVER("Soft Cover", BaseProductProto.Style.SOFT_COVER, null),
     /** A sticker. */
-    STICKER("Sticker", null);
+    STICKER("Sticker", BaseProductProto.Style.STICKER, null);
 
     /** The value's name. */
     private String m_name;
+
+    /** The proto enum value. */
+    private BaseProductProto.Style m_proto;
 
     /** The group of styles, if any. */
     private @Nullable String m_group;
@@ -634,12 +782,15 @@ public class BaseProduct extends BaseEntry
     /** Create the name.
      *
      * @param inName     the name of the value
+     * @param inProto    the proto value
      * @param inGroup    the group to use for sorting
      *
      */
-    private Style(String inName, @Nullable String inGroup)
+    private Style(String inName, BaseProductProto.Style inProto,
+                  @Nullable String inGroup)
     {
       m_name  = constant("product.style.name",  inName);
+      m_proto = inProto;
       if(inGroup != null)
         m_group = constant("product.style.group", inName, inGroup);
     }
@@ -678,6 +829,31 @@ public class BaseProduct extends BaseEntry
     {
         return m_name;
     }
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseProductProto.Style getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto the proto value to look for
+     * @return the matched group (will throw exception if not found)
+     */
+    public static Style fromProto(BaseProductProto.Style inProto)
+    {
+      for(Style style: values())
+        if(style.m_proto == inProto)
+          return style;
+
+      throw new IllegalStateException("invalid proto style: " + inProto);
+    }
   };
 
   //........................................................................
@@ -687,24 +863,29 @@ public class BaseProduct extends BaseEntry
   public enum Audience implements EnumSelection.Named
   {
     /** Material indented for the DM only. */
-    DM("DM"),
+    DM("DM", BaseProductProto.Audience.DM),
     /** Material targeted mostly to players. */
-    PLAYER("Player"),
+    PLAYER("Player", BaseProductProto.Audience.PLAYER),
     /** Material that is open to all. */
-    ALL("All");
+    ALL("All", BaseProductProto.Audience.ALL);
 
     /** The value's name. */
     private String m_name;
+
+    /** The proto enum. */
+    private BaseProductProto.Audience m_proto;
 
     /**
      * Create the name.
      *
      * @param inName     the name of the value
+     * @param inProto    the proto value
      *
      */
-    private Audience(String inName)
+    private Audience(String inName, BaseProductProto.Audience inProto)
     {
       m_name = constant("audiences", inName);
+      m_proto = inProto;
     }
 
     /**
@@ -730,7 +911,32 @@ public class BaseProduct extends BaseEntry
     {
       return m_name;
     }
-  };
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseProductProto.Audience getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static Audience fromProto(BaseProductProto.Audience inProto)
+    {
+      for(Audience audience: values())
+        if(audience.m_proto == inProto)
+          return audience;
+
+      throw new IllegalStateException("invalid proto audience: " + inProto);
+    }
+};
 
   //........................................................................
 
@@ -777,6 +983,7 @@ public class BaseProduct extends BaseEntry
 
   /** The title of the product. */
   @Key("title")
+  @Searchable
   protected Text m_title =
     new Text().withEditType("string[title]").withRelated("leader");
 
@@ -2601,6 +2808,296 @@ public class BaseProduct extends BaseEntry
 //   }
 
   //........................................................................
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Message toProto()
+  {
+    BaseProductProto.Builder builder = BaseProductProto.newBuilder();
+
+    builder.setBase((BaseEntryProto)super.toProto());
+
+    if(m_title.isDefined())
+      builder.setTitle(m_title.get());
+    if(m_leader.isDefined())
+      builder.setLeader(m_leader.get());
+    if(m_subtitle.isDefined())
+      builder.setSubtitle(m_subtitle.get());
+    if(m_notes.isDefined())
+      builder.setNotes(m_notes.get());
+    if(m_authors.isDefined())
+      builder.addAllAuthor(buildPersons(m_authors));
+    if(m_editors.isDefined())
+      builder.addAllEditor(buildPersons(m_editors));
+    if(m_cover.isDefined())
+      builder.addAllCover(buildPersons(m_cover));
+    if(m_cartographers.isDefined())
+      builder.addAllCartographer(buildPersons(m_cartographers));
+    if(m_illustrators.isDefined())
+      builder.addAllIllustrator(buildPersons(m_illustrators));
+    if(m_typographers.isDefined())
+      builder.addAllTypographer(buildPersons(m_typographers));
+    if(m_managers.isDefined())
+      builder.addAllManager(buildPersons(m_managers));
+    if(m_date.isDefined())
+      builder.setDate(BaseProductProto.Date.newBuilder()
+                      .setYear(m_date.getYear())
+                      .setMonth(m_date.getMonth())
+                      .build());
+    if(m_isbn.isDefined())
+      builder.setIsbn(BaseProductProto.ISBN.newBuilder()
+                      .setGroup(m_isbn.getGroup())
+                      .setPublisher(m_isbn.getPublisher())
+                      .setTitle(m_isbn.getTitle())
+                      .setCheck(m_isbn.getCheck())
+                      .build());
+    if(m_isbn13.isDefined())
+      builder.setIsbn13(BaseProductProto.ISBN13.newBuilder()
+                        .setGroup13(m_isbn13.get13())
+                        .setGroup(m_isbn13.getGroup())
+                        .setPublisher(m_isbn13.getPublisher())
+                        .setTitle(m_isbn13.getTitle())
+                        .setCheck(m_isbn13.getCheck())
+                        .build());
+    if(m_pages.isDefined())
+      builder.setPages((int)m_pages.get());
+    if(m_system.isDefined())
+      builder.setSystem(m_system.getSelected().getProto());
+    if(m_audience.isDefined())
+      builder.setAudience(m_audience.getSelected().getProto());
+    if(m_productType.isDefined())
+      builder.setType(m_productType.getSelected().getProto());
+    if(m_style.isDefined())
+      builder.setStyle(m_style.getSelected().getProto());
+    if(m_producer.isDefined())
+      builder.setProducer(m_producer.toString());
+    if(m_volume.isDefined())
+      builder.setVolume(m_volume.get());
+    if(m_number.isDefined())
+      builder.setNumber(m_number.get());
+    if(m_series.isDefined())
+      for(Name series : m_series)
+        builder.addSeries(series.get());
+    if(m_price.isDefined())
+      builder.setPrice(m_price.toProto());
+    if(m_contents.isDefined())
+      for(Multiple content : m_contents)
+        builder.addContent(BaseProductProto.Content.newBuilder()
+                           .setPart(((EnumSelection<Part>)content.get(0))
+                             .getSelected().getProto())
+                           .setDescription
+                           (content.get(1).isDefined()
+                            ? ((Text)content.get(1)).get()
+                            : "")
+                           .setNumber((int)((Number)content.get(2)).get())
+                           .build());
+    if(m_requirements.isDefined())
+    {
+      for(Reference<BaseProduct> reference
+          : (ValueList<Reference<BaseProduct>>)m_requirements.get(0))
+        builder.addRequiredRequirements(reference.getName());
+      for(Reference<BaseProduct> reference
+          : (ValueList<Reference<BaseProduct>>)m_requirements.get(1))
+        builder.addOptionalRequirements(reference.getName());
+    }
+    if(m_layout.isDefined())
+      builder.setLayout(m_layout.getSelected().getProto());
+
+    BaseProductProto proto = builder.build();
+    return proto;
+  }
+
+  /**
+   * Build a person proto list from the given value list.
+   *
+   * @param   inPersons the value to convert
+   * @return  the converted list of protos
+   */
+  private List<BaseProductProto.Person> buildPersons
+    (ValueList<Multiple> inPersons)
+  {
+    List<BaseProductProto.Person> persons = new ArrayList<>();
+    for(Multiple person : inPersons)
+    {
+      BaseProductProto.Person.Builder proto =
+        BaseProductProto.Person.newBuilder();
+      proto.setName(((Text)person.get(0)).get());
+      if(person.get(1).isDefined())
+        proto.setJob(((Name)person.get(1)).get());
+
+      persons.add(proto.build());
+    }
+
+    return persons;
+  }
+
+  /**
+   * Parse the proto for product values.
+   *
+   * @param inProto the proto to parse
+   */
+  @SuppressWarnings("unchecked")
+  public void fromProto(BaseProductProto inProto)
+  {
+    if(!(inProto instanceof BaseProductProto))
+    {
+      Log.warning("cannot parse proto " + inProto.getClass());
+      return;
+    }
+
+    BaseProductProto proto = inProto;
+
+    super.fromProto(proto.getBase());
+
+    if(proto.hasTitle())
+      m_title = m_title.as(proto.getTitle());
+    if(proto.hasLeader())
+      m_leader = m_leader.as(proto.getLeader());
+    if(proto.hasSubtitle())
+      m_subtitle = m_subtitle.as(proto.getSubtitle());
+    if(proto.hasNotes())
+      m_notes = m_notes.as(proto.getNotes());
+
+    List<Multiple> authors = new ArrayList<>();
+    for(BaseProductProto.Person author : proto.getAuthorList())
+      authors.add(m_authors.createElement().as(new Text(author.getName()),
+                                               new Name(author.getJob())));
+    m_authors = m_authors.as(authors);
+
+    List<Multiple> editors = new ArrayList<>();
+    for(BaseProductProto.Person editor : proto.getEditorList())
+      editors.add(m_editors.createElement().as(new Text(editor.getName()),
+                                               new Name(editor.getJob())));
+    m_editors = m_editors.as(editors);
+
+    List<Multiple> covers = new ArrayList<>();
+    for(BaseProductProto.Person cover : proto.getCoverList())
+      covers.add(m_cover.createElement().as(new Text(cover.getName()),
+                                               new Name(cover.getJob())));
+    m_cover = m_cover.as(covers);
+
+    List<Multiple> cartographers = new ArrayList<>();
+    for(BaseProductProto.Person cartographer : proto.getCartographerList())
+      cartographers.add(m_cartographers.createElement().as
+                        (new Text(cartographer.getName()),
+                         new Name(cartographer.getJob())));
+    m_cartographers = m_cartographers.as(cartographers);
+
+    List<Multiple> illustrators = new ArrayList<>();
+    for(BaseProductProto.Person illustrator : proto.getIllustratorList())
+      illustrators.add(m_illustrators.createElement().as
+                       (new Text(illustrator.getName()),
+                        new Name(illustrator.getJob())));
+    m_illustrators = m_illustrators.as(illustrators);
+
+    List<Multiple> typographers = new ArrayList<>();
+    for(BaseProductProto.Person typographer : proto.getTypographerList())
+      typographers.add(m_managers.createElement().as
+                       (new Text(typographer.getName()),
+                        new Name(typographer.getJob())));
+    m_typographers = m_typographers.as(typographers);
+
+    List<Multiple> managers = new ArrayList<>();
+    for(BaseProductProto.Person manager : proto.getManagerList())
+      managers.add(m_managers.createElement().as(new Text(manager.getName()),
+                                               new Name(manager.getJob())));
+    m_managers = m_managers.as(managers);
+
+    if(proto.hasDate())
+      m_date = m_date.as(proto.getDate().getYear(),
+                         proto.getDate().getMonth());
+
+    if(proto.hasIsbn())
+      m_isbn = m_isbn.as(proto.getIsbn().getGroup(),
+                         proto.getIsbn().getPublisher(),
+                         proto.getIsbn().getTitle(),
+                         proto.getIsbn().getCheck());
+
+    if(proto.hasIsbn13())
+      m_isbn13 = m_isbn13.as(proto.getIsbn13().getGroup13(),
+                             proto.getIsbn13().getGroup(),
+                             proto.getIsbn13().getPublisher(),
+                             proto.getIsbn13().getTitle(),
+                             proto.getIsbn13().getCheck());
+
+    if(proto.hasPages())
+      m_pages = m_pages.as(proto.getPages());
+
+    if(proto.hasSystem())
+      m_system = m_system.as(System.fromProto(proto.getSystem()));
+
+    if(proto.hasAudience())
+      m_audience = m_audience.as(Audience.fromProto(proto.getAudience()));
+
+    if(proto.hasType())
+      m_productType =
+        m_productType.as(ProductType.fromProto(proto.getType()));
+
+    if(proto.hasStyle())
+      m_style = m_style.as(Style.fromProto(proto.getStyle()));
+
+    if(proto.hasProducer())
+      m_producer = m_producer.as(proto.getProducer());
+
+    if(proto.hasVolume())
+      m_volume = m_volume.as(proto.getVolume());
+
+    if(proto.hasNumber())
+      m_number = m_number.as(proto.getNumber());
+
+    if(proto.getSeriesCount() > 0)
+    {
+      List<Name> series = new ArrayList<>();
+      for(String seriesProto : proto.getSeriesList())
+        series.add(m_series.createElement().as(seriesProto));
+      m_series = m_series.as(series);
+    }
+
+    if(proto.hasPrice())
+      m_price = m_price.as(proto.getPrice());
+
+    List<Multiple> contents = new ArrayList<>();
+    for(BaseProductProto.Content contentProto : proto.getContentList())
+    {
+      Multiple content = m_contents.createElement();
+      contents.add(content.as(((EnumSelection<Part>)content.get(0)).as
+                              (Part.fromProto(contentProto.getPart())),
+                               ((Text)content.get(1)).as
+                               (contentProto.getDescription()),
+                               ((Number)content.get(2)).as
+                               (contentProto.getNumber())));
+    }
+    m_contents = m_contents.as(contents);
+
+    List<Reference<BaseProduct>> required = new ArrayList<>();
+    for(String requirement : proto.getRequiredRequirementsList())
+      required.add(((ValueList<Reference<BaseProduct>>)
+                       m_requirements.get(0)).createElement().as(requirement));
+    List<Reference<BaseProduct>> optional = new ArrayList<>();
+    for(String requirement : proto.getOptionalRequirementsList())
+      optional.add(((ValueList<Reference<BaseProduct>>)
+                   m_requirements.get(1)).createElement().as(requirement));
+    m_requirements = m_requirements.as(((ValueList<Reference<BaseProduct>>)
+      m_requirements.get(0)).as(required),
+      ((ValueList<Reference<BaseProduct>>)
+        m_requirements.get(1)).as(optional));
+
+    if(proto.hasLayout())
+      m_layout = m_layout.as(Layout.fromProto(proto.getLayout()));
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(BaseProductProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
 
   //........................................................................
 

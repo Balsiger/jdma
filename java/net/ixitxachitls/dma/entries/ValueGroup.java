@@ -92,6 +92,15 @@ public abstract class ValueGroup implements Changeable
     String value();
   }
 
+  /** The annotation for individual searchable fields. */
+  @Target(ElementType.FIELD)
+  @Retention(RetentionPolicy.RUNTIME)
+  @Documented
+  public @interface Searchable {
+    /** If the value is searchable in the data (i.e. stored seperately). */
+    boolean value() default true;
+  }
+
   /** The annotation for a DM only variable. */
   @Target(ElementType.FIELD)
   @Retention(RetentionPolicy.RUNTIME)
@@ -776,6 +785,7 @@ public abstract class ValueGroup implements Changeable
 
       if(key != null)
       {
+        Searchable searchable = field.getAnnotation(Searchable.class);
         DM dm = field.getAnnotation(DM.class);
         NoEdit noEdit = field.getAnnotation(NoEdit.class);
         PlayerOnly player = field.getAnnotation(PlayerOnly.class);
@@ -804,6 +814,7 @@ public abstract class ValueGroup implements Changeable
                                   printUndefined == null
                                   ? false : printUndefined.value());
         variables.add(variable
+                      .withSearchable(searchable != null && searchable.value())
                       .withDM(dm != null && dm.value())
                       .withPlayerOnly(player != null && player.value())
                       .withPlayerEditable(playerEdit != null

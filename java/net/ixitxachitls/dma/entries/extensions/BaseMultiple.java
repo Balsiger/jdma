@@ -25,7 +25,11 @@ package net.ixitxachitls.dma.entries.extensions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.protobuf.Message;
+
 import net.ixitxachitls.dma.entries.BaseItem;
+import net.ixitxachitls.dma.proto.Entries.BaseMultipleProto;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -95,6 +99,36 @@ public class BaseMultiple extends BaseCounted
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    BaseMultipleProto.Builder builder = BaseMultipleProto.newBuilder();
+
+    builder.setCount((int)m_count.get());
+    if(m_unit.isDefined())
+      builder.setUnit(m_unit.getSelected().toProto());
+
+    return builder.build();
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseMultipleProto))
+    {
+      Log.warning("cannot parse base multiple proto " + inProto.getClass());
+      return;
+    }
+
+    BaseMultipleProto proto = (BaseMultipleProto)inProto;
+
+    m_count = m_count.as(proto.getCount());
+
+    if(proto.hasUnit())
+      m_unit = m_unit.as(Unit.fromProto(proto.getUnit()));
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

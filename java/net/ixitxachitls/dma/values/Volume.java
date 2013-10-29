@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.proto.Values.VolumeProto;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -546,6 +547,146 @@ public class Volume extends Units<Volume>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  /**
+   * Create a proto for the value.
+   *
+   * @return the proto representation
+   */
+  public VolumeProto toProto()
+  {
+    VolumeProto.Builder builder = VolumeProto.newBuilder();
+
+    if(m_set == m_sets[0])
+      if(m_values != null && m_values.length == 2)
+      {
+        VolumeProto.Imperial.Builder imperial =
+          VolumeProto.Imperial.newBuilder();
+
+        if(m_values[0] != null)
+          imperial.setCubicFeet(m_values[0].toProto());
+        if(m_values[1] != null)
+          imperial.setCubicInches(m_values[1].toProto());
+
+        builder.setImperial(imperial.build());
+      }
+
+    if(m_set == m_sets[1])
+      if(m_values != null && m_values.length == 2)
+      {
+        VolumeProto.Metric.Builder metric = VolumeProto.Metric.newBuilder();
+
+        if(m_values[0] != null)
+          metric.setCubicMeters(m_values[0].toProto());
+        if(m_values[1] != null)
+          metric.setCubicDecimeters(m_values[1].toProto());
+
+        builder.setMetric(metric.build());
+      }
+
+    if(m_set == m_sets[2])
+      if(m_values != null && m_values.length == 4)
+      {
+        VolumeProto.Gallons.Builder metric = VolumeProto.Gallons.newBuilder();
+
+        if(m_values[0] != null)
+          metric.setGallons(m_values[0].toProto());
+        if(m_values[1] != null)
+          metric.setQuarts(m_values[1].toProto());
+        if(m_values[2] != null)
+          metric.setPints(m_values[2].toProto());
+        if(m_values[3] != null)
+          metric.setCups(m_values[3].toProto());
+
+        builder.setGallons(metric.build());
+      }
+
+    if(m_set == m_sets[3])
+      if(m_values != null && m_values.length == 3)
+      {
+        VolumeProto.Liters.Builder metric = VolumeProto.Liters.newBuilder();
+
+        if(m_values[0] != null)
+          metric.setLiters(m_values[0].toProto());
+        if(m_values[1] != null)
+          metric.setDeciliters(m_values[1].toProto());
+        if(m_values[2] != null)
+          metric.setCentiliters(m_values[2].toProto());
+
+        builder.setLiters(metric.build());
+      }
+
+    return builder.build();
+  }
+
+  /**
+   * Create a new volume similar to the current but with data from the
+   * given proto.
+   *
+   * @param inProto  the proto with the data
+   * @return the newly created volume
+   */
+  public Volume fromProto(VolumeProto inProto)
+  {
+    Volume result = create();
+
+    if(inProto.hasMetric())
+    {
+      result.m_values = new Rational[2];
+      if(inProto.getMetric().hasCubicMeters())
+        result.m_values[0] =
+          Rational.fromProto(inProto.getMetric().getCubicMeters());
+      if(inProto.getMetric().hasCubicDecimeters())
+        result.m_values[1] =
+          Rational.fromProto(inProto.getMetric().getCubicDecimeters());
+      result.m_set = result.m_sets[1];
+    }
+    else if(inProto.hasImperial())
+    {
+      result.m_values = new Rational[2];
+      if(inProto.getImperial().hasCubicFeet())
+        result.m_values[0] =
+          Rational.fromProto(inProto.getImperial().getCubicFeet());
+      if(inProto.getImperial().hasCubicInches())
+        result.m_values[1] =
+          Rational.fromProto(inProto.getImperial().getCubicInches());
+      result.m_set = result.m_sets[0];
+    }
+    else if(inProto.hasGallons())
+    {
+      result.m_values = new Rational[4];
+      if(inProto.getGallons().hasGallons())
+        result.m_values[0] =
+          Rational.fromProto(inProto.getGallons().getGallons());
+      if(inProto.getGallons().hasQuarts())
+        result.m_values[1] =
+          Rational.fromProto(inProto.getGallons().getQuarts());
+      if(inProto.getGallons().hasPints())
+        result.m_values[2] =
+          Rational.fromProto(inProto.getGallons().getPints());
+      if(inProto.getGallons().hasCups())
+        result.m_values[3] =
+          Rational.fromProto(inProto.getGallons().getCups());
+      result.m_set = result.m_sets[2];
+    }
+    else if(inProto.hasLiters())
+    {
+      result.m_values = new Rational[3];
+      if(inProto.getLiters().hasLiters())
+        result.m_values[0] =
+          Rational.fromProto(inProto.getLiters().getLiters());
+      if(inProto.getLiters().hasDeciliters())
+        result.m_values[1] =
+          Rational.fromProto(inProto.getLiters().getDeciliters());
+      if(inProto.getLiters().hasCentiliters())
+        result.m_values[2] =
+          Rational.fromProto(inProto.getLiters().getCentiliters());
+      result.m_set = result.m_sets[3];
+    }
+
+    return result;
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

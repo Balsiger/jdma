@@ -29,6 +29,8 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.protobuf.ProtocolMessageEnum;
+
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -84,6 +86,18 @@ public class EnumSelection<T extends Enum<T>> extends Value<EnumSelection<T>>
      */
     String getShort();
   }
+
+  /** The interface for all enumeration values that convert to protos. */
+  public interface Proto<P extends ProtocolMessageEnum>
+  {
+    /**
+     * Convert the enum value to its corresponding proto value.
+     *
+     * @return the converted proto value
+     */
+    public P toProto();
+  }
+
 
   //........................................................................
 

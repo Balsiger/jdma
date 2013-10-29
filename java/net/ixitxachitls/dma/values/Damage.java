@@ -28,6 +28,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.ValueGroup;
+import net.ixitxachitls.dma.proto.Values.DamageProto;
 import net.ixitxachitls.input.ParseReader;
 
 //..........................................................................
@@ -60,85 +61,103 @@ public class Damage extends Value<Damage>
   private static final long serialVersionUID = 1L;
 
   /** The possible damage types. */
-  public enum Type implements EnumSelection.Named
+  public enum Type
+    implements EnumSelection.Named, EnumSelection.Proto<DamageProto.Damage.Type>
   {
     /** Fire damage. */
-    FIRE("fire"),
+    FIRE("fire", DamageProto.Damage.Type.FIRE),
 
     /** Electrical damage. */
-    ELECTRICAL("electrical"),
+    ELECTRICAL("electrical", DamageProto.Damage.Type.ELECTRICAL),
 
     /** Sonic damage. */
-    SONIC("sonic"),
+    SONIC("sonic", DamageProto.Damage.Type.SONIC),
 
     /** Water damage. */
-    WATER("water"),
+    WATER("water", DamageProto.Damage.Type.WATER),
 
     /** Acid damage. */
-    ACID("acid"),
+    ACID("acid", DamageProto.Damage.Type.ACID),
 
     /** Holy damage. */
-    HOLY("holy"),
+    HOLY("holy", DamageProto.Damage.Type.HOLY),
 
     /** Negative Energy damage. */
-    NEGATIVE_ENERGY("negative energy"),
+    NEGATIVE_ENERGY("negative energy", DamageProto.Damage.Type.NEGATIVE_ENERGY),
 
     /** Nonlethal damage. */
-    NONLETHAL("nonlethal"),
+    NONLETHAL("nonlethal", DamageProto.Damage.Type.NONLETHAL),
 
     /** Cold damage. */
-    COLD("cold"),
+    COLD("cold", DamageProto.Damage.Type.COLD),
 
     /** Strength damage. */
-    STR("Str"),
+    STR("Str", DamageProto.Damage.Type.STR),
 
-    /** Strength damage. */
-    DEX("Dex"),
+    /** Dexterity damage. */
+    DEX("Dex", DamageProto.Damage.Type.DEX),
 
-    /** Strength damage. */
-    CON("Con"),
+    /** Constitution damage. */
+    CON("Con", DamageProto.Damage.Type.CON),
 
-    /** Strength damage. */
-    INT("Int"),
+    /** Intelligence damage. */
+    INT("Int", DamageProto.Damage.Type.INT),
 
-    /** Strength damage. */
-    WIS("Wis"),
+    /** Wisdom damage. */
+    WIS("Wis", DamageProto.Damage.Type.WIS),
 
-    /** Strength damage. */
-    CHA("Cha");
+    /** Charisma damage. */
+    CHA("Cha", DamageProto.Damage.Type.CHA);
 
     /** The value's name. */
     private String m_name;
 
+    /** The enum proto value. */
+    private DamageProto.Damage.Type m_proto;
+
     /** Create the name.
      *
      * @param inName     the name of the value
-     *
+     * @param inProto    the proto enum value
      */
-    private Type(String inName)
+    private Type(String inName, DamageProto.Damage.Type inProto)
     {
       m_name = ValueGroup.constant("damage.types", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Convert to a string.
-     *
-     * @return the name of the value
-     */
     @Override
     public String toString()
     {
       return m_name;
+    }
+
+    @Override
+    public DamageProto.Damage.Type toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the proto enum to an enum value.
+     *
+     * @param inProto  the proto value
+     * @return the converted enum value
+     */
+    public static Type fromProto(DamageProto.Damage.Type inProto)
+    {
+      for(Type type : values())
+        if(type.m_proto == inProto)
+          return type;
+
+      throw new IllegalStateException("cannot convert damage type enum: "
+        + inProto);
     }
   }
 
@@ -337,7 +356,7 @@ public class Damage extends Value<Damage>
 
   //........................................................................
 
-  //------------------------------ doToString ------------------------------
+  //----------------------------- doToString ------------------------------
 
   /**
    * Convert the value to a string.
@@ -545,6 +564,76 @@ public class Damage extends Value<Damage>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  /**
+   * Create a new damage value from the given proto.
+   *
+   * @param inProto  the proto to take values from
+   * @return a newly create damage
+   */
+  public Damage fromProto(DamageProto inProto)
+  {
+    Damage result = null;
+    Damage next = null;
+    for(DamageProto.Damage damage : inProto.getDamageList())
+    {
+      if(result == null)
+      {
+        result = create();
+        next = result;
+      }
+      else
+      {
+        next.m_other = create();
+        next = next.m_other;
+      }
+
+      next.m_base = m_base.fromProto(damage.getBase());
+
+      if(damage.hasType())
+        next.m_type = m_type.as(Type.fromProto(damage.getType()));
+
+      if(damage.hasEffect())
+        next.m_effect = damage.getEffect();
+    }
+
+    return result;
+  }
+
+  /**
+   * Create a proto representation from the damage.
+   *
+   * @return  the proto created
+   */
+  public DamageProto toProto()
+  {
+    DamageProto.Builder builder = DamageProto.newBuilder();
+
+    addToProto(builder);
+
+    return builder.build();
+  }
+
+  /**
+   * Add the damage and all its other damages to the given builder.
+   *
+   * @param inBuilder the proto builder to add to
+   */
+  private void addToProto(DamageProto.Builder inBuilder)
+  {
+    DamageProto.Damage.Builder damage = DamageProto.Damage.newBuilder();
+    damage.setBase(m_base.toProto());
+    if(m_type.isDefined())
+      damage.setType(m_type.getSelected().toProto());
+    if(m_effect != null)
+      damage.setEffect(m_effect);
+
+    inBuilder.addDamage(damage.build());
+
+    if(m_other != null)
+      m_other.addToProto(inBuilder);
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

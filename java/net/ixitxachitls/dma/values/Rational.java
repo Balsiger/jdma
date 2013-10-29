@@ -26,6 +26,8 @@ package net.ixitxachitls.dma.values;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.proto.Values.RationalProto;
+
 //..........................................................................
 
 //------------------------------------------------------------------- header
@@ -292,6 +294,54 @@ public class Rational extends BaseRational<Rational>
   }
 
   //........................................................................
+
+  /**
+   * Create a proto for the value.
+   *
+   * @return the proto created
+   */
+  public RationalProto toProto()
+  {
+    RationalProto.Builder builder = RationalProto.newBuilder();
+
+    if(m_leader != 0)
+      builder.setLeader((int)m_leader);
+    if(m_nominator != 0 && m_denominator != 0)
+    {
+      builder.setDenominator((int)m_denominator);
+      builder.setNominator((int)m_nominator);
+    }
+    if(m_negative)
+      builder.setNegative(m_negative);
+
+    return builder.build();
+  }
+
+  /**
+   * Create a new rational from this one with the given proto values.
+   *
+   *
+   * @param inProto the values to use
+   * @return the newly created rational
+   */
+  public static Rational fromProto(RationalProto inProto)
+  {
+    Rational result = new Rational();
+
+    if(inProto.hasLeader())
+    {
+      result.m_leader = inProto.getLeader();
+      result.m_denominator = 1;
+    }
+    if(inProto.hasNominator())
+      result.m_nominator = inProto.getNominator();
+    if(inProto.hasDenominator())
+      result.m_denominator = inProto.getDenominator();
+    if(inProto.hasNegative())
+      result.m_negative = inProto.getNegative();
+
+    return result;
+  }
 
   //........................................................................
 

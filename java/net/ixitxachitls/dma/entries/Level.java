@@ -22,6 +22,13 @@
 
 package net.ixitxachitls.dma.entries;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
+
+import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
+import net.ixitxachitls.dma.proto.Entries.LevelProto;
+import net.ixitxachitls.util.logging.Log;
+
 /**
  * An actual character level.
  *
@@ -62,5 +69,45 @@ public class Level extends Entry<BaseLevel>
   static
   {
     extractVariables(Level.class);
+  }
+
+  @Override
+  public Message toProto()
+  {
+    LevelProto.Builder builder = LevelProto.newBuilder();
+
+    builder.setBase((CampaignEntryProto)super.toProto());
+
+    LevelProto proto = builder.build();
+    System.out.println(proto);
+    return proto;
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof LevelProto))
+    {
+      Log.warning("cannot parse proto " + inProto);
+      return;
+    }
+
+    LevelProto proto = (LevelProto)inProto;
+
+    super.fromProto(proto.getBase());
+
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(LevelProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
   }
 }

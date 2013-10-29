@@ -32,10 +32,14 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Lists;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.extensions.Composite;
 import net.ixitxachitls.dma.entries.extensions.Contents;
 import net.ixitxachitls.dma.entries.extensions.Incomplete;
+import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
+import net.ixitxachitls.dma.proto.Entries.ItemProto;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Money;
@@ -53,9 +57,7 @@ import net.ixitxachitls.util.logging.Log;
  * This is a real item.
  *
  * @file          Item.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
 
 //..........................................................................
@@ -74,7 +76,6 @@ public class Item extends CampaignEntry<BaseItem>
 
   /**
    * This is the internal, default constructor.
-   *
    */
   protected Item()
   {
@@ -1185,6 +1186,80 @@ public class Item extends CampaignEntry<BaseItem>
   }
 
   //........................................................................
+
+  @Override
+  public Message toProto()
+  {
+    ItemProto.Builder builder = ItemProto.newBuilder();
+
+    builder.setBase((CampaignEntryProto)super.toProto());
+
+    if(m_hp.isDefined())
+      builder.setHitPoints((int)m_hp.get());
+
+    if(m_value.isDefined())
+      builder.setValue(m_value.toProto());
+
+    if(m_appearance.isDefined())
+      builder.setAppearance(m_appearance.get());
+
+    if(m_playerNotes.isDefined())
+      builder.setPlayerNotes(m_playerNotes.get());
+
+    if(m_playerName.isDefined())
+      builder.setPlayerName(m_playerName.get());
+
+    if(m_dmNotes.isDefined())
+      builder.setDmNotes(m_dmNotes.get());
+
+    ItemProto proto = builder.build();
+    return proto;
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof ItemProto))
+    {
+      Log.warning("cannot parse proto " + inProto);
+      return;
+    }
+
+    ItemProto proto = (ItemProto)inProto;
+
+    if(proto.hasHitPoints())
+      m_hp = m_hp.as(proto.getHitPoints());
+
+    if(proto.hasValue())
+      m_value = m_value.fromProto(proto.getValue());
+
+    if(proto.hasAppearance())
+      m_appearance = m_appearance.as(proto.getAppearance());
+
+    if(proto.hasPlayerNotes())
+      m_playerNotes = m_playerNotes.as(proto.getPlayerNotes());
+
+    if(proto.hasPlayerName())
+      m_playerName = m_playerName.as(proto.getPlayerName());
+
+    if(proto.hasDmNotes())
+      m_dmNotes = m_dmNotes.as(proto.getDmNotes());
+
+    super.fromProto(proto.getBase());
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(ItemProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
 
   //........................................................................
 

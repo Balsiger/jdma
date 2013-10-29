@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.data;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.SortedSet;
 
 import javax.annotation.Nullable;
@@ -121,11 +122,11 @@ public class DataStore
   private static MemcacheService s_cacheMultiValues =
     MemcacheServiceFactory.getMemcacheService("multiValues");
 
-  /** Experiation time for the cache. */
+  /** Expiration time for the cache. */
   private static Expiration s_expiration =
     Expiration.byDeltaSeconds(60 * 60 * 24);
 
-  /** Experiation time for the cache. */
+  /** Expiration time for the cache. */
   private static Expiration s_longExpiration =
     Expiration.byDeltaSeconds(60 * 60 * 24 * 7);
 
@@ -292,7 +293,7 @@ public class DataStore
   //----------------------------- getEntities ------------------------------
 
   /**
-   * Get all the entities matching the given key/vallue pair(s).
+   * Get all the entities matching the given key/value pair(s).
    *
    * @param    inType    the type of entry to get
    * @param    inParent  the key to the parent entity, if any
@@ -638,15 +639,17 @@ public class DataStore
     {
       s_cacheIDs.clearAll();
       s_cacheIDsByValue.clearAll();
+      s_cacheRecent.clearAll();
     }
 
     s_cacheEntity.put(inEntity.getKey(), inEntity, s_expiration);
     m_store.put(inEntity);
-    // TODO: we should clear some of these caches too, but just clearing all
-    // of them results in too many requests to the datastore
-    //s_cacheByValue.clearAll();
-    //s_cacheListByValue.clearAll();
-    //s_cacheRecent.clearAll();
+
+    // Clear all the cache key value matches.
+    for(Entry<String, Object> entry : inEntity.getProperties().entrySet())
+      s_cacheByValue.delete(entry.getKey() + "--" + entry.getValue());
+
+    s_cacheListByValue.clearAll();
 
     return true;
   }

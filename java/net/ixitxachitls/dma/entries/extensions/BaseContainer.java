@@ -26,13 +26,16 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseContainerProto;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
 import net.ixitxachitls.dma.values.Volume;
 import net.ixitxachitls.util.Grouping;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -62,55 +65,71 @@ public class BaseContainer extends BaseExtension<BaseItem>
   private static final long serialVersionUID = 1L;
 
   /** The possible sizes in the game. */
-  public enum State implements EnumSelection.Named
+  public enum State implements EnumSelection.Named,
+    EnumSelection.Proto<BaseContainerProto.State>
   {
     /** Made of paper. */
-    SOLID("solid"),
+    SOLID("solid", BaseContainerProto.State.SOLID),
 
     /** Made of cloth. */
-    GRANULAR("granular"),
+    GRANULAR("granular", BaseContainerProto.State.GRANULAR),
 
     /** Made of rope. */
-    LIQUID("liquid"),
+    LIQUID("liquid", BaseContainerProto.State.LIQUID),
 
     /** Made of glass. */
-    GASEOUS("gaseous");
+    GASEOUS("gaseous", BaseContainerProto.State.GASEOUS);
 
     /** The value's name. */
     private String m_name;
 
+    /** The proto enum value. */
+    private BaseContainerProto.State m_proto;
+
     /** Create the name.
      *
      * @param inName     the name of the value
-     *
+     * @param inProto    the proto enum value
      */
-    private State(String inName)
+    private State(String inName, BaseContainerProto.State inProto)
     {
       m_name = constant("substance.state", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
-  };
+
+    @Override
+    public BaseContainerProto.State toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the given proto value into a state enum.
+     *
+     * @param inProto  the proto to convert
+     * @return the converted state
+     */
+    public static State fromProto(BaseContainerProto.State inProto)
+    {
+      for(State state : values())
+        if(state.m_proto == inProto)
+          return state;
+
+      throw new IllegalStateException("invalid state proto: " + inProto);
+    }
+  }
 
   //........................................................................
 
@@ -319,6 +338,37 @@ public class BaseContainer extends BaseExtension<BaseItem>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    BaseContainerProto.Builder builder = BaseContainerProto.newBuilder();
+
+    if(m_capacity.isDefined())
+      builder.setCapacity(m_capacity.toProto());
+    if(m_state.isDefined())
+      builder.setState(m_state.getSelected().toProto());
+
+    return builder.build();
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseContainerProto))
+    {
+      Log.warning("cannot parse base container proto " + inProto.getClass());
+      return;
+    }
+
+    BaseContainerProto proto = (BaseContainerProto)inProto;
+
+    if(proto.hasCapacity())
+      m_capacity = m_capacity.fromProto(proto.getCapacity());
+    if(proto.hasState())
+      m_state = m_state.as(State.fromProto(proto.getState()));
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

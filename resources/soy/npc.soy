@@ -317,6 +317,8 @@
           {call dma.card.item_tiny}
             {param entry: entry($entry.campaign.key + '/item/' + $item.print) /}
           {/call}
+        {ifempty}
+          No items stored.
         {/foreach}
       {else}
         No items stored.
@@ -325,7 +327,7 @@
       {sp}|{sp}
       {call dma.page.link}
         {param js: 'item.create(\'' + $entry.campaign.path + '\', \''
-            + $entry.campaign.key + '/monster/' + $entry.name + '\');' /}
+            + $entry.campaign.key + '/npc/' + $entry.name + '\');' /}
         {param text: 'add' /}
         {param tooltip: 'Add a new item to this monster.' /}
       {/call}
@@ -725,6 +727,7 @@
           {param description: $feat.first.summary /}
         {/call}
       {/foreach}
+      {$entry.possesions}
       {foreach $item in $entry.possesions.list}
         {call dma.card.item_small}
           {param entry: entry($entry.campaign.key + '/item/' + $item.print) /}

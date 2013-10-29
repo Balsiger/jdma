@@ -34,6 +34,7 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.collect.Iterators;
 
 import net.ixitxachitls.dma.entries.ValueGroup;
+import net.ixitxachitls.dma.proto.Values.ModifierProto;
 import net.ixitxachitls.dma.values.conditions.And;
 import net.ixitxachitls.dma.values.conditions.Condition;
 import net.ixitxachitls.input.ParseReader;
@@ -70,61 +71,68 @@ public class Modifier extends Value<Modifier>
   public enum Type implements EnumSelection.Named
   {
     /** Doding stuff. */
-    DODGE("dodge", true),
+    DODGE("dodge", true, ModifierProto.Type.DODGE),
 
     /** Better armor. */
-    ARMOR("armor", false),
+    ARMOR("armor", false, ModifierProto.Type.ARMOR),
 
     /** Some equipment benefit. */
-    EQUIPMENT("equipment", false),
+    EQUIPMENT("equipment", false, ModifierProto.Type.EQUIPMENT),
 
     /** A shield helping out. */
-    SHIELD("shield", false),
+    SHIELD("shield", false, ModifierProto.Type.SHIELD),
 
     /** The general or standard type. */
-    GENERAL("general", true),
+    GENERAL("general", true, ModifierProto.Type.GENERAL),
 
     /** Modifier for natural armor. */
-    NATURAL_ARMOR("natural armor", false),
+    NATURAL_ARMOR("natural armor", false, ModifierProto.Type.NATURAL_ARMOR),
 
     /** A modifier from an ability. */
-    ABILITY("ability", true),
+    ABILITY("ability", true, ModifierProto.Type.ABILITY),
 
     /** A modifier according to size. */
-    SIZE("size", false),
+    SIZE("size", false, ModifierProto.Type.SIZE),
 
     /** A racial modifier. */
-    RACIAL("racial", false),
+    RACIAL("racial", false, ModifierProto.Type.RACIAL),
 
     /** Circumstances giving a modifier. */
-    CIRCUMSTANCE("circumstance", true),
+    CIRCUMSTANCE("circumstance", true, ModifierProto.Type.CIRCUMSTANCE),
 
     /** A magical enhancement modifier. */
-    ENHANCEMENT("enhancement", false),
+    ENHANCEMENT("enhancement", false, ModifierProto.Type.ENHANCEMENT),
 
     /** A deflection modifier against attacks. */
-    DEFLECTION("deflection", false),
+    DEFLECTION("deflection", false, ModifierProto.Type.DEFLECTION),
+
+    /** A rage modifier. */
+    RAGE("rage", false, ModifierProto.Type.RAGE),
 
     /** A competence modifier against attacks. */
-    COMPETENCE("competence", false);
+    COMPETENCE("competence", false, ModifierProto.Type.COMPETENCE);
 
     /** The value's name. */
-    private String m_name;
+    private final String m_name;
 
     /** Flag if the value stacks with others of its kind. */
-    private boolean m_stacks;
+    private final boolean m_stacks;
+
+    /** The proto enum value. */
+    private final ModifierProto.Type m_proto;
 
     /** Create the name.
      *
      * @param inName   the name of the value
      * @param inStacks true if this modifier stacks with similar ones, false
      *                 if not
-     *
+     * @param inProto  the proto enum value
      */
-    private Type(String inName, boolean inStacks)
+    private Type(String inName, boolean inStacks, ModifierProto.Type inProto)
     {
       m_name = ValueGroup.constant("product.part", inName);
       m_stacks = inStacks;
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -158,6 +166,32 @@ public class Modifier extends Value<Modifier>
     {
       return m_stacks;
     }
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public ModifierProto.Type getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static Type fromProto(ModifierProto.Type inProto)
+    {
+      for(Type type : values())
+        if(type.m_proto == inProto)
+          return type;
+
+      throw new IllegalStateException("invalid proto type: " + inProto);
+    }
+
   }
 
   //........................................................................
@@ -902,6 +936,76 @@ public class Modifier extends Value<Modifier>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  /**
+   * Create a proto for the value.
+   *
+   * @return the proto representation
+   */
+  public ModifierProto toProto()
+  {
+    ModifierProto.Builder builder = ModifierProto.newBuilder();
+    addToProto(builder);
+
+    return builder.build();
+  }
+
+  /**
+   * Add the values of this modifier to the given proto.
+   *
+   * @param inBuilder the builder to fill
+   */
+  private void addToProto(ModifierProto.Builder inBuilder)
+  {
+    ModifierProto.Modifier.Builder modifier =
+      ModifierProto.Modifier.newBuilder();
+
+    modifier.setBaseValue(m_value);
+    modifier.setType(m_type.getProto());
+    if (m_condition != null)
+      modifier.setCondition(m_condition.getDescription());
+
+    inBuilder.addModifier(modifier.build());
+
+    if(m_next != null)
+      m_next.addToProto(inBuilder);
+   }
+
+  /**
+   * Create a new modifier similar to the current but with data from the
+   * given proto.
+   *
+   *
+   * @param inProto  the proto with the data
+   * @return the newly created modifier
+   */
+  public Modifier fromProto(ModifierProto inProto)
+  {
+    Modifier result = null;
+    Modifier next = null;
+    for(ModifierProto.Modifier modifier : inProto.getModifierList())
+    {
+      if(result == null)
+      {
+        result = create();
+        next = result;
+      }
+      else
+      {
+        next.m_next = create();
+        next = next.m_next;
+      }
+
+      next.m_value = modifier.getBaseValue();
+      next.m_type = Type.fromProto(modifier.getType());
+      if(modifier.hasCondition())
+        next.m_condition = new Condition(modifier.getCondition());
+      next.m_defined = true;
+    }
+
+    return result;
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

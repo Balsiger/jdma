@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.proto.Values.DistanceProto;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -356,6 +357,50 @@ public Distance create()
 
   //........................................................................
 
+  /**
+   * Create a proto from the duration value.
+   *
+   * @return  the proto created
+   */
+  public DistanceProto toProto()
+  {
+    DistanceProto.Builder builder = DistanceProto.newBuilder();
+
+    if(m_set == m_sets[0])
+      if(m_values != null && m_values.length == 3)
+      {
+        DistanceProto.Imperial.Builder imperial =
+          DistanceProto.Imperial.newBuilder();
+
+        if(m_values[0] != null)
+          imperial.setMiles(m_values[0].toProto());
+        if(m_values[1] != null)
+          imperial.setFeet(m_values[1].toProto());
+        if(m_values[2] != null)
+          imperial.setInches(m_values[2].toProto());
+
+        builder.setImperial(imperial.build());
+      }
+
+    if(m_set == m_sets[1])
+      if(m_values != null && m_values.length == 3)
+      {
+        DistanceProto.Metric.Builder metric =
+          DistanceProto.Metric.newBuilder();
+
+        if(m_values[0] != null)
+          metric.setKilometers(m_values[0].toProto());
+        if(m_values[1] != null)
+          metric.setMeters(m_values[1].toProto());
+        if(m_values[2] != null)
+          metric.setCentimeters(m_values[2].toProto());
+
+        builder.setMetric(metric.build());
+      }
+
+    return builder.build();
+  }
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -400,6 +445,48 @@ public Distance create()
   }
 
   //........................................................................
+
+  /**
+   * Create a distnace like this from the given proto values.
+   *
+   * @param inProto the proto with the values
+   * @return the newly created distance
+   */
+  public Distance fromProto(DistanceProto inProto)
+  {
+    Distance result = create();
+
+    if(inProto.hasMetric())
+    {
+      result.m_values = new Rational[3];
+      if(inProto.getMetric().hasKilometers())
+        result.m_values[0] =
+          Rational.fromProto(inProto.getMetric().getKilometers());
+      if(inProto.getMetric().hasMeters())
+        result.m_values[1] =
+          Rational.fromProto(inProto.getMetric().getMeters());
+      if(inProto.getMetric().hasCentimeters())
+        result.m_values[2] =
+          Rational.fromProto(inProto.getMetric().getCentimeters());
+      result.m_set = m_sets[1];
+    }
+    else if(inProto.hasImperial())
+    {
+      result.m_values = new Rational[3];
+      if(inProto.getImperial().hasMiles())
+        result.m_values[0] =
+          Rational.fromProto(inProto.getImperial().getMiles());
+      if(inProto.getImperial().hasFeet())
+        result.m_values[1] =
+          Rational.fromProto(inProto.getImperial().getFeet());
+      if(inProto.getImperial().hasInches())
+        result.m_values[2] =
+          Rational.fromProto(inProto.getImperial().getInches());
+      result.m_set = m_sets[0];
+    }
+
+    return result;
+  }
 
   //........................................................................
 

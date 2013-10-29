@@ -32,8 +32,12 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
+import net.ixitxachitls.dma.proto.Entries.CharacterProto;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Name;
@@ -42,6 +46,7 @@ import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.util.configuration.Config;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -76,52 +81,63 @@ public class Character extends CampaignEntry<BaseCharacter>
   private static final long serialVersionUID = 1L;
 
   /** The character state. */
-  public enum State implements EnumSelection.Named
+  public enum State implements EnumSelection.Named,
+    EnumSelection.Proto<CharacterProto.State>
   {
     /** A normal character going on adventures. */
-    ADVENTURING("adventuring"),
+    ADVENTURING("adventuring", CharacterProto.State.ADVENTURING),
     /** The character is currently incapable of adventuring. */
-    INCAPACITATED("incapacitated"),
+    INCAPACITATED("incapacitated", CharacterProto.State.INCAPACITATED),
     /** The character has been retired by the player or the DM. */
-    RETIRED("retired"),
+    RETIRED("retired", CharacterProto.State.RETIRED),
     /** The character died. */
-    DEAD("dead");
+    DEAD("dead", CharacterProto.State.DEAD);
 
     /** The value's name. */
     private String m_name;
 
-    /** Create the name.
+    /** The proto enum value. */
+    private CharacterProto.State m_proto;
+
+    /**
+     * Create the name.
      *
      * @param inName     the name of the value
-     *
+     * @param inProto    the proto enum value
      */
-    private State(String inName)
+    private State(String inName, CharacterProto.State inProto)
     {
       m_name = constant("character.state", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Convert to human readable string.
-     *
-     * @return a human readable string representation
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
-  };
+
+    @Override
+    public CharacterProto.State toProto()
+    {
+      return m_proto;
+    }
+
+    public static State fromProto(CharacterProto.State inProto)
+    {
+      for(State state : values())
+        if(state.m_proto == inProto)
+          return state;
+
+      throw new IllegalArgumentException("cannot convert state: " + inProto);
+    }
+  }
 
   //........................................................................
 
@@ -497,5 +513,74 @@ public class Character extends CampaignEntry<BaseCharacter>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    CharacterProto.Builder builder = CharacterProto.newBuilder();
+
+    builder.setBase((CampaignEntryProto)super.toProto());
+
+    if(m_state.isDefined())
+      builder.setState(m_state.getSelected().toProto());
+
+    if(m_items.isDefined())
+      for(Name item : m_items)
+        builder.addItem(item.get());
+
+    if(m_level.isDefined())
+      builder.setLevel((int)m_level.get());
+
+    CharacterProto proto = builder.build();
+    System.out.println(proto);
+    System.out.println(this);
+    return proto;
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof CharacterProto))
+    {
+      Log.warning("cannot parse proto " + inProto);
+      return;
+    }
+
+    CharacterProto proto = (CharacterProto)inProto;
+
+    if(proto.hasState())
+      m_state = m_state.as(State.fromProto(proto.getState()));
+
+    if(proto.getItemCount() > 0)
+    {
+      List<Name> items = new ArrayList<>();
+      for(String item : proto.getItemList())
+        items.add(m_items.createElement().as(item));
+
+      m_items = m_items.as(items);
+    }
+
+    if(proto.hasLevel())
+      m_level = m_level.as(proto.getLevel());
+
+    super.fromProto(proto.getBase());
+
+    System.out.println(proto);
+    System.out.println(this);
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(CharacterProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
+
   //........................................................................
 }

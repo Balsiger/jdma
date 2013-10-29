@@ -390,8 +390,12 @@ edit.Base.create = function(inElement)
       return new edit.Name(element, properties);
 
     case 'price':
-      properties.validate = 'price';
-      return new edit.Name(element, properties);
+        properties.validate = 'price';
+        return new edit.Name(element, properties);
+
+    case 'percent':
+        properties.validate = 'percent';
+        return new edit.Name(element, properties);
 
     case 'dice':
       properties.validate = 'dice';

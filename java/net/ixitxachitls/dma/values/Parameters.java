@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -36,6 +37,9 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import net.ixitxachitls.dma.entries.BaseSkill;
+import net.ixitxachitls.dma.entries.BaseSpell;
+import net.ixitxachitls.dma.proto.Values.ParametersProto;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -139,6 +143,22 @@ public class Parameters extends Value<Parameters>
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  /**
+   * Get the defined values in the parameters.
+   *
+   * @return a map from name to defined value
+   */
+  public Map<String, Value<?>> getValues()
+  {
+    Map<String, Value<?>> defined = new HashMap<>();
+
+    for(Map.Entry<String, Value<?>> entry : m_values.entrySet())
+      if(entry.getValue().isDefined())
+        defined.put(entry.getKey().toLowerCase(), entry.getValue());
+
+    return defined;
+  }
 
   //------------------------------- getValue -------------------------------
 
@@ -416,6 +436,110 @@ public class Parameters extends Value<Parameters>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  /**
+   * Convert to a proto value.
+   *
+   * @return the converted proto
+   */
+  @SuppressWarnings("unchecked")
+  public ParametersProto toProto()
+  {
+    ParametersProto.Builder builder = ParametersProto.newBuilder();
+
+    for(Map.Entry<String, Value<?>> entry : m_values.entrySet())
+      if(entry.getValue().isDefined())
+        if(entry.getValue() instanceof Distance)
+          builder.addDistance(ParametersProto.Distance.newBuilder()
+                              .setName(entry.getKey())
+                              .setDistance(((Distance)entry.getValue())
+                                           .toProto())
+                              .build());
+        else if(entry.getValue() instanceof Name)
+          builder.addText(ParametersProto.Text.newBuilder()
+                          .setName(entry.getKey())
+                          .setText(((Name)entry.getValue()).get())
+                          .build());
+        else if(entry.getValue() instanceof Number)
+          builder.addNumber(ParametersProto.Number.newBuilder()
+                            .setName(entry.getKey())
+                            .setNumber((int)((Number)entry.getValue()).get())
+                            .build());
+        else if(entry.getValue() instanceof Modifier)
+          builder.addModifier(ParametersProto.Modifier.newBuilder()
+                              .setName(entry.getKey())
+                              .setModifier(((Modifier)entry.getValue())
+                                           .toProto())
+                              .build());
+        else if(entry.getValue() instanceof EnumSelection
+          && ((EnumSelection)entry.getValue()).getSelected()
+              instanceof BaseSpell.SpellClass)
+          builder.addSpellClass(ParametersProto.SpellClass.newBuilder()
+                          .setName(entry.getKey())
+                          .setSpellClass
+                          (((EnumSelection<BaseSpell.SpellClass>)
+                            entry.getValue()).getSelected().getProto())
+                          .build());
+        else if(entry.getValue() instanceof EnumSelection
+          && ((EnumSelection)entry.getValue()).getSelected()
+              instanceof BaseSkill.Subtype)
+          builder.addSkillSubtype(ParametersProto.SkillSubtype.newBuilder()
+                                  .setName(entry.getKey())
+                                  .setSkillSubtype
+                                  (((EnumSelection<BaseSkill.Subtype>)
+                                    entry.getValue()).getSelected().toProto())
+                                    .build());
+
+    return builder.build();
+  }
+
+  /**
+   * Create the parameters from the given proto.
+   *
+   * @param inProto the proto to read from
+   * @return the created parameters
+   */
+  @SuppressWarnings("unchecked")
+  public Parameters fromProto(ParametersProto inProto)
+  {
+    Parameters params = create();
+
+    for(ParametersProto.Distance distance : inProto.getDistanceList())
+      params.m_values.put(distance.getName(),
+                          ((Distance)params.m_values.get(distance.getName()))
+                          .fromProto(distance.getDistance()));
+    for(ParametersProto.Text text: inProto.getTextList())
+      params.m_values.put(text.getName(),
+                          ((Name)params.m_values.get(text.getName()))
+                          .as(text.getText()));
+    for(ParametersProto.Number number : inProto.getNumberList())
+      params.m_values.put(number.getName(),
+                          ((Number)params.m_values.get(number.getName()))
+                          .as(number.getNumber()));
+    for(ParametersProto.Modifier modifier: inProto.getModifierList())
+      params.m_values.put(modifier.getName(),
+                          ((Modifier)params.m_values.get(modifier.getName()))
+                          .fromProto(modifier.getModifier()));
+    for(ParametersProto.Damage damage : inProto.getDamageList())
+      params.m_values.put(damage.getName(),
+                          ((Damage)params.m_values.get(damage.getName()))
+                          .fromProto(damage.getDamage()));
+    for(ParametersProto.SpellClass spellClass : inProto.getSpellClassList())
+      params.m_values.put(spellClass.getName(),
+                          ((EnumSelection<BaseSpell.SpellClass>)
+                            params.m_values.get(spellClass.getName()))
+                          .as(BaseSpell.SpellClass.fromProto
+                              (spellClass.getSpellClass())));
+    for(ParametersProto.SkillSubtype skill : inProto.getSkillSubtypeList())
+      params.m_values.put(skill.getName(),
+                          ((EnumSelection<BaseSkill.Subtype>)
+                            params.m_values.get(skill.getName()))
+                          .as(BaseSkill.Subtype.fromProto
+                              (skill.getSkillSubtype())));
+
+    return params;
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

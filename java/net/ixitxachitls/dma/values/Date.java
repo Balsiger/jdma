@@ -300,6 +300,23 @@ public boolean isDefined()
 
   //........................................................................
 
+  /**
+   * Create a new date similar to the current but with new data.
+   *
+   * @param   inYear  the new yerar
+   * @param   inMonth the new month (use 0 for no month)
+   * @return  the newly created date
+   */
+  public Date as(int inYear, int inMonth)
+  {
+    Date result = create();
+
+    result.m_year = inYear;
+    result.m_month = inMonth;
+
+    return result;
+  }
+
   //........................................................................
 
   //------------------------------------------------- other member functions

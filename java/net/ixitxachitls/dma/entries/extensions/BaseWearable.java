@@ -26,12 +26,15 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseWearableProto;
 import net.ixitxachitls.dma.values.Duration;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Multiple;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -63,30 +66,31 @@ public class BaseWearable extends BaseExtension<BaseItem>
   private static final long serialVersionUID = 1L;
 
   /** The available body slots (cf. ). */
-  public enum Slot implements EnumSelection.Named, EnumSelection.Short
+  public enum Slot implements EnumSelection.Named, EnumSelection.Short,
+    EnumSelection.Proto<BaseWearableProto.Slot>
   {
     /** On the head. */
-    HEAD("Head", "He"),
+    HEAD("Head", "He", BaseWearableProto.Slot.HEAD),
     /** Around the neck. */
-    NECK("Neck", "N"),
+    NECK("Neck", "N", BaseWearableProto.Slot.NECK),
     /** On the torso only. */
-    TORSO("Torso", "T"),
+    TORSO("Torso", "T", BaseWearableProto.Slot.TORSO),
     /** On the whole body. */
-    BODY("Body", "B"),
+    BODY("Body", "B", BaseWearableProto.Slot.BODY),
     /** Around the waits. */
-    WAIST("Waist", "Wa"),
+    WAIST("Waist", "Wa", BaseWearableProto.Slot.WAIST),
     /** On the shoulders. */
-    SHOULDERS("Shoulders", "S"),
+    SHOULDERS("Shoulders", "S", BaseWearableProto.Slot.SHOULDERS),
     /** On both hands. */
-    HANDS("Hands", "Hs"),
+    HANDS("Hands", "Hs", BaseWearableProto.Slot.HANDS),
     /** On a hand. */
-    HAND("Hand", "Ha"),
+    HAND("Hand", "Ha", BaseWearableProto.Slot.HAND),
     /** On a finger. */
-    FINGER("Finger", "F"),
+    FINGER("Finger", "F", BaseWearableProto.Slot.FINGER),
     /** On one or both wrists. */
-    WRISTS("Wrists", "Wr"),
+    WRISTS("Wrists", "Wr", BaseWearableProto.Slot.WRISTS),
     /** One one or both of the feet. */
-    FEET("Feet", "F");
+    FEET("Feet", "F", BaseWearableProto.Slot.FEET);
 
     /** The value's name. */
     private String m_name;
@@ -94,49 +98,60 @@ public class BaseWearable extends BaseExtension<BaseItem>
     /** The value's short name. */
     private String m_short;
 
-    /** Create the name.
+    /** The proto enum value. */
+    private BaseWearableProto.Slot m_proto;
+
+    /**
+     * Create the name.
      *
      * @param inName     the name of the value
      * @param inShort    the short name of the value
-     *
+     * @param inProto    the prot enum value
      */
-    private Slot(String inName, String inShort)
+    private Slot(String inName, String inShort, BaseWearableProto.Slot inProto)
     {
       m_name = constant("body.slots", inName);
       m_short = constant("body.slots.short", inShort);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
 
-    /**
-     * Get the short name of the value.
-     *
-     * @return the short name of the value
-     */
     @Override
     public String getShort()
     {
       return m_short;
+    }
+
+    @Override
+    public BaseWearableProto.Slot toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the given proto value to the corresponding enum value.
+     *
+     * @param inProto the proto value to convert
+     * @return the converted enum value
+     */
+    public static Slot fromProto(BaseWearableProto.Slot inProto)
+    {
+      for(Slot slot : values())
+        if(slot.m_proto == inProto)
+          return slot;
+
+      throw new IllegalArgumentException("unknown slot: " + inProto);
     }
   };
 
@@ -256,6 +271,55 @@ public class BaseWearable extends BaseExtension<BaseItem>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    BaseWearableProto.Builder builder = BaseWearableProto.newBuilder();
+
+    if(m_slot.isDefined())
+      builder.setSlot(m_slot.getSelected().toProto());
+    if(m_don.isDefined())
+    {
+      builder.setWear(((Duration)m_don.get(0)).toProto());
+      builder.setWearHastily(((Duration)m_don.get(1)).toProto());
+    }
+    if(m_remove.isDefined())
+      builder.setRemove(m_remove.toProto());
+
+    return builder.build();
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseWearableProto))
+    {
+      Log.warning("cannot parse base wearable proto " + inProto.getClass());
+      return;
+    }
+
+    BaseWearableProto proto = (BaseWearableProto)inProto;
+
+    if(proto.hasSlot())
+      m_slot = m_slot.as(Slot.fromProto(proto.getSlot()));
+
+    if(proto.hasWear() || proto.hasWearHastily())
+    {
+      Duration wear = (Duration)m_don.get(0);
+      Duration wearHastily = (Duration)m_don.get(1);
+      if(proto.hasWear())
+        wear = wear.fromProto(proto.getWear());
+      if(proto.hasWearHastily())
+        wearHastily = wearHastily.fromProto(proto.getWearHastily());
+
+      m_don = m_don.as(wear, wearHastily);
+    }
+
+    if(proto.hasRemove())
+      m_remove = m_remove.fromProto(proto.getRemove());
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

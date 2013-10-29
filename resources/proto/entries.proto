@@ -1,0 +1,1406 @@
+package net.ixitxachitls.dma.proto;
+
+import "values.proto";
+
+message AbstractEntryProto
+{
+  required string name = 1;
+  required string type = 2;
+  repeated string base = 3;
+  repeated string extensions = 4;
+}
+
+message BaseEntryProto
+{
+  required AbstractEntryProto abstract = 1;
+  repeated string category = 2;
+  optional string description = 3;
+  optional string short_description = 4;
+
+  message Reference
+  {
+    optional string name = 1;
+    repeated RangeProto pages = 2;
+  }
+  repeated Reference reference = 5;
+  repeated string synonym = 6;
+  repeated string world = 7;
+}
+
+message BaseCharacterProto
+{
+  required BaseEntryProto base = 1;
+
+  enum Group
+  {
+    GUEST = 0;
+    USER = 1;
+    PLAYER = 2;
+    DM = 3;
+    ADMIN = 4;
+  }
+  optional Group group = 2 [ default = GUEST ];
+  optional string last_action = 3;
+  optional string real_name = 4;
+  optional string email = 5;
+}
+
+message BaseProductProto
+{
+  required BaseEntryProto base = 1;
+  optional string title = 2;
+  optional string leader = 3;
+  optional string subtitle = 4;
+  optional string notes = 5;
+
+  message Person
+  {
+    required string name = 1;
+    optional string job = 2;
+  }
+  repeated Person author = 6;
+  repeated Person editor = 7;
+  repeated Person cover = 8;
+  repeated Person cartographer = 9;
+  repeated Person illustrator = 10;
+  repeated Person typographer = 11;
+  repeated Person manager = 12;
+
+  message Date
+  {
+    required int32 year = 1;
+    optional int32 month = 2; // January is 1, 0 is no month.
+  }
+  optional Date date = 13;
+
+  message ISBN
+  {
+    required string group = 1;
+    required string publisher = 2;
+    required string title = 3;
+    required int32 check = 4;
+  }
+  optional ISBN isbn = 14;
+
+  message ISBN13
+  {
+    required string group13 = 1;
+    required string group = 2;
+    required string publisher = 3;
+    required string title = 4;
+    required int32 check = 5;
+  }
+  optional ISBN13 isbn13 = 15;
+  optional int32 pages = 16;
+
+  enum System
+  {
+    UNKNOWN_SYSTEM = 0;
+    NONE = 1;
+    CHAINMAIL = 2;
+    DND_1ST = 3;
+    ADND_1ST = 4;
+    ADND_2ND = 5;
+    ADND_2ND_SAGA = 6;
+    ADND_REVISED = 7;
+    DND_3RD = 8;
+    DND_3_5 = 9;
+    DND_4 = 10;
+    DND_NEXT = 11;
+    D20_MODERN = 12;
+    D20_FUTUTRE = 13;
+    D20 = 14;
+    ALTERNITY = 15;
+    AMAZING_ENGINE = 16;
+    BLOOD_WARS = 17;
+    CHAOSIUM = 18;
+    DARK_HEAVEN = 19;
+    DRAGON_DICE = 20;
+    DRAGON_STRIKE = 21;
+    DUEL_MASTER = 22;
+    ENDLESS_QUEST = 23;
+    FIRST_QUEST = 24;
+    GAMMA_WORLD = 25;
+    GANGBUSTERS = 26;
+    LEGEND_OF_THE_FIVE_RINGS = 27;
+    MAGIC_THE_GATHERING = 28;
+    MARVEL_SUPER_DICE = 29;
+    MLB_SHOWDOWN_2002 = 30;
+    MLB_SHOWDOWN_2003 = 31;
+    MLB_SHOWDOWN = 32;
+    NEOPETS = 33;
+    ONE_ON_ONE = 34;
+    POKEMON = 35;
+    SAGA = 36;
+    SPECIAL = 37;
+    SPELLFIRE = 38;
+    STAR_WARS_TCG = 39;
+    STAR_WARS = 40;
+    SUPER_ENDLESS_QUEST = 41;
+    SWORD_AND_SORCERY = 42;
+    TERROR_TRACKS = 43;
+    TERROR_TRAX = 44;
+    WILD_SPACE = 45;
+    WORLD_WAR_II = 46;
+    XXVC = 47;
+    MARVEL_SUPER_HEROES = 48;
+  }
+  optional System system = 17;
+
+  enum Audience
+  {
+    DM = 0;
+    PLAYER = 1;
+    ALL = 2;
+  }
+  optional Audience audience = 18;
+
+  enum Type
+  {
+    UNKNOWN_TYPE = 0;
+    ACCESSORY = 1;
+    ADVENTURE = 2;
+    BOARD_GAME = 3;
+    BOOSTER_PACK = 4;
+    CALENDAR = 5;
+    CAMPAIGN_EXPANSION = 6;
+    CAMPAIGN_SETTING = 7;
+    CARD_GAME = 8;
+    CARDS_TYPE = 9;
+    CATALOG = 10;
+    COLLECTION = 11;
+    COMICS = 12;
+    COOKBOOK = 13;
+    DICE = 14;
+    ELECTRONIC_ACCESSORY = 15;
+    GUIDE = 16;
+    MAGAZINE = 17;
+    MINIATURE = 18;
+    MONSTER_COMPENDIUM = 19;
+    NOVEL = 20;
+    PROMOTION = 21;
+    RULEBOOK = 22;
+    RULES_SUPPLEMENT = 23;
+    SOFTWARE = 24;
+    SOURCEBOOK = 25;
+    SPECIAL_BOOK = 26;
+  }
+  optional Type type = 19;
+
+  enum Style
+  {
+    UNKNOWN_STYLE = 0;
+    BOOKLET = 1;
+    BOX = 2;
+    CARDS_STYLE = 3;
+    FLYER = 4;
+    FOLDER = 5;
+    HARDCOVER = 6;
+    MAP = 7;
+    MEDIUM_BOX = 8;
+    PACK = 9;
+    PAPERBACK = 10;
+    POSTER = 11;
+    SCREEN = 12;
+    SHEETS = 13;
+    SMALL_BOX = 14;
+    SOFT_COVER = 15;
+    STICKER = 16;
+  }
+  optional Style style = 20;
+  optional string producer = 21;
+  optional string volume = 22;
+  optional string number = 23;
+  repeated string series = 24;
+  optional PriceProto price = 25;
+
+  message Content
+  {
+    enum Part
+    {
+      UNKNOWN_PART = 0;
+      BOARD = 1;
+      BOOK = 2;
+      BOOKLET = 3;
+      BOX = 4;
+      CARD = 5;
+      CD = 6;
+      COUNTER = 7;
+      COVER = 8;
+      DICE = 9;
+      FLYER = 10;
+      FOLDER = 11;
+      GATEFOLD = 12;
+      MAGNET = 13;
+      MAP = 14;
+      MINIATURE = 15;
+      MISC = 16;
+      OVERLAY = 17;
+      PACK = 18;
+      PAGE = 19;
+      PLAYING_PIECE = 20;
+      POSTER = 21;
+      SCREEN = 22;
+      SHEET = 23;
+      STICKER = 24;
+    }
+    required Part part = 1;
+    required string description = 2;
+    required int32 number = 3 [default = 1];
+  }
+  repeated Content content = 26;
+  repeated string required_requirements = 27;
+  repeated string optional_requirements = 28;
+
+  enum Layout
+  {
+    UNKNOWN_LAYOUT = 0;
+    FULL_COLOR = 1;
+    FOUR_COLOR = 2;
+    TWO_COLOR = 3;
+    COLOR_COVER = 4;
+    BLACK_AND_WHITE = 5;
+    MIXED = 6;
+  }
+  optional Layout layout = 29;
+}
+
+message BaseSpellProto
+{
+  required BaseEntryProto base = 1;
+
+  enum School
+  {
+    UNKNOWN_SCHOOL = 0;
+    ABJURATION = 1;
+    CONJURATION = 2;
+    DIVINATION = 3;
+    ENCHANTMENT = 4;
+    EVOACATION = 5;
+    ILLUSION = 6;
+    NECROMANCY = 7;
+    TRANSMUTATION = 8;
+    UNIVERSAL = 9;
+  }
+  optional School school = 2;
+
+  enum Subschool
+  {
+    UNKNOWN_SUBSCHOOL = 0;
+    NONE = 1;
+    CALLING = 2;
+    CREATION_OR_CALLING = 3;
+    CREATION = 4;
+    HEALING = 5;
+    SUMMONING = 6;
+    TELEPORTATION = 7;
+    SCRYING = 8;
+    CHARM = 9;
+    COMPULSION = 10;
+    FIGMENT_OR_GLAMER = 11;
+    FIGMENT = 12;
+    GLAMER = 13;
+    PATTERN = 14;
+    PHANTASM = 15;
+    SHADOW = 16;
+  }
+  repeated Subschool subschool = 3;
+  optional string summary = 4;
+
+  enum Descriptor
+  {
+    UNKNOWN_DESCRIPTOR = 0;
+    ACID = 1;
+    AIR = 2;
+    CHAOTIC = 3;
+    COLD = 4;
+    DARKNESS = 5;
+    DEATH = 6;
+    EARTH = 7;
+    ELECTRICITY = 8;
+    EVIL = 9;
+    FEAR = 10;
+    FIRE_OR_COLD = 11;
+    FIRE = 12;
+    FORCE = 13;
+    GOOD = 14;
+    LANGUAGE_DEPENDENT = 15;
+    LAWFUL = 16;
+    LIGHT = 17;
+    MIND_AFFECTING = 18;
+    SCRYING_DESCRIPTOR = 19;
+    SONIC = 20;
+    WATER = 21;
+    SEE_TEXT = 22;
+  }
+  repeated Descriptor descriptor = 5;
+
+  message Level {
+    required SharedProto.SpellClass spell_class = 1;
+    required int32 level = 2;
+  }
+  repeated Level level = 6;
+
+  enum Components
+  {
+    UNKNOWN_COMPONENT = 0;
+    VERBOSE = 1;
+    SOMATIC = 2;
+    MATERIAL_DEVINE_FOCUS = 3;
+    MATERIAL = 4;
+    FOCUS_DIVINE_FOCUS = 5;
+    FOCUS = 6;
+    DIVINE_FOCUS = 7;
+    EXPERIENCE_POINTS = 8;
+  }
+  repeated Components components = 7;
+
+  message Material
+  {
+    required string use = 1;
+    repeated string component = 2;
+  }
+  repeated Material material = 8;
+  optional Material focus = 9;
+  optional DurationProto casting_time = 10;
+
+  enum Range
+  {
+    UNKNOWN = 0;
+    PERSONAL_OR_TOUCH = 1;
+    PERSONAL_AND_TOUCH = 2;
+    PERSONAL_OR_CLOSE = 3;
+    PERSONAL = 4;
+    TOUCH = 5;
+    CLOSE = 6;
+    MEDIUM = 7;
+    LONG = 8;
+    UNLIMITED = 9;
+    FOURTY_FEET_PER_LEVEL = 10;
+    SEE_TEXT_RANGE = 11;
+    ANYWHERE_WITHIN_AREA_WARDED = 12;
+    ONE_MILE_PER_LEVEL = 13;
+    UP_TO_TEN_FEE_PER_LEVEL = 14;
+  }
+  optional Range special_range = 11;
+  optional DistanceProto range = 12;
+
+  message Effect
+  {
+    optional DistanceProto distance = 1;
+
+    enum Type
+    {
+      UNKNOWN = 0;
+      RAY = 1;
+      SPREAD = 2;
+    }
+    optional Type type = 2;
+    optional string description = 3;
+  }
+  optional Effect effect = 13;
+  optional string target = 14;
+  optional string area = 15;
+
+  message Duration
+  {
+    optional string duration_description = 1;
+    optional DurationProto duration = 2;
+    optional string levels = 3;
+    optional DurationProto additional_duration = 4;
+    optional string flags = 5;
+    optional string description = 6;
+  }
+  optional Duration duration = 16;
+  optional string saving_throw = 17;
+  optional string spell_resistance = 18;
+}
+
+message BaseQualityProto
+{
+  required BaseEntryProto base = 1;
+
+  enum Type
+  {
+    UNKNOWN = 0;
+    EXTRAORDINARY = 1;
+    SPELL_LIKE = 2;
+    SUPERNATURAL = 3;
+  }
+  optional Type type = 2;
+
+  message Effect
+  {
+    enum Affects
+    {
+      UNKNOWN = 0;
+      FORTITUDE_SAVE = 1;
+      REFLEX_SAVE = 2;
+      WILL_SAVE = 3;
+      SKILL = 4;
+      GRAPPLE = 5;
+      INIT = 6;
+      AC = 7;
+      ATTACK = 8;
+      DAMAGE = 9;
+      SPEED = 10;
+      HP = 11;
+      STRENGTH = 12;
+      DEXTERITY = 13;
+      CONSTITUTION = 14;
+      INTELLIGENCE = 15;
+      WISDOM = 16;
+      CHARISMA = 17;
+    }
+    optional Affects affects = 1;
+    optional string reference = 2;
+    optional ModifierProto modifier = 3;
+    optional string text = 4;
+  }
+  repeated Effect effect = 3;
+  optional string qualifier = 4;
+}
+
+message BaseFeatProto
+{
+  required BaseEntryProto base = 1;
+
+  enum Type
+  {
+    UNKNOWN = 0;
+    GENERAL = 1;
+    ITEM_CREATION = 2;
+    METAMAGIC = 3;
+    REGIONAL = 4;
+    SPECIAL = 5;
+    FIGHTER = 6;
+  }
+  optional Type type = 2;
+  optional string benefit = 3;
+  optional string special = 4;
+  optional string normal = 5;
+  optional string prerequisites = 6;
+
+  message Effect
+  {
+    required BaseQualityProto.Effect.Affects affects = 1;
+    optional string reference= 2;
+    optional ModifierProto modifier = 3;
+  }
+  repeated Effect effect = 7;
+}
+
+message BaseSkillProto
+{
+  required BaseEntryProto base = 1;
+
+  optional BaseMonsterProto.Ability ability = 2;
+  optional string check = 3;
+  optional string action = 4;
+  optional string retry = 5;
+  optional string special = 6;
+  repeated string synergy = 7;
+  optional string synergy_text = 8;
+  optional string restriction_text = 9;
+  optional string untrained = 10;
+
+  enum Restriction
+  {
+    UNKNOWN = 0;
+    TRAINED_ONLY = 1;
+    ARMOR_CHECK_PENALTY = 2;
+    SUBTYPE_ONLY = 3;
+  }
+  repeated Restriction restriction = 11;
+
+  enum Modifier
+  {
+    UNKNOWN_MODIFIER = 0;
+    SPEED = 1;
+    SIZE = 2;
+  }
+  repeated Modifier modifier = 12;
+
+  message DC
+  {
+    required int32 number = 1;
+    required string text = 2;
+  }
+  repeated DC dc = 13;
+}
+
+message BaseItemProto
+{
+  required BaseEntryProto base = 1;
+
+  optional MoneyProto value = 2;
+  optional WeightProto weight = 3;
+
+  enum Probability
+  {
+    UNKNOWN = 0;
+    COMMON = 1;
+    UNCOMMON = 2;
+    RARE = 3;
+    VERY_RARE = 4;
+    UNIQUE = 5;
+  }
+  optional Probability probability = 4;
+
+  enum Size
+  {
+     UNKNOWN_SIZE = 0;
+     FINE = 1;
+     DIMINUTIVE = 2;
+     TINY = 3;
+     SMALL = 4;
+     MEDIUM = 5;
+     LARGE = 6;
+     HUGE = 7;
+     GARGANTUAN = 8;
+     COLOSSAL = 9;
+  }
+  optional Size size = 5;
+
+  enum SizeModifier
+  {
+    UNKNOWN_SIZE_MODIFIER = 0;
+    TALL = 1;
+    LONG = 2;
+  }
+
+  optional int32 hardness = 6;
+  optional int32 hit_points = 7;
+
+  message Appearance
+  {
+    required Probability probability = 1;
+    required string appearance = 2;
+  }
+  repeated Appearance appearance = 8;
+
+  message Substance
+  {
+    enum Material
+    {
+      UNKNOWN = 0;
+      PAPER = 1;
+      CLOTH = 2;
+      ROPE = 3;
+      GLASS = 4;
+      ICE = 5;
+      LEATHER = 6;
+      HIDE = 7;
+      WOOD = 8;
+      STONE = 9;
+      IRON = 10;
+      STEEL = 11;
+      CRYSTAL = 12;
+      MITHRAL = 13;
+      ADAMANTINE = 14;
+      BONE = 15;
+    }
+    required Material material = 1;
+    required DistanceProto thickness = 2;
+  }
+  optional Substance substance = 9;
+  optional int32 break_dc = 10;
+  optional string player_name = 11;
+
+  optional BaseWeaponProto weapon = 12;
+  optional BaseWearableProto wearable = 13;
+  optional BaseIncompleteProto incomplete = 14;
+  optional BaseMagicProto magic = 15;
+  optional BaseCountedProto counted = 16;
+  optional BaseMultipleProto multiple = 17;
+  optional BaseMultiuseProto multiuse = 18;
+  optional BaseTimedProto timed = 19;
+  optional BaseCommodityProto commodity = 20;
+  optional BaseContainerProto container = 21;
+  optional BaseArmorProto armor = 22;
+  optional BaseLightProto light = 23;
+  optional BaseCompositeProto composite = 24;
+}
+
+message BaseWeaponProto
+{
+  optional DamageProto damage = 1;
+  optional DamageProto secondary_damage = 2;
+  optional DamageProto splash = 3;
+
+  enum Type
+  {
+    UNKNOWN = 0;
+    PIERCING_OR_SLASHING = 1;
+    BLUDGEONING_OR_PIERCING = 2;
+    BLUDGEONING_AND_PIERCING = 3;
+    SLASHING_OR_PIERCING = 4;
+    SLASHING = 5;
+    BLUDGEONING = 6;
+    PIERCING = 7;
+    GRENADE = 8;
+    NONE = 9;
+  }
+  optional Type type = 4;
+  optional CriticalProto critical = 5;
+
+  enum Style
+  {
+    UNKNOWN_STYLE = 0;
+    TWOHANDED_MELEE = 1;
+    ONEHANDED_MELEE = 2;
+    LIGHT_MELEE = 3;
+    UNARMED = 4;
+    RANGED_TOUCH = 5;
+    RANGED = 6;
+    THROWN_TOUCH = 7;
+    THROWN = 8;
+    TOUCH = 9;
+  }
+  optional Style style = 6;
+
+  enum Proficiency
+  {
+    UNKNOWN_PROFICIENCY = 0;
+    SIMPLE = 1;
+    MARTIAL = 2;
+    EXOCTIC = 3;
+    IMPROVISED = 4;
+    NONE_PROFICIENCY = 5;
+  }
+  optional Proficiency proficiency = 7;
+  optional DistanceProto range = 8;
+  optional DistanceProto reach = 9;
+  optional int32 max_attacks = 10;
+}
+
+message BaseWearableProto
+{
+  enum Slot
+  {
+    UNKNOWN = 0;
+    HEAD = 1;
+    NECK = 2;
+    TORSO = 3;
+    BODY = 4;
+    WAIST = 5;
+    SHOULDERS = 6;
+    HANDS = 7;
+    HAND = 8;
+    FINGER = 9;
+    WRISTS = 10;
+    FEET = 11;
+  }
+  optional Slot slot = 1;
+  optional DurationProto wear = 2;
+  optional DurationProto wear_hastily = 3;
+  optional DurationProto remove = 4;
+}
+
+message BaseIncompleteProto
+{
+  optional string text = 1;
+}
+
+message BaseMagicProto
+{
+  message AbilityModifier
+  {
+    required BaseMonsterProto.Ability ability = 1;
+    required ModifierProto modifier = 2;
+  }
+  optional AbilityModifier ability_modifier = 1;
+
+  message Modifier
+  {
+    required string name = 1;
+    required ModifierProto modifier = 2;
+  }
+  repeated Modifier modifier = 2;
+}
+
+message BaseCountedProto
+{
+  required int32 count = 1;
+
+  enum Unit
+  {
+    UNKNOWN = 0;
+    DAY = 1;
+    PIECE = 2;
+    SHEET = 3;
+    USE = 4;
+    PAGE = 5;
+    CHARGE = 6;
+    APPLICATION = 7;
+    DAMAGE = 8;
+  }
+  optional Unit unit = 2;
+}
+
+message BaseMultipleProto
+{
+  required int32 count = 1;
+  optional BaseCountedProto.Unit unit = 2;
+}
+
+message BaseMultiuseProto
+{
+  required int32 count = 1;
+}
+
+message BaseTimedProto
+{
+  optional RandomDurationProto duration = 1;
+}
+
+message BaseCommodityProto
+{
+  optional AreaProto area = 1;
+  optional DistanceProto length = 2;
+}
+
+message BaseContainerProto
+{
+  optional VolumeProto capacity = 1;
+
+  enum State
+  {
+    UNKNOWN = 0;
+    SOLID = 1;
+    GRANULAR = 2;
+    LIQUID = 3;
+    GASEOUS = 4;
+  }
+  optional State state = 2;
+}
+
+message BaseArmorProto
+{
+  optional ModifierProto ac_bonus = 1;
+
+  enum Type
+  {
+    UNKNOWN = 0;
+    LIGHT = 1;
+    MEDIUM = 2;
+    HEAVY = 3;
+    SHIELD = 4;
+    TOWER_SHIELD = 5;
+    NONE = 6;
+  }
+  optional Type type = 2;
+  optional int32 max_dexterity = 3;
+  optional int32 check_penalty = 4;
+  optional int32 arcane_failure = 5;
+  optional DistanceProto speed_fast = 6;
+  optional DistanceProto speed_slow = 7;
+}
+
+message BaseLightProto
+{
+  message Light
+  {
+    required DistanceProto distance = 1;
+
+    enum Shape
+    {
+      UNKNOWN = 0;
+      CONE = 1;
+      CYLINDER = 2;
+      LINE = 3;
+      SPHERE = 4;
+    }
+    required Shape shape = 2;
+  }
+  optional Light bright = 1;
+  optional Light shadowy = 2;
+}
+
+message BaseCompositeProto
+{
+  message Or
+  {
+    repeated string name = 1;
+  }
+  repeated Or contains = 1;
+}
+
+message BaseCampaignProto
+{
+  required BaseEntryProto base = 1;
+}
+
+message BaseMonsterProto
+{
+  required BaseEntryProto base = 1;
+
+  optional BaseItemProto.Size size = 2;
+  optional BaseItemProto.SizeModifier size_modifier = 3;
+
+  enum Type
+  {
+    UNKNOWN_TYPE = 0;
+    ABERRATION = 1;
+    ANIMAL = 2;
+    CONSTRUCT = 3;
+    DRAGON = 4;
+    ELEMENTAL = 5;
+    FEY = 6;
+    GIANT = 7;
+    HUMANOID = 8;
+    MAGICAL_BEAST = 9;
+    MONSTROUS_HUMANOID = 10;
+    OOZE = 11;
+    OUTSIDER = 12;
+    PLANT = 13;
+    UNDEAD = 14;
+    VERMIN = 15;
+  }
+  optional Type type = 4;
+
+  enum Subtype
+  {
+    UNKNOWN_SUBTYPE = 0;
+    NONE_SUBTYPE = 1;
+    AIR = 2;
+    AQUATIC = 3;
+    ARCHON = 4;
+    AUGMENTED = 5;
+    BAATEZU = 6;
+    CHAOTIC = 7;
+    COLD = 8;
+    EARTH = 9;
+    ELADRIN = 10;
+    ELF = 11;
+    EVIL = 12;
+    EXTRAPLANAR = 13;
+    FIRE = 14;
+    GOBLINOID = 15;
+    GOOD = 16;
+    GUARDINAL = 17;
+    HUMAN = 18;
+    INCORPOREAL = 19;
+    LAEFUL = 20;
+    NATIVE = 21;
+    ORC = 22;
+    REPTILIAN = 23;
+    SHAPECHANGER = 24;
+    SWARM = 25;
+    WATER = 26;
+  }
+  repeated Subtype subtype = 5;
+  optional DiceProto hit_dice = 6;
+
+  message Speed
+  {
+    enum Mode
+    {
+      UNKNONW_MODE = 0;
+      BURROW = 1;
+      CLIMB = 2;
+      FLY = 3;
+      SWIM = 4;
+      RUN = 5;
+    }
+    optional Mode mode = 1;
+    required DistanceProto distance = 2;
+
+    enum Maneuverability
+    {
+      UNKNOWN_MANEUVERABILITY = 0;
+      PERFECT = 1;
+      GOOD = 2;
+      AVERAGE = 3;
+      POOR = 4;
+      CLUMSY = 5;
+      NONE = 6;
+    }
+    optional Maneuverability maneuverability = 3;
+  }
+  repeated Speed speed = 7;
+  optional ModifierProto natural_armor = 8;
+  optional int32 base_attack = 9;
+  optional int32 strength = 10;
+  optional int32 dexterity = 11;
+  optional int32 constitution = 12;
+  optional int32 wisdom = 13;
+  optional int32 intelligence = 14;
+  optional int32 charisma = 15;
+  optional int32 fortitude_save = 16;
+  optional int32 will_save = 17;
+  optional int32 reflex_save = 18;
+
+  message Attack
+  {
+    optional DiceProto attacks = 1;
+
+    enum Mode
+    {
+      UNKNOWN_MODE = 0;
+      TENTACLE = 1;
+      CLAW = 2;
+      BITE = 3;
+      FIST = 4;
+      QUILL = 5;
+      WEAPON = 6;
+      TOUCH = 7;
+      INCORPOREAL_TOUCH = 8;
+      SLAM = 9;
+      STING = 10;
+      SWARM = 11;
+      RAY = 12;
+      HOOF = 13;
+      SNAKES = 14;
+      WEB = 15;
+    }
+    optional Mode mode = 2;
+
+    enum Style
+    {
+      UNKNOWN_STYLE = 0;
+      MELEE = 1;
+      RANGED = 2;
+    }
+    optional Style style = 3;
+    optional DamageProto damage = 4;
+  }
+  repeated Attack primary_attack = 19;
+  repeated Attack secondary_attack = 20;
+  optional DistanceProto space = 21;
+  optional DistanceProto reach = 22;
+
+  message Reference
+  {
+    required string name = 1;
+    optional ParametersProto parameters = 3;
+  }
+
+  message QualityReference
+  {
+    optional Reference reference = 1;
+    optional int32 per_day = 2;
+    optional string condition = 3;
+  }
+  repeated QualityReference specialAttack = 23;
+  repeated QualityReference specialQuality = 24;
+
+  message SkillReference
+  {
+    optional Reference reference = 1;
+    optional ModifierProto modifier = 2;
+  }
+  repeated SkillReference class_skill = 25;
+  repeated Reference feat = 26;
+
+  enum Climate
+  {
+    UNKNOWN_CLIMATE = 0;
+    WARM = 1;
+    COLD_CLIMATE = 2;
+    ANY = 3;
+    TEMPERATE = 4;
+  }
+  optional Climate climate = 27;
+
+  enum Terrain
+  {
+    UNKNOWN_TERRAIN = 0;
+    FOREST = 1;
+    MARSH = 2;
+    HILLS = 3;
+    MOUNTAIN = 4;
+    DESERT = 5;
+    PLAINS = 6;
+    AQUATIC_TERRAIN = 7;
+    UNDERGROUND = 8;
+    INFERNAL_BATTLEFIELD_OF_ACHERON = 9;
+    INFINITE_LAYERS_OF_THE_ABYSS = 10;
+    ELEMENTAL_PLANE_OF_AIR = 11;
+    ELEMENTAL_PLANE_OF_EARTH = 12;
+    ELEMENTAL_PLANE_OF_FIRE = 13;
+    ELEMENTAL_PLANE_OF_WATER = 14;
+    WINDSWEPT_DEPTHS_OF_PANDEMONIUM = 15;
+    ANY_TERRAIN = 16;
+  }
+  optional Terrain terrain = 28;
+
+  message Organization
+  {
+    enum Type
+    {
+      UNKNOWN = 0;
+      ANY = 1;
+      BAND = 2;
+      BROOD = 3;
+      COLONY = 4;
+      COVEY = 5;
+      FLIGHT = 6;
+      FLOCK = 7;
+      GANG = 8;
+      HERD = 9;
+      INFESTATION = 10;
+      NEST = 11;
+      PACK = 12;
+      PAIR = 13;
+      PATROL = 14;
+      SLAVER_BROOD = 15;
+      SOLITARY = 16;
+      SQUAD = 17;
+      STORM = 18;
+      SWARM = 19;
+      TANGLE = 20;
+      TROUPE = 21;
+    }
+    optional Type type = 1;
+    optional DiceProto number = 2;
+
+    message Plus
+    {
+      optional DiceProto number = 1;
+      optional string text = 2;
+    }
+    repeated Plus plus = 3;
+  }
+  repeated Organization organization = 29;
+  optional RationalProto challenge_rating = 30;
+
+  enum Treasure
+  {
+    UNKNOWN_TREADSURE = 0;
+    NONE_TREASURE = 1;
+    STANDARD = 2;
+    DOUBLE = 3;
+    TRIPLE = 4;
+    QUADRUPLE = 5;
+  }
+  optional Treasure treasure = 31;
+
+  enum Alignment
+  {
+    UNKNOWN_ALIGNMENT = 0;
+    LAWFUL_GOOD = 1;
+    NEUTRAL_GOOD = 2;
+    CHAOTIC_GOOD = 3;
+    LAWFUL_NEUTRAL = 4;
+    TRUE_NEUTRAL = 5;
+    CHOATIC_NETURAL = 6;
+    LAEWFUL_EVIL = 7;
+    NEUTRAL_EVIL = 8;
+    CHAOTIC_EVIL = 9;
+    ANY_CHAOTIC = 10;
+    ANY_EVIL = 11;
+    ANY_GOOD = 12;
+    ANY_LAWFUL = 13;
+    ANY_ALIGNMENT = 14;
+  }
+  optional Alignment alignment = 32;
+
+  enum AlignmentStatus
+  {
+    UNKNOWN_ALIGNMENT_STATU = 0;
+    ALWAYS = 1;
+    USUALLY = 2;
+    OFTEN = 3;
+  }
+  optional AlignmentStatus alignment_status = 33;
+
+  message Advancement
+  {
+    optional RangeProto range = 1;
+    optional BaseItemProto.Size size = 2;
+  }
+  repeated Advancement advancement = 34;
+  optional int32 level_adjustment = 35;
+
+  message Language
+  {
+    enum Modifier
+    {
+      UNKNOWN_MODIFIER = 0;
+      AUTOMATIC = 1;
+      BONUS = 2;
+      SOME = 3;
+      UNDERSTAND = 4;
+    }
+    optional Modifier modifier = 1;
+
+    enum Name
+    {
+      UNKNOWN_LANGUAGE = 0;
+      ABOLETH = 1;
+      ABYSSAL = 2;
+      AQUAN = 3;
+      AURAN = 4;
+      CELESTIAL = 5;
+      COMMON = 6;
+      DRACONIC = 7;
+      DROW_SIGN = 8;
+      DRUIDIC = 9;
+      DWARVEN = 10;
+      ELVEN = 11;
+      GIANT = 12;
+      GNOME = 13;
+      GOBLIN = 14;
+      GNOLL = 15;
+      HALFLING = 16;
+      IGNAN = 17;
+      INFERNAL = 18;
+      KUO_TOA = 19;
+      ORC = 20;
+      SYLVAN = 21;
+      TERRAN = 22;
+      UNDERCOMMON = 23;
+      NONE = 24;
+    }
+    required Name name = 2;
+  }
+  repeated Language language = 36;
+  optional string encounter = 37;
+  optional string combat = 38;
+  optional string tactics = 39;
+  optional string character = 40;
+  optional string reproduction = 41;
+
+  message Possession
+  {
+    optional string name = 1;
+    optional string text = 2;
+  }
+  repeated Possession possession = 42;
+
+  enum Save
+  {
+    UNKNOWN_SAVE = 0;
+    FORTITUDE = 1;
+    REFLEX = 2;
+    WISDOM_SAVE = 3;
+  }
+  repeated Save good_save = 43;
+
+  enum Ability
+  {
+    UNKNOWN = 0;
+    STRENGTH = 1;
+    DEXTERITY = 2;
+    CONSTITUTION = 3;
+    INTELLIGENCE = 4;
+    WISDOM = 5;
+    CHARISMA = 6;
+    NONE = 7;
+  }
+}
+
+message BaseEncounterProto
+{
+  required BaseEntryProto base = 1;
+
+  optional string adventure = 2;
+  repeated string location = 3;
+  optional string floor = 4;
+  optional string ceiling = 5;
+  optional string walls = 6;
+  optional string feel = 7;
+  optional string sound = 8;
+  optional string smell = 9;
+  optional string taste = 10;
+  optional string light = 11;
+  repeated string skill = 12;
+  optional string doors = 13;
+}
+
+message BaseLevelProto
+{
+  required BaseEntryProto base = 1;
+
+  optional string abbreviation = 2;
+  optional string adventures = 3;
+  optional string characteristics = 4;
+  optional string alignment_options = 5;
+  optional string religion = 6;
+  optional string background = 7;
+  optional string races = 8;
+  optional string otherClasses = 9;
+  optional string role = 10;
+  optional string important_abilities = 11;
+  repeated BaseMonsterProto.Alignment allowed_alignment = 12;
+  optional DiceProto hit_dice = 13;
+  optional int32 skill_points = 14;
+  repeated string class_skill = 15;
+  repeated BaseWeaponProto.Proficiency weapon_proficiency = 16;
+  repeated BaseArmorProto.Type armor_proficiency = 17;
+
+  message LeveledQuality
+  {
+    required int32 level = 1;
+    required BaseMonsterProto.QualityReference quality = 2;
+  }
+
+  repeated LeveledQuality specialAttack = 18;
+  repeated LeveledQuality specialQuality = 19;
+  repeated int32 base_attack = 20;
+  repeated int32 fortitude_save = 21;
+  repeated int32 reflex_save = 22;
+  repeated int32 will_save = 23;
+}
+
+message EntryProto
+{
+  required AbstractEntryProto abstract = 1;
+}
+
+message ProductProto
+{
+  required EntryProto base = 1;
+
+  optional string edition = 2;
+  optional string printing = 3;
+  optional string owner = 4;
+
+  enum Status
+  {
+    UNKNOWN = 0;
+    AVAILABLE = 1;
+    DESIRED_1 = 2;
+    DESIRED_2 = 3;
+    DESIRED_3 = 4;
+  }
+  optional Status status = 5;
+
+  enum Condition
+  {
+    UNKNOWN_CONDITION = 0;
+    MINT = 1;
+    GOOD = 2;
+    USED = 3;
+    USABLE = 4;
+    PARTIAL = 5;
+    CRAP = 6;
+    NONE = 7;
+  }
+  optional Condition condition = 6;
+  optional string condition_comment = 7;
+}
+
+message CampaignEntryProto
+{
+  required EntryProto base = 1;
+
+  optional string base_campaign = 2;
+  optional string campaign = 3;
+  optional string parent = 4;
+}
+
+message CampaignProto
+{
+  required CampaignEntryProto base = 1;
+
+  optional string dm = 2;
+}
+
+message CharacterProto
+{
+  required CampaignEntryProto base = 1;
+
+  enum State
+  {
+    UNKNOWN = 0;
+    ADVENTURING = 1;
+    INCAPACITATED = 2;
+    RETIRED = 3;
+    DEAD = 4;
+  }
+  optional State state = 2;
+  repeated string item = 3;
+  optional int32 level = 4;
+}
+
+message ItemProto
+{
+  required CampaignEntryProto base = 1;
+
+  optional int32 hit_points = 2;
+  optional MoneyProto value = 3;
+  optional string appearance = 4;
+  optional string player_notes = 5;
+  optional string player_name = 6;
+  optional string dm_notes = 7;
+}
+
+message EncounterProto
+{
+  required CampaignEntryProto base = 1;
+
+  optional string number = 2;
+  optional string title = 3;
+  repeated string monster = 4;
+  repeated string item = 5;
+  repeated string trap = 6;
+  repeated string hazard = 7;
+  repeated string obstacle = 8;
+  repeated string secret = 9;
+  repeated string event = 10;
+  repeated string rule = 11;
+  repeated string spell = 12;
+  repeated int32 encounter_level = 13;
+  repeated string location = 14;
+  optional string doors = 15;
+  optional string floor = 16;
+  optional string ceiling = 17;
+  optional string walls = 18;
+  optional string feel = 19;
+  optional string sound = 20;
+  optional string smell = 21;
+  optional string taste = 22;
+  optional string light = 23;
+  repeated string skill = 24;
+  optional DistanceProto distance = 25;
+}
+
+message MonsterProto
+{
+  required CampaignEntryProto base = 1;
+
+  repeated string possession = 2;
+  optional int32 strength = 3;
+  optional int32 dexterity = 4;
+  optional int32 constitution = 5;
+  optional int32 intelligence = 6;
+  optional int32 wisdom = 7;
+  optional int32 charisma = 8;
+  repeated BaseMonsterProto.Reference feat = 9;
+  optional int32 max_hit_points = 10;
+  optional int32 hit_points = 11;
+
+  message Skill
+  {
+    required BaseMonsterProto.Reference skill = 1;
+    optional int32 ranks = 2;
+  }
+  repeated Skill skill = 12;
+  optional BaseMonsterProto.Alignment alignment = 13;
+  optional int32 fortitude_save = 14;
+  optional int32 will_save = 15;
+  optional int32 reflex_save = 16;
+}
+
+message LevelProto
+{
+  required CampaignEntryProto base = 1;
+}
+
+message NPCProto
+{
+  required MonsterProto base = 1;
+
+  enum Gender
+  {
+    UNKNOWN = 0;
+    MALE = 1;
+    FEMALE = 2;
+    OTHER = 3;
+  }
+  optional Gender gender = 2;
+  optional string given_name = 3;
+  repeated string level = 4;
+}

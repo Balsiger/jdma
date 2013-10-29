@@ -22,12 +22,21 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
+
+import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
+import net.ixitxachitls.dma.proto.Entries.EncounterProto;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.util.logging.Log;
 
 /**
  * An actual encounter that can happen in the game.
@@ -276,10 +285,6 @@ public class Encounter extends CampaignEntry<BaseEncounter>
   @Key("number")
   protected Name m_number = new Name();
 
-  /** The title of the encounter. */
-  @Key("title")
-  protected Name m_title = new Name();
-
   /** The monster that can potentially be encountered. */
   @Key("monsters")
   protected ValueList<Reference<Monster>> m_monsters =
@@ -385,5 +390,255 @@ public class Encounter extends CampaignEntry<BaseEncounter>
   static
   {
     extractVariables(Encounter.class);
+  }
+
+  @Override
+  public Message toProto()
+  {
+    EncounterProto.Builder builder = EncounterProto.newBuilder();
+
+    builder.setBase((CampaignEntryProto)super.toProto());
+
+    if(m_number.isDefined())
+      builder.setNumber(m_number.get());
+
+    if(m_monsters.isDefined())
+      for(Reference<Monster> monster : m_monsters)
+        builder.addMonster(monster.getName());
+
+    if(m_items.isDefined())
+      for(Reference<Item> item : m_items)
+        builder.addItem(item.getName());
+
+    if(m_traps.isDefined())
+      for(LongFormattedText trap : m_traps)
+        builder.addTrap(trap.get());
+
+    if(m_hazards.isDefined())
+      for(LongFormattedText hazard : m_hazards)
+        builder.addHazard(hazard.get());
+
+    if(m_obstacles.isDefined())
+      for(LongFormattedText obstacle : m_obstacles)
+        builder.addObstacle(obstacle.get());
+
+    if(m_secrets.isDefined())
+      for(LongFormattedText secret : m_secrets)
+        builder.addSecret(secret.get());
+
+    if(m_events.isDefined())
+      for(LongFormattedText event : m_events)
+        builder.addEvent(event.get());
+
+    if(m_rules.isDefined())
+      for(LongFormattedText rule : m_rules)
+        builder.addRule(rule.get());
+
+    if(m_spells.isDefined())
+      for(Reference<BaseSpell> spell : m_spells)
+        builder.addSpell(spell.getName());
+
+    if(m_els.isDefined())
+      for(Number el : m_els)
+        builder.addEncounterLevel((int)el.get());
+
+    if(m_location.isDefined())
+      for(Name location : m_location)
+        builder.addLocation(location.get());
+
+    if(m_doors.isDefined())
+      builder.setDoors(m_doors.get());
+
+    if(m_floor.isDefined())
+      builder.setFloor(m_floor.get());
+
+    if(m_ceiling.isDefined())
+      builder.setCeiling(m_ceiling.get());
+
+    if(m_walls.isDefined())
+      builder.setWalls(m_walls.get());
+
+    if(m_feel.isDefined())
+      builder.setFeel(m_feel.get());
+
+    if(m_sound.isDefined())
+      builder.setSound(m_sound.get());
+
+    if(m_smell.isDefined())
+      builder.setSmell(m_smell.get());
+
+    if(m_taste.isDefined())
+      builder.setDoors(m_taste.get());
+
+    if(m_light.isDefined())
+      builder.setDoors(m_light.get());
+
+    if(m_skills.isDefined())
+      for(Reference<BaseSkill> skill : m_skills)
+        builder.addSkill(skill.getName());
+
+    if(m_distance.isDefined())
+      builder.setDistance(m_distance.toProto());
+
+    EncounterProto proto = builder.build();
+    return proto;
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof EncounterProto))
+    {
+      Log.warning("cannot parse proto " + inProto);
+      return;
+    }
+
+    EncounterProto proto = (EncounterProto)inProto;
+
+    super.fromProto(proto.getBase());
+
+    if(proto.hasNumber())
+      m_number = m_number.as(proto.getNumber());
+
+    if(proto.getMonsterCount() > 0)
+    {
+      List<Reference<Monster>> monsters = new ArrayList<>();
+      for(String monster : proto.getMonsterList())
+        monsters.add(m_monsters.createElement().as(monster));
+      m_monsters = m_monsters.as(monsters);
+    }
+
+    if(proto.getItemCount() > 0)
+    {
+      List<Reference<Item>> items = new ArrayList<>();
+      for(String item : proto.getItemList())
+        items.add(m_items.createElement().as(item));
+      m_items = m_items.as(items);
+    }
+
+    if(proto.getTrapCount() > 0)
+    {
+      List<LongFormattedText> traps = new ArrayList<>();
+      for(String trap : proto.getTrapList())
+        traps.add(m_traps.createElement().as(trap));
+      m_traps = m_traps.as(traps);
+    }
+
+    if(proto.getHazardCount() > 0)
+    {
+      List<LongFormattedText> hazards = new ArrayList<>();
+      for(String hazard : proto.getHazardList())
+        hazards.add(m_traps.createElement().as(hazard));
+      m_hazards = m_hazards.as(hazards);
+    }
+
+    if(proto.getObstacleCount() > 0)
+    {
+      List<LongFormattedText> obstacles = new ArrayList<>();
+      for(String obstacle : proto.getObstacleList())
+        obstacles.add(m_traps.createElement().as(obstacle));
+      m_obstacles = m_obstacles.as(obstacles);
+    }
+
+    if(proto.getSecretCount() > 0)
+    {
+      List<LongFormattedText> secrets = new ArrayList<>();
+      for(String secret : proto.getSecretList())
+        secrets.add(m_secrets.createElement().as(secret));
+      m_secrets = m_secrets.as(secrets);
+    }
+
+    if(proto.getEventCount() > 0)
+    {
+      List<LongFormattedText> events = new ArrayList<>();
+      for(String event : proto.getEventList())
+        events.add(m_events.createElement().as(event));
+      m_events = m_events.as(events);
+    }
+
+    if(proto.getSpellCount() > 0)
+    {
+      List<Reference<BaseSpell>> spells = new ArrayList<>();
+      for(String spell : proto.getSpellList())
+        spells.add(m_spells.createElement().as(spell));
+      m_spells = m_spells.as(spells);
+    }
+
+    if(proto.getEncounterLevelCount() > 0)
+    {
+      List<Number> els = new ArrayList<>();
+      for(int el : proto.getEncounterLevelList())
+        els.add(m_els.createElement().as(el));
+      m_els = m_els.as(els);
+    }
+
+    if(proto.getRuleCount() > 0)
+    {
+      List<LongFormattedText> rules = new ArrayList<>();
+      for(String rule : proto.getRuleList())
+        rules.add(m_rules.createElement().as(rule));
+      m_rules = m_rules.as(rules);
+    }
+
+    if(proto.getLocationCount() > 0)
+    {
+      List<Name> locations = new ArrayList<>();
+      for(String location : proto.getLocationList())
+        locations.add(m_location.createElement().as(location));
+
+      m_location = m_location.as(locations);
+    }
+
+    if(proto.hasDoors())
+      m_doors = m_doors.as(proto.getDoors());
+
+    if(proto.hasFloor())
+      m_floor = m_floor.as(proto.getFloor());
+
+    if(proto.hasCeiling())
+      m_ceiling = m_ceiling.as(proto.getCeiling());
+
+    if(proto.hasWalls())
+      m_walls = m_walls.as(proto.getWalls());
+
+    if(proto.hasFeel())
+      m_feel = m_feel.as(proto.getFeel());
+
+    if(proto.hasSound())
+      m_sound = m_sound.as(proto.getSound());
+
+    if(proto.hasSmell())
+      m_smell = m_smell.as(proto.getSmell());
+
+    if(proto.hasTaste())
+      m_taste = m_taste.as(proto.getTaste());
+
+    if(proto.hasLight())
+      m_light = m_light.as(proto.getLight());
+
+    if(proto.getSkillCount() > 0)
+    {
+      List<Reference<BaseSkill>> skills = new ArrayList<>();
+      for(String skill : proto.getSkillList())
+        skills.add(m_skills.createElement().as(skill));
+
+      m_skills = m_skills.as(skills);
+    }
+
+    if(proto.hasDistance())
+      m_distance = m_distance.fromProto(proto.getDistance());
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(EncounterProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
   }
 }

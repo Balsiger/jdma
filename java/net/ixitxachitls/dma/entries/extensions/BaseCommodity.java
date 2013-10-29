@@ -26,12 +26,15 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseCommodityProto;
 import net.ixitxachitls.dma.values.Area;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Group;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -192,6 +195,37 @@ public class BaseCommodity extends BaseExtension<BaseItem>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    BaseCommodityProto.Builder builder = BaseCommodityProto.newBuilder();
+
+    if(m_area.isDefined())
+      builder.setArea(m_area.toProto());
+    if(m_length.isDefined())
+      builder.setLength(m_length.toProto());
+
+    return builder.build();
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseCommodityProto))
+    {
+      Log.warning("cannot parse base commodity proto " + inProto.getClass());
+      return;
+    }
+
+    BaseCommodityProto proto = (BaseCommodityProto)inProto;
+
+    if(proto.hasArea())
+      m_area = m_area.fromProto(proto.getArea());
+    if(proto.hasLength())
+      m_length = m_length.fromProto(proto.getLength());
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

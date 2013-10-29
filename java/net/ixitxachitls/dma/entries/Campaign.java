@@ -31,7 +31,12 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
+
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
+import net.ixitxachitls.dma.proto.Entries.CampaignProto;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.ValueList;
@@ -138,7 +143,9 @@ public class Campaign extends CampaignEntry<BaseCampaign>
 
     return
       new EntryKey<Campaign>(getName(), Campaign.TYPE,
-                             new EntryKey<BaseCampaign>(names.get(0),
+                             new EntryKey<BaseCampaign>(names.size() > 0
+                                                        ? names.get(0)
+                                                        : "$undefined$",
                                                         BaseCampaign.TYPE));
   }
 
@@ -357,8 +364,11 @@ public class Campaign extends CampaignEntry<BaseCampaign>
   @Override
   public String getPath()
   {
-    return "/" + BaseCampaign.TYPE.getLink() + "/" + m_base.get(0).get()
-      + "/" + getName();
+    if(m_base.isDefined())
+      return "/" + BaseCampaign.TYPE.getLink() + "/" + m_base.get(0).get()
+        + "/" + getName();
+
+    return "/" + BaseCampaign.TYPE.getLink() + "/$undefined$/" + getName();
   }
 
   //........................................................................
@@ -406,6 +416,51 @@ public class Campaign extends CampaignEntry<BaseCampaign>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    CampaignProto.Builder builder = CampaignProto.newBuilder();
+
+    builder.setBase((CampaignEntryProto)super.toProto());
+
+    if(m_dm.isDefined())
+      builder.setDm(m_dm.get());
+
+    CampaignProto proto = builder.build();
+    return proto;
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof CampaignProto))
+    {
+      Log.warning("cannot parse proto " + inProto);
+      return;
+    }
+
+    CampaignProto proto = (CampaignProto)inProto;
+
+    super.fromProto(proto.getBase());
+
+    if(proto.hasDm())
+      m_dm = m_dm.as(proto.getDm());
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(CampaignProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

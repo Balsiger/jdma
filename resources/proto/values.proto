@@ -1,0 +1,327 @@
+package net.ixitxachitls.dma.proto;
+
+message RangeProto
+{
+  optional int64 low = 1;
+  optional int64 high = 2;
+}
+
+message PriceProto
+{
+  required string currency = 1;
+  required int32 number = 2;
+  required int32 precision = 3;
+}
+
+message RationalProto
+{
+  // All the values must be positive!
+  optional int32 leader = 1;
+  optional int32 nominator = 2;
+  optional int32 denominator = 3;
+  optional bool negative = 4;
+}
+
+message DurationProto
+{
+  message Metric
+  {
+    optional RationalProto days = 1;
+    optional RationalProto hours = 2;
+    optional RationalProto minutes = 3;
+    optional RationalProto seconds = 4;
+  }
+  optional Metric metric = 1;
+  optional RationalProto rounds = 2;
+
+  message Actions
+  {
+    optional RationalProto rounds = 1;
+    optional RationalProto standard_actions = 2;
+    optional RationalProto move_actions = 3;
+    optional RationalProto swift_actions = 4;
+    optional RationalProto free_actions = 5;
+    optional RationalProto minutes = 6;
+  }
+  optional Actions actions = 3;
+}
+
+message RandomDurationProto
+{
+  optional DurationProto duration = 1;
+  repeated DiceProto dice = 2;
+}
+
+message DistanceProto
+{
+  message Metric
+  {
+    optional RationalProto kilometers = 1;
+    optional RationalProto meters = 2;
+    optional RationalProto centimeters = 3;
+  }
+  optional Metric metric = 1;
+
+  message Imperial
+  {
+    optional RationalProto miles = 1;
+    optional RationalProto feet = 2;
+    optional RationalProto inches = 3;
+  }
+  optional Imperial imperial = 2;
+}
+
+message AreaProto
+{
+  message Metric
+  {
+    optional RationalProto square_meters = 1;
+    optional RationalProto square_decimeters = 2;
+    optional RationalProto square_centimeters = 3;
+  }
+  optional Metric metric = 1;
+
+  message Imperial
+  {
+    optional RationalProto square_yards = 1;
+    optional RationalProto square_feet = 2;
+    optional RationalProto square_inches = 3;
+  }
+  optional Imperial imperial = 2;
+}
+
+message VolumeProto
+{
+  message Metric
+  {
+    optional RationalProto cubic_meters = 1;
+    optional RationalProto cubic_decimeters = 2;
+  }
+  optional Metric metric = 1;
+
+  message Imperial
+  {
+    optional RationalProto cubic_feet = 1;
+    optional RationalProto cubic_inches = 2;
+  }
+  optional Imperial imperial = 2;
+
+  message Gallons
+  {
+    optional RationalProto gallons = 1;
+    optional RationalProto quarts = 2;
+    optional RationalProto pints = 3;
+    optional RationalProto cups = 4;
+  }
+  optional Gallons gallons = 3;
+
+  message Liters
+  {
+    optional RationalProto liters = 1;
+    optional RationalProto deciliters = 2;
+    optional RationalProto centiliters = 3;
+  }
+  optional Liters liters = 4;
+}
+
+message ModifierProto
+{
+  enum Type
+  {
+    UNKNOWN = 0;
+    DODGE = 1;
+    ARMOR = 2;
+    EQUIPMENT = 3;
+    SHIELD = 4;
+    GENERAL = 5;
+    NATURAL_ARMOR = 6;
+    ABILITY = 7;
+    SIZE = 8;
+    RACIAL = 9;
+    CIRCUMSTANCE = 10;
+    ENHANCEMENT = 11;
+    DEFLECTION = 12;
+    RAGE = 13;
+    COMPETENCE = 14;
+  }
+
+  message Modifier
+  {
+    required int32 base_value = 1;
+    optional Type type = 2;
+    optional string condition = 3;
+  }
+  repeated Modifier modifier = 1;
+}
+
+message MoneyProto
+{
+  optional int32 copper = 1;
+  optional int32 silver = 2;
+  optional int32 gold = 3;
+  optional int32 platinum = 4;
+}
+
+message WeightProto
+{
+  message Metric
+  {
+    optional RationalProto tons = 1;
+    optional RationalProto kilograms = 2;
+    optional RationalProto grams = 3;
+  }
+  optional Metric metric = 1;
+
+  message Imperial
+  {
+    optional RationalProto pounds = 1;
+    optional RationalProto ounces = 2;
+  }
+  optional Imperial imperial = 2;
+  optional RationalProto carats = 3;
+}
+
+message DiceProto
+{
+  optional int32 number = 1;
+  optional int32 dice = 2;
+  optional int32 modifier = 3;
+}
+
+message DamageProto
+{
+  message Damage
+  {
+    enum Type
+    {
+      UNKNOWN = 0;
+      FIRE = 1;
+      ELECTRICAL = 2;
+      SONIC = 3;
+      WATER = 4;
+      ACID = 5;
+      HOLY = 6;
+      NEGATIVE_ENERGY = 7;
+      NONLETHAL = 8;
+      COLD = 9;
+      STR = 10;
+      DEX = 11;
+      CON = 12;
+      INT = 13;
+      WIS = 14;
+      CHA = 15;
+    }
+
+    required DiceProto base = 1;
+    optional Type type = 2;
+    optional string effect = 3;
+  }
+  repeated Damage damage = 1;
+}
+
+message CriticalProto
+{
+  optional RangeProto threat = 1;
+  optional int32 multiplier = 2;
+}
+
+message ParametersProto
+{
+  message Distance
+  {
+    optional string name = 1;
+    optional DistanceProto distance = 2;
+  }
+  repeated Distance distance = 1;
+
+  message Text
+  {
+    optional string name = 1;
+    optional string text= 2;
+  }
+  repeated Text text = 2;
+
+  message Number
+  {
+    optional string name = 1;
+    optional int32 number = 2;
+  }
+  repeated Number number = 3;
+
+  message Modifier
+  {
+    optional string name = 1;
+    optional ModifierProto modifier = 2;
+  }
+  repeated Modifier modifier = 4;
+
+  message Damage
+  {
+    optional string name = 1;
+    optional DamageProto damage = 2;
+  }
+  repeated Damage damage = 5;
+
+  message SpellClass
+  {
+    optional string name = 1;
+    optional SharedProto.SpellClass spell_class = 2;
+  }
+  repeated SpellClass spell_class = 6;
+
+  message SkillSubtype
+  {
+    optional string name = 1;
+    optional SharedProto.SkillSubtype skill_subtype = 2;
+  }
+  repeated SkillSubtype skill_subtype = 7;
+}
+
+message SharedProto
+{
+  enum SpellClass
+  {
+    UNKNOWN = 0;
+    ASSASSIN = 1;
+    BARD = 2;
+    CLERIC = 3;
+    DRUID = 4;
+    PALADIN = 5;
+    RANGER = 6;
+    SORCERER = 7;
+    WIZARD = 8;
+    AIR = 9;
+    ANIMAL = 10;
+    CHAOS = 11;
+    DEATH = 12;
+    DESTRUCTION = 13;
+    DROW = 14;
+    EARTH = 15;
+    EVIL = 16;
+    FIRE = 17;
+    GOOD = 18;
+    HEALING = 19;
+    KNOWLEDGE = 20;
+    LAW = 21;
+    LUCK = 22;
+    MAGIC = 23;
+    PLANT = 24;
+    PROTECTION = 25;
+    STRENGTH = 26;
+    SUN = 27;
+    TRAVEL = 28;
+    TRICKERY = 29;
+    WAR = 30;
+    WATER = 31;
+  }
+
+  enum SkillSubtype
+  {
+    UNKNOWN_SKILL_SUBTYPE = 0;
+    DROW_RELIGION = 1;
+    RELIGION = 2;
+    ARCANA = 3;
+    ALCHEMY = 4;
+    ANY_ONE = 5;
+  }
+}

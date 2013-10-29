@@ -201,7 +201,6 @@ public class SoyServlet extends DMAServlet
     renderer.setInjected(collectInjectedData(inRequest, renderer));
     renderer.setData(collectData(inRequest, renderer));
 
-
     try (PrintWriter print = new PrintWriter(inResponse.getOutputStream()))
     {
       print.println(renderer.render(getTemplateName(inRequest)));

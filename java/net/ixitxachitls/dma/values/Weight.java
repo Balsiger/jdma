@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.proto.Values.WeightProto;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -463,6 +464,99 @@ public class Weight extends Units<Weight>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  /**
+   * Create a proto for the value.
+   *
+   * @return the proto representation
+   */
+  public WeightProto toProto()
+  {
+    WeightProto.Builder builder = WeightProto.newBuilder();
+
+    if(m_set == m_sets[0])
+      if(m_values != null && m_values.length == 2)
+      {
+        WeightProto.Imperial.Builder imperial =
+          WeightProto.Imperial.newBuilder();
+
+        if(m_values[0] != null)
+          imperial.setPounds(m_values[0].toProto());
+        if(m_values[1] != null)
+          imperial.setOunces(m_values[1].toProto());
+
+        builder.setImperial(imperial.build());
+      }
+
+    if(m_set == m_sets[1])
+      if(m_values != null && m_values.length == 3)
+      {
+        WeightProto.Metric.Builder imperial =
+          WeightProto.Metric.newBuilder();
+
+        if(m_values[0] != null)
+          imperial.setTons(m_values[0].toProto());
+        if(m_values[1] != null)
+          imperial.setKilograms(m_values[1].toProto());
+        if(m_values[2] != null)
+          imperial.setGrams(m_values[2].toProto());
+
+        builder.setMetric(imperial.build());
+      }
+
+    if(m_set == m_sets[2])
+      if(m_values != null && m_values.length == 1)
+        if(m_values[0] != null)
+          builder.setCarats(m_values[0].toProto());
+
+    return builder.build();
+  }
+
+  /**
+   * Create a new duration similar to the current but with data from the
+   * given proto.
+   *
+   *
+   * @param inProto  the proto with the data
+   * @return the newly created duration
+   */
+  public Weight fromProto(WeightProto inProto)
+  {
+    Weight result = create();
+
+    if(inProto.hasImperial())
+    {
+      result.m_values = new Rational[2];
+      if(inProto.getImperial().hasPounds())
+        result.m_values[0] =
+          Rational.fromProto(inProto.getImperial().getPounds());
+      if(inProto.getImperial().hasOunces())
+        result.m_values[1] =
+          Rational.fromProto(inProto.getImperial().getOunces());
+      result.m_set = m_sets[0];
+    }
+    else if(inProto.hasMetric())
+    {
+      result.m_values = new Rational[3];
+      if(inProto.getMetric().hasTons())
+        result.m_values[0] = Rational.fromProto(inProto.getMetric().getTons());
+      if(inProto.getMetric().hasKilograms())
+        result.m_values[1] =
+          Rational.fromProto(inProto.getMetric().getKilograms());
+      if(inProto.getMetric().hasGrams())
+        result.m_values[2] = Rational.fromProto(inProto.getMetric().getGrams());
+      result.m_set = m_sets[1];
+    }
+    else if(inProto.hasCarats())
+    {
+      result.m_values = new Rational[1];
+      result.m_values[0] = Rational.fromProto(inProto.getCarats());
+      result.m_set = m_sets[2];
+    }
+
+    return result;
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

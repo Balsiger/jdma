@@ -36,13 +36,9 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
@@ -284,7 +280,7 @@ public class AdminServlet extends SoyServlet
       int size = DMADataFactory.get().refresh(type, request);
 
       Log.event(user.getName(), "admin refresh " + refresh,
-                size + "the entries of " + refresh + " have been refreshed.");
+                size + " entries of " + refresh + " have been refreshed.");
 
       try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
       {
@@ -297,37 +293,37 @@ public class AdminServlet extends SoyServlet
     String upgrade = request.getParam("upgrade");
     if(upgrade != null)
     {
-      inResponse.setHeader("Content-Type", "text/html");
-      inResponse.setHeader("Cache-Control", "max-age=0");
-
-      DMADatastore store = ((DMADatastore)DMADataFactory.get());
-
-      Key campaign =
-        KeyFactory.createKey(KeyFactory.createKey("base_campaign", "fr"),
-                             "campaign", "city of the spider queen");
-      Entity monster =
-        store.m_data.getEntity(KeyFactory.createKey(campaign, "monster",
-                                                    upgrade));
-      if (monster != null)
-      {
-        Entity npc = new Entity("npc", upgrade, campaign);
-        npc.setPropertiesFrom(monster);
-        store.m_data.update(npc);
-
-        try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
-        {
-          writer.println("gui.info('monster " + upgrade + " moved to npc');");
-        }
-      }
-      else
-      {
-        try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
-        {
-          writer.println("gui.alert('Could not find monster " + upgrade
-                         + "');");
-        }
-      }
-      return null;
+//      inResponse.setHeader("Content-Type", "text/html");
+//      inResponse.setHeader("Cache-Control", "max-age=0");
+//
+//      DMADatastore store = ((DMADatastore)DMADataFactory.get());
+//
+//      Key campaign =
+//        KeyFactory.createKey(KeyFactory.createKey("base_campaign", "fr"),
+//                             "campaign", "city of the spider queen");
+//      Entity monster =
+//        store.m_data.getEntity(KeyFactory.createKey(campaign, "monster",
+//                                                    upgrade));
+//      if (monster != null)
+//      {
+//        Entity npc = new Entity("npc", upgrade, campaign);
+//        npc.setPropertiesFrom(monster);
+//        store.m_data.update(npc);
+//
+//     try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
+//        {
+//          writer.println("gui.info('monster " + upgrade + " moved to npc');");
+//        }
+//      }
+//      else
+//      {
+//     try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
+//        {
+//          writer.println("gui.alert('Could not find monster " + upgrade
+//                         + "');");
+//        }
+//      }
+//      return null;
     }
 
     return super.handle(inRequest, inResponse);

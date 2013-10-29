@@ -26,13 +26,17 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.BaseItem;
+import net.ixitxachitls.dma.entries.BaseItem.AreaShapes;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseLightProto;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
 import net.ixitxachitls.dma.values.Multiple;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -192,61 +196,61 @@ public class BaseLight extends BaseExtension<BaseItem>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-
-  //------------------------------ setBright -------------------------------
-
-  /**
-   * Set the bright light value in feet.
-   *
-   * @param       inRange the range of the light in feet
-   * @param       inShape the shape of the range
-   *
-   * @return      true if set, false if not
-   *
-   * @undefined   never
-   *
-   */
-  // @SuppressWarnings("unchecked") // cast to enum selection
-  // public boolean setBright(int inRange, BaseItem.AreaShapes inShape)
-  // {
-  //   if(!((Distance)m_brightLight.get(0).getMutable())
-  //      .setFeet(null, new Rational(inRange), null))
-  //     return false;
-
-  //   return ((EnumSelection<BaseItem.AreaShapes>)
-  //           m_brightLight.get(1).getMutable()).set(inShape);
-  // }
-
-  //........................................................................
-  //----------------------------- setShadowy -------------------------------
-
-  /**
-   * Set the shadowy light value in feet.
-   *
-   * @param       inRange the range of the light in feet
-   * @param       inShape the shape of the range
-   *
-   * @return      true if set, false if not
-   *
-   * @undefined   never
-   *r
-   */
-  // @SuppressWarnings("unchecked") // cast to enum selection
-  // public boolean setShadowy(int inRange, BaseItem.AreaShapes inShape)
-  // {
-  //   if(!((Distance)m_shadowyLight.get(0).getMutable())
-  //      .setFeet(null, new Rational(inRange), null))
-  //     return false;
-
-  //   return ((EnumSelection<BaseItem.AreaShapes>)
-  //           m_shadowyLight.get(1).getMutable()).set(inShape);
-  // }
-
-  //........................................................................
-
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Message toProto()
+  {
+    BaseLightProto.Builder builder = BaseLightProto.newBuilder();
+
+    if(m_brightLight.isDefined())
+      builder.setBright(BaseLightProto.Light.newBuilder()
+                        .setDistance(((Distance)m_brightLight.get(0)).toProto())
+                        .setShape(((EnumSelection<AreaShapes>)m_brightLight
+                                  .get(1)).getSelected().toProto())
+                        .build());
+    if(m_shadowyLight.isDefined())
+      builder.setShadowy(BaseLightProto.Light.newBuilder()
+                         .setDistance(((Distance)m_shadowyLight.get(0))
+                                      .toProto())
+                         .setShape(((EnumSelection<AreaShapes>)m_shadowyLight
+                                  .get(1)).getSelected().toProto())
+                         .build());
+
+    return builder.build();
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseLightProto))
+    {
+      Log.warning("cannot parse base light proto " + inProto.getClass());
+      return;
+    }
+
+    BaseLightProto proto = (BaseLightProto)inProto;
+
+    if(proto.hasBright())
+      m_brightLight =
+        m_brightLight.as(((Distance)m_brightLight.get(0))
+                         .fromProto(proto.getBright().getDistance()),
+                         ((EnumSelection<AreaShapes>)m_brightLight.get(1))
+                         .as(AreaShapes.fromProto(proto.getBright()
+                                                  .getShape())));
+    if(proto.hasShadowy())
+      m_shadowyLight =
+        m_shadowyLight.as(((Distance)m_shadowyLight.get(0))
+                          .fromProto(proto.getShadowy().getDistance()),
+                          ((EnumSelection<AreaShapes>)m_shadowyLight.get(1))
+                          .as(AreaShapes.fromProto(proto.getShadowy()
+                                                   .getShape())));
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

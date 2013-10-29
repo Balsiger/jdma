@@ -30,11 +30,17 @@ import java.util.List;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
+
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.extensions.Contents;
+import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
+import net.ixitxachitls.dma.proto.Entries.EntryProto;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -195,6 +201,9 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   @Override
   public String getPath()
   {
+    if(getCampaign() == null)
+      return super.getPath();
+
     return getCampaign().getPath() + super.getPath();
   }
 
@@ -316,7 +325,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   @Override
   public boolean isDM(@Nullable BaseCharacter inUser)
   {
-    if(inUser == null)
+    if(inUser == null || getCampaign() == null)
       return false;
 
     return inUser.getName().equals(getCampaign().getDMName());
@@ -467,6 +476,60 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    CampaignEntryProto.Builder builder = CampaignEntryProto.newBuilder();
+
+    builder.setBase((EntryProto)super.toProto());
+
+    if(m_campaign.isDefined())
+    {
+      builder.setBaseCampaign(((Name)m_campaign.get(0)).get());
+      builder.setCampaign(((Name)m_campaign.get(1)).get());
+    }
+
+    if(m_parent.isDefined())
+      builder.setParent(m_parent.get());
+
+    return builder.build();
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof CampaignEntryProto))
+    {
+      Log.warning("cannot parse proto " + inProto);
+      return;
+    }
+
+    CampaignEntryProto proto = (CampaignEntryProto)inProto;
+
+    if(proto.hasBaseCampaign() && proto.hasCampaign())
+      m_campaign =
+        m_campaign.as(((Name)m_campaign.get(0)).as(proto.getBaseCampaign()),
+                      ((Name)m_campaign.get(1)).as(proto.getCampaign()));
+
+    if(proto.hasParent())
+      m_parent = m_parent.as(proto.getParent());
+
+    super.fromProto(proto.getBase());
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(CampaignEntryProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
 
   //........................................................................
 }

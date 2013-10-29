@@ -26,11 +26,14 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseCountedProto;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Number;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -60,24 +63,26 @@ public class BaseCounted extends BaseExtension<BaseItem>
   private static final long serialVersionUID = 1L;
 
   /** The possible counting unites in the game. */
-  public enum Unit implements EnumSelection.Named
+  public enum Unit implements EnumSelection.Named,
+    EnumSelection.Proto<BaseCountedProto.Unit>
   {
     /** Number of days. */
-    DAY("day", "days"),
+    DAY("day", "days", BaseCountedProto.Unit.DAY),
     /** Numer of pieces. */
-    PIECE("piece", "pieces"),
+    PIECE("piece", "pieces", BaseCountedProto.Unit.PIECE),
     /** Number of sheets. */
-    SHEET("sheet", "sheets"),
+    SHEET("sheet", "sheets", BaseCountedProto.Unit.SHEET),
     /** Number of individual uses. */
-    USE("use", "uses"),
+    USE("use", "uses", BaseCountedProto.Unit.USE),
     /** Number of pages. */
-    PAGE("page", "pages"),
+    PAGE("page", "pages", BaseCountedProto.Unit.PAGE),
     /** Charges. */
-    CHARGE("charge", "charges"),
+    CHARGE("charge", "charges", BaseCountedProto.Unit.CHARGE),
     /** Can be applied. */
-    APPLICATION("application", "applications"),
+    APPLICATION("application", "applications",
+                BaseCountedProto.Unit.APPLICATION),
     /** Can absorb or take some damage. */
-    DAMAGE("damage", "damage");
+    DAMAGE("damage", "damage", BaseCountedProto.Unit.DAMAGE);
 
     /** The value's name. */
     private String m_name;
@@ -85,50 +90,66 @@ public class BaseCounted extends BaseExtension<BaseItem>
     /** The value's name for multiple unites. */
     private String m_multiple;
 
+    /** The proto enum value. */
+    private BaseCountedProto.Unit m_proto;
+
     /** Create the name.
      *
      * @param inName     the name of the value
      * @param inMultiple the text for multiple units
-     *
+     * @param inProto    the proto enum value
      */
-    private Unit(String inName, String inMultiple)
+    private Unit(String inName, String inMultiple,
+                 BaseCountedProto.Unit inProto)
     {
       m_name = constant("count.unit.name", inName);
       m_multiple = constant("count.unit.multiple", inMultiple);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the multiple name.
+    /**
+     * Get the multiple name.
      *
      * @return the multiple name
-     *
      */
     public String getMultiple()
     {
       return m_multiple;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
-  };
+
+    @Override
+    public BaseCountedProto.Unit toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the unit corresponding to the given proto value.
+     *
+     * @param inProto the proto value to convert
+     * @return the corresponding enum value
+     */
+    public static Unit fromProto(BaseCountedProto.Unit inProto)
+    {
+      for(Unit unit : values())
+        if(unit.m_proto == inProto)
+          return unit;
+
+      throw new IllegalStateException("cannot convert unit: " + inProto);
+    }
+  }
 
   //........................................................................
 
@@ -226,6 +247,34 @@ public class BaseCounted extends BaseExtension<BaseItem>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    BaseCountedProto.Builder builder = BaseCountedProto.newBuilder();
+
+    builder.setCount((int)m_count.get());
+    if(m_unit.isDefined())
+      builder.setUnit(m_unit.getSelected().toProto());
+
+    return builder.build();
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseCountedProto))
+    {
+      Log.warning("cannot parse base counted proto " + inProto.getClass());
+      return;
+    }
+
+    BaseCountedProto proto = (BaseCountedProto)inProto;
+
+    m_count = m_count.as(proto.getCount());
+    m_unit = m_unit.as(Unit.fromProto(proto.getUnit()));
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

@@ -26,9 +26,11 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.values.Critical;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Distance;
@@ -36,6 +38,7 @@ import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Rational;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -67,34 +70,39 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   private static final long serialVersionUID = 1L;
 
   /** The possible weapon types. */
-  public enum Type implements EnumSelection.Named, EnumSelection.Short
+  public enum Type implements EnumSelection.Named, EnumSelection.Short,
+    EnumSelection.Proto<BaseWeaponProto.Type>
   {
     /** A piercing OR slashing weapon. */
-    PIERCING_OR_SLASHING("Piercing or Slashing", "P or S"),
+    PIERCING_OR_SLASHING("Piercing or Slashing", "P or S",
+                         BaseWeaponProto.Type.PIERCING_OR_SLASHING),
 
     /** A bludeoning OR piercing weapon. */
-    BLUDGEONING_OR_PIERCING("Bludgeoning or Piercing", "B or P"),
+    BLUDGEONING_OR_PIERCING("Bludgeoning or Piercing", "B or P",
+                            BaseWeaponProto.Type.BLUDGEONING_OR_PIERCING),
 
     /** A bludeoning AND piercing weapon. */
-    BLUDGEONING_AND_PIERCING("Bludgeoning and Piercing", "B and P"),
+    BLUDGEONING_AND_PIERCING("Bludgeoning and Piercing", "B and P",
+                             BaseWeaponProto.Type.BLUDGEONING_AND_PIERCING),
 
     /** A slashing OR piercing weapon. */
-    SLASHING_OR_PIERCING("Slashing or Piercing", "S or P"),
+    SLASHING_OR_PIERCING("Slashing or Piercing", "S or P",
+                         BaseWeaponProto.Type.SLASHING_OR_PIERCING),
 
     /** A slashing weapon. */
-    SLASHING("Slashing", "S"),
+    SLASHING("Slashing", "S", BaseWeaponProto.Type.SLASHING),
 
     /** A bludgeoning weapon. */
-    BLUDGEONING("Bludgeoning", "B"),
+    BLUDGEONING("Bludgeoning", "B", BaseWeaponProto.Type.BLUDGEONING),
 
     /** A piercing weapon. */
-    PIERCING("Piercing", "P"),
+    PIERCING("Piercing", "P", BaseWeaponProto.Type.PIERCING),
 
     /** A grenade. */
-    GRENADE("Grenade", "G"),
+    GRENADE("Grenade", "G", BaseWeaponProto.Type.GRENADE),
 
     /** No type. */
-    NONE("None", "N");
+    NONE("None", "N", BaseWeaponProto.Type.NONE);
 
     /** The value's name. */
     private String m_name;
@@ -102,49 +110,60 @@ public class BaseWeapon extends BaseExtension<BaseItem>
     /** The value's short name. */
     private String m_short;
 
+    /** The proto enum value. */
+    private BaseWeaponProto.Type m_proto;
+
     /** Create the name.
      *
      * @param inName     the name of the value
      * @param inShort    the short name of the value
-     *
+     * @param inProto    the proto enum value
      */
-    private Type(String inName, String inShort)
+    private Type(String inName, String inShort, BaseWeaponProto.Type inProto)
     {
       m_name = constant("weapon.types", inName);
       m_short = constant("wepon.types.short", inShort);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /**
-     * Get the name of the value.
-     *
-     * @return the name of the value
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
 
-    /**
-     * Get the short name of the value.
-     *
-     * @return the short name of the value
-     */
     @Override
     public String getShort()
     {
       return m_short;
+    }
+
+    @Override
+    public BaseWeaponProto.Type toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the proto enum to its enum value.
+     *
+     * @param inProto  the proto enum value
+     * @return the converted enum value
+     */
+    public static Type fromProto(BaseWeaponProto.Type inProto)
+    {
+      for(Type type : values())
+        if(type.m_proto == inProto)
+          return type;
+
+      throw new IllegalStateException("cannot convert weapon type proto: "
+        + inProto);
     }
   };
 
@@ -152,34 +171,40 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   //----- styles -----------------------------------------------------------
 
   /** The possible weapon styles. */
-  public enum Style implements EnumSelection.Named, EnumSelection.Short
+  public enum Style implements EnumSelection.Named, EnumSelection.Short,
+    EnumSelection.Proto<BaseWeaponProto.Style>
   {
     /** A two-handed melee weapon. */
-    TWOHANDED_MELEE("Two-Handed Melee", "Two", true, 0),
+    TWOHANDED_MELEE("Two-Handed Melee", "Two", true, 0,
+                    BaseWeaponProto.Style.TWOHANDED_MELEE),
 
     /** A one-handed melee weapon. */
-    ONEANDED_MELEE("One-Handed Melee", "One", true, -1),
+    ONEANDED_MELEE("One-Handed Melee", "One", true, -1,
+                   BaseWeaponProto.Style.ONEHANDED_MELEE),
 
     /** A light melee weapon. */
-    LIGHT_MELEE("Light Melee", "Light", true, -2),
+    LIGHT_MELEE("Light Melee", "Light", true, -2,
+                BaseWeaponProto.Style.LIGHT_MELEE),
 
     /** An unarmed 'weapon'. */
-    UNARMED("Unarmed", "Unarmed", true, 0),
+    UNARMED("Unarmed", "Unarmed", true, 0, BaseWeaponProto.Style.UNARMED),
 
     /** A ranged touch weapon. */
-    RANGED_TOUCH("Ranged Touch", "Touch R", false, 0),
+    RANGED_TOUCH("Ranged Touch", "Touch R", false, 0,
+                 BaseWeaponProto.Style.RANGED_TOUCH),
 
     /** A ranged weapon. */
-    RANGED("Ranged", "Ranged", false, 0),
+    RANGED("Ranged", "Ranged", false, 0, BaseWeaponProto.Style.RANGED),
 
     /** A thrown touch weapon. */
-    THROWN_TOUCH("Thrown Touch", "Touch T", false, 0),
+    THROWN_TOUCH("Thrown Touch", "Touch T", false, 0,
+                 BaseWeaponProto.Style.THROWN_TOUCH),
 
     /** A thrown weapon. */
-    THROWN("Thrown", "Thrown", false, 0),
+    THROWN("Thrown", "Thrown", false, 0, BaseWeaponProto.Style.THROWN),
 
     /** A touch weapon. */
-    TOUCH("Touch", "Touch", true, 0);
+    TOUCH("Touch", "Touch", true, 0, BaseWeaponProto.Style.TOUCH);
 
     /** The value's name. */
     private String m_name;
@@ -193,6 +218,9 @@ public class BaseWeapon extends BaseExtension<BaseItem>
     /** The size difference between a normal item an a weapon. */
     private int m_sizeDifference;
 
+    /** The corresponding proto value. */
+    private BaseWeaponProto.Style m_proto;
+
     /**
      * Create the name.
      *
@@ -200,46 +228,30 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      * @param inShort          the short name of the value
      * @param inMelee          true if this is a melee weapon, false for ranged
      * @param inSizeDifference the number of steps between this and medium
-     *
+     * @param inProto          the corresponding proto value
      */
     private Style(String inName, String inShort, boolean inMelee,
-                  int inSizeDifference)
+                  int inSizeDifference, BaseWeaponProto.Style inProto)
     {
-      m_name           = constant("weapon.types", inName);
-      m_short          = constant("weapon.types.short", inShort);
-      m_melee          = inMelee;
+      m_name = constant("weapon.types", inName);
+      m_short = constant("weapon.types.short", inShort);
+      m_melee = inMelee;
       m_sizeDifference = inSizeDifference;
+      m_proto = inProto;
     }
 
-    /**
-     * Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /**
-     * Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
 
-    /**
-     * Get the short name of the value.
-     *
-     * @return the short name of the value
-     */
     @Override
     public String getShort()
     {
@@ -250,7 +262,6 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      * Check if the weapon style is ranged for melee.
      *
      * @return true if the weapon is a melee weapon, false for ranged.
-     *
      */
     public boolean isMelee()
     {
@@ -260,69 +271,108 @@ public class BaseWeapon extends BaseExtension<BaseItem>
     /**
      * Get the size difference.
      *
-     * @return the number of steps between this and medium. */
+     * @return the number of steps between this and medium.
+     */
     public int getSizeDifference()
     {
       return m_sizeDifference;
     }
-  };
+
+    @Override
+    public BaseWeaponProto.Style toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the proto value to the corresponding enum value.
+     *
+     * @param   inProto the proto value
+     * @return  the converted enum value
+     */
+    public static Style fromProto(BaseWeaponProto.Style inProto)
+    {
+      for(Style style : values())
+        if(style.m_proto == inProto)
+          return style;
+
+      throw new IllegalStateException("unknown weapon style: " + inProto);
+    }
+  }
 
   //........................................................................
   //----- proficiencies ----------------------------------------------------
 
   /** The possible weapon proficiencies. */
-  public enum Proficiency implements EnumSelection.Named
+  public enum Proficiency implements EnumSelection.Named,
+    EnumSelection.Proto<BaseWeaponProto.Proficiency>
   {
     /** Proficiency for simple weapons. */
-    SIMPLE("Simple"),
+    SIMPLE("Simple", BaseWeaponProto.Proficiency.SIMPLE),
 
     /** Proficiency for simple weapons. */
-    MARTIAL("Martial"),
+    MARTIAL("Martial", BaseWeaponProto.Proficiency.MARTIAL),
 
     /** Proficiency for simple weapons. */
-    EXOTIC("Exotic"),
+    EXOTIC("Exotic", BaseWeaponProto.Proficiency.EXOCTIC),
 
     /** Proficiency for simple weapons. */
-    IMPROVISED("Improvised"),
+    IMPROVISED("Improvised", BaseWeaponProto.Proficiency.IMPROVISED),
 
     /** Proficiency for simple weapons. */
-    NONE("None");
+    NONE("None", BaseWeaponProto.Proficiency.NONE_PROFICIENCY);
 
     /** The value's name. */
     private String m_name;
 
-    /** Create the name.
+    /** The proto enum value. */
+    private BaseWeaponProto.Proficiency m_proto;
+
+    /**
+     * Create the name.
      *
      * @param inName     the name of the value
-     *
+     * @param inProto    the corresponding proto enum value
      */
-    private Proficiency(String inName)
+    private Proficiency(String inName, BaseWeaponProto.Proficiency inProto)
     {
       m_name = constant("weapon.proficiencies", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
-  };
+
+    @Override
+    public BaseWeaponProto.Proficiency toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the proto enum value to the corresponding enum value.
+     *
+     * @param inProto the proto value to convert
+     * @return the corresponding enum value
+     */
+    public static Proficiency fromProto(BaseWeaponProto.Proficiency inProto)
+    {
+      for(Proficiency proficiency : values())
+        if(proficiency.m_proto == inProto)
+          return proficiency;
+
+      throw new IllegalStateException("unknown weapon proficiency: " + inProto);
+    }
+  }
 
   //........................................................................
 
@@ -384,7 +434,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   //........................................................................
   //----- secondary damage -------------------------------------------------
 
-  /** The damage the weapon inflicts. */
+  /** The secondary damage the weapon inflicts. */
   @Key("secondary damage")
   protected Damage m_secondaryDamage = new Damage()
     .withIndexBase(BaseItem.TYPE);
@@ -638,6 +688,71 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    BaseWeaponProto.Builder builder = BaseWeaponProto.newBuilder();
+
+    if(m_damage.isDefined())
+      builder.setDamage(m_damage.toProto());
+    if(m_secondaryDamage.isDefined())
+      builder.setSecondaryDamage(m_secondaryDamage.toProto());
+    if(m_splash.isDefined())
+      builder.setSplash(m_splash.toProto());
+    if(m_type.isDefined())
+      builder.setType(m_type.getSelected().toProto());
+    if(m_critical.isDefined())
+      builder.setCritical(m_critical.toProto());
+    if(m_style.isDefined())
+      builder.setStyle(m_style.getSelected().toProto());
+    if(m_proficiency.isDefined())
+      builder.setProficiency(m_proficiency.getSelected().toProto());
+    if(m_range.isDefined())
+      builder.setRange(m_range.toProto());
+    if(m_reach.isDefined())
+      builder.setReach(m_reach.toProto());
+    if(m_maxAttacks.isDefined())
+      builder.setMaxAttacks((int)m_maxAttacks.get());
+
+    return builder.build();
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseWeaponProto))
+    {
+      Log.warning("cannot parse base weapon proto " + inProto.getClass());
+      return;
+    }
+
+    BaseWeaponProto proto = (BaseWeaponProto)inProto;
+
+    if(proto.hasDamage())
+      m_damage = m_damage.fromProto(proto.getDamage());
+    if(proto.hasSecondaryDamage())
+      m_secondaryDamage =
+        m_secondaryDamage.fromProto(proto.getSecondaryDamage());
+    if(proto.hasSplash())
+      m_splash = m_splash.fromProto(proto.getSplash());
+    if(proto.hasType())
+      m_type = m_type.as(Type.fromProto(proto.getType()));
+    if(proto.hasCritical())
+      m_critical = m_critical.fromProto(proto.getCritical());
+    if(proto.hasStyle())
+      m_style = m_style.as(Style.fromProto(proto.getStyle()));
+    if(proto.hasProficiency())
+      m_proficiency =
+        m_proficiency.as(Proficiency.fromProto(proto.getProficiency()));
+    if(proto.hasRange())
+      m_range = m_range.fromProto(proto.getRange());
+    if(proto.hasReach())
+      m_reach = m_reach.fromProto(proto.getReach());
+    if(proto.hasMaxAttacks())
+      m_maxAttacks = m_maxAttacks.as(proto.getMaxAttacks());
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

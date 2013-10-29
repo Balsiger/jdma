@@ -26,11 +26,14 @@ package net.ixitxachitls.dma.entries;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.BaseArmor;
@@ -47,6 +50,21 @@ import net.ixitxachitls.dma.entries.extensions.BaseTimed;
 import net.ixitxachitls.dma.entries.extensions.BaseWeapon;
 import net.ixitxachitls.dma.entries.extensions.BaseWearable;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.BaseArmorProto;
+import net.ixitxachitls.dma.proto.Entries.BaseCommodityProto;
+import net.ixitxachitls.dma.proto.Entries.BaseCompositeProto;
+import net.ixitxachitls.dma.proto.Entries.BaseContainerProto;
+import net.ixitxachitls.dma.proto.Entries.BaseCountedProto;
+import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.proto.Entries.BaseIncompleteProto;
+import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
+import net.ixitxachitls.dma.proto.Entries.BaseLightProto;
+import net.ixitxachitls.dma.proto.Entries.BaseMagicProto;
+import net.ixitxachitls.dma.proto.Entries.BaseMultipleProto;
+import net.ixitxachitls.dma.proto.Entries.BaseMultiuseProto;
+import net.ixitxachitls.dma.proto.Entries.BaseTimedProto;
+import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
+import net.ixitxachitls.dma.proto.Entries.BaseWearableProto;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
@@ -61,6 +79,7 @@ import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -91,31 +110,34 @@ public class BaseItem extends BaseEntry
   public enum Size implements EnumSelection.Named, EnumSelection.Short
   {
     /** The smallest size. */
-    FINE("Fine", "F", 0, 0, 1, 0, 8, -16),
+    FINE("Fine", "F", 0, 0, 1, 0, 8, -16, BaseItemProto.Size.FINE),
 
     /** A very small size. */
-    DIMINUTIVE("Diminutive", "D", 0, 0, 2, 0, 4, -12),
+    DIMINUTIVE("Diminutive", "D", 0, 0, 2, 0, 4, -12,
+               BaseItemProto.Size.DIMINUTIVE),
 
     /** Smaller than small. */
-    TINY("Tiny", "T", 0, 0, 5, 0, 2, -8),
+    TINY("Tiny", "T", 0, 0, 5, 0, 2, -8, BaseItemProto.Size.TINY),
 
     /** Just small. */
-    SMALL("Small", "S", 0, 5, 10, 10, 1, -4),
+    SMALL("Small", "S", 0, 5, 10, 10, 1, -4, BaseItemProto.Size.SMALL),
 
     /** This is the medium size. */
-    MEDIUM("Medium-size", "M", 5, 5, 10, 20, 0, 0),
+    MEDIUM("Medium-size", "M", 5, 5, 10, 20, 0, 0, BaseItemProto.Size.MEDIUM),
 
     /** Simply large. */
-    LARGE("Large", "L", 5, 10, 20, 30, -1, 4),
+    LARGE("Large", "L", 5, 10, 20, 30, -1, 4, BaseItemProto.Size.LARGE),
 
     /** Larger than large. */
-    HUGE("Huge", "H", 10, 15, 30, 40, -2, 8),
+    HUGE("Huge", "H", 10, 15, 30, 40, -2, 8, BaseItemProto.Size.HUGE),
 
     /** Really large. */
-    GARGANTUAN("Gargantuan", "G", 15, 20, 40, 60, -4, 12),
+    GARGANTUAN("Gargantuan", "G", 15, 20, 40, 60, -4, 12,
+               BaseItemProto.Size.GARGANTUAN),
 
     /** This is the biggest size. */
-    COLOSSAL("Colossal", "C", 20, 30, 60, 80, -8, 16);
+    COLOSSAL("Colossal", "C", 20, 30, 60, 80, -8, 16,
+             BaseItemProto.Size.COLOSSAL);
 
     /** The value's name. */
     private String m_name;
@@ -141,6 +163,9 @@ public class BaseItem extends BaseEntry
     /** The size modifier for grappling. */
     private int m_grapple;
 
+    /** The proto enum value. */
+    private BaseItemProto.Size m_proto;
+
     /** Create the name.
      *
      * @param inName      the name of the value
@@ -151,11 +176,11 @@ public class BaseItem extends BaseEntry
      * @param inConstruct the bonus hit points for a construct
      * @param inModifier  the armor class and attack bonus for size
      * @param inGrapple   the grapple modifier for size
-     *
+     * @param inProto     the proto enum value
      */
     private Size(String inName, String inShort, int inReachLong,
                  int inReachTall, int inSpace, int inConstruct, int inModifier,
-                 int inGrapple)
+                 int inGrapple, BaseItemProto.Size inProto)
     {
       m_name      = constant("size",             inName);
       m_short     = constant("size.short",       inShort);
@@ -166,6 +191,7 @@ public class BaseItem extends BaseEntry
       m_construct = constant("size.hp.construct", inName, inConstruct);
       m_modifier  = constant("size.modifier",     inName, inModifier);
       m_grapple   = constant("size.grapple",      inName, inGrapple);
+      m_proto     = inProto;
 
       m_space.reduce();
     }
@@ -315,19 +341,45 @@ public class BaseItem extends BaseEntry
     {
       return m_grapple;
     }
-  };
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseItemProto.Size getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static Size fromProto(BaseItemProto.Size inProto)
+    {
+      for(Size size : values())
+        if(size.m_proto == inProto)
+          return size;
+
+      throw new IllegalStateException("invalid proto size: " + inProto);
+    }
+  }
 
   //........................................................................
   //----- sizes modifier ---------------------------------------------------
 
   /** The special size modifiers for monsters. */
-  public enum SizeModifier implements EnumSelection.Named, EnumSelection.Short
+  public enum SizeModifier implements EnumSelection.Named, EnumSelection.Short,
+    EnumSelection.Proto<BaseItemProto.SizeModifier>
   {
     /** A taller than longer monster. */
-    TALL("tall", "T"),
+    TALL("tall", "T", BaseItemProto.SizeModifier.TALL),
 
     /** A longer than taller monster. */
-    LONG("long", "L");
+    LONG("long", "L", BaseItemProto.SizeModifier.LONG);
 
     /** The value's name. */
     private String m_name;
@@ -335,40 +387,57 @@ public class BaseItem extends BaseEntry
     /** The value's short name. */
     private String m_short;
 
+    /** The proto enum value. */
+    private BaseItemProto.SizeModifier m_proto;
+
     /** Create the name.
      *
      * @param inName  the name of the value
      * @param inShort the short name of the value
-     *
+     * @param inProto the proto enum value
      */
-    private SizeModifier(String inName, String inShort)
+    private SizeModifier(String inName, String inShort,
+                         BaseItemProto.SizeModifier inProto)
     {
       m_name  = constant("size.modifier",       inName);
       m_short = constant("size.modifier.short", inShort);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the short name of the value.
-     *
-     * @return the short name of the value
-     *
-     */
     @Override
     public String getShort()
     {
       return m_short;
     }
-  };
+
+    @Override
+    public BaseItemProto.SizeModifier toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the given proto enum to the corresponding enum value.
+     *
+     * @param inProto the proto enum value
+     * @return the corresponding enum vbalue
+     */
+    public static SizeModifier fromProto(BaseItemProto.SizeModifier inProto)
+    {
+      for(SizeModifier modifier : values())
+        if(modifier.m_proto == inProto)
+          return modifier;
+
+      throw new IllegalArgumentException("cannot convert size modifier: "
+                                         + inProto);
+    }
+  }
 
   //........................................................................
   //----- probabilities ----------------------------------------------------
@@ -377,27 +446,31 @@ public class BaseItem extends BaseEntry
   public enum Probability implements EnumSelection.Named
   {
     /** Only a single such item exists in the world. */
-    UNIQUE("Unique"),
+    UNIQUE("Unique", BaseItemProto.Probability.UNIQUE),
     /** A very rare thing, multiple might exist in the whole world. */
-    VERY_RARE("Very Rare"),
+    VERY_RARE("Very Rare", BaseItemProto.Probability.VERY_RARE),
     /** A rare thing, most people rarely see it. */
-    RARE("Rare"),
+    RARE("Rare", BaseItemProto.Probability.RARE),
     /** An uncommon thing, but still often seen. */
-    UNCOMMON("Uncommon"),
+    UNCOMMON("Uncommon", BaseItemProto.Probability.UNCOMMON),
     /** A common, everyday thing. */
-    COMMON("Common");
+    COMMON("Common", BaseItemProto.Probability.COMMON);
 
     /** The value's name. */
     private String m_name;
 
+    /** The prot enum value. */
+    private BaseItemProto.Probability m_proto;
+
     /** Create the name.
      *
      * @param inName     the name of the value
-     *
+     * @param inProto    the proto enum value
      */
-    private Probability(String inName)
+    private Probability(String inName, BaseItemProto.Probability inProto)
     {
       m_name = constant("item.probabilities", inName);
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -454,7 +527,32 @@ public class BaseItem extends BaseEntry
     /** The percentage of the random range to use for adjustments (high). */
     public static final int RANGE_LOW =
       Config.get("/game/value.modification.range.low", 10);
-  };
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseItemProto.Probability getProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static Probability fromProto(BaseItemProto.Probability inProto)
+    {
+      for(Probability probability : values())
+        if(probability.m_proto == inProto)
+          return probability;
+
+      throw new IllegalStateException("invalid proto probability: " + inProto);
+    }
+  }
 
   //........................................................................
   //----- substance --------------------------------------------------------
@@ -463,49 +561,50 @@ public class BaseItem extends BaseEntry
   public enum Substance implements EnumSelection.Named
   {
     /** Made of paper. */
-    PAPER("paper", 0, 2),
+    PAPER("paper", 0, 2, BaseItemProto.Substance.Material.PAPER),
 
     /** Made of cloth. */
-    CLOTH("cloth", 0, 2),
+    CLOTH("cloth", 0, 2, BaseItemProto.Substance.Material.CLOTH),
 
     /** Made of rope. */
-    ROPE("rope", 0, 2),
+    ROPE("rope", 0, 2, BaseItemProto.Substance.Material.ROPE),
 
     /** Made of glass. */
-    GLASS("glass", 1, 1),
+    GLASS("glass", 1, 1, BaseItemProto.Substance.Material.GLASS),
 
     /** Made of ice. */
-    ICE("ice", 0, 3),
+    ICE("ice", 0, 3, BaseItemProto.Substance.Material.ICE),
 
     /** Made of leather. */
-    LEATHER("leather", 2, 5),
+    LEATHER("leather", 2, 5, BaseItemProto.Substance.Material.LEATHER),
 
     /** Made of hide. */
-    HIDE("hide", 2, 5),
+    HIDE("hide", 2, 5, BaseItemProto.Substance.Material.HIDE),
 
     /** Made of wood. */
-    WOOD("wood", 5, 10),
+    WOOD("wood", 5, 10, BaseItemProto.Substance.Material.WOOD),
 
     /** Made of stone. */
-    STONE("stone", 8, 15),
+    STONE("stone", 8, 15, BaseItemProto.Substance.Material.STONE),
 
     /** Made of iron. */
-    IRON("iron", 10, 30),
+    IRON("iron", 10, 30, BaseItemProto.Substance.Material.IRON),
 
     /** Made of steel. */
-    STEEL("steel", 10, 30),
+    STEEL("steel", 10, 30, BaseItemProto.Substance.Material.STEEL),
 
     /** Made of crystal. */
-    CRYSTAL("crystal", 10, 30),
+    CRYSTAL("crystal", 10, 30, BaseItemProto.Substance.Material.CRYSTAL),
 
     /** Made of mithral. */
-    MITHRAL("mithral", 15, 30),
+    MITHRAL("mithral", 15, 30, BaseItemProto.Substance.Material.MITHRAL),
 
     /** Made of adamantine. */
-    ADAMANTINE("adamantine", 20, 40),
+    ADAMANTINE("adamantine", 20, 40,
+               BaseItemProto.Substance.Material.ADAMANTINE),
 
     /** Made of bone. */
-    BONE("bone", 5, 10);
+    BONE("bone", 5, 10, BaseItemProto.Substance.Material.BONE);
 
     /** The value's name. */
     private String m_name;
@@ -516,18 +615,23 @@ public class BaseItem extends BaseEntry
     /** The hit points per inch. */
     private int m_hp;
 
+    /** The proto enum value. */
+    private BaseItemProto.Substance.Material  m_proto;
+
     /** Create the name.
      *
      * @param inName     the name of the value
      * @param inHardness the hardness of the material
      * @param inHP       the hit points of the material
-     *
+     * @param inProto    the proto enum value
      */
-    private Substance(String inName, int inHardness, int inHP)
+    private Substance(String inName, int inHardness, int inHP,
+                      BaseItemProto.Substance.Material inProto)
     {
       m_name     = constant("substance.name",     inName);
       m_hardness = constant("substance.hardness", inName, inHardness);
       m_hp       = constant("substance.hp",       inName, inHP);
+      m_proto = inProto;
     }
 
     /** Get the name of the value.
@@ -571,58 +675,101 @@ public class BaseItem extends BaseEntry
     {
         return m_name;
     }
-  };
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseItemProto.Substance.Material toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inProto     the proto value to look for
+     * @return the matched enum (will throw exception if not found)
+     */
+    public static Substance fromProto(BaseItemProto.Substance.Material inProto)
+    {
+      for(Substance substance: values())
+        if(substance.m_proto == inProto)
+          return substance;
+
+      throw new IllegalStateException("invalid proto substance: " + inProto);
+    }
+  }
 
   //........................................................................
   //----- area shapes ------------------------------------------------------
 
   /** The possible areas to affect (cf. PHB 175). */
-  public enum AreaShapes implements EnumSelection.Named
+  public enum AreaShapes implements EnumSelection.Named,
+    EnumSelection.Proto<BaseLightProto.Light.Shape>
   {
     /** A cone shaped area. */
-    CONE("Cone"),
+    CONE("Cone", BaseLightProto.Light.Shape.CONE),
     /** A cylinder shaped area. */
-    CYLINDER("Cylinder"),
+    CYLINDER("Cylinder", BaseLightProto.Light.Shape.CYLINDER),
     /** An area in the form of a line. */
-    LINE("Line"),
+    LINE("Line", BaseLightProto.Light.Shape.LINE),
     /** A sphere shaped area. */
-    SPHERE("Sphere");
+    SPHERE("Sphere", BaseLightProto.Light.Shape.SPHERE);
 
     /** The value's name. */
     private String m_name;
 
+    /** The enum proto value. */
+    private BaseLightProto.Light.Shape m_proto;
+
     /** Create the name.
      *
      * @param inName     the name of the value
-     *
+     * @param inProto    the proto enum value
      */
-    private AreaShapes(String inName)
+    private AreaShapes(String inName, BaseLightProto.Light.Shape inProto)
     {
       m_name = constant("area.shapes", inName);
+      m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
-  };
+
+    @Override
+    public BaseLightProto.Light.Shape toProto()
+    {
+      return m_proto;
+    }
+
+    /**
+     * Convert the proto value to the corresponding enum value.
+     *
+     *
+     * @param inProto the proto value to convert
+     * @return the corresponding enum value
+     */
+    public static AreaShapes fromProto(BaseLightProto.Light.Shape inProto)
+    {
+      for(AreaShapes area : values())
+        if(area.m_proto == inProto)
+          return area;
+
+      throw new IllegalArgumentException("cannot convert area shape: "
+        + inProto);
+    }
+  }
 
   //........................................................................
 
@@ -764,7 +911,7 @@ public class BaseItem extends BaseEntry
 
   /** The items standard hardness. */
   @Key("hardness")
-    protected Number m_hardness = new Number(0, 100)
+  protected Number m_hardness = new Number(0, 100)
     .withTemplate("link", Index.Path.HARDNESSES.getPath())
     .withGrouping(s_hardnessGroup);
 
@@ -1228,6 +1375,288 @@ public class BaseItem extends BaseEntry
   }
 
   //........................................................................
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Message toProto()
+  {
+    BaseItemProto.Builder builder = BaseItemProto.newBuilder();
+
+    builder.setBase((BaseEntryProto)super.toProto());
+
+    if(m_value.isDefined())
+      builder.setValue(m_value.toProto());
+
+    if(m_weight.isDefined())
+      builder.setWeight(m_weight.toProto());
+
+    if(m_probability.isDefined())
+      builder.setProbability(m_probability.getSelected().getProto());
+
+    if(m_size.isDefined())
+      builder.setSize(m_size.getSelected().getProto());
+
+    if(m_hardness.isDefined())
+      builder.setHardness((int)m_hardness.get());
+
+    if(m_hp.isDefined())
+      builder.setHitPoints((int)m_hp.get());
+
+    if(m_appearances.isDefined())
+      for(Multiple appearance : m_appearances)
+        builder.addAppearance(BaseItemProto.Appearance.newBuilder()
+                              .setProbability(((EnumSelection<Probability>)
+                                              appearance.get(0))
+                                              .getSelected().getProto())
+                              .setAppearance(((Text)appearance.get(1)).get())
+                              .build());
+
+    if(m_substance.isDefined())
+      builder.setSubstance(BaseItemProto.Substance.newBuilder()
+                           .setMaterial(((EnumSelection<Substance>)
+                                        m_substance.get(0)).getSelected()
+                                        .toProto())
+                           .setThickness(((Distance)m_substance.get(1))
+                                         .toProto())
+                           .build());
+
+    if(m_break.isDefined())
+      builder.setBreakDc((int)m_break.get());
+
+    if(m_playerName.isDefined())
+      builder.setPlayerName(m_playerName.get());
+
+    // TODO: move extensions into simple members
+    for(Map.Entry<String, AbstractExtension<? extends AbstractEntry>> entry
+      : m_extensions.entrySet())
+    {
+      switch(entry.getKey())
+      {
+        case "armor":
+          builder.setArmor((BaseArmorProto)entry.getValue().toProto());
+          break;
+
+        case "commodity":
+          builder.setCommodity((BaseCommodityProto)entry.getValue().toProto());
+          break;
+
+        case "composite":
+          builder.setComposite((BaseCompositeProto)entry.getValue().toProto());
+          break;
+
+        case "container":
+          builder.setContainer((BaseContainerProto)entry.getValue().toProto());
+          break;
+
+        case "counted":
+          builder.setCounted((BaseCountedProto)entry.getValue().toProto());
+          break;
+
+        case "incomplete":
+          builder.setIncomplete((BaseIncompleteProto)
+                                entry.getValue().toProto());
+          break;
+
+        case "light":
+          builder.setLight((BaseLightProto)entry.getValue().toProto());
+          break;
+
+        case "magic":
+          builder.setMagic((BaseMagicProto)entry.getValue().toProto());
+          break;
+
+        case "multiple":
+          builder.setMultiple((BaseMultipleProto)entry.getValue().toProto());
+          break;
+
+        case "multiuse":
+          builder.setMultiuse((BaseMultiuseProto)entry.getValue().toProto());
+          break;
+
+        case "timed":
+          builder.setTimed((BaseTimedProto)entry.getValue().toProto());
+          break;
+
+        case "weapon":
+          builder.setWeapon((BaseWeaponProto)entry.getValue().toProto());
+          break;
+
+        case "wearable":
+          builder.setWearable((BaseWearableProto)entry.getValue().toProto());
+
+        default:
+          break;
+      }
+    }
+
+    BaseItemProto proto = builder.build();
+    return proto;
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseItemProto))
+    {
+      Log.warning("cannot parse proto " + inProto.getClass());
+      return;
+    }
+
+    BaseItemProto proto = (BaseItemProto)inProto;
+
+    super.fromProto(proto.getBase());
+
+    if(proto.hasValue())
+      m_value = m_value.fromProto(proto.getValue());
+
+    if(proto.hasWeight())
+      m_weight = m_weight.fromProto(proto.getWeight());
+
+    if(proto.hasProbability())
+      m_probability =
+        m_probability.as(Probability.fromProto(proto.getProbability()));
+
+    if(proto.hasSize())
+      m_size = m_size.as(Size.fromProto(proto.getSize()));
+
+    if(proto.hasHardness())
+      m_hardness = m_hardness.as(proto.getHardness());
+
+    if(proto.hasHitPoints())
+      m_hp = m_hp.as(proto.getHitPoints());
+
+    if(proto.getAppearanceCount() > 0)
+    {
+      List<Multiple> appearances = new ArrayList<>();
+      Multiple multiple = m_appearances.createElement();
+      for(BaseItemProto.Appearance appearance : proto.getAppearanceList())
+        appearances.add
+          (multiple.as(((EnumSelection<Probability>)multiple.get(0))
+                       .as(Probability.fromProto(appearance.getProbability())),
+                       ((Text)multiple.get(1)).as(appearance.getAppearance())));
+
+      m_appearances = m_appearances.as(appearances);
+    }
+
+    if(proto.hasSubstance())
+      m_substance =
+      m_substance.as(((EnumSelection<Substance>)m_substance.get(0))
+                     .as(Substance.fromProto
+                         (proto.getSubstance().getMaterial())),
+                     ((Distance)m_substance.get(1))
+                     .fromProto(proto.getSubstance().getThickness()));
+
+    if(proto.hasBreakDc())
+      m_break = m_break.as(proto.getBreakDc());
+
+    if(proto.hasPlayerName())
+      m_playerName = m_playerName.as(proto.getPlayerName());
+
+    if(proto.hasWeapon())
+    {
+      BaseWeapon extension = new BaseWeapon(this, "weapon");
+      extension.fromProto(proto.getWeapon());
+      addExtension("weapon", extension);
+    }
+
+    if(proto.hasWearable())
+    {
+      BaseWearable extension = new BaseWearable(this, "wearable");
+      extension.fromProto(proto.getWearable());
+      addExtension("wearable", extension);
+    }
+
+    if(proto.hasIncomplete())
+    {
+      BaseIncomplete extension = new BaseIncomplete(this, "incomplete");
+      extension.fromProto(proto.getIncomplete());
+      addExtension("incomplete", extension);
+    }
+
+    if(proto.hasMagic())
+    {
+      BaseMagic extension = new BaseMagic(this, "magic");
+      extension.fromProto(proto.getMagic());
+      addExtension("magic", extension);
+    }
+
+    if(proto.hasCounted())
+    {
+      BaseCounted extension = new BaseCounted(this, "counted");
+      extension.fromProto(proto.getCounted());
+      addExtension("counted", extension);
+    }
+
+    if(proto.hasMultiple())
+    {
+      BaseMultiple extension = new BaseMultiple(this, "multiple");
+      extension.fromProto(proto.getCounted());
+      addExtension("multiple", extension);
+    }
+
+    if(proto.hasTimed())
+    {
+      BaseTimed extension = new BaseTimed(this, "timed");
+      extension.fromProto(proto.getTimed());
+      addExtension("timed", extension);
+    }
+
+    if(proto.hasArmor())
+    {
+      BaseArmor extension = new BaseArmor(this, "armor");
+      extension.fromProto(proto.getArmor());
+      addExtension("armor", extension);
+    }
+
+    if(proto.hasCommodity())
+    {
+      BaseCommodity extension = new BaseCommodity(this, "commodity");
+      extension.fromProto(proto.getCommodity());
+      addExtension("comodity", extension);
+    }
+
+    if(proto.hasComposite())
+    {
+      BaseComposite extension = new BaseComposite(this, "composite");
+      extension.fromProto(proto.getComposite());
+      addExtension("composite", extension);
+    }
+
+    if(proto.hasContainer())
+    {
+      BaseContainer extension = new BaseContainer(this, "container");
+      extension.fromProto(proto.getContainer());
+      addExtension("container", extension);
+    }
+
+    if(proto.hasLight())
+    {
+      BaseLight extension = new BaseLight(this, "light");
+      extension.fromProto(proto.getLight());
+      addExtension("light", extension);
+    }
+
+    if(proto.hasMultiuse())
+    {
+      BaseMultiuse extension = new BaseMultiuse(this, "multiuse");
+      extension.fromProto(proto.getMultiuse());
+      addExtension("multiuse", extension);
+    }
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(BaseItemProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
 
   //........................................................................
 
@@ -1718,170 +2147,6 @@ public class BaseItem extends BaseEntry
     //                 entry.getName());
     //   assertEquals("base item does not match", result, entry.toString());
     // }
-
-    //......................................................................
-    //----- print ----------------------------------------------------------
-
-    /** Test raw printing. */
-    // @org.junit.Test
-    // public void print()
-    // {
-    //   BaseItem item = new BaseItem("test");
-
-    //   item.addAttachment("light");
-
-    //   // setting the values
-    //   assertTrue("size", item.setSize(Size.SMALL));
-    //   assertTrue("probability", item.setProbability(Probability.UNCOMMON));
-    //   assertTrue("value", item.setValue(0, 3, 2, 0));
-    //   assertTrue("weight", item.setWeight(new Rational(42)));
-    //   assertTrue("hardness", item.setHardness(23));
-    //   assertTrue("substance", item.setSubstance(Substance.GLASS, 3));
-    //   assertTrue("hps", item.setHP(42));
-    //   assertTrue("break dc", item.setBreakDC(27));
-    //   assertTrue("appearances", item.addAppearance(Probability.UNIQUE,
-    //                                                "really rare"));
-    //   assertTrue("appearances", item.addAppearance(Probability.COMMON,
-    //                                                "everyday"));
-    //   assertTrue("appearances", item.addAppearance(Probability.COMMON,
-    //                                                "hmm, shabby"));
-    //   assertTrue("quality", item.addQuality("Q1"));
-    //   assertTrue("quality", item.addQuality("Q2"));
-    //   assertTrue("quality", item.addQuality("Q3"));
-    //   assertTrue("quality", item.addQuality("Q4"));
-  //   assertTrue("effect", item.addEffect(BaseQuality.EffectType.SUPERNATURAL,
-    //                                       "affected", 3,
-    //                                       net.ixitxachitls.dma.values.
-    //                                       Modifier.Type.DODGE,
-    //                                       null, null));
-  //   assertTrue("effect", item.addEffect(BaseQuality.EffectType.SUPERNATURAL,
-    //                                       "affected", 3,
-    //                                       net.ixitxachitls.dma.values.
-    //                                       Modifier.Type.SHIELD,
-    //                                     "desc", new Condition("condition")));
-  //   assertTrue("effect", item.addEffect(BaseQuality.EffectType.SUPERNATURAL,
-    //                                       "affected", 3,
-    //                                       net.ixitxachitls.dma.values.
-    //                                       Modifier.Type.ARMOR,
-    //                                       "desc2", null));
-    //   assertTrue("light",
-    //              item.getAttachment(net.ixitxachitls.dma.entries.attachments.
-    //                                 BaseLight.class)
-    //              .setBright(20, AreaShapes.SPHERE));
-    //   assertTrue("light",
-    //              item.getAttachment(net.ixitxachitls.dma.entries.attachments.
-    //                                 BaseLight.class)
-    //              .setShadowy(30, AreaShapes.CONE));
-
-    //   // add attachments
-    //   item.addAttachment("timed");
-    //   item.addAttachment("light");
-
-    //   PrintCommand command = item.printCommand(true, false);
-
-    //   assertNotNull("command", command);
-
-    //   // icons
-    //   Command icons =
-    //     item.getCommand(command,
-    //                     new Command("#{attachment, size, probability}"),
-    //                     true);
-
-    //   assertEquals("category", "attachment: light", extract(icons, 1, 2));
-    //   assertEquals("category", "attachment: timed", extract(icons, 2, 2));
-    //   assertEquals("size", "size: Small", extract(icons, 3, 2, 2));
-    //   assertEquals("probability", "probability: Uncommon",
-    //                extract(icons, 4, 2, 2));
-
-    //   // values
-    //   Command values =
-    //     item.getCommand(command,
-    //                  new Command("%{value, weight, substance, hardness, hp, "
-    //                                 + "break DC, qualities, effects, "
-    //                                 + "appearances, bright light, "
-    //                                 + "shadowy light}"), true);
-
-    //   assertEquals("value", "Value:", extract(values, 1, 1, 1));
-    //   assertEquals("value", "span", extract(values, 2, 1, 2, 1, 1, 0));
-    //   assertEquals("value", "unit", extract(values, 2, 1, 2, 1, 1, 1));
-    //   assertEquals("value", "3 gp", extract(values, 2, 1, 2, 1, 1, 2));
-    //   assertEquals("value", "2 sp", extract(values, 2, 1, 2, 1, 3, 2));
-
-    //   assertEquals("value", "Weight:", extract(values, 3, 1, 1));
-    //   assertEquals("value", "42 lbs", extract(values, 4, 1, 2, 1, 2, 3));
-
-    //   assertEquals("value", "Substance:", extract(values, 5, 1, 1));
-    //   assertEquals("value", "link", extract(values, 6, 1, 2, 1, 0));
-    //   assertEquals("value", "/items/substances/glass",
-    //                extract(values, 6, 1, 2, 1, -1));
-    //   assertEquals("value", "glass", extract(values, 6, 1, 2, 1, 1));
-    //   assertEquals("value", "link", extract(values, 6, 1, 2, 3, 0));
-    //   assertEquals("value", "/items/thicknesses/3 in",
-    //                extract(values, 6, 1, 2, 3, -1));
-    //   assertEquals("value", "3 in", extract(values, 6, 1, 2, 3, 1, 1, 1, 2));
-
-    //   assertEquals("value", "Hardness:", extract(values, 7, 1, 1));
-    //   assertEquals("value", "link", extract(values, 8, 1, 2, 0));
-    //   assertEquals("value", "/items/hardnesses/25",
-    //                extract(values, 8, 1, 2, -1));
-    //   assertEquals("value", "23", extract(values, 8, 1, 2, 1));
-
-    //   assertEquals("value", "Hp:", extract(values, 9, 1, 1));
-    //   assertEquals("value", "link", extract(values, 10, 1, 2, 0));
-    //   assertEquals("value", "/items/hps/50", extract(values, 10, 1, 2, -1));
-    //   assertEquals("value", "42", extract(values, 10, 1, 2, 1));
-
-    //   assertEquals("value", "Break DC:", extract(values, 11, 1, 1));
-    //   assertEquals("value", "link", extract(values, 12, 1, 2, 0));
-  //   assertEquals("value", "/items/breaks/30", extract(values, 12, 1, 2, -1));
-    //   assertEquals("value", "27", extract(values, 12, 1, 2, 1));
-
-    //   assertEquals("value", "Qualities:", extract(values, 13, 1, 1));
-    //   assertEquals("value", "Q1", extract(values, 14, 1, 2, 1, 1));
-    //   assertEquals("value", "Q2", extract(values, 14, 1, 2, 3, 1));
-    //   assertEquals("value", "Q3", extract(values, 14, 1, 2, 5, 1));
-    //   assertEquals("value", "Q4", extract(values, 14, 1, 2, 7, 1));
-
-    //   assertEquals("value", "Effects:", extract(values, 15, 1, 1));
-    //   assertEquals("value", "Supernatural", extract(values, 16, 1, 2, 1, 1));
-    //   assertEquals("value", "affected", extract(values, 16, 1, 2, 1, 3));
-    //   assertEquals("value", "dodge, stacks",
-    //                extract(values, 16, 1, 2, 1, 5, -1));
-    //   assertEquals("value", "+3 dodge", extract(values, 16, 1, 2, 1, 5, 1));
-    //   assertEquals("value", "Supernatural", extract(values, 16, 1, 2, 3, 1));
-    //   assertEquals("value", "affected", extract(values, 16, 1, 2, 3, 3));
-    //   assertEquals("value", "shield if condition, does not stack",
-    //                extract(values, 16, 1, 2, 3, 5, -1));
-    //   assertEquals("value", "+3 desc", extract(values, 16, 1, 2, 3, 5, 1));
-    //   assertEquals("value", "Supernatural", extract(values, 16, 1, 2, 5, 1));
-    //   assertEquals("value", "affected", extract(values, 16, 1, 2, 5, 3));
-    //   assertEquals("value", "armor, does not stack",
-    //                extract(values, 16, 1, 2, 5, 5, -1));
-    //   assertEquals("value", "+3 desc2", extract(values, 16, 1, 2, 5, 5, 1));
-
-    //   assertEquals("value", "Appearances:", extract(values, 17, 1, 1));
-    //   assertEquals("value", "table", extract(values, 18, 1, 2, 0));
-    //   assertEquals("value", "Unique", extract(values, 18, 1, 2, 2));
-    //   assertEquals("value", "really rare", extract(values, 18, 1, 2, 3));
-    //   assertEquals("value", "Common", extract(values, 18, 1, 2, 4));
-    //   assertEquals("value", "everyday", extract(values, 18, 1, 2, 5));
-    //   assertEquals("value", "Common", extract(values, 18, 1, 2, 6));
-    //   assertEquals("value", "hmm, shabby", extract(values, 18, 1, 2, 7));
-
-    //   assertEquals("value", "Bright Light:", extract(values, 19, 1, 1));
-    //   assertEquals("value", "/items/lights/25 ft bright",
-    //                extract(values, 20, 1, 2, -1));
-    //   assertEquals("value", "20 ft",
-    //                extract(values, 20, 1, 2, 1, 1, 1, 1, 1, 2));
-    //   assertEquals("value", "Sphere", extract(values, 20, 1, 2, 1, 3));
-
-    //   assertEquals("value", "Shadowy Light:", extract(values, 21, 1, 1));
-    //   assertEquals("value", "/items/lights/50 ft shadowy",
-    //                extract(values, 22, 1, 2, -1));
-    //   assertEquals("value", "30 ft",
-    //                extract(values, 22, 1, 2, 1, 1, 1, 1, 1, 2));
-    //   assertEquals("value", "Cone", extract(values, 22, 1, 2, 1, 3));
-    //  }
 
     //......................................................................
     //----- size -----------------------------------------------------------

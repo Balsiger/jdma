@@ -250,6 +250,9 @@ public abstract class ValueHandle<T extends ValueHandle<T>>
   /** The key for this variable. */
   protected String m_key;
 
+  /** A flag denoting if the value is searchable in the datastore. */
+  protected boolean m_searchable = false;
+
   /** A flag denoting if the value is for DMs only. */
   protected boolean m_dm = false;
 
@@ -299,46 +302,6 @@ public abstract class ValueHandle<T extends ValueHandle<T>>
     Object value = value(inEntry, inDM);
 
     return value;
-    // if(value == null)
-    //   return null;
-
-    // if(inDM && isPlayerOnly() || !inDM && isDMOnly())
-    //   return null;
-
-    // String type;
-    // String choices;
-    // String name;
-    // Object formatted = formatted(inEntry, inDM);
-    // String related;
-    // String edit;
-
-    // if(value instanceof Value)
-    // {
-    //   type = ((Value)value).getEditType();
-    //   choices = ((Value)value).getChoices();
-    //   related = ((Value)value).getRelated();
-    //   edit = ((Value)value).getEditValue();
-    // }
-    // else
-    // {
-    //   type = m_editType;
-    //   choices = m_editChoices;
-    //   related = "";
-    //   edit = value(inEntry, inDM).toString();
-    // }
-
-    // // TODO: fix this (have to deal with attachments here)!
-    // assert inEntry instanceof AbstractEntry
-    //   : "temporarily need an abstract entry here, please fix";
-
-    // String note = m_note;
-    // if(note == null)
-    //   note = "";
-
-    // if(inEdit && m_editable && (inDM || m_playerEditable))
-    // return new Editable(inEntry.getKey(), formatted, m_key, edit, type, note,
-    //                       choices, related);
-    // return formatted;
   }
 
   //........................................................................
@@ -457,6 +420,17 @@ public abstract class ValueHandle<T extends ValueHandle<T>>
   }
 
   //........................................................................
+
+  /**
+   * Check whether the value is searchable in the datastore.
+   *
+   * @return true if the value is searchable and stored separately in the
+   *         datastore
+   */
+  public boolean isSearchable()
+  {
+    return m_searchable;
+  }
 
   //........................................................................
 

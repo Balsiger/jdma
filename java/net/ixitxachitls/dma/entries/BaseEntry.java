@@ -30,9 +30,14 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
+import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.proto.Values.RangeProto;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
@@ -44,6 +49,7 @@ import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.configuration.Config;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -595,297 +601,114 @@ public class BaseEntry extends AbstractEntry
   }
 
   //........................................................................
-  //---------------------------- setShortDescription -----------------------
-
-  /**
-   * Set the the short description of the base entry.
-   *
-   * @param       inShort the description
-   *
-   * @return      true if set, false if not
-   *
-   * @undefined   never
-   *
-   */
-//   public boolean setShortDescription(String inShort)
-//   {
-//     if(inShort == null)
-//       return false;
-
-//     m_short.set(inShort);
-
-//     return true;
-//   }
-
-  //........................................................................
-  //-------------------------------- setSynonyms ---------------------------
-
-  /**
-   * Set the synonyms of the base entry.
-   *
-   * @param       inSynonyms the synonyms
-   *
-   * @return      true if added, false if not
-   *
-   * @undefined   assertion if synonyms is null
-   *
-   */
-//   public boolean setSynonyms(String []inSynonyms)
-//   {
-//     if(inSynonyms == null)
-//       return false;
-
-//     m_synonyms.reset();
-
-//     for(int i = 0; i < inSynonyms.length; i++)
-//       m_synonyms.getBaseValue().add(new Text(inSynonyms[i], true, false));
-
-//     return true;
-//   }
-
-  //........................................................................
-  //-------------------------------- addSynonym ----------------------------
-
-  /**
-   * Add a synonym to the base entry.
-   *
-   * @param       inSynonym the synonym
-   *
-   * @return      true if added, false if not
-   *
-   */
-//   public boolean addSynonym(String inSynonym)
-//   {
-//     if(inSynonym == null)
-//       return false;
-
-//     m_synonyms.getBaseValue().add(new Text(inSynonym, true, false));
-
-//     return true;
-//   }
-
-  //........................................................................
-  //------------------------------- setCategories --------------------------
-
-  /**
-   * Set the categories of the base entry.
-   *
-   * @param       inCategories the new categories
-   *
-   * @return      true if added, false if not
-   *
-   * @undefined   never
-   *
-   */
-//   public boolean setCategories(String []inCategories)
-//   {
-//     if(inCategories == null)
-//       return false;
-
-//     m_categories.reset();
-
-//     for(int i = 0; i < inCategories.length; i++)
-//       m_categories.add(new Text(inCategories[i], true, false));
-
-//     return true;
-//   }
-
-  //........................................................................
-  //------------------------------- addCategory ----------------------------
-
-  /**
-   * Add a category to the base entry.
-   *
-   * @param       inCategory the category
-   *
-   * @return      true if added, false if not
-   *
-   */
-//   public boolean addCategory(String inCategory)
-//   {
-//     if(inCategory == null)
-//       return false;
-
-//     m_categories.add(new Text(inCategory, true, false));
-
-//     return true;
-//   }
-
-  //........................................................................
-  //------------------------------- setReferences --------------------------
-
-  /**
-   * Set the references of the base entry.
-   *
-   * @param       inReferences the new references
-   * @param       inStarts     the starting pages (0 for none)
-   * @param       inEnds       the ending pages (0 for none)
-   *
-   * @return      true if added, false if not
-   *
-   * @undefined   never
-   *
-   */
-//   public boolean setReferences(String []inReferences, int [][]inStarts,
-//                                int [][]inEnds)
-//   {
-//     if(inReferences == null)
-//       return false;
-
-//     m_references.reset();
-
-//     for(int i = 0; i < inReferences.length; i++)
-//       addReference(inReferences[i], inStarts[i], inEnds[i]);
-
-//     return true;
-//   }
-
-  //........................................................................
-
-  //------------------------------ addReference ----------------------------
-
-  /**
-   * Add a reference to the base entry.
-   *
-   * @param       inReference the reference
-   * @param       inStart     the start page (0 for none)
-   * @param       inEnd       the end page (0 for none)
-   *
-   * @return      true if added, false if not
-   *
-   */
-//   @SuppressWarnings("unchecked") // casting from multiple element
-//   public boolean addReference(String inReference, int []inStart, int []inEnd)
-//   {
-//     if(inReference == null)
-//       return false;
-
-//     Multiple reference = m_references.getBaseValue().newElement();
-
-//     ((Text)reference.get(0).getMutable()).set(inReference);
-
-//     if(inStart != null || inEnd != null)
-//     {
-//       if(inStart.length != inEnd.length)
-//         throw new IllegalArgumentException("number of starting pages does "
-//                                            + "not match number of ending "
-//                                            + "pages");
-
-//     ValueList<Range> pages = (ValueList<Range>)reference.get(1).getMutable();
-
-//       for(int i = 0; i < inStart.length; i++)
-//       {
-//         Range range = pages.newElement();
-
-//         range.set(inStart[i], inEnd[i]);
-
-//         pages.add(range);
-//       }
-//     }
-
-//     m_references.getBaseValue().add(reference);
-
-//     return true;
-//   }
-
-  //........................................................................
-  //------------------------------- addBase --------------------------------
-
-  /**
-   * Add a base to this entry. The entry is ignored if name and entry are null.
-   *
-   * @param       inBase the base entry to add
-   * @param       inName the name to add with (or null to use the name of the
-   *                     given base entry, if any)
-   *
-   */
-// protected void addBase(@MayBeNull BaseEntry inBase, @MayBeNull String inName)
-//   {
-//     super.addBase(inBase, inName);
-
-//     if(inBase != null)
-//       for(Iterator<AbstractAttachment> i = inBase.getAttachments();
-//           i.hasNext(); )
-//         addAttachment(i.next().getName());
-//   }
-
-  //........................................................................
-
-  //------------------------------- complete -------------------------------
-
-  /**
-   * Complete the entry and make sure that all values are filled.
-   *
-   * @undefined   never
-   *
-   */
-//   @SuppressWarnings("unchecked") // don't know real type of value
-//   public void complete()
-//   {
-//     if(m_complete)
-//       return;
-
-//  // Add the attachments of all the bases (we have to do that before calling
-//     // the super complete, as that will complete the attachments)
-//     if(m_baseEntries != null)
-//       for(BaseEntry entry : m_baseEntries)
-//       {
-//         if(entry == null)
-//           continue;
-
-//         for(Iterator<AbstractAttachment> i = entry.getAttachments();
-//             i.hasNext(); )
-//           addAttachment(i.next().getName());
-//       }
-
-//     super.complete();
-//   }
-
-  //........................................................................
-  //------------------------------ readEntry -------------------------------
-
-  /**
-   * Read an entry, and only the entry without type and comments, from the
-   * reader.
-   *
-   * @param       inReader the reader to read from
-   *
-   * @return      true if read successfully, false else
-   *
-   */
-//   protected boolean readEntry(ParseReader inReader)
-//   {
-//     // TODO: remove this!
-//     if(inReader.expect("based on"))
-//     {
-//       // we have to handle a value based on another one
-//       Text base = new Text(false, false);
-//       base.read(inReader);
-
-//       // add the attachments from the base
-//       m_base = BaseCampaign.GLOBAL.getBaseEntry(base.get(),
-//                                                 getType().getBaseType());
-
-//       if(m_base == null)
-//         Log.warning("could not find base entry for '" + base
-//                     + "', no attachments or initializers copied over");
-//       else
-//         for(Iterator<AbstractAttachment> i = m_base.getAttachments();
-//             i.hasNext(); )
-//           addAttachment(i.next().getName());
-
-//       if(!inReader.expect(':'))
-//         return false;
-//     }
-
-//     return super.readEntry(inReader);
-//   }
-
-  //........................................................................
 
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Message toProto()
+  {
+    BaseEntryProto.Builder builder = BaseEntryProto.newBuilder();
+
+    builder.setAbstract((AbstractEntryProto)super.toProto());
+
+    for(Name category : m_categories)
+      builder.addCategory(category.get());
+
+    if(m_description.isDefined())
+      builder.setDescription(m_description.get());
+    if(m_short.isDefined())
+      builder.setShortDescription(m_short.get());
+    for(Multiple reference : m_references)
+    {
+      BaseEntryProto.Reference.Builder ref =
+        BaseEntryProto.Reference.newBuilder();
+        ref.setName(((Reference<BaseProduct>)reference.get(0)).getName());
+
+      for(Range pages : ((ValueList<Range>)reference.get(1)))
+        ref.addPages(pages.toProto());
+
+      builder.addReference(ref);
+    }
+    for(Text synonym : m_synonyms)
+      builder.addSynonym(synonym.get());
+    for(Selection world : m_worlds)
+      builder.addWorld(world.toString());
+
+    BaseEntryProto proto = builder.build();
+    return proto;
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseEntryProto))
+    {
+      Log.warning("cannot parse proto " + inProto.getClass());
+      return;
+    }
+
+    BaseEntryProto proto = (BaseEntryProto)inProto;
+
+    super.fromProto(proto.getAbstract());
+
+    if(proto.getCategoryCount() > 0)
+    {
+      List<Name> categories = new ArrayList<>();
+      for(String category : proto.getCategoryList())
+        categories.add(m_categories.createElement().as(category));
+
+      m_categories = m_categories.as(categories);
+    }
+
+    if(proto.hasDescription())
+      m_description = m_description.as(proto.getDescription());
+    if(proto.hasShortDescription())
+      m_short = m_short.as(proto.getShortDescription());
+
+    List<Multiple> references = new ArrayList<>();
+    for(BaseEntryProto.Reference reference : proto.getReferenceList())
+    {
+      Multiple ref = m_references.newElement();
+
+      List<Range> pages = new ArrayList<>();
+      for (RangeProto page : reference.getPagesList())
+        pages.add(((ValueList<Range>)ref.get(1)).createElement()
+                  .as(page.getLow(), page.getHigh()));
+
+      ref = ref.as(((Reference<BaseProduct>)ref.get(0)).as(reference.getName()),
+                   ((ValueList<Range>)ref.get(1)).as(pages));
+      references.add(ref);
+    }
+    m_references = m_references.as(references);
+
+    List<Text> synonyms = new ArrayList<>();
+    for(String synonym : proto.getSynonymList())
+      synonyms.add(m_synonyms.createElement().as(synonym));
+    m_synonyms = m_synonyms.as(synonyms);
+
+    List<Selection> worlds = new ArrayList<>();
+    for(String world : proto.getWorldList())
+      worlds.add(m_worlds.createElement().as(world));
+    m_worlds = m_worlds.as(worlds);
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(BaseEntryProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test
@@ -970,492 +793,6 @@ public class BaseEntry extends AbstractEntry
         // assertEquals("synonyms 1", "guru", entry.getSynonyms()[1]);
       }
     }
-
-    //......................................................................
-    //----- set/get --------------------------------------------------------
-
-    /** Testing set and get. */
-//     @org.junit.Test
-//     public void setGet()
-//     {
-//       BaseEntry entry = new BaseEntry();
-
-//       assertEquals("length", 0, entry.getSynonyms().length);
-
-//       assertFalse("set", entry.setSynonyms(null));
-//       assertTrue("set",  entry.setSynonyms(new String [] { "1", "2", "3"}));
-
-//       assertEquals("length 2", 3, entry.getSynonyms().length);
-//       assertEquals("synonyms 0", "1", entry.getSynonyms()[0]);
-//       assertEquals("synonyms 1", "2", entry.getSynonyms()[1]);
-//       assertEquals("synonyms 2", "3", entry.getSynonyms()[2]);
-
-//       assertTrue("set",  entry.addSynonym("4"));
-
-//       assertEquals("length 3", 4, entry.getSynonyms().length);
-//       assertEquals("synonyms 0", "1", entry.getSynonyms()[0]);
-//       assertEquals("synonyms 1", "2", entry.getSynonyms()[1]);
-//       assertEquals("synonyms 2", "3", entry.getSynonyms()[2]);
-//       assertEquals("synonyms 3", "4", entry.getSynonyms()[3]);
-
-//       assertTrue("world", entry.setWorld("Forgotten Realms"));
-//       assertFalse("world", entry.setWorld("guru"));
-//       assertEquals("world", "Forgotten Realms", entry.getWorld());
-
-//       assertTrue("category", entry.addCategory("cat"));
-//       assertTrue("category", entry.hasCategory("cat"));
-//     }
-
-    //......................................................................
-    //----- print ----------------------------------------------------------
-
-    /** Testing printing. */
-//     public void testPrint()
-//     {
-      // TODO: does not work right now because printing changed.
-//       BaseEntry entry = new BaseEntry("test");
-
-//       assertTrue("synonym", entry.addSynonym("synonym1"));
-//       assertTrue("synonym", entry.addSynonym("synonym2"));
-//       assertFalse("world", entry.setWorld("world"));
-//       assertTrue("world", entry.setWorld("forgotten Realms"));
-//       assertTrue("category", entry.addCategory("cat1"));
-//       assertTrue("category", entry.addCategory("cat2"));
-//       assertTrue("category", entry.addCategory("cat3"));
-//       assertTrue("reference", entry.addReference("ref1", null, null));
-//     assertTrue("reference", entry.addReference("ref2", new int [] { 23, 55 },
-//                                     new int [] { 42, 66 }));
-//       assertTrue("reference", entry.addReference("ref3", new int [] { 23 },
-//                                     new int [] { 23 }));
-//       assertTrue("description", entry.setDescription("description"));
-//       assertTrue("short description", entry.setShortDescription("short"));
-
-//       PrintCommand command = entry.printCommand(false, false);
-
-//       assertNotNull("command", command);
-
-//       // icons
-//       assertEquals("world", "world: Forgotten Realms",
-//                    extract((Command)command.icons.get(0), 2));
-//       assertEquals("category", "divider",
-//                    extract((Command)command.icons.get(1), 0));
-//       assertEquals("category", "multiedit",
-//                    extract((Command)command.icons.get(1), 1));
-//       assertEquals("category", "categories: cat1",
-//                    extract((Command)command.icons.get(1), 2, 1, 2));
-//       assertEquals("category", "categories: cat2",
-//                    extract((Command)command.icons.get(1), 2, 2, 2));
-//       assertEquals("category", "categories: cat3",
-//                    extract((Command)command.icons.get(1), 2, 3, 2));
-
-//       // pre
-//       assertEquals("description", "textblock",
-//                    extract((Command)command.pre.get(0), 0));
-//       assertEquals("description", "desc",
-//                    extract((Command)command.pre.get(0), -1));
-//       assertEquals("description", "description",
-//                    extract((Command)command.pre.get(0), 1, 1));
-//       assertEquals("short", "hrule",
-//                    extract((Command)command.pre.get(0), 1, 3, 0));
-//       assertEquals("short", "short",
-//                    extract((Command)command.pre.get(0), 1, 4));
-//       assertEquals("files", "files",
-//                    extract((Command)command.pre.get(1), 0));
-//       assertEquals("files", "BaseEntries/test",
-//                    extract((Command)command.pre.get(1), 1));
-
-//       // values
-//       assertEquals("base", "Base:",
-//                    extract((Command)command.values.get(0), 1, 1));
-//       assertEquals("base", "", extract((Command)command.values.get(1)));
-//       assertEquals("file", "File:",
-//                    extract((Command)command.values.get(2), 1, 1));
-//       assertEquals("file", "test",
-//                    extract((Command)command.values.get(3), 1));
-//       assertEquals("categories", "Categories:",
-//                    extract((Command)command.values.get(4), 1, 1));
-//       assertEquals("categories", "cat1,\ncat2,\ncat3",
-//                    extract((Command)command.values.get(5)));
-//       assertEquals("synoyms", "Synonyms:",
-//                    extract((Command)command.values.get(6), 1, 1));
-//       assertEquals("synonyms", "synonym1; synonym2",
-//                    extract((Command)command.values.get(7), 1));
-//       assertEquals("synoyms", "References:",
-//                    extract((Command)command.values.get(8), 1, 1));
-//       assertEquals("references", "color",
-//                    extract((Command)command.values.get(9), 1, 1, 1, 0));
-//       assertEquals("references", "error",
-//                    extract((Command)command.values.get(9), 1, 1, 1, 1));
-//       assertEquals("references", "link",
-//                    extract((Command)command.values.get(9), 1, 1, 1, 2, 0));
-//       assertEquals("references", "/entry/baseproduct/ref1",
-//                    extract((Command)command.values.get(9), 1, 1, 1, 2, -1));
-//       assertEquals("references", "ref1",
-//                    extract((Command)command.values.get(9), 1, 1, 1, 2, 1));
-//       assertEquals("references", ",\n",
-//                    extract((Command)command.values.get(9), 1, 2));
-//       assertEquals("references", "color",
-//                    extract((Command)command.values.get(9), 1, 3, 1, 0));
-//       assertEquals("references", "error",
-//                    extract((Command)command.values.get(9), 1, 3, 1, 1));
-//       assertEquals("references", "link",
-//                    extract((Command)command.values.get(9), 1, 3, 1, 2, 0));
-//       assertEquals("references", "/entry/baseproduct/ref2",
-//                    extract((Command)command.values.get(9), 1, 3, 1, 2, -1));
-//       assertEquals("references", "ref2",
-//                    extract((Command)command.values.get(9), 1, 3, 1, 2, 1));
-//       assertEquals("references", " ",
-//                    extract((Command)command.values.get(9), 1, 3, 2));
-//       assertEquals("references", "p. 23-42/55-66",
-//                    extract((Command)command.values.get(9), 1, 3, 3));
-//       assertEquals("references", ",\n",
-//                    extract((Command)command.values.get(9), 1, 4));
-//       assertEquals("references", "color",
-//                    extract((Command)command.values.get(9), 1, 5, 1, 0));
-//       assertEquals("references", "error",
-//                    extract((Command)command.values.get(9), 1, 5, 1, 1));
-//       assertEquals("references", "link",
-//                    extract((Command)command.values.get(9), 1, 5, 1, 2, 0));
-//       assertEquals("references", "/entry/baseproduct/ref3",
-//                    extract((Command)command.values.get(9), 1, 5, 1, 2, -1));
-//       assertEquals("references", "ref3",
-//                    extract((Command)command.values.get(9), 1, 5, 1, 2, 1));
-//       assertEquals("references", " ",
-//                    extract((Command)command.values.get(9), 1, 5, 2));
-//       assertEquals("references", "p. 23",
-//                    extract((Command)command.values.get(9), 1, 5, 3));
-//     }
-
-    //......................................................................
-    //----- testBased ------------------------------------------------------
-
-    /** Testing with base values. */
-//     public void testBased()
-//     {
-//       String base1 = "base entry with incomplete base1 = "
-//         + "synonyms \"s1\", \"s2\"; "
-//         + "world generic; "
-//         + "references \"a\" 13-99; "
-//         + "incomplete \"test\".";
-
-//       String base3 = "base entry base3 = references \"b\" 23-42.";
-
-//       String derived = "base entry derived [base1, base2, base3] = "
-//         + "description \"d\".";
-
-//       ParseReader reader =
-//         new ParseReader(new java.io.StringReader(base1 + base3 + derived),
-//                         "test");
-
-//       // Add the base entry to the campaign for the second read to find it.
-//       BaseCampaign.GLOBAL.add(BaseEntry.read(reader));
-//       BaseCampaign.GLOBAL.add(BaseEntry.read(reader));
-
-//       // Read the dervied entry
-//       BaseEntry entry = (BaseEntry)BaseEntry.read(reader);
-//       entry.complete();
-
-//       m_logger.addExpectedPattern("WARNING: base.not-found:.*(base name "
-//                                   + "'base2').*");
-
-//       m_logger.verify();
-
-//       assertNotNull("entry should have been read", entry);
-//       assertEquals("entry name does not match", "derived",
-//                    entry.getName());
-//       assertEquals("entry does not match",
-//                    "#----- derived\n"
-//                    + "\n"
-//                    + "base entry with incomplete derived "
-//                    + "[base1, base2, base3] =\n"
-//                    + "\n"
-//                    + "  references        ;\n"
-//                    + "  description       \n"
-//                    + "  \"d\";\n"
-//                    + "  synonyms          .\n"
-//                    + "\n"
-//                    + "#.....\n",
-//                    entry.toString());
-
-//       // check the values
-//       assertEquals("world", "Generic", entry.getWorld());
-//       assertEquals("references", "a 13-99",
-//                    entry.m_references.getHigh().get(0).toString());
-//       assertEquals("references", "b 23-42",
-//                    entry.m_references.getHigh().get(1).toString());
-//     }
-
-    //......................................................................
-    //----- testInitializer ------------------------------------------------
-
-    /** Testing with initializers. */
-//     public void testInitializer()
-//     {
-//       String s_initializer =
-//         "#----- test2\n"
-//         + "\n"
-//         + "base entry test2 [test] = \n"
-//         + "\n"
-//         + "  synonyms      += \"another\";\n"
-//         + "  categories    -= guru;\n"
-//         + "  references    += \"c\";\n"
-//         + "  description   += \n"
-//         + "\n"
-//         + "  \" With some more text.\".\n"
-//         + "\n";
-
-//       ParseReader reader =
-//         new ParseReader(new java.io.StringReader(s_text + s_initializer),
-//                         "test");
-
-//       BaseCampaign.GLOBAL.add(BaseEntry.read(reader));
-//       BaseEntry entry = (BaseEntry)BaseEntry.read(reader);
-//       entry.complete();
-
-//       m_logger.verify();
-
-//       assertNotNull("entry should have been read", entry);
-//       assertEquals("entry name does not match", "test2",
-//                    entry.getName());
-//       assertEquals("synonyms", "blanket, winter", entry.getSynonyms()[0]);
-//       assertEquals("synonyms", "guru", entry.getSynonyms()[1]);
-//       assertEquals("synonyms", "another", entry.getSynonyms()[2]);
-//       assertEquals("entry does not match", s_initializer, entry.toString());
-      // TODO: this is currently changed!
-//     }
-
-    //......................................................................
-    //----- testRemarks ----------------------------------------------------
-
-    /** Testing with remarks. */
-//     @org.junit.Test
-//     public void remarks()
-//     {
-//       ParseReader reader =
-//         new ParseReader(new java.io.StringReader(s_remarks),
-//                         "test");
-
-//       BaseEntry entry = (BaseEntry)BaseEntry.read(reader);
-
-//       m_logger.verify();
-
-//       assertNotNull("entry should have been read", entry);
-//       assertEquals("entry name does not match", "test remarks",
-//                    entry.getName());
-//       assertEquals("entry does not match",
-//                    "base entry test remarks =\n"
-//                    + "\n"
-//                    + "  world             {@} Generic;\n"
-//                    + "  references        {p, a player remark} \"a\" 10,\n"
-//                    + "                    \"b\" 5-10/20;\n"
-//                    + "  description       \n"
-//                    + "  \"A thick, quilted, wool blanket.\";\n"
-//                    + "  synonyms          {*} \"blanket, winter\",\n"
-//                    + "                    \"guru\";\n"
-//                    + "  categories        {~, some estimation} dagger,\n"
-//                    + "                    weapon,\n"
-//                    + "                    guru,\n"
-//                    + "                    test.\n",
-//                    entry.toString());
-
-//       // check if printing of remarks is ok
-
-//       PrintCommand print = entry.printCommand(true, false);
-
-//       // world
-//     Command world = entry.getCommand(print, new Command("#{world}"), false);
-
-//       assertEquals("world", "span", extract(world, 1, 2, 2, 0));
-//       assertEquals("world", "AUTO", extract(world, 1, 2, 2, 1));
-//       assertEquals("world", "window", extract(world, 1, 2, 2, 2, 0));
-//       assertEquals("world", "world: Generic", extract(world, 1, 2, 2, 2, 1));
-//       assertEquals("world", "Auto", extract(world, 1, 2, 2, 2, 2));
-
-//       // references
-//       Command references =
-//         entry.getCommand(print, new Command("${references}"), true);
-//       assertEquals("references", "span", extract(references, 1, 2, 0));
-//       assertEquals("references", "PLAYER", extract(references, 1, 2, 1));
-//       assertEquals("references", "window", extract(references, 1, 2, 2, 0));
-//       assertEquals("references", "Player: a player remark",
-//                    extract(references, 1, 2, 2, 2));
-
-//       // synonyms
-//       Command synonyms =
-//         entry.getCommand(print, new Command("${synonyms}"), true);
-
-//       assertEquals("synonyms", "span", extract(synonyms, 1, 2, 0));
-//       assertEquals("synonyms", "HOUSE_RULE", extract(synonyms, 1, 2, 1));
-//       assertEquals("synonyms", "window", extract(synonyms, 1, 2, 2, 0));
-//       assertEquals("synonyms", "House Rule", extract(synonyms, 1, 2, 2, 2));
-
-//       // categories
-//       Command categories =
-//         entry.getCommand(print, new Command("${categories}"), true);
-
-//       assertEquals("categories", "span", extract(categories, 1, 2, 0));
-//       assertEquals("categories", "ESTIMATION", extract(categories, 1, 2, 1));
-//       assertEquals("categories", "window", extract(categories, 1, 2, 2, 0));
-//       assertEquals("categories", "Estimation: some estimation",
-//                    extract(categories, 1, 2, 2, 2));
-//     }
-
-    //......................................................................
-    //----- testIndex ------------------------------------------------------
-
-    /** Test indexes. */
-//     public void testIndexes()
-//     {
-//       BaseCampaign.GLOBAL.m_bases.clear();
-
-//       BaseEntry entry1 = new BaseEntry("name1");
-//       entry1.setWorld("Generic");
-//       entry1.addReference("ref1", null, null);
-//    entry1.addReference("ref2", new int [] { 23, 55 }, new int [] { 42, 66 });
-//       entry1.addReference("ref3", new int [] { 23 }, new int [] { 23 });
-//       entry1.addCategory("cat1");
-//       entry1.addCategory("cat2");
-//       entry1.addCategory("cat3");
-
-//       BaseEntry entry2 = new BaseEntry("name2");
-//       entry2.setWorld("Forgotten Realms");
-//       entry2.addReference("ref2", null, null);
-//    entry2.addReference("ref4", new int [] { 23, 55 }, new int [] { 42, 66 });
-//       entry2.addCategory("cat2");
-//       entry2.addCategory("cat4");
-
-//       BaseCampaign.GLOBAL.add(entry1);
-//       BaseCampaign.GLOBAL.add(entry2);
-
-//       m_logger.verify();
-
-//       for(net.ixitxachitls.dma.entries.indexes.Index<?> index : s_indexes)
-//       {
-//         if("General".equals(index.getGroup())
-//            && "Worlds".equals(index.getTitle()))
-//         {
-//           assertEquals("worlds", 2,
-//                        index.buildNames
-//                        (BaseCampaign.GLOBAL.getAbstractEntries()).size());
-//           Iterator i = index.buildNames
-//             (BaseCampaign.GLOBAL.getAbstractEntries()).iterator();
-//           assertEquals("worlds", "Forgotten Realms", i.next().toString());
-//           assertEquals("worlds", "Generic", i.next().toString());
-
-//           assertFalse("worlds", index.matchesName("guru", entry1));
-//         assertTrue("worlds", index.matchesName("Forgotten realms", entry2));
-//           assertTrue("worlds", index.matchesName("Generic", entry1));
-
-//           continue;
-//         }
-
-//         if("General".equals(index.getGroup())
-//            && "References".equals(index.getTitle()))
-//         {
-//           assertEquals("references", 4,
-//                        index.buildNames
-//                        (BaseCampaign.GLOBAL.getAbstractEntries()).size());
-//           assertTrue("references",
-//                    index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
-//                      .contains("ref1"));
-//           assertTrue("references",
-//                    index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
-//                      .contains("ref2"));
-//           assertTrue("references",
-//                    index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
-//                      .contains("ref3"));
-//           assertTrue("references",
-//                    index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
-//                      .contains("ref4"));
-
-//           assertTrue("references", index.matchesName("ref1", entry1));
-//           assertTrue("references", index.matchesName("ref2", entry1));
-//           assertTrue("references", index.matchesName("ref3", entry1));
-//           assertFalse("references", index.matchesName("ref4", entry1));
-//           assertFalse("references", index.matchesName("ref1", entry2));
-//           assertTrue("references", index.matchesName("ref2", entry2));
-//           assertFalse("references", index.matchesName("ref3", entry2));
-//           assertTrue("references", index.matchesName("ref4", entry2));
-
-//           continue;
-//         }
-
-//         if("General".equals(index.getGroup())
-//            && "Categories".equals(index.getTitle()))
-//         {
-//           assertEquals("categories", 4,
-//                        index.buildNames
-//                        (BaseCampaign.GLOBAL.getAbstractEntries()).size());
-//           assertTrue("categories",
-//                    index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
-//                      .contains("Cat1"));
-//           assertTrue("categories",
-//                    index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
-//                      .contains("Cat2"));
-//           assertTrue("categories",
-//                    index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
-//                      .contains("Cat3"));
-//           assertTrue("categories",
-//                    index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
-//                      .contains("Cat4"));
-
-//           assertTrue("categories", index.matchesName("cat1", entry1));
-//           assertTrue("categories", index.matchesName("cat2", entry1));
-//           assertTrue("categories", index.matchesName("cat3", entry1));
-//           assertFalse("categories", index.matchesName("cat4", entry1));
-//           assertFalse("categories", index.matchesName("cat1", entry2));
-//           assertTrue("categories", index.matchesName("cat2", entry2));
-//           assertFalse("categories", index.matchesName("cat3", entry2));
-//           assertTrue("categories", index.matchesName("cat4", entry2));
-
-//           continue;
-//         }
-//       }
-
-//       BaseCampaign.GLOBAL.m_bases.clear();
-//     }
-
-    //......................................................................
-    //----- testMatching ---------------------------------------------------
-
-    /** Test matching. */
-//     public void testMatching()
-//     {
-//       BaseEntry entry1 = new BaseEntry("entry 1");
-//       BaseEntry entry2 = new BaseEntry("entry 2");
-
-//       // not matching if not same type
-//       assertFalse("match type", entry1.matches(new BaseItem("item")));
-
-//       // not matching because of name
-//       assertFalse("match name", entry2.matches(entry1));
-
-//       // match name
-//       entry2 = new BaseEntry(null);
-//       assertTrue("match name", entry2.matches(entry1));
-
-//       entry2 = new BaseEntry("entry **");
-//       assertTrue("match name", entry2.matches(entry1));
-
-//       // match some values now
-//       assertEquals("set value", null,
-//                    entry2.m_world.setFromString("== Forgotten Realms"));
-//       assertFalse("match value", entry2.matches(entry1));
-
-//       entry1.setWorld("Forgotten Realms");
-//       assertTrue("match value", entry2.matches(entry1));
-
-//       // matching in a list
-//       assertEquals("set value", null,
-//                    entry2.m_categories.setFromString("~= cat"));
-//       assertFalse("match value", entry2.matches(entry1));
-
-//       entry1.addCategory("cat1");
-//       entry1.addCategory("cat2");
-//       entry1.addCategory("cat");
-
-//       assertTrue("match value", entry2.matches(entry1));
-//     }
 
     //......................................................................
   }

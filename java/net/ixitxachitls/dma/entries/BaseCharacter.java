@@ -29,8 +29,13 @@ import java.util.List;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
+
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.proto.Entries.BaseCharacterProto;
+import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
@@ -39,6 +44,7 @@ import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -67,37 +73,40 @@ public class BaseCharacter extends BaseEntry
   public enum Group implements EnumSelection.Named
   {
     /** A guest user without any special permissions. */
-    GUEST("Guest"),
+    GUEST("Guest", BaseCharacterProto.Group.GUEST),
 
     /** A normal user. */
-    USER("User"),
+    USER("User", BaseCharacterProto.Group.USER),
 
     /** The player in possession of the entry. */
-    PLAYER("Player"),
+    PLAYER("Player", BaseCharacterProto.Group.PLAYER),
 
     /** A DM (in any campaign). */
-    DM("DM"),
+    DM("DM", BaseCharacterProto.Group.DM),
 
     /** An administrator. */
-    ADMIN("Admin");
+    ADMIN("Admin", BaseCharacterProto.Group.ADMIN);
 
     /** Create the group.
      *
-     * @param inName the name of the value
-     *
+     * @param inName  the name of the value
+     * @param inProto the proto enum value
      */
-    private Group(String inName)
+    private Group(String inName, BaseCharacterProto.Group inProto)
     {
       m_name = constant("group", inName);
+      m_proto = inProto;
     }
 
     /** The name of the group. */
     private String m_name;
 
+    /** The proto enum value. */
+    private BaseCharacterProto.Group m_proto;
+
     /** Get the name of the value.
      *
      * @return the name of the value
-     *
      */
     @Override
     public String getName()
@@ -108,12 +117,21 @@ public class BaseCharacter extends BaseEntry
     /** Get the name of the value.
      *
      * @return the name of the value
-     *
      */
     @Override
     public String toString()
     {
       return m_name;
+    }
+
+    /**
+     * Get the proto value for this value.
+     *
+     * @return the proto enum value
+     */
+    public BaseCharacterProto.Group getProto()
+    {
+      return m_proto;
     }
 
     /** Check if a group allows a given group.
@@ -127,6 +145,21 @@ public class BaseCharacter extends BaseEntry
     public boolean allows(Group inGroup)
     {
       return this.ordinal() <= inGroup.ordinal();
+    }
+
+    /**
+     * Get the group matching the given proto value.
+     *
+     * @param  inGroup the proto value to look for
+     * @return the matched group (will throw exception if not found)
+     */
+    public static Group fromProto(BaseCharacterProto.Group inGroup)
+    {
+      for(Group group : values())
+        if(group.m_proto == inGroup)
+          return group;
+
+      throw new IllegalStateException("invalid proto group: " + inGroup);
     }
   }
 
@@ -202,6 +235,7 @@ public class BaseCharacter extends BaseEntry
   /** The files in the base campaign. */
   @Key("email")
   @DM
+  @Searchable
   protected Text m_email = new Text();
 
   //........................................................................
@@ -431,6 +465,62 @@ public class BaseCharacter extends BaseEntry
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    BaseCharacterProto.Builder builder = BaseCharacterProto.newBuilder();
+
+    builder.setBase((BaseEntryProto)super.toProto());
+    if(m_group.isDefined())
+      builder.setGroup(m_group.getSelected().getProto());
+    if(m_lastAction.isDefined())
+      builder.setLastAction(m_lastAction.get());
+    if(m_realName.isDefined())
+      builder.setRealName(m_realName.get());
+    if(m_email.isDefined())
+      builder.setEmail(m_email.get());
+
+    return builder.build();
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseCharacterProto))
+    {
+      Log.warning("cannot parse proto " + inProto.getClass());
+      return;
+    }
+
+    BaseCharacterProto proto = (BaseCharacterProto)inProto;
+
+    super.fromProto(proto.getBase());
+
+    if(proto.hasGroup())
+      m_group = m_group.as(Group.fromProto(proto.getGroup()));
+    if(proto.hasLastAction())
+      m_lastAction = m_lastAction.as(proto.getLastAction());
+    if(proto.hasRealName())
+      m_realName = m_realName.as(proto.getRealName());
+    if(proto.hasEmail())
+      m_email = m_email.as(proto.getEmail());
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(BaseCharacterProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
+
+
   //........................................................................
 
   //------------------------------------------------------------------- test

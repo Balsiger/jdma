@@ -144,7 +144,7 @@ public class ISBN13 extends Value<ISBN13>
    *
    */
   @Override
-public ISBN13 create()
+  public ISBN13 create()
   {
     return new ISBN13();
   }
@@ -183,7 +183,7 @@ public ISBN13 create()
    *
    */
   @Override
-public boolean isDefined()
+  public boolean isDefined()
   {
     return m_g13 != null && m_group != null && m_publisher != null
       && m_title != null && m_check >= 0;
@@ -403,6 +403,30 @@ public boolean isDefined()
   }
 
   //........................................................................
+
+  /**
+   * Create a new ISBN like the current one but with diffent values.
+   *
+   * @param inGroup13    the 13 group number
+   * @param inGroup      the isbn group number
+   * @param inPublisher  the isbn publisher number
+   * @param inTitle      the isbn title nubmer
+   * @param inCheck      the isbn check value
+   * @return
+   */
+  public ISBN13 as(String inGroup13, String inGroup, String inPublisher,
+                   String inTitle, int inCheck)
+  {
+    ISBN13 result = create();
+
+    result.m_g13 = inGroup13;
+    result.m_group = inGroup;
+    result.m_publisher = inPublisher;
+    result.m_title = inTitle;
+    result.m_check = inCheck;
+
+    return result;
+  }
 
   //........................................................................
 

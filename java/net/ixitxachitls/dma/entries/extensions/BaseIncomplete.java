@@ -25,8 +25,13 @@ package net.ixitxachitls.dma.entries.extensions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.protobuf.Message;
+
 import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.proto.Entries.BaseIncompleteProto;
+import net.ixitxachitls.dma.proto.Entries.BaseWearableProto;
 import net.ixitxachitls.dma.values.LongFormattedText;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -110,6 +115,33 @@ public class BaseIncomplete extends BaseExtension<BaseEntry>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  @Override
+  public Message toProto()
+  {
+    BaseIncompleteProto.Builder builder = BaseIncompleteProto.newBuilder();
+
+    if(m_incomplete.isDefined())
+      builder.setText(m_incomplete.get());
+
+    return builder.build();
+  }
+
+  @Override
+  public void fromProto(Message inProto)
+  {
+    if(!(inProto instanceof BaseWearableProto))
+    {
+      Log.warning("cannot parse base wearable proto " + inProto.getClass());
+      return;
+    }
+
+    BaseIncompleteProto proto = (BaseIncompleteProto)inProto;
+
+    if(proto.hasText())
+      m_incomplete = m_incomplete.as(proto.getText());
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

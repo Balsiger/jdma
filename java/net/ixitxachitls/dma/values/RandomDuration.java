@@ -27,6 +27,8 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.proto.Values.DiceProto;
+import net.ixitxachitls.dma.proto.Values.RandomDurationProto;
 import net.ixitxachitls.input.ParseReader;
 
 //..........................................................................
@@ -145,10 +147,10 @@ public class RandomDuration extends Duration
     if(inIndex < 0 || m_dices == null || inIndex >= m_dices.length)
       return super.singleUnitToString(inIndex);
 
-    if(m_dices[inIndex] == null)
+    if(m_dices[inIndex] == null || !m_dices[inIndex].isDefined())
       return super.singleUnitToString(inIndex);
 
-    if(m_values[inIndex].isOne())
+    if(m_values[inIndex] != null && m_values[inIndex].isOne())
       return m_dices[inIndex].toString() + " " + m_set.m_units[inIndex].m_units;
 
     return m_dices[inIndex].toString() + " * "
@@ -246,6 +248,56 @@ public class RandomDuration extends Duration
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  /**
+   * Create a proto for the value.
+   *
+   * @return the proto representation
+   */
+  // TODO: this is bad! We con't override the super method, but we should!
+  public RandomDurationProto toRProto()
+  {
+    RandomDurationProto.Builder builder = RandomDurationProto.newBuilder();
+
+    builder.setDuration(super.toProto());
+
+    if(m_dices != null)
+      for(Dice dice : m_dices)
+        if(dice == null)
+          builder.addDice(DiceProto.getDefaultInstance());
+        else
+          builder.addDice(dice.toProto());
+
+    return builder.build();
+  }
+
+  /**
+   * Create a new random duration similar to the current but with data from the
+   * given proto.
+   *
+   * @param inProto  the proto with the data
+   * @return the newly created random duration
+   */
+  public RandomDuration fromProto(RandomDurationProto inProto)
+  {
+    RandomDuration result = create();
+
+    Duration base = fromProto(inProto.getDuration());
+    result.m_values = base.m_values;
+    result.m_set = base.m_set;
+    result.m_sets = base.m_sets;
+
+    if(inProto.getDiceCount() > 0)
+    {
+      result.m_dices = new Dice[inProto.getDiceCount()];
+      int i = 0;
+      for(DiceProto dice : inProto.getDiceList())
+        result.m_dices[i++] = new Dice().fromProto(dice);
+    }
+
+    return result;
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

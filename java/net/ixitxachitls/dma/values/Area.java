@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.proto.Values.AreaProto;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -283,6 +284,92 @@ public class Area extends Units<Area>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  /**
+   * Create a proto for the value.
+   *
+   * @return the proto representation
+   */
+  public AreaProto toProto()
+  {
+    AreaProto.Builder builder = AreaProto.newBuilder();
+
+    if(m_set == m_sets[0])
+      if(m_values != null && m_values.length == 3)
+      {
+        AreaProto.Imperial.Builder imperial = AreaProto.Imperial.newBuilder();
+
+        if(m_values[0] != null)
+          imperial.setSquareYards(m_values[0].toProto());
+        if(m_values[1] != null)
+          imperial.setSquareFeet(m_values[1].toProto());
+        if(m_values[2] != null)
+          imperial.setSquareInches(m_values[2].toProto());
+
+        builder.setImperial(imperial.build());
+      }
+
+    if(m_set == m_sets[1])
+      if(m_values != null && m_values.length == 3)
+      {
+        AreaProto.Metric.Builder metric = AreaProto.Metric.newBuilder();
+
+        if(m_values[0] != null)
+          metric.setSquareMeters(m_values[0].toProto());
+        if(m_values[1] != null)
+          metric.setSquareDecimeters(m_values[1].toProto());
+        if(m_values[2] != null)
+          metric.setSquareCentimeters(m_values[2].toProto());
+
+        builder.setMetric(metric.build());
+      }
+
+    return builder.build();
+  }
+
+  /**
+   * Create a new area similar to the current but with data from the
+   * given proto.
+   *
+   * @param inProto  the proto with the data
+   * @return the newly created area
+   */
+  public Area fromProto(AreaProto inProto)
+  {
+    Area result = create();
+
+    if(inProto.hasMetric())
+    {
+      result.m_values = new Rational[3];
+      if(inProto.getMetric().hasSquareMeters())
+        result.m_values[0] =
+          Rational.fromProto(inProto.getMetric().getSquareMeters());
+      if(inProto.getMetric().hasSquareDecimeters())
+        result.m_values[1] =
+          Rational.fromProto(inProto.getMetric().getSquareDecimeters());
+      if(inProto.getMetric().hasSquareCentimeters())
+        result.m_values[2] =
+          Rational.fromProto(inProto.getMetric().getSquareCentimeters());
+      result.m_set = m_sets[1];
+    }
+    else if(inProto.hasImperial())
+    {
+      result.m_values = new Rational[3];
+      if(inProto.getImperial().hasSquareYards())
+        result.m_values[0] =
+          Rational.fromProto(inProto.getImperial().getSquareYards());
+      if(inProto.getImperial().hasSquareFeet())
+        result.m_values[1] =
+          Rational.fromProto(inProto.getImperial().getSquareFeet());
+      if(inProto.getImperial().hasSquareInches())
+        result.m_values[2] =
+          Rational.fromProto(inProto.getImperial().getSquareInches());
+      result.m_set = m_sets[0];
+    }
+
+    return result;
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

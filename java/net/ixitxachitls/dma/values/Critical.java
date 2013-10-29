@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.values;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.proto.Values.CriticalProto;
 import net.ixitxachitls.input.ParseReader;
 
 //..........................................................................
@@ -356,6 +357,48 @@ public class Critical extends BaseNumber<Critical>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  /**
+   * Create a proto representation of the value.
+   *
+   * @return the proto
+   */
+  public CriticalProto toProto()
+  {
+    CriticalProto.Builder builder = CriticalProto.newBuilder();
+
+    if(m_threat.isDefined())
+      builder.setThreat(m_threat.toProto());
+    if(get() > 0)
+      builder.setMultiplier((int)m_number);
+
+    return builder.build();
+  }
+
+  /**
+   * Create a new critical value with the values from the given proto.
+   *
+   * @param inProto the proto to read the values from
+   * @return the newly created critical
+   */
+  public Critical fromProto(CriticalProto inProto)
+  {
+    Critical result = create();
+
+    if(inProto.hasThreat())
+    {
+      result.m_threat = result.m_threat.fromProto(inProto.getThreat());
+      result.m_defined = true;
+    }
+    if(inProto.hasMultiplier())
+    {
+      result.m_number = inProto.getMultiplier();
+      result.m_defined = true;
+    }
+
+    return result;
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

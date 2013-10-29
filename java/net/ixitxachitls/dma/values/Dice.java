@@ -28,6 +28,7 @@ import java.util.Random;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.proto.Values.DiceProto;
 import net.ixitxachitls.input.ParseReader;
 
 //..........................................................................
@@ -551,6 +552,49 @@ public class Dice extends Value<Dice>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  /**
+   * Create a proto representation of the value.
+   *
+   * @return the proto
+   */
+  public DiceProto toProto()
+  {
+    DiceProto.Builder builder = DiceProto.newBuilder();
+
+    if(m_number > 0)
+    {
+      builder.setNumber(m_number);
+      builder.setDice(m_dice);
+    }
+
+    if(m_modifier > 0)
+      builder.setModifier(m_modifier);
+
+    return builder.build();
+  }
+
+  /**
+   * Create a new dice value with the values from the given proto.
+   *
+   *
+   * @param inProto the proto to read the values from
+   * @return the newly crated dice
+   */
+  public Dice fromProto(DiceProto inProto)
+  {
+    Dice result = create();
+
+    if(inProto.hasNumber())
+      result.m_number = inProto.getNumber();
+    if(inProto.hasDice())
+      result.m_dice = inProto.getDice();
+    if(inProto.hasModifier())
+      result.m_modifier = inProto.getModifier();
+
+    return result;
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

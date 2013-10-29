@@ -147,7 +147,7 @@ public class ISBN extends Value<ISBN>
    *
    */
   @Override
-public ISBN create()
+  public ISBN create()
   {
     return new ISBN();
   }
@@ -312,7 +312,7 @@ public boolean isDefined()
    *
    */
   @Override
-public boolean doRead(ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     ParseReader.Position pos;
 
@@ -387,6 +387,28 @@ public boolean doRead(ParseReader inReader)
   }
 
   //........................................................................
+
+  /**
+   * Create a new ISBN like the current one but with diffent values.
+   *
+   * @param inGroup      the isbn group number
+   * @param inPublisher  the isbn publisher number
+   * @param inTitle      the isbn title nubmer
+   * @param inCheck      the isbn check value
+   * @return
+   */
+  public ISBN as(String inGroup, String inPublisher, String inTitle,
+                 int inCheck)
+  {
+    ISBN result = create();
+
+    result.m_group = inGroup;
+    result.m_publisher = inPublisher;
+    result.m_title = inTitle;
+    result.m_check = inCheck;
+
+    return result;
+  }
 
   //........................................................................
 
