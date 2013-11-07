@@ -13,6 +13,7 @@ message AbstractEntryProto
 message BaseEntryProto
 {
   required AbstractEntryProto abstract = 1;
+
   repeated string category = 2;
   optional string description = 3;
   optional string short_description = 4;
@@ -48,6 +49,7 @@ message BaseCharacterProto
 message BaseProductProto
 {
   required BaseEntryProto base = 1;
+
   optional string title = 2;
   optional string leader = 3;
   optional string subtitle = 4;
@@ -1403,4 +1405,27 @@ message NPCProto
   optional Gender gender = 2;
   optional string given_name = 3;
   repeated string level = 4;
+}
+
+message EntriesProto
+{
+  repeated BaseCharacterProto base_character = 1;
+  repeated BaseProductProto base_product = 2;
+  repeated BaseSpellProto base_spell = 3;
+  repeated BaseQualityProto base_quality = 4;
+  repeated BaseFeatProto base_feat = 5;
+  repeated BaseSkillProto base_skill = 6;
+  repeated BaseItemProto base_item = 7;
+  repeated BaseCampaignProto base_campaign = 8;
+  repeated BaseMonsterProto base_monster = 9;
+  repeated BaseEncounterProto base_encounter = 10;
+  repeated BaseLevelProto base_level = 11;
+
+  repeated ProductProto product = 12;
+  repeated CharacterProto character = 13;
+  repeated ItemProto item = 14;
+  repeated EncounterProto encounter = 15;
+  repeated LevelProto level = 16;
+  repeated MonsterProto monster = 17;
+  repeated NPCProto npc = 18;
 }

@@ -2936,16 +2936,17 @@ public class BaseProduct extends BaseEntry
    *
    * @param inProto the proto to parse
    */
+  @Override
   @SuppressWarnings("unchecked")
-  public void fromProto(BaseProductProto inProto)
+  public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseProductProto))
     {
-      Log.warning("cannot parse proto " + inProto.getClass());
+      Log.warning("cannot parse product proto " + inProto.getClass());
       return;
     }
 
-    BaseProductProto proto = inProto;
+    BaseProductProto proto = (BaseProductProto)inProto;
 
     super.fromProto(proto.getBase());
 

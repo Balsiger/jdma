@@ -24,7 +24,6 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -34,6 +33,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.apphosting.api.ApiProxy;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
@@ -118,9 +118,6 @@ public class DMARequest extends HttpServletRequestWrapper
   private Map<AbstractEntry.EntryKey<?>, AbstractEntry> m_entries =
     Maps.newHashMap();
 
-  /** The date when the request was started. */
-  private Date m_start = new Date();
-
   /** The player for the request, if any. */
 //   private Character m_player = null;
 
@@ -141,7 +138,7 @@ public class DMARequest extends HttpServletRequestWrapper
   @Override
   public String toString()
   {
-    return "DMA Request (" + m_start + "): "
+    return "DMA Request: "
       + (m_user == null ? "no user" : m_user.getName())
       + (m_userOverride == null ? "" : " (" + m_userOverride.getName() + ")")
       + ", params " + m_params;
@@ -515,7 +512,7 @@ public class DMARequest extends HttpServletRequestWrapper
     if (DMAServlet.isDev())
       return false;
 
-    return new Date().getTime() - m_start.getTime() > 55 * 1000;
+    return ApiProxy.getCurrentEnvironment().getRemainingMillis() < 5000;
   }
 
   //........................................................................

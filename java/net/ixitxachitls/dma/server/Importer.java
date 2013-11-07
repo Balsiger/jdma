@@ -47,14 +47,48 @@ import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
+import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.data.DMADatafiles;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseCampaign;
+import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.BaseEncounter;
+import net.ixitxachitls.dma.entries.BaseFeat;
+import net.ixitxachitls.dma.entries.BaseItem;
+import net.ixitxachitls.dma.entries.BaseLevel;
+import net.ixitxachitls.dma.entries.BaseMonster;
+import net.ixitxachitls.dma.entries.BaseProduct;
+import net.ixitxachitls.dma.entries.BaseQuality;
+import net.ixitxachitls.dma.entries.BaseSkill;
+import net.ixitxachitls.dma.entries.BaseSpell;
+import net.ixitxachitls.dma.entries.Character;
+import net.ixitxachitls.dma.entries.Encounter;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.entries.extensions.Composite;
+import net.ixitxachitls.dma.entries.Level;
+import net.ixitxachitls.dma.entries.Monster;
+import net.ixitxachitls.dma.entries.NPC;
+import net.ixitxachitls.dma.entries.Product;
+import net.ixitxachitls.dma.proto.Entries.BaseCampaignProto;
+import net.ixitxachitls.dma.proto.Entries.BaseCharacterProto;
+import net.ixitxachitls.dma.proto.Entries.BaseEncounterProto;
+import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
+import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
+import net.ixitxachitls.dma.proto.Entries.BaseLevelProto;
+import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
+import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
+import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
+import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
+import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
+import net.ixitxachitls.dma.proto.Entries.CharacterProto;
+import net.ixitxachitls.dma.proto.Entries.EncounterProto;
+import net.ixitxachitls.dma.proto.Entries.EntriesProto;
+import net.ixitxachitls.dma.proto.Entries.ItemProto;
+import net.ixitxachitls.dma.proto.Entries.LevelProto;
+import net.ixitxachitls.dma.proto.Entries.MonsterProto;
+import net.ixitxachitls.dma.proto.Entries.NPCProto;
+import net.ixitxachitls.dma.proto.Entries.ProductProto;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.dma.server.servlets.DMAServlet;
 import net.ixitxachitls.util.CommandLineParser;
@@ -127,7 +161,9 @@ public final class Importer
 
     m_installer = new RemoteApiInstaller();
     m_installer.install(options);
-  }
+
+    DMARequest.ensureTypes();
+}
 
   //........................................................................
 
@@ -135,14 +171,20 @@ public final class Importer
 
   //-------------------------------------------------------------- variables
 
+  /** The data store */
+  DatastoreService m_store = DatastoreServiceFactory.getDatastoreService();
+
+  /** THe dma data store. */
+  DMADatastore m_dmaStore = new DMADatastore();
+
   /** The remove api installer. */
   private RemoteApiInstaller m_installer;
 
-  /** A list of all files to import. */
-  private List<String> m_files = new ArrayList<String>();
+  /** A list of all external files to import. */
+  private List<String> m_files = new ArrayList<>();
 
-  /** The dma data parsed. */
-  private DMADatafiles m_data = new DMADatafiles("./");
+  /** A list of proto buffer files to import. */
+  private List<String> m_protoFiles = new ArrayList<>();
 
   /** The hostname to connect to. */
   private String m_host;
@@ -155,6 +197,12 @@ public final class Importer
 
   /** If true, read and store each entry individually (no batch). */
   private boolean m_individual;
+
+  /** The list of entities to store in batch. */
+  List<Entity> m_entities = new ArrayList<>();
+
+  /** The list of entries with errors to store later. */
+  List<AbstractEntry> m_errors = new ArrayList<>();
 
   /** Joiner for paths. */
   public static final Joiner PATH_JOINER = Joiner.on('/').skipNulls();
@@ -185,7 +233,6 @@ public final class Importer
    * Add the given file or directory for import.
    *
    * @param       inFile the file or directory to import
-   *
    */
   public void add(String inFile)
   {
@@ -228,8 +275,8 @@ public final class Importer
   {
     Log.important("adding file " + inFile);
 
-    if(inFile.endsWith(".dma"))
-      m_data.addFile(inFile);
+    if(inFile.endsWith(".pb"))
+      m_protoFiles.add(inFile);
     else
       m_files.add(inFile);
   }
@@ -241,51 +288,64 @@ public final class Importer
    * Do the import of all the files.
    *
    * @throws IOException reading or writing failed
-   *
    */
   public void read() throws IOException
   {
-    if(!m_data.read())
+    for (String protoFile : m_protoFiles)
     {
-      Log.error("cannot properly read data file");
-      return;
+      EntriesProto protos =
+        EntriesProto.parseFrom(new FileInputStream(protoFile));
+
+      for(BaseCharacterProto proto : protos.getBaseCharacterList())
+        add(new BaseCharacter(""), proto);
+      for(BaseProductProto proto : protos.getBaseProductList())
+        add(new BaseProduct(""), proto);
+      for(BaseSpellProto proto : protos.getBaseSpellList())
+        add(new BaseSpell(""), proto);
+      for(BaseQualityProto proto : protos.getBaseQualityList())
+        add(new BaseQuality(""), proto);
+      for(BaseFeatProto proto : protos.getBaseFeatList())
+        add(new BaseFeat(""), proto);
+      for(BaseSkillProto proto : protos.getBaseSkillList())
+        add(new BaseSkill(""), proto);
+      for(BaseItemProto proto : protos.getBaseItemList())
+        add(new BaseItem(""), proto);
+      for(BaseCampaignProto proto : protos.getBaseCampaignList())
+        add(new BaseCampaign(""), proto);
+      for(BaseMonsterProto proto : protos.getBaseMonsterList())
+        add(new BaseMonster(""), proto);
+      for(BaseEncounterProto proto : protos.getBaseEncounterList())
+        add(new BaseEncounter(""), proto);
+      for(BaseLevelProto proto : protos.getBaseLevelList())
+        add(new BaseLevel(""), proto);
+
+      for(ProductProto proto : protos.getProductList())
+        add(new Product(""), proto);
+      for(CharacterProto proto : protos.getCharacterList())
+        add(new Character(""), proto);
+      for(ItemProto proto : protos.getItemList())
+        add(new Item(""), proto);
+      for(EncounterProto proto : protos.getEncounterList())
+        add(new Encounter(""), proto);
+      for(LevelProto proto : protos.getLevelList())
+        add(new Level(""), proto);
+      for(MonsterProto proto : protos.getMonsterList())
+        add(new Monster(""), proto);
+      for(NPCProto proto : protos.getNpcList())
+        add(new NPC(""), proto);
+
     }
 
-    DatastoreService store = DatastoreServiceFactory.getDatastoreService();
-    DMADatastore dmaStore = new DMADatastore();
-    DMARequest.ensureTypes();
-
-    List<Entity> entities = new ArrayList<Entity>();
-    List<AbstractEntry> errors = new ArrayList<AbstractEntry>();
-
-    for(AbstractType<? extends AbstractEntry> type : m_data.getTypes())
-      for(AbstractEntry entry : m_data.getEntries(type, null, 0, 0))
-      {
-        if(!entry.ensureBaseEntries())
-        {
-          errors.add(entry);
-          continue;
-        }
-
-        if(entry instanceof Entry)
-          complete((Entry)entry);
-
-        if(m_individual)
-          store.put(dmaStore.convert(entry));
-        else
-          entities.add(dmaStore.convert(entry));
-        Log.important("importing " + type + " " + entry.getName());
-      }
-
     Log.important("storing entities in datastore");
-    if(!entities.isEmpty())
-      store.put(entities);
+    if(!m_entities.isEmpty())
+      m_store.put(m_entities);
 
+    m_entities.clear();
     int last = 0;
-    while(last != errors.size())
+    while(last != m_errors.size())
     {
-      last = errors.size();
-      for(Iterator<AbstractEntry> i = errors.iterator(); i.hasNext(); )
+      last = m_errors.size();
+      for(Iterator<AbstractEntry> i = m_errors.iterator(); i.hasNext(); )
       {
         AbstractEntry entry = i.next();
         if(!entry.ensureBaseEntries())
@@ -297,27 +357,26 @@ public final class Importer
         if(entry instanceof Entry)
           complete((Entry)entry);
 
-        entities.add(dmaStore.convert(entry));
+        m_entities.add(m_dmaStore.convert(entry));
         Log.important("importing after error " + entry.getName());
 
         i.remove();
       }
 
       Log.important("storing entities in datastore");
-      store.put(entities);
+      m_store.put(m_entities);
+      m_entities.clear();
     }
 
-    if(!errors.isEmpty())
+    if(!m_errors.isEmpty())
     {
       List<String> names = new ArrayList<String>();
 
-      for(AbstractEntry entry : errors)
+      for(AbstractEntry entry : m_errors)
         names.add(entry.getName());
 
       Log.error("Could not properly read all entries: " + names);
     }
-
-    m_data.save();
 
     Log.important("importing images");
 
@@ -415,26 +474,45 @@ public final class Importer
 
     // if the entry has a composite, we could have added some new items, which
     // we must properly store
-    if(inEntry instanceof Item)
-    {
-      Composite composite = (Composite)inEntry.getExtension("composite");
-      if(composite != null)
-      {
-        String file = m_data.getFilename(inEntry);
-
-        if(file == null)
-          Log.error("cannot properly store composites because "
-                    + inEntry.getName() + " is not found in any file!");
-        else
-          for(Item item : composite.getIncludes())
-            if(!m_data.hasEntry(item.getName(), Item.TYPE))
-              m_data.add(item, file, false);
-      }
-    }
+//    if(inEntry instanceof Item)
+//    {
+//      Composite composite = (Composite)inEntry.getExtension("composite");
+//      if(composite != null)
+//      {
+//        String file = m_data.getFilename(inEntry);
+//
+//        if(file == null)
+//          Log.error("cannot properly store composites because "
+//                    + inEntry.getName() + " is not found in any file!");
+//        else
+//          for(Item item : composite.getIncludes())
+//            if(!m_dmaStore.hasEntry(item.getName(), Item.TYPE))
+//              m_dmaStore.add(item, file, false);
+//      }
+//    }
   }
 
   //........................................................................
 
+  private void add(AbstractEntry inEntry, Message inProto)
+  {
+    inEntry.fromProto(inProto);
+
+    if(!inEntry.ensureBaseEntries())
+      m_errors.add(inEntry);
+    else
+    {
+      if(inEntry instanceof Entry)
+        complete((Entry)inEntry);
+
+      if(m_individual)
+        m_store.put(m_dmaStore.convert(inEntry));
+      else
+        m_entities.add(m_dmaStore.convert(inEntry));
+
+      Log.important("importing " + inEntry.getType() + " " + inEntry.getName());
+    }
+  }
 
   //........................................................................
 

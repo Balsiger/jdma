@@ -2880,14 +2880,14 @@ public abstract class AbstractEntry extends ValueGroup
   {
     if(!(inProto instanceof AbstractEntryProto))
     {
-      Log.warning("Cannot parse from proto " + inProto.getClass());
+      Log.warning("Cannot parse abstract proto " + inProto.getClass());
       return;
     }
 
     AbstractEntryProto proto = (AbstractEntryProto)inProto;
 
-    // Type and id are taken from the entity key.
     m_name = m_name.as(proto.getName());
+    m_type = AbstractType.getTyped(proto.getType());
 
     List<Name> bases = new ArrayList<>();
     for (String base : proto.getBaseList())

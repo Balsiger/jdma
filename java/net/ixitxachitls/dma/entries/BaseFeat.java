@@ -411,8 +411,6 @@ public class BaseFeat extends BaseEntry
       }
 
     BaseFeatProto proto = builder.build();
-    System.out.println(proto);
-    System.out.println(this);
     return proto;
   }
 

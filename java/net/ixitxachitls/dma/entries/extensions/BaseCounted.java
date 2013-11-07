@@ -272,7 +272,9 @@ public class BaseCounted extends BaseExtension<BaseItem>
     BaseCountedProto proto = (BaseCountedProto)inProto;
 
     m_count = m_count.as(proto.getCount());
-    m_unit = m_unit.as(Unit.fromProto(proto.getUnit()));
+
+    if(proto.hasUnit() && proto.getUnit() != BaseCountedProto.Unit.UNKNOWN)
+      m_unit = m_unit.as(Unit.fromProto(proto.getUnit()));
   }
 
   //........................................................................

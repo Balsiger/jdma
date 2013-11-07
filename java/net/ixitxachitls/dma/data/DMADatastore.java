@@ -114,7 +114,7 @@ public class DMADatastore implements DMAData
 
   //-------------------------------------------------------------- variables
 
-  private static final boolean s_readOld = false;
+  private static final boolean s_readOld = true;
 
   /** The access to the datastore. Don't use this except in the AdminServlet! */
   private DataStore m_data = new DataStore();

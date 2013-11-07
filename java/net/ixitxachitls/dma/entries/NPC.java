@@ -268,7 +268,6 @@ public class NPC extends Monster
         builder.addLevel(level.getName());
 
     NPCProto proto = builder.build();
-    System.out.println(proto);
     return proto;
   }
 

@@ -647,7 +647,7 @@ public class BaseEntry extends AbstractEntry
   {
     if(!(inProto instanceof BaseEntryProto))
     {
-      Log.warning("cannot parse proto " + inProto.getClass());
+      Log.warning("cannot parse base entry proto " + inProto.getClass());
       return;
     }
 

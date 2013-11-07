@@ -489,7 +489,7 @@ public class BaseCharacter extends BaseEntry
   {
     if(!(inProto instanceof BaseCharacterProto))
     {
-      Log.warning("cannot parse proto " + inProto.getClass());
+      Log.warning("cannot parse character proto " + inProto.getClass());
       return;
     }
 

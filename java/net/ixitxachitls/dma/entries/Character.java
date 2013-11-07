@@ -532,8 +532,6 @@ public class Character extends CampaignEntry<BaseCharacter>
       builder.setLevel((int)m_level.get());
 
     CharacterProto proto = builder.build();
-    System.out.println(proto);
-    System.out.println(this);
     return proto;
   }
 
@@ -564,9 +562,6 @@ public class Character extends CampaignEntry<BaseCharacter>
       m_level = m_level.as(proto.getLevel());
 
     super.fromProto(proto.getBase());
-
-    System.out.println(proto);
-    System.out.println(this);
   }
 
   @Override
