@@ -29,7 +29,6 @@ import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.proto.Entries.BaseIncompleteProto;
-import net.ixitxachitls.dma.proto.Entries.BaseWearableProto;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.util.logging.Log;
 
@@ -130,9 +129,9 @@ public class BaseIncomplete extends BaseExtension<BaseEntry>
   @Override
   public void fromProto(Message inProto)
   {
-    if(!(inProto instanceof BaseWearableProto))
+    if(!(inProto instanceof BaseIncompleteProto))
     {
-      Log.warning("cannot parse base wearable proto " + inProto.getClass());
+      Log.warning("cannot parse base incomplete proto " + inProto.getClass());
       return;
     }
 

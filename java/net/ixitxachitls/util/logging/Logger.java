@@ -53,12 +53,10 @@ public interface Logger extends AutoCloseable
   //-------------------------------- print ---------------------------------
 
   /**
-    *
     * Print the given message.
     *
     * @param       inText the text to print
     * @param       inType the logging level to print
-    *
     */
   void print(String inText, Log.Type inType);
 
@@ -66,14 +64,15 @@ public interface Logger extends AutoCloseable
   //-------------------------------- print ---------------------------------
 
   /**
-    *
     * Print the given object.
     *
     * @param       inObject the object to print
     * @param       inType   the type (level) printing
-    *
     */
   void print(Object inObject, Log.Type inType);
+
+  @Override
+  void close(); // Just here to ensure this does not throw any exception.
 
   //........................................................................
 

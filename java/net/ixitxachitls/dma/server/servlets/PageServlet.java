@@ -435,6 +435,7 @@ public class PageServlet extends SoyServlet
      * @throws IOException when closing the output
      */
     @org.junit.Test
+    @SuppressWarnings("try")
     public void navigation() throws IOException
     {
       try (java.io.ByteArrayOutputStream output =

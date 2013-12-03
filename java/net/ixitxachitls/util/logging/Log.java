@@ -1161,7 +1161,7 @@ public final class Log
       }
 
       @Override
-      public void close() throws Exception
+      public void close()
       {
       }
     }

@@ -1591,7 +1591,7 @@ public class BaseItem extends BaseEntry
     if(proto.hasMultiple())
     {
       BaseMultiple extension = new BaseMultiple(this, "multiple");
-      extension.fromProto(proto.getCounted());
+      extension.fromProto(proto.getMultiple());
       addExtension("multiple", extension);
     }
 

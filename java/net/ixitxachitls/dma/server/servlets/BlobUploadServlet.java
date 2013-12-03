@@ -63,9 +63,7 @@ import net.ixitxachitls.util.logging.Log;
  * going through the DMAFilter, thus we don't have the appropriate DMARequest.
  *
  * @file          BlobServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
 //..........................................................................

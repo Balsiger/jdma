@@ -173,6 +173,7 @@ protected SpecialResult handle(HttpServletRequest inRequest,
      *
      * @throws Exception should not happen */
     @org.junit.Test
+    @SuppressWarnings("try")
     public void handleHTML() throws Exception
     {
       FixedTextServlet servlet = new FixedTextServlet("title", "text", 42);

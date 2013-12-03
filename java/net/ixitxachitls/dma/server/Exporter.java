@@ -25,6 +25,7 @@ package net.ixitxachitls.dma.server;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -36,7 +37,6 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
@@ -46,28 +46,11 @@ import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.google.common.io.ByteSink;
 import com.google.common.io.CharSink;
+import com.google.protobuf.Message;
 
+import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.proto.Entries.BaseCampaignProto;
-import net.ixitxachitls.dma.proto.Entries.BaseCharacterProto;
-import net.ixitxachitls.dma.proto.Entries.BaseEncounterProto;
-import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
-import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
-import net.ixitxachitls.dma.proto.Entries.BaseLevelProto;
-import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
-import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
-import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
-import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.proto.Entries.CharacterProto;
-import net.ixitxachitls.dma.proto.Entries.EncounterProto;
-import net.ixitxachitls.dma.proto.Entries.EntriesProto;
-import net.ixitxachitls.dma.proto.Entries.ItemProto;
-import net.ixitxachitls.dma.proto.Entries.LevelProto;
-import net.ixitxachitls.dma.proto.Entries.MonsterProto;
-import net.ixitxachitls.dma.proto.Entries.NPCProto;
-import net.ixitxachitls.dma.proto.Entries.ProductProto;
 import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.logging.ANSILogger;
@@ -111,7 +94,6 @@ public final class Exporter
    */
   private Exporter()
   {
-    // nothing to do
   }
 
   //........................................................................
@@ -119,6 +101,16 @@ public final class Exporter
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** The datastore service. */
+  DatastoreService m_store = DatastoreServiceFactory.getDatastoreService();
+
+  /** The image service. */
+  ImagesService m_image = ImagesServiceFactory.getImagesService();
+
+  /** The DMA data store. */
+  DMADatastore m_dmaStore = new DMADatastore();
+
 
   static
   {
@@ -134,6 +126,161 @@ public final class Exporter
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  /**
+   * Export all entries of the given type.
+   *
+   * @param inType        the type of entry to export
+   * @param inDir         the base directory to export into
+   * @param inBlobs       whether to write blobs related to an etnry
+   *
+   * @throws IOException  thrown when writing fails
+   */
+  public void export(String inType, String inDir, boolean inBlobs) throws IOException
+  {
+    Log.important("reading entities from datastore");
+
+    Query query;
+    if(inType.isEmpty())
+      query = new Query();
+    else
+      query = new Query(inType);
+
+    for(Entity entity : m_store.prepare(query).asIterable
+          (FetchOptions.Builder.withChunkSize(1000)))
+    {
+      // ignore internal entities
+      if(entity.getKind().startsWith("__"))
+        continue;
+
+      // ignore blobs (written from entities)
+      if("file".equals(entity.getKind()))
+        continue;
+
+      Log.important("converting entity " + entity.getKind() + ": "
+                    + entity.getKey());
+      AbstractEntry entry = m_dmaStore.convert(entity);
+
+      if(entry == null)
+      {
+        Log.warning("could not convert " + entity);
+        continue;
+      }
+
+      export(entry, inDir, inBlobs);
+    }
+  }
+
+  /**
+   * Export the given entry.
+   *
+   * @param inEntry the entry to export
+   * @param inRoot  the base direactory to export to
+   * @param inBlobs whether to export blobs related to an entry
+   *
+   * @throws IOException if writing fails
+   */
+  private void export(AbstractEntry inEntry, String inRoot, boolean inBlobs)
+    throws IOException
+  {
+    String name = Files.encodeName(inEntry.getName());
+    String dir = Files.concatenate(inRoot, inEntry.getType().getName());
+    Message proto = inEntry.toProto();
+    Files.ensureDir(inRoot, inEntry.getType().getName());
+
+    Log.important("Writing " + inEntry.getType() + " " + name);
+    ByteSink bytes = com.google.common.io.Files.asByteSink
+      (new File(Files.concatenate(dir, name + ".pb")));
+    try
+    {
+      bytes.write(proto.toByteArray());
+    }
+    catch(IOException e)
+    {
+      Log.warning("Cannot write binary proto " + name + ": " + e);
+    }
+
+    CharSink chars = com.google.common.io.Files.asCharSink
+      (new File(Files.concatenate(dir, name + ".ascii")), Charsets.UTF_8);
+    try
+    {
+      chars.write(proto.toString());
+    }
+    catch(IOException e)
+    {
+      Log.warning("Cannot write ascii proto " + name + ": " + e);
+    }
+
+    // Export any files associated with the entry.
+    if(inBlobs)
+      for(DMAData.File file : inEntry.getFiles())
+        export(file, name, dir);
+  }
+
+  /**
+   * Export a blob.
+   *
+   * @param inFile the file structure describing the blob
+   * @param inName the name of the entry this blob is for
+   * @param inDir  the directory to export to
+   *
+   * @thwos IOException if writing fails
+   */
+  private void export(DMAData.File inFile, String inName, String inDir)
+    throws IOException
+  {
+    String extension = Files.mimeExtension(inFile.getType());
+    String path = Files.concatenate(inDir, inName + " - " + inFile.getName()
+                                    + "." + extension);
+
+    for(int i = 1; i <= 5; i++)
+    {
+      FileOutputStream output = null;
+      InputStream input = null;
+
+      try
+      {
+        try
+        {
+          String url =
+            m_image.getServingUrl(ServingUrlOptions.Builder.withBlobKey
+                                (new BlobKey(inFile.getPath()
+                                             .replaceAll("^.*/", ""))));
+
+          URLConnection connection = new URL(url).openConnection();
+
+          byte[] buffer = new byte[100 * 1024];
+
+          output = new FileOutputStream(path);
+          input = connection.getInputStream();
+
+          for(int read = input.read(buffer); read > 0;
+              read = input.read(buffer))
+            output.write(buffer, 0, read);
+
+          break;
+        }
+        catch(java.io.IOException e)
+        {
+          Log.error("Deadline exceeded when trying to download file "
+                    + inFile + " (retrying " + i + "): " + e);
+        }
+        finally
+        {
+          if(input != null)
+            input.close();
+        }
+      }
+      finally
+      {
+        if(output != null)
+          output.close();
+      }
+    }
+
+    Log.important("Wrote blob " + path);
+  }
+
   //........................................................................
 
   //--------------------------------------------------------- main/debugging
@@ -146,7 +293,6 @@ public final class Exporter
    * @param    inArguments the command line arguments
    *
    * @throws   Exception too lazy to handle
-   *
    */
   public static void main(String []inArguments) throws Exception
   {
@@ -164,7 +310,11 @@ public final class Exporter
        ("p", "port", "The port to connect to.", 8888),
        new CommandLineParser.StringOption
        ("u", "username", "The username to connect with.",
-        "balsiger@ixitxachitls.net"));
+         "balsiger@ixitxachitls.net"),
+       new CommandLineParser.Flag
+         ("n", "nopassword", "Connect without a password."),
+       new CommandLineParser.Flag
+       ("b", "blobs", "Store the blobs associated with entries."));
 
     String dir = clp.parse(inArguments);
 
@@ -174,10 +324,11 @@ public final class Exporter
       return;
     }
 
-    String password =
-      new String(System.console().readPassword("password for "
-                                               + clp.getString("username")
-                                               + ": "));
+    String password = "";
+    if(!clp.hasValue("nopassword"))
+      password =
+        new String(System.console().readPassword
+                   ("password for " + clp.getString("username") + ": "));
 
     RemoteApiOptions options = new RemoteApiOptions()
       .server(clp.getString("host"), clp.getInteger("port"))
@@ -186,192 +337,10 @@ public final class Exporter
     RemoteApiInstaller installer = new RemoteApiInstaller();
     installer.install(options);
 
-    // init the dma files
-    EntriesProto.Builder entries = EntriesProto.newBuilder();
-
     try
     {
-      DatastoreService store = DatastoreServiceFactory.getDatastoreService();
-      ImagesService image = ImagesServiceFactory.getImagesService();
-      DMADatastore dmaStore = new DMADatastore();
-      Log.important("reading entities from datastore");
-
-      Query query;
-      if(clp.getString("type").isEmpty())
-        query = new Query();
-      else
-        query = new Query(clp.getString("type"));
-
-      for(Entity entity : store.prepare(query).asIterable
-            (FetchOptions.Builder.withChunkSize(1000)))
-      {
-        // ignore internal entities
-        if(entity.getKind().startsWith("__"))
-          continue;
-
-        // write out blobs specially
-        if("file".equals(entity.getKind()))
-        {
-          String filePath = extractFilePath(entity.getParent());
-          String name = (String)entity.getProperty("name");
-          String path = (String)entity.getProperty("path");
-          String extension =
-            Files.mimeExtension((String)entity.getProperty("type"));
-          File blobDir = new File(Files.concatenate(dir, "blobs", filePath));
-          if(!blobDir.exists())
-            if(!blobDir.mkdirs())
-              Log.warning("could not create directory " + blobDir);
-
-          String file =
-            Files.concatenate(dir, "blobs", filePath, name + "." + extension);
-
-          for(int i = 1; i <= 5; i++)
-          {
-            FileOutputStream output = null;
-            InputStream input = null;
-
-            try
-            {
-              try
-              {
-                String url = image.getServingUrl
-                  (ServingUrlOptions.Builder.withBlobKey(new BlobKey(path)));
-
-                URLConnection connection = new URL(url).openConnection();
-
-                byte[] buffer = new byte[100 * 1024];
-
-                output = new FileOutputStream(file);
-                input = connection.getInputStream();
-
-                for(int read = input.read(buffer); read > 0;
-                    read = input.read(buffer))
-                  output.write(buffer, 0, read);
-
-                break;
-              }
-              catch(java.io.IOException e)
-              {
-                Log.error("Deadline exceeded when trying to download file "
-                          + file + " (retrying " + i + "): " + e);
-              }
-              finally
-              {
-                if(input != null)
-                  input.close();
-              }
-            }
-            finally
-            {
-              if(output != null)
-                output.close();
-            }
-          }
-
-          Log.important("Wrote blob " + file);
-
-          continue;
-        }
-
-        Log.important("converting entity " + entity.getKind() + ": "
-                      + entity.getKey());
-        AbstractEntry entry = dmaStore.convert(entity);
-
-        if(entry == null)
-        {
-          Log.warning("could not convert " + entity);
-          continue;
-        }
-
-        switch(entry.getType().getName())
-        {
-          case "base character":
-            entries.addBaseCharacter((BaseCharacterProto)entry.toProto());
-            break;
-
-          case "base product":
-            entries.addBaseProduct((BaseProductProto)entry.toProto());
-            break;
-
-          case "base spell":
-            entries.addBaseSpell((BaseSpellProto)entry.toProto());
-            break;
-
-          case "base quality":
-            entries.addBaseQuality((BaseQualityProto)entry.toProto());
-            break;
-
-          case "base feat":
-            entries.addBaseFeat((BaseFeatProto)entry.toProto());
-            break;
-
-          case "base skill":
-            entries.addBaseSkill((BaseSkillProto)entry.toProto());
-            break;
-
-          case "base item":
-            entries.addBaseItem((BaseItemProto)entry.toProto());
-            break;
-
-          case "base campaign":
-            entries.addBaseCampaign((BaseCampaignProto)entry.toProto());
-            break;
-
-          case "base monster":
-            entries.addBaseMonster((BaseMonsterProto)entry.toProto());
-            break;
-
-          case "base encounter":
-            entries.addBaseEncounter((BaseEncounterProto)entry.toProto());
-            break;
-
-          case "base level":
-            entries.addBaseLevel((BaseLevelProto)entry.toProto());
-            break;
-
-          case "product":
-            entries.addProduct((ProductProto)entry.toProto());
-            break;
-
-          case "character":
-            entries.addCharacter((CharacterProto)entry.toProto());
-            break;
-
-          case "item":
-            entries.addItem((ItemProto)entry.toProto());
-            break;
-
-          case "encounter":
-            entries.addEncounter((EncounterProto)entry.toProto());
-            break;
-
-          case "level":
-            entries.addLevel((LevelProto)entry.toProto());
-            break;
-
-          case "monster":
-            entries.addMonster((MonsterProto)entry.toProto());
-            break;
-
-          case "npc":
-            entries.addNpc((NPCProto)entry.toProto());
-            break;
-
-          default:
-            System.err.println("could not convert entry type "
-                               + entry.getType().getName());
-        }
-      }
-
-      ByteSink bytes =
-        com.google.common.io.Files.asByteSink(new File(dir + "/export.pb"));
-      EntriesProto data = entries.build();
-      bytes.write(data.toByteArray());
-
-      CharSink chars =
-        com.google.common.io.Files.asCharSink(new File(dir + "/export.ascii"),
-                                              Charsets.UTF_8);
-      chars.write(data.toString());
+      Exporter exporter = new Exporter();
+      exporter.export(clp.getString("type"), dir, clp.hasValue("blobs"));
     }
     finally
     {
@@ -380,30 +349,6 @@ public final class Exporter
   }
 
   //........................................................................
-  //--------------------------- extractFilePath ----------------------------
-
-  /**
-   * Extract the path for the file from the given file entity, without the file
-   * name.
-   *
-   * @param    inKey the key of the file's parent
-   *
-   * @return   the full path for the file, withouth filename
-   */
-  private static String extractFilePath(Key inKey)
-  {
-    String id = inKey.getName();
-    String type = inKey.getKind();
-
-    Key parent = inKey.getParent();
-    if(parent != null)
-      return Files.concatenate(extractFilePath(parent), type, id);
-
-    return Files.concatenate(type, id);
-  }
-
-  //........................................................................
-
 
   //........................................................................
 }

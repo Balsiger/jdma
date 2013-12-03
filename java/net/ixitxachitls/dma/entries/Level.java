@@ -79,7 +79,6 @@ public class Level extends Entry<BaseLevel>
     builder.setBase((CampaignEntryProto)super.toProto());
 
     LevelProto proto = builder.build();
-    System.out.println(proto);
     return proto;
   }
 

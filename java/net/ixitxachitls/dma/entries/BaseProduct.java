@@ -1024,7 +1024,7 @@ public class BaseProduct extends BaseEntry
         (new Name()
          .withEditType("autoname(base product/author/jobs|name)[job]")
          .withRelated("name"),
-         true, " ", null) })
+         true) })
                             .withTemplate("person"));
 
   static

@@ -48,6 +48,7 @@ import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.protobuf.Message;
+import com.google.protobuf.TextFormat;
 
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -277,6 +278,8 @@ public final class Importer
 
     if(inFile.endsWith(".pb"))
       m_protoFiles.add(inFile);
+    else if(inFile.endsWith(".ascii"))
+      m_protoFiles.add(inFile);
     else
       m_files.add(inFile);
   }
@@ -293,8 +296,16 @@ public final class Importer
   {
     for (String protoFile : m_protoFiles)
     {
-      EntriesProto protos =
-        EntriesProto.parseFrom(new FileInputStream(protoFile));
+      EntriesProto protos;
+      if (protoFile.endsWith(".pb"))
+        protos = EntriesProto.parseFrom(new FileInputStream(protoFile));
+      else
+      {
+        EntriesProto.Builder builder = EntriesProto.newBuilder();
+        TextFormat.merge(new InputStreamReader(new FileInputStream(protoFile)),
+                         builder);
+        protos = builder.build();
+      }
 
       for(BaseCharacterProto proto : protos.getBaseCharacterList())
         add(new BaseCharacter(""), proto);

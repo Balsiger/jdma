@@ -25,7 +25,9 @@ package net.ixitxachitls.util;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -250,7 +252,6 @@ public final class Files
    * @param       inName the name to extract from
    *
    * @return      the filename part
-   *
    */
   public static String file(String inName)
   {
@@ -586,6 +587,23 @@ public final class Files
   }
 
   //........................................................................
+
+  /**
+   * Make sure the given directories exist.
+   *
+   * @param inDirs the directories to create if necessary, each strings as a
+   *               subdirectory of the previous
+   */
+  public static void ensureDir(String ... inDirs)
+  {
+    List<String> dirs = Arrays.asList(inDirs);
+    for(int i = 1; i <= inDirs.length; i++)
+    {
+      String path = concatenate(dirs.subList(0, i).toArray(new String[i]));
+      if(!exists(path))
+        new File(path).mkdir();
+    }
+  }
 
   //........................................................................
 
