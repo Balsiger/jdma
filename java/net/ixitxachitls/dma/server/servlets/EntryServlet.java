@@ -47,6 +47,8 @@ import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.server.ServerUtils;
+import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -162,15 +164,11 @@ public class EntryServlet extends PageServlet
       return data;
     }
 
-    boolean dma = path.endsWith(".dma");
-    boolean print = path.endsWith(".print");
-    boolean summary = path.endsWith(".summary");
-    if(dma)
-      path = path.substring(0, path.length() - 4);
-    else if(print)
-      path = path.substring(0, path.length() - 6);
-    else if(summary)
-      path = path.substring(0, path.length() - 8);
+    String action = Strings.getPattern(path, "\\.(.*)$");
+    if(action != null && !action.isEmpty())
+      path = path.substring(0, path.length() - action.length() - 1);
+    else
+      action = "show";
 
     AbstractEntry entry = getEntry(inRequest, path);
     if(entry != null && !entry.isShownTo(inRequest.getUser()))
@@ -247,28 +245,36 @@ public class EntryServlet extends PageServlet
 
     String template;
     String extension;
-    if(dma)
+    switch(action)
     {
-      extension = ".dma";
-      if(inRequest.hasParam("deep"))
-        template = "dma.entry.dmadeepcontainer";
-      else
-        template = "dma.entry.dmacontainer";
-    }
-    else if(print)
-    {
-      extension = ".print";
-      template = "dma.entry.printcontainer";
-    }
-    else if(summary)
-    {
-      extension = ".summary";
-      template = "dma.entry.summarycontainer";
-    }
-    else
-    {
-      extension = "";
-      template = "dma.entry.container";
+      case "dma":
+        extension = ".dma";
+        if(inRequest.hasParam("deep"))
+          template = "dma.entry.dmadeepcontainer";
+        else
+          template = "dma.entry.dmacontainer";
+        break;
+
+      case "print":
+        extension = ".print";
+        template = "dma.entry.printcontainer";
+        break;
+
+      case "summary":
+        extension = ".summary";
+        template = "dma.entry.summarycontainer";
+        break;
+
+      case "edit":
+        extension = ".edit";
+        template = "dma.entries.basecharacters.edit";
+        break;
+
+      case "show":
+      default:
+        extension = "";
+        template = "dma.entries."
+          + entry.getType().getMultipleDir().toLowerCase();
     }
 
     data.put
@@ -281,7 +287,8 @@ public class EntryServlet extends PageServlet
             "list", "/" + entry.getType().getMultipleLink(),
             "next", current >= last ? "" : ids.get(current + 1) + extension,
             "last", current >= last ? "" : ids.get(last) + extension,
-            "variant", type.getName().replace(" ", "")),
+            "variant", type.getName().replace(" ", ""),
+            "id", inRequest.getParam("id")),
         ImmutableSet.of(type.getName().replace(" ", ""))));
 
     return data;
@@ -304,6 +311,7 @@ public class EntryServlet extends PageServlet
   protected Map<String, Object> collectInjectedData(DMARequest inRequest,
                                                     SoyRenderer inRenderer)
   {
+    Tracer tracer = new Tracer("collecting entry injected data");
     BaseCharacter user = inRequest.getUser();
     AbstractEntry entry = getEntry(inRequest);
 
@@ -315,6 +323,7 @@ public class EntryServlet extends PageServlet
 
     data.put("isOwner", user != null && (entry == null || entry.isOwner(user)));
 
+    Tracer tracer2 = new Tracer("collecting request parameters");
     Map<String, Object> params = Maps.newHashMap();
     for(String param : inRequest.getParams().keySet())
       if(inRequest.getParam(param).isEmpty())
@@ -323,7 +332,9 @@ public class EntryServlet extends PageServlet
         params.put(param, inRequest.getParam(param));
 
     data.put("params", params);
+    tracer2.done();
 
+    tracer.done();
     return data;
   }
 

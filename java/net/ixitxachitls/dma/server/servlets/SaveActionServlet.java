@@ -24,29 +24,18 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.collect.Multimap;
+import com.google.common.base.Joiner;
 
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.dma.entries.CampaignEntry;
-import net.ixitxachitls.dma.entries.Entry;
-import net.ixitxachitls.util.Encodings;
-import net.ixitxachitls.util.Strings;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -68,164 +57,6 @@ import net.ixitxachitls.util.logging.Log;
 @ParametersAreNonnullByDefault
 public class SaveActionServlet extends ActionServlet
 {
-  //----------------------------------------------------------------- nested
-
-  /**
-   * Storage for the change information for one or multiple entries.
-   */
-  private static class Changes
-  {
-    /**
-     * Create a change for one or multiple entries.
-     *
-     * @param inKey         the key to the entry
-     * @param inOwner       the owner of the entry/entries
-     *
-     */
-    protected Changes(AbstractEntry.EntryKey<?> inKey, AbstractEntry inOwner)
-    {
-      m_key = inKey;
-      m_owner = inOwner;
-    }
-
-    /** The key of the entry/entries changed. */
-    protected AbstractEntry.EntryKey<?> m_key;
-
-    /** The owner of the entry/entries changed. */
-    protected @Nullable AbstractEntry m_owner;
-
-    /** The file for the entry/entries. */
-    protected @Nullable String m_file;
-
-    /** Flag if creating a new value or not. */
-    protected boolean m_create = false;
-
-    /** The extensions for the entry, if any. */
-    protected @Nullable String []m_extensions;
-
-    /** A flag if multiple entries are affected by the change. */
-    protected boolean m_multiple = false;
-
-    /** The path to store the created entry after creation, if any. */
-    protected @Nullable String m_store;
-
-    /** A map with all the changed values. */
-    protected Map<String, String>m_values = new HashMap<String, String>();
-
-    /**
-     * Convert to a human readable string for debugging.
-     *
-     * @return the converted string
-     *
-     */
-    @Override
-    public String toString()
-    {
-      return m_key + " (" + (m_owner == null ? "no owner" : m_owner.getName())
-        + "/" + m_file + (m_multiple ? ", multiple" : ", single") + "):"
-        + m_values;
-    }
-
-    /**
-     * Set a value in the change for a given key.
-     *
-     * @param inKey   the key of the value to change
-     * @param inValue the value to change to
-     *
-     */
-    public void set(String inKey, String inValue)
-    {
-      if("file".equals(inKey))
-        m_file = inValue;
-      else if("create".equals(inKey))
-        m_create = true;
-      else if("extensions".equals(inKey))
-      {
-        m_extensions = inValue.split("\\s*,\\s*");
-        // also set it as a normal value for existing entries
-        m_values.put(inKey, inValue);
-      }
-      else
-        m_values.put(inKey, inValue);
-
-      if(inKey.indexOf('=') >= 0)
-        m_multiple = true;
-    }
-
-    /**
-     * Set the path to store this entry after creation, if any.
-     *
-     * @param  inStore the name of the entry to store in
-     */
-    public void store(@Nullable String inStore)
-    {
-      if(inStore != null)
-        m_store = inStore;
-    }
-
-    /**
-     * Figure out the affected entries.
-     *
-     * @param ioErrors the errors encountered, will be adjusted
-     *
-     * @return a set with all the entries affected by this change
-     *
-     */
-    public Set<AbstractEntry> entries(List<String> ioErrors)
-    {
-      Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
-      if(m_multiple)
-      {
-        assert m_values.size() == 1 : "Only expected a single value to change";
-        String []parts = m_values.keySet().iterator().next().split("/");
-        String index = parts[0];
-        String value = parts[1];
-        entries.addAll(DMADataFactory.get().getIndexEntries(index,
-                                                            m_key.getType(),
-                                                            m_key.getParent(),
-                                                            value, 0, 0));
-      }
-      else
-      {
-        AbstractEntry entry = DMADataFactory.get().getEntry(m_key);
-
-        if(entry == null && m_create)
-        {
-          // create a new entry for filling out
-          Log.event(m_owner.getName(), "create",
-                    "creating " + m_key.getType() + " entry '" + m_key.getID()
-                    + "'");
-
-          entry = m_key.getType().create(m_key.getID());
-          if(entry != null)
-            entry.updateKey(m_key);
-
-          // setting up extensions first
-          if(m_extensions != null)
-            for(String extension : m_extensions)
-              entry.addExtension(extension);
-        }
-
-        if(entry == null)
-        {
-          String error = "could not find " + m_key + " for saving";
-          Log.warning(error);
-          ioErrors.add("gui.alert(" + Encodings.toJSString(error) + ");");
-        }
-        else
-          entries.add(entry);
-      }
-
-      return entries;
-    }
-  }
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //--------------------------- SaveActionServlet --------------------------
-
   /**
    * Create the entry action servlet.
    */
@@ -234,18 +65,11 @@ public class SaveActionServlet extends ActionServlet
     // nothing to do
   }
 
-  //......................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
+  /** The joiner to join errors. */
+  private static final Joiner newlineJoiner = Joiner.on("<br />");
 
   @Override
   public String toString()
@@ -253,201 +77,51 @@ public class SaveActionServlet extends ActionServlet
     return "SaveActionServlet";
   }
 
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------- doAction -------------------------------
-
   /**
-   *
    * Execute the action associated with this servlet.
    *
    * @param       inRequest  the request for the page
    * @param       inResponse the response to write to
    *
    * @return      the javascript code to send back to the client
-   *
    */
   @Override
   protected String doAction(DMARequest inRequest,
                             HttpServletResponse inResponse)
   {
-    List<String> errors = new ArrayList<String>();
-    Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
-    Map<String, CampaignEntry<?>> stores =
-      new HashMap<String, CampaignEntry<?>>();
-    for(Changes change : preprocess(inRequest, inRequest.getParams(), errors))
-      for(AbstractEntry entry : change.entries(errors))
-      {
-        for(Map.Entry<String, String> keyValue : change.m_values.entrySet())
-        {
-          if(!entry.canEdit(keyValue.getKey(), inRequest.getUser()))
-          {
-            String error = "not allowed to edit " + keyValue.getKey() + " in "
-              + change.m_key;
-            Log.warning(error);
-            errors.add("gui.alert(" + Encodings.toJSString(error) + ");");
-            continue;
-          }
+    String keyParam = inRequest.getParam("_key_");
+    if(keyParam == null || keyParam.isEmpty())
+      return "gui.alert('Cannot save values, as no key is given');";
 
-          String rest = entry.set(keyValue.getKey(), keyValue.getValue());
-          if(rest != null)
-          {
-            Log.warning("Could not fully parse " + keyValue.getKey()
-                        + " value for " + change.m_key + ": '" + rest + "'");
-            errors.add
-              ("edit.unparsed("
-               + Encodings.toJSString(change.m_key.getType().toString()) + ", "
-               + Encodings.toJSString(change.m_key.getID()) + ", "
-               + Encodings.toJSString(keyValue.getKey()) + ", "
-               + Encodings.toJSString(rest) + ");");
-          }
-          else
-          {
-            entries.add(entry);
+    AbstractEntry.EntryKey<? extends AbstractEntry> key =
+      AbstractEntry.EntryKey.fromString(keyParam);
 
-            if(change.m_store != null && entry instanceof CampaignEntry)
-            {
-              AbstractEntry.EntryKey<? extends AbstractEntry> key =
-                extractKey(change.m_store);
+    if(key == null)
+      return "gui.alert('Cannot create entry key for " + keyParam + "');";
 
-              if(key == null)
-                Log.warning("Cannot find entry for storage: " + change.m_store);
-              else
-              {
-                CampaignEntry<?> store =
-                  (CampaignEntry<?>)DMADataFactory.get().getEntry(key);
-                if(store != null)
-                  stores.put(entry.getName(), store);
-              }
-            }
-          }
-        }
-      }
+    AbstractEntry entry = DMADataFactory.get().getEntry(key);
+    if(entry == null)
+      return "gui.alert('Cannot find entry for " + key + "');";
 
-    List<String> saved = new ArrayList<String>();
-    String path = "";
-
-    // do we really have something to do?
-    if(entries.size() <= 0)
-      errors.add("gui.alert('No values to save');");
-    else
+    List<String> errors = new ArrayList<>();
+    for(String name : inRequest.getParams().keySet())
     {
-      // update all entries and mark them as saved
-      for(AbstractEntry entry : entries)
-      {
-        // We have to get the store for the entry before saving, as saving can
-        // change the name.
-        CampaignEntry<?> store = stores.get(entry.getName());
-        if(entry.save())
-        {
-          saved.add(Encodings.escapeJS(entry.getType().toString()) + " "
-                    + Encodings.escapeJS(entry.getName()));
-
-          if(store != null)
-          {
-            store.add((CampaignEntry<?>)entry);
-            path = Encodings.toJSString(store.getPath());
-          }
-        }
-        else
-          errors.add("Coult not store " + entry.getType() + " '"
-                     + entry.getName() + "'");
-      }
-
-      if(entries.size() == 1 && path.isEmpty())
-        path = Encodings.toJSString(entries.iterator().next().getPath());
-    }
-
-    return
-      (errors.isEmpty() ? "" : "gui.alert('Parse error for values');")
-      + (saved.isEmpty() ? ""
-         : "gui.info('The following entries were updated:<p>"
-         + Strings.BR_JOINER.join(saved) + "'); "
-         + "util.link(null" + (path.isEmpty() ? "" : ", "  + path + "")
-         + ");")
-      + Strings.NEWLINE_JOINER.join(errors);
-  }
-
-  //........................................................................
-  //------------------------------ preprocess ------------------------------
-
-  /**
-   * Preprocess the request by collecting all changes that need to be made.
-   *
-   * @param       inRequest the original request for the page
-   * @param       inParams  the params for the request
-   * @param       ioErrors  the errors encountered
-   *
-   * @return      a collection of all changes requested
-   *
-   */
-  private Collection<Changes> preprocess(DMARequest inRequest,
-                                         Multimap<String, String> inParams,
-                                         List<String> ioErrors)
-  {
-    Map<AbstractEntry.EntryKey<? extends AbstractEntry>, Changes> changes =
-      new HashMap<AbstractEntry.EntryKey<? extends AbstractEntry>, Changes>();
-    for(Map.Entry<String, String> param : inParams.entries())
-    {
-      String []parts = param.getKey().split("::");
-
-      // not a real key value pair
-      if(parts.length != 2)
+      if(name.startsWith("_"))
         continue;
 
-      String keyName = parts[0];
-      String valueName = parts[1];
+      String value = inRequest.getParam(name);
+      name = name.replaceAll("-", " ");
 
-      // extract the storage info if there is one
-      String storePath = null;
-      String []store =
-        Strings.getPatterns(keyName, "(.*/" + Entry.TEMPORARY + ")-(.+)");
-      if(store.length == 2)
-      {
-        keyName = store[0];
-        storePath = store[1];
-      }
-
-      AbstractEntry.EntryKey<? extends AbstractEntry> key = extractKey(keyName);
-      if(key == null)
-      {
-        String error = "invalid entry '" + keyName + "' ignored";
-        Log.warning(error);
-        ioErrors.add("gui.alert(" + Encodings.toJSString(error) + ");");
-        continue;
-      }
-
-      Changes change = changes.get(key);
-      if(change == null)
-      {
-        change = new Changes(key, inRequest.getUser());
-        changes.put(key, change);
-      }
-
-      if("name".equals(valueName)
-         && param.getValue().startsWith(Entry.TEMPORARY))
-        change.set("name", Entry.TEMPORARY);
-      if("dmaValues".equals(valueName))
-        change.set("dmaValues",
-                   param.getValue().replaceAll("(?sm)\\s*\"(.*)\"\\s*", "$1")
-                   .replaceAll("(?sm)\\\\\"", "\""));
-      else
-        change.set(valueName, param.getValue());
-
-      change.store(storePath);
+      String rest = entry.set(name, value);
+      if(rest != null && !rest.isEmpty())
+        errors.add("Cannot fully parse " + name + ": " + rest);
     }
 
-    return changes.values();
+    if(!errors.isEmpty())
+      return "gui.alert('" + newlineJoiner.join(errors) + "');";
+
+    return "gui.info('Entry " + entry.getName() + " has been saved.');";
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
 
   //------------------------------------------------------------------- test
 
@@ -669,72 +343,6 @@ public class SaveActionServlet extends ActionServlet
     }
 
     //......................................................................
-    //----- collet changes -------------------------------------------------
-
-    /** The changes Test. */
-    @org.junit.Test
-    public void collectChanges()
-    {
-      SaveActionServlet servlet = new SaveActionServlet();
-      DMARequest request = EasyMock.createMock(DMARequest.class);
-      BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
-
-      EasyMock.expect(request.getUser()).andStubReturn(user);
-
-      EasyMock.replay(request, user);
-
-      Multimap<String, String> params =
-        com.google.common.collect.ImmutableSetMultimap.<String, String>builder()
-        .put("/base entry/id::name", "guru")
-        .put("/base entry/id::description", "\"text\"")
-        .put("/base entry/id2::name", "guru2")
-        .put("/base entry/id2::file", "file")
-        .put("/base entry/id2::worlds", "wolrd")
-        .put("something/base entry/my-id::name", "name guru")
-        .put("/character/me/base entry/id::key", "value")
-        .put("/character/me/base entry/id::file", "file")
-        .put("/character/me/base entry/id::key2", "value2")
-        .put("/base entry/*=Person::key", "value")
-        .put("/base entry/*=Something::key", "value")
-        .build();
-      List<String> errors = new ArrayList<String>();
-      Collection<Changes> changes = servlet.preprocess(request, params, errors);
-
-      java.util.Iterator<Changes> i = changes.iterator();
-      checkChanges(i.next(), "/base entry/*=Something", null, "key", "value");
-      checkChanges(i.next(), "/base entry/id", null,
-                   "name", "guru", "description", "\"text\"");
-      checkChanges(i.next(), "/base entry/id2", "file",
-                   "name", "guru2", "worlds", "wolrd");
-      checkChanges(i.next(), "/character/me/base entry/id", "file",
-                   "key", "value", "key2", "value2");
-      checkChanges(i.next(), "/base entry/my-id", null, "name", "name guru");
-      checkChanges(i.next(), "/base entry/*=Person", null, "key", "value");
-      assertFalse(i.hasNext());
-
-      EasyMock.verify(request, user);
-    }
-
-    /** Check assertions for changes.
-     *
-     * @param inChanges   the changes to check
-     * @param inKey       the expected key of the entry changed
-     * @param inFile      the expected file for the entry changed
-     * @param inKeyValues the expected key value pairs for the entry changed
-     *
-     */
-    private void checkChanges(Changes inChanges, String inKey, String inFile,
-                              String ... inKeyValues)
-    {
-      assertEquals("file", inFile, inChanges.m_file);
-      assertEquals("key", inKey, inChanges.m_key.toString());
-
-      assertEquals("number of values", inChanges.m_values.keySet().size(),
-                   inKeyValues.length / 2);
-      for(int i = 0; i < inKeyValues.length; i += 2)
-        assertEquals(inKeyValues[i], inKeyValues[i + 1],
-                     inChanges.m_values.get(inKeyValues[i]));
-    }
 
     //......................................................................
   }

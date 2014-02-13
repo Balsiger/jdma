@@ -26,6 +26,8 @@ package net.ixitxachitls.dma.server;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -35,8 +37,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -52,49 +58,15 @@ import com.google.protobuf.TextFormat;
 
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.BaseCampaign;
-import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.dma.entries.BaseEncounter;
-import net.ixitxachitls.dma.entries.BaseFeat;
-import net.ixitxachitls.dma.entries.BaseItem;
-import net.ixitxachitls.dma.entries.BaseLevel;
-import net.ixitxachitls.dma.entries.BaseMonster;
-import net.ixitxachitls.dma.entries.BaseProduct;
-import net.ixitxachitls.dma.entries.BaseQuality;
-import net.ixitxachitls.dma.entries.BaseSkill;
-import net.ixitxachitls.dma.entries.BaseSpell;
-import net.ixitxachitls.dma.entries.Character;
-import net.ixitxachitls.dma.entries.Encounter;
+import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.Campaign;
 import net.ixitxachitls.dma.entries.Entry;
-import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.entries.Level;
-import net.ixitxachitls.dma.entries.Monster;
-import net.ixitxachitls.dma.entries.NPC;
 import net.ixitxachitls.dma.entries.Product;
-import net.ixitxachitls.dma.proto.Entries.BaseCampaignProto;
-import net.ixitxachitls.dma.proto.Entries.BaseCharacterProto;
-import net.ixitxachitls.dma.proto.Entries.BaseEncounterProto;
-import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
-import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
-import net.ixitxachitls.dma.proto.Entries.BaseLevelProto;
-import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
-import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
-import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
-import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.proto.Entries.CharacterProto;
-import net.ixitxachitls.dma.proto.Entries.EncounterProto;
-import net.ixitxachitls.dma.proto.Entries.EntriesProto;
-import net.ixitxachitls.dma.proto.Entries.ItemProto;
-import net.ixitxachitls.dma.proto.Entries.LevelProto;
-import net.ixitxachitls.dma.proto.Entries.MonsterProto;
-import net.ixitxachitls.dma.proto.Entries.NPCProto;
-import net.ixitxachitls.dma.proto.Entries.ProductProto;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
-import net.ixitxachitls.dma.server.servlets.DMAServlet;
 import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Files;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.ANSILogger;
 import net.ixitxachitls.util.logging.Log;
 
@@ -142,19 +114,23 @@ public final class Importer
    * @param   inIndividual if true, store each entry after reading instead of
    *                       in batch (slower and more expensive, but can
    *                       properly find bases)
+   * @param   inBlobs      if true, import blobs alongside entries
+   * @param   inASCII      if true, import ascii protos
    *
    * @throws IOException unable to install remove api
    *
    */
   public Importer(String inHost, int inPort, int inWebPort,
                   String inUserName, String inPassword, boolean inMain,
-                  boolean inIndividual)
+                  boolean inIndividual, boolean inBlobs, boolean inASCII)
     throws IOException
   {
     m_host = inHost;
     m_webPort = inWebPort;
     m_mainImages = inMain;
     m_individual = inIndividual;
+    m_blobs = inBlobs;
+    m_ascii = inASCII;
 
     RemoteApiOptions options = new RemoteApiOptions()
       .server(inHost, inPort)
@@ -182,7 +158,7 @@ public final class Importer
   private RemoteApiInstaller m_installer;
 
   /** A list of all external files to import. */
-  private List<String> m_files = new ArrayList<>();
+  private Map<String, AbstractEntry> m_files = new HashMap<>();
 
   /** A list of proto buffer files to import. */
   private List<String> m_protoFiles = new ArrayList<>();
@@ -198,6 +174,12 @@ public final class Importer
 
   /** If true, read and store each entry individually (no batch). */
   private boolean m_individual;
+
+  /** If true, import blobs of entries. */
+  private boolean m_blobs;
+
+  /** IF true, import ascii proto files. */
+  private boolean m_ascii;
 
   /** The list of entities to store in batch. */
   List<Entity> m_entities = new ArrayList<>();
@@ -239,28 +221,11 @@ public final class Importer
   {
     File file = new File(inFile);
     if(file.isDirectory())
-    {
-      if("CVS".equals(file.getName()) || file.getName().charAt(0) == '.')
-        return;
-
       for(File entry : file.listFiles())
-      {
-        if(entry.getName().charAt(0) == '.')
-          continue;
-
-        if(entry.getName().contains("_thumbnail."))
-          continue;
-
-        add(Files.concatenate(inFile, entry.getName()));
-      }
-    }
+        add(entry.getPath());
     else
-    {
-      if(file.getName().endsWith("~"))
-        return;
-
-      addFile(inFile);
-    }
+      if(file.getName().endsWith(m_ascii ? ".ascii" : ".pb"))
+        addFile(inFile);
   }
 
   //........................................................................
@@ -270,18 +235,11 @@ public final class Importer
    * Add the given file for importing.
    *
    * @param       inFile the file to import
-   *
    */
   public void addFile(String inFile)
   {
     Log.important("adding file " + inFile);
-
-    if(inFile.endsWith(".pb"))
-      m_protoFiles.add(inFile);
-    else if(inFile.endsWith(".ascii"))
-      m_protoFiles.add(inFile);
-    else
-      m_files.add(inFile);
+    m_protoFiles.add(inFile);
   }
 
   //........................................................................
@@ -294,57 +252,106 @@ public final class Importer
    */
   public void read() throws IOException
   {
-    for (String protoFile : m_protoFiles)
+    Collections.sort(m_protoFiles, new Comparator<String>() {
+
+      @Override
+      public int compare(String in1, String in2)
+      {
+        // Do base products first.
+        boolean product1 = in1.contains("/product/");
+        boolean product2 = in2.contains("/product/");
+        if(product1 && !product2)
+          return -1;
+        if(!product1 && product2)
+          return +1;
+
+        if(product1 && product2)
+        {
+          boolean user1 = in1.contains("/user/");
+          boolean user2 = in2.contains("/user/");
+          if (user1 && !user2)
+            return +1;
+          if (!user1 && user2)
+            return -1;
+        }
+
+        // Do campaign files last.
+        boolean campaign1 = in1.contains("/campaign/");
+        boolean campaign2 = in2.contains("/campaign/");
+        if(campaign1 && !campaign2)
+          return +1;
+        if(!campaign1 && campaign2)
+          return -1;
+
+        // Do base campaigns before campaign entries.
+        boolean base1 = in1.matches(".*/campaign/[^/]+");
+        boolean base2 = in2.matches("/campaign/[^/]+");
+        if(base1 && !base2)
+          return -1;
+        if(!base1 && base2)
+          return +1;
+
+
+        // Do campaigns before other entries.
+        boolean main1 = in1.matches(".*/campaign/[^/]+/[^/]+");
+        boolean main2 = in2.matches(".*/campaign/[^/]+/[^/]+");
+        if(main1 && !main2)
+          return -1;
+        if(!main1 && main2)
+          return +1;
+
+        return in1.compareTo(in2);
+      }
+    });
+
+    AbstractType lastType = null;
+    for(String file : m_protoFiles)
     {
-      EntriesProto protos;
-      if (protoFile.endsWith(".pb"))
-        protos = EntriesProto.parseFrom(new FileInputStream(protoFile));
+      String []parts = file.split("/");
+
+      AbstractType type;
+      if(parts.length >= 3 && "campaign".equals(parts[parts.length - 3]))
+        type = Campaign.TYPE;
+      else if (parts.length >= 5 && "campaign".equals(parts[parts.length - 5]))
+        type = AbstractType.getTyped(parts[parts.length - 2]);
+      else if (parts.length >= 4 && "product".equals(parts[parts.length - 2])
+               && "user".equals(parts[parts.length - 4]))
+        type = Product.TYPE;
+      else
+        type = AbstractType.getTyped("base " + parts[parts.length - 2]);
+
+      if(type == null)
+        Log.warning("ignoring invalid type for " + file + ": "
+                    + Arrays.toString(parts));
       else
       {
-        EntriesProto.Builder builder = EntriesProto.newBuilder();
-        TextFormat.merge(new InputStreamReader(new FileInputStream(protoFile)),
-                         builder);
-        protos = builder.build();
+        if (lastType != type && !m_entities.isEmpty())
+        {
+          lastType = type;
+          Log.important("storing entities in datastore");
+          m_store.put(m_entities);
+          m_entities.clear();
+        }
+
+        final AbstractEntry entry = type.create("proto import");
+        add(entry, fill(entry.toProto().newBuilderForType(), file));
+
+        if(m_blobs)
+        {
+          String path = Files.path(file);
+          String []images = new File(path).list(new FilenameFilter()
+          {
+            @Override
+            public boolean accept(File inDir, String inName)
+            {
+              return
+                inName.matches(Files.encodeName(entry.getName()) + " - .*");
+            }
+          });
+          for(String image : images)
+            m_files.put(Files.concatenate(path, image), entry);
+        }
       }
-
-      for(BaseCharacterProto proto : protos.getBaseCharacterList())
-        add(new BaseCharacter(""), proto);
-      for(BaseProductProto proto : protos.getBaseProductList())
-        add(new BaseProduct(""), proto);
-      for(BaseSpellProto proto : protos.getBaseSpellList())
-        add(new BaseSpell(""), proto);
-      for(BaseQualityProto proto : protos.getBaseQualityList())
-        add(new BaseQuality(""), proto);
-      for(BaseFeatProto proto : protos.getBaseFeatList())
-        add(new BaseFeat(""), proto);
-      for(BaseSkillProto proto : protos.getBaseSkillList())
-        add(new BaseSkill(""), proto);
-      for(BaseItemProto proto : protos.getBaseItemList())
-        add(new BaseItem(""), proto);
-      for(BaseCampaignProto proto : protos.getBaseCampaignList())
-        add(new BaseCampaign(""), proto);
-      for(BaseMonsterProto proto : protos.getBaseMonsterList())
-        add(new BaseMonster(""), proto);
-      for(BaseEncounterProto proto : protos.getBaseEncounterList())
-        add(new BaseEncounter(""), proto);
-      for(BaseLevelProto proto : protos.getBaseLevelList())
-        add(new BaseLevel(""), proto);
-
-      for(ProductProto proto : protos.getProductList())
-        add(new Product(""), proto);
-      for(CharacterProto proto : protos.getCharacterList())
-        add(new Character(""), proto);
-      for(ItemProto proto : protos.getItemList())
-        add(new Item(""), proto);
-      for(EncounterProto proto : protos.getEncounterList())
-        add(new Encounter(""), proto);
-      for(LevelProto proto : protos.getLevelList())
-        add(new Level(""), proto);
-      for(MonsterProto proto : protos.getMonsterList())
-        add(new Monster(""), proto);
-      for(NPCProto proto : protos.getNpcList())
-        add(new NPC(""), proto);
-
     }
 
     Log.important("storing entities in datastore");
@@ -384,89 +391,118 @@ public final class Importer
       List<String> names = new ArrayList<String>();
 
       for(AbstractEntry entry : m_errors)
-        names.add(entry.getName());
+        names.add(entry.getName() + " (" + entry.getType() + ")");
 
       Log.error("Could not properly read all entries: " + names);
     }
 
     Log.important("importing images");
 
-    FileNameMap types = URLConnection.getFileNameMap();
+    for(Map.Entry<String, AbstractEntry> image : m_files.entrySet())
+      importFile(image.getKey(), image.getValue());
+  }
 
-    for(String image : m_files)
+  //........................................................................
+
+  /**
+   * Fill the proto with the values of the named file.
+   *
+   * @param inProto   the proto to fill
+   * @param inFile    the name of the file with the proto values
+   * @return The built message read
+   * @throws FileNotFoundException  if the file cannot be found
+   * @throws IOException            when reading fails
+   */
+  private Message fill(Message.Builder inProto, String inFile)
+    throws FileNotFoundException, IOException
+  {
+    if(m_ascii)
     {
-      // Windows requires special handling...
-      String []parts = image.split(File.separatorChar == '\\' ? "\\\\"
-                                   : File.separator);
-      if(parts.length < 3)
+      TextFormat.merge(new InputStreamReader(new FileInputStream(inFile)),
+                       inProto);
+      return inProto.build();
+    }
+    else
+    {
+      Log.important("merging '" + inFile + "' into " + inProto);
+      return inProto.mergeFrom(new FileInputStream(inFile)).build();
+    }
+  }
+
+  private void importFile(String inName, AbstractEntry inEntry)
+    throws IOException
+  {
+    String name = Strings.getPattern(inName, " - (.*)\\.*?$");
+
+    // Windows requires special handling...
+    String []parts = Files.decodeName(inName).split(File.separatorChar == '\\'
+      ? "\\\\" : File.separator);
+
+    if(parts.length < 3)
+    {
+      Log.warning("ignoring invalid file " + inName + " "
+                  + Arrays.toString(parts));
+      return;
+    }
+
+    FileNameMap types = URLConnection.getFileNameMap();
+    String type = types.getContentTypeFor(parts[parts.length - 1]);
+    AbstractEntry.EntryKey<AbstractEntry> key = inEntry.getKey();
+
+    if(key == null)
+    {
+      Log.warning("invalid key for " + inName + ", ignored");
+      return;
+    }
+
+    // check if this is the main image
+    if(m_mainImages || key.getID().equalsIgnoreCase(name)
+       || name.contains(key.getID())
+       || "cover".equalsIgnoreCase(name)
+       || "official".equalsIgnoreCase(name)
+       || "unofficial".equalsIgnoreCase(name)
+       || "main".equalsIgnoreCase(name))
+      name = "main";
+
+    Log.important("importing image " + name + " with type " + inEntry.getType()
+                  + " for " + key);
+
+    URL url =
+      new URL("http", m_host, m_webPort,
+              "/__import"
+                + "?type=" + Encodings.urlEncode(type)
+                + "&name=" + Encodings.urlEncode(name)
+                + "&key=" + Encodings.urlEncode(key.toString()));
+    HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+    connection.setDoOutput(true);
+    connection.setRequestMethod("POST");
+    connection.connect();
+
+    try (OutputStream output = connection.getOutputStream();
+      FileInputStream input =
+        new FileInputStream(inName.replace("\\ ", " ")))
+    {
+      byte []buffer = new byte[1024 * 100];
+      for(int read = input.read(buffer); read > 0; read = input.read(buffer))
+        output.write(buffer, 0, read);
+
+      output.flush();
+
+      // Get the response
+      try (BufferedReader rd =
+        new BufferedReader(new InputStreamReader(connection.getInputStream(),
+                                                 Charsets.UTF_8)))
       {
-        Log.warning("ignoring invalid file " + image + " "
-                    + Arrays.toString(parts));
-        continue;
-      }
-
-      String type = types.getContentTypeFor(image);
-      String name = Files.file(parts[parts.length - 1]);
-      parts[parts.length - 1] = null;
-      AbstractEntry.EntryKey<?> key =
-        DMAServlet.extractKey(PATH_JOINER.join(parts));
-
-      if(key == null)
-      {
-        Log.warning("invalid key for " + image + ", ignored");
-        continue;
-      }
-
-      // check if this is the main image
-      if(m_mainImages || key.getID().equalsIgnoreCase(name)
-         || name.contains(key.getID())
-         || "cover".equalsIgnoreCase(name)
-         || "official".equalsIgnoreCase(name)
-         || "unofficial".equalsIgnoreCase(name)
-         || "main".equalsIgnoreCase(name))
-        name = "main";
-
-      Log.important("importing image " + name + " with type " + type + " for "
-                    + key);
-
-      URL url = new URL("http", m_host, m_webPort,
-                        "/__import"
-                        + "?type=" + Encodings.urlEncode(type)
-                        + "&name=" + Encodings.urlEncode(name)
-                        + "&key=" + Encodings.urlEncode(key.toString()));
-      HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-      connection.setDoOutput(true);
-      connection.setRequestMethod("POST");
-      connection.connect();
-
-      try (OutputStream output = connection.getOutputStream();
-        FileInputStream input =
-          new FileInputStream(image.replace("\\ ", " ")))
-      {
-        byte []buffer = new byte[1024 * 100];
-        for(int read = input.read(buffer); read > 0; read = input.read(buffer))
-          output.write(buffer, 0, read);
-
-        output.flush();
-
-        // Get the response
-        try (BufferedReader rd =
-          new BufferedReader(new InputStreamReader(connection.getInputStream(),
-                                                   Charsets.UTF_8)))
+        String line = rd.readLine();
+        if(line != null && !"OK".equals(line) && !line.isEmpty())
         {
-          String line = rd.readLine();
-          if(line != null && !"OK".equals(line) && !line.isEmpty())
-          {
-            Log.error("Server returned an error:");
-            for(; line != null; line = rd.readLine())
-              Log.error(line);
-          }
+          Log.error("Server returned an error:");
+          for(; line != null; line = rd.readLine())
+            Log.error(line);
         }
       }
     }
   }
-
-  //........................................................................
 
   //........................................................................
 
@@ -560,9 +596,13 @@ public final class Importer
        new CommandLineParser.Flag
        ("i", "individual", "Individually store entries."),
        new CommandLineParser.Flag
-       ("n", "nopassword", "Connect without a password."));
+       ("n", "nopassword", "Connect without a password."),
+       new CommandLineParser.Flag
+       ("a", "ascii", "Import ascii protos (default is binary)."),
+       new CommandLineParser.Flag
+       ("b", "blobs", "Import blobs associated with entries."));
 
-    String files = clp.parse(inArguments);
+    List<String> files = clp.parse(inArguments);
     String password = "";
     if(!clp.hasValue("nopassword"))
       password = new String(System.console().readPassword
@@ -572,11 +612,12 @@ public final class Importer
     Importer importer =
       new Importer(clp.getString("host"), clp.getInteger("port"),
                    clp.getInteger("webport"), clp.getString("username"),
-                   password, clp.hasValue("main"), clp.hasValue("individual"));
+                   password, clp.hasValue("main"), clp.hasValue("individual"),
+                   clp.hasValue("blobs"), clp.hasValue("ascii"));
 
     try
     {
-      for(String file : files.split("(?<!\\\\)\\s+"))
+      for(String file : files)
         importer.add(file.replace("\\ ", " "));
 
       importer.read();

@@ -38,6 +38,110 @@ var edit = new Object();
 /** All the values currently edited. */
 edit.all = [];
 
+/**
+ * Show the edit window for editing an entry.
+ *
+ * @param inName the name of the entry edited
+ * @param inPath the path of the entry to edit
+ * @param inID   the id of the element to create
+ */
+edit.show = function(inName, inPath, inID)
+{
+  var contents = util.ajax(inPath + '.edit?body&id=' + inID);
+  var dialog = $('<div id="dialog-' + inID + '"/>')
+    .html(contents)
+    .dialog({
+      title: 'Edit ' + inName,
+      modal: true,
+      resizable: false,
+      width: $(window).width() * 2 / 3,
+      height: $(window).height() * 2 / 3,
+      closeOnEscape: true,
+      dialogClass: 'edit-dialog',
+    });
+};
+
+/**
+ * Delete the image indicated.
+ *
+ * @param inKey  The key of the entry with the image.
+ * @param inName The name of the image to delete.
+ * @param inID   the container id
+ */
+edit.deleteImage = function(inKey, inName, inID)
+{
+  if(!inKey || !inName)
+    return;
+
+  if(window.confirm('Do you really want to immediately delete the ' + inName
+                    + '?'))
+  {
+    util.ajax('/fileupload?key=' + escape(inKey) + '&name=' + escape(inName)
+        + '&delete&id=' + inID, null, null, true);
+  }
+};
+
+/**
+ * Add the indicated image to the image list being edited.
+ *
+ * @param inUrl         the image url.
+ * @param inKey         the key to the entry for the image
+ * @param inMame        the name of the image.
+ * @param inContainerID the id of the div containing all the images
+ */
+edit.addImage = function(inContainerID, inUrl, inName)
+{
+  $('#' + inContainerID).append('<div class="image">'
+      + '<img src="' + inUrl + '" alt="' + inName + '" />'
+      + '<div class="caption">' + inName + '</div></div>');
+};
+
+/**
+ * Remove the indication image from the images list.
+ *
+ * @param inID the id of the image to remove.
+ */
+edit.removeImage = function(inID)
+{
+  $('#' + inID.replace(/\./, "\\.")).remove();
+};
+
+/**
+ * Save the data for the entry given it's key and it's form values.
+ *
+ * @param inKey the key of the entry to save.
+ * @param inID  the id of the elemement with all the input fields.
+ */
+edit.save = function(inKey, inID)
+{
+  var values = { '_key_': inKey };
+  $('#' + inID + " :input").each(function ()
+    {
+      if (this.name)
+        values[this.name] = this.value;
+    });
+
+  // send the data to the server
+  window.console.log('saving!', values);
+  util.ajax('/actions/save', values, null, true);
+
+  // remove the move away code
+  window.onbeforeunload = undefined;
+
+  // close the dialog
+  $('#dialog-' + inID).dialog("destroy");
+};
+
+/**
+ * Cancel editing and close the edit dialog.
+ *
+ * @param inID
+ */
+edit.cancel = function(inID)
+{
+  $('#dialog-' + inID).dialog("destroy");
+};
+
 //----------------------------- makeEditable -------------------------------
 
 /**
@@ -55,7 +159,7 @@ edit.makeEditable = function()
 
   $(target).dblclick(edit.edit);
   $(target).bind('contextmenu', edit.edit);
-}
+};
 
 //..........................................................................
 //---------------------------------- edit ----------------------------------
@@ -168,7 +272,7 @@ edit.editAll = function()
  * Save all the current edits.
  *
  */
-edit.save = function()
+edit.saveOld = function()
 {
   var values = { };
   var create = location.search.match(/(\?|&)create($|&)/);
@@ -235,7 +339,7 @@ edit.refresh = function()
  * @param  inID      the id of the image to modify
  * @param  inSrc     the new source for the image
  * @param  inOnclick the new on click handler
- * @param  inEditID  the id fo the edit element
+ * @param  inEditID  the id for the edit element
  *
  */
 edit.updateImage = function(inID, inSrc, inOnclick, inEditID)

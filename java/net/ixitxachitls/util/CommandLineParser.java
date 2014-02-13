@@ -1143,13 +1143,11 @@ public class CommandLineParser
    *
    * @param       inArguments the command line arguments
    *
-   * @return      the text that was not parsed by any option or null if
-   *              everything was parsed
-   *
+   * @return      the arguments that were not parsed
    */
-  public @Nullable String parse(String ... inArguments)
+  public List<String> parse(String ... inArguments)
   {
-    StringBuilder rest = new StringBuilder();
+    List<String> rest = new ArrayList<>();
 
     if(inArguments != null)
       for(int i = 0; i < inArguments.length; i = parse(inArguments, i, rest))
@@ -1157,10 +1155,7 @@ public class CommandLineParser
         /* nothing to do */
       }
 
-    if(rest.length() == 0)
-      return null;
-
-    return rest.toString().trim();
+    return rest;
   }
 
   //........................................................................
@@ -1176,7 +1171,7 @@ public class CommandLineParser
    * @return      the next argument to read
    *
    */
-  private int parse(String []inArguments, int inIndex, StringBuilder  ioRest)
+  private int parse(String []inArguments, int inIndex, List<String> ioRest)
   {
     if(inIndex >= inArguments.length)
       return inIndex;
@@ -1212,8 +1207,7 @@ public class CommandLineParser
 
     if(option == null)
     {
-      ioRest.append(inArguments[inIndex]);
-      ioRest.append(' ');
+      ioRest.add(inArguments[inIndex]);
 
       return inIndex + 1;
     }

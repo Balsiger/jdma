@@ -44,7 +44,6 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
@@ -63,11 +62,7 @@ import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.Variable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
-import net.ixitxachitls.dma.values.LongFormattedText;
-import net.ixitxachitls.dma.values.Union;
-import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -113,8 +108,6 @@ public class DMADatastore implements DMAData
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  private static final boolean s_readOld = true;
 
   /** The access to the datastore. Don't use this except in the AdminServlet! */
   private DataStore m_data = new DataStore();
@@ -328,13 +321,14 @@ public class DMADatastore implements DMAData
   /**
    * Get the files for the given entry.
    *
-   * @param    inEntry the entry for which to get files
+   * @param    inEntry       the entry for which to get files
+   * @param    inIncludeBase whether to include files from base entries or not
    *
    * @return   a list of all the files found
    *
    */
   @Override
-  public List<File> getFiles(AbstractEntry inEntry)
+  public List<File> getFiles(AbstractEntry inEntry, boolean inIncludeBase)
   {
     List<File> files = Lists.newArrayList();
     Set<String> names = Sets.newHashSet();
@@ -377,9 +371,10 @@ public class DMADatastore implements DMAData
     }
 
     // add the files from any base entries
-    for(AbstractEntry entry : inEntry.getBaseEntries())
-      if(entry != null)
-        files.addAll(getFiles(entry));
+    if(inIncludeBase)
+      for(AbstractEntry entry : inEntry.getBaseEntries())
+        if(entry != null)
+          files.addAll(getFiles(entry, true));
 
     return files;
   }
@@ -708,8 +703,10 @@ public class DMADatastore implements DMAData
    * @param  inEntry the entry to add the file to
    * @param  inName  the name of the file
    *
+   * @return true if the file was removed, false if not
+   *
    */
-  public void removeFile(AbstractEntry inEntry, String inName)
+  public boolean removeFile(AbstractEntry inEntry, String inName)
   {
     Key key = KeyFactory.createKey(convert(inEntry.getKey()), "file", inName);
 
@@ -720,11 +717,13 @@ public class DMADatastore implements DMAData
       m_data.remove(key);
       Log.important("deleted file " + inName + " for " + inEntry.getType()
                     + " " + inEntry.getName());
+      return true;
     }
     else
     {
       Log.warning("trying to delete noexistant file " + inName + " for "
                   + inEntry.getType() + " " + inEntry.getName());
+      return false;
     }
   }
 
@@ -961,9 +960,14 @@ public class DMADatastore implements DMAData
     if(inEntity == null)
       return null;
 
+    Tracer tracer = new Tracer("converting " + inID);
+
     T entry = (T)s_entryCache.get(convert(inEntity.getKey()).toString());
     if (entry != null)
+    {
+      tracer.done("cached");
       return entry;
+    }
 
     Log.debug("converting entity " + inID + " to " + inType);
 
@@ -972,51 +976,13 @@ public class DMADatastore implements DMAData
     {
       Log.warning("cannot create conversion " + inType + " entity with id "
                   + inID + ": " + inEntity);
+      tracer.done("cannot create");
       return null;
     }
 
     Blob blob = (Blob)inEntity.getProperty("proto");
     if (blob != null)
       entry.parseFrom(blob.getBytes());
-
-    // setup the extensions
-    if(s_readOld)
-    {
-    Object extensions = inEntity.getProperty("extensions");
-    if(extensions != null && extensions instanceof Iterable)
-      for(String extension : (Iterable<String>)extensions)
-        entry.addExtension(extension);
-    }
-
-    if(s_readOld)
-    for(Map.Entry<String, Object> property
-          : inEntity.getProperties().entrySet())
-    {
-      String name = m_data.fromPropertyName(property.getKey());
-      if(name.startsWith(Index.PREFIX) || "change".equals(name)
-         || "extensions".equals(name) || "proto".equals(name))
-        continue;
-
-      Object value = property.getValue();
-      if(value == null)
-        continue;
-
-      String rest;
-      if(value instanceof Text)
-        rest = entry.set(name, ((Text)value).getValue());
-      else if(value instanceof ArrayList
-              && entry.getValue(name) instanceof ValueList)
-        rest = entry.set(name,
-                  Strings.toString((ArrayList)value,
-                                   ((ValueList)entry.getValue(name))
-                                   .getDelimiter(),
-                                   Value.UNDEFINED));
-      else
-        rest = entry.set(name, value.toString());
-
-      if(rest != null && !rest.isEmpty())
-        Log.warning("could not fully set value for " + name + ": " + rest);
-    }
 
     // update any key related value
     entry.updateKey(convert(inEntity.getKey()));
@@ -1025,6 +991,7 @@ public class DMADatastore implements DMAData
     entry.setupExtensions();
 
     //s_entryCache.put(entry.getKey().toString(), entry);
+    tracer.done("uncached");
     return entry;
   }
 
@@ -1103,48 +1070,6 @@ public class DMADatastore implements DMAData
         entity.setProperty(variable.getKey(),
                            variable.get(inEntry).toString().toLowerCase());
 
-    if(s_readOld)
-    for(Map.Entry<String, Value<?>> value : inEntry.getAllValues().entrySet())
-    {
-      if(!value.getValue().isDefined())
-        continue;
-
-      if("base".equals(value.getKey()))
-      {
-        List<String> values = new ArrayList<String>();
-        for(Object item : ((ValueList)value.getValue()))
-          values.add(item.toString().toLowerCase(Locale.US));
-        entity.setProperty(m_data.toPropertyName(value.getKey()), values);
-      }
-      else if(value.getValue() instanceof ValueList)
-      {
-        List<String> values = new ArrayList<String>();
-        for(Object item : ((ValueList)value.getValue()))
-          values.add(item.toString());
-        entity.setProperty(m_data.toPropertyName(value.getKey()), values);
-      }
-      else
-      {
-        String valueText = value.getValue().toString();
-        if(value.getValue() instanceof LongFormattedText
-           || (value.getValue() instanceof Union
-               && ((Union)value.getValue()).get() instanceof LongFormattedText))
-          entity.setProperty(m_data.toPropertyName(value.getKey()),
-                             new Text(valueText));
-        else
-        {
-          if(valueText.length() >= 500)
-            Log.warning("value for " + value.getKey() + " for "
-                        + inEntry.getType() + " with id " + inEntry.getName()
-                        + " is longer than 500 characters and will be "
-                        + "truncated! (" + valueText.length() + ": "
-                        + valueText + ")");
-
-          entity.setProperty(m_data.toPropertyName(value.getKey()), valueText);
-        }
-      }
-    }
-
     // save the index information to make it searchable afterwards
     Multimap<Index.Path, String> indexes = inEntry.computeIndexValues();
     for(Index.Path index : indexes.keySet())
@@ -1154,11 +1079,6 @@ public class DMADatastore implements DMAData
 
     // save the time for recent changes
     entity.setProperty(m_data.toPropertyName("change"), new Date());
-
-    // save the extensions
-    if(s_readOld)
-    entity.setProperty(m_data.toPropertyName("extensions"),
-                       inEntry.getExtensionNames());
 
     entity.setProperty("proto", new Blob(inEntry.toProto().toByteArray()));
     return entity;

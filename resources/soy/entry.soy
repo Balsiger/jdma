@@ -309,6 +309,11 @@
                                    null,
                                    true);
                            {rb});
+            gui.addAction('edit', 'Edit', 
+                          function() {lb}
+                            edit.show('{$entry.name}', '{$entry.path}', 
+                                      'edit-{$entry.type.css}-{$entry.name}');
+                          {rb});
           </script>
           {call dma.page.link}
             {param url: $entry.name + '.summary' /}

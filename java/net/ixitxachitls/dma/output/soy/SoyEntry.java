@@ -132,11 +132,11 @@ public class SoyEntry extends SoyAbstract
     if("files".equals(inName))
     {
       DMAData.File main = m_entry.getMainFile();
-      List<DMAData.File> files = m_entry.getFiles();
+      List<DMAData.File> files = m_entry.getAllFiles();
 
       SoyListData data = new SoyListData();
       for(DMAData.File file : files)
-        if(main != null && !file.getPath().equals(main.getPath()))
+        if(main == null || !file.getPath().equals(main.getPath()))
           data.add(new SoyMapData("path", file.getPath(),
                                   "icon", file.getIcon(),
                                   "name", file.getName(),

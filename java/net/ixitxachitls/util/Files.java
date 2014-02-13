@@ -25,9 +25,7 @@ package net.ixitxachitls.util;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -596,13 +594,18 @@ public final class Files
    */
   public static void ensureDir(String ... inDirs)
   {
-    List<String> dirs = Arrays.asList(inDirs);
-    for(int i = 1; i <= inDirs.length; i++)
-    {
-      String path = concatenate(dirs.subList(0, i).toArray(new String[i]));
-      if(!exists(path))
-        new File(path).mkdir();
-    }
+    String path = "";
+    for(String part : inDirs)
+      for(String dir : part.split("/"))
+      {
+        if (path.isEmpty())
+          path = dir;
+        else
+          path = concatenate(path, dir);
+
+        if(!exists(path))
+          new File(path).mkdir();
+      }
   }
 
   //........................................................................

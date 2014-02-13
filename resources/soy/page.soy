@@ -20,8 +20,7 @@
  *****************************************************************************/
 
 /*
- * The templates for the main page.
- *
+ * The templates for the general page.
  */
 {namespace dma.page autoescape="contextual"}
 
@@ -403,4 +402,27 @@
       {/foreach}
     </div>
   {/foreach}
+{/template}
+
+/**
+ * The template for image upload form.
+ *
+ * @param url  the url to which to upload
+ * @param key  the key of the entry to upload the file to
+ * @param name the name of the uploaded file
+ * @param id   the id of the images container
+ */
+{template .imageUploadForm}
+  <html>
+    <body style="overflow: hidden;">
+      <form action="{$url}" method="post" enctype="multipart/form-data">
+        <input name="name" value="{$name}" />
+        <input type="file" name="file" 
+               onchange="this.parentNode['filename'].value=this.value;this.parentNode.submit();" />
+        <input type="hidden" name="id" value="{$id}" />
+        <input type="hidden" name="key" value="{$key}" />
+        <input type="hidden" name="filename" value="" />
+      </form>
+    </body>
+  </html>
 {/template}

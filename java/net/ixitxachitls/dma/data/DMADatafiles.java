@@ -873,13 +873,14 @@ public class DMADatafiles implements DMAData
   /**
    * Get the files for the given entry.
    *
-   * @param    inEntry the entry for which to get all files.
+   * @param    inEntry               the entry for which to get all files.
+   * @param    inIncludeBase whether to include files from base entries or not
    *
    * @return   a list of all the files found
    *
    */
   @Override
-  public List<File> getFiles(AbstractEntry inEntry)
+  public List<File> getFiles(AbstractEntry inEntry, boolean inIncludeBase)
   {
     String baseType = null;
     String []baseNames = null;

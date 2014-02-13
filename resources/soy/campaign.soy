@@ -106,6 +106,7 @@
     {param entry: $entry /}
     {param name: 'Items' /}
     {param content}
+      /*
       {foreach $item in $entry.items.list}
         {call dma.page.link}
           {param url: $item.multi.2.print /}
@@ -121,6 +122,7 @@
       {ifempty}
         No unclaimed items
       {/foreach}
+      */
       {if $ij.isDM}
         {sp}|{sp}
         {call dma.page.link}

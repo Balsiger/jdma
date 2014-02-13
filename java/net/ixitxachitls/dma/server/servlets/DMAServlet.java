@@ -39,6 +39,7 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.server.servlets.BaseServlet;
+import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -177,7 +178,11 @@ public abstract class DMAServlet extends BaseServlet
    */
   public @Nullable AbstractEntry getEntry(DMARequest inRequest)
   {
-    return getEntry(inRequest, inRequest.getRequestURI());
+    Tracer tracer = new Tracer("getting entry for request");
+    AbstractEntry entry = getEntry(inRequest, inRequest.getRequestURI());
+
+    tracer.done();
+    return entry;
   }
 
   //........................................................................

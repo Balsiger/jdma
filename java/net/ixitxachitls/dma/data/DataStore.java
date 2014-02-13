@@ -44,6 +44,7 @@ import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.collect.ImmutableSortedSet;
 
+import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -149,6 +150,7 @@ public class DataStore
    */
   public @Nullable Entity getEntity(Key inKey)
   {
+    Tracer tracer = new Tracer("getting entity " + inKey);
     Entity entity = (Entity)s_cacheEntity.get(inKey);
 
     if(entity == null)
@@ -158,14 +160,17 @@ public class DataStore
         Log.debug("gae: getting entity for " + inKey);
         entity = m_store.get(inKey);
         s_cacheEntity.put(inKey, entity, s_expiration);
+        tracer.done("uncached");
       }
       catch(com.google.appengine.api.datastore.EntityNotFoundException e)
       {
         Log.warning("could not get entity for " + inKey + ": " + e);
 
+        tracer.done("not found");
         return null;
       }
-    }
+    } else
+      tracer.done("cached");
 
     return entity;
   }
@@ -185,6 +190,8 @@ public class DataStore
    */
   public @Nullable Entity getEntity(String inType, String inKey, String inValue)
   {
+    Tracer tracer = new Tracer
+      ("getting " + inType + " entity with " + inKey + " = " + inValue);
     Entity entity = (Entity)
       s_cacheByValue.get(inKey + "--" + inValue);
 
@@ -199,10 +206,18 @@ public class DataStore
       entity = m_store.prepare(query).asSingleEntity();
 
       if(entity == null)
+      {
+        tracer.done("none found");
         return null;
+      }
 
+      // TODO: this fails when the entity is already otherwise cached!
       s_cacheByValue.put(inKey + "--" + inValue, entity, s_expiration);
+      s_cacheEntity.put(entity.getKey(), entity, s_expiration);
+      tracer.done("uncached");
     }
+    else
+      tracer.done("cached");
 
     return entity;
   }
@@ -228,6 +243,7 @@ public class DataStore
                                       @Nullable String inSortField,
                                       int inStart, int inSize)
   {
+    Tracer tracer = new Tracer("getting entities for " + inType);
     Query query;
     if(inParent == null)
       query = new Query(inType);
@@ -245,6 +261,7 @@ public class DataStore
               + (inSortField != null ? " sorted by " + inSortField : "")
               + " from " + inStart + " size " + inSize);
 
+    tracer.done();
     return m_store.prepare(query).asIterable(options);
   }
 

@@ -211,16 +211,16 @@ public abstract class AbstractEntry extends ValueGroup
     }
 
     /**
-     * Extract the key from the given paths array nd index.
+     * Extract the key from the given paths arraya nd index.
      *
      * @param    inPaths the paths pieces
-     * @param    inIndex the index to start from with computation (descaending)
+     * @param    inIndex the index to start from with computation (descending)
      * @param    <T>     the type of entry to create the key for
      *
      * @return   the key for the path part or null if not found
      *
      */
-    @SuppressWarnings("unchecked") // creating wildard type
+    @SuppressWarnings("unchecked") // creating wildcard type
     private static @Nullable <T extends AbstractEntry> EntryKey<T>
     fromString(String []inPaths, int inIndex)
     {
@@ -407,6 +407,9 @@ public abstract class AbstractEntry extends ValueGroup
 
   /** The files for this entry. */
   protected transient @Nullable List<DMAData.File> m_files = null;
+
+  /** The files for this entry and all base entries. */
+  protected transient @Nullable List<DMAData.File> m_allFiles = null;
 
   /** Flag if computing extension values. */
 //  private boolean m_computingExtension = false;
@@ -944,17 +947,32 @@ public abstract class AbstractEntry extends ValueGroup
    * Get the files associated with this entry.
    *
    * @return      the associated files
-   *
    */
   public List<DMAData.File> getFiles()
   {
     if(m_files == null)
     {
-      m_files = DMADataFactory.get().getFiles(this);
+      m_files = DMADataFactory.get().getFiles(this, false);
       DMADataFactory.get().cacheEntry(this);
     }
 
     return m_files;
+  }
+
+  /**
+   * Get the files associated with this entry and all base entries.
+   *
+   * @return all the associated files
+   */
+  public List<DMAData.File> getAllFiles()
+  {
+    if(m_allFiles == null)
+    {
+      m_allFiles = DMADataFactory.get().getFiles(this, true);
+      DMADataFactory.get().cacheEntry(this);
+    }
+
+    return m_allFiles;
   }
 
   //........................................................................
@@ -968,7 +986,7 @@ public abstract class AbstractEntry extends ValueGroup
    */
   public @Nullable DMAData.File getMainFile()
   {
-    for(DMAData.File file : getFiles())
+    for(DMAData.File file : getAllFiles())
       if("main".equals(file.getName()))
         return file;
 

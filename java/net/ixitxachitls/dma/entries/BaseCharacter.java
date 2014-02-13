@@ -39,7 +39,6 @@ import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
@@ -161,6 +160,21 @@ public class BaseCharacter extends BaseEntry
 
       throw new IllegalStateException("invalid proto group: " + inGroup);
     }
+
+    /**
+     * All the possible names for the group.
+     *
+     * @return the possible names
+     */
+    public static List<String> names()
+    {
+      List<String> names = new ArrayList<>();
+
+      for(Group group : values())
+        names.add(group.getName());
+
+      return names;
+    }
   }
 
   //........................................................................
@@ -205,7 +219,7 @@ public class BaseCharacter extends BaseEntry
   public BaseCharacter(String inName, String inEmail)
   {
     this(inName);
-    m_email = new Text(inEmail);
+    m_email = new Name(inEmail);
   }
 
   //........................................................................
@@ -227,7 +241,7 @@ public class BaseCharacter extends BaseEntry
   /** The files in the base campaign. */
   @Key("real name")
   @DM
-  protected Text m_realName = new Text();
+  protected Name m_realName = new Name();
 
   //........................................................................
   //----- email ------------------------------------------------------------
@@ -236,7 +250,7 @@ public class BaseCharacter extends BaseEntry
   @Key("email")
   @DM
   @Searchable
-  protected Text m_email = new Text();
+  protected Name m_email = new Name();
 
   //........................................................................
   //----- products ---------------------------------------------------------
@@ -250,7 +264,7 @@ public class BaseCharacter extends BaseEntry
   /** The files in the base campaign. */
   @Key("last action")
   @NoEdit
-  protected Text m_lastAction = new Text();
+  protected Name m_lastAction = new Name();
 
   //........................................................................
   //----- group ------------------------------------------------------------

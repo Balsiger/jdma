@@ -264,7 +264,7 @@ public class Condition<T extends Condition<T>> extends Value<T>
       String []tests =
         {
           "empty", "", null, null,
-          "nul", "\"\"", "\"\"", null,
+          "null", "\"\"", "\"\"", null,
           "simple", "\"test\"", "\"test\"", null,
           "longer", "\"some larger text\"", "\"some larger text\"", null,
         };

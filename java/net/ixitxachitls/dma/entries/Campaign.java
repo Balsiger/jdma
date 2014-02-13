@@ -105,10 +105,6 @@ public class Campaign extends CampaignEntry<BaseCampaign>
   /** The type of the base entry to this entry. */
   public static final BaseType<BaseCampaign> BASE_TYPE = BaseCampaign.TYPE;
 
-  /** The files read for this campaign. */
-//  private final transient Map<String, DMAFile> m_dmaFiles =
-//    new HashMap<String, DMAFile>();
-
   //----- dm ---------------------------------------------------------------
 
   /** The dm for this campaign. */

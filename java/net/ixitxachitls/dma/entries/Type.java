@@ -166,7 +166,6 @@ public class Type<T extends Entry<?>> extends AbstractType<T>
    *
    * @return      the base entry type with the given name or null if not
    *              found.
-   *
    */
   public static @Nullable Type<? /*extends Entry*/> getType(String inName)
   {
@@ -180,7 +179,6 @@ public class Type<T extends Entry<?>> extends AbstractType<T>
    * Get the non-base types available.
    *
    * @return      all the non-base types
-   *
    */
   public static Collection<Type<?>> getTypes()
   {

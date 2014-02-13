@@ -181,11 +181,15 @@ public class ANSILogger extends ASCIILogger
   protected static final String def_debug   =
     BLUE + "%<%Y-%M-%D %h:%m:%s - %L: %>%T" + RESET;
 
+  /** The format for tracing messages.. */
+  protected static final String def_trace=
+    MAGENTA + "%<%Y-%M-%D %h:%m:%s - %L: %>%T" + RESET;
+
   /** The character pattern to ignore for width. */
   protected static final String s_ignore = "\u001B\\[\\d+m";
 
   /** The formats for the individual levels. */
-  protected String []m_formats = new String[Log.Type.DEBUG.ordinal() + 1];
+  protected String []m_formats = new String[Log.Type.TRACE.ordinal() + 1];
 
   // set the default formats
   {
@@ -200,6 +204,7 @@ public class ANSILogger extends ASCIILogger
     setFormat(Log.Type.STATUS,    def_info);
     setFormat(Log.Type.COMPLETE,  def_info);
     setFormat(Log.Type.DEBUG,     def_debug);
+    setFormat(Log.Type.TRACE,     def_trace);
   }
 
   //........................................................................

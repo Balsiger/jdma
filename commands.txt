@@ -33,4 +33,11 @@ java net.ixitxachitls.dma.server.Importer "resources/files/base\ monster/Aboleth
 java net.ixitxachitls.dma.server.Importer "dma/Characters/Characters.dma" "dma/Items/City\ of\ the\ Spider\ Queen.dma" "dma/BaseItems/WTC\ 17752.dma" "dma/BaseItems/WTC\ 17524.dma" "dma/BaseItems/WTC\ 1076272.dma" -nx
 
 # export data of type from production
-java net.ixitxachitls.dma.server.Exporter -t base_monster -h jdmaixit-hrd.appspot.com -p 443 export-2013-11-30
+java net.ixitxachitls.dma.server.Exporter -t base_monster -h jdmaixit-hrd.appspot.com -p 443 -b export-2013-11-30
+
+# import data from production into local
+java net.ixitxachitls.dma.server.Importer -b -n export-2013-11-30
+
+# download wizards art gallery images
+grep '/dnd/images/mof_gallery/M[^\.]*\.jpg' -o MF | xargs -n 1 -I file basename file | xargs -n 1 -I file curl http://www.wizards.com/dnd/images/mof_gallery/file -o file
+

@@ -7,7 +7,7 @@
     <property name="java.util.logging.config.file"
               value="WEB-INF/logging.properties" />
     <!-- jdma logging -->
-    <property name="logging.level" value="DEBUG" />
+    <property name="logging.level" value="TRACE" />
     <property name="logging.loggers" value="ANSILogger" />
     <!-- jdma web template values -->
     <property name="web.template.css.color_Class" value="#ff80ff" />

@@ -869,7 +869,7 @@ public class SoyTemplate
     for(String file : m_files)
     {
       String name;
-      if(file.contains("/"))
+      if(file.startsWith("/"))
         name = file + ".soy";
       else
         name = "soy/" + file + ".soy";

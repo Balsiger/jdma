@@ -221,6 +221,7 @@ DIV.subtitletext, DIV.subtitletext A
   background-image: url('/icons/icons-large.png');
   width:            19px;
   height:           25px;
+  background-position-y: 0;
 }
 
 .sprite.large:hover
@@ -338,6 +339,18 @@ DIV.add
 DIV.remove
 {
   background-position: -182px;
+}
+
+.sprite.large.save 
+{
+  background-position-x: -20px;
+  width: 26px;
+}
+
+.sprite.large.revert 
+{
+  background-position-x: -47px;
+  width: 26px;
 }
 
 DIV.delete.sprite.large
@@ -2367,4 +2380,199 @@ BODY.print
 .flex-3
 {
   -webkit-flex: 3;
+}
+
+/******************************************************************************
+ * Edit pages
+ *****************************************************************************/
+ 
+.edit-dialog .ui-dialog-content 
+{
+  padding: 0;
+}
+
+.edit-dialog .ui-dialog-title
+{
+  font-size: 11px;
+}
+ 
+ .edit 
+ {
+   position: relative;
+   height: 100%;
+ }  
+
+.edit .scroll 
+{
+  height: 100%;
+  overflow: scroll;
+}
+ 
+ .edit .values 
+ {
+   margin: 10px;
+   display: table;
+ }
+ 
+ .edit .value 
+ {
+   display: table-row;
+ }
+ 
+ .edit .label
+ {
+   display: table-cell;
+   text-align: right;
+   font-weight: bold;
+   padding: 5px 10px 4px;
+   position: relative;
+   vertical-align: middle;
+   white-space: nowrap;
+ }
+ 
+ .edit .label-text
+ {
+   position: relative;
+   display: inline-block;   
+ }
+ 
+ .edit .label-decoration
+ {
+   right: 0;
+   bottom: -4px;
+   width: 100%;
+   height: 2px;
+   position: absolute;
+ }
+ 
+ .edit.character .label-decoration
+ {
+   background: -webkit-linear-gradient(left, transparent 0%, #39f 100%);
+ }
+ 
+ .edit .field
+ {
+   display: table-cell;
+   font-size: 15px;
+   padding: 3px;
+   width: 100%;
+   box-sizing: border-box;
+ }
+ 
+ .edit SELECT.field
+ {
+   width: auto;
+ }
+ 
+ .edit .field.invalid
+ {
+  color: #800;
+  background-color: #fff0f0;
+  border: 2px inset #800;   
+ }
+ 
+ .edit .images 
+ {
+   padding: 20px 20px 0 20px;
+ }
+ 
+ .edit .images .image 
+ {
+   display: inline-block;
+   position: relative;
+   margin-right: 2px;
+   cursor: pointer;
+ }
+ 
+ .edit .images .image:hover .delete-horizontal,
+ .edit .images .image:hover .delete-vertical
+ {
+   display: block;
+ }
+ 
+.edit .images .image .delete-horizontal 
+{
+  position: absolute;
+  left: 0;
+  right:0;
+  top: 50%;
+  height: 8px;
+  margin-top: -4px;
+  z-index: 1;
+  background-color: #800;
+  display: none;
+}
+
+.edit .images .image .delete-vertical 
+{
+  position: absolute;
+  left: 50%;
+  width: 8px;
+  margin-left: -4px;
+  bottom: 0;
+  top: 0;
+  z-index: 1;
+  background-color: rgba(175, 0, 0, .5);
+  display: none;
+}
+ 
+ .edit .images .image .caption
+ {
+   color: #ccc;
+   text-align: center;
+   width: 100%;
+   font-size: 10px;
+   margin-bottom: 10px;
+ }
+ 
+ .edit .upload
+ {
+  width: 200px;
+  height: 60px;
+  position: relative;
+  border: none;
+  margin-left: 10px;
+}
+
+.actions
+{
+  position: absolute;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.05);
+  width: 100%;
+  z-index: 2;
+  padding: 10px 0 5px 0;
+}
+
+.actions:hover
+{
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.actions .buttons {
+  margin-left: 50%;
+  position: relative;
+  display: inline-block;
+}
+
+.actions .buttons .move 
+{
+  margin-left: -50%;
+}
+
+.actions .action
+{
+  cursor: pointer;
+  z-index: 2;
+  position: relative;
+  opacity: 0.1;
+}
+
+.actions:hover .action
+{
+  opacity: 1.0;
+}
+
+.actions-spacer {
+  height: 40px;
 }

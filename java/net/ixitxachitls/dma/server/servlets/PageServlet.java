@@ -43,6 +43,7 @@ import net.ixitxachitls.output.html.HTMLBodyWriter;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Files;
+import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -156,6 +157,7 @@ public class PageServlet extends SoyServlet
   protected Map<String, Object> collectInjectedData
     (DMARequest inRequest, SoyRenderer inRenderer)
   {
+    Tracer tracer = new Tracer("collecting page injected data");
     Map<String, Object> data = super.collectInjectedData(inRequest, inRenderer);
 
     if(inRequest.getUser() == null)
@@ -163,6 +165,7 @@ public class PageServlet extends SoyServlet
     else
       data.put("dm", inRequest.getUser().hasAccess(BaseCharacter.Group.DM));
 
+    tracer.done();
     return data;
   }
 

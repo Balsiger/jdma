@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -37,6 +38,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
@@ -131,12 +133,15 @@ public final class Exporter
    * Export all entries of the given type.
    *
    * @param inType        the type of entry to export
+   * @param inID          the id of the entry to get or empty for all matching
+   *                      entries
    * @param inDir         the base directory to export into
    * @param inBlobs       whether to write blobs related to an etnry
    *
    * @throws IOException  thrown when writing fails
    */
-  public void export(String inType, String inDir, boolean inBlobs) throws IOException
+  public void export(String inType, String inID, String inDir, boolean inBlobs)
+    throws IOException
   {
     Log.important("reading entities from datastore");
 
@@ -145,6 +150,11 @@ public final class Exporter
       query = new Query();
     else
       query = new Query(inType);
+
+    if(!inID.isEmpty())
+      query.setFilter(new Query.FilterPredicate
+                      ("__key__", Query.FilterOperator.EQUAL,
+                       KeyFactory.createKey(inType, inID.toLowerCase())));
 
     for(Entity entity : m_store.prepare(query).asIterable
           (FetchOptions.Builder.withChunkSize(1000)))
@@ -184,9 +194,10 @@ public final class Exporter
     throws IOException
   {
     String name = Files.encodeName(inEntry.getName());
-    String dir = Files.concatenate(inRoot, inEntry.getType().getName());
+    String dir = Files.concatenate(inRoot,
+                                   inEntry.getPath().replaceAll("/[^/]+$", ""));
+    Files.ensureDir(dir);
     Message proto = inEntry.toProto();
-    Files.ensureDir(inRoot, inEntry.getType().getName());
 
     Log.important("Writing " + inEntry.getType() + " " + name);
     ByteSink bytes = com.google.common.io.Files.asByteSink
@@ -304,23 +315,24 @@ public final class Exporter
       (new CommandLineParser.StringOption
        ("h", "host", "The host to connect to.", "localhost"),
        new CommandLineParser.StringOption
-       ("t", "type", "The type of entries to export (or file for blobs)",
-        ""),
+       ("t", "type", "The type of entries to export (or file for blobs)", ""),
        new CommandLineParser.IntegerOption
        ("p", "port", "The port to connect to.", 8888),
        new CommandLineParser.StringOption
        ("u", "username", "The username to connect with.",
-         "balsiger@ixitxachitls.net"),
+        "balsiger@ixitxachitls.net"),
+       new CommandLineParser.StringOption
+       ("i", "id", "The id of the entry to get.", ""),
        new CommandLineParser.Flag
-         ("n", "nopassword", "Connect without a password."),
+       ("n", "nopassword", "Connect without a password."),
        new CommandLineParser.Flag
        ("b", "blobs", "Store the blobs associated with entries."));
 
-    String dir = clp.parse(inArguments);
+    List<String> dirs = clp.parse(inArguments);
 
-    if(dir == null || dir.isEmpty())
+    if(dirs.size() != 1)
     {
-      System.err.println("Must have an output directory");
+      System.err.println("Must have a single output directory");
       return;
     }
 
@@ -340,7 +352,8 @@ public final class Exporter
     try
     {
       Exporter exporter = new Exporter();
-      exporter.export(clp.getString("type"), dir, clp.hasValue("blobs"));
+      exporter.export(clp.getString("type"), clp.getString("id"), dirs.get(0),
+                      clp.hasValue("blobs"));
     }
     finally
     {

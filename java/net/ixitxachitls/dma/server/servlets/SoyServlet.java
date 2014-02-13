@@ -33,6 +33,8 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -44,6 +46,7 @@ import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.server.servlets.FileServlet;
+import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -90,11 +93,15 @@ public class SoyServlet extends DMAServlet
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
+  /** The blob store service. */
+  private BlobstoreService m_blobs =
+    BlobstoreServiceFactory.getBlobstoreService();
+
   /** The template to render a page. */
   protected static final SoyTemplate TEMPLATE =
      new SoyTemplate("page", "errors", "about", "main", "navigation", "entry",
-                     "commands", "value", "admin", "cards",
-                     "basecharacter", "character",
+                     "commands", "value", "admin", "cards", "edit",
+                     "basecharacter", "character", "entries/basecharacters",
                      "baseproduct", "product",
                      "baseitem", "item",
                      "basecampaign", "campaign",
@@ -185,26 +192,40 @@ public class SoyServlet extends DMAServlet
   {
     if(FileServlet.wasReloaded() && isDev())
     {
+      Tracer tracer = new Tracer("compiling soy templates");
       Log.important("recompiling soy templates on dev");
       TEMPLATE.recompile();
       SoyValue.COMMAND_RENDERER.recompile();
       SoyTemplate.COMMAND_RENDERER.recompile();
+      tracer.done();
     }
 
     // Set the output header.
     inResponse.setHeader("Content-Type", "text/html");
     inResponse.setHeader("Cache-Control", "max-age=0");
 
+    Tracer tracer = new Tracer("creating renderer");
     SoyRenderer renderer = new SoyRenderer(TEMPLATE);
+    tracer.done();
     // we have to collect injected data before other data to have it available
     // when collecting
+    tracer = new Tracer("setting injected data");
     renderer.setInjected(collectInjectedData(inRequest, renderer));
-    renderer.setData(collectData(inRequest, renderer));
+    tracer.done();
+    tracer = new Tracer("collecting data");
+    Map<String, Object> data = collectData(inRequest, renderer);
+    tracer.done();
+    System.out.println("data: " + data);
+    tracer = new Tracer("setting soy data");
+    renderer.setData(data);
+    tracer.done();
 
+    tracer = new Tracer("rendering soy template");
     try (PrintWriter print = new PrintWriter(inResponse.getOutputStream()))
     {
       print.println(renderer.render(getTemplateName(inRequest)));
     }
+    tracer.done();
 
     return null;
   }
@@ -245,10 +266,11 @@ public class SoyServlet extends DMAServlet
   protected Map<String, Object> collectInjectedData
     (DMARequest inRequest, SoyRenderer inRenderer)
   {
+    Tracer tracer = new Tracer("collecting soy injected data");
     BaseCharacter user = inRequest.getUser();
     UserService userService = UserServiceFactory.getUserService();
 
-    return SoyTemplate.map
+    Map<String, Object> map = SoyTemplate.map
       ("user", user == null ? "" : new SoyEntry(user),
        "isPublic", isPublic(inRequest),
        "originalPath", inRequest.getOriginalPath(),
@@ -261,6 +283,9 @@ public class SoyServlet extends DMAServlet
        inRequest.hasUserOverride() ? inRequest.getRealUser().getName() : "",
        "isUser", user != null,
        "isAdmin", user != null && user.hasAccess(BaseCharacter.Group.ADMIN));
+
+    tracer.done();
+    return map;
   }
 
   //........................................................................

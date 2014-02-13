@@ -441,11 +441,12 @@ public interface DMAData
    * Get the files for the given entry.
    *
    * @param    inEntry the entry for which to get files
+   * @param    inIncludeBase whether to include files from base entries or not
    *
    * @return   a list of all the files found
    *
    */
-  public List<File> getFiles(AbstractEntry inEntry);
+  public List<File> getFiles(AbstractEntry inEntry, boolean inIncludeBase);
 
   //........................................................................
   //------------------------------- rebuild --------------------------------

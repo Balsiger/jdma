@@ -195,7 +195,10 @@ public final class Log
 
     /** This level prints all message, even those that are
         mainly used for debugging purposes. */
-    DEBUG;
+    DEBUG,
+
+    /** A timing trace message. */
+    TRACE;
 
     /**
      * Create a string with all the types of the current and lower types.
@@ -889,6 +892,18 @@ public final class Log
   }
 
   //........................................................................
+
+  /**
+   * Add a tracing message.
+   *
+   * @param inMessage the tracing message
+   */
+  public static void trace(String inMessage)
+  {
+    print(inMessage, Type.TRACE);
+  }
+
+
   //--------------------------------- debug --------------------------------
 
   /**

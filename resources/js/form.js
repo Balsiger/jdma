@@ -52,31 +52,36 @@ form.setupValidation = function(inElement)
 //-------------------------------- validate --------------------------------
 
 /**
- * Validate the input in a given field.
- *
+ * Validate the input in a given (this) field.
  */
-form.validate = function()
+form.validate = function(inField)
 {
-  var value = this.value;
-  var type = this.getAttribute('validate');
-  var button = this.getAttribute('validateButton');
+  var field;
+  if(!inField)
+    field = this;
+  else
+    field = inField;
+
+  var value = field.value;
+  var type = field.getAttribute('validate');
+  var button = field.getAttribute('validateButton');
 
   if(!type)
     return;
 
   if(form.checkValue(type, value))
   {
-    if($(this).hasClass('invalid'))
+    if($(field).hasClass('invalid'))
     {
-      $(this).removeClass('invalid');
+      $(field).removeClass('invalid');
       $(button).each(form.enableButton);
     }
   }
   else
   {
-    if(!$(this).hasClass('invalid'))
+    if(!$(field).hasClass('invalid'))
     {
-      $(this).addClass('invalid');
+      $(field).addClass('invalid');
       $(button).each(form.disableButton);
     }
   }

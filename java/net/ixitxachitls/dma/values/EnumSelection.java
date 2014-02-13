@@ -23,7 +23,10 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -365,6 +368,26 @@ public class EnumSelection<T extends Enum<T>> extends Value<EnumSelection<T>>
   }
 
   //........................................................................
+
+  /**
+   * The possible selection names.
+   *
+   * @return the selection names
+   */
+  @SuppressWarnings("unchecked")
+  public List<String> names()
+  {
+    try
+    {
+      return (List<String>)m_enum.getMethod("names").invoke(null);
+    }
+    catch(IllegalAccessException | IllegalArgumentException
+      | InvocationTargetException | NoSuchMethodException | SecurityException e)
+    {
+      Log.warning("cannot get names for selection: " + e);
+      return new ArrayList<>();
+    }
+  }
 
   //........................................................................
 

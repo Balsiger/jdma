@@ -43,6 +43,7 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.values.Text;
+import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -406,6 +407,7 @@ public class DMARequest extends HttpServletRequestWrapper
    */
   public @Nullable BaseCharacter getUser()
   {
+    Tracer tracer = new Tracer("getting user");
     extractUser();
 
     // only admin are allows to do that
@@ -413,6 +415,7 @@ public class DMARequest extends HttpServletRequestWrapper
        && m_user.hasAccess(BaseCharacter.Group.ADMIN))
       return m_userOverride;
 
+    tracer.done();
     return m_user;
   }
 
