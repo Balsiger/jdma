@@ -28,6 +28,92 @@
 // @function def 1 0
 // @function entry 1 0
 
+/** The main title.
+ * 
+ * @param title The text of the title
+ * @param color The color of the title
+ */
+{template ._new_title}
+  <div class="title-container">
+  <span class="title" style="color: {$color}">
+    {$title}
+   <div class="decoration"
+        style="background: -webkit-linear-gradient(right, transparent 0%, {$color} 100%);">
+    </div>
+  </span>
+  </div>
+{/template}
+
+/**
+ * The main image of an entry.
+ *
+ * @param entry The entry formatted.
+ * @param? size The size of the image
+ */
+{template .mainImage}
+  {if def($entry.files.main)}
+    {call dma.page.link}
+      {param url: $entry.files.main.path /}
+      {param tooltip: 'Main' /}
+      {param class: 'image-link' /}
+      {param text}
+        <img src="{$entry.files.main.icon}=s{if $size}{$size}{else}100{/if}"
+          alt="Main" class="_new_ image main" id="file=-main" />
+      {/param}
+    {/call}
+  {else}
+    {call dma.page.link}
+      {param url: '' /}
+      {param tooltip: 'Main' /}
+      {param class: 'image-link' /}
+      {param text}
+        <img src="/icons/{$entry.type.multilink}-dummy.png" alt="Main"
+        class="image main" id="file=-main"
+        {if $size}
+          {sp}style="max-width: {$size}px; max-height: {$size}px;"
+        {/if} />
+      {/param}
+    {/call}
+  {/if}
+{/template}
+
+/**
+ * An image for the entry.
+ * 
+ * @param file The image shown
+ * @param? size The size of the image
+ */
+{template .file}
+  {call dma.page.link}
+    {param url: $file.path /}
+    {param tooltip: $file.name /}
+    {param class: 'image-link' /}
+    {param text}
+      <img src="{$file.icon}=s{if $size}{$size}{else}100{/if}"
+        alt="{$file.name}" class="_new_ image other" id="file=-other" />
+    {/param}
+  {/call}
+{/template}
+
+/** An entry value.
+ * 
+ * @param label The value label.
+ * @param value The value's value.'
+ * @param color The color for display.
+ */
+{template .value}
+  <div class="_new_value">
+    <div class="_new_value-label" style="color:{$color}">
+      {$label}:
+    </div>
+    <div class="_new_value-content">
+      {$value}
+    </div>
+  </div>
+{/template}
+
+// The old templates are below
+
 /**
  * The main template for an entry.
  *

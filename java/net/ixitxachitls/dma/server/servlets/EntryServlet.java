@@ -274,7 +274,7 @@ public class EntryServlet extends PageServlet
       default:
         extension = "";
         template = "dma.entries."
-          + entry.getType().getMultipleDir().toLowerCase();
+          + entry.getType().getMultipleDir().toLowerCase() + ".show";
     }
 
     data.put

@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
@@ -45,20 +43,12 @@ import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * An object of this class represents a real person associated with D&D.
  *
  * @file          BaseCharacter.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class BaseCharacter extends BaseEntry
@@ -179,10 +169,6 @@ public class BaseCharacter extends BaseEntry
 
   //........................................................................
 
-  //--------------------------------------------------------- constructor(s)
-
-  //---------------------------- BaseCharacter -----------------------------
-
   /**
    * The default internal constructor to create an undefined entry to be
    * filled by reading it from a file.
@@ -192,9 +178,6 @@ public class BaseCharacter extends BaseEntry
   {
     super(TYPE);
   }
-
-  //........................................................................
-  //---------------------------- BaseCharacter -----------------------------
 
   /**
    * This is the standard constructor to create a base character with its
@@ -222,12 +205,6 @@ public class BaseCharacter extends BaseEntry
     m_email = new Name(inEmail);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The type of this entry. */
   public static final BaseType<BaseCharacter> TYPE =
     new BaseType<BaseCharacter>(BaseCharacter.class).withLink("user", "users");
@@ -236,15 +213,10 @@ public class BaseCharacter extends BaseEntry
   public static final int MAX_PRODUCTS =
     Config.get("entries/basecharacter.products", 5);
 
-  //----- real name --------------------------------------------------------
-
   /** The files in the base campaign. */
   @Key("real name")
   @DM
   protected Name m_realName = new Name();
-
-  //........................................................................
-  //----- email ------------------------------------------------------------
 
   /** The files in the base campaign. */
   @Key("email")
@@ -252,48 +224,29 @@ public class BaseCharacter extends BaseEntry
   @Searchable
   protected Name m_email = new Name();
 
-  //........................................................................
-  //----- products ---------------------------------------------------------
-
   /** All the products for this user. */
   protected transient @Nullable DMAData m_productData = null;
-
-  //........................................................................
-  //----- last action ------------------------------------------------------
 
   /** The files in the base campaign. */
   @Key("last action")
   @NoEdit
   protected Name m_lastAction = new Name();
 
-  //........................................................................
-  //----- group ------------------------------------------------------------
-
   /** The access group of the user. */
   @Key("group")
   protected EnumSelection<Group> m_group =
     new EnumSelection<Group>(Group.class);
-
-  //........................................................................
 
   static
   {
     extractVariables(BaseCharacter.class);
   }
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------- getGroup -------------------------------
-
   /**
-    *
-    * Get the group this user is in.
-    *
-    * @return      the group of the user
-    *
-    */
+   * Get the group this user is in.
+   *
+   * @return      the group of the user
+   */
   public Group getGroup()
   {
     if(m_group.isDefined())
@@ -302,14 +255,10 @@ public class BaseCharacter extends BaseEntry
     return Group.GUEST;
   }
 
-  //........................................................................
-  //------------------------------- getEMail -------------------------------
-
   /**
    * Get the users email address.
    *
    * @return      the users email address.
-   *
    */
   public String getEMail()
   {

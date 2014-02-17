@@ -151,9 +151,6 @@ public class SoyEntry extends SoyAbstract
                             "other", data);
     }
 
-    if("name".equals(inName))
-      return StringData.forValue(m_entry.getName());
-
     if("dma".equals(inName))
       return StringData.forValue(m_entry.toString());
 
@@ -190,10 +187,7 @@ public class SoyEntry extends SoyAbstract
 
     String name = inName.replace("__", "").replace("_", " ");
 
-    Object value = m_entry.compute(name);
-    if(value != null)
-      return convert(name, value);
-
+    Object value;
     // check if there is a function with the given name
     if(!inName.startsWith("__"))
     {
@@ -201,6 +195,10 @@ public class SoyEntry extends SoyAbstract
       if(value != null)
         return convert(name, value);
     }
+
+    value = m_entry.compute(name);
+    if(value != null)
+      return convert(name, value);
 
     for(BaseEntry base : m_entry.getBaseEntries())
       if(base != null)

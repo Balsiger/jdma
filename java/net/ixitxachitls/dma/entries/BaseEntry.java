@@ -401,6 +401,19 @@ public class BaseEntry extends AbstractEntry
 
   //........................................................................
 
+  /**
+   * Get the entry description.
+   *
+   * @return the descritpion of the entry
+   */
+  public String getDescription()
+  {
+    if (m_description.isDefined())
+      return m_description.get();
+
+    return "";
+  }
+
   //------------------------------- getWorlds ------------------------------
 
   /**
@@ -427,13 +440,17 @@ public class BaseEntry extends AbstractEntry
   {
     String desc = m_short.get();
 
+    /** Do printing of base values from soy.
     for(BaseEntry base : getBaseEntries())
       if(base != null)
         if (desc == null || desc.isEmpty())
           desc = base.getShortDescription();
         else
           desc += " " + base.getShortDescription();
+    */
 
+    if (desc == null)
+      desc = "";
 
     return desc;
   }

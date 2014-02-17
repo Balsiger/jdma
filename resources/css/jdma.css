@@ -45,7 +45,7 @@ BODY
 
 DIV.page
 {
-  padding: 80px 1em 20px 2em;
+  padding: 80px 1em 20px 50px;
 }
 
 H1
@@ -355,8 +355,9 @@ DIV.remove
 
 DIV.delete.sprite.large
 {
-  background-position: -86px;
-  width: 38px;
+  background-position: -71px;
+  width: 21px;
+  height: 48px;
 }
 
 DIV.delete.white.sprite
@@ -1801,7 +1802,7 @@ DIV.action-container:hover
   width: 25px !important;
 }
 
-#action-delete
+#action-delete,
 {
   background-position: -71px 0;
   height: 29px !important;
@@ -2382,6 +2383,139 @@ BODY.print
   -webkit-flex: 3;
 }
 
+/*** NEW STYLES BELOW ****/
+
+
+/******************************************************************************
+ * Entry pages
+ *****************************************************************************/
+
+.entry
+{
+  position: relative;
+}
+
+.entry .values
+{
+  margin-top: 10px;
+}
+
+.entry .toolbar
+{
+  width: 40px;
+  top: -33px;
+  bottom: 0;
+  position: absolute;
+  left: -50px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.entry .toolbar:hover
+{
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.entry .toolbar .actions
+{
+  position: fixed;
+  top: 120px;
+  left: 5px;
+}
+
+.entry .toolbar .actions .action
+{
+  display: block;
+  margin-bottom: 5px;
+}
+
+.entry .toolbar .actions .action
+{
+  cursor: pointer;
+  z-index: 2;
+  position: relative;
+  opacity: 0.1;
+}
+
+.entry .toolbar:hover .actions .action
+{
+  opacity: 1.0;
+}
+
+.entry .title
+{
+  position: relative;
+  font-size: 24px;
+  font-weight: bold;
+  padding-right: 50px;
+}
+
+.entry .title-container
+{
+  margin-bottom: 15px;
+}
+
+.entry .title .decoration
+{
+   right: 0;
+   bottom: -4px;
+   width: 100%;
+   height: 2px;
+   position: absolute;  
+}
+
+.entry ._new_.images
+{
+  margin: -10px 30px 20px 0;
+  float: left;
+  width: 112px;
+}
+
+.entry .image-link
+{
+  border: 1px solid #ccc;
+  padding: 5px;
+  box-shadow: 1px 1px 3px #777;
+  width: 112px;
+  line-height: 112px;
+  display: inline-block;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.entry .image-link:hover
+{
+  border: 1px solid #aaa;
+}
+
+.entry ._new_.main.image,
+.entry ._new_.other.image
+{
+  vertical-align: middle;
+}
+
+.entry ._new_value._new_description,
+.entry ._new_value._new_short-description
+{
+  margin-bottom: 10px;
+}
+
+.entry ._new_value
+{
+  margin-top: 5px;
+}
+
+.entry ._new_value ._new_value-label
+{
+  display: inline-block;
+  font-weight: bold;
+  width: 150px;
+}
+
+.entry ._new_value ._new_value-content
+{
+  display: inline-block;
+}
+
 /******************************************************************************
  * Edit pages
  *****************************************************************************/
@@ -2534,7 +2668,7 @@ BODY.print
   margin-left: 10px;
 }
 
-.actions
+.edit .actions
 {
   position: absolute;
   bottom: 0;
@@ -2544,7 +2678,7 @@ BODY.print
   padding: 10px 0 5px 0;
 }
 
-.actions:hover
+.edit .actions:hover
 {
   background: rgba(0, 0, 0, 0.1);
 }
@@ -2560,7 +2694,7 @@ BODY.print
   margin-left: -50%;
 }
 
-.actions .action
+.edit .actions .action
 {
   cursor: pointer;
   z-index: 2;
@@ -2568,7 +2702,7 @@ BODY.print
   opacity: 0.1;
 }
 
-.actions:hover .action
+.edit .actions:hover .action
 {
   opacity: 1.0;
 }
