@@ -1,0 +1,218 @@
+/* ****************************************************************************
+ * Copyright (c) 2002-2014 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/*
+ * Templates for base characters.
+ */
+{namespace dma.entries.basecharacters}
+
+/**
+ * Show the given entry in standard format.
+ * 
+ * @param entry The entry to show.
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ */
+{template .show autoescape="true"}
+  <div class="show entry base-character">
+    <div class="toolbar">
+      <div class="actions">
+        <div class="action sprite large edit"
+             onclick="edit.show('{$entry.name}', '{$entry.path}', 
+                                'edit-{$entry.type.css}-{$entry.name}')">
+        </div>
+        <div class="action sprite large delete"
+             onclick="if(confirm('Do you really want to delete this?'))
+                        util.ajax('/actions/remove',
+                                 {lb} key: '{$entry.key |escapeJs}' {rb},
+                                 null, true);">
+        </div> 
+      </div>
+    </div>
+
+    {if not $ij.params.card and not $ij.params.body}
+      {call dma.entry.navigation}
+        {param first: $first /}
+        {param previous: $previous /}
+        {param list: $list /}
+        {param next: $next /}
+        {param last: $last /}
+      {/call}
+      {call dma.navigation.navigation}
+        {param entries:
+            [
+              [ 'label': $entry.type.link, 'url': '/' + $entry.type.multilink ],
+              [ 'label': $entry.name, 'url': $entry.path ]
+            ] /}
+      {/call}
+    {/if}
+      
+    <div class="values">
+      <div class="_new_ images">
+        {call dma.entry.mainImage}
+          {param entry: $entry /}
+        {/call}
+        
+        {foreach $file in $entry.files.other}
+          {call dma.entry.file}
+            {param file: $file /}
+          {/call}
+        {/foreach}
+      </div>
+      
+      {call dma.entry._new_title}
+        {param title: $entry.name /}
+        {param color: '#39f' /}
+      {/call}
+      
+      <div class="_new_value _new_description">
+        {if $entry.description}
+          {$entry.description}
+        {else}
+          (no description)
+        {/if}
+      </div>
+        
+      <div class="_new_value _new_short-description">
+        {if $entry.short_description}
+          {$entry.short_description}
+        {else}
+          (no short description)
+        {/if}
+      </div>
+
+      {call dma.entry.value}
+        {param label: 'Real Name' /}
+        {param value: $entry.real_name /}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Email' /}
+        {param value: $entry.email /}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Group' /}
+        {param value: $entry.group.name/}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Last Action' /}
+        {param value: $entry.last_action/}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Recent Products' /}
+        {param value}
+          {foreach $product in $entry.products.list}
+            {if index($product) < 5}
+              {call dma.page.link}
+                {param url: $product.multi.1.print /}
+                {param text: $product.multi.0.print /}
+              {/call}
+              {if not isLast($product)}, {/if}
+              {else}
+              , ...
+            {/if}
+          {/foreach}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      
+      <div class="clear"></div>
+    </div>
+    
+    {if not $ij.params.card and not $ij.params.body}
+      {call dma.entry.navigation}
+        {param first: $first /}
+        {param previous: $previous /}
+        {param list: $list /}
+        {param next: $next /}
+        {param last: $last /}
+      {/call}
+    {/if}
+    {literal}
+      <script>
+        $(document).ready(function()
+        {
+          $('DIV.files IMG.image')
+            .mouseover(util.replaceMainImage)
+            .mouseout(util.restoreMainImage);
+        });
+      </script>
+    {/literal}
+  </div>
+{/template}
+
+/**
+ * Editiing the base character.
+ * 
+ * @param entry The character to edit. 
+ * @param id    THe id to use for the editing dialog.
+ */
+{template .edit autoescape="true"}
+  {call dma.edit.entry}
+    {param entry: $entry /}
+    {param type: 'character' /}
+    {param id: $id /}
+    {param values}
+      {call dma.edit.value}
+        {param name: 'name' /}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param validate: 'non-empty' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'real-name' /}
+        {param label: 'Real Name' /}
+        {param value: $entry.real_name /}
+        {param validate: 'non-empty' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'email' /}
+        {param label: 'Email' /}
+        {param value: $entry.email /}
+        {param validate: 'non-empty' /}
+      {/call}    
+      {call dma.edit.value_text}
+        {param name: 'description' /}
+        {param label: 'Description' /}
+        {param value: $entry.description /}
+        {param validate: 'any' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'short-description' /}
+        {param label: 'Short Description' /}
+        {param value: $entry.short_description /}
+        {param validate: 'any' /}
+      {/call}
+      {call dma.edit.value_selection}
+        {param name: 'group' /}
+        {param label: 'Group' /}
+        {param value: $entry.group /}
+        {param choices: $entry.group.names /}
+      {/call}
+    {/param}
+  {/call}
+{/template}

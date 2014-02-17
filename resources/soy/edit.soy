@@ -1,0 +1,251 @@
+/* ****************************************************************************
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/*
+ * The templates for editing values.
+ */
+{namespace dma.edit autoescape="contextual"}
+
+/** 
+ * The editable card for an entry.
+ * 
+ * @param entry  The entry to edit
+ * @param type   The type of entry edited
+ * @param id     The id of the card.
+ * @param values The editable value content
+ */
+{template .entry}
+  <div class="edit {$type}" id="{$id}">
+    <div class="scroll">
+      <div class="values">
+        {$values |noescape}
+      </div>
+    
+      {call dma.edit.images}
+        {param entry: $entry /}
+        {param id: $id + '-image' /}
+      {/call}
+      
+      <div class="actions-spacer"></div>
+    </div> // scroll
+    
+    {call dma.edit.actions}
+      {param id: $id /}
+      {param key: $entry.key /}
+    {/call}
+    
+  </div>  
+{/template}
+
+/**
+ * An editable value.
+ * 
+ * @param name     The name of the value.
+ * @param label    The label text.
+ * @param value    The value contents.
+ * @param validate The type of validation to be done.
+ */
+{template .value}
+  <div class="value">
+    {call .label}
+      {param text: $label /}
+    {/call}
+    {call .field}
+      {param name: $name /}
+      {param value: $value /}
+      {param validate: $validate /}
+    {/call}
+  </div>
+{/template}
+
+/**
+ * An editable multiline text value.
+ * 
+ * @param name     The name of the value.
+ * @param label    The label text.
+ * @param value    The value contents.
+ * @param validate The type of validation to be done.
+ */
+{template .value_text}
+  <div class="value">
+    {call .label}
+      {param text: $label /}
+    {/call}
+    {call .field_text}
+      {param name: $name /}
+      {param value: $value /}
+      {param validate: $validate /}
+    {/call}
+  </div>
+{/template}
+
+/**
+ * An editable selection value.
+ * 
+ * @param name     The name of the value.
+ * @param label    The label text.
+ * @param value    The value contents.
+ * @param choices  The possible chocies.
+ */
+{template .value_selection}
+  <div class="value">
+    {call .label}
+      {param text: $label /}
+    {/call}
+    {call .field_selection}
+      {param name: $name /}
+      {param value: $value /}
+      {param choices: $choices /}
+    {/call}
+  </div>
+{/template}
+
+/**
+ * The name for an editable value.
+ * 
+ * @param text The label text.
+ */
+{template .label}
+  <div class="label">
+    <div class="label-text">
+      {$text}:
+      <div class="label-decoration"></div>
+    </div>
+  </div>
+{/template}
+
+/**
+ * The field for editing a simple value.
+ * 
+ * @param name     The name of the value.
+ * @param value    The value contents.
+ * @param validate The type of validation to be done.
+ */
+{template .field}
+  <div class='field'>
+    <input class='field' value='{$value}' name='{$name}' validate='{$validate}'
+           onkeyup='window.form.validate(this)'>
+    </input>
+  </div>
+{/template}
+
+/**
+ * The field for editing a multiline text value.
+ * 
+ * @param name     The name of the value.
+ * @param value    The value contents.
+ * @param validate The type of validation to be done.
+ */
+{template .field_text}
+  <div class='field'>
+    <textarea class='field' value='{$value}' name='{$name}' 
+              validate='{$validate}'
+              onkeyup='window.form.validate(this)'>
+    </textarea>
+  </div>
+{/template}
+
+/**
+ * The field for editing a selection value.
+ * 
+ * @param name     The name of the value.
+ * @param value    The value contents.
+ * @param choices  The possible chocies to select from.
+ */
+{template .field_selection}
+  <div class='field'>
+    <select class='field' name='{$name}'  
+            onkeyup='window.form.validate(this)'>
+      {foreach $choice in $choices}
+        <option value='{$choice}'{if $choice == $value.raw} selected{/if}>
+          {$choice}
+        </option>
+      {/foreach}
+    </select>
+  </div>
+{/template}
+
+/**
+ * Editing and displaying an image. If you change this template, you also have
+ * to appropriately adjust the js code to generate the dynamic image in 
+ * edit.addImage().
+ * 
+ * @param id    the id of the images container
+ * @param image The image as a file structure. 
+ */
+{template .image}
+  <div class="image" id="{$id}-{$image.name}">
+    <img src="{$image.icon}=s100" alt="{$image.name}"/>
+    <div class="caption">
+      {$image.name}
+    </div>
+    <div class="delete-horizontal"></div>
+    <div class="delete-vertical"></div>
+  </div>
+{/template}
+
+/**
+ * Editing all the images of an entry.
+ * 
+ * @param entry the entry for which to edit entries
+ * @param id    the id for the elements to create
+ */
+{template .images}
+  <div class="images" id="{$id}" 
+       onclick="edit.deleteImage('{$entry.key}', event.target.alt, '{$id}');">
+    {if def($entry.files.main)}
+      {call dma.edit.image}
+        {param id: $id /}
+        {param image: $entry.files.main /}
+      {/call}
+    {/if}
+    {foreach $image in $entry.files.other}
+      {call dma.edit.image}
+        {param id: $id /}
+        {param image: $image /}
+      {/call}
+    {/foreach}
+  </div>
+  <iframe src="/fileupload?key={$entry.key}&amp;name=main&amp;form&amp;id={$id}"
+          class="upload" id="upload-main">
+  </iframe>
+{/template}
+
+/**
+ * The actions when editing.
+ * 
+ * @param key the key of the entry to save
+ * @param id  the id of the element with all the fields.
+ */
+{template .actions}
+  <div class="actions">
+    <div class="buttons">
+      <div class="move">
+        <div class="action sprite large save" title="Save"
+             onclick="edit.save('{$key}', '{$id}')">
+        </div>
+        <div class="action sprite large revert" title="Revert"
+             onclick="edit.cancel('{$id}')">
+        </div>
+      </div>
+    </div>
+  </div>  
+{/template}
