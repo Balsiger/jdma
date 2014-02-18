@@ -480,6 +480,9 @@ public abstract class AbstractEntry extends ValueGroup
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
+  /** The undefined string value. */
+  public static final String UNDEFINED_STRING = "";
+
  //........................................................................
 
   //----- name -------------------------------------------------------------
@@ -1035,6 +1038,17 @@ public abstract class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+
+  /**
+   * Collect all the searchable values by key.
+   *
+   * @return a map of keys to searchable values
+   */
+  public Map<String, Object> collectSearchables()
+  {
+    return new HashMap<>();
+  }
+
   //---------------------------- fullReferences ----------------------------
 
   /**

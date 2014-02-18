@@ -215,7 +215,6 @@ public class SoyServlet extends DMAServlet
     tracer = new Tracer("collecting data");
     Map<String, Object> data = collectData(inRequest, renderer);
     tracer.done();
-    System.out.println("data: " + data);
     tracer = new Tracer("setting soy data");
     renderer.setData(data);
     tracer.done();

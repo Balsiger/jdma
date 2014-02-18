@@ -129,7 +129,12 @@ edit.save = function(inKey, inID)
   window.onbeforeunload = undefined;
 
   // close the dialog
+  window.console.log("dialog", $('#dialog-' + inID), $('#dialog-' + inID));
   $('#dialog-' + inID).dialog("destroy");
+  $('#dialog-' + inID).remove();
+
+  // reload the saved entry
+  util.link(null, null, null);
 };
 
 /**
@@ -140,6 +145,7 @@ edit.save = function(inKey, inID)
 edit.cancel = function(inID)
 {
   $('#dialog-' + inID).dialog("destroy");
+  $('#dialog-' + inID).remove();
 };
 
 //----------------------------- makeEditable -------------------------------

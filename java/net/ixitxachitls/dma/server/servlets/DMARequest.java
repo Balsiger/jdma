@@ -542,9 +542,14 @@ public class DMARequest extends HttpServletRequestWrapper
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn())
     {
+      // TODO: this is the old email format!
       m_user = DMADataFactory.get()
           .getEntry(BaseCharacter.TYPE, "email", new Text(userService
               .getCurrentUser().getEmail()).toString());
+      if (m_user == null)
+        m_user = DMADataFactory.get()
+          .getEntry(BaseCharacter.TYPE, "email",
+                    userService.getCurrentUser().getEmail());
     }
     if (m_user != null)
       m_user.action();

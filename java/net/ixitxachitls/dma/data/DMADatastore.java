@@ -1063,21 +1063,27 @@ public class DMADatastore implements DMAData
   {
     Entity entity = new Entity(convert(inEntry.getKey()));
 
-    // Save searchable values as distinct properties to be able to search
-    // for them in the datastore.
+
+    // TODO: remove this once all searchable values are gone.
     for(Variable variable : inEntry.getVariables())
       if(variable.isSearchable())
         entity.setProperty(variable.getKey(),
                            variable.get(inEntry).toString().toLowerCase());
 
-    // save the index information to make it searchable afterwards
+    // Save searchable values as distinct properties to be able to search
+    // for them in the datastore.
+    for(Map.Entry<String, Object> entry :
+      inEntry.collectSearchables().entrySet())
+      entity.setProperty(entry.getKey(), entry.getValue());
+
+    // Save the index information to make it searchable afterwards.
     Multimap<Index.Path, String> indexes = inEntry.computeIndexValues();
     for(Index.Path index : indexes.keySet())
       // must convert the contained set to a list to make it serializable
       entity.setProperty(m_data.toPropertyName("index-" + index.getPath()),
                          new ArrayList<String>(indexes.get(index)));
 
-    // save the time for recent changes
+    // Save the time for recent changes.
     entity.setProperty(m_data.toPropertyName("change"), new Date());
 
     entity.setProperty("proto", new Blob(inEntry.toProto().toByteArray()));

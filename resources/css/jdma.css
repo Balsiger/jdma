@@ -2397,7 +2397,8 @@ BODY.print
 
 .entry .values
 {
-  margin-top: 10px;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .entry .toolbar
@@ -2465,26 +2466,27 @@ BODY.print
 
 .entry ._new_.images
 {
-  margin: -10px 30px 20px 0;
-  float: left;
+  margin: 0 30px 10px 15px;
   width: 112px;
+  display: inline-block;
 }
 
 .entry .image-link
 {
   border: 1px solid #ccc;
   padding: 5px;
-  box-shadow: 1px 1px 3px #777;
   width: 112px;
   line-height: 112px;
   display: inline-block;
   margin-bottom: 5px;
   text-align: center;
+  box-shadow: 1px 1px 3px #777;
 }
 
 .entry .image-link:hover
 {
   border: 1px solid #aaa;
+  box-shadow: 0 0 3px #777;
 }
 
 .entry ._new_.main.image,

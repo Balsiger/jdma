@@ -23,6 +23,7 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -53,13 +54,12 @@ import net.ixitxachitls.util.logging.Log;
 @ParametersAreNonnullByDefault
 public class BaseCharacter extends BaseEntry
 {
-  //----------------------------------------------------------------- nested
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The possible groups for a character. */
-  public enum Group implements EnumSelection.Named
+  public enum Group implements EnumSelection.Named,
+                               EnumSelection.Proto<BaseCharacterProto.Group>
   {
     /** A guest user without any special permissions. */
     GUEST("Guest", BaseCharacterProto.Group.GUEST),
@@ -93,32 +93,20 @@ public class BaseCharacter extends BaseEntry
     /** The proto enum value. */
     private BaseCharacterProto.Group m_proto;
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     */
     @Override
     public String toString()
     {
       return m_name;
     }
 
-    /**
-     * Get the proto value for this value.
-     *
-     * @return the proto enum value
-     */
-    public BaseCharacterProto.Group getProto()
+    @Override
+    public BaseCharacterProto.Group toProto()
     {
       return m_proto;
     }
@@ -167,8 +155,6 @@ public class BaseCharacter extends BaseEntry
     }
   }
 
-  //........................................................................
-
   /**
    * The default internal constructor to create an undefined entry to be
    * filled by reading it from a file.
@@ -197,12 +183,12 @@ public class BaseCharacter extends BaseEntry
    *
    * @param       inName the name of the base character to create
    * @param       inEmail the email address of the base character to create
-   *
    */
   public BaseCharacter(String inName, String inEmail)
   {
     this(inName);
-    m_email = new Name(inEmail);
+
+    m_email = inEmail;
   }
 
   /** The type of this entry. */
@@ -214,28 +200,19 @@ public class BaseCharacter extends BaseEntry
     Config.get("entries/basecharacter.products", 5);
 
   /** The files in the base campaign. */
-  @Key("real name")
-  @DM
-  protected Name m_realName = new Name();
+  protected String m_realName = UNDEFINED_STRING;
 
   /** The files in the base campaign. */
-  @Key("email")
-  @DM
-  @Searchable
-  protected Name m_email = new Name();
+  protected String m_email = UNDEFINED_STRING;
 
   /** All the products for this user. */
   protected transient @Nullable DMAData m_productData = null;
 
   /** The files in the base campaign. */
-  @Key("last action")
-  @NoEdit
-  protected Name m_lastAction = new Name();
+  protected String m_lastAction = UNDEFINED_STRING;
 
   /** The access group of the user. */
-  @Key("group")
-  protected EnumSelection<Group> m_group =
-    new EnumSelection<Group>(Group.class);
+  protected Group m_group = Group.GUEST;
 
   static
   {
@@ -249,10 +226,7 @@ public class BaseCharacter extends BaseEntry
    */
   public Group getGroup()
   {
-    if(m_group.isDefined())
-      return m_group.getSelected();
-
-    return Group.GUEST;
+    return m_group;
   }
 
   /**
@@ -260,13 +234,20 @@ public class BaseCharacter extends BaseEntry
    *
    * @return      the users email address.
    */
-  public String getEMail()
+  public String getEmail()
   {
-    return m_email.get();
+    return m_email;
   }
 
-  //........................................................................
-  //------------------------------ hasAccess -------------------------------
+  @Override
+  public Map<String, Object> collectSearchables()
+  {
+    Map<String, Object> searchables = super.collectSearchables();
+
+    searchables.put("email", m_email);
+
+    return searchables;
+  }
 
   /**
    * Checks if the user has at least the given access.
@@ -274,24 +255,12 @@ public class BaseCharacter extends BaseEntry
    * @param       inGroup the group to check for
    *
    * @return      true if enough access, false if not
-   *
    */
   public boolean hasAccess(Group inGroup)
   {
     return inGroup.allows(getGroup());
   }
 
-  //........................................................................
-  //--------------------------------- isDM ---------------------------------
-
-  /**
-   * Check whether the given user is the DM for this entry.
-   *
-   * @param       inUser the user accessing
-   *
-   * @return      true for DM, false for not
-   *
-   */
   @Override
   public boolean isDM(@Nullable BaseCharacter inUser)
   {
@@ -301,28 +270,32 @@ public class BaseCharacter extends BaseEntry
     return inUser.hasAccess(Group.ADMIN) || inUser == this;
   }
 
-  //........................................................................
-  //----------------------------- isShownTo -------------------------------
-
-  /**
-   * Check if the given user is allowed to see the entry.
-   *
-   * @param       inUser the user trying to edit
-   *
-   * @return      true if the entry can be seen, false if not
-   *
-   */
   @Override
   public boolean isShownTo(@Nullable BaseCharacter inUser)
   {
     return inUser != null;
   }
 
-  //........................................................................
-
-  //........................................................................
-
   //----------------------------------------------------------- manipulators
+
+  @Override
+  public @Nullable String set(String inKey, String inText)
+  {
+    switch(inKey)
+    {
+      case "real name":
+        m_realName = m_realName.as(inText);
+        return null;
+
+      case "email":
+        m_email = inText;
+        return null;
+    }
+
+    return super.set(inKey,  inText);
+  }
+
+
 
   //-------------------------------- action --------------------------------
 
@@ -436,13 +409,13 @@ public class BaseCharacter extends BaseEntry
 
     builder.setBase((BaseEntryProto)super.toProto());
     if(m_group.isDefined())
-      builder.setGroup(m_group.getSelected().getProto());
+      builder.setGroup(m_group.getSelected().toProto());
     if(m_lastAction.isDefined())
       builder.setLastAction(m_lastAction.get());
     if(m_realName.isDefined())
       builder.setRealName(m_realName.get());
-    if(m_email.isDefined())
-      builder.setEmail(m_email.get());
+    if(!m_email.isEmpty())
+      builder.setEmail(m_email);
 
     return builder.build();
   }
@@ -467,7 +440,7 @@ public class BaseCharacter extends BaseEntry
     if(proto.hasRealName())
       m_realName = m_realName.as(proto.getRealName());
     if(proto.hasEmail())
-      m_email = m_email.as(proto.getEmail());
+      m_email = proto.getEmail();
   }
 
   @Override
@@ -501,7 +474,7 @@ public class BaseCharacter extends BaseEntry
 
       assertEquals("id", "Me", character.getName());
       assertFalse("real name", character.m_realName.isDefined());
-      assertFalse("email", character.m_email.isDefined());
+      assertTrue("email", character.m_email.isEmpty());
       assertFalse("last action", character.m_lastAction.isDefined());
       assertFalse("group", character.m_group.isDefined());
     }

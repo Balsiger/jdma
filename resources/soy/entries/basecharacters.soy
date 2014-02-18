@@ -51,7 +51,7 @@
       </div>
     </div>
 
-    {if not $ij.params.card and not $ij.params.body}
+    {if not $ij.params.card}
       {call dma.entry.navigation}
         {param first: $first /}
         {param previous: $previous /}
@@ -68,19 +68,19 @@
       {/call}
     {/if}
       
-    <div class="values">
-      <div class="_new_ images">
-        {call dma.entry.mainImage}
-          {param entry: $entry /}
-        {/call}
+    <div class="_new_ images">
+      {call dma.entry.mainImage}
+        {param entry: $entry /}
+      {/call}
         
-        {foreach $file in $entry.files.other}
-          {call dma.entry.file}
-            {param file: $file /}
-          {/call}
-        {/foreach}
-      </div>
+      {foreach $file in $entry.files.other}
+        {call dma.entry.file}
+          {param file: $file /}
+        {/call}
+      {/foreach}
+    </div>
       
+    <div class="values">
       {call dma.entry._new_title}
         {param title: $entry.name /}
         {param color: '#39f' /}
@@ -143,7 +143,7 @@
       <div class="clear"></div>
     </div>
     
-    {if not $ij.params.card and not $ij.params.body}
+    {if not $ij.params.card}
       {call dma.entry.navigation}
         {param first: $first /}
         {param previous: $previous /}

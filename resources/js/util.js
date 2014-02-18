@@ -115,11 +115,11 @@ util.ajax = function(inURL, inValues, inFunction, inEval)
 //..........................................................................
 //--------------------------------- reload ---------------------------------
 
-/** Reload the current page.
+/**
+  * Reload the current page.
   *
   * @param inPage an optional page to use instead of the default one; this
   *               is only the page, without the path
-  *
   */
 util.reload = function(inPage)
 {

@@ -117,6 +117,8 @@ public class SaveActionServlet extends ActionServlet
         errors.add("Cannot fully parse " + name + ": " + rest);
     }
 
+    entry.save();
+
     if(!errors.isEmpty())
       return "gui.alert('" + newlineJoiner.join(errors) + "');";
 

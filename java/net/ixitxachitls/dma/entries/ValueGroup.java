@@ -725,7 +725,6 @@ public abstract class ValueGroup implements Changeable
    * @param       inText the text to set the value to
    *
    * @return      the part of the string that could not be parsed
-   *
    */
   public @Nullable String set(String inKey, String inText)
   {
