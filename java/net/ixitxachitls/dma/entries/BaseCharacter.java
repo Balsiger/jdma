@@ -54,27 +54,24 @@ import net.ixitxachitls.util.logging.Log;
 @ParametersAreNonnullByDefault
 public class BaseCharacter extends BaseEntry
 {
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
-
   /** The possible groups for a character. */
   public enum Group implements EnumSelection.Named,
                                EnumSelection.Proto<BaseCharacterProto.Group>
   {
-    /** A guest user without any special permissions. */
-    GUEST("Guest", BaseCharacterProto.Group.GUEST),
-
-    /** A normal user. */
-    USER("User", BaseCharacterProto.Group.USER),
-
-    /** The player in possession of the entry. */
-    PLAYER("Player", BaseCharacterProto.Group.PLAYER),
+    /** An administrator. */
+    ADMIN("Admin", BaseCharacterProto.Group.ADMIN),
 
     /** A DM (in any campaign). */
     DM("DM", BaseCharacterProto.Group.DM),
 
-    /** An administrator. */
-    ADMIN("Admin", BaseCharacterProto.Group.ADMIN);
+    /** A guest user without any special permissions. */
+    GUEST("Guest", BaseCharacterProto.Group.GUEST),
+
+    /** The player in possession of the entry. */
+    PLAYER("Player", BaseCharacterProto.Group.PLAYER),
+
+    /** A normal user. */
+    USER("User", BaseCharacterProto.Group.USER);
 
     /** Create the group.
      *
@@ -93,14 +90,21 @@ public class BaseCharacter extends BaseEntry
     /** The proto enum value. */
     private BaseCharacterProto.Group m_proto;
 
-    @Override
-    public String getName()
+    /**
+     * Check if a group allows a given group.
+     *
+     * @param  inGroup the group to check against
+     *
+     * @return true if the other group is less or equally restricted than the
+     *         current one
+     */
+    public boolean allows(Group inGroup)
     {
-      return m_name;
+      return this.ordinal() <= inGroup.ordinal();
     }
 
     @Override
-    public String toString()
+    public String getName()
     {
       return m_name;
     }
@@ -111,17 +115,10 @@ public class BaseCharacter extends BaseEntry
       return m_proto;
     }
 
-    /** Check if a group allows a given group.
-     *
-     * @param  inGroup the group to check against
-     *
-     * @return true if the other group is less or equally restricted than the
-     *         current one
-     *
-     */
-    public boolean allows(Group inGroup)
+    @Override
+    public String toString()
     {
-      return this.ordinal() <= inGroup.ordinal();
+      return m_name;
     }
 
     /**
@@ -153,24 +150,26 @@ public class BaseCharacter extends BaseEntry
 
       return names;
     }
+
+    /**
+     * Get the group matching the given text.
+     */
+    public static @Nullable Group fromString(String inText)
+    {
+      for(Group group : values())
+        if(group.m_name.equalsIgnoreCase(inText))
+          return group;
+
+      return null;
+    }
   }
 
-  /**
-   * The default internal constructor to create an undefined entry to be
-   * filled by reading it from a file.
-   *
-   */
-  protected BaseCharacter()
-  {
-    super(TYPE);
-  }
 
   /**
    * This is the standard constructor to create a base character with its
    * name.
    *
    * @param       inName the name of the base charcter to create
-   *
    */
   public BaseCharacter(String inName)
   {
@@ -191,32 +190,55 @@ public class BaseCharacter extends BaseEntry
     m_email = inEmail;
   }
 
-  /** The type of this entry. */
-  public static final BaseType<BaseCharacter> TYPE =
-    new BaseType<BaseCharacter>(BaseCharacter.class).withLink("user", "users");
-
-  /** The number of recent products to show. */
-  public static final int MAX_PRODUCTS =
-    Config.get("entries/basecharacter.products", 5);
-
-  /** The files in the base campaign. */
-  protected String m_realName = UNDEFINED_STRING;
+  /**
+   * The default internal constructor to create an undefined entry to be
+   * filled by reading it from a file.
+   *
+   */
+  protected BaseCharacter()
+  {
+    super(TYPE);
+  }
 
   /** The files in the base campaign. */
   protected String m_email = UNDEFINED_STRING;
+
+  /** The access group of the user. */
+  protected Group m_group = Group.GUEST;
+
+  /** The files in the base campaign. */
+  protected String m_lastAction = UNDEFINED_STRING;
 
   /** All the products for this user. */
   protected transient @Nullable DMAData m_productData = null;
 
   /** The files in the base campaign. */
-  protected String m_lastAction = UNDEFINED_STRING;
+  protected String m_realName = UNDEFINED_STRING;
 
-  /** The access group of the user. */
-  protected Group m_group = Group.GUEST;
+  /** The number of recent products to show. */
+  public static final int MAX_PRODUCTS =
+    Config.get("entries/basecharacter.products", 5);
+
+  /** The type of this entry. */
+  public static final BaseType<BaseCharacter> TYPE =
+    new BaseType<BaseCharacter>(BaseCharacter.class).withLink("user", "users");
+
+  /** The serial version id. */
+  private static final long serialVersionUID = 1L;
 
   static
   {
     extractVariables(BaseCharacter.class);
+  }
+
+  /**
+   * Get the users email address.
+   *
+   * @return      the users email address.
+   */
+  public String getEmail()
+  {
+    return m_email;
   }
 
   /**
@@ -230,23 +252,23 @@ public class BaseCharacter extends BaseEntry
   }
 
   /**
-   * Get the users email address.
+   * Get the users real name.
    *
-   * @return      the users email address.
+   * @return the real name
    */
-  public String getEmail()
+  public String getRealName()
   {
-    return m_email;
+    return m_realName;
   }
 
-  @Override
-  public Map<String, Object> collectSearchables()
+  /**
+   * Get the users last action time.
+   *
+   * @return the time and date of the last action
+   */
+  public String getLastAction()
   {
-    Map<String, Object> searchables = super.collectSearchables();
-
-    searchables.put("email", m_email);
-
-    return searchables;
+    return m_lastAction;
   }
 
   /**
@@ -262,6 +284,12 @@ public class BaseCharacter extends BaseEntry
   }
 
   @Override
+  public boolean isShownTo(@Nullable BaseCharacter inUser)
+  {
+    return inUser != null;
+  }
+
+  @Override
   public boolean isDM(@Nullable BaseCharacter inUser)
   {
     if(inUser == null)
@@ -271,56 +299,15 @@ public class BaseCharacter extends BaseEntry
   }
 
   @Override
-  public boolean isShownTo(@Nullable BaseCharacter inUser)
+  public Map<String, Object> collectSearchables()
   {
-    return inUser != null;
+    Map<String, Object> searchables = super.collectSearchables();
+
+    searchables.put("email", m_email);
+
+    return searchables;
   }
 
-  //----------------------------------------------------------- manipulators
-
-  @Override
-  public @Nullable String set(String inKey, String inText)
-  {
-    switch(inKey)
-    {
-      case "real name":
-        m_realName = m_realName.as(inText);
-        return null;
-
-      case "email":
-        m_email = inText;
-        return null;
-    }
-
-    return super.set(inKey,  inText);
-  }
-
-
-
-  //-------------------------------- action --------------------------------
-
-  /**
-   * The character did or does an action, record this.
-   *
-   */
-  public void action()
-  {
-    m_lastAction = m_lastAction.as(Strings.today());
-    save();
-  }
-
-  //........................................................................
-  //------------------------------- compute --------------------------------
-
-  /**
-   * Compute a value for a given key, taking base entries into account if
-   * available.
-   *
-   * @param    inKey the key of the value to compute
-   *
-   * @return   the compute value
-   *
-   */
   @Override
   public @Nullable Object compute(String inKey)
   {
@@ -348,76 +335,91 @@ public class BaseCharacter extends BaseEntry
     return super.compute(inKey);
   }
 
-  //........................................................................
-  //------------------------------ readEntry -------------------------------
-
-  /**
-   * Read an entry, and only the entry without type and comments, from the
-   * reader.
-   *
-   * @param       inReader the reader to read from
-   *
-   * @return      true if read successfully, false else
-   *
-   */
-  @Override
-  protected boolean readEntry(ParseReader inReader)
-  {
-    return super.readEntry(inReader);
-  }
-
-  //........................................................................
-  //------------------------------- setGroup -------------------------------
-
-  /**
-   * Set the group of the user.
-   *
-   * @param inSelected the selected group
-   *
-   */
-  public void setGroup(Group inSelected)
-  {
-    m_group = m_group.as(inSelected);
-    changed();
-  }
-
-  //........................................................................
-  //------------------------------- setRealName ----------------------------
-
-  /**
-   * Set the real name of the user.
-   *
-   * @param inRealName the real name of the user
-   *
-   */
-  public void setRealName(String inRealName)
-  {
-    m_realName = m_realName.as(inRealName);
-    changed();
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
   @Override
   public Message toProto()
   {
     BaseCharacterProto.Builder builder = BaseCharacterProto.newBuilder();
 
     builder.setBase((BaseEntryProto)super.toProto());
-    if(m_group.isDefined())
-      builder.setGroup(m_group.getSelected().toProto());
-    if(m_lastAction.isDefined())
-      builder.setLastAction(m_lastAction.get());
-    if(m_realName.isDefined())
-      builder.setRealName(m_realName.get());
+    builder.setGroup(m_group.toProto());
+    if(!m_lastAction.isEmpty())
+      builder.setLastAction(m_lastAction);
+    if(!m_realName.isEmpty())
+      builder.setRealName(m_realName);
     if(!m_email.isEmpty())
       builder.setEmail(m_email);
 
     return builder.build();
+  }
+
+  @Override
+  public @Nullable String set(String inKey, String inText)
+  {
+    switch(inKey)
+    {
+      case "real name":
+        m_realName = inText;
+        return null;
+
+      case "email":
+        m_email = inText;
+        return null;
+
+      case "group":
+         m_group = Group.fromString(inText);
+         if (m_group == null)
+         {
+           m_group = Group.GUEST;
+           return inText;
+         }
+         return null;
+    }
+
+    return super.set(inKey,  inText);
+  }
+
+  /**
+   * Set the group of the user.
+   *
+   * @param inSelected the selected group
+   */
+  public void setGroup(Group inSelected)
+  {
+    m_group = inSelected;
+    changed();
+  }
+
+  /**
+   * Set the real name of the user.
+   *
+   * @param inRealName the real name of the user
+   */
+  public void setRealName(String inRealName)
+  {
+    m_realName = inRealName;
+    changed();
+  }
+
+  /**
+   * The character did or does an action, record this.
+   */
+  public void action()
+  {
+    m_lastAction = Strings.today();
+    save();
+  }
+
+  @Override
+  public void parseFrom(byte []inBytes)
+  {
+    try
+    {
+      fromProto(BaseCharacterProto.parseFrom(inBytes));
+    }
+    catch(InvalidProtocolBufferException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
   }
 
   @Override
@@ -434,37 +436,63 @@ public class BaseCharacter extends BaseEntry
     super.fromProto(proto.getBase());
 
     if(proto.hasGroup())
-      m_group = m_group.as(Group.fromProto(proto.getGroup()));
+      m_group = Group.fromProto(proto.getGroup());
     if(proto.hasLastAction())
-      m_lastAction = m_lastAction.as(proto.getLastAction());
+      m_lastAction = proto.getLastAction();
     if(proto.hasRealName())
-      m_realName = m_realName.as(proto.getRealName());
+      m_realName = proto.getRealName();
     if(proto.hasEmail())
       m_email = proto.getEmail();
   }
 
+  /**
+   * Read an entry, and only the entry without type and comments, from the
+   * reader.
+   *
+   * @param       inReader the reader to read from
+   *
+   * @return      true if read successfully, false else
+   *
+   */
   @Override
-  public void parseFrom(byte []inBytes)
+  protected boolean readEntry(ParseReader inReader)
   {
-    try
-    {
-      fromProto(BaseCharacterProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return super.readEntry(inReader);
   }
 
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- init -----------------------------------------------------------
+    /** The group Test. */
+    @org.junit.Test
+    public void group()
+    {
+      BaseCharacter character = new BaseCharacter("Me");
+
+      assertTrue("guest", character.hasAccess(Group.GUEST));
+      assertFalse("user", character.hasAccess(Group.USER));
+      assertFalse("player", character.hasAccess(Group.PLAYER));
+      assertFalse("dm", character.hasAccess(Group.DM));
+      assertFalse("admin", character.hasAccess(Group.ADMIN));
+
+      character.setGroup(Group.USER);
+
+      assertTrue("guest", character.hasAccess(Group.GUEST));
+      assertTrue("user", character.hasAccess(Group.USER));
+      assertFalse("player", character.hasAccess(Group.PLAYER));
+      assertFalse("dm", character.hasAccess(Group.DM));
+      assertFalse("admin", character.hasAccess(Group.ADMIN));
+
+      character.setGroup(Group.ADMIN);
+
+      assertTrue("guest", character.hasAccess(Group.GUEST));
+      assertTrue("user", character.hasAccess(Group.USER));
+      assertTrue("player", character.hasAccess(Group.PLAYER));
+      assertTrue("dm", character.hasAccess(Group.DM));
+      assertTrue("admin", character.hasAccess(Group.ADMIN));
+    }
 
     /** The init Test. */
     @org.junit.Test
@@ -473,14 +501,11 @@ public class BaseCharacter extends BaseEntry
       BaseCharacter character = new BaseCharacter("Me");
 
       assertEquals("id", "Me", character.getName());
-      assertFalse("real name", character.m_realName.isDefined());
+      assertTrue("real name", character.m_realName.isEmpty());
       assertTrue("email", character.m_email.isEmpty());
-      assertFalse("last action", character.m_lastAction.isDefined());
-      assertFalse("group", character.m_group.isDefined());
+      assertTrue("last action", character.m_lastAction.isEmpty());
+      assertEquals("group", Group.GUEST, character.m_group);
     }
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
 
     /** The read Test. */
     @org.junit.Test
@@ -520,41 +545,5 @@ public class BaseCharacter extends BaseEntry
                      character.toString());
       }
     }
-
-    //......................................................................
-    //----- group ----------------------------------------------------------
-
-    /** The group Test. */
-    @org.junit.Test
-    public void group()
-    {
-      BaseCharacter character = new BaseCharacter("Me");
-
-      assertTrue("guest", character.hasAccess(Group.GUEST));
-      assertFalse("user", character.hasAccess(Group.USER));
-      assertFalse("player", character.hasAccess(Group.PLAYER));
-      assertFalse("dm", character.hasAccess(Group.DM));
-      assertFalse("admin", character.hasAccess(Group.ADMIN));
-
-      character.setGroup(Group.USER);
-
-      assertTrue("guest", character.hasAccess(Group.GUEST));
-      assertTrue("user", character.hasAccess(Group.USER));
-      assertFalse("player", character.hasAccess(Group.PLAYER));
-      assertFalse("dm", character.hasAccess(Group.DM));
-      assertFalse("admin", character.hasAccess(Group.ADMIN));
-
-      character.setGroup(Group.ADMIN);
-
-      assertTrue("guest", character.hasAccess(Group.GUEST));
-      assertTrue("user", character.hasAccess(Group.USER));
-      assertTrue("player", character.hasAccess(Group.PLAYER));
-      assertTrue("dm", character.hasAccess(Group.DM));
-      assertTrue("admin", character.hasAccess(Group.ADMIN));
-    }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
@@ -38,7 +36,6 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Values.RangeProto;
-import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Range;
@@ -51,10 +48,6 @@ import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * This is the base class for all base entries of DMA.
  *
@@ -62,22 +55,12 @@ import net.ixitxachitls.util.logging.Log;
  * be non-null!
  *
  * @file          BaseEntry.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class BaseEntry extends AbstractEntry
 {
-  //----------------------------------------------------------------- nested
-
-  //----- worlds -----------------------------------------------------------
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
@@ -127,77 +110,50 @@ public class BaseEntry extends AbstractEntry
       "Wheel of Time",
     });
 
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------ BaseEntry -------------------------------
-
-  /**
+   /**
    * The default constructor, with undefined values.
-   *
    */
   protected BaseEntry()
   {
     super(TYPE);
   }
 
-  //........................................................................
-  //------------------------------ BaseEntry -------------------------------
-
-  /**
+   /**
    * The default constructor, with undefined values.
    *
    * @param   inType the type of the entry
-   *
    */
   protected BaseEntry(AbstractType<? extends BaseEntry> inType)
   {
     super(inType);
   }
 
-  //........................................................................
-  //------------------------------ BaseEntry -------------------------------
-
   /**
    * The complete constructor.
    *
    * @param       inName     the name of the entry
-   *
    */
   public BaseEntry(String inName)
   {
     this(inName, TYPE);
   }
 
-  //........................................................................
-  //------------------------------ BaseEntry -------------------------------
-
   /**
    * The constructor for derivations, with a type.
    *
    * @param       inName     the name of the entry
    * @param       inType     the type of the entry
-   *
    */
   protected BaseEntry(String inName, AbstractType<? extends BaseEntry> inType)
   {
     super(inName, inType);
   }
 
-  //........................................................................
-  //------------------------------ BaseEntry -------------------------------
-
   /**
    * The constructor for derivations, with a type.
    *
    * @param       inName     the name of the entry
    * @param       inType     the type of the entry
-   *
-   * @undefined   never
-   *
    */
 //   protected BaseEntry(String inName, Type inType,
 //                       BaseEntry ... inBases)
@@ -205,25 +161,14 @@ public class BaseEntry extends AbstractEntry
 //     super(inName, inType, inBases);
 //   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The type of this entry. */
   public static final BaseType<BaseEntry> TYPE =
     new BaseType<BaseEntry>(BaseEntry.class, "Base Entries");
-
-  //----- world ------------------------------------------------------------
 
   /** The world. */
   @Key("worlds")
   protected ValueList<Selection> m_worlds = new ValueList<Selection>
     (new Selection(WORLDS).withTemplate("link", "worlds"));
-
-  //........................................................................
-  //----- references -------------------------------------------------------
 
   // TODO: was modifiable; check if it needs to be
   /** The references for this entry. */
@@ -239,26 +184,11 @@ public class BaseEntry extends AbstractEntry
       (new ValueList<Range>(new Range(0, Integer.MAX_VALUE), "/")
        /*.withEditType("pages[pages]")*/, true, ": ", null)));
 
-  //........................................................................
-  //----- description ------------------------------------------------------
-
   /** The descriptive text for this entry. */
-  @Key("description")
-  @WithBases
-  protected LongFormattedText m_description = new LongFormattedText();
-
-  //........................................................................
-  //----- short description ------------------------------------------------
+  protected String m_description = UNDEFINED_STRING;
 
   /** The short description text for this entry. */
-  @Key("short description")
-  @WithBases
-  @PrintUndefined
-  protected Text m_short =
-    new Text().withEditType("string[short description]");
-
-  //........................................................................
-  //----- synonyms ---------------------------------------------------------
+  protected String m_short = UNDEFINED_STRING;
 
   /** The synonyms for this entry. */
   @Key("synonyms")
@@ -266,33 +196,41 @@ public class BaseEntry extends AbstractEntry
   protected ValueList<Text> m_synonyms =
     new ValueList<Text>(new Text());
 
-  //........................................................................
-  //----- categories -------------------------------------------------------
-
   /** The categories. */
   @Key("categories")
   @DM
   protected ValueList<Name> m_categories =
     new ValueList<Name>(new Name());
 
-  //........................................................................
-
   static
   {
     extractVariables(BaseEntry.class);
   }
 
-  //........................................................................
+  /**
+   * Get the entry description.
+   *
+   * @return the description of the entry
+   */
+  public String getDescription()
+  {
+    return m_description;
+  }
 
-  //-------------------------------------------------------------- accessors
-
-  //-------------------------------- isBase --------------------------------
+  /**
+  * Get the short description of the base entry.
+   *
+   * @return      the selection containing the selected world
+   */
+  public String getShortDescription()
+  {
+    return m_short;
+  }
 
   /**
    * Check if the current entry represents a base entry or not.
    *
    * @return      true if this is a base entry, false else
-   *
    */
   @Override
   public boolean isBase()
@@ -300,75 +238,12 @@ public class BaseEntry extends AbstractEntry
     return true;
   }
 
-  //........................................................................
-  //------------------------------- matches --------------------------------
-
-  /**
-   * Determine if the current entry matches to the given base entry.
-   *
-   * @param       inBase the base entry to match to
-   *
-   * @return      true if they match, i.e. if the given base entry could
-   *              be the base to the current object
-   *
-   */
-//   public boolean matches(BaseEntry inBase)
-//   {
-//     // only matches if the types match
-//     if(getType() != inBase.getType())
-//       return false;
-
-//     // check the name
-//     String name = getName();
-
-//     if(name != null)
-//     {
-//       // match the name
-//       name = name.replaceAll("\\*\\*", ".*");
-
-//       if(!inBase.getName().matches(name))
-//         return false;
-//     }
-
-//     // now we do the real check, i.e. really compare values
-//     Values values = getValues();
-//     if(values != null)
-//       for(Variable variable : values)
-//       {
-//         // if no matcher is present, we ignore this value
-//         if(!variable.hasMatcher(this))
-//           continue;
-
-//         // we don't have a value, see if the base entry has one
-//         Variable base = inBase.getValues().getValue(variable.getKey());
-
-//         // no base, we ignore the value
-//         if(base == null)
-//         {
-//           Log.warning("Cannot find matcher value for '"
-//                       + variable.getKey() + "' in '" + inBase.getType()
-//                       + "'");
-
-//           continue;
-//         }
-
-//         if(!variable.check(this, base.get(inBase)))
-//           return false;
-//       }
-
-//     return true;
-//   }
-
-  //........................................................................
-  //----------------------------- hasCategory ------------------------------
-
   /**
    * Check if the base entry has a named category.
    *
    * @param       inCategory the category to look for
    *
    * @return      true if the category is present, false if not
-   *
    */
   public boolean hasCategory(String inCategory)
   {
@@ -379,16 +254,12 @@ public class BaseEntry extends AbstractEntry
     return false;
   }
 
-  //........................................................................
-  //------------------------------ hasSynonym ------------------------------
-
   /**
    * Check if the given base entry has a synonym with the given name.
    *
    * @param       inName the name to look for
    *
    * @return      true if the entry has a synonym, false if not
-   *
    */
   public boolean hasSynonym(String inName)
   {
@@ -399,71 +270,20 @@ public class BaseEntry extends AbstractEntry
     return false;
   }
 
-  //........................................................................
-
-  /**
-   * Get the entry description.
-   *
-   * @return the descritpion of the entry
-   */
-  public String getDescription()
-  {
-    if (m_description.isDefined())
-      return m_description.get();
-
-    return "";
-  }
-
-  //------------------------------- getWorlds ------------------------------
-
   /**
    * Get the worlds the product is for.
    *
    * @return      the selection containing the selected world
-   *
    */
   public String getWorlds()
   {
     return m_worlds.toString();
   }
 
-  //........................................................................
-  //------------------------- getShortDescription --------------------------
-
-  /**
-   * Get the short description of the base entry.
-   *
-   * @return      the selection containing the selected world
-   *
-   */
-  public String getShortDescription()
-  {
-    String desc = m_short.get();
-
-    /** Do printing of base values from soy.
-    for(BaseEntry base : getBaseEntries())
-      if(base != null)
-        if (desc == null || desc.isEmpty())
-          desc = base.getShortDescription();
-        else
-          desc += " " + base.getShortDescription();
-    */
-
-    if (desc == null)
-      desc = "";
-
-    return desc;
-  }
-
-  //........................................................................
-
-  //--------------------------- getReferenceIDs ----------------------------
-
   /**
    * Get the ids of the reference for this entry.
    *
    * @return      a list of the reference ids
-   *
    */
   public List<String> getReferenceIDs()
   {
@@ -475,31 +295,22 @@ public class BaseEntry extends AbstractEntry
     return ids;
   }
 
-  //........................................................................
-
-  //--------------------------- resolveReference ---------------------------
-
   /**
    * Resolve the given reference into something readable.
    *
    * @param       inName the name of the base product reference
    *
    * @return      the base product referenced, if found
-   *
    */
   protected @Nullable BaseProduct resolveReference(String inName)
   {
     return DMADataFactory.get().getEntry(createKey(inName, BaseProduct.TYPE));
   }
 
-  //........................................................................
-  //------------------------------ getSynonyms -----------------------------
-
   /**
    * Get the synonyms of the entry.
    *
    * @return      the synonyms
-   *
    */
   public List<String> getSynonyms()
   {
@@ -512,14 +323,10 @@ public class BaseEntry extends AbstractEntry
     return result;
   }
 
-  //........................................................................
-  //----------------------------- getReferences ----------------------------
-
   /**
    * Get the references of the entry.
    *
    * @return      the references
-   *
    */
   public List<String> getReferences()
   {
@@ -546,14 +353,10 @@ public class BaseEntry extends AbstractEntry
     return result;
   }
 
-  //........................................................................
-  //----------------------------- getCategories ----------------------------
-
   /**
    * Get the categories of the entry.
    *
    * @return      the categories
-   *
    */
   public List<String> getCategories()
   {
@@ -569,14 +372,10 @@ public class BaseEntry extends AbstractEntry
     return result;
   }
 
-  //........................................................................
-  //-------------------------- computeIndexValues --------------------------
-
   /**
    * Get all the values for all the indexes.
    *
    * @return      a multi map of values per index name
-   *
    */
   @Override
   public Multimap<Index.Path, String> computeIndexValues()
@@ -595,13 +394,22 @@ public class BaseEntry extends AbstractEntry
     return values;
   }
 
-  //........................................................................
+  @Override
+  public @Nullable String set(String inKey, String inText)
+  {
+    switch(inKey)
+    {
+      case "description":
+        m_description = inText;
+        return null;
 
-  //........................................................................
+      case "short description":
+        m_short = inText;
+        return null;
+    }
 
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------ setDescription --------------------------
+    return super.set(inKey, inText);
+  }
 
   /**
    * Set the description of the base entry.
@@ -609,12 +417,9 @@ public class BaseEntry extends AbstractEntry
    * @param       inDescription the description
    *
    */
-  public void setDescription(@Nullable String inDescription)
+  public void setDescription(String inDescription)
   {
-    if(inDescription == null)
-      m_description = new LongFormattedText();
-    else
-      m_description = new LongFormattedText(inDescription);
+    m_description = inDescription;
   }
 
   //........................................................................
@@ -634,10 +439,10 @@ public class BaseEntry extends AbstractEntry
     for(Name category : m_categories)
       builder.addCategory(category.get());
 
-    if(m_description.isDefined())
-      builder.setDescription(m_description.get());
-    if(m_short.isDefined())
-      builder.setShortDescription(m_short.get());
+    if(!m_description.isEmpty())
+      builder.setDescription(m_description);
+    if(!m_short.isEmpty())
+      builder.setShortDescription(m_short);
     for(Multiple reference : m_references)
     {
       BaseEntryProto.Reference.Builder ref =
@@ -682,9 +487,9 @@ public class BaseEntry extends AbstractEntry
     }
 
     if(proto.hasDescription())
-      m_description = m_description.as(proto.getDescription());
+      m_description = proto.getDescription();
     if(proto.hasShortDescription())
-      m_short = m_short.as(proto.getShortDescription());
+      m_short = proto.getShortDescription();
 
     List<Multiple> references = new ArrayList<>();
     for(BaseEntryProto.Reference reference : proto.getReferenceList())
