@@ -26,66 +26,6 @@
 {namespace dma.entry.basecharacter}
 
 /**
- * The values for the entry.
- *
- * @param entry The entry rendered
- */
-{deltemplate dma.entry.values}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Real Name' /}
-    {param value: $entry.real_name /}
-    {param access: 'owner' /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Email' /}
-    {param value: $entry.email /}
-    {param access: 'owner' /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Last Action' /}
-    {param value: $entry.last_action /}
-    {param access: 'owner' /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Group' /}
-    {param value: $entry.group /}
-    {param access: 'admin' /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Characters' /}
-    {param content: '(not yet implemented)' /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Products' /}
-    {param content}
-      {foreach $product in $entry.products.list}
-        {if index($product) < 5}
-          {call dma.page.link}
-            {param url: $product.multi.1.print /}
-            {param text: $product.multi.0.print /}
-          {/call}
-          {if not isLast($product)}, {/if}
-        {else}
-          , ...
-        {/if}
-      {/foreach}
-      {sp}|{sp}
-      {call dma.page.link}
-        {param url: '/user/' + $entry.name + '/products' /}
-        {param text: 'view all' /}
-        {param tooltip: 'List all products of ' + $entry.name + '.' /}
-      {/call}
-    {/param}
-  {/delcall}
-{/deltemplate}
-
-/**
  * Template for the list titles.
  */
 {deltemplate dma.entry.listtitles}

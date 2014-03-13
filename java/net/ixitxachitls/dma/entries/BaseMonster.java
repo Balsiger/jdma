@@ -4867,7 +4867,7 @@ public class BaseMonster extends BaseEntry
       try (ParseReader reader =
         new ParseReader(new java.io.StringReader(s_text), "test"))
       {
-        return BaseMonster.read(reader);
+        return null; //BaseMonster.read(reader);
       }
     }
 

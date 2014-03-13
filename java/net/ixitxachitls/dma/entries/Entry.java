@@ -179,7 +179,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
    */
   public void randomID()
   {
-    setName(ID.random().get());
+    m_name = ID.random().get();
     changed(true);
   }
 
@@ -214,7 +214,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
   @OverridingMethodsMustInvokeSuper
   public void complete()
   {
-    if(!m_name.isDefined() || m_name.get().isEmpty())
+    if(m_name.isEmpty())
     {
       changed();
 

@@ -293,51 +293,67 @@ public class AdminServlet extends SoyServlet
     String upgrade = request.getParam("upgrade");
     if(upgrade != null)
     {
-//      inResponse.setHeader("Content-Type", "text/html");
-//      inResponse.setHeader("Cache-Control", "max-age=0");
-//
-//      DMADatastore store = ((DMADatastore)DMADataFactory.get());
-//
-//      Key campaign =
-//        KeyFactory.createKey(KeyFactory.createKey("base_campaign", "fr"),
-//                             "campaign", "city of the spider queen");
-//      Entity monster =
-//        store.m_data.getEntity(KeyFactory.createKey(campaign, "monster",
-//                                                    upgrade));
-//      if (monster != null)
-//      {
-//        Entity npc = new Entity("npc", upgrade, campaign);
-//        npc.setPropertiesFrom(monster);
-//        store.m_data.update(npc);
-//
-//     try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
-//        {
-//          writer.println("gui.info('monster " + upgrade + " moved to npc');");
-//        }
-//      }
-//      else
-//      {
-//     try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
-//        {
-//          writer.println("gui.alert('Could not find monster " + upgrade
-//                         + "');");
-//        }
-//      }
-//      return null;
+      inResponse.setHeader("Content-Type", "text/html");
+      inResponse.setHeader("Cache-Control", "max-age=0");
+
+      /*
+      DMADatastore store = ((DMADatastore)DMADataFactory.get());
+      AbstractType type = AbstractType.getTyped(upgrade);
+      if (type == null)
+        try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
+        {
+          writer.println("gui.info('invalid type " + upgrade
+                         + ", nothing done');");
+          return null;
+        }
+
+      int start = 0;
+      if (request.hasParam("start")) {
+        start = Integer.parseInt(request.getParam("start"));
+      }
+      int count = 0;
+      int converted = 0;
+      int first = start;
+      for(List<? extends AbstractEntry> entries =
+            store.getEntries(type, null, start, 100);
+          !entries.isEmpty();
+            start += 100, entries = store.getEntries(type, null, start, 100))
+      {
+        if(request.timeIsRunningOut())
+          break;
+
+        for(AbstractEntry entry : entries)
+        {
+          count++;
+          if(entry.getFiles().isEmpty())
+          {
+            List<DMAData.File> files = store.getFiles(entry, false);
+            if (!files.isEmpty())
+            {
+              converted++;
+              for (DMAData.File file : files)
+                entry.addFile(file.getName(), file.getType(), file.getPath(),
+                              file.getIcon());
+
+              entry.save();
+            }
+          }
+        }
+      }
+
+      try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
+      {
+        writer.println("gui.info('updated " + converted + " of " + count + " "
+                       + type + " starting at " + first + " and ending at "
+                       + start + " for files');");
+      }
+
+      return null;
+      */
     }
 
     return super.handle(inRequest, inResponse);
   }
-
-//  private Key upgradeKey(Key key)
-//  {
-//    String kind = key.getKind().replace(" ", "_").toLowerCase();
-//    String name = key.getName().toLowerCase();
-//    if(key.getParent() == null)
-//      return KeyFactory.createKey(kind, name);
-//
-//    return KeyFactory.createKey(upgradeKey(key.getParent()), kind, name);
-//  }
 
   //........................................................................
 

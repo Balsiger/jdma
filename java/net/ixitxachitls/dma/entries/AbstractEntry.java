@@ -24,7 +24,6 @@
 package net.ixitxachitls.dma.entries;
 
 import java.io.Serializable;
-import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +43,9 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -52,16 +54,13 @@ import com.google.common.collect.Sets;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
-import net.ixitxachitls.dma.values.BaseText;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Comment;
+import net.ixitxachitls.dma.values.File;
 import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
@@ -72,37 +71,21 @@ import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Classes;
-import net.ixitxachitls.util.EmptyIterator;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
-import net.ixitxachitls.util.errors.BaseError;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is the base class for all entries.
  *
  * @file          AbstractEntry.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public abstract class AbstractEntry extends ValueGroup
   implements Comparable<AbstractEntry>, Serializable
 {
-  //----------------------------------------------------------------- nested
-
-  //----- EntryKey ---------------------------------------------------------
-
   /**
    * The key for an entry for storage.
    *
@@ -280,32 +263,17 @@ public abstract class AbstractEntry extends ValueGroup
     }
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //---------------------------- AbstractEntry -----------------------------
-
   /**
    * The constructor with a type.
    *
    * @param  inType  the type of the entry
-   *
    */
   protected AbstractEntry(AbstractType<? extends AbstractEntry> inType)
   {
     m_type = inType;
 
-    // we have to init this here, as we need to have the type set
-    m_base = new ValueList<Name>(new Name().withTemplate("entrylink"));
-
     setupExtensions();
   }
-
-  //........................................................................
-  //---------------------------- AbstractEntry -----------------------------
 
   /**
    * The complete constructor, with name and type. It is only used in
@@ -313,33 +281,25 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @param       inName the name of the entry
    * @param       inType the type of the entry
-   *
    */
   protected AbstractEntry(String inName,
                           AbstractType<? extends AbstractEntry> inType)
   {
     this(inType);
 
-    setName(inName);
+    m_name = inName;
     // addBase(inName); // when creating new entries, default bases are not
     //                  // preserved
     m_changed = false;
   }
 
-  //........................................................................
-  //---------------------------- AbstractEntry -----------------------------
-
   /**
    * Simple constructor for reading entries. This one is only used in tests.
-   *
    */
   protected AbstractEntry()
   {
     this(BaseEntry.TYPE);
   }
-
-  //........................................................................
-  //---------------------------- AbstractEntry -----------------------------
 
   /**
    * The complete constructor, with name and type. It is only used in
@@ -347,7 +307,6 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @param       inType  the type of the entry
    * @param       inBases the name of the base entries
-   *
    */
   protected AbstractEntry(AbstractType<? extends AbstractEntry> inType,
                           String ... inBases)
@@ -358,9 +317,6 @@ public abstract class AbstractEntry extends ValueGroup
       addBase(base);
   }
 
-  //........................................................................
-  //---------------------------- AbstractEntry -----------------------------
-
   /**
    * The complete constructor, with name and type. It is only used in
    * derivations, where the type has to be set.
@@ -368,7 +324,6 @@ public abstract class AbstractEntry extends ValueGroup
    * @param       inName  the name of the entry
    * @param       inType  the type of the entry
    * @param       inBases the name of the base entries
-   *
    */
   protected AbstractEntry(String inName,
                           AbstractType<? extends AbstractEntry> inType,
@@ -380,22 +335,11 @@ public abstract class AbstractEntry extends ValueGroup
       addBase(base);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  //----- general values ---------------------------------------------------
-
-   /** The entry type. */
+  /** The entry type. */
   protected AbstractType<? extends AbstractEntry> m_type;
 
   /** Flag if this entry has been changed but not saved. */
   protected boolean m_changed = false;
-
-  /** Errors for this entry. */
-  protected @Nullable List<BaseError> m_errors = null;
 
   /** All the extensions, indexed by name. */
   protected Map<String, AbstractExtension<? extends AbstractEntry>>
@@ -406,13 +350,10 @@ public abstract class AbstractEntry extends ValueGroup
   protected List<BaseEntry> m_baseEntries = Lists.newArrayList();
 
   /** The files for this entry. */
-  protected transient @Nullable List<DMAData.File> m_files = null;
+  protected transient List<File> m_files = new ArrayList<>();
 
   /** The files for this entry and all base entries. */
-  protected transient @Nullable List<DMAData.File> m_allFiles = null;
-
-  /** Flag if computing extension values. */
-//  private boolean m_computingExtension = false;
+  protected transient @Nullable List<File> m_allFiles = null;
 
   /** The random generator. */
   protected static final Random RANDOM = new Random();
@@ -430,26 +371,6 @@ public abstract class AbstractEntry extends ValueGroup
   /** The introducer used to start the entry, after name and qualifiers. */
   protected static final char INTRODUCER =
     Config.get("resource:entries/introducer", '=');
-
-  /** The maximal number of leading comments to read. */
-  protected static final int MAX_LEADING_COMMENTS =
-    Config.get("resource:entries/comment.leading.max", -1);
-
-  /** The maximal number of lines of leading comments to read. */
-  protected static final int MAX_LEADING_LINES =
-    Config.get("resource:entries/comment.leading.lines.max", -1);
-
-  /** The maximal number of trailing comments to read. */
-  protected static final int MAX_TRAILING_COMMENTS =
-    Config.get("resource:entries/comment.trailing.max", 1);
-
-  /** The maximal number of lines of trailing comments to read. */
-  protected static final int MAX_TRAILING_LINES =
-    Config.get("resource:entries/comment.trailing.lines.max", 1);
-
-  /** The name of the package for this class. */
-  protected static final String PACKAGE =
-    "net.ixitxachitls.dma.entries.";
 
   /** The maximal number of keywords to read for an entry. */
   protected static final int MAX_KEYWORD_WORDS =
@@ -483,73 +404,17 @@ public abstract class AbstractEntry extends ValueGroup
   /** The undefined string value. */
   public static final String UNDEFINED_STRING = "";
 
- //........................................................................
-
-  //----- name -------------------------------------------------------------
-
   /** The name of the abstract entry. */
-  @Key("name")
-  @Note("Changing the name will not change any references to entries with "
-        + "that name, thus leaving these references dangling. You will have "
-        + "to update these manually.")
-  protected BaseText<?> m_name = new Name();
+  protected String m_name = UNDEFINED_STRING;
 
-  //........................................................................
-  //----- comments ---------------------------------------------------------
-
-  /** The leading comment(s) in front of the entry. */
-  protected Comment m_leadingComment =
-    new Comment(MAX_LEADING_COMMENTS, MAX_LEADING_LINES);
-
-  /** The trailing comment(s) after the entry. */
-  protected Comment m_trailingComment =
-    new Comment(MAX_TRAILING_COMMENTS, MAX_TRAILING_LINES);
-
-  //........................................................................
-  //----- base names -------------------------------------------------------
-
-  // Cannot use a template here, as it depends on the real type; thus we need
-  // to initialize this in the constructor after we have the type.
-  /** The base names. */
-  @Key("base")
-  @PrintUndefined
-  protected ValueList<Name> m_base;
-
-  //........................................................................
-
-  //----- storage ----------------------------------------------------------
-
-  /** The file this entry will be written to. */
-  @Deprecated
-  protected transient @Nullable DMAFile m_file;
-
-  /** The starting position in the file (characters). */
-  protected long m_startPos = 0;
-
-  /** The starting position in the file (lines). */
-  protected long m_startLine = 0;
-
-  /** The ending position in the file (characters). */
-  protected long m_endPos = 0;
-
-  /** The ending position in the file (lines). */
-  protected long m_endLine = 0;
-
-  //........................................................................
-
-  static
-  {
-    extractVariables(AbstractEntry.class);
-  }
-
-  //........................................................................
+  protected List<String> m_base = new ArrayList<>();
 
   //-------------------------------------------------------------- accessors
 
   //-------------------------------- getKey --------------------------------
 
   /**
-   * Get the key uniqueliy identifying this entry.
+   * Get the key uniquely identifying this entry.
    *
    * @param    <T> the type of entry to get the key for
    *
@@ -590,7 +455,6 @@ public abstract class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-  //------------------------------- getName --------------------------------
 
   /**
    * Get the name of the entry.
@@ -601,13 +465,9 @@ public abstract class AbstractEntry extends ValueGroup
   @Override
   public String getName()
   {
-    if(m_name.isDefined())
-      return m_name.get();
-
-    return "";
+    return m_name;
   }
 
-  //........................................................................
   //------------------------------- getEntry -------------------------------
 
   /**
@@ -650,39 +510,17 @@ public abstract class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-  //----------------------------- getBaseName ------------------------------
-
-  /**
-   * Get the name of the base entry this entry is based on if this entry is a
-   * base entry or the value undefined then getBaseName returns getName().
-   *
-   * @return      the requested base name
-   *
-   */
-//   public String getBaseName()
-//   {
-//     return getName();
-//   }
-
-  //........................................................................
-  //----------------------------- getBaseNames -----------------------------
 
   /**
    * Get the names of the base entries this entry is based on.
    *
    * @return      the requested base names
-   *
    */
   public List<String> getBaseNames()
   {
-    List<String> names = new ArrayList<String>();
-    for(Name name : m_base)
-      names.add(name.get());
-
-    return names;
+    return Collections.unmodifiableList(m_base);
   }
 
-  //........................................................................
   //---------------------------- getBaseEntries ----------------------------
 
   /**
@@ -700,10 +538,9 @@ public abstract class AbstractEntry extends ValueGroup
       m_baseEntries = new ArrayList<BaseEntry>();
 
       // TODO: make this in a single datastore request
-      for(Name base : m_base)
+      for(String base : m_base)
         m_baseEntries.add((BaseEntry)DMADataFactory.get()
-                          .getEntry(createKey(base.get(),
-                                              getType().getBaseType())));
+                          .getEntry(createKey(base, getType().getBaseType())));
     }
 
     return m_baseEntries;
@@ -912,53 +749,14 @@ public abstract class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-  //------------------------------ getErrors -------------------------------
-
-  /**
-   * Get an iterator over all errors in the entry. Returns null if no
-   * errors are available.
-   *
-   * @return      an iterator over all errors or null if none
-   */
-  public Iterator<BaseError> getErrors()
-  {
-    if(m_errors == null)
-      return new EmptyIterator<BaseError>();
-
-    return m_errors.iterator();
-  }
-
-  //........................................................................
-  //------------------------------- getFile --------------------------------
-
-  /**
-   * Get the file this entry is stored in.
-   *
-   * @return      the file stored in, if any
-   *
-   */
-  // @Deprecated
-  // public @Nullable DMAFile getFile()
-  // {
-  //   return m_file;
-  // }
-
-  //........................................................................
-  //------------------------------- getFiles -------------------------------
 
   /**
    * Get the files associated with this entry.
    *
    * @return      the associated files
    */
-  public List<DMAData.File> getFiles()
+  public List<File> getFiles()
   {
-    if(m_files == null)
-    {
-      m_files = DMADataFactory.get().getFiles(this, false);
-      DMADataFactory.get().cacheEntry(this);
-    }
-
     return m_files;
   }
 
@@ -967,37 +765,32 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @return all the associated files
    */
-  public List<DMAData.File> getAllFiles()
+  public List<File> getAllFiles()
   {
     if(m_allFiles == null)
     {
-      m_allFiles = DMADataFactory.get().getFiles(this, true);
-      DMADataFactory.get().cacheEntry(this);
+      m_allFiles = new ArrayList<>(m_files);
+      for(AbstractEntry entry : getBaseEntries())
+        if(entry != null)
+          m_allFiles.addAll(entry.getAllFiles());
     }
 
     return m_allFiles;
   }
 
-  //........................................................................
-  //----------------------------- getMainFile ------------------------------
-
   /**
    * Get the main file associated with this entry.
    *
    * @return      the associated main file
-   *
    */
-  public @Nullable DMAData.File getMainFile()
+  public @Nullable File getMainFile()
   {
-    for(DMAData.File file : getAllFiles())
-      if("main".equals(file.getName()))
+    for(File file : getAllFiles())
+      if("main".equals(file.getName()) || file.getName().startsWith("main."))
         return file;
 
     return null;
   }
-
-  //........................................................................
-  //--------------------------------- dma ----------------------------------
 
   /**
    * Compute and return the dma representation of the entry.
@@ -1009,7 +802,6 @@ public abstract class AbstractEntry extends ValueGroup
     return new FormattedText(formatValues() + ".");
   }
 
-  //........................................................................
   //------------------------- collectDependencies --------------------------
 
   /**
@@ -1140,20 +932,6 @@ public abstract class AbstractEntry extends ValueGroup
 
   //........................................................................
 
-  //------------------------------ hasErrors -------------------------------
-
-  /**
-   * Determine if the entry has some errors stored for it.
-   *
-   * @return      true if there are errors, false if not
-   *
-   */
-  public boolean hasErrors()
-  {
-    return m_errors != null;
-  }
-
-  //........................................................................
   //------------------------------ isChanged -------------------------------
 
   /**
@@ -1345,9 +1123,6 @@ public abstract class AbstractEntry extends ValueGroup
   {
     StringBuilder result = new StringBuilder();
 
-    if(m_leadingComment.isDefined())
-      result.append(m_leadingComment);
-
     result.append(m_type);
     result.append(' ');
 
@@ -1369,9 +1144,6 @@ public abstract class AbstractEntry extends ValueGroup
     result.append(formatValues());
     result.append(s_delimiter);
     result.append('\n');
-
-    if(m_trailingComment.isDefined())
-      result.append(m_trailingComment);
 
     return result.toString();
   }
@@ -1482,46 +1254,6 @@ public abstract class AbstractEntry extends ValueGroup
 
     return super.compute(inKey);
   }
-
-  //........................................................................
-  //--------------------------- shortPrintCommand --------------------------
-
-  /**
-   * Print the item to the document, in the general section (short).
-   *
-   * @param       inDM       true if setting for dm, false if not
-   *
-   * @return      the command representing this item in a list
-   *
-   */
-//   protected PrintCommand shortPrintCommand(boolean inDM)
-//   {
-//     return printCommand(inDM, true);
-//   }
-
-  //........................................................................
-  //---------------------------- getListCommands ---------------------------
-
-  /**
-   * Get all the commands for printing all the lists.
-   *
-   * @param       inDM flag if printing for dm or not
-   *
-   * @return      a map with a list type and the corresponding commands for
-   *              printing
-   *
-   * @undefined   never
-   *
-   */
-//   public ListCommand getListCommands(boolean inDM)
-//   {
-//     ListCommand commands = new ListCommand();
-
-//     for(Iterator<AbstractAttachment> i = getAttachments(); i.hasNext(); )
-//       i.next().addListCommands(commands, inDM);
-
-//     return commands;
-//   }
 
   //........................................................................
 
@@ -1640,6 +1372,7 @@ public abstract class AbstractEntry extends ValueGroup
    * @return      the created key
    *
    */
+
   public static <T extends AbstractEntry>
     EntryKey<T> createKey
     (String inID, AbstractType<T> inType,
@@ -1686,6 +1419,63 @@ public abstract class AbstractEntry extends ValueGroup
 
   //----------------------------------------------------------- manipulators
 
+  public void addFile(String inName, String inType, String inPath,
+                      String inIcon)
+  {
+    m_files.add(new File(inName, inType, inPath, inIcon));
+    m_changed = true;
+  }
+
+  public void addFile(ImagesService inImageService, String inName,
+                      @Nullable String inType, BlobKey inBlobKey)
+  {
+    if (inType == null)
+      inType = "image/png";
+
+    String icon = "";
+    if(inType.startsWith("image/"))
+    {
+      try
+      {
+        icon = inImageService.getServingUrl(ServingUrlOptions.Builder
+                                            .withBlobKey(inBlobKey));
+      }
+      catch(IllegalArgumentException e)
+      {
+        Log.error("Cannot obtain serving url for '" + inBlobKey + "': " + e);
+      }
+    }
+    else if("application/pdf".equals(inType))
+      icon = "/icons/pdf.png";
+    else
+      Log.warning("unknown file type " + inType + " ignored for " + inName);
+
+    addFile(inName, inType, "//file/" + inBlobKey.getKeyString(), icon);
+  }
+
+
+  /**
+   * Remove the name file from the entry.
+   *
+   * @param inName the name of the file to remove
+   *
+   * @return true file was removed, false if not.
+   */
+  public boolean removeFile(String inName)
+  {
+    for(Iterator<File> i = m_files.iterator(); i.hasNext(); )
+      if(i.next().getName().equals(inName))
+      {
+        i.remove();
+        m_changed = true;
+        return true;
+      }
+
+    return false;
+  }
+
+
+
   //--------------------------------- set ----------------------------------
 
   /**
@@ -1700,31 +1490,6 @@ public abstract class AbstractEntry extends ValueGroup
   @Override
   public @Nullable String set(String inKey, String inText)
   {
-    // we have to treat the name specially, as it is not a readable value
-    if("name".equals(inKey))
-    {
-      setName(inText);
-      return null;
-    }
-
-    // base is also special
-    if("base".equals(inKey))
-    {
-      // TODO: this is very inefficient!
-      m_base = m_base.as(new ArrayList<Name>());
-      m_baseEntries = null;
-      if(!inText.startsWith(Value.UNDEFINED))
-        for(String base : inText.split(",\\s*"))
-          if(base != null && !base.isEmpty())
-            addBase(base);
-
-      // setup extensions from base entries
-      setupExtensions();
-
-      changed();
-      return null;
-    }
-
     if("extensions".equals(inKey))
     {
       List<String> extensions = Arrays.asList(inText.split(",\\s+"));
@@ -1739,67 +1504,16 @@ public abstract class AbstractEntry extends ValueGroup
       return null;
     }
 
-    if("dmaValues".equals(inKey))
-    {
-      try (StringReader reader = new StringReader(inText))
-      {
-        readValues(new ParseReader(reader, "dma values"));
-      }
-
-      return null;
-    }
-
     return super.set(inKey, inText);
   }
 
-  //........................................................................
-  //------------------------------- setName --------------------------------
-
-  /**
-   * Set the name of the entry.
-   *
-   * @param       inName the new name
-   *
-   */
-  public void setName(String inName)
+  @Override
+  public void set(Values inValues)
   {
-    m_name = m_name.as(inName);
-    m_leadingComment = m_leadingComment.as("#----- " + m_name + "\n\n");
-    if(!m_trailingComment.isDefined())
-      m_trailingComment = m_trailingComment.as("\n#.....\n");
-
-    changed();
+    m_name = inValues.use("name", m_name, Values.NOT_EMPTY);
+    m_base = inValues.use("base", m_base, Values.NOT_EMPTY);
   }
 
-  //........................................................................
-  //-------------------------- setLeadingComment ---------------------------
-
-  /**
-   * Set the comment at the beginning of the entry.
-   *
-   * @param       inComment the new comment
-   *
-   */
-  public void setLeadingComment(Comment inComment)
-  {
-    m_leadingComment = inComment;
-  }
-
-  //........................................................................
-  //------------------------- setTrailingComment ---------------------------
-
-  /**
-   * Set the comment at the end of the entry.
-   *
-   * @param       inComment the new comment
-   *
-   */
-  public void setTrailingComment(Comment inComment)
-  {
-    m_trailingComment = inComment;
-  }
-
-  //........................................................................
   //------------------------------ updateKey -------------------------------
 
   /**
@@ -1973,6 +1687,7 @@ public abstract class AbstractEntry extends ValueGroup
    * @return      the entry read or null of no matching entry found.
    *
    */
+  /*
   @SuppressWarnings("unchecked") // calling complete on base type
   public static @Nullable AbstractEntry read(ParseReader inReader)
   {
@@ -2074,7 +1789,7 @@ public abstract class AbstractEntry extends ValueGroup
     result.m_endPos    = end.getPosition();
 
     // fix the comments
-    if(!result.m_leadingComment.isDefined() && result.m_name.isDefined())
+    if(!result.m_leadingComment.isDefined() && !result.m_name.isEmpty())
         result.m_leadingComment =
           result.m_leadingComment.as("#----- " + result.m_name + "\n\n");
     else
@@ -2092,6 +1807,7 @@ public abstract class AbstractEntry extends ValueGroup
 
     return result;
   }
+  */
 
   //........................................................................
   //------------------------------ readEntry -------------------------------
@@ -2105,6 +1821,7 @@ public abstract class AbstractEntry extends ValueGroup
    * @return      true if read successfully, false else
    *
    */
+  /*
   protected boolean readEntry(ParseReader inReader)
   {
     if(inReader.isAtEnd())
@@ -2179,6 +1896,7 @@ public abstract class AbstractEntry extends ValueGroup
 
     return true;
   }
+  */
 
   //........................................................................
   //------------------------------ readValues ------------------------------
@@ -2394,11 +2112,10 @@ public abstract class AbstractEntry extends ValueGroup
     // else
     //   addExtensions(entry.getExtensionNames());
 
-    m_base = m_base.asAppended(m_base.newElement().as(inName));
-
     if(m_baseEntries == null)
       m_baseEntries = new ArrayList<BaseEntry>();
 
+    m_base.add(inName);
     m_baseEntries.add(entry);
   }
 
@@ -2459,60 +2176,7 @@ public abstract class AbstractEntry extends ValueGroup
 //   }
 
   //........................................................................
-  //-------------------------------- addTo ---------------------------------
 
-  /**
-   * Add the entry to the given file (also removing it from any current file).
-   *
-   * @param       inFile the file to add to
-   *
-   */
-  public void addTo(DMAFile inFile)
-  {
-    if(m_file != null)
-    {
-      m_file.remove(this);
-      m_startPos = -1;
-      m_startLine = -1;
-      m_endPos = -1;
-      m_endLine = -1;
-    }
-
-    m_file = inFile;
-  }
-
-  //........................................................................
-
-  //------------------------------- complete -------------------------------
-
-  /**
-   * Complete the entry and make sure that all values are filled.
-   *
-   * @undefined   never
-   *
-   */
-//   @SuppressWarnings("unchecked") // don't know real type of value
-//   public void complete()
-//   {
-//     // can't complete anything if we don't have a base value
-//     if(m_complete)
-//       return;
-
-//     // setup the default comments
-//     String name = getName();
-
-
-//     // Copy over the values of the base entries (if any)
-//     completeVariables(m_baseEntries);
-
-//     // complete the attachments
-//     for(Iterator<AbstractAttachment> i = getAttachments(); i.hasNext(); )
-//       i.next().complete();
-
-//     m_complete = true;
-//   }
-
-  //........................................................................
   //-------------------------------- check ---------------------------------
 
   /**
@@ -2528,45 +2192,6 @@ public abstract class AbstractEntry extends ValueGroup
 
   //........................................................................
 
-  //------------------------------- addError -------------------------------
-
-  /**
-   * Add the given error to the entry.
-   *
-   * @param       inError the error to add
-   *
-   */
-  public void addError(BaseError inError)
-  {
-    if(m_errors == null)
-      m_errors = new ArrayList<BaseError>();
-
-    m_errors.add(inError);
-  }
-
-  //........................................................................
-  //------------------------------ removeError -----------------------------
-
-  /**
-   * Remove the given error to the entry.
-   *
-   * @param       inError the error to remove
-   *
-   */
-  protected void removeError(BaseError inError)
-  {
-    if(m_errors == null)
-      return;
-
-    for(Iterator<BaseError> i = m_errors.iterator(); i.hasNext(); )
-      if(i.next() == inError)
-        i.remove();
-
-    if(m_errors.size() == 0)
-      m_errors = null;
-  }
-
-  //........................................................................
   //------------------------------- changed --------------------------------
 
   /**
@@ -2580,9 +2205,6 @@ public abstract class AbstractEntry extends ValueGroup
   public void changed(boolean inChanged)
   {
     m_changed = inChanged;
-
-    if(m_changed && m_file != null)
-      m_file.changed();
   }
 
   //........................................................................
@@ -2893,12 +2515,13 @@ public abstract class AbstractEntry extends ValueGroup
   {
     AbstractEntryProto.Builder builder = AbstractEntryProto.newBuilder();
 
-    builder.setName(m_name.get());
+    builder.setName(m_name);
     builder.setType(m_type.toString());
-    for (Name base : m_base)
-      builder.addBase(base.get());
-    for (String name : m_extensions.keySet())
+    builder.addAllBase(m_base);
+    for(String name : m_extensions.keySet())
       builder.addExtensions(name);
+    for(File file : m_files)
+      builder.addFiles(file.toProto());
 
     return builder.build();
   }
@@ -2918,14 +2541,12 @@ public abstract class AbstractEntry extends ValueGroup
 
     AbstractEntryProto proto = (AbstractEntryProto)inProto;
 
-    m_name = m_name.as(proto.getName());
+    m_name = proto.getName();
     m_type = AbstractType.getTyped(proto.getType());
+    m_base = proto.getBaseList();
 
-    List<Name> bases = new ArrayList<>();
-    for (String base : proto.getBaseList())
-      bases.add(new Name(base));
-
-    m_base = m_base.as(bases);
+    for (AbstractEntryProto.File file : proto.getFilesList())
+      m_files.add(File.fromProto(file));
   }
 
   /**
@@ -3030,95 +2651,6 @@ public abstract class AbstractEntry extends ValueGroup
 //       // conversion to string
 //       assertEquals("converted", "abstract entry name =\n\n.\n",
 //                    entry.toString());
-    }
-
-    //......................................................................
-    //----- readNameOnly ---------------------------------------------------
-
-    /** Testing reading of name only. */
-    //@org.junit.Test
-    public void readNameOnly()
-    {
-      try (StringReader sReader = new StringReader("abstract entry test."))
-      {
-        ParseReader reader = new ParseReader(sReader, "test");
-
-        AbstractEntry entry = AbstractEntry.read(reader);
-
-        assertNotNull("entry should have been read", entry);
-        assertEquals("entry name does not match", "test", entry.getName());
-        assertEquals("entry does not match",
-                     "#----- test\n"
-                     + "\n"
-                     + "abstract entry test =\n"
-                     + "\n"
-                     + ".\n"
-                     + "\n"
-                     + "#.....\n",
-                     entry.toString());
-      }
-    }
-
-    //......................................................................
-    //----- readNoName -----------------------------------------------------
-
-    /** Testing reading without a name. */
-    //@org.junit.Test
-    public void readNoName()
-    {
-      try (StringReader sReader = new StringReader("abstract entry."))
-      {
-        ParseReader reader = new ParseReader(sReader, "test");
-
-        AbstractEntry entry = AbstractEntry.read(reader);
-
-        assertNotNull("entry should have been read", entry);
-        assertEquals("entry name does not match", "", entry.getName());
-        assertEquals("entry does not match",
-                     "abstract entry $undefined$ =\n"
-                     + "\n"
-                     + ".\n"
-                     + "\n"
-                     + "#.....\n",
-                     entry.toString());
-      }
-    }
-
-    //......................................................................
-    //----- comment --------------------------------------------------------
-
-    /** Testing reading with comments. */
-    @org.junit.Test
-    public void comment()
-    {
-      try (StringReader sReader = new StringReader("  #--- test \n"
-                         + "\n"
-                         + "  # just some test\n"
-                         + "\n"
-                         + "base entry test = .\n"
-                         + "# some other text\n"
-                         + "# as end comment\n"
-                         + "\n"
-                         + "# now the next entry\n"))
-      {
-        ParseReader reader = new ParseReader(sReader, "test");
-
-        AbstractEntry entry = AbstractEntry.read(reader);
-
-        assertNotNull("entry should have been read", entry);
-        assertEquals("entry name does not match", "test",
-                     entry.getName());
-        assertEquals("entry does not match",
-                     "  #--- test \n"
-                     + "\n"
-                     + "  # just some test\n"
-                     + "\n"
-                     + "base entry test =\n"
-                     + "\n"
-                     + "  name              test.\n"
-                     + "# some other text\n",
-                     entry.toString());
-      }
     }
 
     //......................................................................

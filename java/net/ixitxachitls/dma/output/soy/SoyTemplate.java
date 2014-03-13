@@ -433,7 +433,7 @@ public class SoyTemplate
   //........................................................................
   //----- PrintDirective ---------------------------------------------------
 
-  /** A directive to nicely print a value. */
+  /** A directive to nicely print a vlue. */
   public static class PrintDirective extends SoyAbstractTofuPrintDirective
   {
     @Override

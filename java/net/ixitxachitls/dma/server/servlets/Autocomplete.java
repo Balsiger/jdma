@@ -194,24 +194,17 @@ public class Autocomplete extends JSONServlet
     return true;
   }
 
-  //........................................................................
-  //------------------------------ normalize -------------------------------
-
   /**
    * Normalize the given name for comparison.
    *
    * @param    inName the name to normalize
    *
    * @return   the normalized name
-   *
    */
   private String normalize(String inName)
   {
     return inName.replaceAll(" +", " ");
   }
-
-  //........................................................................
-  //---------------------------- ensureCached ------------------------------
 
   /**
    * Ensure that the desired values are in the cache, loading them if
@@ -225,11 +218,11 @@ public class Autocomplete extends JSONServlet
                            String inField)
   {
     // Check if already cached.
-    SortedSet<String> value = cached(inType.toString(), inField);
-    if(value != null)
+    SortedSet<String> values = cached(inType.toString(), inField);
+    if(values != null)
       return;
 
-    value = DMADataFactory.get().getValues(inType, inField);
+    values = DMADataFactory.get().getValues(inType, inField);
 
     if(inType == BaseProduct.TYPE)
       if("author".equals(inField)
@@ -239,9 +232,9 @@ public class Autocomplete extends JSONServlet
          || "illustrations".equals(inField)
          || "typography".equals(inField)
          || "management".equals(inField))
-        value = extractPersonsAndJobs(value, inType.toString(), inField);
+        values = extractPersonsAndJobs(values, inType.toString(), inField);
 
-    cache(value, inType.toString(), inField);
+    cache(values, inType.toString(), inField);
   }
 
   //........................................................................

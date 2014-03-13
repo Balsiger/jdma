@@ -182,6 +182,25 @@
 {/template}
 
 /**
+ * Format a product reference.
+ * 
+ * @param reference the product reference
+ */
+{template .productReference}
+
+  {call dma.page.link}
+    {param url: $reference.url /}
+    {param text: $reference.title /}
+   {/call} 
+   {if length($reference.pages)}
+     {sp}p.{sp}
+     {foreach $page in $reference.pages}
+       {$page.toString}{if not isLast($page)}, {/if}
+     {/foreach}
+   {/if}
+{/template}
+
+/**
  * Formatting a link to an entry.
  *
  * @param entry The entry rendered

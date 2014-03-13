@@ -42,6 +42,7 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
@@ -267,14 +268,19 @@ public class EntryServlet extends PageServlet
 
       case "edit":
         extension = ".edit";
-        template = "dma.entries.basecharacters.edit";
+        template = "dma.entries."
+          + entry.getType().getMultipleDir().toLowerCase() + ".edit";
         break;
 
       case "show":
       default:
         extension = "";
-        template = "dma.entries."
-          + entry.getType().getMultipleDir().toLowerCase() + ".show";
+        if (entry.getType().equals(BaseCharacter.TYPE)
+            || entry.getType().equals(BaseProduct.TYPE))
+          template = "dma.entries."
+            + entry.getType().getMultipleDir().toLowerCase() + ".show";
+        else
+          template = "dma.entry.container";
     }
 
     data.put

@@ -22,30 +22,20 @@
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
-import net.ixitxachitls.dma.proto.Values.RangeProto;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Range;
-import net.ixitxachitls.dma.values.Reference;
-import net.ixitxachitls.dma.values.Selection;
-import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.util.Encodings;
-import net.ixitxachitls.util.configuration.Config;
+import net.ixitxachitls.dma.values.ProductReference;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -65,52 +55,49 @@ public class BaseEntry extends AbstractEntry
   private static final long serialVersionUID = 1L;
 
   /** The game worlds (this is configurable and thus not an enum). */
-  private static final String []WORLDS =
-    Config.get("/game/worlds", new String []
-    {
-      // these are unsorted because they are the most important
-      "Generic",
-      "Eberron",
-      "Forgotten Realms",
+  private static final List<String> WORLDS = ImmutableList.of
+    (// these are unsorted because they are the most important
+     "Generic",
+     "Eberron",
+     "Forgotten Realms",
 
-      // the rest is sorted
-      "Al-Qadim",
-      "Birthright",
-      "Buck Rogers",
-      "Call of Cthulhu",
-      "Confrontation",
-      "Dark Sun",
-      "Dark.Matter",
-      "Dawn of the Emperors",
-      "Diablo II",
-      "Dominaria",
-      "Dragonlance",
-      "Episode I",
-      "Gamma World",
-      "Greyhawk",
-      "Hollow World",
-      "Lankhmar",
-      "Marvel Super Heroes",
-      "Middle Earth",
-      "Mystara",
-      "None",
-      "Odyssey",
-      "Planescape",
-      "Ptolus",
-      "Ravenloft",
-      "Real",
-      "Red Steel",
-      "Rokugan",
-      "S.P.I.",
-      "Savage Coast",
-      "Spelljammer",
-      "Star Wars",
-      "Star*Drive",
-      "Urza's Destiny",
-      "Wheel of Time",
-    });
+     // the rest is sorted
+     "Al-Qadim",
+     "Birthright",
+     "Buck Rogers",
+     "Call of Cthulhu",
+     "Confrontation",
+     "Dark Sun",
+     "Dark.Matter",
+     "Dawn of the Emperors",
+     "Diablo II",
+     "Dominaria",
+     "Dragonlance",
+     "Episode I",
+     "Gamma World",
+     "Greyhawk",
+     "Hollow World",
+     "Lankhmar",
+     "Marvel Super Heroes",
+     "Middle Earth",
+     "Mystara",
+     "None",
+     "Odyssey",
+     "Planescape",
+     "Ptolus",
+     "Ravenloft",
+     "Real",
+     "Red Steel",
+     "Rokugan",
+     "S.P.I.",
+     "Savage Coast",
+     "Spelljammer",
+     "Star Wars",
+     "Star*Drive",
+     "Urza's Destiny",
+     "Wheel of Time");
 
-   /**
+  /**
    * The default constructor, with undefined values.
    */
   protected BaseEntry()
@@ -149,40 +136,15 @@ public class BaseEntry extends AbstractEntry
     super(inName, inType);
   }
 
-  /**
-   * The constructor for derivations, with a type.
-   *
-   * @param       inName     the name of the entry
-   * @param       inType     the type of the entry
-   */
-//   protected BaseEntry(String inName, Type inType,
-//                       BaseEntry ... inBases)
-//   {
-//     super(inName, inType, inBases);
-//   }
-
   /** The type of this entry. */
   public static final BaseType<BaseEntry> TYPE =
     new BaseType<BaseEntry>(BaseEntry.class, "Base Entries");
 
   /** The world. */
-  @Key("worlds")
-  protected ValueList<Selection> m_worlds = new ValueList<Selection>
-    (new Selection(WORLDS).withTemplate("link", "worlds"));
+  protected List<String> m_worlds = new ArrayList<>();
 
-  // TODO: was modifiable; check if it needs to be
   /** The references for this entry. */
-  @Key("references")
-  @DM
-  protected ValueList<Multiple> m_references =
-    new ValueList<Multiple>
-    (new Multiple
-     (new Multiple.Element
-      (new Reference<BaseProduct>(BaseProduct.TYPE).withEditType
-       ("autokey(base product/titles)[product]"), false),
-      new Multiple.Element
-      (new ValueList<Range>(new Range(0, Integer.MAX_VALUE), "/")
-       /*.withEditType("pages[pages]")*/, true, ": ", null)));
+  protected List<ProductReference> m_references = new ArrayList<>();
 
   /** The descriptive text for this entry. */
   protected String m_description = UNDEFINED_STRING;
@@ -191,21 +153,10 @@ public class BaseEntry extends AbstractEntry
   protected String m_short = UNDEFINED_STRING;
 
   /** The synonyms for this entry. */
-  @Key("synonyms")
-  @DM
-  protected ValueList<Text> m_synonyms =
-    new ValueList<Text>(new Text());
+  protected List<String> m_synonyms = new ArrayList<>();
 
   /** The categories. */
-  @Key("categories")
-  @DM
-  protected ValueList<Name> m_categories =
-    new ValueList<Name>(new Name());
-
-  static
-  {
-    extractVariables(BaseEntry.class);
-  }
+  protected List<String> m_categories = new ArrayList<>();
 
   /**
    * Get the entry description.
@@ -247,11 +198,7 @@ public class BaseEntry extends AbstractEntry
    */
   public boolean hasCategory(String inCategory)
   {
-    for(Name text : m_categories)
-      if(text.get().equalsIgnoreCase(inCategory))
-        return true;
-
-    return false;
+    return m_categories.contains(inCategory);
   }
 
   /**
@@ -263,48 +210,17 @@ public class BaseEntry extends AbstractEntry
    */
   public boolean hasSynonym(String inName)
   {
-    for(Text text : m_synonyms)
-      if(text.get().equalsIgnoreCase(inName))
-        return true;
-
-    return false;
+    return m_synonyms.contains(inName);
   }
 
   /**
    * Get the worlds the product is for.
    *
-   * @return      the selection containing the selected world
+   * @return a list of the worlds for this product
    */
-  public String getWorlds()
+  public List<String> getWorlds()
   {
-    return m_worlds.toString();
-  }
-
-  /**
-   * Get the ids of the reference for this entry.
-   *
-   * @return      a list of the reference ids
-   */
-  public List<String> getReferenceIDs()
-  {
-    List<String> ids = new ArrayList<String>();
-    for(Multiple reference : m_references)
-      if(reference.isDefined())
-        ids.add(reference.get(0).toString());
-
-    return ids;
-  }
-
-  /**
-   * Resolve the given reference into something readable.
-   *
-   * @param       inName the name of the base product reference
-   *
-   * @return      the base product referenced, if found
-   */
-  protected @Nullable BaseProduct resolveReference(String inName)
-  {
-    return DMADataFactory.get().getEntry(createKey(inName, BaseProduct.TYPE));
+    return Collections.unmodifiableList(m_worlds);
   }
 
   /**
@@ -314,43 +230,17 @@ public class BaseEntry extends AbstractEntry
    */
   public List<String> getSynonyms()
   {
-    List<String> result = new ArrayList<String>();
-
-    // TODO: add some handling for base class synonyms here
-    for(Text synonym : m_synonyms)
-      result.add(synonym.get());
-
-    return result;
+    return Collections.unmodifiableList(m_synonyms);
   }
 
   /**
-   * Get the references of the entry.
+   * Get the product references.
    *
-   * @return      the references
+   * @return the product references
    */
-  public List<String> getReferences()
+  public List<ProductReference> getReferences()
   {
-    List<String> result = new ArrayList<String>();
-
-    // TODO: must include base entries here!
-    for(Multiple reference : m_references)
-      if(reference.isDefined() && reference.get(0).isDefined())
-      {
-        String name = reference.get(0).toString();
-        BaseProduct product = resolveReference(name);
-        if(product == null)
-          result.add(name);
-        else
-        {
-          String title = product.getTitle();
-          if(name.equals(title))
-            result.add(title);
-          else
-            result.add(product.getTitle() + " (" + name + ")");
-        }
-      }
-
-    return result;
+    return Collections.unmodifiableList(m_references);
   }
 
   /**
@@ -360,75 +250,26 @@ public class BaseEntry extends AbstractEntry
    */
   public List<String> getCategories()
   {
-    List<String> result = new ArrayList<String>();
-
-    for(Name text : m_categories)
-      result.add(Encodings.toWordUpperCase(text.get()));
-
-    // add the extensions, if any
-    for(String extension : m_extensions.keySet())
-      result.add(Encodings.toWordUpperCase(extension));
-
-    return result;
+    return Collections.unmodifiableList(m_categories);
   }
 
-  /**
-   * Get all the values for all the indexes.
-   *
-   * @return      a multi map of values per index name
-   */
   @Override
   public Multimap<Index.Path, String> computeIndexValues()
   {
     Multimap<Index.Path, String> values = super.computeIndexValues();
 
-    for(Selection world : m_worlds)
-      values.put(Index.Path.WORLDS, world.toString());
+    for(String world : m_worlds)
+      values.put(Index.Path.WORLDS, world);
 
     for(String category : getCategories())
       values.put(Index.Path.CATEGORIES, category);
 
-    for(String reference : getReferences())
-      values.put(Index.Path.REFERENCES, reference);
+    for(ProductReference reference : getReferences())
+      values.put(Index.Path.REFERENCES, reference.getName());
 
     return values;
   }
 
-  @Override
-  public @Nullable String set(String inKey, String inText)
-  {
-    switch(inKey)
-    {
-      case "description":
-        m_description = inText;
-        return null;
-
-      case "short description":
-        m_short = inText;
-        return null;
-    }
-
-    return super.set(inKey, inText);
-  }
-
-  /**
-   * Set the description of the base entry.
-   *
-   * @param       inDescription the description
-   *
-   */
-  public void setDescription(String inDescription)
-  {
-    m_description = inDescription;
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  @SuppressWarnings("unchecked")
   @Override
   public Message toProto()
   {
@@ -436,35 +277,42 @@ public class BaseEntry extends AbstractEntry
 
     builder.setAbstract((AbstractEntryProto)super.toProto());
 
-    for(Name category : m_categories)
-      builder.addCategory(category.get());
-
     if(!m_description.isEmpty())
       builder.setDescription(m_description);
     if(!m_short.isEmpty())
       builder.setShortDescription(m_short);
-    for(Multiple reference : m_references)
-    {
-      BaseEntryProto.Reference.Builder ref =
-        BaseEntryProto.Reference.newBuilder();
-        ref.setName(((Reference<BaseProduct>)reference.get(0)).getName());
-
-      for(Range pages : ((ValueList<Range>)reference.get(1)))
-        ref.addPages(pages.toProto());
-
-      builder.addReference(ref);
-    }
-    for(Text synonym : m_synonyms)
-      builder.addSynonym(synonym.get());
-    for(Selection world : m_worlds)
-      builder.addWorld(world.toString());
+    for(ProductReference reference : m_references)
+      builder.addReference(reference.toProto());
+    builder.addAllSynonym(m_synonyms);
+    builder.addAllWorld(m_worlds);
+    builder.addAllCategory(m_categories);
 
     BaseEntryProto proto = builder.build();
     return proto;
   }
 
   @Override
-  @SuppressWarnings("unchecked")
+  public void set(Values inValues)
+  {
+    super.set(inValues);
+
+    m_description = inValues.use("description", m_description);
+    m_short = inValues.use("short description", m_short);
+    m_worlds = inValues.use("worlds", m_worlds, new Values.Checker()
+    {
+      @Override
+      public boolean check(String inCheck)
+      {
+        return WORLDS.contains(inCheck);
+      }
+    });
+    m_references = inValues.use("references",  m_references,
+                                ProductReference.PARSER, "name", "pages");
+    m_synonyms = inValues.use("synonyms", m_synonyms, Values.NOT_EMPTY);
+    m_categories = inValues.use("categories", m_categories, Values.NOT_EMPTY);
+  }
+
+  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseEntryProto))
@@ -477,45 +325,17 @@ public class BaseEntry extends AbstractEntry
 
     super.fromProto(proto.getAbstract());
 
-    if(proto.getCategoryCount() > 0)
-    {
-      List<Name> categories = new ArrayList<>();
-      for(String category : proto.getCategoryList())
-        categories.add(m_categories.createElement().as(category));
-
-      m_categories = m_categories.as(categories);
-    }
-
     if(proto.hasDescription())
       m_description = proto.getDescription();
     if(proto.hasShortDescription())
       m_short = proto.getShortDescription();
 
-    List<Multiple> references = new ArrayList<>();
     for(BaseEntryProto.Reference reference : proto.getReferenceList())
-    {
-      Multiple ref = m_references.newElement();
+      m_references.add(ProductReference.fromProto(reference));
 
-      List<Range> pages = new ArrayList<>();
-      for (RangeProto page : reference.getPagesList())
-        pages.add(((ValueList<Range>)ref.get(1)).createElement()
-                  .as(page.getLow(), page.getHigh()));
-
-      ref = ref.as(((Reference<BaseProduct>)ref.get(0)).as(reference.getName()),
-                   ((ValueList<Range>)ref.get(1)).as(pages));
-      references.add(ref);
-    }
-    m_references = m_references.as(references);
-
-    List<Text> synonyms = new ArrayList<>();
-    for(String synonym : proto.getSynonymList())
-      synonyms.add(m_synonyms.createElement().as(synonym));
-    m_synonyms = m_synonyms.as(synonyms);
-
-    List<Selection> worlds = new ArrayList<>();
-    for(String world : proto.getWorldList())
-      worlds.add(m_worlds.createElement().as(world));
-    m_worlds = m_worlds.as(worlds);
+    m_worlds = proto.getWorldList();
+    m_categories = proto.getCategoryList();
+    m_synonyms = proto.getSynonymList();
   }
 
   @Override
@@ -530,95 +350,5 @@ public class BaseEntry extends AbstractEntry
       Log.warning("could not properly parse proto: " + e);
     }
   }
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
-
-  /** The test. */
-  public static class Test extends ValueGroup.Test
-  {
-    //----- text -----------------------------------------------------------
-
-    /** Test text. */
-    private static final String TEXT =
-      "base entry test = \n"
-      + "\n"
-      + "  synonyms      \"blanket, winter\", \"guru\";\n"
-      + "  categories    dagger, weapon, guru, test;\n"
-      + "  references    a: 10, b: 5-10/20;\n"
-      + "  short description \"A cozy, warm blanket.\";\n"
-      + "  description   \n"
-      + "\n"
-      + "  \"A thick, quilted, wool blanket.\".\n"
-      + "\n";
-
-//     /** Test text with remarks. */
-//     private static String s_remarks =
-//       "base entry test remarks = \n"
-//       + "\n"
-//       + "  synonyms      {*}\"blanket, winter\", \"guru\";\n"
-//       + "  categories    {~, some estimation}dagger, weapon, guru, test;\n"
-//       + "  references    {p, a player remark} \"a\" 10, \"b\" 5-10/20;\n"
-//       + "  description   \n"
-//       + "\n"
-//       + "  \"A thick, quilted, wool blanket.\".\n"
-//       + "\n";
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-     /** Testing reading. */
-    @Override
-    @org.junit.Test
-    public void read()
-    {
-      try (java.io.StringReader sReader = new java.io.StringReader(TEXT))
-      {
-        ParseReader reader = new ParseReader(sReader, "test");
-        BaseEntry entry = (BaseEntry)BaseEntry.read(reader);
-
-        m_logger.verify();
-
-        assertNotNull("entry should have been read", entry);
-        assertEquals("entry name does not match", "test",
-                     entry.getName());
-        assertEquals("entry does not match",
-                     "#----- test\n"
-                     + "\n"
-                     + "base entry test =\n"
-                     + "\n"
-                     + "  references        a: 10,\n"
-                     + "                    b: 5-10/20;\n"
-                     + "  description       "
-                     + "\"A thick, quilted, wool blanket.\";\n"
-                     + "  short description \"A cozy, warm blanket.\";\n"
-                     + "  synonyms          \"blanket, winter\",\n"
-                     + "                    \"guru\";\n"
-                     + "  categories        dagger,\n"
-                     + "                    weapon,\n"
-                     + "                    guru,\n"
-                     + "                    test;\n"
-                     + "  name              test.\n"
-                     + "\n"
-                     + "#.....\n",
-                     entry.toString());
-
-        assertTrue("category dagger", entry.hasCategory("dagger"));
-        assertTrue("category weapon", entry.hasCategory("weapon"));
-        assertFalse("category gugus", entry.hasCategory("gugus"));
-        assertEquals("short description", "A cozy, warm blanket.",
-                     entry.getShortDescription());
-        assertTrue("is base", entry.isBase());
-        // assertEquals("synonyms 0", "blanket, winter",
-        //              entry.getSynonyms()[0]);
-        // assertEquals("synonyms 1", "guru", entry.getSynonyms()[1]);
-      }
-    }
-
-    //......................................................................
-  }
-
-  //........................................................................
 }
 

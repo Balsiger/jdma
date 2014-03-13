@@ -52,10 +52,6 @@ import net.ixitxachitls.server.ServerUtils;
 import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * A small servlet to upload blobs. Real uploading of the data is done by the
  * blobstore service, we only need to do the bookeeping here.
@@ -67,31 +63,16 @@ import net.ixitxachitls.util.logging.Log;
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ParametersAreNonnullByDefault
 public class BlobUploadServlet extends BaseServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //-------------------------- BlobUploadServlet ---------------------------
-
   /**
    * Create the servlet.
-   *
    */
   public  BlobUploadServlet()
   {
     // nothing to do here
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -103,18 +84,6 @@ public class BlobUploadServlet extends BaseServlet
   /** The image service to serve images. */
   private ImagesService m_image = ImagesServiceFactory.getImagesService();
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
   /**
    * Handle requests to download blob.
    *
@@ -124,7 +93,6 @@ public class BlobUploadServlet extends BaseServlet
    * @return a special result in case of error or null if ok
    *
    * @throws IOException if problems reading the blob
-   *
    */
   @Override
   public @Nullable SpecialResult handle(HttpServletRequest inRequest,
@@ -168,8 +136,6 @@ public class BlobUploadServlet extends BaseServlet
           return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                                "could not find " + keyName);
 
-        store.uncacheEntry(key);
-
         String file = request.getParam("filename");
         String name = request.getParam("name");
 
@@ -179,11 +145,14 @@ public class BlobUploadServlet extends BaseServlet
 
         if(request.getParam("delete") != null)
         {
-          if(store.removeFile(entry, name))
+          if(entry.removeFile(name))
+          {
             writer.print("parent.window.edit.removeImage('"
                          + request.getParam("id") + "-" + name + "');"
                          + "parent.window.gui.info('Image " + name
                          + " has been removed');");
+            entry.save();
+          }
           else
             writer.print("parent.window.gui.alert('Could not delete image \\'"
                          + name + "\\'');");
@@ -211,11 +180,11 @@ public class BlobUploadServlet extends BaseServlet
         String fileType =
           URLConnection.getFileNameMap().getContentTypeFor(file);
 
-        store.addFile(entry, name, fileType, blobKey);
+        entry.addFile(m_image, name, fileType, blobKey);
+        entry.save();
 
         Log.event(request.getUser().getName(), "upload",
                   "Uploaded " + fileType + " file " + name + " for " + key);
-
 
         String url =
           m_image.getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKey));
@@ -237,6 +206,4 @@ public class BlobUploadServlet extends BaseServlet
 
     return null;
   }
-
-  //........................................................................
 }

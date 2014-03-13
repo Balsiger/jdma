@@ -73,11 +73,14 @@
 
   <a onclick="util.ajax('/admin', 
                         {literal}
-                          { 'upgrade': $('input[name=upgrade]').val() }
+                          { 'upgrade': $('input[name=upgrade]').val(),
+                            'start': $('input[name=start]').val()
+                          }
                         {/literal}, null, true);">
     Execute custom upgrade with:
   </a>
   <input name="upgrade">
+  <input name="start">
   </input>
 
   <h2>Recent Events</h2>

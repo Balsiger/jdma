@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
 import org.easymock.EasyMock;
@@ -106,7 +106,7 @@ public final class ServerUtils
   public static Multimap<String, String> extractParams
     (HttpServletRequest inRequest)
   {
-    Multimap<String, String> values = HashMultimap.create();
+    Multimap<String, String> values = ArrayListMultimap.create();
 
     // don't parse post requests to special urls
     if(!inRequest.getServletPath().startsWith("/__")

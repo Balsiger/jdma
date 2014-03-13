@@ -152,10 +152,13 @@ public class Multiple extends Counted
         new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
                                                "container test"))
       {
+        /*
         addEntry(net.ixitxachitls.dma.entries.Campaign.read(reader));
         Item item = (Item)Item.read(reader);
 
         assertEquals("value", 2000.0, item.getGoldValue(), 0.5);
+        */
+        fail("reimplement");
       }
     }
 

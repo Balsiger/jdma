@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * Copyright (c) 2002-2013 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -19,55 +19,40 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-package net.ixitxachitls.dma.data;
 
+package net.ixitxachitls.dma.values;
+
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.ixitxachitls.util.configuration.Config;
+import com.google.protobuf.Message;
 
 /**
- * Factory for creating dma data stores.
+ * Base class for values.
  *
+ * @file   NewValue.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
- * @file          DMADataFactory.java
- * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
 @ParametersAreNonnullByDefault
-public final class DMADataFactory
+public abstract class NewValue<T extends Message>
 {
-  /**
-   * Prevent instantiations.
-   */
-  private DMADataFactory()
+  /** Simple interface for parsing values. */
+  public interface Parser<P>
   {
-    // nothing to do
+    /**
+     * Parse the value from the given string.
+     *
+     * @param inValues the string values to parse from
+     * @return the parse value
+     */
+    public @Nullable P parse(String ... inValues);
   }
 
-  /** The static singleton with all the base data. */
-  private static volatile DMADatastore s_base;
-
   /**
-   * Get the base data for all entries.
+   * Convert the value to a proto message.
    *
-   * @return      the repository with all the base data
+   * @return the converted proto message
    */
-  public static synchronized DMADatastore get()
-  {
-    if(s_base == null)
-      if(Config.get("web.data.datastore", true))
-        s_base = new DMADatastore();
-
-    return s_base;
-  }
-
-  /**
-   * Clear the currently used base to get a new one next time. Mostly used for
-   * testing.
-   *
-   */
-  public static synchronized void clear()
-  {
-    s_base = null;
-  }
+  public abstract T toProto();
 }

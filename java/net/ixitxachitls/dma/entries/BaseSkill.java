@@ -708,7 +708,7 @@ public class BaseSkill extends BaseEntry
       try (ParseReader reader =
         new ParseReader(new java.io.StringReader(s_text), "test"))
       {
-        return BaseSkill.read(reader);
+        return null; //BaseSkill.read(reader);
       }
     }
 

@@ -8,6 +8,15 @@ message AbstractEntryProto
   required string type = 2;
   repeated string base = 3;
   repeated string extensions = 4;
+
+  message File
+  {
+    required string name = 1;
+    required string path = 2;
+    required string type = 3;
+    required string icon = 4;
+  }
+  repeated File files = 5;
 }
 
 message BaseEntryProto
@@ -154,6 +163,7 @@ message BaseProductProto
     DM = 0;
     PLAYER = 1;
     ALL = 2;
+    UNKNOWN = 3;
   }
   optional Audience audience = 18;
 

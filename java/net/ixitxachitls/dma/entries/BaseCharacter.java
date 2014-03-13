@@ -31,15 +31,15 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.proto.Entries.BaseCharacterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -164,7 +164,6 @@ public class BaseCharacter extends BaseEntry
     }
   }
 
-
   /**
    * This is the standard constructor to create a base character with its
    * name.
@@ -210,7 +209,7 @@ public class BaseCharacter extends BaseEntry
   protected String m_lastAction = UNDEFINED_STRING;
 
   /** All the products for this user. */
-  protected transient @Nullable DMAData m_productData = null;
+  protected transient @Nullable DMADatastore m_productData = null;
 
   /** The files in the base campaign. */
   protected String m_realName = UNDEFINED_STRING;
@@ -353,29 +352,22 @@ public class BaseCharacter extends BaseEntry
   }
 
   @Override
-  public @Nullable String set(String inKey, String inText)
+  public void set(Values inValues)
   {
-    switch(inKey)
-    {
-      case "real name":
-        m_realName = inText;
-        return null;
+    super.set(inValues);
 
-      case "email":
-        m_email = inText;
-        return null;
+    m_realName = inValues.use("real name", m_realName);
+    m_email = inValues.use("email", m_email);
+    m_group = inValues.use("group", m_group, new NewValue.Parser<Group>() {
+      @Override
+      public @Nullable Group parse(String... inValues)
+      {
+        if(inValues.length != 1)
+          return null;
 
-      case "group":
-         m_group = Group.fromString(inText);
-         if (m_group == null)
-         {
-           m_group = Group.GUEST;
-           return inText;
-         }
-         return null;
-    }
-
-    return super.set(inKey,  inText);
+        return Group.fromString(inValues[0]);
+      }
+    });
   }
 
   /**
@@ -445,21 +437,6 @@ public class BaseCharacter extends BaseEntry
       m_email = proto.getEmail();
   }
 
-  /**
-   * Read an entry, and only the entry without type and comments, from the
-   * reader.
-   *
-   * @param       inReader the reader to read from
-   *
-   * @return      true if read successfully, false else
-   *
-   */
-  @Override
-  protected boolean readEntry(ParseReader inReader)
-  {
-    return super.readEntry(inReader);
-  }
-
   //----------------------------------------------------------------------------
 
   /** The test. */
@@ -505,45 +482,6 @@ public class BaseCharacter extends BaseEntry
       assertTrue("email", character.m_email.isEmpty());
       assertTrue("last action", character.m_lastAction.isEmpty());
       assertEquals("group", Group.GUEST, character.m_group);
-    }
-
-    /** The read Test. */
-    @org.junit.Test
-    public void read()
-    {
-      String text =
-        "base character Me = \n"
-        + "\n"
-        + "  real name     \"Roger Rabbit\";\n"
-        + "  email         \"roger@acme.com <'Roger Rabbit'>\";\n"
-        + "  last action   \"today\";\n"
-        + "  group         user.\n"
-        + "\n";
-
-      try (net.ixitxachitls.input.ParseReader reader =
-        new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
-                                               "test"))
-      {
-        BaseCharacter character = (BaseCharacter)BaseCharacter.read(reader);
-
-        assertNotNull("base character should have been read", character);
-        assertEquals("base character name does not match", "Me",
-                     character.getName());
-        assertEquals("base character does not match",
-                     "#----- Me\n"
-                     + "\n"
-                     + "base character Me =\n"
-                     + "\n"
-                     + "  real name         \"Roger Rabbit\";\n"
-                     + "  email             "
-                     + "\"roger@acme.com <'Roger Rabbit'>\";\n"
-                     + "  last action       \"today\";\n"
-                     + "  group             User;\n"
-                     + "  name              Me.\n"
-                     + "\n"
-                     + "#.....\n",
-                     character.toString());
-      }
     }
   }
 }

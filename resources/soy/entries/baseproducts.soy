@@ -1,0 +1,771 @@
+/* ****************************************************************************
+ * Copyright (C) 2002-2014 Peter 'Merlin' Balsiger And Fred 'Mythos' Dobler
+ * All Rights Reserved
+ *
+ * This File Is Part Of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant Is Free Software; You Can Redistribute It And/Or
+ * Modify It Under The Terms Of The Gnu General Public License As Published By
+ * The Free Software Foundation; Either Version 2 Of The License, Or
+ * (At Your Option) Any Later Version.
+ *
+ * Dungeon Master Assistant Is Distributed In The Hope That It Will Be Useful,
+ * But Without Any Warranty; Without Even The Implied Warranty Of
+ * Merchantability Or Fitness For A Particular Purpose.  See The
+ * Gnu General Public License For More Details.
+ *
+ * You Should Have Received A Copy Of The Gnu General Public License
+ * Along With Dungeon Master Assistant; If Not, Write To The Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, Ma  02111-1307  Usa
+ *****************************************************************************/
+
+ /*
+ * Templates for base products.
+ */
+{namespace dma.entries.baseproducts}
+
+/**
+ * Show the given entry in standard format.
+ * 
+ * @param entry The entry to show.
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ */
+{template .show autoescape="true"}
+  {call dma.entry.show}
+    {param entry: $entry /}
+    {param type: 'base-product' /}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param list: $list /}
+    {param next: $next /}
+    {param last: $last /}
+    {param color: '#444' /}
+    {param title}
+      {call dma.entry._new_title}
+        {param title}
+          {if $entry.leader}{$entry.leader} {/if}
+          {$entry.title}
+        {/param}
+        {param color: '#444' /}
+      {/call}
+      
+      {if def($entry.subtitle)}
+        {call dma.entry._new_subtitle}
+          {param title: $entry.subtitle /}
+        {/call}
+      {/if}
+    {/param}
+    {param values}            
+      {call dma.entry.value}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param color: '#444' /}
+      {/call}
+      {if length($entry.synonyms)}
+        {call dma.entry.value}
+          {param label: 'Synonyms' /}
+          {param value}
+            {foreach $synonym in $entry.synonyms}
+              {$synonym}
+              {if not isLast($synonym)}; {/if}
+            {/foreach}
+          {/param}
+          {param color: '#444' /}
+        {/call}
+      {/if}      
+      {if length($entry.categories)}
+        {call dma.entry.value}
+          {param label: 'Categories' /}
+          {param value}
+            {foreach $category in $entry.categories}
+              {$category}
+              {if not isLast($category)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#444' /}
+        {/call}
+      {/if}      
+      {call dma.entry.value}
+        {param label: 'Worlds' /}        
+        {param value}
+          {foreach $world in $entry.getWorlds}
+            {$world}{if not isLast($world)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#444' /}
+      {/call}
+      {if def($entry.system)}
+        {call dma.entry.value}
+          {param label: 'System' /}
+          {param value: $entry.system.getName /}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'Producer' /}
+        {param value: $entry.producer /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Type' /}
+        {param value}
+          {$entry.product_type.getName}
+          {if def($entry.audience)}
+            , {$entry.audience.getName}
+          {/if}
+        {/param}
+        {param color: '#444' /}
+      {/call}
+      {if def($entry.style) or def($entry.layout)}
+        {call dma.entry.value}
+          {param label: 'Style' /}
+          {param value}
+            {$entry.style.getName}
+            {if def($entry.layout)}
+              , {$entry.layout.getName}
+            {/if}
+          {/param}  
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if $entry.date}
+        {call dma.entry.value}
+          {param label: 'Date' /}
+          {param value: $entry.date /}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if $entry.pages > 0}
+        {call dma.entry.value}
+          {param label: 'Pages' /}
+          {param value: $entry.pages /}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if $entry.price}
+        {call dma.entry.value}
+          {param label: 'Price' /}
+          {param value: $entry.price /}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if length($entry.series) or $entry.number}
+        {call dma.entry.value}
+          {param label: 'Series' /}
+          {param value}
+            {foreach $series in $entry.series}            
+              {$series}{if not isLast($series)}, {/if}
+            {/foreach} 
+            {if $entry.number}
+            ; {$entry.number}
+            {/if}
+            {if $entry.volume}
+            ; {$entry.volume}
+            {/if}
+          {/param}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if $entry.ISBN or $entry.ISBN13}
+        {call dma.entry.value}
+          {param label: 'ISBN' /}
+          {param value}
+            {$entry.ISBN}
+            {if $entry.ISBN and $entry.ISBN13}, {/if} 
+            {$entry.ISBN13}
+          {/param}  
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'Authors' /}
+        {param value}
+          {foreach $person in $entry.authors}
+            {$person.name}{if $person.job} ({$person.job}){/if}
+            {if not isLast($person)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#444' /}
+      {/call}
+      {if length($entry.editors) > 0}
+        {call dma.entry.value}
+          {param label: 'Editors' /}
+          {param value}
+            {foreach $person in $entry.editors}
+              {$person.name}{if $person.job} ({$person.job}){/if}
+              {if not isLast($person)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if length($entry.cover_artists) > 0}
+        {call dma.entry.value}
+          {param label: 'Cover Artists' /}
+          {param value}
+            {foreach $person in $entry.cover_artists}
+              {$person.name}{if $person.job} ({$person.job}){/if}
+              {if not isLast($person)}, {/if}
+            {/foreach}
+          {/param}          
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if length($entry.cartographers) > 0}
+        {call dma.entry.value}
+          {param label: 'Cartographers' /}
+          {param value}
+            {foreach $person in $entry.cartographers}
+              {$person.name}{if $person.job} ({$person.job}){/if}
+              {if not isLast($person)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if length($entry.illustrators) > 0}
+        {call dma.entry.value}
+          {param label: 'Illustrators' /}
+          {param value}
+            {foreach $person in $entry.illustrators}
+              {$person.name}{if $person.job} ({$person.job}){/if}
+              {if not isLast($person)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if length($entry.typographers) > 0}
+        {call dma.entry.value}
+          {param label: 'Typographers' /}
+          {param value}
+            {foreach $person in $entry.typographers}
+              {$person.name}{if $person.job} ({$person.job}){/if}
+              {if not isLast($person)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if length($entry.managers) > 0}
+        {call dma.entry.value}
+          {param label: 'Managers' /}
+          {param value}
+            {foreach $person in $entry.managers}
+              {$person.name}{if $person.job} ({$person.job}){/if}
+              {if not isLast($person)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if $entry.notes}
+        {call dma.entry.value}
+          {param label: 'Notes' /}
+          {param value: $entry.notes /}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if length($entry.contents)}
+        {call dma.entry.value}
+          {param label: 'Contents' /}
+          {param value}
+            {foreach $content in $entry.contents}
+              {if $content.amount != 1}
+                {$content.amount} x{sp}
+              {/if}   
+              {$content.part.getName} {$content.description}
+              {if not isLast($content)}, {/if}               
+            {/foreach}
+          {/param}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if length($entry.mandatoryRequirements)}
+        {call dma.entry.value}
+          {param label: 'Mandatory Req.' /}
+          {param value}
+            {foreach $requirement in $entry.mandatoryRequirements}
+              {call dma.value.productReference}
+                {param reference : $requirement /}
+              {/call}
+              {if not isLast($requirement)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if length($entry.optionalRequirements)}
+        {call dma.entry.value}
+          {param label: 'Optional Req.' /}
+          {param value}
+            {foreach $requirement in $entry.optionalRequirements}
+              {call dma.value.productReference}
+                {param reference : $requirement /}
+              {/call}
+              {if not isLast($requirement)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {if $entry.references}
+        {call dma.entry.value}
+          {param label: 'References' /}
+          {param value}
+            {foreach $reference in $entry.references}
+              {call dma.value.productReference}
+                {param reference: $reference /}
+              {/call}
+              {if not isLast($reference)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      /*
+      {call dma.entry.value}
+        {param label: 'Owners' /}
+        {param value}
+          {foreach $owner in $entry.owners}
+            {call dma.page.link}
+              {param url: '/user/' + $owner.multi.1.print + '/product/'
+                  + $owner.multi.0.print /}
+              {param text: $owner.multi.1.print /}
+            {/call}
+            {if not isLast($owner)}, {/if}
+          {/foreach}
+          {if $ij.user}
+          {sp}| {call dma.page.link}
+              {param url: '/user/' + $ij.user.name + '/product/' + $entry.name
+                  + '?create' /}
+              {param text: 'add' /}
+              {param tooltip: 'Add this product for yourself.' /}
+            {/call}
+          {/if}
+        {/param}
+        {param color: '#444' /}
+      {/call}      
+      */
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Editiing the base character.
+ * 
+ * @param entry The character to edit. 
+ * @param id    THe id to use for the editing dialog.
+ */
+{template .edit autoescape="true"}
+  {call dma.edit.entry}
+    {param entry: $entry /}
+    {param type: 'character' /}
+    {param id: $id /}
+    {param values}
+      {call dma.edit.value}
+        {param name: 'name' /}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'leader' /}
+        {param label: 'Leader' /}
+        {param value: $entry.leader/}
+        {param validate: 'any' /}
+        {param color: '#444' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'title' /}
+        {param label: 'Title' /}
+        {param value: $entry.title /}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'subtitle' /}
+        {param label: 'Subtitle' /}
+        {param value: $entry.subtitle /}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'worlds' /}
+        {param label: 'Worlds' /}
+        {param values: $entry.worlds/}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'synonyms' /}
+        {param label: 'Synonyms' /}
+        {param values: $entry.synonyms /}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'categories' /}
+        {param label: 'Categories' /}
+        {param values: $entry.categories /}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value_text}
+        {param name: 'description' /}
+        {param label: 'Description' /}
+        {param value: $entry.description /}
+        {param validate: 'any' /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'short-description' /}
+        {param label: 'Short Description' /}
+        {param value: $entry.short_description /}
+        {param validate: 'any' /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value_selection}
+        {param name: 'producer' /}
+        {param label: 'Producer' /}
+        {param value: $entry.producer /}
+        {param choices: $entry.producers /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value_selection}
+        {param name: 'system' /}
+        {param label: 'System' /}
+        {param value: $entry.system.getName /}
+        {param choices: $entry.system.names /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value_selection}
+        {param name: 'audience' /}
+        {param label: 'Audience' /}
+        {param value: $entry.audience.getName /}
+        {param choices: $entry.audience.names /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value_selection}
+        {param name: 'product type' /}
+        {param label: 'Type' /}
+        {param value: $entry.productType.getName /}
+        {param choices: $entry.productType.names /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value_selection}
+        {param name: 'style' /}
+        {param label: 'Style' /}
+        {param value: $entry.style.getName /}
+        {param choices: $entry.style.names /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value_selection}
+        {param name: 'layout' /}
+        {param label: 'Layout' /}
+        {param value: $entry.layout.getName /}
+        {param choices: $entry.layout.names /}
+        {param color: '#444' /}
+      {/call}
+      {call .edit_person}
+        {param name: 'authors' /}
+        {param label: 'Authors' /}
+        {param persons: $entry.authors /}
+      {/call}
+      {call .edit_person}
+        {param name: 'editors' /}
+        {param label: 'Editors' /}
+        {param persons: $entry.editors /}
+      {/call}
+      {call .edit_person}
+        {param name: 'cover' /}
+        {param label: 'Cover' /}
+        {param persons: $entry.cover_artists /}
+      {/call}
+      {call .edit_person}
+        {param name: 'illustrators' /}
+        {param label: 'Illustrators' /}
+        {param persons: $entry.illustrators /}
+      {/call}
+      {call .edit_person}
+        {param name: 'cartographers' /}
+        {param label: 'Cartographers' /}
+        {param persons: $entry.cartographers /}
+      {/call}
+      {call .edit_person}
+        {param name: 'typographers' /}
+        {param label: 'Typographers' /}
+        {param persons: $entry.typographers /}
+      {/call}
+      {call .edit_person}
+        {param name: 'managers' /}
+        {param label: 'Managers' /}
+        {param persons: $entry.managers /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'date' /}
+        {param label: 'Date' /}
+        {param value: $entry.date /}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param label: 'ISBN' /}
+        {param color: '#444' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {call dma.edit.field_input}
+                {param name: 'isbn.10' /}
+                {param value: $entry.ISBN /}
+                {param validate: 'isbn' /}
+                {param class: 'field2' /}
+                {param caption: 'ISBN' /}
+              {/call}
+              {call dma.edit.field_input}
+                {param name: 'isbn.13' /}
+                {param value: $entry.ISBN13 /}
+                {param validate: 'isbn13' /}
+                {param class: 'field2' /}
+                {param caption: 'ISBN13' /}
+              {/call}
+            {/param}
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'pages' /}
+        {param label: 'Pages' /}
+        {param value: $entry.pages /}
+        {param validate: 'number' /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'series' /}
+        {param label: 'Series' /}
+        {param values: $entry.series /}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'number' /}
+        {param label: 'Number' /}
+        {param value: $entry.number/}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'volume' /}
+        {param label: 'Volume' /}
+        {param value: $entry.volume/}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'price' /}
+        {param label: 'Price' /}
+        {param value: $entry.price/}
+        {param validate: 'price' /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'notes' /}
+        {param label: 'Notes' /}
+        {param value: $entry.notes /}
+        {param validate: 'any' /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'contents' /}
+        {param color: '#444' /}
+        {param label: 'Contents' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $content in $entry.contents}  
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'contents.part',
+                      'value': $content.part.getName,
+                      'type': 'selection',
+                      'choices': $content.part.names,
+                      'caption': 'part' 
+                    ],
+                    [
+                      'name': 'contents.description',
+                      'value': $content.description,
+                      'validate': 'any',
+                      'caption': 'description' 
+                    ],
+                    [
+                      'name': 'contents.amount',
+                      'value': $content.amount,
+                      'validate': 'number',
+                      'caption': 'amount' 
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'contents.part',
+                      'value': '',
+                      'type': 'selection',
+                      'choices': $entry.partNames,
+                      'caption': 'part' 
+                    ],
+                    [
+                      'name': 'contents.description',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'description' 
+                    ],
+                    [
+                      'name': 'contents.amount',
+                      'value': 1,
+                      'validate': 'number',
+                      'caption': 'amount' 
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}            
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'mandatoryRequirements.name' /}
+        {param label: 'Mandatory Req.' /}
+        {param values: $entry.mandatoryRequirementNames /}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}          
+      {call dma.edit.value_list}
+        {param name: 'optionalRequirements.name' /}
+        {param label: 'Optional Req.' /}
+        {param values: $entry.optionalRequirementNames /}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}          
+      {call dma.edit.generic_value}
+        {param name: 'references' /}
+        {param color: '#444' /}
+        {param label: 'References' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $reference in $entry.references}  
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'references.name',
+                      'value': $reference.name,
+                      'validate': 'non-empty',
+                      'caption': 'name' 
+                    ],
+                    [
+                      'name': 'references.pages',
+                      'value': $reference.pagesString,
+                      'validate': 'any',
+                      'caption': 'pages' 
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'references.name',
+                      'value': '',
+                      'validate': 'non-empty',
+                      'caption': 'name' 
+                    ],
+                    [
+                      'name': 'references.pages',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'pages' 
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}            
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Create the edit markup for a persons field.
+ * 
+ * @param name the name of the field
+ * @param label the label for the field
+ * @param persons the person values
+ */
+{template .edit_person private="true"}
+  {call dma.edit.generic_value}
+    {param name: $name /}
+    {param color: '#444' /}
+    {param label: $label /}
+    {param value}
+      {call dma.edit.field}
+        {param markup}
+          {foreach $person in $persons}
+            {call dma.edit.field_list_multiple}
+              {param values: [
+                [
+                  'name': $name + '.name',
+                  'value': $person.name,
+                  'validate': 'non-empty',
+                  'caption': 'name', 
+                  'autocomplete': 'base product/index-persons'
+                ],
+                [
+                  'name': $name + '.job',
+                  'value': $person.job,
+                  'validate': 'any',
+                  'caption': 'job', 
+                  'autocomplete': 'base product/index-jobs'
+                ]
+              ] 
+              /}
+            {/call}          
+          {ifempty}
+            {call dma.edit.field_list_multiple}
+              {param values: [
+                [
+                  'name': $name + '.name',
+                  'value': '',
+                  'validate': 'non-empty',
+                  'caption': 'name',  
+                  'autocomplete': 'base product/index-persons'
+               ],
+                [
+                  'name': $name + '.job',
+                  'value': '',
+                  'validate': 'any',
+                  'caption': 'job',
+                  'autocomplete': 'base product/index-jobs'
+                ]
+              ] 
+              /}
+            {/call}          
+          {/foreach}
+        {/param}
+      {/call}
+    {/param}
+  {/call}  
+{/template}

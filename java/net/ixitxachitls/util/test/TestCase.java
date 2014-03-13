@@ -32,7 +32,6 @@ import java.util.regex.Pattern;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.util.configuration.Config;
@@ -327,7 +326,7 @@ public class TestCase extends org.junit.Assert
    */
   public void addEntry(AbstractEntry inEntry)
   {
-    ((DMAData.Test.Data)DMADataFactory.get()).add(inEntry);
+    throw new UnsupportedOperationException("no more implemented");
   }
 
   //........................................................................

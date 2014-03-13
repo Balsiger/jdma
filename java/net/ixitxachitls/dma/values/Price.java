@@ -19,111 +19,63 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.values;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.proto.Values.PriceProto;
-import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.util.configuration.Config;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
+import net.ixitxachitls.util.Strings;
 
 /**
  * This class stores a float and is capable of reading such floats
  * from a reader (and write it to a writer of course).
  *
  * @file          Price.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class Price extends Decimal<Price>
+public class Price extends NewValue<PriceProto>
 {
-  //--------------------------------------------------------- constructor(s)
+  public static class PriceParser implements Parser<Price>
+  {
+    @Override
+    public @Nullable Price parse(String ... inValues)
+    {
+      if(inValues.length != 1)
+        return null;
 
-  //------------------------------- Price --------------------------------
-
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
+      return Price.parse(inValues[0]);
+    }
+  }
 
   /**
    * Construct the price object with all the values.
    *
    * @param       inCurrency the currency symbol to use
    * @param       inNumber   the number itself
-   * @param       inMin      the minimally allowed number
-   * @param       inMax      the maximally allowed number
-   *
    */
-  public Price(String inCurrency, long inNumber, long inMin, long inMax)
+  public Price(String inCurrency, int inNumber, int inPrecision)
   {
-    super(inNumber, inMin, inMax, 100);
-
+    m_number = inNumber;
     m_currency = inCurrency;
+    m_precision = inPrecision;
   }
-
-  //........................................................................
-  //------------------------------- Price --------------------------------
-
-  /**
-   * Construct the price object with all the values.
-   *
-   * @param       inMin      the minimally allowed number
-   * @param       inMax      the maximally allowed number
-   *
-   */
-  public Price(long inMin, long inMax)
-  {
-    super(inMin, inMax, 100);
-  }
-
-  //........................................................................
-
-  {
-    m_editType = "price";
-  }
-
-  //-------------------------------- create --------------------------------
-
-  /**
-   * Create a new price with the same type information as this one, but one
-   * that is still undefined.
-   *
-   * @return      a similar list, but without any contents
-   *
-   */
-  @Override
-  public Price create()
-  {
-    return super.create(new Price(m_min, m_max));
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The sign for the currency. */
-  private String m_currency =
-    Config.get("resource:values/price.default.currency", "$");
+  private String m_currency = "$";
 
-  //........................................................................
+  /** The number of the price. */
+  private int m_number = 0;
 
-  //-------------------------------------------------------------- accessors
+  /** The precision of the number. */
+  private int m_precision = 100;
+
+  /** THe parser for prices. */
+  public static final PriceParser PARSER = new PriceParser();
 
   //------------------------------ getCurrency -----------------------------
 
@@ -131,246 +83,100 @@ public class Price extends Decimal<Price>
    * Get the currency used.
    *
    * @return      the currency symbol(s)
-   *
    */
   public String getCurrency()
   {
     return m_currency;
   }
 
-  //........................................................................
-
-  //------------------------------ doToString ------------------------------
-
   /**
-   * Convert the value to a string, depending on the given kind.
+   * Get the stored price.
    *
-   * @return      a String representation, depending on the kind given
-   *
+   * @return the price
    */
-  @Override
-  protected String doToString()
+  public double getPrice()
   {
-    return m_currency + super.doToString();
+    return 1.0 * m_number / m_precision;
   }
 
-  /**
-   * Create a proto for the value.
-   *
-   * @return the proto representation
-   */
+  @Override
+  public String toString()
+  {
+    String precision = Integer.toString(m_precision);
+    String decimals  = Strings.pad(m_number % m_precision,
+                                   precision.length() - 1, true);
+
+    return m_currency + m_number / m_precision + "." + decimals;
+  }
+
+  @Override
   public PriceProto toProto()
   {
     return PriceProto.newBuilder()
       .setCurrency(m_currency)
-      .setNumber((int)m_number)
+      .setNumber(m_number)
       .setPrecision(m_precision)
       .build();
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------- doRead ---------------------------------
-
-  /**
-   * Read the value from the reader and replace the current one.
-   *
-   * @param       inReader the reader to read from
-   *
-   * @return      true if read, false if not
-   *
-   */
-  @Override
-  public boolean doRead(ParseReader inReader)
+  public static Price fromProto(PriceProto inProto)
   {
-    ParseReader.Position pos = inReader.getPosition();
-
-    long   number   = 0;
-    String currency = null;
-
-    try
-    {
-      currency = inReader.read("1234567890+-");
-
-      // remove superfluous white spaces
-      currency = currency.replaceAll("[ \n]+", " ");
-      currency = currency.replaceFirst("^[ \n]*", "");
-
-      if(currency.length() == 0)
-        return false;
-
-      // we read -0 as 0, resulting in -0.5 read as 0.5 ...
-      // thus we need to check for the negative sign
-      boolean negative = false;
-
-      if(inReader.expect('-'))
-        negative = true;
-
-      number = inReader.readInt() * m_precision;
-
-      if(inReader.expect(s_delimiter))
-      {
-        int prices = inReader.readInt();
-
-        if(prices >= m_precision)
-        {
-          inReader.logWarning(pos, "value.price.decimals",
-                              "only up to " + m_precision + " allowed");
-
-          return false;
-        }
-
-        number += prices;
-      }
-
-      if(negative)
-        number *= -1;
-    }
-    catch(net.ixitxachitls.input.ReadException e)
-    {
-      return false;
-    }
-
-    if(number > m_max)
-    {
-      inReader.logWarning(pos, "value.float.high", "maximal "
-                          + format(m_max, m_precision));
-
-      return false;
-    }
-
-    if(number < m_min)
-    {
-      inReader.logWarning(pos, "value.float.low", "minimal "
-                          + format(m_min, m_precision));
-
-      return false;
-    }
-
-    // store the values
-    m_currency = currency;
-    m_number   = number;
-    m_defined  = true;
-
-    return true;
-  }
-
-  //........................................................................
-
-  /**
-   * Create a new price similar to this one with new data.
-   *
-   * @param  inCurrency   the new currency of the price
-   * @param  inPrecision  the new precision of the price
-   * @param  inNumber     the new value of the price
-   * @return the newly generated price
-   */
-  public Price as(String inCurrency, int inPrecision, int inNumber)
-  {
-    Price result = create();
-
-    result.m_currency = inCurrency;
-    result.m_precision = inPrecision;
-    result.m_number = inNumber;
-    result.m_defined = true;
-
-    return result;
+    return new Price(inProto.getCurrency(), inProto.getNumber(),
+                     inProto.getPrecision());
   }
 
   /**
-   * Create a new price as this one but with the data from the proto.
+   * Parse the price from the given string.
    *
-   * @param inProto  the proto with the data
-   * @return a new price with new data but some formatting
+   * @param       the text to parse
+   *
+   * @return      the price parsed, if any
+   *
    */
-  public Price as(PriceProto inProto)
+  public static @Nullable Price parse(String inText)
   {
-    Price result = create();
+    String []parts = Strings.getPatterns(inText, "(.*)\\s*(\\d+)(?:\\.(\\d+))");
+    if(parts.length != 3)
+      return null;
 
-    result.m_currency = inProto.getCurrency();
-    result.m_precision = inProto.getPrecision();
-    result.m_number = inProto.getNumber();
-    result.m_defined = true;
+    String currency = parts[0];
+    int precision = (int)Math.pow(10, parts[2].length());
+    int number =
+      Integer.parseInt(parts[1]) * precision + Integer.parseInt(parts[2]);
 
-    return result;
+    return new Price(currency, number, precision);
   }
 
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- init -----------------------------------------------------------
-
     /** Testing init. */
     @org.junit.Test
     public void init()
     {
-      Price value = new Price(10, 200);
-
-      // undefined value
-      assertEquals("not undefined at start", false, value.isDefined());
-      assertEquals("undefined value not correct", "$undefined$",
-                   value.toString());
-      assertEquals("undefined value not correct", 105, value.get());
-      assertEquals("undefined value not correct", "$", value.getCurrency());
-
       // now with some value
-      value = new Price("SFr. ", 10023, 0, 20000);
+      Price value = new Price("SFr. ", 10023, 2);
 
-      assertEquals("not defined after setting", true, value.isDefined());
-      assertEquals("value not correctly gotten", 10023, value.get());
+      assertEquals("value not correctly gotten", 100.23, value.getPrice(), 0.1);
       assertEquals("value not correctly converted", "SFr. 100.23",
                    value.toString());
-
-      Value.Test.createTest(value);
     }
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
 
     /** Testing reading. */
     @org.junit.Test
     public void read()
     {
-      String []tests =
-        {
-          "simple", "$42.00", "$42.00", null,
-          "SFr", "SFr. 1.42", "SFr. 1.42", null,
-          "white", "  \nSFr.  \n 11.12", "SFr. 11.12", null,
-          "digits", "$ 1.234", null, "$ 1.234",
-          "too high", "$ +120.00", null, "$ +120.00",
-          "too low", "$ -10", null, "$ -10",
-          "too low", "$ -0.1", null, "$ -0.1",
-          "white currency", "A \n B 10.20", "A B 10.20", null,
-          "invalid", "1.2", null, "1.2",
-          "empty", "", null, null,
-          "no digits", "$ 40", "$ 40.00", null,
-        };
-
-      m_logger.addExpectedPattern("WARNING:.*\\(only up to 100 allowed\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "...>>>\\$ 1.234...");
-      m_logger.addExpectedPattern("WARNING:.*\\(maximal 50.00\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "...>>>\\$ \\+120.00...");
-      m_logger.addExpectedPattern("WARNING:.*\\(minimal 0.00\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "...>>>\\$ \\-10...");
-      m_logger.addExpectedPattern("WARNING:.*\\(minimal 0.00\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "...>>>\\$ \\-0.1...");
-
-      Value.Test.readTest(tests, new Price(0, 5000));
+      assertEquals("simple", "$42.00", Price.parse("$42.00").toString());
+      assertEquals("SFr", "SFr. 1.42", Price.parse("SFr. 1.42").toString());
+      assertEquals("white", "  \nSFr.  \n 11.12",
+                   Price.parse("SFr. 11.12").toString());
+      assertEquals("digits", "$ 1.234", Price.parse("$ 1.234").toString());
+      assertNull("white currency", Price.parse("A \n B 10.20"));
+      assertNull("invalid", Price.parse("1.2"));
+      assertNull("empty", Price.parse(""));
+      assertEquals("no digits", "$ 40", Price.parse("$ 40.00"));
     }
 
     //......................................................................

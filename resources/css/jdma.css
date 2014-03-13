@@ -1627,17 +1627,11 @@ DIV.edit-list-element
 DIV.edit-list-remove
 {
   background-position: -195px;
-  position:            absolute;
-  right:               -9px;
-  top:                 0;
 }
 
 DIV.edit-list-add
 {
   background-position: -182px;
-  position:            absolute;
-  right:               -9px;
-  bottom:              0;
 }
 
 .edit-undefined
@@ -2397,8 +2391,8 @@ BODY.print
 
 .entry .values
 {
-  display: inline-block;
   vertical-align: top;
+  margin-left: 180px;
 }
 
 .entry .toolbar
@@ -2450,6 +2444,12 @@ BODY.print
   padding-right: 50px;
 }
 
+.entry .subtitle
+{
+  font-size: 16px;
+  color: #800;
+}
+
 .entry .title-container
 {
   margin-bottom: 15px;
@@ -2468,12 +2468,12 @@ BODY.print
 {
   margin: 0 30px 10px 15px;
   width: 112px;
-  display: inline-block;
+  float: left;
 }
 
 .entry .image-link
 {
-  border: 1px solid #ccc;
+  border: 1px solid transparent;
   padding: 5px;
   width: 112px;
   line-height: 112px;
@@ -2489,8 +2489,8 @@ BODY.print
   box-shadow: 0 0 3px #777;
 }
 
-.entry ._new_.main.image,
-.entry ._new_.other.image
+.entry ._new_._new_main._new_image,
+.entry ._new_.other._new_image
 {
   vertical-align: middle;
 }
@@ -2506,16 +2506,26 @@ BODY.print
   margin-top: 5px;
 }
 
-.entry ._new_value ._new_value-label
+.entry ._new_values
 {
-  display: inline-block;
+  display: table;
+}
+
+.entry ._new_values ._new_label-value 
+{
+  display: table-row;
+}
+
+.entry ._new_values ._new_value ._new_value-label
+{
+  display: table-cell;
   font-weight: bold;
   width: 150px;
 }
 
-.entry ._new_value ._new_value-content
+.entry ._new_values ._new_value ._new_value-content
 {
-  display: inline-block;
+  display: table-cell;
 }
 
 /******************************************************************************
@@ -2546,7 +2556,7 @@ BODY.print
  
  .edit .values 
  {
-   margin: 10px;
+   margin: 10px 20px 10px 10px;
    display: table;
  }
  
@@ -2560,9 +2570,9 @@ BODY.print
    display: table-cell;
    text-align: right;
    font-weight: bold;
-   padding: 5px 10px 4px;
+   padding: 8px 10px 4px;
    position: relative;
-   vertical-align: middle;
+   vertical-align: top;
    white-space: nowrap;
  }
  
@@ -2581,11 +2591,6 @@ BODY.print
    position: absolute;
  }
  
- .edit.character .label-decoration
- {
-   background: -webkit-linear-gradient(left, transparent 0%, #39f 100%);
- }
- 
  .edit .field
  {
    display: table-cell;
@@ -2593,7 +2598,25 @@ BODY.print
    padding: 3px;
    width: 100%;
    box-sizing: border-box;
+   position: relative;
  }
+ 
+ .edit .field INPUT
+ {
+   width: 100%;
+ }
+ 
+.edit .field.field2 
+{
+  width: 50%;
+  display: inline-block;
+}
+
+.edit .field.field3
+{
+  width: 33%;
+  display: inline-block;
+}
  
  .edit SELECT.field
  {
@@ -2685,7 +2708,8 @@ BODY.print
   background: rgba(0, 0, 0, 0.1);
 }
 
-.actions .buttons {
+.actions .buttons 
+{
   margin-left: 50%;
   position: relative;
   display: inline-block;
@@ -2709,6 +2733,53 @@ BODY.print
   opacity: 1.0;
 }
 
-.actions-spacer {
+.actions-spacer 
+{
   height: 40px;
+}
+
+.edit .field .line 
+{
+  position: relative;
+  margin-right: -20px;
+  padding-right: 20px;
+}
+
+.edit .field .line .edit-list-add,
+.edit .field .line .edit-list-remove
+{
+  position: absolute;
+  right: 0;
+  display: none;
+}
+
+.edit .field .line .edit-list-add
+{
+  top: 3px;
+}
+
+.edit .field .line .edit-list-remove
+{
+  top: 17px;
+}
+
+.edit .field .line:hover .edit-list-add,
+.edit .field .line:hover .edit-list-remove 
+{
+  display: block;
+}
+
+.edit .field .input-label 
+{
+  position: absolute;
+  font-size: 10px;
+  color: #888;
+  right: 10px;
+  bottom: 7px;
+}
+
+.edit .field .input-wrapper
+{
+  position: relative;
+  display: inline-block;
 }

@@ -101,8 +101,10 @@ public class SoyServlet extends DMAServlet
   protected static final SoyTemplate TEMPLATE =
      new SoyTemplate("page", "errors", "about", "main", "navigation", "entry",
                      "commands", "value", "admin", "cards", "edit",
-                     "basecharacter", "character", "entries/basecharacters",
+                     "basecharacter", "character",
+                     "entries/basecharacters",
                      "baseproduct", "product",
+                     "entries/baseproducts",
                      "baseitem", "item",
                      "basecampaign", "campaign",
                      "basequality",

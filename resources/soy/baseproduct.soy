@@ -26,37 +26,6 @@
 {namespace dma.entry.baseproduct}
 
 /**
- * The entry title.
- *
- * @param entry The entry rendered.
- */
-{deltemplate dma.entry.title}
-  <h1>
-    {call dma.value.value}
-      {param canEdit: $ij.isDM /}
-      {param entry: $entry /}
-      {param value: $entry.leader /}
-    {/call}
-    {if $entry.leader.isDefined}{sp}{/if}
-    {call dma.value.value}
-      {param canEdit: $ij.isDM /}
-      {param entry: $entry /}
-      {param value: $entry.title /}
-    {/call}
-  </h1>
-  {call dma.page.title}
-    {param title: $entry.title.print /}
-  {/call}
-  <h2>
-    {call dma.value.value}
-      {param canEdit: $ij.isDM /}
-      {param entry: $entry /}
-      {param value: $entry.subtitle /}
-    {/call}
-  </h2>
-{/deltemplate}
-
-/**
  * The values for the entry.
  *
  * @param entry The entry rendered

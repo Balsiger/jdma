@@ -35,10 +35,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.CharacterProto;
 import net.ixitxachitls.dma.values.EnumSelection;
+import net.ixitxachitls.dma.values.File;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
@@ -426,7 +426,7 @@ public class Character extends CampaignEntry<BaseCharacter>
   {
     if("icon".equals(inKey))
     {
-      DMAData.File main = getMainFile();
+      File main = getMainFile();
       if(main == null)
         return new Name("character/person.png");
       else

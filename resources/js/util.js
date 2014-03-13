@@ -70,6 +70,7 @@ util.ajax = function(inURL, inValues, inFunction, inEval)
         catch(e2)
         {
           alert('Your browser is currently not supported!');
+          return;
         }
       }
     }
@@ -77,7 +78,11 @@ util.ajax = function(inURL, inValues, inFunction, inEval)
   // build up the data
   var data = '';
   for(var key in inValues)
-    data += key + '=' + encodeURIComponent(inValues[key]) + '\n';
+    if(inValues[key] instanceof Array)
+      for(var i = 0; i < inValues[key].length; i++)
+        data += key + '=' + encodeURIComponent(inValues[key][i]) + '\n';
+    else
+      data += key + '=' + encodeURIComponent(inValues[key]) + '\n';
 
   request.open('POST', inURL, inFunction !=  null);
   request.setRequestHeader('Content-Type', 'application/octet-stream');

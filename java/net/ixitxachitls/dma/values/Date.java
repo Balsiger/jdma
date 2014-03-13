@@ -19,19 +19,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.values;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
-import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.util.configuration.Config;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
+import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 
 /**
  * This class stores a date and is capable of reading such dates from a reader
@@ -40,44 +39,56 @@ import net.ixitxachitls.util.configuration.Config;
  * make a derivation of this class.
  *
  * @file          Date.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class Date extends Value<Date>
+public class Date extends NewValue<BaseProductProto.Date>
+  implements Comparable<Date>
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //--------------------------------- Date ---------------------------------
-
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
-
-  /**
-   * Construct the date object with an undefined value.
-   *
-   */
-  public Date()
+  public static class DateParser implements Parser<Date>
   {
-    this(0, 0);
-  }
+    @Override
+    public @Nullable Date parse(String... inValues)
+    {
+      if(inValues.length != 1)
+        return null;
 
-  //........................................................................
-  //--------------------------------- Date ---------------------------------
+      List<String> parts = SPACE_SPLITTER.splitToList(inValues[0]);
+      if(parts.size() > 2)
+        return null;
+
+      int month = 0;
+      if(parts.size() > 1)
+      {
+        for(int i = 0; i < MONTH_STRINGS.size(); i++)
+          if(MONTH_STRINGS.get(i).equalsIgnoreCase(parts.get(0)))
+          {
+            month = i + 1;
+            break;
+          }
+        if(month <= 0)
+          return null;
+      }
+
+      try
+      {
+        int year = Integer.parseInt(parts.get(parts.size() - 1));
+        return new Date(month, year);
+      }
+      catch(NumberFormatException e)
+      {
+        return null;
+      }
+    }
+  }
 
   /**
    * Construct the date object.
    *
    * @param       inMonth the month of the date
    * @param       inYear  the year of the date
-   *
    */
   public Date(int inMonth, int inYear)
   {
@@ -87,33 +98,9 @@ public class Date extends Value<Date>
     if(inYear < 0)
       throw new IllegalArgumentException("year must not be negative");
 
-    m_month    = inMonth;
-    m_year     = inYear;
-    m_editType = "date";
+    m_month = inMonth;
+    m_year = inYear;
   }
-
-  //........................................................................
-
-  //------------------------------ createNew -------------------------------
-
-  /**
-   * Create a new list with the same type information as this one, but one
-   * that is still undefined.
-   *
-   * @return      a similar list, but without any contents
-   *
-   */
-  @Override
-  public Date create()
-  {
-    return super.create(new Date());
-  }
-
-  //.......................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The month of the date, if any (0 is no month). */
   private int m_month = 0;
@@ -122,132 +109,60 @@ public class Date extends Value<Date>
   private int m_year  = 0;
 
   /** Possible month strings. */
-  private static final String []MONTH_STRINGS =
-    Config.get("resource:default/month.names", new String []
-      {
-        "January", "February", "March", "April", "May", "June", "July",
-        "August", "September", "October", "November", "December"
-      });
+  private static final List<String> MONTH_STRINGS =
+    ImmutableList.of("January", "February", "March", "April", "May", "June",
+                     "July", "August", "September", "October", "November",
+                     "December");
 
-  /** Invalid month. */
-  private static final String s_invalid =
-    Config.get("resource:default/month.invalid", "<invalid>");
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------- getMonth -------------------------------
+  private static final Splitter SPACE_SPLITTER = Splitter.on(' ');
+  public static final Parser<Date> PARSER = new DateParser();
 
   /**
    * Get the month stored.
    *
    * @return      the date stored
-   *
    */
   public int getMonth()
   {
     return m_month;
   }
 
-  //........................................................................
-  //--------------------------- getMonthAsString ---------------------------
-
   /**
    * Get the month stored (as a string).
    *
-   * @return      the date stored
-   *
+   * @return      the month stored or an empty string if invalid
    */
   public String getMonthAsString()
   {
-    return convertToMonthString(m_month);
-  }
+    if(m_month == 0 || m_month > MONTH_STRINGS.size())
+      return "";
 
-  //........................................................................
-  //------------------------------- getYear --------------------------------
+    return MONTH_STRINGS.get(m_month - 1);
+  }
 
   /**
    * Get the year stored.
    *
    * @return      the date stored
-   *
    */
   public int getYear()
   {
     return m_year;
   }
 
-  //........................................................................
-
-  //------------------------------ isDefined -------------------------------
-
-  /**
-   * Check if the value is defined or not.
-   *
-   * @return      true if the value is defined, false if not
-   *
-   */
   @Override
-public boolean isDefined()
-  {
-    return m_year > 0;
-  }
-
-  //........................................................................
-  //----------------------------- isArithmetic -----------------------------
-
-  /**
-   * Checks whether the value is arithmetic and thus can be computed with.
-   *
-   * @return      true if the value is arithemtic
-   *
-   */
-  @Override
-  public boolean isArithmetic()
-  {
-    return false;
-  }
-
-  //........................................................................
-
-  //----------------------------- convertValue -----------------------------
-
-  /**
-   * Convert the value to a string, depending on the given kind.
-   *
-   * @return      a String representation, depending on the kind given
-   *
-   */
-  @Override
-  protected String doToString()
+  public String toString()
   {
     if(m_month > 0)
-      return getMonthAsString() + ' ' + m_year;
-    else
-      return "" + m_year;
+      return getMonthAsString() + " " + m_year;
+
+    return "" + m_year;
   }
 
-  //........................................................................
-
-  //------------------------------ compareTo -------------------------------
-
-  /**
-   * Compare this value to another one.
-   *
-   * @param       inOther the value to compare to
-   *
-   * @return      -1 for less than, 0 for equal and +1 for greater than the
-   *              object given
-   *
-   */
   @Override
-  public int compareTo(Object inOther)
+  public int compareTo(Date inOther)
   {
-    if(!(inOther instanceof Date))
-      return super.compareTo(inOther);
-
-    Date other = (Date)inOther;
+    Date other = inOther;
     if(m_year < other.m_year)
       return -1;
 
@@ -263,183 +178,69 @@ public boolean isDefined()
     return 0;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  // immutable!
-
-  //------------------------------- doRead ---------------------------------
-
-  /**
-    * Read the value from the reader and replace the current one.
-    *
-    * @param       inReader the reader to read from
-    *
-    * @return      true if read, false if not
-    *
-    */
   @Override
-  public boolean doRead(ParseReader inReader)
+  public BaseProductProto.Date toProto()
   {
-    m_month = inReader.expectCase(MONTH_STRINGS, true) + 1;
-
-    try
-    {
-      m_year  = inReader.readInt();
-    }
-    catch(net.ixitxachitls.input.ReadException e)
-    {
-      return false;
-    }
-
-    return true;
+    return BaseProductProto.Date.newBuilder()
+      .setYear(m_year)
+      .setMonth(m_month)
+      .build();
   }
-
-  //........................................................................
 
   /**
-   * Create a new date similar to the current but with new data.
+   * Create a date from the given proto.
    *
-   * @param   inYear  the new yerar
-   * @param   inMonth the new month (use 0 for no month)
-   * @return  the newly created date
+   * @param inProto the proto to create from
+   * @return the created date
    */
-  public Date as(int inYear, int inMonth)
+  public static Date fromProto(BaseProductProto.Date inProto)
   {
-    Date result = create();
+    if(inProto.hasMonth())
+      return new Date(inProto.getMonth(), inProto.getYear());
 
-    result.m_year = inYear;
-    result.m_month = inMonth;
-
-    return result;
+    return new Date(inProto.getYear(), 0);
   }
 
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //------------------------- convertToMonthString -------------------------
-
-  /**
-   * Convert the given month number into a String.
-   *
-   * @param       inMonth the number to convert
-   *
-   * @return      the String representation of the month
-   *
-   */
-  public static String convertToMonthString(int inMonth)
-  {
-    if(inMonth <= 0)
-      return "";
-
-    if(inMonth - 1 >= MONTH_STRINGS.length)
-      return s_invalid;
-
-    return MONTH_STRINGS[inMonth - 1];
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------------
 
   /** The Test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- init -----------------------------------------------------------
-
     /** Testing init. */
     @org.junit.Test
     public void init()
     {
-      Date date = new Date();
-
-      // undefined value
-      assertEquals("not undefined at start", false, date.isDefined());
-      assertEquals("undefined value not correct", "$undefined$",
-                   date.toString());
-      assertEquals("undefined value not correct", 0, date.getMonth());
-      assertEquals("undefined value not correct", "", date.getMonthAsString());
-      assertEquals("undefined value not correct", 0, date.getYear());
-
       // now with some date
-      date = new Date(5, 2002);
+      Date date = new Date(5, 2002);
 
-      assertEquals("not defined after setting", true, date.isDefined());
       assertEquals("value not correctly gotten", "May 2002",
                    date.toString());
       assertEquals("undefined value not correct", 5, date.getMonth());
       assertEquals("undefined value not correct", "May",
                    date.getMonthAsString());
       assertEquals("undefined value not correct", 2002, date.getYear());
-
-      Value.Test.createTest(date);
     }
-
-    //......................................................................
-    //----- convert --------------------------------------------------------
 
     /** Testing converting. */
     @org.junit.Test
     @SuppressWarnings("rawtypes")
     public void convert()
     {
-      Value value = new Date(5, 1969);
+      Date value = new Date(5, 1969);
 
       assertEquals("string", "May 1969", value.toString());
     }
 
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** Testing reading. */
+    /** Testing parsing. */
     @org.junit.Test
-    public void read()
+    public void parse()
     {
-      String []tests =
-        {
-          "simple", "May 2002", "May 2002", null,
-          "casing", "mAY 2002", "May 2002",  null,
-          "year", "1999", "1999", null,
-          "invalid", "guru", null, "guru",
-          "invalid", "jully 2004", null, "jully 2004",
-        };
-
-      Value.Test.readTest(tests, new Date());
+      assertEquals("simple", "May 2002", PARSER.parse("May 2002").toString());
+      assertEquals("casing", "May 2002", PARSER.parse("mAY 2002").toString());
+      assertEquals("year", "1999", PARSER.parse("1999").toString());
+      assertNull("invalid 1", PARSER.parse("guru").toString());
+      assertNull("invalid 2", PARSER.parse("January").toString());
+      assertNull("invalid 3", PARSER.parse("20a").toString());
     }
-
-    //......................................................................
-    //----- string set -----------------------------------------------------
-
-    /** Testing set with String. */
-//     @org.junit.Test
-//     public void stringSet()
-//     {
-//       Date date = new Date();
-
-//       assertNull("set", date.setFromString("january 2000"));
-//       assertEquals("set", "January 2000", date.toString());
-
-//    assertEquals("set", "januaryy 2000", date.setFromString("januaryy 2000"));
-//       assertEquals("set", Value.UNDEFINED, date.toString());
-
-//       assertEquals("set", " guru", date.setFromString("may 2005 guru"));
-//       assertEquals("set", "May 2005", date.toString());
-
-//       assertEquals("set", "guru", date.setFromString("guru"));
-//       assertEquals("set", Value.UNDEFINED, date.toString());
-
-//       assertNull("set", date.setFromString(null));
-//       assertEquals("set", Value.UNDEFINED, date.toString());
-//     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

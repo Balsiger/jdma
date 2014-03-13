@@ -23,8 +23,6 @@
 
 package net.ixitxachitls.dma.output.soy;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -38,13 +36,12 @@ import com.google.template.soy.data.SoyMapData;
 import com.google.template.soy.data.restricted.BooleanData;
 import com.google.template.soy.data.restricted.StringData;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Campaign;
 import net.ixitxachitls.dma.entries.CampaignEntry;
+import net.ixitxachitls.dma.values.File;
 import net.ixitxachitls.util.Classes;
-import net.ixitxachitls.util.errors.BaseError;
 
 //..........................................................................
 
@@ -131,11 +128,11 @@ public class SoyEntry extends SoyAbstract
 
     if("files".equals(inName))
     {
-      DMAData.File main = m_entry.getMainFile();
-      List<DMAData.File> files = m_entry.getAllFiles();
+      File main = m_entry.getMainFile();
+      List<File> files = m_entry.getAllFiles();
 
       SoyListData data = new SoyListData();
-      for(DMAData.File file : files)
+      for(File file : files)
         if(main == null || !file.getPath().equals(main.getPath()))
           data.add(new SoyMapData("path", file.getPath(),
                                   "icon", file.getIcon(),
@@ -174,15 +171,6 @@ public class SoyEntry extends SoyAbstract
 
       buffer.append(m_entry.toString());
       return StringData.forValue(buffer.toString());
-    }
-
-    if("errors".equals(inName))
-    {
-      List<String> errors = new ArrayList<String>();
-      for(Iterator<BaseError> i = m_entry.getErrors(); i.hasNext(); )
-        errors.add(i.next().format().toString());
-
-      return new SoyListData(errors);
     }
 
     String name = inName.replace("__", "").replace("_", " ");

@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.lang.annotation.Documented;
@@ -30,11 +28,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -46,6 +47,7 @@ import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Combined;
+import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
@@ -54,35 +56,20 @@ import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * This class groups a bunch of Values, its be base for all entries.
  *
  * @file          ValueGroup.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public abstract class ValueGroup implements Changeable
 {
-  //----------------------------------------------------------------- nested
-
-  //----- Annotations ------------------------------------------------------
-
   /**
    * The annotations for variables.
    *
    * @param The key to use for this variable.
-   *
    */
   @Target(ElementType.FIELD)
   @Retention(RetentionPolicy.RUNTIME)
@@ -182,44 +169,271 @@ public abstract class ValueGroup implements Changeable
     boolean value() default true;
   }
 
-  //........................................................................
+  public static class Values
+  {
+    public interface Checker
+    {
+      public boolean check(String inCheck);
+    }
 
-  //........................................................................
+    public interface Parser<T>
+    {
+      public T parse(String ... inValues);
+    }
 
-  //--------------------------------------------------------- constructor(s)
+    public static final Checker NOT_EMPTY = new Checker()
+    {
+      @Override
+      public boolean check(String inCheck)
+      {
+        return !inCheck.isEmpty();
+      }
+    };
 
-  //------------------------------ ValueGroup ------------------------------
+    public Values(Multimap<String, String> inValues)
+    {
+      m_values = inValues;
+    }
+
+    private Multimap<String, String> m_values;
+    private boolean m_changed = false;
+    private List<String> m_messages = new ArrayList<>();
+    private Set<String> m_handled = new HashSet<>();
+
+    public boolean isChanged()
+    {
+      return m_changed;
+    }
+
+    public String use(String inKey, String inDefault)
+    {
+      return use(inKey, inDefault, null);
+    }
+
+    public String use(String inKey, String inDefault,
+                      @Nullable Checker inChecker)
+    {
+      String value = getFirst(inKey);
+      if(value == null)
+        return inDefault;
+
+      if(!inDefault.equals(value))
+        m_changed = true;
+
+      if (inChecker != null && !inChecker.check(value))
+      {
+        m_messages.add("Check for " + inKey + " failed, value not set.");
+        return inDefault;
+      }
+
+      return value;
+    }
+
+    public List<String> use(String inKey, List<String> inDefault)
+    {
+      return use(inKey, inDefault, null);
+    }
+
+    public List<String> use(String inKey, List<String> inDefault,
+                            @Nullable Checker inChecker)
+    {
+      Collection<String> values = get(inKey);
+      if(values == null)
+        return inDefault;
+
+      List<String> result;
+      if(inChecker != null)
+      {
+        result = new ArrayList<>();
+        for(String value : values)
+          if(!inChecker.check(value))
+          {
+            m_messages.add("Invalid value '" + value + "' for " + inKey);
+            return inDefault;
+          }
+          else
+            result.add(value);
+      }
+      else
+        result = new ArrayList<>(values);
+
+      if(inDefault.equals(values))
+        return inDefault;
+
+      m_changed = true;
+      return result;
+    }
+
+    public @Nullable <T> T use(String inKey, @Nullable T inDefault,
+                               NewValue.Parser<T> inParser,
+                               String ... inParts) {
+      List<String []> values = listValues(inKey, inParts);
+      if(values.size() != 1
+        || allEmpty(values.get(0))
+        || (values.get(0).length != inParts.length
+           && inParts != null && inParts.length != 0
+           && values.get(0).length != 1))
+        throw new IllegalArgumentException("cannot properly parse '" + inKey
+                                           + "' for " + Arrays.toString(inParts)
+                                           + " with " + values);
+
+      T value = inParser.parse(values.get(0));
+      if(value == null)
+      {
+        m_messages.add("Cannot properly parse " + inKey + " '"
+                       + Arrays.toString(values.get(0)) + "'");
+        return inDefault;
+      }
+
+      if(value.equals(inDefault))
+        return inDefault;
+
+       m_changed = true;
+       return value;
+    }
+
+    public <T> List<T> use(String inKey, List<T> inDefault,
+                           NewValue.Parser<T> inParser, String ... inParts)
+    {
+      List<String []> values = listValues(inKey, inParts);
+      List<T> results = new ArrayList<>();
+      for(String []single : values)
+      {
+        if(allEmpty(single))
+          continue;
+
+        T value = inParser.parse(single);
+        if (value == null)
+        {
+          m_messages.add("Cannot parse values for " + inKey + ": " + single);
+          return inDefault;
+        }
+
+        results.add(value);
+      }
+
+      if(inDefault.equals(results))
+        return inDefault;
+
+      m_changed = true;
+      return results;
+    }
+
+    private boolean allEmpty(String ... inValues)
+    {
+      for(String value : inValues)
+        if(!value.isEmpty())
+          return false;
+
+      return true;
+    }
+
+    public List<String> obtainMessages()
+    {
+      return m_messages;
+    }
+
+    private @Nullable Collection<String> get(String inKey)
+    {
+      m_handled.add(inKey);
+      Collection<String> values = m_values.get(inKey);
+      if(values == null)
+        m_messages.add("Tried to use unknown value " + inKey);
+
+      return values;
+    }
+
+    private @Nullable String getFirst(String inKey)
+    {
+      Collection<String> values = get(inKey);
+      if(values == null || values.isEmpty())
+        return null;
+
+      if(values.size() != 1)
+        m_messages.add("Found multiple values for " + inKey
+                       + ", expected single value.");
+
+      return values.iterator().next();
+    }
+
+    private List<String []> listValues(String inKey, String ... inParts)
+    {
+      List<String []> values = new ArrayList<>();
+      if (inParts == null || inParts.length == 0)
+        for(String value : get(inKey))
+          values.add(new String [] { value });
+      else
+        for(int i = 0; i < inParts.length; i++)
+        {
+          int j = 0;
+          for(String value : get(inKey + "." + inParts[i]))
+          {
+            String []single;
+            if(i == 0)
+            {
+              single = new String[inParts.length];
+              values.add(single);
+            }
+            else
+              single = values.get(j++);
+
+            single[i] = value;
+          }
+        }
+
+      return values;
+    }
+
+    public @Nullable Integer use(String inKey, Integer inDefault)
+    {
+      String value = getFirst(inKey);
+      if(value == null)
+        return inDefault;
+
+      try
+      {
+        int pages = Integer.parseInt(value);
+        if(pages == inDefault)
+          return inDefault;
+
+        m_changed = true;
+        return pages;
+      }
+      catch(NumberFormatException e)
+      {
+        m_messages.add("Cannot parse number for " + inKey);
+        return null;
+      }
+    }
+  }
+
 
   /**
    * Default constructor.
-   *
    */
   protected ValueGroup()
   {
     // nothing to do
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The delimiter between entries. */
   protected static final char s_delimiter =
     Config.get("resource:entries/delimiter", '.');
 
   /** The delimiter between individual values. */
+
   protected static final char s_keyDelimiter =
     Config.get("resource:entries/key.delimiter", ';');
 
   /** The delimiter for lists. */
+
   protected static final char s_listDelimiter =
     Config.get("resource:entries/list.delimiter", ',');
 
   /** The keyword indent to use. */
+
   protected static final int s_keyIndent =
-  Config.get("resource:entries/key.indent", 2);
+    Config.get("resource:entries/key.indent", 2);
 
   /** The random generator. */
   protected static final Random s_random = new Random();
@@ -237,6 +451,7 @@ public abstract class ValueGroup implements Changeable
 
   // TODO: make this not static and move to campaign.
   /** The name of the current game. */
+
   public static final String CURRENT =
     Config.get("configuration", "default");
 
@@ -245,6 +460,7 @@ public abstract class ValueGroup implements Changeable
   //-------------------------------------------------------------- accessors
 
   //----------------------------- getVariables ------------------------------
+
 
   /**
    * Get the variables possible for this group.
@@ -739,6 +955,48 @@ public abstract class ValueGroup implements Changeable
 
     changed();
     return variable.setFromString(this, inText);
+  }
+
+  public static class ParseResult
+  {
+    public ParseResult(Type inType, String inRest)
+    {
+      this(inType, inRest, null);
+    }
+
+    public ParseResult(Type inType, String inRest,
+                       @Nullable String inDescription)
+    {
+      m_type = inType;
+      m_rest = inRest;
+      m_description = inDescription;
+    }
+
+    public enum Type { UNPARSED, INVALID, PARTIAL, UNKNOWN, WARNING, };
+
+    private Type m_type;
+    private String m_rest;
+    private @Nullable String m_description;
+
+    public Type getType()
+    {
+      return m_type;
+    }
+
+    public String getRest()
+    {
+      return m_rest;
+    }
+
+    public @Nullable String getDescription()
+    {
+      return m_description;
+    }
+  }
+
+  public void set(Values inValues)
+  {
+    // no values here
   }
 
   //........................................................................

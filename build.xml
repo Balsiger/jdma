@@ -21,7 +21,7 @@
   <property name="version" value="astraldeva" />
 
   <!-- Google App Engine -->
-  <property name="gae.version" value="1.8.9" />
+  <property name="gae.version" value="1.9.0" />
   <property name="gae.dir" location="../../appengine-java-sdk-${gae.version}" />
   <import file="${gae.dir}/config/user/ant-macros.xml" />
 
@@ -101,7 +101,7 @@
     <pathelement location="${classes.dir}" />
     <pathelement location="${resources.dir}" />
     <!-- guava -->
-    <pathelement location="${lib.dir}/guava-14.0-rc1.jar" />
+    <pathelement location="${lib.dir}/guava-16.0.1.jar" />
     <!-- for testing -->
     <pathelement location="${lib.test.dir}/junit-4.8.2.jar" />
     <pathelement location="${lib.test.dir}/cglib-nodep-2.2.jar" />
@@ -113,19 +113,6 @@
     <pathelement location="${lib.test.dir}/appengine-testing.jar" />
     <!-- soy -->
     <pathelement location="${lib.dir}/soy-2012-12-21.jar" />
-    <!-- jetty -->
-    <pathelement location="${lib.dir}/jetty-continuation-${jetty.version}.jar"/>
-    <pathelement location="${lib.dir}/jetty-http-${jetty.version}.jar" />
-    <pathelement location="${lib.dir}/jetty-io-${jetty.version}.jar" />
-    <pathelement location="${lib.dir}/jetty-jmx-${jetty.version}.jar" />
-    <pathelement location="${lib.dir}/jetty-rewrite-${jetty.version}.jar" />
-    <pathelement location="${lib.dir}/jetty-security-${jetty.version}.jar" />
-    <pathelement location="${lib.dir}/jetty-server-${jetty.version}.jar" />
-    <pathelement location="${lib.dir}/jetty-servlet-${jetty.version}.jar" />
-    <pathelement location="${lib.dir}/jetty-servlets-${jetty.version}.jar" />
-    <pathelement location="${lib.dir}/jetty-util-${jetty.version}.jar" />
-    <pathelement location="${lib.dir}/jetty-webapp-${jetty.version}.jar" />
-    <pathelement location="${lib.dir}/jetty-xml-${jetty.version}.jar" />
     <pathelement location="${lib.dir}/servlet-api-3.0.jar" />
     <!-- mail -->
     <pathelement location="${lib.dir}/mail.jar" />
@@ -180,9 +167,6 @@
       </fileset>
       <fileset dir="${lib.dir}">
         <include name="*.jar" />
-      </fileset>
-      <fileset dir="${lib.test.dir}">
-        <include name="junit-4.8.2.jar" />
       </fileset>
     </copy>
     <copy todir="${webinf.dir}" flatten="true">
@@ -334,6 +318,7 @@
       </classpath>
 
       <compilerarg line="-Xlint:${warnings.lint}"/>
+      <compilerarg line="-J -Xmx512m"/>
     </javac>
     <copy todir="${classes.dir}">
       <fileset dir="${source.dir}" excludes="**/*.java" />

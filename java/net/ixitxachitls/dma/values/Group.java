@@ -56,7 +56,7 @@ import net.ixitxachitls.util.Grouping;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class Group<T extends Value<?>,
+public class Group<T,
                    S extends Comparable<S> & Serializable,
                    U extends Serializable>
   implements Grouping<T, U>, Comparator<U>, Serializable
@@ -69,7 +69,7 @@ public class Group<T extends Value<?>,
    * @param <K> the type of values to extract from
    * @param <V> the type of grouping value extracted
    */
-  public interface Extractor<K extends Value<?>, V extends Comparable<V>>
+  public interface Extractor<K, V extends Comparable<V>>
     extends Serializable
   {
     //------------------------------ extract -------------------------------
@@ -152,7 +152,8 @@ public class Group<T extends Value<?>,
   @Override
   public U group(T inValue)
   {
-    if(!inValue.isDefined())
+    if(inValue == null
+      || (inValue instanceof Value && !((Value)inValue).isDefined()))
       return m_undefined;
 
     S compare = m_extractor.extract(inValue);

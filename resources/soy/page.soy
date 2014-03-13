@@ -303,7 +303,7 @@
  */
 {template .title}
   <script>
-    document.title = 'DMA - {$title}';
+    document.title = 'DMA{if $title} - {$title}{/if}';
   </script>
 {/template}
 

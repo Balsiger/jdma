@@ -438,7 +438,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   @Override
   public boolean save()
   {
-    if(m_name.get().startsWith(Entry.TEMPORARY))
+    if(m_name.startsWith(Entry.TEMPORARY))
       do
       {
         randomID();

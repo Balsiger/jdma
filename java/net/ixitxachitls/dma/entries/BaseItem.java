@@ -1261,7 +1261,7 @@ public class BaseItem extends BaseEntry
     if(m_playerName.isDefined())
       return m_playerName.get();
 
-    return m_name.get();
+    return m_name;
   }
 
   //........................................................................
@@ -2063,7 +2063,7 @@ public class BaseItem extends BaseEntry
       {
         ParseReader reader = new ParseReader(sReader, "test");
 
-        return BaseItem.read(reader);
+        return null; //BaseItem.read(reader);
       }
     }
 

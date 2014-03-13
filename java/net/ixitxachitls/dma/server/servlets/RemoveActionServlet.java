@@ -270,7 +270,7 @@ public class RemoveActionServlet extends ActionServlet
     if(!entry.isDM(user))
       return "gui.alert('Not allow to delete " + key + "!');";
 
-    if(DMADataFactory.get().remove(key))
+    if(DMADataFactory.get().remove(entry))
     {
       Log.important("Deleted entry " + keyParam);
       return "gui.info('Entry " + key + " deleted!');";

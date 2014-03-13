@@ -33,6 +33,7 @@
 //..........................................................................
 
 /** The object to store everything in. */
+
 var edit = new Object();
 
 /** All the values currently edited. */
@@ -59,6 +60,16 @@ edit.show = function(inName, inPath, inID)
       closeOnEscape: true,
       dialogClass: 'edit-dialog',
     });
+  
+  // Setup any necessary autocomplete
+  $(":input[autocomplete]").each(function(inIndex, inElement) {
+    $(inElement).autocomplete({
+      source: '/autocomplete/' + $(inElement).attr("autocomplete"),
+      autoFocus: true,
+      minLength: 0,
+      delay: 0,
+    });
+  });
 };
 
 /**
@@ -117,24 +128,41 @@ edit.save = function(inKey, inID)
   var values = { '_key_': inKey };
   $('#' + inID + " :input").each(function ()
     {
-      if (this.name)
-        values[this.name] = this.value;
+      if(this.name)
+      {
+        if(this.name in values)
+        {
+          if(values[this.name] instanceof Array)
+            values[this.name].push(this.value);
+          else
+          {
+            var current = values[this.name];
+            values[this.name] = [ current, this.value ];
+          }
+        }
+        else
+          values[this.name] = this.value;
+      }
     });
 
   // send the data to the server
-  window.console.log('saving!', values);
-  util.ajax('/actions/save', values, null, true);
+  window.console.log('saving!', inID, values);
+  var eval = util.ajax('/actions/save', values, null, true);
 
   // remove the move away code
   window.onbeforeunload = undefined;
 
+  window.console.log("eval", eval);
   // close the dialog
-  window.console.log("dialog", $('#dialog-' + inID), $('#dialog-' + inID));
-  $('#dialog-' + inID).dialog("destroy");
-  $('#dialog-' + inID).remove();
+  if(eval)
+  {
+    window.console.log("dialog", $('#dialog-' + inID), $('#dialog-' + inID));
+    $('#dialog-' + inID).dialog("destroy");
+    $('#dialog-' + inID).remove();
 
-  // reload the saved entry
-  util.link(null, null, null);
+    // reload the saved entry
+    util.link(null, null, null);
+  }
 };
 
 /**
@@ -146,6 +174,35 @@ edit.cancel = function(inID)
 {
   $('#dialog-' + inID).dialog("destroy");
   $('#dialog-' + inID).remove();
+};
+
+/**
+ * Insert a newline, if Shift-Enter has been hit.
+ * 
+ * @param inEvent the key up event
+ * @param inElement the element to duplicate
+ */
+edit.maybeInsertLine = function(inEvent, inElement)
+{
+  if(inEvent.which != 13 || !inEvent.shiftKey)
+    return;
+
+  edit.insertLine(inElement);
+};
+
+edit.insertLine = function(inElement)
+{
+  var element = $(inElement);
+  var clone = element.clone(true);
+  element.append(clone);
+  clone.find(":input").val("");
+  clone.find(":input")[0].focus();
+};
+
+edit.removeLine = function(inElement)
+{
+    var element = $(inElement);
+    element.remove();
 };
 
 //----------------------------- makeEditable -------------------------------

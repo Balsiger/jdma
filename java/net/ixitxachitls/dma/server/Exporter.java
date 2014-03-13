@@ -50,7 +50,6 @@ import com.google.common.io.ByteSink;
 import com.google.common.io.CharSink;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.util.CommandLineParser;
@@ -224,7 +223,7 @@ public final class Exporter
 
     // Export any files associated with the entry.
     if(inBlobs)
-      for(DMAData.File file : inEntry.getFiles())
+      for(net.ixitxachitls.dma.values.File file : inEntry.getFiles())
         export(file, name, dir);
   }
 
@@ -237,7 +236,8 @@ public final class Exporter
    *
    * @thwos IOException if writing fails
    */
-  private void export(DMAData.File inFile, String inName, String inDir)
+  private void export(net.ixitxachitls.dma.values.File inFile, String inName,
+                      String inDir)
     throws IOException
   {
     String extension = Files.mimeExtension(inFile.getType());

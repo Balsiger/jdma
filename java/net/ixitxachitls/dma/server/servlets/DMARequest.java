@@ -515,7 +515,7 @@ public class DMARequest extends HttpServletRequestWrapper
     if (DMAServlet.isDev())
       return false;
 
-    return ApiProxy.getCurrentEnvironment().getRemainingMillis() < 5000;
+    return ApiProxy.getCurrentEnvironment().getRemainingMillis() < 10000;
   }
 
   //........................................................................

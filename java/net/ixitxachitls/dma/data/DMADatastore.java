@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.data;
 
 import java.util.ArrayList;
@@ -28,7 +26,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -39,20 +36,14 @@ import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.Blob;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
-import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -62,12 +53,9 @@ import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.Variable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
+import net.ixitxachitls.dma.values.File;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * Wrapper for accessing data from app engine's datastore.
@@ -76,50 +64,26 @@ import net.ixitxachitls.util.logging.Log;
  * serializable objects and copies them for getting.
  *
  * @file          DMADatastore.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ParametersAreNonnullByDefault
-public class DMADatastore implements DMAData
+public class DMADatastore
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- DMADatastore -----------------------------
-
   /**
    * Create the datastore.
-   *
    */
   public DMADatastore()
   {
-    m_store = DatastoreServiceFactory.getDatastoreService();
     m_blobs = BlobstoreServiceFactory.getBlobstoreService();
-    m_image = ImagesServiceFactory.getImagesService();
+    ImagesServiceFactory.getImagesService();
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The access to the datastore. Don't use this except in the AdminServlet! */
   private DataStore m_data = new DataStore();
 
-  /** The access to the datastore. */
-  private DatastoreService m_store;
-
   /** The blob store service. */
   private BlobstoreService m_blobs;
-
-  /** The image service to serve images. */
-  private ImagesService m_image;
 
   /** The id for serialization. */
   @SuppressWarnings("unused")
@@ -129,24 +93,15 @@ public class DMADatastore implements DMAData
   private static MemcacheService s_entryCache =
     MemcacheServiceFactory.getMemcacheService("entry");
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------- getEntry -------------------------------
-
   /**
    * Get an entry denoted by type and id and their respective parents.
    *
    * @param      inKey  the key to the entry to get
-   *
    * @param      <T>    the type of the entry to get
    *
    * @return     the entry found, if any
-   *
    */
   @SuppressWarnings("unchecked")
-  @Override
   public @Nullable <T extends AbstractEntry> T getEntry
                       (AbstractEntry.EntryKey<T> inKey)
   {
@@ -162,9 +117,6 @@ public class DMADatastore implements DMAData
     return (T)entry;
   }
 
-  //........................................................................
-  //----------------------------- getEntries -------------------------------
-
   /**
    * Gets all the entries of a specific type.
    *
@@ -175,9 +127,7 @@ public class DMADatastore implements DMAData
    * @param    inSize   the maximal number of entries to return
    *
    * @return   a list with all the entries
-   *
    */
-  @Override
   @SuppressWarnings("unchecked") // need to cast
   public <T extends AbstractEntry> List<T> getEntries
             (AbstractType<T> inType,
@@ -196,9 +146,6 @@ public class DMADatastore implements DMAData
     return entries;
   }
 
-  //........................................................................
-  //------------------------------- getEntry -------------------------------
-
   /**
    * Get the entry denoted by a key value pair.
    *
@@ -209,9 +156,7 @@ public class DMADatastore implements DMAData
    * @param      <T>    the type of the entry to get
    *
    * @return     the entry found, if any
-   *
    */
-  @Override
   @SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry> T getEntry
                       (AbstractType<T> inType, String inKey, String inValue)
@@ -220,9 +165,6 @@ public class DMADatastore implements DMAData
     return (T)convert(m_data.getEntity(escapeType(inType.toString()),
                                        inKey, inValue));
   }
-
-  //........................................................................
-  //------------------------------ getEntries ------------------------------
 
   /**
    * Get the entry denoted by a key value pair.
@@ -234,9 +176,7 @@ public class DMADatastore implements DMAData
    * @param      <T>    the type of the entry to get
    *
    * @return     the entries found
-   *
    */
-  @Override
   @SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry> List<T> getEntries
                       (AbstractType<T> inType, String inKey, String inValue)
@@ -246,9 +186,6 @@ public class DMADatastore implements DMAData
                                  inKey, inValue));
   }
 
-  //........................................................................
-  //-------------------------------- getIDs --------------------------------
-
   /**
    * Get all the ids of a specific type, sorted and navigable.
    *
@@ -256,9 +193,7 @@ public class DMADatastore implements DMAData
    * @param       inParent the key of the parent, if any
    *
    * @return      all the ids
-   *
    */
-  @Override
   public List<String> getIDs
     (AbstractType<? extends AbstractEntry> inType,
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent)
@@ -266,9 +201,6 @@ public class DMADatastore implements DMAData
     return m_data.getIDs(escapeType(inType.toString()), inType.getSortField(),
                          convert(inParent));
   }
-
-  //........................................................................
-  //---------------------------- getRecentEntries --------------------------
 
   /**
    * Get all the ids of a specific type, sorting by last change.
@@ -278,9 +210,7 @@ public class DMADatastore implements DMAData
    * @param       inParent the key of the parent entry
    *
    * @return      all the ids
-   *
    */
-  @Override
   @SuppressWarnings("unchecked") // need to cast cache value
   public <T extends AbstractEntry> List<T> getRecentEntries
     (AbstractType<T> inType,
@@ -292,18 +222,13 @@ public class DMADatastore implements DMAData
                                        convert(inParent)));
   }
 
-  //........................................................................
-  //------------------------------ getOwners -------------------------------
-
   /**
-   * Get the owners and products for a given base procut.
+   * Get the owners and products for a given base product.
    *
    * @param    inID the id of the base product
    *
    * @return   a multi map from owner to ids
-   *
    */
-  @Override
   public Multimap<String, String> getOwners(String inID)
   {
     Multimap<String, String> owners = HashMultimap.create();
@@ -314,73 +239,6 @@ public class DMADatastore implements DMAData
 
     return owners;
   }
-
-  //........................................................................
-  //------------------------------- getFiles -------------------------------
-
-  /**
-   * Get the files for the given entry.
-   *
-   * @param    inEntry       the entry for which to get files
-   * @param    inIncludeBase whether to include files from base entries or not
-   *
-   * @return   a list of all the files found
-   *
-   */
-  @Override
-  public List<File> getFiles(AbstractEntry inEntry, boolean inIncludeBase)
-  {
-    List<File> files = Lists.newArrayList();
-    Set<String> names = Sets.newHashSet();
-    for(Entity entity : m_data.getEntities("file", convert(inEntry.getKey()),
-                                           "__key__", 0, 100))
-    {
-      String name = (String)entity.getProperty("name");
-      if(names.contains(name))
-        name = inEntry.getName() + "-" + name;
-      names.add(name);
-
-      String type = (String)entity.getProperty("type");
-      String path = (String)entity.getProperty("path");
-      String icon = null;
-      if(type == null)
-        type = "image/png";
-
-      if(type.startsWith("image/"))
-      {
-        try
-        {
-          icon = m_image.getServingUrl(ServingUrlOptions.Builder.withBlobKey
-                                       (new BlobKey(path)));
-        }
-        catch(IllegalArgumentException e)
-        {
-          Log.error("Cannot obtain serving url for '" + path + "': " + e);
-          continue;
-        }
-      }
-      else if("application/pdf".equals(type))
-        icon = "/icons/pdf.png";
-      else
-      {
-        Log.warning("unknown file type " + type + " ignored for " + name);
-        continue;
-      }
-
-      files.add(new File(name, type, "//file/" + path, icon));
-    }
-
-    // add the files from any base entries
-    if(inIncludeBase)
-      for(AbstractEntry entry : inEntry.getBaseEntries())
-        if(entry != null)
-          files.addAll(getFiles(entry, true));
-
-    return files;
-  }
-
-  //........................................................................
-  //--------------------------- getIndexEntries ----------------------------
 
   /**
    * Get the entries for the given index.
@@ -395,9 +253,7 @@ public class DMADatastore implements DMAData
    * @param    inSize   the maximal number of entries to return
    *
    * @return   the entries matching the given index
-   *
    */
-  @Override
   @SuppressWarnings("unchecked") // need to cast return value for generics
   public <T extends AbstractEntry> List<T> getIndexEntries
     (String inIndex, AbstractType<T> inType,
@@ -414,9 +270,6 @@ public class DMADatastore implements DMAData
 
     return (List<T>)entries;
   }
-
-  //........................................................................
-  //---------------------------- getIndexNames -----------------------------
 
   /**
    * Get the names for the given index.
@@ -435,9 +288,7 @@ public class DMADatastore implements DMAData
    *                        name)
    *
    * @return      a multi map with all the names
-   *
    */
-  @Override
   @Deprecated
   @SuppressWarnings("unchecked") // need to cast from property value
   public SortedSet<String> getIndexNames
@@ -464,9 +315,6 @@ public class DMADatastore implements DMAData
     return names;
   }
 
-  //........................................................................
-  //------------------------------ getValues -------------------------------
-
   /**
    * Get the value for the given fields.
    *
@@ -475,17 +323,12 @@ public class DMADatastore implements DMAData
    *
    * @return      a list of records found, each with values for each field,
    *              in the order they were specificed
-   *
    */
-  @Override
   public List<List<String>> getMultiValues
     (AbstractType<? extends AbstractEntry> inType, String ... inFields)
   {
     return m_data.getMultiValues(escapeType(inType.toString()), null, inFields);
   }
-
-  //........................................................................
-  //------------------------------ getValues -------------------------------
 
   /**
    * Get the value for the given fields.
@@ -495,17 +338,12 @@ public class DMADatastore implements DMAData
    *
    * @return      a list of records found, each with values for each field,
    *              in the order they were specificed
-   *
    */
-  @Override
   public SortedSet<String> getValues
     (AbstractType<? extends AbstractEntry> inType, String inField)
   {
     return m_data.getValues(escapeType(inType.toString()), null, inField);
   }
-
-  //........................................................................
-  //------------------------------ cacheEntry ------------------------------
 
   /**
    * Caches the given entry (or updates what is in the cache).
@@ -513,14 +351,10 @@ public class DMADatastore implements DMAData
    *
    * @param       inEntry the entry to cache
    */
-  @Override
   public void cacheEntry(AbstractEntry inEntry)
   {
     //s_entryCache.put(inEntry.getKey().toString(), inEntry);
   }
-
-  //........................................................................
-  //----------------------------- uncacheEntry -----------------------------
 
   /**
    * Remove the entry with the given key from the cache.
@@ -534,90 +368,43 @@ public class DMADatastore implements DMAData
     s_entryCache.delete(inKey.toString());
   }
 
-  //........................................................................
-  //------------------------------ clearCache ------------------------------
-
   /**
    * Clear the cache of entires.
    */
-  @Override
   public void clearCache()
   {
     s_entryCache.clearAll();
   }
 
-  //........................................................................
-
-  //------------------------------ isChanged -------------------------------
-
   /**
    * Check if any of the data has been changed and needs saving.
    *
    * @return      true if data is changed from store, false if not
-   *
    */
-  @Override
   @Deprecated
   public boolean isChanged()
   {
     return false;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //-------------------------------- remove --------------------------------
-
   /**
    * Remove the described entity from the datastore.
    *
-   * @param       inID    the id of the entry to remove
-   * @param       inType  the type of the entry to remove
-   *
+   * @param       inEntry the entry to remove
    * @return      true if removed, false if not
-   *
    */
-  @Override
-  public boolean remove(String inID,
-                        AbstractType<? extends AbstractEntry> inType)
-  {
-    return m_data.remove(KeyFactory.createKey(inType.toString(),
-                                              inID.toLowerCase(Locale.US)));
-  }
-
-  //........................................................................
-  //-------------------------------- remove --------------------------------
-
-  /**
-   * Remove the described entity from the datastore.
-   *
-   * @param       inKey   the key of the entry to delete
-   *
-   * @return      true if removed, false if not
-   *
-   */
-  @Override
-  public boolean remove(AbstractEntry.EntryKey<?> inKey)
+  public boolean remove(AbstractEntry inEntry)
   {
     // also remove all blobs for this entry
-    for(Entity entity : m_data.getEntities("file", convert(inKey), "__key__",
-                                           0, 1000))
+    for(File file : inEntry.getFiles())
     {
-      m_blobs.delete(new BlobKey((String)entity.getProperty("path")));
-      m_data.remove(KeyFactory.createKey(convert(inKey), "file",
-                                         (String)entity.getProperty("name")));
-      Log.important("deleted file " + entity.getProperty("name") + " for "
-                    + inKey);
+      m_blobs.delete(new BlobKey(file.getPath().replace("//file/",  "")));
+      Log.important("deleted file " + file.getPath() + " for "
+                    + inEntry.getKey());
     }
 
-    return m_data.remove(convert(inKey));
+    return m_data.remove(convert(inEntry.getKey()));
   }
-
-  //........................................................................
-  //-------------------------------- update --------------------------------
 
   /**
    * Add an entry to the store.
@@ -625,9 +412,7 @@ public class DMADatastore implements DMAData
    * @param       inEntry the entry to add
    *
    * @return      true if added, false if there was an error
-   *
    */
-  @Override
   public boolean update(AbstractEntry inEntry)
   {
     if(inEntry.getName().equals(Entry.TEMPORARY) && inEntry instanceof Entry)
@@ -640,9 +425,6 @@ public class DMADatastore implements DMAData
     //s_entryCache.put(inEntry.getKey().toString(), inEntry);
     return m_data.update(convert(inEntry));
   }
-
-  //........................................................................
-  //--------------------------------- save ---------------------------------
 
   /**
    * Save the given entry.
@@ -657,80 +439,6 @@ public class DMADatastore implements DMAData
     return update(inEntry);
   }
 
-  //........................................................................
-  //------------------------------- addFile --------------------------------
-
-  /**
-   * Add a file for the given entry.
-   *
-   * @param  inEntry the entry to add the file to
-   * @param  inName  the name of the file
-   * @param  inType  the type of the file
-   * @param  inKey   the key of the blob in the blobstore
-   *
-   */
-  public void addFile(AbstractEntry inEntry, String inName, String inType,
-                      BlobKey inKey)
-  {
-    Log.debug("adding file for " + inEntry.getType() + " " + inEntry.getName());
-    // if a file with the same name is already there, we have to delete it first
-    Key key = KeyFactory.createKey(convert(inEntry.getKey()), "file", inName);
-    Entity entity = null;
-
-      entity = m_data.getEntity(key);
-      if(entity != null)
-      {
-        Log.important("replacing file " + inName + " for " + inEntry.getType()
-                      + " " + inEntry.getName() + " [" + inKey + "]");
-        m_blobs.delete(new BlobKey((String)entity.getProperty("path")));
-        m_store.delete(key);
-      }
-      else
-        entity = new Entity(key);
-
-    entity.setProperty("path", inKey.getKeyString());
-    entity.setProperty("name", inName);
-    entity.setProperty("type", inType);
-    m_data.update(entity);
-  }
-
-  //........................................................................
-  //----------------------------- removeFile -------------------------------
-
-  /**
-   * Remove a file from the given entry.
-   *
-   * @param  inEntry the entry to add the file to
-   * @param  inName  the name of the file
-   *
-   * @return true if the file was removed, false if not
-   *
-   */
-  public boolean removeFile(AbstractEntry inEntry, String inName)
-  {
-    Key key = KeyFactory.createKey(convert(inEntry.getKey()), "file", inName);
-
-    Entity entity = m_data.getEntity(key);
-    if(entity != null)
-    {
-      m_blobs.delete(new BlobKey((String)entity.getProperty("path")));
-      m_data.remove(key);
-      Log.important("deleted file " + inName + " for " + inEntry.getType()
-                    + " " + inEntry.getName());
-      return true;
-    }
-    else
-    {
-      Log.warning("trying to delete noexistant file " + inName + " for "
-                  + inEntry.getType() + " " + inEntry.getName());
-      return false;
-    }
-  }
-
-  //........................................................................
-
-  //------------------------------- rebuild --------------------------------
-
   /**
    * Rebuild the given type. This means mainly rebuilding the indexes. It is
    * accomplished by reading all entries and writing them back.
@@ -742,7 +450,6 @@ public class DMADatastore implements DMAData
    * @return     the numbert of enties updated
    *
    */
-  @Override
   public int rebuild(AbstractType<? extends AbstractEntry> inType)
   {
     Log.debug("rebuilding data for " + inType);
@@ -758,9 +465,6 @@ public class DMADatastore implements DMAData
     return count;
   }
 
-  //........................................................................
-  //------------------------------- rebuild --------------------------------
-
   /**
    * Rebuild the given type. This means mainly rebuilding the indexes. It is
    * accomplished by reading all entries and writing them back.
@@ -771,9 +475,7 @@ public class DMADatastore implements DMAData
    * @param      inRequest the original request
    *
    * @return     the numbert of enties updated
-   *
    */
-  @Override
   public int refresh(AbstractType<? extends AbstractEntry> inType,
                        DMARequest inRequest)
   {
@@ -814,14 +516,6 @@ public class DMADatastore implements DMAData
     return count;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //-------------------------------- equals --------------------------------
-
   /**
    * Check whether the two given entities are equal.
    *
@@ -829,7 +523,6 @@ public class DMADatastore implements DMAData
    * @param       inSecond  the second entity to check
    *
    * @return      true if the entities are equal, false if not
-   *
    */
   private boolean equals(Entity inFirst, Entity inSecond)
   {
@@ -842,10 +535,6 @@ public class DMADatastore implements DMAData
     return true;
   }
 
-  //........................................................................
-
-  //---------------------------- propertyEquals ----------------------------
-
   /**
    * Check if the two given entities have equal properties.
    *
@@ -853,7 +542,6 @@ public class DMADatastore implements DMAData
    * @param       inSecond the second entity
    *
    * @return      true if all the properties are equals, false if not
-   *
    */
   private boolean propertyEquals(Entity inFirst, Entity inSecond)
   {
@@ -876,10 +564,6 @@ public class DMADatastore implements DMAData
     return true;
   }
 
-  //........................................................................
-
-  //------------------------------- convert --------------------------------
-
   /**
    * Convert the given entry key into a corresponding entity key.
    *
@@ -887,7 +571,6 @@ public class DMADatastore implements DMAData
    * @param       <T>   the type of entry to convert
    *
    * @return      the converted key
-   *
    */
   @SuppressWarnings("unchecked")
   public @Nullable <T extends AbstractEntry> Key convert
@@ -907,9 +590,6 @@ public class DMADatastore implements DMAData
                                   inKey.getID().toLowerCase(Locale.US));
   }
 
-  //........................................................................
-  //------------------------------- convert --------------------------------
-
   /**
    * Convert the given entry key into a corresponding entity key.
    *
@@ -917,7 +597,6 @@ public class DMADatastore implements DMAData
    * @param       <T>   the type of entry to convert
    *
    * @return      the converted key
-   *
    */
   @SuppressWarnings("unchecked") // not using proper types
   public <T extends AbstractEntry> AbstractEntry.EntryKey<T> convert(Key inKey)
@@ -937,20 +616,15 @@ public class DMADatastore implements DMAData
        .getTyped(escapeType(inKey.getKind())));
   }
 
-  //........................................................................
-  //------------------------------- convert --------------------------------
-
   /**
    * Convert the given datastore entity into a dma entry.
    *
    * @param      inID     the id of the entry to convert
    * @param      inType   the type of the entry to convert
    * @param      inEntity the entity to convert
-   *
    * @param      <T>      the type of the entry to convert
    *
    * @return     the converted entry, if any
-   *
    */
   @SuppressWarnings("unchecked") // need to cast value gotten
   public @Nullable <T extends AbstractEntry> T convert
@@ -995,16 +669,12 @@ public class DMADatastore implements DMAData
     return entry;
   }
 
-  //........................................................................
-  //------------------------------- convert --------------------------------
-
   /**
    * Convert the given datastore entity into a dma entry.
    *
    * @param      inEntity the entity to convert
    *
    * @return     the entry found, if any
-   *
    */
   public @Nullable AbstractEntry convert(@Nullable Entity inEntity)
   {
@@ -1026,16 +696,12 @@ public class DMADatastore implements DMAData
     return convert(id, type, inEntity);
   }
 
-  //........................................................................
-  //------------------------------- convert --------------------------------
-
   /**
    * Convert the given datastore entities into a dma entries.
    *
    * @param      inEntities the entities to convert
    *
    * @return     the entries found, if any
-   *
    */
   public @Nullable List<AbstractEntry> convert(List<Entity> inEntities)
   {
@@ -1047,22 +713,17 @@ public class DMADatastore implements DMAData
     return entries;
   }
 
-  //........................................................................
-  //------------------------------- convert --------------------------------
-
   /**
    * Convert the given dma entry into a datastore entity.
    *
    * @param      inEntry the entry to convert
    *
    * @return     the entry found, if any
-   *
    */
   @SuppressWarnings({ "rawtypes" })
   public Entity convert(AbstractEntry inEntry)
   {
     Entity entity = new Entity(convert(inEntry.getKey()));
-
 
     // TODO: remove this once all searchable values are gone.
     for(Variable variable : inEntry.getVariables())
@@ -1090,10 +751,6 @@ public class DMADatastore implements DMAData
     return entity;
   }
 
-  //........................................................................
-
-  //---------------------------- escapeType -----------------------------
-
   /**
    * Escape the given type for storage. This means to replace spaces with
    * underscores.
@@ -1107,9 +764,6 @@ public class DMADatastore implements DMAData
     return inType.replace(" ", "_");
   }
 
-  //........................................................................
-  //----------------------------- unsecapeType -----------------------------
-
   /**
    * Unescape the type from data storage. This replaces underscores with spaces.
    *
@@ -1121,8 +775,4 @@ public class DMADatastore implements DMAData
   {
     return inType.replace("_", " ");
   }
-
-  //........................................................................
-
-  //........................................................................
 }

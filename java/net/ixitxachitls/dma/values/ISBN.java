@@ -19,19 +19,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.values;
+
+import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
-import net.ixitxachitls.input.ParseReader;
+import com.google.common.base.Splitter;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
+import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 
 /**
  * This class stores a ISBN and is capable of reading such ISBNs
@@ -39,61 +37,52 @@ import net.ixitxachitls.input.ParseReader;
  * means to check the validity of an ISBN number.
  *
  * @file          ISBN.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class ISBN extends Value<ISBN>
+public class ISBN extends NewValue<BaseProductProto.ISBN>
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //--------------------------------- ISBN ---------------------------------
-
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
-
-  /**
-   * Construct the ISBN object with an undefined value.
-   *
-   */
-  public ISBN()
+  public static class ISBNParser implements Parser<ISBN>
   {
-    m_editType = "isbn[ISBN]";
-  }
+    @Override
+    public @Nullable ISBN parse(String... inValues)
+    {
+      if(inValues.length != 1)
+        return null;
 
-  //........................................................................
-  //--------------------------------- ISBN ---------------------------------
+      try
+      {
+        return new ISBN(inValues[0]);
+      }
+      catch(IllegalArgumentException e)
+      {
+        return null;
+      }
+    }
+  }
 
   /**
    * Construct the ISBN object.
    *
    * @param       inNumber the ISBN number
-   *
    */
   public ISBN(String inNumber)
   {
-    this();
+    List<String> parts = DASH_SPLITTER.splitToList(inNumber);
 
-    String []parts = inNumber.split("-");
-
-    if(parts.length != 4)
+    if(parts.size() != 4)
       throw new IllegalArgumentException("not all four ISBN parts given");
 
-    m_group     = parts[0];
-    m_publisher = parts[1];
-    m_title     = parts[2];
+    m_group     = parts.get(0);
+    m_publisher = parts.get(1);
+    m_title     = parts.get(2);
 
-    if(parts[3].equalsIgnoreCase("x"))
+    if(parts.get(3).equalsIgnoreCase("x"))
       m_check = 10;
     else
-      m_check = Integer.parseInt(parts[3]);
+      m_check = Integer.parseInt(parts.get(3));
 
     if(m_check != compute(m_group, m_publisher, m_title))
       throw new IllegalArgumentException("check number does not match, "
@@ -101,9 +90,6 @@ public class ISBN extends Value<ISBN>
                                          + compute(m_group, m_publisher,
                                                    m_title));
   }
-
-  //........................................................................
-  //--------------------------------- ISBN ---------------------------------
 
   /**
    * Construct the ISBN object.
@@ -113,12 +99,9 @@ public class ISBN extends Value<ISBN>
    * @param       inTitle     the ISBN title part
    * @param       inCheck     the check number (or -1 if to calculate
    *                          automatically)
-   *
    */
   public ISBN(String inGroup, String inPublisher, String inTitle, int inCheck)
   {
-    this();
-
     if(inCheck >= 0)
       m_check = inCheck;
     else
@@ -135,232 +118,95 @@ public class ISBN extends Value<ISBN>
                                                    m_title));
   }
 
-  //........................................................................
-
-  //------------------------------ createNew -------------------------------
-
-  /**
-   * Create a new list with the same type information as this one, but one
-   * that is still undefined.
-   *
-   * @return      a similar list, but without any contents
-   *
-   */
-  @Override
-  public ISBN create()
-  {
-    return new ISBN();
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
+  private static final Splitter DASH_SPLITTER = Splitter.on('-').trimResults();
+  public static final Parser<ISBN> PARSER = new ISBNParser();
 
   /** The group part of the whole number. */
-  private @Nullable String m_group = null;
+  private String m_group = null;
 
   /** The publisher part of the whole number. */
-  private @Nullable String m_publisher = null;
+  private String m_publisher = null;
 
   /** The title part of the whole number. */
-  private @Nullable String m_title = null;
+  private String m_title = null;
 
   /** The check number. */
   private int m_check = 0;
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------ isDefined -------------------------------
-
-  /**
-   * Check if the value is defined or not.
-   *
-   * @return      true if the value is defined, false if not
-   *
-   */
   @Override
-public boolean isDefined()
-  {
-    return m_group != null && m_publisher != null && m_title != null
-      && m_check >= 0;
-  }
-
-  //........................................................................
-  //----------------------------- isArithmetic -----------------------------
-
-  /**
-   * Checks whether the value is arithmetic and thus can be computed with.
-   *
-   * @return      true if the value is arithemtic
-   *
-   */
-  @Override
-  public boolean isArithmetic()
-  {
-    return false;
-  }
-
-  //........................................................................
-
-  //------------------------------ doToString ------------------------------
-
-  /**
-   * Convert the value to a string, depending on the given kind.
-   *
-   * @return      a String representation, depending on the kind given
-   *
-   */
-  @Override
-  protected String doToString()
+  public String toString()
   {
     return m_group + '-' + m_publisher + '-' + m_title + '-'
       + (m_check > 9 ? 'X' : (char)(m_check + '0'));
   }
 
-  //........................................................................
-
-  //------------------------------- getGroup -------------------------------
-
   /**
    * Get the group of the ISBN number.
    *
    * @return      a String with the stored group
-   *
    */
-  public @Nullable String getGroup()
+  public String getGroup()
   {
     return m_group;
   }
-
-  //........................................................................
-  //----------------------------- getPublisher -----------------------------
 
   /**
    * Get the publisher part of the ISBN number.
    *
    * @return      a String with the stored publisher
-   *
    */
-  public @Nullable String getPublisher()
+  public String getPublisher()
   {
     return m_publisher;
   }
-
-  //........................................................................
-  //------------------------------- getTitle -------------------------------
 
   /**
    * Get the title of the ISBN number.
    *
    * @return      a String with the stored title
-   *
    */
-  public @Nullable String getTitle()
+  public String getTitle()
   {
     return m_title;
   }
-
-  //........................................................................
-  //------------------------------- getCheck -------------------------------
 
   /**
    * Get the check number of the ISBN number.
    *
    * @return      the checksum number, 10 represents X
-   *
    */
   public int getCheck()
   {
     return m_check;
   }
 
-  //........................................................................
-  //---------------------------- getUnformatted ----------------------------
-
   /**
    * Get the ISBN number unformatted.
    *
    * @return      a String with the stored title
-   *
    */
-  public String getUnformatted()
+  public String toUnformatted()
   {
     return m_group + m_publisher + m_title
       + (m_check == 10 ? "X" : "" + m_check);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  // immutable!
-
-  //------------------------------- doRead ---------------------------------
-
-  /**
-   * Read the value from the reader and replace the current one.
-   *
-   * @param       inReader the reader to read from
-   *
-   * @return      true if read, false if not
-   *
-   */
   @Override
-  public boolean doRead(ParseReader inReader)
+  public BaseProductProto.ISBN toProto()
   {
-    ParseReader.Position pos;
-
-    try
-    {
-      m_group = inReader.readWord();
-      if(!inReader.expect('-'))
-        return false;
-
-      m_publisher = inReader.readWord();
-      if(!inReader.expect('-'))
-        return false;
-
-      m_title = inReader.readWord();
-      if(!inReader.expect('-'))
-        return false;
-
-      pos = inReader.getPosition();
-      char check = inReader.readChar();
-
-      if(check == 'x' || check == 'X')
-        m_check = 10;
-      else
-        m_check = check - '0';
-    }
-    catch(net.ixitxachitls.input.ReadException e)
-    {
-      return false;
-    }
-
-    if(m_check != compute(m_group, m_publisher, m_title))
-    {
-      inReader.logWarning(pos, "entry.ISBN.invalid", "checksum should be "
-                          + compute(m_group, m_publisher, m_title));
-
-      return false;
-    }
-
-    return true;
+    return BaseProductProto.ISBN.newBuilder()
+      .setGroup(m_group)
+      .setPublisher(m_publisher)
+      .setTitle(m_title)
+      .setCheck(m_check)
+      .build();
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //------------------------------- compute --------------------------------
+  public static ISBN fromProto(BaseProductProto.ISBN inProto)
+  {
+    return new ISBN(inProto.getGroup(), inProto.getPublisher(),
+                    inProto.getTitle(), inProto.getCheck());
+  }
 
   /**
    * Compute the check number for the given ISBN number.
@@ -386,61 +232,24 @@ public boolean isDefined()
     return (11 - (sum % 11)) % 11;
   }
 
-  //........................................................................
-
-  /**
-   * Create a new ISBN like the current one but with diffent values.
-   *
-   * @param inGroup      the isbn group number
-   * @param inPublisher  the isbn publisher number
-   * @param inTitle      the isbn title nubmer
-   * @param inCheck      the isbn check value
-   * @return
-   */
-  public ISBN as(String inGroup, String inPublisher, String inTitle,
-                 int inCheck)
-  {
-    ISBN result = create();
-
-    result.m_group = inGroup;
-    result.m_publisher = inPublisher;
-    result.m_title = inTitle;
-    result.m_check = inCheck;
-
-    return result;
-  }
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- init -----------------------------------------------------------
-
     /** Testing the inits. */
     @org.junit.Test
     public void init()
     {
-      ISBN isbn = new ISBN();
-
-      // undefined value
-      assertEquals("not undefined at start", false, isbn.isDefined());
-      assertEquals("undefined value not correct", "$undefined$",
-                   isbn.toString());
-
       // now with some ISBN
-      isbn = new ISBN("0", "596", "00283", 1);
+      ISBN isbn = new ISBN("0", "596", "00283", 1);
 
-      assertEquals("not defined after setting", true, isbn.isDefined());
       assertEquals("value not correctly gotten", "0-596-00283-1",
                    isbn.toString());
 
       // now with some ISBN
       isbn = new ISBN("0-7869-0139-X");
 
-      assertEquals("not defined after setting", true, isbn.isDefined());
       assertEquals("value not correctly gotten", "0-7869-0139-X",
                    isbn.toString());
 
@@ -448,74 +257,29 @@ public boolean isDefined()
       assertEquals("group",      "0", isbn.getGroup());
       assertEquals("publischer", "7869", isbn.getPublisher());
       assertEquals("title",      "0139", isbn.getTitle());
-
-      Value.Test.createTest(isbn);
     }
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
 
     /** Testing reading. */
     @org.junit.Test
-    public void read()
+    public void parse()
     {
-      String []tests =
-        {
-          "simple", "0-596-00283-1", "0-596-00283-1", null,
-          "whites", "0-   596\n- 00283 - 1 ", "0-596-00283-1", " ",
-          "invalid 0", "0-596-00283-0", null, "0-596-00283-0",
-          "invalid 2", "0-596-00283-2", null, "0-596-00283-2",
-          "invalid 3", "0-596-00283-3", null, "0-596-00283-3",
-          "invalid 4", "0-596-00283-4", null, "0-596-00283-4",
-          "invalid 5", "0-596-00283-5", null, "0-596-00283-5",
-          "invalid 6", "0-596-00283-6", null, "0-596-00283-6",
-          "invalid 7", "0-596-00283-7", null, "0-596-00283-7",
-          "invalid 8", "0-596-00283-8", null, "0-596-00283-8",
-          "invalid 9", "0-596-00283-9", null, "0-596-00283-9",
-          "invalid X", "0-596-00283-x", null, "0-596-00283-x",
-          "missing", "123-444-222 h", null, "123-444-222 h",
-          "missing 2", "123-444-22a-3", null, "123-444-22a-3",
-        };
-
-      m_logger.addExpectedPattern("WARNING:.* "
-                                  + "on line 1 in document 'test'."
-                                  + "...0-596-00283->>>0...");
-      m_logger.addExpectedPattern("WARNING:.* "
-                                  + "on line 1 in document 'test'."
-                                  + "...0-596-00283->>>2...");
-      m_logger.addExpectedPattern("WARNING:.* "
-                                  + "on line 1 in document 'test'."
-                                  + "...0-596-00283->>>3...");
-      m_logger.addExpectedPattern("WARNING:.* "
-                                  + "on line 1 in document 'test'."
-                                  + "...0-596-00283->>>4...");
-      m_logger.addExpectedPattern("WARNING:.* "
-                                  + "on line 1 in document 'test'."
-                                  + "...0-596-00283->>>5...");
-      m_logger.addExpectedPattern("WARNING:.* "
-                                  + "on line 1 in document 'test'."
-                                  + "...0-596-00283->>>6...");
-      m_logger.addExpectedPattern("WARNING:.* "
-                                  + "on line 1 in document 'test'."
-                                  + "...0-596-00283->>>7...");
-      m_logger.addExpectedPattern("WARNING:.* "
-                                  + "on line 1 in document 'test'."
-                                  + "...0-596-00283->>>8...");
-      m_logger.addExpectedPattern("WARNING:.* "
-                                  + "on line 1 in document 'test'."
-                                  + "...0-596-00283->>>9...");
-      m_logger.addExpectedPattern("WARNING:.* "
-                                  + "on line 1 in document 'test'."
-                                  + "...0-596-00283->>>x...");
-      m_logger.addExpectedPattern("WARNING:.* "
-                                  + "on line 1 in document 'test'."
-                                  + "...123-444-22a->>>3...");
-
-      Value.Test.readTest(tests, new ISBN());
+      assertEquals("simple", "0-596-00283-1",
+                   PARSER.parse("0-596-00283-1").toString());
+      assertEquals("whites", "0-596-00283-1",
+                   PARSER.parse("0-   596\n- 00283 - 1 "));
+      assertNull("invalid 0", PARSER.parse("0-596-00283-0"));
+      assertNull("invalid 2", PARSER.parse("0-596-00283-2"));
+      assertNull("invalid 3", PARSER.parse("0-596-00283-3"));
+      assertNull("invalid 4", PARSER.parse("0-596-00283-4"));
+      assertNull("invalid 5", PARSER.parse("0-596-00283-5"));
+      assertNull("invalid 6", PARSER.parse("0-596-00283-6"));
+      assertNull("invalid 7", PARSER.parse("0-596-00283-7"));
+      assertNull("invalid 8", PARSER.parse("0-596-00283-8"));
+      assertNull("invalid 9", PARSER.parse("0-596-00283-9"));
+      assertNull("invalid X", PARSER.parse("0-596-00283-x"));
+      assertNull("missing", PARSER.parse("123-444-222 h"));
+      assertNull("missing 2", PARSER.parse("123-444-22a-3"));
     }
-
-    //......................................................................
-    //----- check ----------------------------------------------------------
 
     /** Test for checks. */
     @org.junit.Test
@@ -531,22 +295,15 @@ public boolean isDefined()
                    ISBN.compute("3", "411", "02421"));
     }
 
-    //......................................................................
-    //----- unformatted ----------------------------------------------------
-
     /** Testing setting. */
     @org.junit.Test
     public void unformatted()
     {
       ISBN isbn = new ISBN("0", "7869", "2944", 8);
-      assertEquals("simple", "0786929448", isbn.getUnformatted());
+      assertEquals("simple", "0786929448", isbn.toUnformatted());
 
       isbn = new ISBN("0", "7869", "0755", 10);
-      assertEquals("string", "078690755X", isbn.getUnformatted());
+      assertEquals("string", "078690755X", isbn.toUnformatted());
     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

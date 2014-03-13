@@ -412,6 +412,7 @@ public class Contents extends Extension<Item>
         new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
                                                "container test"))
       {
+        /*
         Item item = (Item)Item.read(reader);
 
         assertNotNull("item should have been read", item);
@@ -425,6 +426,8 @@ public class Contents extends Extension<Item>
                      + "\n"
                      + "#.....\n",
                      item.toString());
+                     */
+        fail("reimplement");
       }
     }
 
@@ -443,6 +446,7 @@ public class Contents extends Extension<Item>
         new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
                                                "container test"))
       {
+        /*
         Item item = (Item)Item.read(reader);
 
         assertNotNull("item should have been read", item);
@@ -457,6 +461,8 @@ public class Contents extends Extension<Item>
                      + "\n"
                      + "#.....\n",
                      item.toString());
+                     */
+        fail("reimplement");
       }
     }
 
@@ -477,13 +483,16 @@ public class Contents extends Extension<Item>
         new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
                                                "container test"))
       {
+        /*
         addEntry(net.ixitxachitls.dma.entries.Campaign.read(reader));
         addEntry(Item.read(reader));
         addEntry(Item.read(reader));
 
         Item container = (Item)Item.read(reader);
-
         assertEquals("value", 375.0, container.getGoldValue(), 0.5);
+        */
+
+        fail("reimplement");
       }
     }
 
@@ -507,6 +516,7 @@ public class Contents extends Extension<Item>
         new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
                                                "container test"))
       {
+        /*
         addEntry(net.ixitxachitls.dma.entries.Campaign.read(reader));
         addEntry(net.ixitxachitls.dma.entries.BaseItem.read(reader));
         addEntry(Item.read(reader));
@@ -515,9 +525,10 @@ public class Contents extends Extension<Item>
         addEntry(net.ixitxachitls.dma.entries.BaseCampaign.read(reader));
 
         Item container = (Item)Item.read(reader);
-
         assertEquals("weight", 16.0,
                      container.getTotalWeight().getAsPounds().getValue(), 0.5);
+        */
+        fail("reimplement");
       }
     }
 

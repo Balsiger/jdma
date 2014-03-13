@@ -235,7 +235,8 @@ public class BaseCampaign extends BaseEntry
         new net.ixitxachitls.input.ParseReader
         (new java.io.StringReader(s_text), "test"); // $codepro.audit.disable
 
-      return (BaseCampaign)AbstractEntry.read(reader);
+      //return (BaseCampaign)AbstractEntry.read(reader);
+      return null;
     }
 
     //......................................................................

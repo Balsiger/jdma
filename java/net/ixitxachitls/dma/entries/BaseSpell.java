@@ -2317,7 +2317,7 @@ public class BaseSpell extends BaseEntry
       {
         ParseReader reader = new ParseReader(sReader, "test");
 
-        return BaseSpell.read(reader);
+        return null; //BaseSpell.read(reader);
       }
     }
 

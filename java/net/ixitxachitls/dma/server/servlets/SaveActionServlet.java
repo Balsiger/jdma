@@ -23,7 +23,6 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -36,6 +35,8 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.ValueGroup;
+import net.ixitxachitls.util.Encodings;
 
 //..........................................................................
 
@@ -103,26 +104,22 @@ public class SaveActionServlet extends ActionServlet
     if(entry == null)
       return "gui.alert('Cannot find entry for " + key + "');";
 
-    List<String> errors = new ArrayList<>();
-    for(String name : inRequest.getParams().keySet())
-    {
-      if(name.startsWith("_"))
-        continue;
-
-      String value = inRequest.getParam(name);
-      name = name.replaceAll("-", " ");
-
-      String rest = entry.set(name, value);
-      if(rest != null && !rest.isEmpty())
-        errors.add("Cannot fully parse " + name + ": " + rest);
-    }
-
-    entry.save();
+    ValueGroup.Values values = new ValueGroup.Values(inRequest.getParams());
+    entry.set(values);
+    List<String> errors = values.obtainMessages();
 
     if(!errors.isEmpty())
-      return "gui.alert('" + newlineJoiner.join(errors) + "');";
+      return "gui.alert('" + Encodings.escapeJS(newlineJoiner.join(errors))
+        + "');";
 
-    return "gui.info('Entry " + entry.getName() + " has been saved.');";
+    if(values.isChanged())
+    {
+      entry.changed();
+      entry.save();
+      return "gui.info('Entry " + entry.getName() + " has been saved.'); true";
+    }
+
+    return "gui.info('No changes needed saving')";
   }
 
   //------------------------------------------------------------------- test

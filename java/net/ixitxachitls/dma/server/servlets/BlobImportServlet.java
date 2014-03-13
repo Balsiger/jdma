@@ -38,55 +38,29 @@ import com.google.appengine.api.files.AppEngineFile;
 import com.google.appengine.api.files.FileService;
 import com.google.appengine.api.files.FileServiceFactory;
 import com.google.appengine.api.files.FileWriteChannel;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * A servlet to import files to the blob store.
  *
- *
  * @file          BlobImportServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class BlobImportServlet extends HttpServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //-------------------------------- doPost --------------------------------
+  /** The image service to serve images. */
+  private ImagesService m_image = ImagesServiceFactory.getImagesService();
 
   /**
    * Post information to the blob store.
@@ -165,7 +139,8 @@ public class BlobImportServlet extends HttpServlet
           }
 
           // Add a reference to the path to the datastore.
-          store.addFile(entry, name, type, fileService.getBlobKey(file));
+          entry.addFile(m_image, name, type, fileService.getBlobKey(file));
+          entry.save();
 
           writer.println("OK");
         }

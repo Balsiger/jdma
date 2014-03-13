@@ -343,7 +343,7 @@ public class Campaign extends CampaignEntry<BaseCampaign>
     }
 
     if("basename".equals(inKey))
-      return new Name(m_base.get(0).get());
+      return new Name(m_base.get(0));
 
     return super.compute(inKey);
   }
@@ -355,13 +355,12 @@ public class Campaign extends CampaignEntry<BaseCampaign>
    * Get the path to this entry.
    *
    * @return      the path to read this entry
-   *
    */
   @Override
   public String getPath()
   {
-    if(m_base.isDefined())
-      return "/" + BaseCampaign.TYPE.getLink() + "/" + m_base.get(0).get()
+    if(!m_base.isEmpty())
+      return "/" + BaseCampaign.TYPE.getLink() + "/" + m_base.get(0)
         + "/" + getName();
 
     return "/" + BaseCampaign.TYPE.getLink() + "/$undefined$/" + getName();
@@ -374,12 +373,11 @@ public class Campaign extends CampaignEntry<BaseCampaign>
    * Get the path to this entry.
    *
    * @return      the path to read this entry
-   *
    */
   @Override
   public String getEditType()
   {
-    return "/" + BaseCampaign.TYPE + "/" + m_base.get(0).get()
+    return "/" + BaseCampaign.TYPE + "/" + m_base.get(0)
       + "/" + Campaign.TYPE + "/" + getName();
   }
 

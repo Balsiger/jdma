@@ -28,6 +28,143 @@
 // @function def 1 0
 // @function entry 1 0
 
+/**
+ * Show the entry.
+ * 
+ * @param entry The entry to show
+ * @param type The entry type to use
+ * @param values The values to show
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ * @param color the color for highlights
+ * @param? title the special title, if any
+ */
+{template .show}
+  <div class="show entry {$type}">
+
+    {call dma.entry.toolbar}
+      {param entry: $entry /}
+    {/call}
+
+  <div class="show entry base-character">
+    {call dma.entry.toolbar}
+      {param entry: $entry /}
+    {/call}
+
+    {if not $ij.params.card}
+      {call dma.entry.navigation}
+        {param first: $first /}
+        {param previous: $previous /}
+        {param list: $list /}
+        {param next: $next /}
+        {param last: $last /}
+      {/call}
+      {call dma.navigation.navigation}
+        {param entries:
+            [
+              [ 'label': $entry.type.link, 'url': '/' + $entry.type.multilink ],
+              [ 'label': $entry.name, 'url': $entry.path ]
+            ] /}
+      {/call}
+    {/if}
+
+    <div class="_new_ images">
+      {call dma.entry.mainImage}
+        {param entry: $entry /}
+      {/call}
+        
+      {foreach $file in $entry.files.other}
+        {call dma.entry.file}
+          {param file: $file /}
+        {/call}
+      {/foreach}
+    </div>
+
+    <div class="values">
+
+       {if $title}
+         {$title}
+       {else}
+         {call dma.entry._new_title}
+           {param title: $entry.name /}
+           {param color: $color /}
+         {/call}
+       {/if}
+       
+      <div class="_new_value _new_description">
+        {if $entry.description}
+          {commands($entry.description) |noescape}
+        {else}
+          (no description)
+        {/if}
+      </div>
+        
+      <div class="_new_value _new_short-description">
+        {if $entry.short_description}
+          {commands($entry.short_description) |noescape}
+        {else}
+          (no short description)
+        {/if}
+      </div>
+
+       <div class="_new_values">
+         {$values} 
+       </div>
+       
+      <div class="clear"></div>
+    </div>
+    
+    {if not $ij.params.card}
+      {call dma.entry.navigation}
+        {param first: $first /}
+        {param previous: $previous /}
+        {param list: $list /}
+        {param next: $next /}
+        {param last: $last /}
+      {/call}
+    {/if}
+    {literal}
+      <script>
+        $(document).ready(function()
+        {
+          $('DIV.files IMG.image')
+            .mouseover(util.replaceMainImage)
+            .mouseout(util.restoreMainImage);
+        });
+      </script>
+    {/literal}
+
+  </div>  
+  <pre>
+    {$entry.toProto.toString}
+  </pre>
+{/template}
+
+/**
+ * Show the toolbar with the avaialable actions.
+ * 
+ * @param entry The entry to show the toolbar for
+ */
+{template .toolbar}
+  <div class="toolbar">
+    <div class="actions">
+      <div class="action sprite large edit"
+           onclick="edit.show('{$entry.name}', '{$entry.path}', 
+                              'edit-{$entry.type.css}-{$entry.name |css}')">
+      </div>
+      <div class="action sprite large delete"
+           onclick="if(confirm('Do you really want to delete this?'))
+                      util.ajax('/actions/remove',
+                               {lb} key: '{$entry.key |escapeJs}' {rb},
+                               null, true);">
+      </div> 
+    </div>
+  </div>
+{/template}
+
 /** The main title.
  * 
  * @param title The text of the title
@@ -41,6 +178,16 @@
         style="background: -webkit-linear-gradient(right, transparent 0%, {$color} 100%);">
     </div>
   </span>
+  </div>
+{/template}
+
+/** The sub title.
+ * 
+ * @param title The text of the title
+ */
+{template ._new_subtitle}
+  <div class="subtitle"">
+    {$title}
   </div>
 {/template}
 
@@ -58,19 +205,21 @@
       {param class: 'image-link' /}
       {param text}
         <img src="{$entry.files.main.icon}=s{if $size}{$size}{else}100{/if}"
-          alt="Main" class="_new_ image main" id="file=-main" />
+          alt="Main" class="_new_ _new_image _new_main" />
       {/param}
     {/call}
   {else}
     {call dma.page.link}
-      {param url: '' /}
+      {param url: '#' /}
       {param tooltip: 'Main' /}
       {param class: 'image-link' /}
       {param text}
         <img src="/icons/{$entry.type.multilink}-dummy.png" alt="Main"
-        class="image main" id="file=-main"
+        class="_new_ _new_image _new_main"
         {if $size}
           {sp}style="max-width: {$size}px; max-height: {$size}px;"
+        {else}
+          {sp}style="max-width: 100px; max-height: 100px;"
         {/if} />
       {/param}
     {/call}
@@ -90,7 +239,7 @@
     {param class: 'image-link' /}
     {param text}
       <img src="{$file.icon}=s{if $size}{$size}{else}100{/if}"
-        alt="{$file.name}" class="_new_ image other" id="file=-other" />
+        alt="{$file.name}" class="_new_ _new_image other" id="file=-other" />
     {/param}
   {/call}
 {/template}
@@ -113,6 +262,7 @@
 {/template}
 
 // The old templates are below
+// *****************************************************************************
 
 /**
  * The main template for an entry.

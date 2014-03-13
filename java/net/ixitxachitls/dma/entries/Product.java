@@ -554,7 +554,7 @@ public class Product extends Entry<BaseProduct>
   @Override
   public boolean save()
   {
-    if(m_name.get().startsWith(Entry.TEMPORARY))
+    if(m_name.startsWith(Entry.TEMPORARY))
       do
       {
         randomID();
