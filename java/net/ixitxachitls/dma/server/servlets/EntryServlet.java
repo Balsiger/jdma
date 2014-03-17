@@ -42,7 +42,6 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseEntry;
-import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
@@ -131,17 +130,6 @@ public class EntryServlet extends PageServlet
     return entry != null && entry.isBase();
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //----------------------------- collectData ------------------------------
-
   /**
    * Collect the data that is to be printed.
    *
@@ -150,7 +138,6 @@ public class EntryServlet extends PageServlet
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
-   *
    */
   @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
@@ -275,12 +262,8 @@ public class EntryServlet extends PageServlet
       case "show":
       default:
         extension = "";
-        if (entry.getType().equals(BaseCharacter.TYPE)
-            || entry.getType().equals(BaseProduct.TYPE))
-          template = "dma.entries."
-            + entry.getType().getMultipleDir().toLowerCase() + ".show";
-        else
-          template = "dma.entry.container";
+        template = "dma.entries."
+          + entry.getType().getMultipleDir().toLowerCase() + ".show";
     }
 
     data.put
@@ -299,9 +282,6 @@ public class EntryServlet extends PageServlet
 
     return data;
   }
-
-  //........................................................................
-  //------------------------- collectInjectedData --------------------------
 
   /**
    * Collect the injected data that is to be printed.
@@ -326,7 +306,7 @@ public class EntryServlet extends PageServlet
     // If we don't have an entry, it's probably being created and thus we
     // should have access to it.
     data.put("isDM", user != null && (entry == null || entry.isDM(user)));
-
+    data.put("isDev", DMAServlet.isDev() || inRequest.hasParam("dev"));
     data.put("isOwner", user != null && (entry == null || entry.isOwner(user)));
 
     Tracer tracer2 = new Tracer("collecting request parameters");

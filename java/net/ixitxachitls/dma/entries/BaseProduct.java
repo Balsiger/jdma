@@ -1403,7 +1403,6 @@ public class BaseProduct extends BaseEntry
     return m_system;
   }
 
-
   /**
    * Accessor for the title of the base product.
    *
@@ -1447,7 +1446,6 @@ public class BaseProduct extends BaseEntry
   {
     return m_productType;
   }
-
 
   /**
    * Get the volume of the product.
@@ -1799,6 +1797,16 @@ public class BaseProduct extends BaseEntry
                                           m_optionalRequirements,
                                           ProductReference.PARSER,
                                           "name", "pages");
+  }
+
+  @Override
+  public Map<String, Object> collectSearchables()
+  {
+    Map<String, Object> searchables = super.collectSearchables();
+
+    searchables.put("title", m_title);
+
+    return searchables;
   }
 
   @SuppressWarnings("unchecked")

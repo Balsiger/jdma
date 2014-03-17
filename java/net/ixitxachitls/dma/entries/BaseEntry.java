@@ -36,6 +36,7 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.values.ProductReference;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -221,6 +222,16 @@ public class BaseEntry extends AbstractEntry
   public List<String> getWorlds()
   {
     return Collections.unmodifiableList(m_worlds);
+  }
+
+  /**
+   * Get the worlds as a single string.
+   *
+   * @return the worlds as string representation
+   */
+  public String getWorldsString()
+  {
+    return Strings.COMMA_JOINER.join(m_worlds);
   }
 
   /**

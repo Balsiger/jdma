@@ -49,11 +49,6 @@
       {param entry: $entry /}
     {/call}
 
-  <div class="show entry base-character">
-    {call dma.entry.toolbar}
-      {param entry: $entry /}
-    {/call}
-
     {if not $ij.params.card}
       {call dma.entry.navigation}
         {param first: $first /}
@@ -137,10 +132,12 @@
       </script>
     {/literal}
 
-  </div>  
-  <pre>
-    {$entry.toProto.toString}
-  </pre>
+    {if false and $ij.isDev}  
+      <pre>
+        {$entry.toProto.toString}
+      </pre>
+    {/if}
+  </div>
 {/template}
 
 /**
@@ -259,6 +256,67 @@
       {$value}
     </div>
   </div>
+{/template}
+
+/**
+ * Formatting a list of entries.
+ *
+ * @param title The list title.
+ * @param start The start index
+ * @param pagesize The size of the page
+ * @param size The number of entries shown
+ * @param titles An array with the list title names
+ * @param entries The entries printed
+ * @param label The navigation label for this page
+ * @param path The path to this page
+ *
+ */
+{template .newlist}
+  <h1>{$title}</h1>
+  {call dma.page.title}
+    {param title: $title /}
+  {/call}
+
+  {call dma.navigation.navigation}
+    {param entries: [[ 'label': $label, 'url': $path ]] /}
+  {/call}
+  {call dma.entry.listnav}
+    {param start: $start /}
+    {param pagesize: $pagesize /}
+    {param size: $size /}
+  {/call}
+
+  {if $entries}
+    <table class="entrylist">
+      <tr class="title">
+        {foreach $listTitle in $titles}
+          {call .listtitle}{param title: $listTitle /}{/call}
+        {/foreach}
+      </tr>
+      {$entries}
+    </table>
+    {call dma.entry.listnav}
+      {param start: $start /}
+      {param pagesize: $pagesize /}
+      {param size: $size /}
+    {/call}
+  {else}
+    <div class="error">No entries found!</div>
+  {/if}
+{/template}
+
+/**
+ * Template for a single list entry.
+ * 
+ * @param path The path to the value for selection
+ * @param values The values for the list entry.
+ */
+{template .newListEntry}
+  <tr onclick="util.link(event, '{$path}')">
+    {foreach $value in $values}
+      <td class="list">{$value}</td>
+    {/foreach}          
+  </tr>   
 {/template}
 
 // The old templates are below

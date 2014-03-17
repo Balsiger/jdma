@@ -409,9 +409,6 @@ public class DataStore
     return ids;
   }
 
-  //........................................................................
-  //-------------------------------- getIDs --------------------------------
-
   /**
    * Get all the ids of all entities with the given type and parent.
    *
@@ -420,7 +417,6 @@ public class DataStore
    * @param       inParent    the key of the parent value, if any
    *
    * @return      the list of ids found
-   *
    */
   @SuppressWarnings("unchecked")
   public List<String> getIDs(String inType, @Nullable String inSortField,

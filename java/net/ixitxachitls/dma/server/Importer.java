@@ -328,7 +328,8 @@ public final class Importer
         if (lastType != type && !m_entities.isEmpty())
         {
           lastType = type;
-          Log.important("storing entities in datastore");
+          Log.important("storing " + m_entities.size()
+                        + " entities in datastore");
           m_store.put(m_entities);
           m_entities.clear();
         }
@@ -423,10 +424,7 @@ public final class Importer
       return inProto.build();
     }
     else
-    {
-      Log.important("merging '" + inFile + "' into " + inProto);
       return inProto.mergeFrom(new FileInputStream(inFile)).build();
-    }
   }
 
   private void importFile(String inName, AbstractEntry inEntry)
@@ -468,7 +466,7 @@ public final class Importer
                   + " for " + key);
 
     URL url =
-      new URL("http", m_host, m_webPort,
+      new URL("http", "www.ixitxachitls.net", 80,
               "/__import"
                 + "?type=" + Encodings.urlEncode(type)
                 + "&name=" + Encodings.urlEncode(name)

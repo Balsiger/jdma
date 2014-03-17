@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.ArrayList;
@@ -44,30 +42,18 @@ import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
-//------------------------------------------------------------------- header
-
 /**
  * A page servlet to serve a list of values.
  *
  *
  * @file          ListServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @Immutable
 @ParametersAreNonnullByDefault
 public class EntryListServlet extends PageServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //--------------------------- EntryListServlet ---------------------------
-
   /**
    * Create the servlet.
    */
@@ -75,20 +61,8 @@ public class EntryListServlet extends PageServlet
   {
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------ getEntries ------------------------------
 
   /**
    * Get the entries in the given page range.
@@ -100,7 +74,6 @@ public class EntryListServlet extends PageServlet
    * @param       inSize    the maximal number of entries to return
    *
    * @return      a list of all entries in range
-   *
    */
   @SuppressWarnings("unchecked") // need to cast
   public List<AbstractEntry>
@@ -112,14 +85,6 @@ public class EntryListServlet extends PageServlet
       .getEntries(inType, null, inStart, inSize);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //----------------------------- collectData ------------------------------
-
   /**
    * Collect the data that is to be printed.
    *
@@ -128,7 +93,6 @@ public class EntryListServlet extends PageServlet
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
-   *
    */
   @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
@@ -145,7 +109,7 @@ public class EntryListServlet extends PageServlet
       AbstractType.getTyped(typeName);
     if(type == null)
     {
-      data.put("content", inRenderer.render("dma.error.unknownType",
+      data.put("content", inRenderer.render("dma.error.invalidType",
                                             map("type", typeName)));
       return data;
     }
@@ -163,7 +127,7 @@ public class EntryListServlet extends PageServlet
 
     data.put("content",
              inRenderer.render
-             ("dma.entry.list",
+             ("dma.entries." + type.getMultipleDir().toLowerCase() + ".list",
               map("title", title,
                   "entries", entries,
                   "label", title.toLowerCase(Locale.US),
@@ -174,11 +138,4 @@ public class EntryListServlet extends PageServlet
 
     return data;
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
 }

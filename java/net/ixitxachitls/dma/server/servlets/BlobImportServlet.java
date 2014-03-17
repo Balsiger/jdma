@@ -109,7 +109,7 @@ public class BlobImportServlet extends HttpServlet
       }
       else
       {
-        DMADatastore store = (DMADatastore)DMADataFactory.get();
+        DMADatastore store = DMADataFactory.get();
         AbstractEntry entry = store.getEntry(key);
 
         if(entry == null)
