@@ -25,6 +25,7 @@ package net.ixitxachitls.util;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -40,6 +41,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
+import com.google.common.base.Splitter;
 
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -149,8 +152,14 @@ public final class Strings
   /** The joiner to convert with spaces. */
   public static final Joiner SPACE_JOINER = Joiner.on(' ');
 
-  /** The joiner to convert with spaces. */
+  /** The joiner to convert with commas. */
   public static final Joiner COMMA_JOINER = Joiner.on(", ");
+
+  /** The joiner to convert with pipes. */
+  public static final Joiner PIPE_JOINER = Joiner.on("|");
+
+  /** The splitter to split by commas. */
+  public static final Splitter COMMA_SPLITTER = Splitter.on(',').trimResults();
 
   /** The joiner to convert with escaped newlines. */
   public static final Joiner BR_JOINER = Joiner.on("<br />");
@@ -361,6 +370,35 @@ public final class Strings
     else
       return new String[0];
   }
+
+  /**
+   * Get all the patterns matching.
+   *
+   * @param inText     the text to match against
+   * @param inPattern  the pattern to match multiple times
+   * @return           a list of all the groups matching each time the pattern
+   *                   matches
+   */
+  public static List<String []> getAllPatterns(String inText, String inPattern)
+  {
+    List<String []> results = new ArrayList<>();
+
+    // check if we have a name
+    Matcher matcher = Pattern.compile(inPattern).matcher(inText);
+
+    while(matcher.find())
+    {
+      String []found = new String[matcher.groupCount()];
+
+      for(int i = 0; i < found.length; i++)
+        found[i] = matcher.group(i + 1);
+
+      results.add(found);
+    }
+
+    return results;
+  }
+
 
   //........................................................................
   //-------------------------- replaceTemplates ----------------------------
@@ -811,14 +849,21 @@ public final class Strings
     return " class=\"" + result + "\"";
   }
 
-  //........................................................................
+  public static Optional<String> concatenate(Optional<String> inFirst,
+                                             Optional<String> inSecond,
+                                             String inDelimiter)
+  {
+    if(!inFirst.isPresent())
+      return inSecond;
 
-  //........................................................................
+    if(!inSecond.isPresent())
+      return inFirst;
 
-  //------------------------------------------------- other member functions
-  //........................................................................
+    return Optional.of(inFirst.get() + inDelimiter + inSecond.get());
+  }
 
-  //---------------------------------------------------------------- testing
+
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
@@ -1239,6 +1284,4 @@ public final class Strings
 
     //......................................................................
   }
-
-  //........................................................................
 }

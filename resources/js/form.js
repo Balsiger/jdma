@@ -146,6 +146,13 @@ form.checkValue = function(inType, inValue)
 
     case 'number':
       return inValue.match(/^\+?\d+$/);
+      
+    case 'money':
+      return inValue.match(/^(\s*\d+\s*(pp|gp|sp|cp))*$/);
+
+    case 'weight':
+      return inValue.match
+        (/^(\s*\d+\s*(lb|lbs|oz|pound|pounds|ounce|ounces))*$/);
 
     case 'modifier':
     return inValue.match(/^[+-]?\d+(\s+[a-zA-Z]+)*$/);

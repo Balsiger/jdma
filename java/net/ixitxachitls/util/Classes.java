@@ -19,60 +19,38 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.util;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.collect.ImmutableList;
+
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * General utility functions for dealing with classes.
  *
  * @file          Classes.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public final class Classes
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------- Classes --------------------------------
-
   /**
    * Prevent instantiation of static class.
-   *
    */
   private Classes()
   {
     // nothing to do here, never called
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //----------------------------- toClassName ------------------------------
+  private static final List<String> METHOD_PREFIXES =
+    ImmutableList.of("get", "is", "has", "to");
 
   /**
     * Convert the given name into a possible class name.
@@ -116,11 +94,7 @@ public final class Classes
       return result.toString();
   }
 
-  //........................................................................
-  //---------------------------- fromClassName -----------------------------
-
   /**
-    *
     * Convert the name of the given class into a String.
     *
     * The name is converted without package and before all uppercase characters
@@ -139,11 +113,7 @@ public final class Classes
     return name.replaceAll("(\\w)(\\p{Upper}\\p{Lower})", "$1 $2");
   }
 
-  //........................................................................
-  //------------------------------ getPackage ------------------------------
-
   /**
-    *
     * Get the package name from the given class.
     *
     * @param       inClass the class to get the package name from
@@ -157,9 +127,6 @@ public final class Classes
     return name.substring(0, name.lastIndexOf('.'));
   }
 
-  //........................................................................
-  //------------------------------ getMethod -------------------------------
-
   /**
    * Obtains the method with the given name from the given class, traversing to
    * superclasses if necessary.
@@ -169,7 +136,6 @@ public final class Classes
    * @param     inArguments the argument types for the method
    *
    * @return    the method found
-   *
    */
   public static @Nullable Method getMethod(Class<?> inClass, String inName,
                                            Class<?> ... inArguments)
@@ -192,9 +158,6 @@ public final class Classes
     return method;
   }
 
-  //........................................................................
-  //------------------------------ callMethod ------------------------------
-
   /**
    * Call the name method with the given arguments.
    *
@@ -203,7 +166,6 @@ public final class Classes
    * @param       inArguments the arguments to call the method with
    *
    * @return      the result of the method, or null if something failed
-   *
    */
   public static @Nullable Object callMethod(String inName, Object inObject,
                                             Object ... inArguments)
@@ -217,14 +179,24 @@ public final class Classes
     Method method = getMethod(inObject.getClass(), name, arguments);
     if(method == null)
     {
-      name = "get" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
-      method = getMethod(inObject.getClass(), name, arguments);
+      String stem = Character.toUpperCase(name.charAt(0)) + name.substring(1);;
+      for(String prefix : METHOD_PREFIXES)
+      {
+        name = prefix + stem;
+        method = getMethod(inObject.getClass(), name, arguments);
+        if(method != null)
+          break;
+      }
+
       if(method == null)
         return null;
     }
 
     try
     {
+      // Make this accessible in case it's used in a non-public inner
+      // class.
+      method.setAccessible(true);
       return method.invoke(inObject, inArguments);
     }
     catch(IllegalAccessException e)

@@ -23,10 +23,10 @@ package net.ixitxachitls.dma.values;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 
@@ -47,17 +47,19 @@ import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 public class Date extends NewValue<BaseProductProto.Date>
   implements Comparable<Date>
 {
-  public static class DateParser implements Parser<Date>
+  public static class DateParser extends Parser<Date>
   {
-    @Override
-    public @Nullable Date parse(String... inValues)
+    public DateParser()
     {
-      if(inValues.length != 1)
-        return null;
+      super(1);
+    }
 
-      List<String> parts = SPACE_SPLITTER.splitToList(inValues[0]);
+    @Override
+    public Optional<Date> doParse(String inValue)
+    {
+      List<String> parts = SPACE_SPLITTER.splitToList(inValue);
       if(parts.size() > 2)
-        return null;
+        return Optional.absent();
 
       int month = 0;
       if(parts.size() > 1)
@@ -69,13 +71,13 @@ public class Date extends NewValue<BaseProductProto.Date>
             break;
           }
         if(month <= 0)
-          return null;
+          return Optional.absent();
       }
 
       try
       {
         int year = Integer.parseInt(parts.get(parts.size() - 1));
-        return new Date(month, year);
+        return Optional.of(new Date(month, year));
       }
       catch(NumberFormatException e)
       {

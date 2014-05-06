@@ -19,192 +19,150 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries.extensions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseItem;
+import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseCommodityProto;
 import net.ixitxachitls.dma.values.Area;
-import net.ixitxachitls.dma.values.Distance;
-import net.ixitxachitls.dma.values.Group;
+import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.NewDistance;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is the commodity extension for all the entries.
  *
  * @file          BaseCommodity.java
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ParametersAreNonnullByDefault
-public class BaseCommodity extends BaseExtension<BaseItem>
+public class BaseCommodity extends ValueGroup
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- BaseCommodity ----------------------------
-
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
-
   /**
    * Default constructor.
    *
    * @param       inEntry the base item attached to
    * @param       inName the name of the extension
-   *
    */
-  public BaseCommodity(BaseItem inEntry, String inName)
+  public BaseCommodity(BaseItem inItem)
   {
-    super(inEntry, inName);
+    m_item = inItem;
   }
 
-  //........................................................................
-  //----------------------------- BaseCommodity ----------------------------
-
-  /**
-   * Default constructor.
-   *
-   * @param       inEntry the base item attached to
-   * @param       inTag   the tag name for this instance
-   * @param       inName  the name of the extension
-   *
-   */
-  // public BaseCommodity(BaseItem inEntry, String inTag, String inName)
-  // {
-  //   super(inEntry, inTag, inName);
-  // }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  //----- area -------------------------------------------------------------
-
-  /** The grouping for max dex. */
-  protected static final Group<Area, Long, String> s_areaGrouping =
-    new Group<Area, Long, String>(new Group.Extractor<Area, Long>()
-      {
-        /**
-         *
-         */
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Long extract(Area inValue)
-        {
-          return (long)inValue.getAsFeet().getValue() * 144;
-        }
-      }, new Long [] { 1L, 144 * 1L, 144 * 9L, 144 * 9 * 10L, 144 * 9 * 100L, },
-                               new String []
-      { "1 sq inch", "1 sq foot", "1 sq yard", "10 sq yards", "100 sq yards",
-        "ocean wide", }, "$undefined$");
+  /** The item this commodity belongs to. */
+  protected BaseItem m_item;
 
   /** The area for this commodity. */
-  @Key("area")
-  protected Area m_area = new Area()
-    .withGrouping(s_areaGrouping)
-    .withTemplate("link", Index.Path.AREAS.getPath());
-
-  static
-  {
-    addIndex(new Index(Index.Path.AREAS, "Areas", BaseItem.TYPE));
-  }
-
-  //........................................................................
-  //----- length -----------------------------------------------------------
-
-  /** The grouping for max dex. */
-  protected static final Group<Distance, Long, String> s_lengthGrouping =
-    new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
-      {
-        /**
-         *
-         */
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Long extract(Distance inValue)
-        {
-          if(inValue == null)
-            throw new IllegalArgumentException("must have a value here");
-
-          return (long)inValue.getAsFeet().getValue() * 12;
-        }
-      }, new Long [] { 1L, 12 * 1L, 12 * 10L, 12 * 25L, 12 * 50L, 12 * 100L,
-                       12 * 250L, 12 * 500L, },
-                               new String []
-      { "1 in", "1 ft", "10 ft", "25 ft", "50 ft", "100 ft", "250 ft",
-        "500 ft", "Infinite", }, "$undefined$");
+  protected Optional<Area> m_area = Optional.absent();
 
   /** The length of this commodity. */
-  @Key("length")
-  protected Distance m_length = new Distance()
-    .withGrouping(s_lengthGrouping);
-
-  static
-  {
-    addIndex(new Index(Index.Path.LENGTHS, "Lengths", BaseItem.TYPE));
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------- computeIndexValues ---------------------------
+  protected Optional<NewDistance> m_length = Optional.absent();
 
   /**
-   * Get all the values for all the indexes.
+   * Get the area value.
    *
-   * @param       ioValues a multi map of values per index name
-   *
+   * @return      the area
    */
-  @Override
-  public void computeIndexValues(Multimap<Index.Path, String> ioValues)
+  public Optional<Area> getArea()
   {
-    super.computeIndexValues(ioValues);
-
-    ioValues.put(Index.Path.AREAS, m_area.group());
-    ioValues.put(Index.Path.LENGTHS, m_length.group());
+    return m_area;
   }
 
-  //........................................................................
+  /**
+   * Get the combined area of this commodity, including values of bases.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Area> getCombinedArea()
+  {
+    if(m_area.isPresent())
+      return new Combination.Addable<Area>(m_item, m_area.get());
 
-  //........................................................................
+    List<Combination<Area>> combinations = new ArrayList<>();
+    for(BaseEntry entry : m_item.getBaseEntries())
+      if(entry instanceof BaseItem)
+      {
+        BaseCommodity armor = ((BaseItem)entry).getCommodity();
+        combinations.add(armor.getCombinedArea());
+      }
 
-  //----------------------------------------------------------- manipulators
-  //........................................................................
+    return new Combination.Addable<Area>(m_item, combinations);
+  }
 
-  //------------------------------------------------- other member functions
+  /**
+   * Get the length value.
+   *
+   * @return      the length
+   */
+  public Optional<NewDistance> getLength()
+  {
+    return m_length;
+  }
+
+  /**
+   * Get the combined length of this commodity, including values of bases.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDistance> getCombinedLength()
+  {
+    if(m_length.isPresent())
+      return new Combination.Addable<NewDistance>(m_item, m_length.get());
+
+    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    for(BaseEntry entry : m_item.getBaseEntries())
+      if(entry instanceof BaseItem)
+      {
+        BaseCommodity armor = ((BaseItem)entry).getCommodity();
+        combinations.add(armor.getCombinedLength());
+      }
+
+    return new Combination.Addable<NewDistance>(m_item, combinations);
+  }
+
+  @Override
+  public Multimap<Index.Path, String> computeIndexValues()
+  {
+    Multimap<Index.Path, String> values = super.computeIndexValues();
+
+    if(m_area.isPresent())
+      values.put(Index.Path.AREAS, m_area.toString());
+    if(m_length.isPresent())
+      values.put(Index.Path.LENGTHS, m_length.toString());
+
+    return values;
+  }
+
+  @Override
+  public void set(Values inValues)
+  {
+    m_area = inValues.use("commodity.area", m_area, Area.PARSER);
+    m_length = inValues.use("commodity.length", m_length, NewDistance.PARSER);
+  }
 
   @Override
   public Message toProto()
   {
     BaseCommodityProto.Builder builder = BaseCommodityProto.newBuilder();
 
-    if(m_area.isDefined())
-      builder.setArea(m_area.toProto());
-    if(m_length.isDefined())
-      builder.setLength(m_length.toProto());
+    if(m_area.isPresent())
+      builder.setArea(m_area.get().toProto());
+    if(m_length.isPresent())
+      builder.setLength(m_length.get().toProto());
 
     return builder.build();
   }
@@ -221,16 +179,60 @@ public class BaseCommodity extends BaseExtension<BaseItem>
     BaseCommodityProto proto = (BaseCommodityProto)inProto;
 
     if(proto.hasArea())
-      m_area = m_area.fromProto(proto.getArea());
+      m_area = Optional.of(Area.fromProto(proto.getArea()));
     if(proto.hasLength())
-      m_length = m_length.fromProto(proto.getLength());
+      m_length = Optional.of(NewDistance.fromProto(proto.getLength()));
   }
 
-  //........................................................................
+  @Override
+  public <T extends AbstractEntry> AbstractType<T> getType()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-  //------------------------------------------------------------------- test
+  @Override
+  public String getEditType()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-  // no tests, see BaseItem for tests
+  @Override
+  public AbstractEntry getEntry()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-  //........................................................................
+  @Override
+  public String getName()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getID()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public void changed(boolean inChanged)
+  {
+    // TODO Auto-generated method stub
+
+  }
+
+  /**
+   * Check whether any commodity values are defined.
+   *
+   * @return true if commodity values are defined, false if not
+   */
+  public boolean hasValues()
+  {
+    return m_area.isPresent() || m_length.isPresent();
+  }
 }

@@ -22,9 +22,9 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.protobuf.Message;
 
 /**
@@ -38,16 +38,84 @@ import com.google.protobuf.Message;
 public abstract class NewValue<T extends Message>
 {
   /** Simple interface for parsing values. */
-  public interface Parser<P>
+  public static abstract class Parser<P>
   {
+    public Parser(int inArguments)
+    {
+      m_arguments = inArguments;
+    }
+
+    int m_arguments;
+
     /**
      * Parse the value from the given string.
      *
      * @param inValues the string values to parse from
-     * @return the parse value
+     * @return the parsed value
      */
-    public @Nullable P parse(String ... inValues);
+    public Optional<P> parse(String ... inValues)
+    {
+      if(inValues == null || inValues.length == 0)
+        return Optional.absent();
+
+      if(m_arguments > 0 && inValues.length != m_arguments)
+        return Optional.absent();
+
+      if(m_arguments == 1)
+        return doParse(inValues[0]);
+
+      if(m_arguments == 2)
+        return doParse(inValues[0], inValues[1]);
+
+      if(m_arguments == 3)
+        return doParse(inValues[0], inValues[1], inValues[2]);
+
+      return doParse(inValues);
+    }
+
+    protected Optional<P> doParse(String inValue)
+    {
+      return Optional.absent();
+    }
+
+    protected Optional<P> doParse(String inFirst, String inSecond)
+    {
+      return Optional.absent();
+    }
+
+    protected Optional<P> doParse(String inFirst, String inSecond,
+                                  String inThird)
+    {
+      return Optional.absent();
+    }
+
+    protected Optional<P> doParse(String ... inValues)
+    {
+      return Optional.absent();
+    }
   }
+
+  public static abstract class Addable<V extends Message> extends NewValue<V>
+  {
+    public abstract Addable<V> add(Addable<V> inValue);
+    public abstract boolean canAdd(Addable<V> inValue);
+  }
+
+  public static final Parser<Integer> INTEGER_PARSER = new Parser<Integer>(1)
+  {
+    @Override
+    public Optional<Integer> doParse(String inValue)
+    {
+      try
+      {
+        return Optional.of(Integer.parseInt(inValue));
+      }
+      catch(NumberFormatException e)
+      {
+        return Optional.absent();
+      }
+    }
+  };
 
   /**
    * Convert the value to a proto message.
@@ -55,4 +123,25 @@ public abstract class NewValue<T extends Message>
    * @return the converted proto message
    */
   public abstract T toProto();
+
+  /**
+   * Group the value into a bucket.
+   *
+   * @return the name of the bucket grouped into.
+   */
+  public String group()
+  {
+    return toString();
+  }
+
+  protected static Optional<NewRational> add(Optional<NewRational> inFirst,
+                                             Optional<NewRational> inSecond)
+  {
+    if(!inFirst.isPresent())
+      return inSecond;
+    if(!inSecond.isPresent())
+      return inFirst;
+
+    return Optional.of((NewRational)inFirst.get().add(inSecond.get()));
+  }
 }

@@ -102,7 +102,10 @@ public class SaveActionServlet extends ActionServlet
 
     AbstractEntry entry = DMADataFactory.get().getEntry(key);
     if(entry == null)
-      return "gui.alert('Cannot find entry for " + key + "');";
+      if(inRequest.hasParam("_create_"))
+        entry = key.getType().create(key.getID());
+      else
+        return "gui.alert('Cannot find entry for " + key + "');";
 
     ValueGroup.Values values = new ValueGroup.Values(inRequest.getParams());
     entry.set(values);

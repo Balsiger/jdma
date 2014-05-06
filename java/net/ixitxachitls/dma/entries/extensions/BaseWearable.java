@@ -19,56 +19,46 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries.extensions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseItem;
+import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseWearableProto;
-import net.ixitxachitls.dma.values.Duration;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.EnumSelection;
-import net.ixitxachitls.dma.values.Multiple;
+import net.ixitxachitls.dma.values.NewDuration;
+import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is the wearable extension for all the entries.
  *
  * @file          BaseWearable.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ParametersAreNonnullByDefault
-public class BaseWearable extends BaseExtension<BaseItem>
+public class BaseWearable extends ValueGroup
 {
-  //----------------------------------------------------------------- nested
-
-  //----- slots ------------------------------------------------------------
-
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
-
   /** The available body slots (cf. ). */
   public enum Slot implements EnumSelection.Named, EnumSelection.Short,
     EnumSelection.Proto<BaseWearableProto.Slot>
   {
+    /** Unknown slots. */
+    UNKNOWN("Unknown", "U", BaseWearableProto.Slot.UNKNOWN),
     /** On the head. */
     HEAD("Head", "He", BaseWearableProto.Slot.HEAD),
     /** Around the neck. */
@@ -153,139 +143,219 @@ public class BaseWearable extends BaseExtension<BaseItem>
 
       throw new IllegalArgumentException("unknown slot: " + inProto);
     }
-  };
 
-  //........................................................................
+    /**
+     * Convert a string into the corresponding slot.
+     *
+     * @param inValue the string to convert
+     * @return the corresponding slot
+     */
+    public static Optional<Slot> fromString(String inValue)
+    {
+      for(Slot slot: values())
+        if(slot.getName().equalsIgnoreCase(inValue))
+          return Optional.of(slot);
 
-  //........................................................................
+      return Optional.absent();
+    }
 
-  //--------------------------------------------------------- constructor(s)
+    /**
+     * Get the possible names of types.
+     *
+     * @return a list of the names
+     */
+    public static List<String> names()
+    {
+      List<String> names = new ArrayList<>();
+      for(Slot slot: values())
+        names.add(slot.getName());
 
-  //------------------------------ BaseWearable ----------------------------
-
-  /**
-   * Default constructor.
-   *
-   * @param       inEntry the base item attached to
-   * @param       inName the name of the extension
-   *
-   */
-  public BaseWearable(BaseItem inEntry, String inName)
-  {
-    super(inEntry, inName);
+      return names;
+    }
   }
 
-  //........................................................................
-  //------------------------------ BaseWearable ----------------------------
-
   /**
    * Default constructor.
    *
-   * @param       inEntry the base item attached to
-   * @param       inTag   the tag name for this instance
-   * @param       inName  the name of the extension
-   *
+   * @param       inItem the base item attached to
    */
-  // public BaseWearable(BaseItem inEntry, String inTag, String inName)
-  // {
-  //   super(inEntry, inTag, inName);
-  // }
+  public BaseWearable(BaseItem inItem)
+  {
+    m_item = inItem;
+  }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  //----- slot -------------------------------------------------------------
+  /** The entry this weapon belongs to. */
+  protected BaseItem m_item;
 
   /** The slot where the item can be worn. */
-  @Key("slot")
-  protected EnumSelection<Slot> m_slot =
-    new EnumSelection<Slot>(Slot.class)
-    .withTemplate("link", "slots");
-
-  static
-  {
-    addIndex(new Index(Index.Path.SLOTS, "Slots", BaseItem.TYPE));
-  }
-
-  //........................................................................
-  //----- don --------------------------------------------------------------
+  protected Slot m_slot = Slot.UNKNOWN;
 
   /** How much time it takes to don the item. */
-  @Key("don")
-  protected Multiple m_don = new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element(new Duration(), false, null, "/"),
-      new Multiple.Element(new Duration(), false),
-    });
+  protected Optional<NewDuration> m_don = Optional.absent();
 
-  static
-  {
-    addIndex(new Index(Index.Path.DONS, "Donning Times", BaseItem.TYPE));
-  }
-
-  //........................................................................
-  //----- remove -----------------------------------------------------------
+  /** How much time it takes to don the item hastily. */
+  protected Optional<NewDuration> m_donHastily = Optional.absent();
 
   /** How much time it takes to remove the item. */
-  @Key("remove")
-  protected Duration m_remove = new Duration();
-
-  static
-  {
-    addIndex(new Index(Index.Path.REMOVES, "Removing Times", BaseItem.TYPE));
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------- computeIndexValues ---------------------------
+  protected Optional<NewDuration> m_remove = Optional.absent();
 
   /**
-   * Get all the values for all the indexes.
+   * Get the slot.
    *
-   * @param       ioValues a multi map of values per index name
-   *
+   * @return      the slot
    */
-  @Override
-  public void computeIndexValues(Multimap<Index.Path, String> ioValues)
+  public Slot getSlot()
   {
-    super.computeIndexValues(ioValues);
-
-    // donning times
-    ioValues.put(Index.Path.DONS, m_don.get(0).group());
-    ioValues.put(Index.Path.DONS, m_don.get(1).group());
-
-    ioValues.put(Index.Path.SLOTS, m_slot.group());
-    ioValues.put(Index.Path.REMOVES, m_remove.group());
+    return m_slot;
   }
 
-  //........................................................................
+  /**
+   * Get the combined slot, including values of base wearable.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Slot> getCombinedSlot()
+  {
+    if(m_slot != Slot.UNKNOWN)
+      return new Combination.Max<Slot>(m_item, m_slot);
 
-  //----------------------------------------------------------- manipulators
-  //........................................................................
+    List<Combination<Slot>> combinations = new ArrayList<>();
+    for(BaseEntry entry : m_item.getBaseEntries())
+      if(entry instanceof BaseItem)
+      {
+        BaseWearable wearable = ((BaseItem)entry).getWearable();
+        combinations.add(wearable.getCombinedSlot());
+      }
 
-  //------------------------------------------------- other member functions
+    return new Combination.Max<Slot>(m_item, combinations);
+  }
+
+  /**
+   * Get the duration for donning the item.
+   *
+   * @return      the don duration
+   */
+  public Optional<NewDuration> getDon()
+  {
+    return m_don;
+  }
+
+  /**
+   * Get the combined duration for donning of the item, including values of
+   * base wearable.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDuration> getCombinedDon()
+  {
+    if(m_don.isPresent())
+      return new Combination.Addable<NewDuration>(m_item, m_don.get());
+
+    List<Combination<NewDuration>> combinations = new ArrayList<>();
+    for(BaseEntry entry : m_item.getBaseEntries())
+      if(entry instanceof BaseItem)
+      {
+        BaseWearable wearable = ((BaseItem)entry).getWearable();
+        combinations.add(wearable.getCombinedDon());
+      }
+
+    return new Combination.Addable<NewDuration>(m_item, combinations);
+  }
+
+  /**
+   * Get the duration for donning the item hastily.
+   *
+   * @return      the don hastily duration
+   */
+  public Optional<NewDuration> getDonHastily()
+  {
+    return m_donHastily;
+  }
+
+  /**
+   * Get the combined duration for donning of the item hastily, including
+   * values of base wearable.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDuration> getCombinedDonHastily()
+  {
+    if(m_donHastily.isPresent())
+      return new Combination.Addable<NewDuration>(m_item, m_donHastily.get());
+
+    List<Combination<NewDuration>> combinations = new ArrayList<>();
+    for(BaseEntry entry : m_item.getBaseEntries())
+      if(entry instanceof BaseItem)
+      {
+        BaseWearable wearable = ((BaseItem)entry).getWearable();
+        combinations.add(wearable.getCombinedDonHastily());
+      }
+
+    return new Combination.Addable<NewDuration>(m_item, combinations);
+  }
+
+  /**
+   * Get the duration for removing the item.
+   *
+   * @return      the remove duration
+   */
+  public Optional<NewDuration> getRemove()
+  {
+    return m_remove;
+  }
+
+  /**
+   * Get the combined duration for rewmoving of the item, including values of
+   * base wearable.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDuration> getCombinedRemove()
+  {
+    if(m_remove.isPresent())
+      return new Combination.Addable<NewDuration>(m_item, m_remove.get());
+
+    List<Combination<NewDuration>> combinations = new ArrayList<>();
+    for(BaseEntry entry : m_item.getBaseEntries())
+      if(entry instanceof BaseItem)
+      {
+        BaseWearable wearable = ((BaseItem)entry).getWearable();
+        combinations.add(wearable.getCombinedRemove());
+      }
+
+    return new Combination.Addable<NewDuration>(m_item, combinations);
+  }
+
+  @Override
+  public Multimap<Index.Path, String> computeIndexValues()
+  {
+    Multimap<Index.Path, String> values = super.computeIndexValues();
+
+    if(m_don.isPresent())
+      values.put(Index.Path.DONS, m_don.get().toString());
+    if(m_donHastily.isPresent())
+      values.put(Index.Path.DONS, m_donHastily.get().toString());
+
+    values.put(Index.Path.SLOTS, m_slot.getName());
+    if(m_remove.isPresent())
+      values.put(Index.Path.REMOVES, m_remove.get().toString());
+
+    return values;
+  }
 
   @Override
   public Message toProto()
   {
     BaseWearableProto.Builder builder = BaseWearableProto.newBuilder();
 
-    if(m_slot.isDefined())
-      builder.setSlot(m_slot.getSelected().toProto());
-    if(m_don.isDefined())
-    {
-      builder.setWear(((Duration)m_don.get(0)).toProto());
-      builder.setWearHastily(((Duration)m_don.get(1)).toProto());
-    }
-    if(m_remove.isDefined())
-      builder.setRemove(m_remove.toProto());
+    if(m_slot != Slot.UNKNOWN)
+      builder.setSlot(m_slot.toProto());
+    if(m_don.isPresent())
+      builder.setWear(m_don.get().toProto());
+    if(m_donHastily.isPresent())
+      builder.setWearHastily(m_donHastily.get().toProto());
+    if(m_remove.isPresent())
+      builder.setRemove(m_remove.get().toProto());
 
     return builder.build();
   }
@@ -302,29 +372,84 @@ public class BaseWearable extends BaseExtension<BaseItem>
     BaseWearableProto proto = (BaseWearableProto)inProto;
 
     if(proto.hasSlot())
-      m_slot = m_slot.as(Slot.fromProto(proto.getSlot()));
+      m_slot = Slot.fromProto(proto.getSlot());
 
-    if(proto.hasWear() || proto.hasWearHastily())
-    {
-      Duration wear = (Duration)m_don.get(0);
-      Duration wearHastily = (Duration)m_don.get(1);
-      if(proto.hasWear())
-        wear = wear.fromProto(proto.getWear());
-      if(proto.hasWearHastily())
-        wearHastily = wearHastily.fromProto(proto.getWearHastily());
+    if(proto.hasWear())
+      m_don = Optional.of(NewDuration.fromProto(proto.getWear()));
 
-      m_don = m_don.as(wear, wearHastily);
-    }
+    if(proto.hasWearHastily())
+      m_donHastily = Optional.of(NewDuration.fromProto(proto.getWearHastily()));
 
     if(proto.hasRemove())
-      m_remove = m_remove.fromProto(proto.getRemove());
+      m_remove = Optional.of(NewDuration.fromProto(proto.getRemove()));
   }
 
-  //........................................................................
+  @Override
+  public <T extends AbstractEntry> AbstractType<T> getType()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-  //------------------------------------------------------------------- test
+  @Override
+  public String getEditType()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-  // no tests, see BaseItem for tests
+  @Override
+  public AbstractEntry getEntry()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-  //........................................................................
+  @Override
+  public String getName()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getID()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public void changed(boolean inChanged)
+  {
+    // TODO Auto-generated method stub
+  }
+
+  /**
+   * Check whether the relevant wearable values are defined.
+   *
+   * @return true if values are there, false if not
+   */
+  public boolean hasValues()
+  {
+    return m_slot != Slot.UNKNOWN;
+  }
+
+  @Override
+  public void set(Values inValues)
+  {
+    m_slot = inValues.use("wearable.slot", m_slot,
+                          new NewValue.Parser<Slot>(1)
+   {
+      @Override
+      public Optional<Slot> doParse(String inValue)
+      {
+        return Slot.fromString(inValue);
+      }
+    });
+    m_don = inValues.use("wearable.don", m_don, NewDuration.PARSER);
+    m_donHastily = inValues.use("wearable.don_hastily", m_donHastily,
+                                NewDuration.PARSER);
+    m_remove = inValues.use("wearable.remove", m_remove, NewDuration.PARSER);
+  }
 }

@@ -171,6 +171,12 @@ public class SoyAbstract extends SoyMapData
     {
       return super.hashCode();
     }
+
+    @Override
+    public String toString()
+    {
+      return m_value.toString();
+    }
   }
 
   //........................................................................

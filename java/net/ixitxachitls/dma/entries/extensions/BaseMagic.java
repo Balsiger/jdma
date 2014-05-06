@@ -201,6 +201,7 @@ public class BaseMagic extends BaseExtension<BaseItem>
   {
     BaseMagicProto.Builder builder = BaseMagicProto.newBuilder();
 
+    /*
     if(m_ability.isDefined())
       builder.setAbilityModifier
         (BaseMagicProto.AbilityModifier.newBuilder()
@@ -215,7 +216,7 @@ public class BaseMagic extends BaseExtension<BaseItem>
                             .setName(((Name)modifier.get(0)).get())
                             .setModifier(((Modifier)modifier.get(1)).toProto())
                             .build());
-
+  */
     return builder.build();
   }
 

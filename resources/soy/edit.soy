@@ -153,6 +153,7 @@
  * @param values   The value contents.
  * @param validate The validation for values.
  * @param color    The decoration color.
+ * @param? autocomplete the url for autocompleting this field
  */
 {template .value_list}
   {call .generic_value}
@@ -163,6 +164,7 @@
         {param name: $name /}
         {param values: $values /}
         {param validate: $validate /}
+        {param autocomplete: $autocomplete /}
       {/call}
     {/param}
   {/call}
@@ -212,7 +214,7 @@
 {template .field_input}
   <div class="input-wrapper field{if $class} {$class}{/if}">
     <input value='{$value}' name='{$name}' validate='{$validate}' 
-           {if $autocomplete} autocomplete="{$autocomplete}"{/if}
+           {if $autocomplete} dma-autocomplete="{$autocomplete}"{/if}
            onkeyup='window.form.validate(this);
                {if $inList}edit.maybeInsertLine(event, 
                                                 this.parentNode.parentNode);
@@ -272,6 +274,7 @@
  * @param name     The name of the value.
  * @param values   The value contents.
  * @param validate How the values are validated
+ * @param? autocomplete the url for autocompleting this field
  */
 {template .field_list}
   {call .field}
@@ -281,12 +284,14 @@
           {param name: $name /}
           {param value: $value /}
           {param validate: $validate /}
+          {param autocomplete: $autocomplete /}
         {/call}
       {ifempty}
         {call .field_list_input_line}
           {param name: $name /}
           {param value: '' /}
           {param validate: $validate /}
+          {param autocomplete: $autocomplete /}
         {/call}
       {/foreach}
     {/param}
@@ -314,15 +319,18 @@
  * @param name the name of the field
  * @param value the value of the field
  * @param validate how to validate the field 
+ * @param? autocomplete the url for autocompleting this field
  */
 {template .field_list_input_line}
   {call .field_list_line}
     {param field}
-      <input class="field" value="{$value}" name="{$name}" 
-             validate="{$validate}"
-             onkeyup="window.form.validate(this); 
-                      edit.maybeInsertLine(event, this.parentNode);">
-      </input>
+      {call .field_input}
+        {param name: $name /}
+        {param value: $value /}
+        {param validate: $validate /}
+        {param inList: true /}
+        {param autocomplete: $autocomplete /}
+      {/call}
     {/param}
   {/call}
 {/template}
@@ -331,6 +339,7 @@
  * Format a list line with multiple values.
  * 
  * @param values the information about the values to edit 
+ * @param? class  the class to use for the fields
  */
 {template .field_list_multiple}
   {call dma.edit.field_list_line}
@@ -341,14 +350,14 @@
             {param name: $value.name /}
             {param value: $value.value /}
             {param choices: $value.choices /}      
-            {param class: 'field' + length($values) /}
+            {param class: $class ? $class : 'field' + length($values) /}
           {/call}
         {else}
           {call .field_input}
             {param name: $value.name /}
             {param validate: $value.validate /}
             {param value: $value.value /}
-            {param class: 'field' + length($values) /}
+            {param class: $class ? $class : 'field' + length($values) /}
             {param caption: $value.caption /}
             {param inList: true /}
             {param autocomplete: $value.autocomplete /}

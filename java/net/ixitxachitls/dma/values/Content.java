@@ -21,7 +21,7 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nullable;
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
@@ -29,21 +29,29 @@ import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 /** Small class to encapsulate person information with job. */
 public class Content extends NewValue<BaseProductProto.Content> {
 
-  public static class ContentParser implements Parser<Content>
+  public static class ContentParser extends Parser<Content>
   {
-    @Override
-    public @Nullable Content parse(String ... inValues)
+    public ContentParser()
     {
-      if(inValues.length != 3 || inValues[0].isEmpty())
+      super(3);
+    }
+
+    @Override
+    public Optional<Content> doParse(String ... inValues)
+    {
+      if(inValues[0].isEmpty())
         return null;
 
-      BaseProduct.Part part = BaseProduct.Part.fromString(inValues[0]);
-      if(part == null)
-        return null;
+      Optional<BaseProduct.Part> part =
+        BaseProduct.Part.fromString(inValues[0]);
+      if(!part.isPresent())
+        return Optional.absent();
 
       try
       {
-        return new Content(part, inValues[1], Integer.parseInt(inValues[2]));
+        return Optional
+          .of(new Content(part.get(), inValues[1],
+                          Integer.parseInt(inValues[2])));
       }
       catch(NumberFormatException e)
       {

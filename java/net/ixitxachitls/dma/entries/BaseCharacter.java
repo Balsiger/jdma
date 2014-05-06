@@ -28,6 +28,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
@@ -154,13 +155,13 @@ public class BaseCharacter extends BaseEntry
     /**
      * Get the group matching the given text.
      */
-    public static @Nullable Group fromString(String inText)
+    public static Optional<Group> fromString(String inText)
     {
       for(Group group : values())
         if(group.m_name.equalsIgnoreCase(inText))
-          return group;
+          return Optional.of(group);
 
-      return null;
+      return Optional.absent();
     }
   }
 
@@ -358,14 +359,11 @@ public class BaseCharacter extends BaseEntry
 
     m_realName = inValues.use("real name", m_realName);
     m_email = inValues.use("email", m_email);
-    m_group = inValues.use("group", m_group, new NewValue.Parser<Group>() {
+    m_group = inValues.use("group", m_group, new NewValue.Parser<Group>(1) {
       @Override
-      public @Nullable Group parse(String... inValues)
+      public Optional<Group> doParse(String inValue)
       {
-        if(inValues.length != 1)
-          return null;
-
-        return Group.fromString(inValues[0]);
+        return Group.fromString(inValue);
       }
     });
   }

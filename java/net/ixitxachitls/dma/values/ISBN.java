@@ -23,10 +23,10 @@ package net.ixitxachitls.dma.values;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 
 import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
@@ -44,21 +44,23 @@ import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 @ParametersAreNonnullByDefault
 public class ISBN extends NewValue<BaseProductProto.ISBN>
 {
-  public static class ISBNParser implements Parser<ISBN>
+  public static class ISBNParser extends Parser<ISBN>
   {
-    @Override
-    public @Nullable ISBN parse(String... inValues)
+    public ISBNParser()
     {
-      if(inValues.length != 1)
-        return null;
+      super(1);
+    }
 
+    @Override
+    public Optional<ISBN> doParse(String inValue)
+    {
       try
       {
-        return new ISBN(inValues[0]);
+        return Optional.of(new ISBN(inValue));
       }
       catch(IllegalArgumentException e)
       {
-        return null;
+        return Optional.absent();
       }
     }
   }

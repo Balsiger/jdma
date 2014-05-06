@@ -35,6 +35,7 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.ProductReference;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -159,6 +160,9 @@ public class BaseEntry extends AbstractEntry
   /** The categories. */
   protected List<String> m_categories = new ArrayList<>();
 
+  /** The information that is incomplete for the entry. */
+  protected String m_incomplete = UNDEFINED_STRING;
+
   /**
    * Get the entry description.
    *
@@ -170,6 +174,25 @@ public class BaseEntry extends AbstractEntry
   }
 
   /**
+   * Get the combined description of the entry, including values of base items.
+   *
+   * @return a combined description with the sum and their sources.
+   */
+  public Combination<String> getCombinedDescription()
+  {
+    String description = getDescription();
+    if(!description.isEmpty())
+      return new Combination.String(this, description);
+
+    List<Combination<String>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      if(entry instanceof BaseEntry)
+        combinations.add(entry.getCombinedDescription());
+
+    return new Combination.String(this, combinations);
+  }
+
+  /**
   * Get the short description of the base entry.
    *
    * @return      the selection containing the selected world
@@ -177,6 +200,26 @@ public class BaseEntry extends AbstractEntry
   public String getShortDescription()
   {
     return m_short;
+  }
+
+  /**
+   * Get the combined short description of the entry, including values of base
+   * items.
+   *
+   * @return a combined description with the sum and their sources.
+   */
+  public Combination<String> getCombinedShortDescription()
+  {
+    String description = getShortDescription();
+    if(!description.isEmpty())
+      return new Combination.String(this, description);
+
+    List<Combination<String>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      if(entry instanceof BaseEntry)
+        combinations.add(entry.getCombinedShortDescription());
+
+    return new Combination.String(this, combinations);
   }
 
   /**
@@ -225,6 +268,24 @@ public class BaseEntry extends AbstractEntry
   }
 
   /**
+   * Get the combined worlds of the entry, including values from base entries.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<List<String>> getCombinedWorlds()
+  {
+    if(!m_worlds.isEmpty())
+      return new Combination.List<String>(this, m_worlds);
+
+    List<Combination<List<String>>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      if(entry instanceof BaseItem)
+        combinations.add(((BaseItem)entry).getCombinedWorlds());
+
+    return new Combination.List<String>(combinations, this);
+  }
+
+  /**
    * Get the worlds as a single string.
    *
    * @return the worlds as string representation
@@ -255,6 +316,26 @@ public class BaseEntry extends AbstractEntry
   }
 
   /**
+   * Get the combined references of the entry, including values from base
+   * entries.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<List<ProductReference>> getCombinedReferences()
+  {
+    List<Combination<List<ProductReference>>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      if(entry instanceof BaseItem)
+        combinations.add(((BaseItem)entry).getCombinedReferences());
+
+    if(m_categories.isEmpty())
+      return new Combination.Set<ProductReference>(combinations, this);
+
+    return new Combination.Set<ProductReference>(this, m_references,
+                                                 combinations);
+  }
+
+  /**
    * Get the categories of the entry.
    *
    * @return      the categories
@@ -262,6 +343,53 @@ public class BaseEntry extends AbstractEntry
   public List<String> getCategories()
   {
     return Collections.unmodifiableList(m_categories);
+  }
+
+  /**
+   * Get the combined categories of the entry, including values from base
+   * entries.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<List<String>> getCombinedCategories()
+  {
+    List<Combination<List<String>>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      if(entry instanceof BaseItem)
+        combinations.add(((BaseItem)entry).getCombinedCategories());
+
+    if(m_categories.isEmpty())
+      return new Combination.Set<String>(combinations, this);
+
+    return new Combination.Set<String>(this, m_categories, combinations);
+  }
+
+  /**
+   * Get the incomplete information.
+   *
+   * @return the incomplete information
+   */
+  public String getIncomplete()
+  {
+    return m_incomplete;
+  }
+
+  /**
+   * Get the combined incomplete data, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<String> getCombinedIncomplete()
+  {
+    List<Combination<String>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      if(entry instanceof BaseItem)
+        combinations.add(((BaseItem)entry).getCombinedIncomplete());
+
+    if(m_incomplete.isEmpty())
+      return new Combination.String(this, combinations);
+
+    return new Combination.String(this, m_incomplete, combinations);
   }
 
   @Override
@@ -297,6 +425,8 @@ public class BaseEntry extends AbstractEntry
     builder.addAllSynonym(m_synonyms);
     builder.addAllWorld(m_worlds);
     builder.addAllCategory(m_categories);
+    if(!m_incomplete.isEmpty())
+      builder.setIncomplete(m_incomplete);
 
     BaseEntryProto proto = builder.build();
     return proto;
@@ -321,6 +451,7 @@ public class BaseEntry extends AbstractEntry
                                 ProductReference.PARSER, "name", "pages");
     m_synonyms = inValues.use("synonyms", m_synonyms, Values.NOT_EMPTY);
     m_categories = inValues.use("categories", m_categories, Values.NOT_EMPTY);
+    m_incomplete = inValues.use("incomplete", m_incomplete);
   }
 
   @Override
@@ -347,6 +478,7 @@ public class BaseEntry extends AbstractEntry
     m_worlds = proto.getWorldList();
     m_categories = proto.getCategoryList();
     m_synonyms = proto.getSynonymList();
+    m_incomplete = proto.getIncomplete();
   }
 
   @Override

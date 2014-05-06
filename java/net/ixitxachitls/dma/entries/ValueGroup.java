@@ -40,8 +40,11 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
@@ -220,7 +223,7 @@ public abstract class ValueGroup implements Changeable
       if(!inDefault.equals(value))
         m_changed = true;
 
-      if (inChecker != null && !inChecker.check(value))
+      if(inChecker != null && !inChecker.check(value))
       {
         m_messages.add("Check for " + inKey + " failed, value not set.");
         return inDefault;
@@ -246,13 +249,14 @@ public abstract class ValueGroup implements Changeable
       {
         result = new ArrayList<>();
         for(String value : values)
-          if(!inChecker.check(value))
-          {
-            m_messages.add("Invalid value '" + value + "' for " + inKey);
-            return inDefault;
-          }
-          else
-            result.add(value);
+          if(!value.isEmpty())
+            if(!inChecker.check(value))
+            {
+              m_messages.add("Invalid value '" + value + "' for " + inKey);
+              return inDefault;
+            }
+            else
+              result.add(value);
       }
       else
         result = new ArrayList<>(values);
@@ -264,12 +268,16 @@ public abstract class ValueGroup implements Changeable
       return result;
     }
 
-    public @Nullable <T> T use(String inKey, @Nullable T inDefault,
-                               NewValue.Parser<T> inParser,
-                               String ... inParts) {
+    public <T> T use(String inKey, T inDefault, NewValue.Parser<T> inParser,
+                     String ... inParts) {
       List<String []> values = listValues(inKey, inParts);
+      if(values.size() == 0 || allEmpty(values.get(0)))
+      {
+        m_changed = true;
+        return inDefault;
+      }
+
       if(values.size() != 1
-        || allEmpty(values.get(0))
         || (values.get(0).length != inParts.length
            && inParts != null && inParts.length != 0
            && values.get(0).length != 1))
@@ -277,8 +285,41 @@ public abstract class ValueGroup implements Changeable
                                            + "' for " + Arrays.toString(inParts)
                                            + " with " + values);
 
-      T value = inParser.parse(values.get(0));
-      if(value == null)
+      Optional<T> value = inParser.parse(values.get(0));
+      if(!value.isPresent())
+      {
+        m_messages.add("Cannot properly parse " + inKey + " '"
+                       + Arrays.toString(values.get(0)) + "'");
+        return inDefault;
+      }
+
+      if(value.get().equals(inDefault))
+        return inDefault;
+
+       m_changed = true;
+       return value.get();
+    }
+
+    public <T> Optional<T> use(String inKey, Optional<T> inDefault,
+                               NewValue.Parser<T> inParser,
+                               String ... inParts) {
+      List<String []> values = listValues(inKey, inParts);
+      if(values.size() == 0 || allEmpty(values.get(0)))
+      {
+        m_changed = inDefault.isPresent() ? true : m_changed;
+        return Optional.absent();
+      }
+
+      if(values.size() != 1
+        || (values.get(0).length != inParts.length
+           && inParts != null && inParts.length != 0
+           && values.get(0).length != 1))
+        throw new IllegalArgumentException("cannot properly parse '" + inKey
+                                           + "' for " + Arrays.toString(inParts)
+                                           + " with " + values);
+
+      Optional<T> value = inParser.parse(values.get(0));
+      if(!value.isPresent())
       {
         m_messages.add("Cannot properly parse " + inKey + " '"
                        + Arrays.toString(values.get(0)) + "'");
@@ -302,14 +343,15 @@ public abstract class ValueGroup implements Changeable
         if(allEmpty(single))
           continue;
 
-        T value = inParser.parse(single);
-        if (value == null)
+        Optional<T> value = inParser.parse(single);
+        if(!value.isPresent())
         {
-          m_messages.add("Cannot parse values for " + inKey + ": " + single);
+          m_messages.add("Cannot parse values for " + inKey + ": "
+                         + Arrays.toString(single));
           return inDefault;
         }
 
-        results.add(value);
+        results.add(value.get());
       }
 
       if(inDefault.equals(results))
@@ -322,7 +364,7 @@ public abstract class ValueGroup implements Changeable
     private boolean allEmpty(String ... inValues)
     {
       for(String value : inValues)
-        if(!value.isEmpty())
+        if(value != null && !value.isEmpty())
           return false;
 
       return true;
@@ -392,12 +434,12 @@ public abstract class ValueGroup implements Changeable
 
       try
       {
-        int pages = Integer.parseInt(value);
-        if(pages == inDefault)
+        int intValue = Integer.parseInt(value);
+        if(inDefault != null && intValue == inDefault)
           return inDefault;
 
         m_changed = true;
-        return pages;
+        return intValue;
       }
       catch(NumberFormatException e)
       {
@@ -926,13 +968,29 @@ public abstract class ValueGroup implements Changeable
     return !first;
   }
 
-  //........................................................................
+  /**
+   * Get all the values for all the indexes.
+   *
+   * @return      a multi map of values per index name
+   */
+  public Multimap<Index.Path, String> computeIndexValues()
+  {
+    return HashMultimap.create();
+  }
 
-  //........................................................................
+  /**
+   * Create a proto representing the entry.
+   *
+   * @return the proto representation
+   */
+  public abstract Message toProto();
 
-  //----------------------------------------------------------- manipulators
-
-  //--------------------------------- set ----------------------------------
+  /**
+   * Read the values for the entry from the given proto.
+   *
+   * @param   inProto  the proto buffer with all the data
+   */
+  public abstract void fromProto(Message inProto);
 
   /**
    * Set the value for the given key.
@@ -955,43 +1013,6 @@ public abstract class ValueGroup implements Changeable
 
     changed();
     return variable.setFromString(this, inText);
-  }
-
-  public static class ParseResult
-  {
-    public ParseResult(Type inType, String inRest)
-    {
-      this(inType, inRest, null);
-    }
-
-    public ParseResult(Type inType, String inRest,
-                       @Nullable String inDescription)
-    {
-      m_type = inType;
-      m_rest = inRest;
-      m_description = inDescription;
-    }
-
-    public enum Type { UNPARSED, INVALID, PARTIAL, UNKNOWN, WARNING, };
-
-    private Type m_type;
-    private String m_rest;
-    private @Nullable String m_description;
-
-    public Type getType()
-    {
-      return m_type;
-    }
-
-    public String getRest()
-    {
-      return m_rest;
-    }
-
-    public @Nullable String getDescription()
-    {
-      return m_description;
-    }
   }
 
   public void set(Values inValues)

@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.List;
@@ -51,53 +49,27 @@ import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * An entry servlet that has a single type and gets the id from the path of the
  * request.
  *
  * @file          EntryServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class EntryServlet extends PageServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //-------------------------- EntryServlet ---------------------------
-
   /**
    * Create the servlet.
-   *
    */
   public EntryServlet()
   {
     // nothing to do
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //--------------------------- getLastModified ----------------------------
 
   /**
     * Get the time of the last modification. Since entries can change anytime,
@@ -105,24 +77,12 @@ public class EntryServlet extends PageServlet
     *
     * @return      the time of the last modification in miliseconds or -1
     *              if unknown
-    *
     */
   public long getLastModified()
   {
     return -1;
   }
 
-  //........................................................................
-  //------------------------------- isPublic -------------------------------
-
-  /**
-   * Checks whether the current page is public or requires some kind of
-   * login.
-   *
-   * @param       inRequest the request for the page
-   *
-   * @return      true if public, false if login is required
-   */
   @Override
   public boolean isPublic(DMARequest inRequest)
   {
@@ -130,15 +90,6 @@ public class EntryServlet extends PageServlet
     return entry != null && entry.isBase();
   }
 
-  /**
-   * Collect the data that is to be printed.
-   *
-   * @param    inRequest  the request for the page
-   * @param    inRenderer the renderer to render sub values
-   *
-   * @return   a map with key/value pairs for data (values can be primitives
-   *           or maps or lists)
-   */
   @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
                                             SoyRenderer inRenderer)
@@ -183,6 +134,8 @@ public class EntryServlet extends PageServlet
 
       if(inRequest.hasParam("create") && inRequest.hasUser())
       {
+        action = "edit";
+
         // create a new entry for filling out
         Log.info("creating " + type + " '" + id + "'");
 
@@ -279,20 +232,11 @@ public class EntryServlet extends PageServlet
             "variant", type.getName().replace(" ", ""),
             "id", inRequest.getParam("id")),
         ImmutableSet.of(type.getName().replace(" ", ""))));
+    data.put("title", entry.getName());
 
     return data;
   }
 
-  /**
-   * Collect the injected data that is to be printed.
-   *
-   * @param    inRequest  the request for the page
-   * @param    inRenderer the renderer to render sub values
-   *
-   * @return   a map with key/value pairs for data (values can be primitives
-   *           or maps or lists)
-   *
-   */
   @Override
   protected Map<String, Object> collectInjectedData(DMARequest inRequest,
                                                     SoyRenderer inRenderer)

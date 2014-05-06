@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
@@ -33,8 +31,6 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -49,53 +45,28 @@ import net.ixitxachitls.server.servlets.FileServlet;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * The base servlet for all soy rendered pages.
  *
  *
  * @file          SoyServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @Immutable
 @ParametersAreNonnullByDefault
 public class SoyServlet extends DMAServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- SoyServlet -------------------------------
-
    /**
     * Create the servlet.
-    *
     */
    public  SoyServlet()
    {
      // nothing to do
    }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
-
-  /** The blob store service. */
-  private BlobstoreService m_blobs =
-    BlobstoreServiceFactory.getBlobstoreService();
 
   /** The template to render a page. */
   protected static final SoyTemplate TEMPLATE =
@@ -103,9 +74,10 @@ public class SoyServlet extends DMAServlet
                      "commands", "value", "admin", "cards", "edit",
                      "basecharacter", "character",
                      "entries/basecharacters",
-                     "baseproduct", "product",
+                     "product",
                      "entries/baseproducts",
                      "baseitem", "item",
+                     "entries/baseitems",
                      "basecampaign", "campaign",
                      "basequality",
                      "basefeat",
@@ -116,19 +88,12 @@ public class SoyServlet extends DMAServlet
                      "baseencounter", "encounter",
                      "baselevel", "level");
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //--------------------------- getTemplateName ----------------------------
-
   /**
    * Get the name of the template to render the page.
    *
    * @param     inRequest the request for the page
    *
    * @return    the name of the template
-   *
    */
   protected String getTemplateName(DMARequest inRequest)
   {
@@ -140,10 +105,6 @@ public class SoyServlet extends DMAServlet
 
     return "dma.page.full";
   }
-
-  //........................................................................
-
-  //------------------------------- isPublic -------------------------------
 
   /**
    * Checks whether the current page is public or requires some kind of
@@ -158,40 +119,18 @@ public class SoyServlet extends DMAServlet
     return true;
   }
 
-  //........................................................................
-
   @Override
   public String toString()
   {
     return "soy servlet with template " + TEMPLATE;
   }
 
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //-------------------------------- handle --------------------------------
-
-  /**
-   * Handle the request.
-   *
-   * @param       inRequest  the original request
-   * @param       inResponse the original response
-   *
-   * @return      a special result if something went wrong
-   *
-   * @throws      ServletException general error when processing the page
-   * @throws      IOException      writing to the page failed
-   *
-   */
   @Override
   protected @Nullable SpecialResult handle(DMARequest inRequest,
                                            HttpServletResponse inResponse)
     throws ServletException, IOException
   {
+
     if(FileServlet.wasReloaded() && isDev())
     {
       Tracer tracer = new Tracer("compiling soy templates");
@@ -231,10 +170,6 @@ public class SoyServlet extends DMAServlet
     return null;
   }
 
-  //........................................................................
-
-  //----------------------------- collectData ------------------------------
-
   /**
    * Collect the data that is to be printed.
    *
@@ -243,16 +178,12 @@ public class SoyServlet extends DMAServlet
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
-   *
    */
   protected Map<String, Object> collectData(DMARequest inRequest,
                                             SoyRenderer inRenderer)
   {
     return SoyTemplate.map();
   }
-
-  //........................................................................
-  //------------------------- collectInjectedData --------------------------
 
   /**
    * Collect the injected data that is to be printed.
@@ -262,7 +193,6 @@ public class SoyServlet extends DMAServlet
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
-   *
    */
   protected Map<String, Object> collectInjectedData
     (DMARequest inRequest, SoyRenderer inRenderer)
@@ -289,9 +219,6 @@ public class SoyServlet extends DMAServlet
     return map;
   }
 
-  //........................................................................
-  //--------------------------------- map ----------------------------------
-
   /**
    * Convert the given data into a map, using odd params as keys and even as
    * values.
@@ -306,11 +233,7 @@ public class SoyServlet extends DMAServlet
     return SoyTemplate.map(inData);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The tests. */
   public static class Test extends net.ixitxachitls.server.ServerUtils.Test

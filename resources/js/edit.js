@@ -55,18 +55,29 @@ edit.show = function(inName, inPath, inID)
       title: 'Edit ' + inName,
       modal: true,
       resizable: false,
-      width: $(window).width() * 2 / 3,
-      height: $(window).height() * 2 / 3,
+      width: $(window).width() * 3 / 4,
+      height: $(window).height(),
       closeOnEscape: true,
       dialogClass: 'edit-dialog',
     });
   
   // Setup any necessary autocomplete
-  $(":input[autocomplete]").each(function(inIndex, inElement) {
+  edit.setupAutocomplete($(":input[dma-autocomplete]"));
+};
+
+/**
+ * Install autocomplete handling into the given elements.
+ * 
+ * @param inElements the elements to install into
+ */
+edit.setupAutocomplete = function(inElements)
+{
+  inElements.each(function(inIndex, inElement) {
+  window.console.log("setting up autocomplete", inElement, $(inElement).attr("dma-autocomplete"));
     $(inElement).autocomplete({
-      source: '/autocomplete/' + $(inElement).attr("autocomplete"),
+      source: '/autocomplete/' + $(inElement).attr("dma-autocomplete"),
       autoFocus: true,
-      minLength: 0,
+      minLength: 2,
       delay: 0,
     });
   });
@@ -147,6 +158,8 @@ edit.save = function(inKey, inID)
 
   // send the data to the server
   window.console.log('saving!', inID, values);
+  if(window.location.href.match(/\?create$/))
+    values['_create_'] = '';
   var eval = util.ajax('/actions/save', values, null, true);
 
   // remove the move away code
@@ -193,10 +206,12 @@ edit.maybeInsertLine = function(inEvent, inElement)
 edit.insertLine = function(inElement)
 {
   var element = $(inElement);
-  var clone = element.clone(true);
-  element.append(clone);
+  var clone = element.clone(false);
+  element.parent().append(clone);
   clone.find(":input").val("");
   clone.find(":input")[0].focus();
+  
+  edit.setupAutocomplete(clone.find(":input[dma-autocomplete]"));
 };
 
 edit.removeLine = function(inElement)

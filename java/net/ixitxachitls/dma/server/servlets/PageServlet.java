@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
@@ -46,65 +44,29 @@ import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * The base servlet for all dma pages. This class is mainly responsible for
  * rendering headers and footers and everything that is the same for every dma
  * page.
  *
  * @file          PageServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @Immutable
 @ParametersAreNonnullByDefault
 public class PageServlet extends SoyServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
   /**
    * Create the servlet.
-   *
    */
   public PageServlet()
   {
   }
 
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //----------------------------- collectData ------------------------------
-
-  /**
-   * Collect the data that is to be printed.
-   *
-   * @param    inRequest  the request for the page
-   * @param    inRenderer the renderer for sub values
-   *
-   * @return   a map with key/value pairs for data (values can be primitives
-   *           or maps or lists)
-   *
-   */
   @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
                                             SoyRenderer inRenderer)
@@ -140,19 +102,6 @@ public class PageServlet extends SoyServlet
     return data;
   }
 
-  //........................................................................
-  //------------------------- collectInjectedData --------------------------
-
-  /**
-   * Collect the injected data that is to be printed.
-   *
-   * @param    inRequest the request for the page
-   * @param    inRenderer the renderer for rendering sub values
-   *
-   * @return   a map with key/value pairs for data (values can be primitives
-   *           or maps or lists)
-   *
-   */
   @Override
   protected Map<String, Object> collectInjectedData
     (DMARequest inRequest, SoyRenderer inRenderer)
@@ -169,10 +118,6 @@ public class PageServlet extends SoyServlet
     return data;
   }
 
-  //........................................................................
-
-  //----------------------------- writeHeader ------------------------------
-
   /**
    * Write the header to the writer.
    *
@@ -180,7 +125,6 @@ public class PageServlet extends SoyServlet
    *                      by the PageServlet)
    * @param     inPath    the path of the request
    * @param     inRequest the request for the page
-   *
    */
   @OverridingMethodsMustInvokeSuper
   protected void writeHeader(HTMLWriter inWriter, String inPath,
@@ -189,9 +133,6 @@ public class PageServlet extends SoyServlet
     // nothing to do here, but maybe in derivations
   }
 
-  //........................................................................
-  //------------------------------- writeBody ------------------------------
-
   /**
    * Handles the body content of the request.
    *
@@ -199,7 +140,6 @@ public class PageServlet extends SoyServlet
    *                      by the PageServlet)
    * @param     inPath    the path of the request
    * @param     inRequest the request for the page
-   *
    */
   @OverridingMethodsMustInvokeSuper
   protected void writeBody(HTMLWriter inWriter, @Nullable String inPath,
@@ -208,9 +148,6 @@ public class PageServlet extends SoyServlet
     // nothing done here
   }
 
-  //........................................................................
-  //----------------------------- writeFooter ------------------------------
-
   /**
    * Write the footer to the writer.
    *
@@ -218,7 +155,6 @@ public class PageServlet extends SoyServlet
    *                      by the PageServlet)
    * @param     inPath    the path of the request
    * @param     inRequest the request for the page
-   *
    */
   @OverridingMethodsMustInvokeSuper
   protected void writeFooter(HTMLWriter inWriter, String inPath,
@@ -227,16 +163,11 @@ public class PageServlet extends SoyServlet
     // nothing to do here, but maybe in derivations
   }
 
-  //........................................................................
-
-  //---------------------------- addNavigation -----------------------------
-
   /**
    * Add the navigation structure to the page.
    *
    * @param       inWriter   the writer to write to
    * @param       inSections the sections and subsections to the current page
-   *
    */
   public void addNavigation(HTMLWriter inWriter, String ... inSections)
   {
@@ -267,14 +198,6 @@ public class PageServlet extends SoyServlet
     inWriter.bodyScript("$('#subnavigation').html('" + navigation + "');");
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //------------------------------ writeIcon -------------------------------
-
   /**
    * Write an icon to the current position in the writer.
    *
@@ -283,7 +206,6 @@ public class PageServlet extends SoyServlet
    *                         (/icons/ will be prefixed, .png appended)
    * @param       inCaption  the caption below the icon
    * @param       inURL      the url to link to when clicking the icon
-   *
    */
   protected static void writeIcon(HTMLWriter inWriter, String inIcon,
                                   String inCaption, String inURL)
@@ -302,16 +224,12 @@ public class PageServlet extends SoyServlet
       .end("div");
   }
 
-  //........................................................................
-  //------------------------------ writeError ------------------------------
-
   /**
    * Write an error text to the output.
    *
    * @param    inWriter   the output to write to
    * @param    inTitle    the title of the error
    * @param    inMessage  the error message
-   *
    */
   protected static void writeError(HTMLWriter inWriter, String inTitle,
                                    String inMessage)
@@ -324,11 +242,7 @@ public class PageServlet extends SoyServlet
     Log.warning(inTitle + " - " + inMessage);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.server.ServerUtils.Test

@@ -19,11 +19,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -51,32 +50,18 @@ import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.output.html.JsonWriter;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * The base servlet for autocomplete requests.
  *
  *
  * @file          Autocomplete.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @Immutable
 @ParametersAreNonnullByDefault
 public class Autocomplete extends JSONServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- Autocomplete -----------------------------
-
   /**
    * Create the autocomplete servlet.
    *
@@ -85,12 +70,6 @@ public class Autocomplete extends JSONServlet
   {
     // nothing to do here
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -105,23 +84,6 @@ public class Autocomplete extends JSONServlet
   /** The joiner for keys. */
   private static final Joiner s_keyJoiner = Joiner.on("//");
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------ writeJson -------------------------------
-
-  /**
-   * Write the json output to the given writer.
-   *
-   * @param       inRequest  the original request
-   * @param       inPath   the path requested
-   * @param       inWriter the writer to write to
-   *
-   */
   @Override
   protected synchronized void writeJson(DMARequest inRequest,
                                         String inPath,
@@ -140,9 +102,15 @@ public class Autocomplete extends JSONServlet
 
       if(type != null && field != null)
       {
-        ensureCached(type, field);
+        Collection<String> items;
+        if("name".equals(field))
+          items = DMADataFactory.get().getIDs(type, null);
+        else
+        {
+          ensureCached(type, field);
+          items = cached(keys);
+        }
 
-        SortedSet<String> items = cached(keys);
         List<String> names = Lists.newArrayList();
         if(items != null)
         {
@@ -163,9 +131,6 @@ public class Autocomplete extends JSONServlet
 
     inWriter.strings(ImmutableList.of("* Error computing autocomplete *"));
   }
-
-  //........................................................................
-  //-------------------------------- match ---------------------------------
 
   /**
    * Check if the given name matches the given autocomplete string.
@@ -237,9 +202,6 @@ public class Autocomplete extends JSONServlet
     cache(values, inType.toString(), inField);
   }
 
-  //........................................................................
-  //-------------------------------- cache ---------------------------------
-
   /**
    * Cache the given value with the given keys.
    *
@@ -251,9 +213,6 @@ public class Autocomplete extends JSONServlet
   {
     s_cache.put(s_keyJoiner.join(inKeys), inValues);
   }
-
-  //........................................................................
-  //-------------------------------- cached --------------------------------
 
   /**
    * Get the cached value for the given keys.
@@ -267,9 +226,6 @@ public class Autocomplete extends JSONServlet
   {
     return s_cache.get(s_keyJoiner.join(inKeys));
   }
-
-  //........................................................................
-  //------------------------ extractPersonsAndJobs -------------------------
 
   /**
    * Extract person and job information from the obtained values.
@@ -320,21 +276,11 @@ public class Autocomplete extends JSONServlet
     return persons;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
-    //----- handle ---------------------------------------------------------
-
     /**
      * The handle Test.
      *
@@ -374,9 +320,5 @@ public class Autocomplete extends JSONServlet
         EasyMock.verify(request, response);
       }
     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

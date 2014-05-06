@@ -90,19 +90,18 @@
        {/if}
        
       <div class="_new_value _new_description">
-        {if $entry.description}
-          {commands($entry.description) |noescape}
-        {else}
-          (no description)
-        {/if}
+        {call .concatenated}
+          {param value: $entry.description /}
+          {param concatenate: $entry.combined_description /}
+          {param lines: true /}
+        {/call}
       </div>
         
       <div class="_new_value _new_short-description">
-        {if $entry.short_description}
-          {commands($entry.short_description) |noescape}
-        {else}
-          (no short description)
-        {/if}
+        {call .concatenated}
+          {param value: $entry.short_description /}
+          {param concatenate: $entry.combined_short_description /}
+        {/call}
       </div>
 
        <div class="_new_values">
@@ -132,7 +131,7 @@
       </script>
     {/literal}
 
-    {if false and $ij.isDev}  
+    {if $ij.isDev}  
       <pre>
         {$entry.toProto.toString}
       </pre>
@@ -318,6 +317,124 @@
     {/foreach}          
   </tr>   
 {/template}
+
+/**
+ * Format an addable, combined value.
+ * 
+ * @param value   the normal value
+ * @param addable the addable value
+ */
+{template .added}
+  {if $value.present}
+    {$value.get}
+  {else}
+    <span class="combination-value">
+      {$addable.value_string}
+      <div class="combination-sources">
+        {foreach $annotated in $addable.annotate}
+          <div class="combination-source">
+            <span class="combination-source-value">
+              {$annotated.value.string}
+            </span>
+            <span class="combination-source-origin">
+              from {$annotated.source}
+            </span>
+          </div>
+        {/foreach}
+      </div>
+    </span>
+  {/if}
+{/template}
+
+/**
+ * Format an max/min, combined value.
+ * 
+ * @param combination the combination value
+ */
+{template .single}
+  {if not length($combination.annotate)}
+    {$combination.value_string}  
+  {else}
+    {if $combination.value_string != 'Unknown'}
+      <span class="combination-value">
+        {$combination.value_string}
+        <div class="combination-sources">
+          {foreach $annotated in $combination.annotate}
+              <div class="combination-source">
+                <span class="combination-source-value">
+                  {if $annotated.value.string}
+                    {$annotated.value.string}
+                  {else}
+                    {$annotated.value}
+                  {/if}
+                </span>
+                <span class="combination-source-origin">
+                  from {$annotated.source}
+                </span>
+              </div>
+          {/foreach}
+        </div>
+      </span>
+    {/if}
+  {/if}
+{/template}
+
+/**
+ * Format a concatenated, combined value.
+ * 
+ * @param value       the normal value
+ * @param concatenate the concatenate value
+ * @param? lines      whether to format the text in lines
+ */
+{template .concatenated}
+  {if $value}
+    {commands($value)}
+  {else}
+    {foreach $concat in $concatenate.annotate}
+      <span class="combination-{if $lines}line{else}text{/if}">
+        {commands($concat.value)}{if not $lines}{sp}{/if}
+        <div class="combination-text-source">
+          from {$concat.source}
+        </div>
+      </span>
+    {/foreach}
+  {/if}
+{/template}
+
+/**
+ * Format a concatenated, combined value.
+ * 
+ * @param values       the normal value
+ * @param concatenate the concatenate value
+  */
+{template .concatenated_list}
+  {if $values and length($values)}
+    {foreach $value in $values}
+      {$value}{if not isLast($value)}, {/if}
+    {/foreach}
+ {else}
+    <span class="combination-value">
+      {call dma.value.list}
+        {param values: $concatenate.value /}
+      {/call}
+      <div class="combination-sources">
+        {foreach $annotated in $concatenate.annotate}
+          <div class="combination-source">
+            <span class="combination-source-value">
+              {call dma.value.list}
+                {param values: $annotated.value /}
+              {/call}
+            </span>
+            <span class="combination-source-origin">
+              from {$annotated.source}
+            </span>
+          </div>          
+        {/foreach}
+      </div>
+    </span>
+  {/if}
+{/template}
+
 
 // The old templates are below
 // *****************************************************************************

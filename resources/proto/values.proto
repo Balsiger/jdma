@@ -96,6 +96,7 @@ message VolumeProto
   {
     optional RationalProto cubic_meters = 1;
     optional RationalProto cubic_decimeters = 2;
+    optional RationalProto cubic_centimeters = 3;
   }
   optional Metric metric = 1;
 

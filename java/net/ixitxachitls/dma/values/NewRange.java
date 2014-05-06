@@ -33,7 +33,6 @@ import net.ixitxachitls.dma.proto.Values.RangeProto;
  *
  * @file   NewRange.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 public class NewRange extends NewValue<RangeProto>
 {

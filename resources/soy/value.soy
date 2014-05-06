@@ -33,6 +33,19 @@
 // @printDirective raw 0 0 
 
 /**
+ * Formatting a list of values, comma separated.
+ * 
+ * @param values the values to format
+ */
+{template .list}
+  {if isList($values)}
+    {foreach $value in $values}
+      {$value}{if not isLast($value)}, {/if}
+    {/foreach}
+  {/if}
+{/template}
+
+/**
  * Base template for values to make them editable.
  *
  * @param entry The entry to print for
@@ -774,19 +787,6 @@
       {param short: $short /}
     {/call}
   {/if}
-{/template}
-
-/**
- * Print a value list.
- *
- * @param value the value to print
- * @param args arguments to the template
- */
-{template .list}
-  {foreach $element in $value.list}
-    {$element |print}
-    {if not isLast($element)}{$args[0]}{/if}
-  {/foreach}
 {/template}
 
 /**

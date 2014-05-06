@@ -191,7 +191,6 @@ public class Modifier extends Value<Modifier>
 
       throw new IllegalStateException("invalid proto type: " + inProto);
     }
-
   }
 
   //........................................................................

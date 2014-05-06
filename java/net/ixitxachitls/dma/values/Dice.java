@@ -143,7 +143,6 @@ public class Dice extends Value<Dice>
    * of at least 1.
    *
    * @return      the value rolled
-   *
    */
   public int roll()
   {
@@ -178,7 +177,6 @@ public class Dice extends Value<Dice>
    * Get the number stored (without escaping).
    *
    * @return      the number stored
-   *
    */
   public int getNumber()
   {
@@ -192,7 +190,6 @@ public class Dice extends Value<Dice>
    * Get the dice stored (without escaping).
    *
    * @return      the dice stored
-   *
    */
   public int getDice()
   {
@@ -206,7 +203,6 @@ public class Dice extends Value<Dice>
    * Get the modifier stored (without escaping).
    *
    * @return      the modifier stored
-   *
    */
   public int getModifier()
   {
@@ -220,7 +216,6 @@ public class Dice extends Value<Dice>
     * Get the maximal value that can result of this dice.
     *
     * @return      the maximal possible value
-    *
     */
   public long getMax()
   {
@@ -234,7 +229,6 @@ public class Dice extends Value<Dice>
     * Get the minimal value that can result of this dice.
     *
     * @return      the minimal possible value
-    *
     */
   public long getMin()
   {
@@ -250,7 +244,6 @@ public class Dice extends Value<Dice>
    * The minimal value is always 1.
    *
    * @return      the average value
-   *
    */
   public long getAverage()
   {
@@ -264,7 +257,6 @@ public class Dice extends Value<Dice>
    * Determine if this dice represents any random value or is basically static.
    *
    * @return   true if the die is random, false if not
-   *
    */
   public boolean isRandom()
   {

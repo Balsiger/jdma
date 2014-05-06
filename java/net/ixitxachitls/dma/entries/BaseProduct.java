@@ -31,6 +31,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
@@ -230,13 +231,13 @@ public class BaseProduct extends BaseEntry
     /**
      * Get the part matching the given text.
      */
-    public static @Nullable Part fromString(String inText)
+    public static Optional<Part> fromString(String inText)
     {
       for(Part part : values())
         if(part.m_name.equalsIgnoreCase(inText))
-          return part;
+          return Optional.of(part);
 
-      return null;
+      return Optional.absent();
     }
 
     /**
@@ -332,13 +333,13 @@ public class BaseProduct extends BaseEntry
     /**
      * Get the layout matching the given text.
      */
-    public static @Nullable Layout fromString(String inText)
+    public static Optional<Layout> fromString(String inText)
     {
       for(Layout layout : values())
         if(layout.m_name.equalsIgnoreCase(inText))
-          return layout;
+          return Optional.of(layout);
 
-      return null;
+      return Optional.absent();
     }
 
     /**
@@ -383,6 +384,8 @@ public class BaseProduct extends BaseEntry
     DnD_3_5("D&D 3.5", BaseProductProto.System.DND_3_5, "D&D 3rd"),
     /** Dungeon & Dragons, fourth edition. */
     DnD_4("D&D 4th", BaseProductProto.System.DND_4, "D&D 4th"),
+    /** Games with d20 modern rules. */
+    DnD_NEXT("D&D Next", BaseProductProto.System.DND_NEXT, "D&D Next"),
     /** Games with d20 modern rules. */
     D20_MODERN("d20 Modern", BaseProductProto.System.D20_MODERN, null),
     /** Games with d20 future rules. */
@@ -571,13 +574,13 @@ public class BaseProduct extends BaseEntry
     /**
      * Get the system matching the given text.
      */
-    public static @Nullable System fromString(String inText)
+    public static Optional<System> fromString(String inText)
     {
       for(System system : values())
         if(system.m_name.equalsIgnoreCase(inText))
-          return system;
+          return Optional.of(system);
 
-      return null;
+      return Optional.absent();
     }
 
     /**
@@ -735,13 +738,13 @@ public class BaseProduct extends BaseEntry
     /**
      * Get the product type matching the given text.
      */
-    public static @Nullable ProductType fromString(String inText)
+    public static Optional<ProductType> fromString(String inText)
     {
       for(ProductType type : values())
         if(type.m_name.equalsIgnoreCase(inText))
-          return type;
+          return Optional.of(type);
 
-      return null;
+      return Optional.absent();
     }
 
     /**
@@ -862,13 +865,13 @@ public class BaseProduct extends BaseEntry
     /**
      * Get the style matching the given text.
      */
-    public static @Nullable Style fromString(String inText)
+    public static Optional<Style> fromString(String inText)
     {
       for(Style style : values())
         if(style.m_name.equalsIgnoreCase(inText))
-          return style;
+          return Optional.of(style);
 
-      return null;
+      return Optional.absent();
     }
 
     @Override
@@ -963,13 +966,13 @@ public class BaseProduct extends BaseEntry
     /**
      * Get the audience matching the given text.
      */
-    public static @Nullable Audience fromString(String inText)
+    public static Optional<Audience> fromString(String inText)
     {
       for(Audience audience : values())
         if(audience.m_name.equalsIgnoreCase(inText))
-          return audience;
+          return Optional.of(audience);
 
-      return null;
+      return Optional.absent();
     }
 
     /**
@@ -1487,7 +1490,7 @@ public class BaseProduct extends BaseEntry
     List<String> categories = super.getCategories();
     ProductType type = getProductType();
 
-    if(type == null || categories.contains(type.toString()))
+    if(type == ProductType.UNKNOWN || categories.contains(type.toString()))
       return categories;
 
     List<String> result = new ArrayList<>(categories);
@@ -1731,56 +1734,42 @@ public class BaseProduct extends BaseEntry
     m_isbn = inValues.use("isbn.10", m_isbn, ISBN.PARSER);
     m_isbn13 = inValues.use("isbn.13", m_isbn13, ISBN13.PARSER);
     m_pages = inValues.use("pages", m_pages);
-    m_system= inValues.use("system", m_system, new NewValue.Parser<System>() {
+    m_producer = inValues.use("producer", m_producer);
+    m_system= inValues.use("system", m_system, new NewValue.Parser<System>(1) {
       @Override
-      public @Nullable System parse(String... inValues)
+      public Optional<System> doParse(String inValue)
       {
-        if(inValues.length != 1)
-          return null;
-
-        return System.fromString(inValues[0]);
+        return System.fromString(inValue);
       }
     });
     m_audience = inValues.use("audience", m_audience,
-                              new NewValue.Parser<Audience>() {
+                              new NewValue.Parser<Audience>(1) {
       @Override
-      public @Nullable Audience parse(String... inValues)
+      public Optional<Audience> doParse(String inValue)
       {
-        if(inValues.length != 1)
-          return null;
-
-        return Audience.fromString(inValues[0]);
+        return Audience.fromString(inValue);
       }
     });
     m_productType = inValues.use("product type", m_productType,
-                                 new NewValue.Parser<ProductType>() {
+                                 new NewValue.Parser<ProductType>(1) {
       @Override
-      public @Nullable ProductType parse(String... inValues)
+      public Optional<ProductType> doParse(String inValue)
       {
-        if(inValues.length != 1)
-          return null;
-
-        return ProductType.fromString(inValues[0]);
+        return ProductType.fromString(inValue);
       }
     });
-    m_style = inValues.use("style", m_style, new NewValue.Parser<Style>() {
+    m_style = inValues.use("style", m_style, new NewValue.Parser<Style>(1) {
       @Override
-      public @Nullable Style parse(String... inValues)
+      public Optional<Style> doParse(String inValue)
       {
-        if(inValues.length != 1)
-          return null;
-
-        return Style.fromString(inValues[0]);
+        return Style.fromString(inValue);
       }
     });
-    m_layout = inValues.use("layout", m_layout, new NewValue.Parser<Layout>() {
+    m_layout = inValues.use("layout", m_layout, new NewValue.Parser<Layout>(1) {
       @Override
-      public @Nullable Layout parse(String... inValues)
+      public Optional<Layout> doParse(String inValue)
       {
-        if(inValues.length != 1)
-          return null;
-
-        return Layout.fromString(inValues[0]);
+        return Layout.fromString(inValue);
       }
     });
     m_series = inValues.use("series", m_series);

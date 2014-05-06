@@ -35,6 +35,7 @@ message BaseEntryProto
   repeated Reference reference = 5;
   repeated string synonym = 6;
   repeated string world = 7;
+  optional string incomplete = 8;
 }
 
 message BaseCharacterProto
@@ -580,7 +581,8 @@ message BaseItemProto
     TALL = 1;
     LONG = 2;
   }
-
+  optional SizeModifier size_modifier = 25;
+  
   optional int32 hardness = 6;
   optional int32 hit_points = 7;
 

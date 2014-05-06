@@ -544,7 +544,7 @@ public class BaseSkill extends BaseEntry
     builder.setBase((BaseEntryProto)super.toProto());
 
     if(m_ability.isDefined())
-      builder.setAbility(m_ability.getSelected().getProto());
+      builder.setAbility(m_ability.getSelected().toProto());
 
     if(m_check.isDefined())
       builder.setCheck(m_check.get());

@@ -21,9 +21,10 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
+
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Values.PriceProto;
 import net.ixitxachitls.util.Strings;
@@ -40,15 +41,17 @@ import net.ixitxachitls.util.Strings;
 @ParametersAreNonnullByDefault
 public class Price extends NewValue<PriceProto>
 {
-  public static class PriceParser implements Parser<Price>
+  public static class PriceParser extends Parser<Price>
   {
-    @Override
-    public @Nullable Price parse(String ... inValues)
+    public PriceParser()
     {
-      if(inValues.length != 1)
-        return null;
+      super(1);
+    }
 
-      return Price.parse(inValues[0]);
+    @Override
+    public Optional<Price> doParse(String inValue)
+    {
+      return Price.parse(inValue);
     }
   }
 
@@ -133,18 +136,18 @@ public class Price extends NewValue<PriceProto>
    * @return      the price parsed, if any
    *
    */
-  public static @Nullable Price parse(String inText)
+  public static Optional<Price> parse(String inText)
   {
     String []parts = Strings.getPatterns(inText, "(.*)\\s*(\\d+)(?:\\.(\\d+))");
     if(parts.length != 3)
-      return null;
+      return Optional.absent();
 
     String currency = parts[0];
     int precision = (int)Math.pow(10, parts[2].length());
     int number =
       Integer.parseInt(parts[1]) * precision + Integer.parseInt(parts[2]);
 
-    return new Price(currency, number, precision);
+    return Optional.of(new Price(currency, number, precision));
   }
 
   //---------------------------------------------------------------------------

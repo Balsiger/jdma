@@ -46,7 +46,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ServingUrlOptions;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
@@ -407,11 +406,8 @@ public abstract class AbstractEntry extends ValueGroup
   /** The name of the abstract entry. */
   protected String m_name = UNDEFINED_STRING;
 
+  /** The base entries for this one. */
   protected List<String> m_base = new ArrayList<>();
-
-  //-------------------------------------------------------------- accessors
-
-  //-------------------------------- getKey --------------------------------
 
   /**
    * Get the key uniquely identifying this entry.
@@ -419,7 +415,6 @@ public abstract class AbstractEntry extends ValueGroup
    * @param    <T> the type of entry to get the key for
    *
    * @return   the key for the entry
-   *
    */
   @SuppressWarnings("unchecked")
   @Override
@@ -428,14 +423,10 @@ public abstract class AbstractEntry extends ValueGroup
     return new EntryKey<T>(getName(), (AbstractType<T>)getType());
   }
 
-  //........................................................................
-  //----------------------------- getKeyWidth ------------------------------
-
   /**
    * Get the maximal width of the keys, including attachments.
    *
    * @return      the maximal key width
-   *
    */
   protected int getKeyWidth()
   {
@@ -454,21 +445,16 @@ public abstract class AbstractEntry extends ValueGroup
     return width;
   }
 
-  //........................................................................
-
   /**
    * Get the name of the entry.
    *
    * @return      the requested name
-   *
    */
   @Override
   public String getName()
   {
     return m_name;
   }
-
-  //------------------------------- getEntry -------------------------------
 
   /**
    * Get the entry associated with this group.
@@ -481,9 +467,6 @@ public abstract class AbstractEntry extends ValueGroup
     return this;
   }
 
-  //........................................................................
-  //-------------------------- getQualifiedName ----------------------------
-
   /**
    * Get the qualified name for this entry.
    *
@@ -492,8 +475,8 @@ public abstract class AbstractEntry extends ValueGroup
    * are seperated by '|'.
    *
    * @return      A string of form 'base1:base2:entry|base3:base4:entry'
-   *
    */
+  @Deprecated
   public String getQualifiedName()
   {
 //     List<String> names = new ArrayList<String>();
@@ -509,8 +492,6 @@ public abstract class AbstractEntry extends ValueGroup
 //       + "::" + getName();
   }
 
-  //........................................................................
-
   /**
    * Get the names of the base entries this entry is based on.
    *
@@ -521,14 +502,11 @@ public abstract class AbstractEntry extends ValueGroup
     return Collections.unmodifiableList(m_base);
   }
 
-  //---------------------------- getBaseEntries ----------------------------
-
   /**
    * Get the base entries this abstract entry is based on, if any.
    *
    * @return      the requested base entries; note that an entry can be null
    *              if it is not found
-   *
    */
   @Override
   public List<BaseEntry> getBaseEntries()
@@ -546,14 +524,10 @@ public abstract class AbstractEntry extends ValueGroup
     return m_baseEntries;
   }
 
-  //........................................................................
-  //-------------------------- ensureBaseEntries ---------------------------
-
   /**
    * Make sure that all base entries are available.
    *
    * @return      true if all are available, false if not
-   *
    */
   public boolean ensureBaseEntries()
   {
@@ -567,9 +541,6 @@ public abstract class AbstractEntry extends ValueGroup
     return true;
   }
 
-  //........................................................................
-  //------------------------------ getRefName ------------------------------
-
   /**
    * Get the name of the entry as a reference for humans (not necessarily how
    * it can be found in a campaign).
@@ -582,16 +553,12 @@ public abstract class AbstractEntry extends ValueGroup
     return getName();
   }
 
-  //........................................................................
-  //--------------------------------- getID --------------------------------
-
   /**
    * Get the ID of the entry. This can mainly be used for reference purposes.
    * In this case, the lowercased name is equal to the id, which is not true
    * for entries.
    *
    * @return      the requested id
-   *
    */
   @Override
   @Deprecated
@@ -600,16 +567,12 @@ public abstract class AbstractEntry extends ValueGroup
     return getName();
   }
 
-  //........................................................................
-  //------------------------------- getType --------------------------------
-
   /**
    * Get the type of the entry.
    *
    * @param       <T>  the type of entry to get the type for
    *
    * @return      the requested name
-   *
    */
   @Override
   @SuppressWarnings("unchecked") // cast
@@ -618,14 +581,10 @@ public abstract class AbstractEntry extends ValueGroup
     return (AbstractType<T>)m_type;
   }
 
-  //........................................................................
-  //----------------------------- getEditType ------------------------------
-
   /**
    * Get the type of the entry.
    *
    * @return      the requested name
-   *
    */
   @Override
   public String getEditType()
@@ -633,14 +592,10 @@ public abstract class AbstractEntry extends ValueGroup
     return m_type.toString();
   }
 
-  //........................................................................
-  //-------------------------- getExtensionNames ---------------------------
-
   /**
    * Get an all the names of the extensions.
    *
    * @return      the requested names
-   *
    */
   public Set<String> getExtensionNames()
   {
@@ -653,9 +608,6 @@ public abstract class AbstractEntry extends ValueGroup
 
     return extensions;
   }
-
-  //........................................................................
-  //---------------------------- hasExtension -----------------------------
 
   /**
    * Check if the entry (or one of is bases) has an extension with the given
@@ -675,9 +627,6 @@ public abstract class AbstractEntry extends ValueGroup
     return false;
   }
 
-  //........................................................................
-  //---------------------------- hasExtension -----------------------------
-
   /**
    * Check if the entry (or one of is bases) has an extension with the given
    * name.
@@ -691,24 +640,17 @@ public abstract class AbstractEntry extends ValueGroup
     return m_extensions.keySet().contains(inExtension);
   }
 
-  //........................................................................
-  //----------------------------- getExtension -----------------------------
-
   /**
    * Get the extension given by name.
    *
    * @param   inName the name of the extension
    *
    * @return  the extension found, if any
-   *
    */
   public @Nullable AbstractExtension<?> getExtension(String inName)
   {
     return m_extensions.get(inName);
   }
-
-  //........................................................................
-  //---------------------------- getExtension ------------------------------
 
   /**
    * Get the extension with the given class.
@@ -717,7 +659,6 @@ public abstract class AbstractEntry extends ValueGroup
    * @param       <T> the type of extension to get
    *
    * @return      the extension found or null if not found
-   *
    */
   @SuppressWarnings("unchecked")
   public @Nullable <T extends AbstractExtension<?>> T
@@ -729,9 +670,6 @@ public abstract class AbstractEntry extends ValueGroup
 
     return null;
   }
-
-  //........................................................................
-  //---------------------------- getQuantifiers ----------------------------
 
   /**
    * Get the current quantifiers.
@@ -747,8 +685,6 @@ public abstract class AbstractEntry extends ValueGroup
 
     return "";
   }
-
-  //........................................................................
 
   /**
    * Get the files associated with this entry.
@@ -802,13 +738,10 @@ public abstract class AbstractEntry extends ValueGroup
     return new FormattedText(formatValues() + ".");
   }
 
-  //------------------------- collectDependencies --------------------------
-
   /**
    * Collect the dependencies for this entry.
    *
    * @return      a list with all dependent entries
-   *
    */
   public Set<AbstractEntry> collectDependencies()
   {
@@ -829,8 +762,6 @@ public abstract class AbstractEntry extends ValueGroup
     return entries;
   }
 
-  //........................................................................
-
   /**
    * Collect all the searchable values by key.
    *
@@ -841,13 +772,10 @@ public abstract class AbstractEntry extends ValueGroup
     return new HashMap<>();
   }
 
-  //---------------------------- fullReferences ----------------------------
-
   /**
    * Get the references of this entry with full information for printing.
    *
    * @return      a list with the references and all values
-   *
    */
   @SuppressWarnings("unchecked")
   public List<Map<String, Object>> fullReferences()
@@ -873,9 +801,6 @@ public abstract class AbstractEntry extends ValueGroup
     return references;
   }
 
-  //........................................................................
-  //------------------------------- collect --------------------------------
-
   /**
    * Collect the name value.
    *
@@ -883,7 +808,6 @@ public abstract class AbstractEntry extends ValueGroup
    * @param   <T>    the type of value to collect
    *
    * @return  the combined value collected.
-   *
    */
   public <T extends Value<T>> Combined<T> collect(String inName)
   {
@@ -892,8 +816,6 @@ public abstract class AbstractEntry extends ValueGroup
 
     return combined;
   }
-
-  //........................................................................
 
   @Override
   protected <T extends Value<T>> void collect(String inName,
@@ -909,17 +831,10 @@ public abstract class AbstractEntry extends ValueGroup
       extension.collect(inName, ioCombined);
   }
 
-  //------------------------- computeIndexValues ---------------------------
-
-  /**
-   * Get all the values for all the indexes.
-   *
-   * @return      a multi map of values per index name
-   *
-   */
+  @Override
   public Multimap<Index.Path, String> computeIndexValues()
   {
-    Multimap<Index.Path, String> values = HashMultimap.create();
+    Multimap<Index.Path, String> values = super.computeIndexValues();
     for(AbstractExtension<? extends AbstractEntry> extension
           : m_extensions.values())
       extension.computeIndexValues(values);
@@ -930,53 +845,16 @@ public abstract class AbstractEntry extends ValueGroup
     return values;
   }
 
-  //........................................................................
-
-  //------------------------------ isChanged -------------------------------
-
   /**
     * Check if the file has been changed (and thus might need saving).
     *
     * @return      true if changed, false if not
-    *
     */
   public boolean isChanged()
   {
     return m_changed;
   }
 
-  //........................................................................
-  //------------------------------- matches --------------------------------
-
-  /**
-   * Check if this entry matches the given search string or pattern.
-   *
-   * @param       inPattern the pattern to search for
-   *
-   * @return      true if it matches, false if not
-   *
-   * @undefined   never
-   *
-   */
-//   public boolean matches(String inPattern)
-//   {
-//     if(inPattern == null)
-//       return false;
-
-//     return getName().matches("(?i).*" + inPattern + ".*");
-//   }
-
-  //........................................................................
-  //-------------------------------- equals --------------------------------
-
-  /**
-   * Check for equality of the given errors.
-   *
-   * @param       inOther the object to compare to
-   *
-   * @return      true if equal, false else
-   *
-   */
   @Override
   public boolean equals(Object inOther)
   {
@@ -1007,26 +885,11 @@ public abstract class AbstractEntry extends ValueGroup
     return getID().hashCode();
   }
 
-  //........................................................................
-  //------------------------------ compareTo -------------------------------
-
-  /**
-   * Compare this value to another one.
-   *
-   * @param       inOther the value to compare to
-   *
-   * @return      -1 for less than, 0 for equal and +1 for greater than the
-   *              object given
-   *
-   */
   @Override
   public int compareTo(AbstractEntry inOther)
   {
     return getID().compareTo(inOther.getID());
   }
-
-  //........................................................................
-  //------------------------------ isBasedOn -------------------------------
 
   /**
    * Checks whether this entry is based on the given one, directly or
@@ -1036,7 +899,6 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @return     true if this entry is directly or indirectly based on the
    *             given entry, false else
-   *
    */
   public boolean isBasedOn(BaseEntry inBase)
   {
@@ -1050,9 +912,6 @@ public abstract class AbstractEntry extends ValueGroup
     return false;
   }
 
-  //.......................................................................
-  //------------------------------ isValueIn -------------------------------
-
   /**
    * Check if the given value is in the group value with the given key.
    *
@@ -1060,7 +919,6 @@ public abstract class AbstractEntry extends ValueGroup
    * @param       inKey   the key of the value to check in
    *
    * @return      true if it is in, false if it is not
-   *
    */
   @Override
   public boolean isValueIn(String inValue, String inKey)
@@ -1075,9 +933,6 @@ public abstract class AbstractEntry extends ValueGroup
     return false;
   }
 
-  //........................................................................
-  //------------------------------ isValue -------------------------------
-
   /**
    * Check if the given value has the value given.
    *
@@ -1086,7 +941,6 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @return      true if it is in, false if it is not, null if undefined or
    *              invalid
-   *
    */
   @Override
   public @Nullable Boolean isValue(String inValue, String inKey)
@@ -1108,16 +962,6 @@ public abstract class AbstractEntry extends ValueGroup
     return null;
   }
 
-  //........................................................................
-
-  //------------------------------- toString -------------------------------
-
-  /**
-   * Convert the object to a String for printing.
-   *
-   * @return      the String representation
-   *
-   */
   @Override
   public String toString()
   {
@@ -1148,16 +992,12 @@ public abstract class AbstractEntry extends ValueGroup
     return result.toString();
   }
 
-  //........................................................................
-
-  //----------------------------- formatValues -----------------------------
-
   /**
    * Format all the values contained in the entry for printing.
    *
    * @return      a String with a representation of all values
-   *
    */
+  @Deprecated
   protected String formatValues()
   {
     StringBuilder result = new StringBuilder();
@@ -1171,14 +1011,10 @@ public abstract class AbstractEntry extends ValueGroup
     return result.toString();
   }
 
-  //........................................................................
-  //----------------------------- getAllValues -----------------------------
-
   /**
    * Get all the values in this entry, including attachments.
    *
    * @return      a map with all values by key
-   *
    */
   public Map<String, Value<?>> getAllValues()
   {
@@ -1207,19 +1043,6 @@ public abstract class AbstractEntry extends ValueGroup
     return values;
   }
 
-  //........................................................................
-
-  //------------------------------- compute --------------------------------
-
-  /**
-   * Compute a value for a given key, taking base entries into account if
-   * available.
-   *
-   * @param    inKey the key of the value to compute
-   *
-   * @return   the compute value
-   *
-   */
   @Override
   public @Nullable Object compute(String inKey)
   {
@@ -1255,29 +1078,20 @@ public abstract class AbstractEntry extends ValueGroup
     return super.compute(inKey);
   }
 
-  //........................................................................
-
-  //------------------------------- getPath --------------------------------
-
   /**
    * Get the path to this entry.
    *
    * @return      the path to read this entry
-   *
    */
   public String getPath()
   {
     return "/" + getType().getLink() + "/" + getName();
   }
 
-  //........................................................................
-  //---------------------------- getNavigation -----------------------------
-
   /**
    * Get the navigation information to this entry.
    *
    * @return      an array with pairs for caption and link per navigation entry
-   *
    */
   public String [] getNavigation()
   {
@@ -1286,9 +1100,6 @@ public abstract class AbstractEntry extends ValueGroup
       getName(), "/" + getType().getLink() + "/" + getName(),
     };
   }
-
-  //........................................................................
-  //-------------------------- getListNavigation ---------------------------
 
   /**
    * Get the list navigation information to this entry.
@@ -1303,9 +1114,6 @@ public abstract class AbstractEntry extends ValueGroup
     };
   }
 
-  //........................................................................
-  //------------------------------- canEdit --------------------------------
-
   /**
    * Check if the given user is allowed to edit the value with the given key.
    *
@@ -1313,15 +1121,11 @@ public abstract class AbstractEntry extends ValueGroup
    * @param       inUser the user trying to edit
    *
    * @return      true if the value can be edited by the user, false if not
-   *
    */
   public boolean canEdit(String inKey, BaseCharacter inUser)
   {
     return inUser != null && inUser.hasAccess(BaseCharacter.Group.ADMIN);
   }
-
-  //........................................................................
-  //----------------------------- isShownTo -------------------------------
 
   /**
    * Check if the given user is allowed to see the entry.
@@ -1329,15 +1133,11 @@ public abstract class AbstractEntry extends ValueGroup
    * @param       inUser the user trying to edit
    *
    * @return      true if the entry can be seen, false if not
-   *
    */
   public boolean isShownTo(BaseCharacter inUser)
   {
     return true;
   }
-
-  //........................................................................
-  //------------------------------ createKey -------------------------------
 
   /**
    * Create a key for the given values.
@@ -2506,11 +2306,7 @@ public abstract class AbstractEntry extends ValueGroup
     }
   }
 
-  /**
-   * Create a proto representing the entry.
-   *
-   * @return the proto representation
-   */
+  @Override
   public Message toProto()
   {
     AbstractEntryProto.Builder builder = AbstractEntryProto.newBuilder();
@@ -2526,11 +2322,7 @@ public abstract class AbstractEntry extends ValueGroup
     return builder.build();
   }
 
-  /**
-   * Read the values for the entry from the given proto.
-   *
-   * @param   inProto  the proto buffer with all the data
-   */
+  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof AbstractEntryProto))

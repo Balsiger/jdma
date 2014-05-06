@@ -2528,6 +2528,66 @@ BODY.print
   display: table-cell;
 }
 
+.entry .combination-line
+{
+  border-left: 1px dashed #ccc;
+  padding-left: 3px;
+  position: relative;
+  display: block;
+}
+
+.entry .combination-value,
+.entry .combination-text
+{
+  border-bottom: 1px dashed #ccc;
+  position: relative;
+}
+
+.entry .combination-source 
+{
+  display: table-row;
+}
+
+.entry .combination-source-value,
+.entry .combination-source-origin
+{
+  display: table-cell;
+  text-align: left;
+  padding-left: 5px;
+}
+
+.entry .combination-value:hover .combination-sources,
+.entry .combination-line:hover .combination-text-source,
+.entry .combination-text:hover .combination-text-source
+{
+  display: block;
+}
+
+.entry .combination-sources,
+.entry .combination-text .combination-text-source,
+.entry .combination-line .combination-text-source
+{
+  display: none;
+  position: absolute;
+  padding: 5px;
+  border: 1px solid #bbb;
+  white-space: nowrap;
+  bottom: 50%;
+  background: #eee;
+  z-index: 1;
+}
+
+.entry .combination-sources,
+.entry .combination-text .combination-text-source
+{
+  left: 110%;
+}
+
+.entry .combination-line .combination-text-source
+{
+  right: 100%;
+}
+
 /******************************************************************************
  * Edit pages
  *****************************************************************************/
@@ -2781,5 +2841,11 @@ BODY.print
 .edit .field .input-wrapper
 {
   position: relative;
+  display: inline-block;
+}
+
+.edit .narrow 
+{
+  width: auto;
   display: inline-block;
 }

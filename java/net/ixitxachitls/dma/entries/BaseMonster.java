@@ -31,6 +31,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -1559,6 +1560,9 @@ public class BaseMonster extends BaseEntry
   @ParametersAreNonnullByDefault
   public enum Ability implements EnumSelection.Named, EnumSelection.Short
   {
+    /** Unknown.*/
+    UNKNOWN("Unknown", "Unk", BaseMonsterProto.Ability.UNKNOWN),
+
     /** Strength. */
     STRENGTH("Strength", "Str", BaseMonsterProto.Ability.STRENGTH),
 
@@ -1642,7 +1646,7 @@ public class BaseMonster extends BaseEntry
      *
      * @return the proto enum value
      */
-    public BaseMonsterProto.Ability getProto()
+    public BaseMonsterProto.Ability toProto()
     {
       return m_proto;
     }
@@ -1660,6 +1664,33 @@ public class BaseMonster extends BaseEntry
           return ability;
 
       throw new IllegalStateException("invalid proto ability: " + inProto);
+    }
+
+   /**
+     * All the possible names for the layout.
+     *
+     * @return the possible names
+     */
+    public static List<String> names()
+    {
+      List<String> names = new ArrayList<>();
+
+      for(Ability ability : values())
+        names.add(ability.getName());
+
+      return names;
+    }
+
+    /**
+     * Get the layout matching the given text.
+     */
+    public static Optional<Ability> fromString(String inText)
+    {
+      for(Ability ability : values())
+        if(ability.m_name.equalsIgnoreCase(inText))
+          return Optional.of(ability);
+
+      return Optional.absent();
     }
   };
 
@@ -4095,7 +4126,7 @@ public class BaseMonster extends BaseEntry
     if(m_size.isDefined())
     {
       builder.setSize(((EnumSelection<BaseItem.Size>)m_size.get(0))
-                      .getSelected().getProto());
+                      .getSelected().toProto());
       builder.setSizeModifier(((EnumSelection<BaseItem.SizeModifier>)
                               m_size.get(1)).getSelected().toProto());
     }
@@ -4343,7 +4374,7 @@ public class BaseMonster extends BaseEntry
           (BaseMonsterProto.Advancement.newBuilder()
            .setRange(((Range)advancement.get(0)).toProto())
            .setSize(((EnumSelection<BaseItem.Size>)advancement.get(1))
-                    .getSelected().getProto())
+                    .getSelected().toProto())
            .build());
 
     if(m_levelAdjustment.isDefined())

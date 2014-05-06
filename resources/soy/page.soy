@@ -144,15 +144,16 @@
 
   // title
   <title>
-    DMA -{sp}
-    {switch $title}
-      {case 'main'}
-        {call .titleMain /}
-      {default}
-        {msg desc="Unknown page title"}
-          Unknown
-        {/msg}
-    {/switch}
+    DMA 
+    {if $title}
+      {sp}-{sp}
+      {switch $title}
+        {case 'main'}
+          {call .titleMain /}
+        {default}
+          {$title}
+      {/switch}
+    {/if}
   </title>
   </head>
 {/template}

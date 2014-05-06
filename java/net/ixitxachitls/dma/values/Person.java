@@ -23,20 +23,24 @@ package net.ixitxachitls.dma.values;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Optional;
+
 import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 
 /** Small class to encapsulate person information with job. */
 public class Person extends NewValue<BaseProductProto.Person> {
 
-  public static class PersonParser implements Parser<Person>
+  public static class PersonParser extends Parser<Person>
   {
-    @Override
-    public @Nullable Person parse(String ... inValues)
+    public PersonParser()
     {
-      if(inValues.length != 2 || inValues[0].isEmpty())
-        return null;
+      super(2);
+    }
 
-      return new Person(inValues[0], inValues[1]);
+    @Override
+    public Optional<Person> doParse(String inName, String inJob)
+    {
+      return Optional.of(new Person(inName, inJob));
     }
   }
 

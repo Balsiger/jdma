@@ -31,90 +31,12 @@
  * @param entry The entry rendered
  */
 {deltemplate dma.entry.values}
-  {if def($entry.incomplete) and $ij.isDM}
-    {call dma.entry.extension}
-      {param name: 'incomplete' /}
-      {param content}
-        {delcall dma.entry.keyvalue}
-          {param entry: $entry /}
-          {param name: 'Incomplete' /}
-          {param value: $entry.incomplete /}
-        {/delcall}
-      {/param}
-    {/call}
-  {/if}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Base' /}
-    {param value: $entry.base /}
-    {param access: 'dm' /}
-  {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
     {param name: 'Extensions' /}
     {param value: $entry.extensions /}
     {param withoutbase: true /}
     {param access: 'dm' /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Synonyms' /}
-    {param value: $entry.synonyms /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Player Name' /}
-    {param value: $entry.player_name /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Worlds' /}
-    {param value: $entry.worlds /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Categoeries' /}
-    {param value: $entry.categories /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Value' /}
-    {param value: $entry.value /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Weight' /}
-    {param value: $entry.weight /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'HP' /}
-    {param value: $entry.hp /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Size' /}
-    {param value: $entry.size /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Substance' /}
-    {param value: $entry.substance /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Hardness' /}
-    {param value: $entry.hardness /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Break DC' /}
-    {param value: $entry.break_DC /}
-  {/delcall}
-  {delcall dma.entry.keyvalue}
-    {param entry: $entry /}
-    {param name: 'Probability' /}
-    {param value: $entry.probability /}
   {/delcall}
 
   {if $entry.extension_magic}
@@ -155,64 +77,6 @@
               {param value: $entry.unit /}
             {/call}
           {/param}
-        {/delcall}
-      {/param}
-    {/call}
-  {/if}
-
-  {if $entry.extension_weapon}
-    {call dma.entry.extension}
-      {param name: 'weapon' /}
-      {param content}
-        {delcall dma.entry.keyvalue}
-          {param entry: $entry /}
-          {param name: 'Damage' /}
-          {param value: $entry.damage /}
-        {/delcall}
-        {delcall dma.entry.keyvalue}
-          {param entry: $entry /}
-          {param name: 'Secondary Damage' /}
-          {param value: $entry.secondary_damage /}
-        {/delcall}
-        {delcall dma.entry.keyvalue}
-          {param entry: $entry /}
-          {param name: 'Splash' /}
-          {param value: $entry.splash /}
-        {/delcall}
-        {delcall dma.entry.keyvalue}
-          {param entry: $entry /}
-          {param name: 'Critical' /}
-          {param value: $entry.critical /}
-        {/delcall}
-        {delcall dma.entry.keyvalue}
-          {param entry: $entry /}
-          {param name: 'Weapon Type' /}
-          {param value: $entry.weapon_type /}
-        {/delcall}
-        {delcall dma.entry.keyvalue}
-          {param entry: $entry /}
-          {param name: 'Weapon Style' /}
-          {param value: $entry.weapon_style /}
-        {/delcall}
-        {delcall dma.entry.keyvalue}
-          {param entry: $entry /}
-          {param name: 'Proficiency' /}
-          {param value: $entry.proficiency /}
-        {/delcall}
-        {delcall dma.entry.keyvalue}
-          {param entry: $entry /}
-          {param name: 'Range' /}
-          {param value: $entry.range_increment /}
-        {/delcall}
-        {delcall dma.entry.keyvalue}
-          {param entry: $entry /}
-          {param name: 'Reach' /}
-          {param value: $entry.reach /}
-        {/delcall}
-        {delcall dma.entry.keyvalue}
-          {param entry: $entry /}
-          {param name: 'Max Attacks' /}
-          {param value: $entry.max_attacks /}
         {/delcall}
       {/param}
     {/call}

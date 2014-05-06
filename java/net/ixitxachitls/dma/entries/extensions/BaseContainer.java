@@ -19,55 +19,47 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries.extensions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseItem;
+import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseContainerProto;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.EnumSelection;
-import net.ixitxachitls.dma.values.Group;
+import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Volume;
-import net.ixitxachitls.util.Grouping;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is the container extension for all the entries.
  *
  * @file          BaseContainer.java
- *
  * @author        balsiger@ixitxachils.net (Peter 'Merlin' Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ParametersAreNonnullByDefault
-public class BaseContainer extends BaseExtension<BaseItem>
+public class BaseContainer extends ValueGroup
 {
-  //----------------------------------------------------------------- nested
-
-  //----- states -----------------------------------------------------------
-
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
-
   /** The possible sizes in the game. */
   public enum State implements EnumSelection.Named,
     EnumSelection.Proto<BaseContainerProto.State>
   {
+    /** Unknown state. */
+    UNKNOWN("unknown", BaseContainerProto.State.UNKNOWN),
+
     /** Made of paper. */
     SOLID("solid", BaseContainerProto.State.SOLID),
 
@@ -129,225 +121,163 @@ public class BaseContainer extends BaseExtension<BaseItem>
 
       throw new IllegalStateException("invalid state proto: " + inProto);
     }
-  }
 
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------ BaseContainer ---------------------------
-
-  /**
-   * Default constructor.
-   *
-   * @param       inEntry the base item attached to
-   * @param       inName  the name of the extension
-   *
-   */
-  public BaseContainer(BaseItem inEntry, String inName)
-  {
-    super(inEntry, inName);
-  }
-
-  //........................................................................
-  //------------------------------ BaseContainer ---------------------------
-
-  /**
-   * Default constructor.
-   *
-   * @param       inEntry the base item attached to
-   * @param       inTag   the tag name for this instance
-   * @param       inName  the name of the extension
-   *
-   */
-  // public BaseContainer(BaseItem inEntry, String inTag, String inName)
-  // {
-  //   super(inEntry, inTag, inName);
-  // }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  //----- capacity ---------------------------------------------------------
-
-  /** The grouping for liquid capacities in 'feet'. */
-  protected static final Group<Volume, Long, String> s_liquidLiterGrouping =
-    new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
-      {
-        /**
-         *
-         */
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Long extract(Volume inValue)
-        {
-          return (long)inValue.getAsLiters().getValue() * 100;
-        }
-      }, new Long [] { 1L, 10L, 1 * 100L, 2 * 100L, 5 * 100L, 10 * 100L,
-                       20 * 100L, 50 * 100L, 100 * 100L, },
-                                    new String []
-        { "1 cl", "1 dl", "1 l", "2 l", "5 l", "10 l", "20 l", "50 l", "100 l",
-          "a lot" }, "$undefined$");
-
-  /** The grouping for liquid capacities in 'meter'. */
-  protected static final Group<Volume, Long, String> s_liquidFeetGrouping =
-    new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
-      {
-        /**
-         *
-         */
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Long extract(Volume inValue)
-        {
-          return (long)inValue.getAsGallons().getValue() * 16;
-        }
-      }, new Long [] { 1L, 2L, 4L, 1 * 16L, 2 * 16L, 5 * 16L, 10 * 16L,
-                       20 * 16L, 50 * 16L, 100 * 16L, },
-                               new String []
-      { "1 cup", "1 ping", "1 quart", "1 gallon", "2 gallons", "5 gallons",
-        "10 gallons", "20 gallons", "50 gallons", "100 gallons",
-        "a lot liquid" }, "$undefined$");
-
-  /** The grouping for liquid capacities in 'meter'. */
-  protected static final Group<Volume, Long, String> s_solidFeetGrouping =
-    new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
-      {
-        /**
-         *
-         */
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Long extract(Volume inValue)
-        {
-          return (long)inValue.getAsFeet().getValue() * 1728;
-        }
-      }, new Long [] { 1L, 1 * 1728L, 2 * 1728L, 5 * 1728L, 10 * 1728L,
-                       20 * 1728L, 50 * 1728L, 100 * 1728L, },
-                               new String []
-      { "1 cu in", "1 cu ft", "2 cu ft", "5 cu ft", "10 cu ft", "20 cu ft",
-        "50 cu ft", "100 cu ft", "a lot" }, "$undefined$");
-
-  /** The grouping for liquid capacities in 'feet'. */
-  protected static final Group<Volume, Long, String> s_solidMeterGrouping =
-    new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
-      {
-        /**
-         *
-         */
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Long extract(Volume inValue)
-        {
-          return (long)inValue.getAsLiters().getValue() * 1000;
-        }
-      }, new Long [] { 1L, 1 * 1000L, 2 * 1000L, 5 * 1000L, 10 * 1000L,
-                       20 * 1000L, 50 * 1000L, 100 * 1000L, },
-                               new String []
-      { "1 cu dm", "1 cu m", "2 cu m", "5 cu m", "10 cu m", "20 cu m",
-        "50 cu m", "100 cu m", "a lot" }, "$undefined$");
-
-  /** The grouping for the capacity. */
-  protected static final Grouping<Volume, String> s_capacityGrouping =
-    new Grouping<Volume, String>()
+    /**
+     * Get the state from the given string.
+     *
+     * @param inValue the string representation
+     * @return the matching state, if any
+     */
+    public static Optional<State> fromString(String inValue)
     {
-      /**
-       *
-       */
-      private static final long serialVersionUID = 1L;
+      for(State state : values())
+        if(state.getName().equalsIgnoreCase(inValue))
+          return Optional.of(state);
 
-      @Override
-      public String group(Volume inValue)
-      {
-        Volume volume = inValue;
+      return Optional.absent();
+    }
 
-        if(volume.isLiquid())
-          if(volume.isFeet())
-            return s_liquidFeetGrouping.group(inValue);
-          else
-            return s_liquidLiterGrouping.group(inValue);
-        else
-          if(volume.isFeet())
-            return s_solidFeetGrouping.group(inValue);
-          else
-            return s_solidMeterGrouping.group(inValue);
-      }
-    };
+    /**
+     * Get the possible names of types.
+     *
+     * @return a list of the names
+     */
+    public static List<String> names()
+    {
+      List<String> names = new ArrayList<>();
+      for(State state : values())
+        names.add(state.getName());
+
+      return names;
+    }
+  }
+
+  /**
+   * Default constructor.
+   *
+   * @param       inEntry the base item attached to
+   */
+  public BaseContainer(BaseItem inItem)
+  {
+    m_item = inItem;
+  }
+
+  /** The item for this container. */
+  protected final BaseItem m_item;
 
   /** The container's capacity. */
   @Key("capacity")
-  protected Volume m_capacity = new Volume()
-    .withGrouping(s_capacityGrouping);
-
-  static
-  {
-    addIndex(new Index(Index.Path.CAPACITIES, "Container Capacities",
-                       BaseItem.TYPE));
-  }
-
-  //........................................................................
-  //----- state ------------------------------------------------------------
-
+  protected Optional<Volume> m_capacity = Optional.absent();
   /** The state of substances that can be put into the container. */
-  @Key("state")
-  protected EnumSelection<State> m_state =
-    new EnumSelection<State>(State.class);
-
-  static
-  {
-    addIndex(new Index(Index.Path.STATES, "Container States", BaseItem.TYPE));
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------- computeIndexValues ---------------------------
+  protected State m_state = State.UNKNOWN;
 
   /**
-   * Get all the values for all the indexes.
+   * Get the capacity value.
    *
-   * @param       ioValues a multi map of values per index name
-   *
+   * @return      the capacity
    */
-  @Override
-  public void computeIndexValues(Multimap<Index.Path, String> ioValues)
+  public Optional<Volume> getCapacity()
   {
-    super.computeIndexValues(ioValues);
-
-    ioValues.put(Index.Path.CAPACITIES, m_capacity.group());
-    ioValues.put(Index.Path.STATES, m_state.group());
+    return m_capacity;
   }
 
-  //........................................................................
+  /**
+   * Get the combined capacity of this commodity, including values of bases.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Volume> getCombinedCapacity()
+  {
+    if(m_capacity.isPresent())
+      return new Combination.Addable<Volume>(m_item, m_capacity.get());
 
-  //........................................................................
+    List<Combination<Volume>> combinations = new ArrayList<>();
+    for(BaseEntry entry : m_item.getBaseEntries())
+      if(entry instanceof BaseItem)
+      {
+        BaseContainer armor = ((BaseItem)entry).getContainer();
+        combinations.add(armor.getCombinedCapacity());
+      }
 
-  //----------------------------------------------------------- manipulators
-  //........................................................................
+    return new Combination.Addable<Volume>(m_item, combinations);
+  }
 
-  //------------------------------------------------- other member functions
+  /**
+   * Get the state value.
+   *
+   * @return      the state
+   */
+  public State getState()
+  {
+    return m_state;
+  }
+
+  /**
+   * Get the combined state of this commodity, including values of bases.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<State> getCombinedState()
+  {
+    if(m_state != State.UNKNOWN)
+      return new Combination.Max<State>(m_item, m_state);
+
+    List<Combination<State>> combinations = new ArrayList<>();
+    for(BaseEntry entry : m_item.getBaseEntries())
+      if(entry instanceof BaseItem)
+      {
+        BaseContainer armor = ((BaseItem)entry).getContainer();
+        combinations.add(armor.getCombinedState());
+      }
+
+    return new Combination.Max<State>(m_item, combinations);
+  }
+
+  @Override
+  public Multimap<Index.Path, String> computeIndexValues()
+  {
+    Multimap<Index.Path, String> values = super.computeIndexValues();
+
+    values.put(Index.Path.CAPACITIES, m_capacity.toString());
+    values.put(Index.Path.STATES, m_state.toString());
+
+    return values;
+  }
+
+  /**
+   * Check whether any armor values are defined.
+   *
+   * @return true if armor values are defined, false if not
+   */
+  public boolean hasValues()
+  {
+    return m_state != State.UNKNOWN && m_capacity.isPresent();
+  }
+
+  @Override
+  public void set(Values inValues)
+  {
+    m_capacity = inValues.use("container.capacity", m_capacity, Volume.PARSER);
+    m_state = inValues.use("container.state", m_state,
+                          new NewValue.Parser<State>(1)
+   {
+      @Override
+      public Optional<State> doParse(String inValue)
+      {
+        return State.fromString(inValue);
+      }
+    });
+  }
 
   @Override
   public Message toProto()
   {
     BaseContainerProto.Builder builder = BaseContainerProto.newBuilder();
 
-    if(m_capacity.isDefined())
-      builder.setCapacity(m_capacity.toProto());
-    if(m_state.isDefined())
-      builder.setState(m_state.getSelected().toProto());
+    if(m_capacity.isPresent())
+      builder.setCapacity(m_capacity.get().toProto());
+    if(m_state != State.UNKNOWN)
+      builder.setState(m_state.toProto());
 
     return builder.build();
   }
@@ -364,9 +294,51 @@ public class BaseContainer extends BaseExtension<BaseItem>
     BaseContainerProto proto = (BaseContainerProto)inProto;
 
     if(proto.hasCapacity())
-      m_capacity = m_capacity.fromProto(proto.getCapacity());
+      m_capacity = Optional.of(Volume.fromProto(proto.getCapacity()));
     if(proto.hasState())
-      m_state = m_state.as(State.fromProto(proto.getState()));
+      m_state = State.fromProto(proto.getState());
+  }
+
+  @Override
+  public <T extends AbstractEntry> AbstractType<T> getType()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getEditType()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public AbstractEntry getEntry()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getName()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getID()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public void changed(boolean inChanged)
+  {
+    // TODO Auto-generated method stub
+
   }
 
   //........................................................................

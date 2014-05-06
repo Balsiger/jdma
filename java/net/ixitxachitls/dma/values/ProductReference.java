@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -40,17 +41,20 @@ import net.ixitxachitls.dma.proto.Values.RangeProto;
 
 @ParametersAreNonnullByDefault
 public class ProductReference extends NewValue<BaseEntryProto.Reference>
+  implements Comparable<ProductReference>
 {
   public static class ProductReferenceParser
-    implements Parser<ProductReference> {
+    extends Parser<ProductReference>
+  {
+    public ProductReferenceParser()
+    {
+      super(2);
+    }
 
     @Override
-    public ProductReference parse(String... inValues)
+    public Optional<ProductReference> doParse(String inName, String inPages)
     {
-      if(inValues.length != 2)
-        return null;
-
-      return ProductReference.parse(inValues[0], inValues[1]);
+      return ProductReference.parse(inName, inPages);
     }
   }
 
@@ -194,19 +198,19 @@ public class ProductReference extends NewValue<BaseEntryProto.Reference>
    * @param inPages the pages of the reference
    * @return
    */
-  public static ProductReference parse(String inName, String inPages)
+  public static Optional<ProductReference> parse(String inName, String inPages)
   {
     List<NewRange> pages = new ArrayList<>();
     for(String page : COMMA_SPLITTER.split(inPages))
     {
       NewRange range = NewRange.parse(page);
       if(range == null)
-        return null;
+        return Optional.absent();
 
       pages.add(range);
     }
 
-    return new ProductReference(inName, pages);
+    return Optional.of(new ProductReference(inName, pages));
   }
 
   @Override
@@ -230,5 +234,14 @@ public class ProductReference extends NewValue<BaseEntryProto.Reference>
   public int hashCode()
   {
     return m_name.hashCode();
+  }
+
+  @Override
+  public int compareTo(ProductReference inOther)
+  {
+    if(inOther == this)
+      return 0;
+
+     return m_name.compareTo(inOther.m_name);
   }
 }
