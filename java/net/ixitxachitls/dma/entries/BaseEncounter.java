@@ -31,7 +31,6 @@ import javax.annotation.Nullable;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.proto.Entries.BaseEncounterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.values.LongFormattedText;
@@ -127,7 +126,6 @@ public class BaseEncounter extends BaseEntry
   static
   {
     extractVariables(BaseEncounter.class);
-    extractVariables(BaseEncounter.class, BaseIncomplete.class);
   }
 
   @Override

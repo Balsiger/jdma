@@ -33,7 +33,6 @@ import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
@@ -399,7 +398,6 @@ public class BaseQuality extends BaseEntry
   static
   {
     extractVariables(BaseQuality.class);
-    extractVariables(BaseQuality.class, BaseIncomplete.class);
   }
 
   //----- special indexes --------------------------------------------------

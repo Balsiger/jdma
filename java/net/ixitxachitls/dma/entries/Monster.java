@@ -42,7 +42,6 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.entries.extensions.BaseWeapon;
 import net.ixitxachitls.dma.entries.extensions.Weapon;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
@@ -61,8 +60,10 @@ import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Reference;
+import net.ixitxachitls.dma.values.Size;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.dma.values.WeaponStyle;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -1349,14 +1350,14 @@ public class Monster extends CampaignEntry<BaseMonster>
       if(!item.hasExtension(Weapon.class))
         continue;
 
-      Combined<EnumSelection<BaseWeapon.Style>> style =
+      Combined<EnumSelection<WeaponStyle>> style =
         item.collect("weapon style");
       List<Long> baseAtks = new ArrayList<Long>(baseAttacks);
       if(hasFeat("Rapid Shot"))
         for(Value<?> styleValue : style.valuesOnly())
           if(styleValue instanceof EnumSelection
              && ((EnumSelection)styleValue).getSelected()
-             == BaseWeapon.Style.RANGED)
+             == WeaponStyle.RANGED)
           {
             baseAtks.add(0, baseAtks.get(0));
             break;
@@ -1478,11 +1479,11 @@ public class Monster extends CampaignEntry<BaseMonster>
     List<Pair<Multiple, List<Pair<Multiple, String>>>> sizesPerGroup =
       combinedSize.valuesWithDescriptions();
 
-    BaseItem.Size size = BaseItem.Size.MEDIUM;
+    Size size = Size.MEDIUM;
     for(Pair<Multiple, List<Pair<Multiple, String>>> sizeGroup : sizesPerGroup)
-      if(((EnumSelection<BaseItem.Size>)sizeGroup.first().get(0)).getSelected()
+      if(((EnumSelection<Size>)sizeGroup.first().get(0)).getSelected()
          .isBigger(size))
-        size = ((EnumSelection<BaseItem.Size>)sizeGroup.first().get(0))
+        size = ((EnumSelection<Size>)sizeGroup.first().get(0))
           .getSelected();
 
     grapple.withModifier(new Modifier(size.grapple()), size.toString());
@@ -1507,9 +1508,9 @@ public class Monster extends CampaignEntry<BaseMonster>
   {
     // Strength bonus (or dexterity)
     BaseMonster.Ability keyAbility = BaseMonster.Ability.STRENGTH;
-    Combined<EnumSelection<BaseWeapon.Style>> weaponStyle =
+    Combined<EnumSelection<WeaponStyle>> weaponStyle =
       collect("weapon style");
-    EnumSelection<BaseWeapon.Style> weaponStyleMin = weaponStyle.min();
+    EnumSelection<WeaponStyle> weaponStyleMin = weaponStyle.min();
     if(weaponStyleMin != null && !weaponStyle.min().getSelected().isMelee())
       keyAbility = BaseMonster.Ability.DEXTERITY;
     else
@@ -1605,8 +1606,8 @@ public class Monster extends CampaignEntry<BaseMonster>
       modified.withModifier(new Modifier(+1, Modifier.Type.GENERAL),
                             "Weapon Focus");
 
-    BaseItem.Size size = getSize();
-    if(size != BaseItem.Size.MEDIUM)
+    Size size = getSize();
+    if(size != Size.MEDIUM)
       modified.withModifier(new Modifier(size.modifier()), "size");
 
     return modified;
@@ -2003,8 +2004,7 @@ public class Monster extends CampaignEntry<BaseMonster>
       Multiple minSize = combinedSize.min();
       if(minSize != null && minSize.isDefined())
       {
-        BaseItem.Size size =
-          ((EnumSelection<BaseItem.Size>)minSize.get(0)).getSelected();
+        Size size = ((EnumSelection<Size>)minSize.get(0)).getSelected();
 
         if(size.modifier() != 0)
           ioCombined.addModifier
@@ -2377,14 +2377,14 @@ public class Monster extends CampaignEntry<BaseMonster>
    *
    */
   @SuppressWarnings("unchecked")
-  public BaseItem.Size getSize()
+  public Size getSize()
   {
     Combined<Multiple> combined = collect("size");
     Multiple size = combined.min();
     if(size == null)
-      return BaseItem.Size.MEDIUM;
+      return Size.MEDIUM;
 
-    return ((EnumSelection<BaseItem.Size>)size.get(0)).getSelected();
+    return ((EnumSelection<Size>)size.get(0)).getSelected();
   }
 
   //........................................................................

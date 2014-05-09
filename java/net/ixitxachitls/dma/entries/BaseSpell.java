@@ -33,7 +33,6 @@ import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
@@ -1389,7 +1388,6 @@ public class BaseSpell extends BaseEntry
   static
   {
     extractVariables(BaseSpell.class);
-    extractVariables(BaseSpell.class, BaseIncomplete.class);
   }
 
   //----- special indexes --------------------------------------------------

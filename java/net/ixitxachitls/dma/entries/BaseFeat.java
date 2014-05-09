@@ -34,7 +34,6 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.BaseQuality.Affects;
-import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
@@ -264,7 +263,6 @@ public class BaseFeat extends BaseEntry
   static
   {
     extractVariables(BaseFeat.class);
-    extractVariables(BaseFeat.class, BaseIncomplete.class);
   }
 
   //----- special indexes --------------------------------------------------

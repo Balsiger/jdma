@@ -466,7 +466,7 @@ public final class Importer
                   + " for " + key);
 
     URL url =
-      new URL("http", "www.ixitxachitls.net", 80,
+      new URL("http", m_host, m_webPort,
               "/__import"
                 + "?type=" + Encodings.urlEncode(type)
                 + "&name=" + Encodings.urlEncode(name)

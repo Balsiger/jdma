@@ -718,16 +718,25 @@ message BaseIncompleteProto
 
 message BaseMagicProto
 {
-  message AbilityModifier
+  enum Type
   {
-    required BaseMonsterProto.Ability ability = 1;
-    required ModifierProto modifier = 2;
+    UNKNOWN = 0;
+    STRENGTH = 1;
+    DEXTERITY = 2;
+    CONSTITUTION = 3;
+    INTELLIGENCE = 4;
+    WISDOM = 5;
+    CHARISMA = 6;
+    ATTACK = 7;
+    DAMAGE = 8;
+    ARMOR_CLASS = 9;
+    HIDE = 10;
+    MOVE_SILENTLY = 11;
   }
-  optional AbilityModifier ability_modifier = 1;
 
   message Modifier
-  {
-    required string name = 1;
+  {    
+    optional Type type = 3;
     required ModifierProto modifier = 2;
   }
   repeated Modifier modifier = 2;

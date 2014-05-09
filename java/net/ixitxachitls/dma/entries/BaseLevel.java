@@ -30,15 +30,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.entries.extensions.BaseArmor;
-import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
-import net.ixitxachitls.dma.entries.extensions.BaseWeapon;
 import net.ixitxachitls.dma.proto.Entries.BaseArmorProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseLevelProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.proto.Values.ParametersProto;
+import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
@@ -50,6 +48,7 @@ import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Parameters;
+import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
@@ -152,17 +151,17 @@ public class BaseLevel extends BaseEntry
 
   /** The weapon proficiencies. */
   @Key("weapon proficiencies")
-  protected ValueList<EnumSelection<BaseWeapon.Proficiency>>
+  protected ValueList<EnumSelection<Proficiency>>
     m_weaponProficiencies =
-      new ValueList<>(new EnumSelection<BaseWeapon.Proficiency>
-        (BaseWeapon.Proficiency.class));
+      new ValueList<>(new EnumSelection<Proficiency>
+        (Proficiency.class));
 
   /** The weapon proficiencies. */
   @Key("armor proficiencies")
-  protected ValueList<EnumSelection<BaseArmor.ArmorTypes>>
+  protected ValueList<EnumSelection<ArmorType>>
     m_armorProficiencies =
-      new ValueList<>(new EnumSelection<BaseArmor.ArmorTypes>
-        (BaseArmor.ArmorTypes.class));
+      new ValueList<>(new EnumSelection<ArmorType>
+        (ArmorType.class));
 
   /** Special attacks. */
   @Key("special attacks")
@@ -267,7 +266,6 @@ public class BaseLevel extends BaseEntry
   static
   {
     extractVariables(BaseLevel.class);
-    extractVariables(BaseLevel.class, BaseIncomplete.class);
   }
 
   @Override
@@ -511,12 +509,12 @@ public class BaseLevel extends BaseEntry
         builder.addClassSkill(reference.getName());
 
     if(m_weaponProficiencies.isDefined())
-      for(EnumSelection<BaseWeapon.Proficiency> proficiency
+      for(EnumSelection<Proficiency> proficiency
         : m_weaponProficiencies)
         builder.addWeaponProficiency(proficiency.getSelected().toProto());
 
     if(m_armorProficiencies.isDefined())
-      for(EnumSelection<BaseArmor.ArmorTypes> proficiency
+      for(EnumSelection<ArmorType> proficiency
         : m_armorProficiencies)
         builder.addArmorProficiency(proficiency.getSelected().toProto());
 
@@ -666,24 +664,24 @@ public class BaseLevel extends BaseEntry
 
     if(proto.getWeaponProficiencyCount() > 0)
     {
-      List<EnumSelection<BaseWeapon.Proficiency>> proficiencies =
+      List<EnumSelection<Proficiency>> proficiencies =
         new ArrayList<>();
       for(BaseWeaponProto.Proficiency proficiency
         : proto.getWeaponProficiencyList())
         proficiencies.add(m_weaponProficiencies.createElement()
-                          .as(BaseWeapon.Proficiency.fromProto(proficiency)));
+                          .as(Proficiency.fromProto(proficiency)));
 
       m_weaponProficiencies = m_weaponProficiencies.as(proficiencies);
     }
 
     if(proto.getArmorProficiencyCount() > 0)
     {
-      List<EnumSelection<BaseArmor.ArmorTypes>> proficiencies =
+      List<EnumSelection<ArmorType>> proficiencies =
         new ArrayList<>();
       for(BaseArmorProto.Type proficiency
         : proto.getArmorProficiencyList())
         proficiencies.add(m_armorProficiencies.createElement()
-                          .as(BaseArmor.ArmorTypes.fromProto(proficiency)));
+                          .as(ArmorType.fromProto(proficiency)));
 
       m_armorProficiencies = m_armorProficiencies.as(proficiencies);
     }

@@ -85,7 +85,7 @@ public class BlobUploadServlet extends BaseServlet
   private ImagesService m_image = ImagesServiceFactory.getImagesService();
 
   /**
-   * Handle requests to download blob.
+   * Handle requests to upload a blob.
    *
    * @param inRequest  the http request
    * @param inResponse the http response
@@ -129,7 +129,7 @@ public class BlobUploadServlet extends BaseServlet
           return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                                "invalid key '" + keyName + "' given");
 
-        DMADatastore store = (DMADatastore)DMADataFactory.get();
+        DMADatastore store = DMADataFactory.get();
         AbstractEntry entry = store.getEntry(key);
 
         if(entry == null)

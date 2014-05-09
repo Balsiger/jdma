@@ -37,7 +37,6 @@ import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
@@ -62,6 +61,8 @@ import net.ixitxachitls.dma.values.Range;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Selection;
+import net.ixitxachitls.dma.values.Size;
+import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Union;
 import net.ixitxachitls.dma.values.Value;
@@ -1742,9 +1743,9 @@ public class BaseMonster extends BaseEntry
   protected Multiple m_size = new Multiple(new Multiple.Element []
     {
       new Multiple.Element
-      (new EnumSelection<BaseItem.Size>(BaseItem.Size.class), false),
+      (new EnumSelection<Size>(Size.class), false),
       new Multiple.Element
-      (new EnumSelection<BaseItem.SizeModifier>(BaseItem.SizeModifier.class),
+      (new EnumSelection<SizeModifier>(SizeModifier.class),
        true, " (", ")"),
     });
 
@@ -2251,7 +2252,7 @@ public class BaseMonster extends BaseEntry
       {
         new Multiple.Element(new Range(1, 100), false),
         new Multiple.Element
-        (new EnumSelection<BaseItem.Size>(BaseItem.Size.class), false,
+        (new EnumSelection<Size>(Size.class), false,
          " HD (", ")"),
       }));
 
@@ -2353,7 +2354,6 @@ public class BaseMonster extends BaseEntry
   static
   {
     extractVariables(BaseMonster.class);
-    extractVariables(BaseMonster.class, BaseIncomplete.class);
   }
 
   //........................................................................
@@ -4125,9 +4125,9 @@ public class BaseMonster extends BaseEntry
 
     if(m_size.isDefined())
     {
-      builder.setSize(((EnumSelection<BaseItem.Size>)m_size.get(0))
+      builder.setSize(((EnumSelection<Size>)m_size.get(0))
                       .getSelected().toProto());
-      builder.setSizeModifier(((EnumSelection<BaseItem.SizeModifier>)
+      builder.setSizeModifier(((EnumSelection<SizeModifier>)
                               m_size.get(1)).getSelected().toProto());
     }
 
@@ -4373,7 +4373,7 @@ public class BaseMonster extends BaseEntry
         builder.addAdvancement
           (BaseMonsterProto.Advancement.newBuilder()
            .setRange(((Range)advancement.get(0)).toProto())
-           .setSize(((EnumSelection<BaseItem.Size>)advancement.get(1))
+           .setSize(((EnumSelection<Size>)advancement.get(1))
                     .getSelected().toProto())
            .build());
 
@@ -4453,10 +4453,10 @@ public class BaseMonster extends BaseEntry
 
     if(proto.hasSize() && proto.hasSizeModifier())
       m_size =
-        m_size.as(((EnumSelection<BaseItem.Size>)m_size.get(0))
-                  .as(BaseItem.Size.fromProto(proto.getSize())),
-                  ((EnumSelection<BaseItem.SizeModifier>)m_size.get(1))
-                  .as(BaseItem.SizeModifier
+        m_size.as(((EnumSelection<Size>)m_size.get(0))
+                  .as(Size.fromProto(proto.getSize())),
+                  ((EnumSelection<SizeModifier>)m_size.get(1))
+                  .as(SizeModifier
                       .fromProto(proto.getSizeModifier())));
 
     if(proto.hasType())
@@ -4771,8 +4771,8 @@ public class BaseMonster extends BaseEntry
         multiple =
           multiple.as(((Range)multiple.get(0))
                       .fromProto(advancement.getRange()),
-                      ((EnumSelection<BaseItem.Size>)multiple.get(1))
-                      .as(BaseItem.Size.fromProto(advancement.getSize())));
+                      ((EnumSelection<Size>)multiple.get(1))
+                      .as(Size.fromProto(advancement.getSize())));
         advancements.add(multiple);
       }
 

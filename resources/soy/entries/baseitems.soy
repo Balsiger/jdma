@@ -1,0 +1,1018 @@
+/* ****************************************************************************
+ * Copyright (C) 2002-2014 Peter 'Merlin' Balsiger And Fred 'Mythos' Dobler
+ * All Rights Reserved
+ *
+ * This File Is Part Of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant Is Free Software; You Can Redistribute It And/Or
+ * Modify It Under The Terms Of The Gnu General Public License As Published By
+ * The Free Software Foundation; Either Version 2 Of The License, Or
+ * (At Your Option) Any Later Version.
+ *
+ * Dungeon Master Assistant Is Distributed In The Hope That It Will Be Useful,
+ * But Without Any Warranty; Without Even The Implied Warranty Of
+ * Merchantability Or Fitness For A Particular Purpose.  See The
+ * Gnu General Public License For More Details.
+ *
+ * You Should Have Received A Copy Of The Gnu General Public License
+ * Along With Dungeon Master Assistant; If Not, Write To The Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, Ma  02111-1307  Usa
+ *****************************************************************************/
+
+ /*
+ * Templates for base products.
+ */
+{namespace dma.entries.baseitems}
+
+/**
+ * Show the given entry in standard format.
+ * 
+ * @param entry The entry to show.
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ */
+{template .show autoescape="true"}
+  {call dma.entry.show}
+    {param entry: $entry /}
+    {param type: 'base-item' /}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param list: $list /}
+    {param next: $next /}
+    {param last: $last /}
+    {param color: '#008' /}
+    {param title}
+      {call dma.entry._new_title}
+        {param title: $entry.name /}
+        {param color: '#008' /}
+      {/call}
+    {/param}
+    {param values}            
+      {if length($entry.baseNames)}
+        {call dma.entry.value}
+          {param label: 'Base' /}
+          {param value}
+            {foreach $base in $entry.baseNames}
+              {call dma.page.link}
+                {param text: $base /}
+                {param url: '/item/'  + $base /}
+              {/call}
+              {if not isLast($base)}; {/if}
+            {/foreach}
+          {/param}
+          {param color: '#008' /}
+        {/call} 
+      {/if}      
+      {call dma.entry.value}
+        {param label: 'Player Name' /}
+        {param value}
+          {call dma.entry.concatenated}
+            {param value: $entry.player_name /}
+            {param concatenate: $entry.combined_player_name /}
+          {/call}
+        {/param}
+        {param color: '#008' /}
+      {/call}
+      {if length($entry.synonyms)}
+        {call dma.entry.value}
+          {param label: 'Synonyms' /}
+          {param value}
+            {foreach $synonym in $entry.synonyms}
+              {$synonym}
+              {if not isLast($synonym)}; {/if}
+            {/foreach}
+          {/param}
+          {param color: '#008' /}
+        {/call}
+      {/if}      
+      {if length($entry.categories) or 
+          length($entry.combined_categories.annotate)}
+        {call dma.entry.value}
+          {param label: 'Categories' /}
+          {param value}
+            {if length($entry.categories)}
+              {foreach $category in $entry.categories}
+                {$category}
+                {if not isLast($category)}, {/if}
+              {/foreach}
+            {/if}
+            {if length($entry.combined_categories.annotate)}
+              {if length($entry.categories)},{sp}{/if}
+              {call dma.entry.concatenated_list}
+                {param values: [] /}
+                {param concatenate: $entry.combined_categories /}
+              {/call}
+            {/if}
+          {/param}
+          {param color: '#008' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'Worlds' /}        
+        {param value}
+          {call dma.entry.concatenated_list}
+            {param values: $entry.worlds /}
+            {param concatenate: $entry.combined_worlds /}
+          {/call}
+        {/param}
+        {param color: '#008' /}
+      {/call}
+      {if $entry.incomplete or length($entry.combined_incomplete.annotate) > 0}
+        {call dma.entry.value}
+          {param label: 'Incomplete' /}
+          {param value}
+            {if $entry.incomplete}
+              {$entry.incomplete}{sp}
+            {/if}
+            {call dma.entry.concatenated}
+              {param value: '' /}
+              {param concatenate: $entry.combined_incomplete /}
+            {/call}
+          {/param}
+          {param color: '#008' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'Value' /}
+        {param value}
+          {call dma.entry.added}
+            {param value: $entry.value /}
+            {param addable: $entry.combined_value /}
+          {/call}
+        {/param}
+        {param color: '#008' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Weight' /}
+        {param value}
+          {call dma.entry.added}
+            {param value: $entry.weight /}
+            {param addable: $entry.combined_weight /}
+          {/call}
+        {/param}
+        {param color: '#008' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'HP' /}
+        {param value}
+          {call dma.entry.added}
+            {param value: $entry.HP /}
+            {param addable: $entry.combined_HP /}
+          {/call}
+        {/param}
+        {param color: '#008' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Size' /}
+        {param value}
+          {call dma.entry.single}
+            {param combination: $entry.combined_size /}
+          {/call}
+          {sp}
+          {call dma.entry.single}
+            {param combination: $entry.combined_size_modifier /}
+          {/call}
+        {/param}
+        {param color: '#008' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Substance' /}
+        {param value}
+          {call dma.entry.single}
+            {param combination: $entry.combined_substance /}
+          {/call}
+          {sp}
+          {call dma.entry.single}
+            {param combination: $entry.combined_thickness /}
+          {/call}
+          , hardness{sp}
+          {call dma.entry.single}
+            {param value: $entry.hardness /}
+            {param combination: $entry.combined_hardness /}
+          {/call}
+          , break dc{sp}
+          {call dma.entry.single}
+            {param value: $entry.break_DC /}
+            {param combination: $entry.combined_break_DC /}
+          {/call}
+        {/param}
+        {param color: '#008' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Probability' /}
+        {param value}
+          {call dma.entry.single}
+            {param combination: $entry.combined_probability /}
+          {/call}
+        {/param}
+        {param color: '#008' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Appearances' /}        
+        {param value}
+          {call dma.entry.concatenated_list}
+            {param values: $entry.appearances /}
+            {param concatenate: $entry.combined_appearances /}
+          {/call}
+        {/param}
+        {param color: '#008' /}
+      {/call}
+      {if $entry.isWearable}
+        {call dma.entry.value}
+          {param label: 'Wear' /}        
+          {param value}
+            {call dma.entry.single}
+              {param value: $entry.slot /}
+              {param combination: $entry.combined_slot /}
+            {/call}
+            , don{sp}
+            {call dma.entry.added}
+              {param value: $entry.don /}
+              {param addable: $entry.combined_don /}
+            {/call}
+            {sp}(hastily{sp} 
+            {call dma.entry.added}
+              {param value: $entry.don_hastily /}
+              {param addable: $entry.combined_don_hastily /}
+            {/call})
+            , remove{sp}
+            {call dma.entry.added}
+              {param value: $entry.remove /}
+              {param addable: $entry.combined_remove /}
+            {/call}
+          {/param}
+          {param color: '#008' /}          
+        {/call}
+      {/if}
+      {if $entry.isArmor}
+        {call dma.entry.value}
+          {param label: 'Armor' /}
+          {param value}
+            {call dma.entry.single}
+              {param value: $entry.armor_type /}
+              {param combination: $entry.combined_armor_type /}
+            {/call},
+            max dexterity{sp}
+            {call dma.entry.single}
+              {param value: $entry.max_dex /}
+              {param combination: $entry.combined_max_dex /}
+            {/call},{sp}
+            {call dma.entry.single}
+              {param value: $entry.check_penalty /}
+              {param combination: $entry.combined_check_penalty /}
+            {/call} check penalty,{sp}
+            {call dma.entry.single}
+              {param value: $entry.arcane_failure /}
+              {param combination: $entry.combined_arcane_failure /}
+            {/call}% arcane failure
+          {/param}
+          {param color: '#008' /}
+        {/call}
+        {call dma.entry.value}
+          {param label: 'AC Bonus' /}        
+          {param value}
+            {call dma.entry.added}
+              {param value: $entry.armor_bonus /}
+              {param addable: $entry.combined_armor_bonus /}
+            {/call}
+          {/param}
+          {param color: '#008' /}          
+        {/call}
+      {/if}
+      {if $entry.isWeapon}
+        {call dma.entry.value}
+          {param label: 'Weapon' /}
+          {param value}
+            {call dma.entry.single}
+              {param value: $entry.weapon_type /}
+              {param combination: $entry.combined_weapon_type /}
+            {/call}
+            {sp}
+            {call dma.entry.single}
+              {param value: $entry.weapon_style /}
+              {param combination: $entry.combined_weapon_style /}
+            {/call}
+            {sp}
+            {call dma.entry.single}
+              {param value: $entry.proficiency /}
+              {param combination: $entry.combined_proficiency /}
+            {/call}, range{sp}
+            {call dma.entry.single}
+              {param value: $entry.range /}
+              {param combination: $entry.combined_range /}
+            {/call}, reach{sp}
+            {call dma.entry.single}
+              {param value: $entry.reach /}
+              {param combination: $entry.combined_reach /}
+            {/call}, max attacks{sp}                
+            {call dma.entry.single}
+              {param value: $entry.max_attacks /}
+              {param combination: $entry.combined_max_attacks /}
+            {/call}
+          {/param}
+          {param color: '#008' /}
+        {/call}
+        {call dma.entry.value}
+          {param label: 'Damage' /}
+          {param value}
+            {call dma.entry.single}
+              {param combination: $entry.combined_damage /}
+            {/call}
+            {if $entry.combined_secondary_damage.any_value}
+              /
+              {call dma.entry.single}
+                {param combination: $entry.combined_secondary_damage /}
+              {/call}
+            {/if}
+            {if $entry.combined_splash.any_value}
+              &nbsp;splash&nbsp; 
+              {call dma.entry.single}
+                {param combination: $entry.combined_splash /}
+              {/call}
+            {/if}
+            &nbsp;(
+            {call dma.entry.single}
+              {param combination: $entry.combined_critical /}
+            {/call})
+          {/param}
+          {param color: '#008' /}
+        {/call}
+      {/if}
+      {if $entry.isCommodity}
+        {call dma.entry.value}
+          {param label: 'Commodity' /}        
+          {param color: '#008' /}
+          {param value}
+            {call dma.entry.single}
+              {param value: $entry.area /}
+              {param combination: $entry.combined_area /}
+            {/call}
+            {call dma.entry.single}
+              {param value: $entry.length /}
+              {param combination: $entry.combined_length /}
+            {/call}
+          {/param}
+        {/call}
+      {/if}
+      {if $entry.isContainer}
+        {call dma.entry.value}
+          {param label: 'Container' /}        
+          {param color: '#008' /}
+          {param value}
+            {call dma.entry.single}
+              {param value: $entry.state /}
+              {param combination: $entry.combined_state /}
+            {/call},{sp}
+            {call dma.entry.single}
+              {param value: $entry.capacity /}
+              {param combination: $entry.combined_capacity /}
+            {/call}
+          {/param}
+        {/call}
+      {/if}
+      {if $entry.counted}
+        {call dma.entry.value}
+          {param label: 'Count' /}        
+          {param color: '#008' /}
+          {param value}
+            {call dma.entry.single}
+              {param value: $entry.count /}
+              {param combination: $entry.combined_count /}
+            {/call}{sp}
+            {call dma.entry.single}
+              {param value: $entry.count_unit /}
+              {param combination: $entry.combined_count_unit /}
+            {/call}
+          {/param}
+        {/call}
+      {/if}
+      {if $entry.is_light}
+        {call dma.entry.value}
+          {param label: 'Light' /}        
+          {param color: '#008' /}
+          {param value}
+            {call dma.entry.single}
+              {param value: $entry.light_shape /}
+              {param combination: $entry.combined_light_shape /}
+            {/call} bright{sp}
+            {call dma.entry.single}
+              {param value: $entry.bright_light /}
+              {param combination: $entry.combined_bright_light /}
+            {/call} shadowy {sp}
+            {call dma.entry.single}
+              {param value: $entry.shadowy_light /}
+              {param combination: $entry.combined_shadowy_light /}
+            {/call}
+          {/param}
+        {/call}
+      {/if}
+      {if $entry.isTimed}
+        {call dma.entry.value}
+          {param label: 'Timed' /}        
+          {param color: '#008' /}
+          {param value}
+            {call dma.entry.single}
+              {param value: $entry.timed /}
+              {param combination: $entry.combined_timed /}
+            {/call}
+          {/param}
+        {/call}
+      {/if}
+      {if $entry.isMagical}
+        {call dma.entry.value}
+          {param label: 'Magic' /}        
+          {param color: '#008' /}
+          {param value}
+            {call dma.entry.concatenated_list}
+              {param values: [] /}
+              {param concatenate: $entry.combined_magical_modifiers /}
+            {/call}
+          {/param}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'References' /}
+        {param value}
+          {call dma.entry.concatenated_list}
+            {param values: [] /}
+            {param concatenate: $entry.combined_references /}
+          {/call}
+        {/param}
+        {param color: '#008' /}
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Editiing the base item.
+ * 
+ * @param entry The item to edit. 
+ * @param id    THe id to use for the editing dialog.
+ */
+{template .edit autoescape="true"}
+  {call dma.edit.entry}
+    {param entry: $entry /}
+    {param type: 'item' /}
+    {param id: $id /}
+    {param values}
+      {call dma.edit.value}
+        {param name: 'name' /}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param validate: 'non-empty' /}
+        {param color: '#008' /}
+      {/call}    
+      {call dma.edit.value_text}
+        {param name: 'description' /}
+        {param label: 'Description' /}
+        {param value: $entry.description /}
+        {param validate: 'any' /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'short-description' /}
+        {param label: 'Short Description' /}
+        {param value: $entry.short_description /}
+        {param validate: 'any' /}
+        {param color: '#444' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'base' /}
+        {param label: 'Base' /}
+        {param values: $entry.base_names /}
+        {param validate: 'non-empty' /}
+        {param color: '#008' /}
+        {param autocomplete: 'base item/name' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'player_name' /}
+        {param label: 'Player Name' /}
+        {param value: $entry.player_name /}
+        {param validate: 'any' /}
+        {param color: '#008' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'synonyms' /}
+        {param label: 'Synonyms' /}
+        {param values: $entry.synonyms /}
+        {param validate: 'non-empty' /}
+        {param color: '#008' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'categories' /}
+        {param label: 'Categories' /}
+        {param values: $entry.categories /}
+        {param validate: 'non-empty' /}
+        {param color: '#008' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'worlds' /}
+        {param label: 'Worlds' /}
+        {param values: $entry.worlds/}
+        {param validate: 'non-empty' /}
+        {param color: '#008' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'incomplete' /}
+        {param label: 'Incomplete' /}
+        {param value: $entry.incomplete /}
+        {param validate: 'any' /}
+        {param color: '#008' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'value' /}
+        {param label: 'Value' /}
+        {param value: $entry.value.present ? $entry.value.get : '' /}
+        {param validate: 'money' /}
+        {param color: '#008' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'weight' /}
+        {param label: 'Weight' /}
+        {param value: $entry.weight.present ? $entry.weight.get : '' /}
+        {param validate: 'weight' /}
+        {param color: '#008' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param label: 'Size' /}
+        {param color: '#008' /}
+        {param value}
+          {call dma.edit.field_selection}
+            {param name: 'size' /}
+            {param value: $entry.size.string /}
+            {param choices: $entry.size.names /}
+            {param class: 'narrow' /}            
+          {/call}
+          {call dma.edit.field_selection}
+            {param name: 'size_modifier' /}
+            {param value: $entry.size_modifier.string /}
+            {param choices: $entry.size_modifier.names /}
+            {param class: 'narrow' /}            
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param label: 'Substance' /}
+        {param color: '#008' /}
+        {param value}
+          {call dma.edit.field_selection}
+            {param name: 'substance' /}
+            {param value: $entry.substance.string /}
+            {param choices: $entry.substance.names /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'thickness' /}
+            {param value: 
+              $entry.thickness.present ? $entry.thickness.get.string : '' /}
+            {param validate: 'distance' /}
+            {param caption: 'thickness' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'hardness' /}
+            {param value: $entry.hardness /}
+            {param validate: 'number' /}
+            {param caption: 'hardness' /}
+            {param class: 'narrow' /}
+          {/call}    
+          {call dma.edit.field_input}
+            {param name: 'break' /}
+            {param value: $entry.break_DC.present ? $entry.break_DC.get : '' /}
+            {param validate: 'number' /}
+            {param caption: 'break dc' /}
+            {param class: 'narrow' /}
+          {/call}    
+        {/param}
+      {/call}
+      {call dma.edit.value_selection}
+        {param name: 'probability' /}
+        {param label: 'Probability' /}
+        {param value: $entry.probability.string /}
+        {param choices: $entry.probability.names /}
+        {param color: '#008' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'appearances' /}
+        {param color: '#008' /}
+        {param label: 'Appearances' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $appearance in $entry.appearances}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'appearances.probability',
+                      'value': $appearance.probability,
+                      'validate': 'non-empty',
+                      'type': 'selection',
+                      'choices': $entry.probabilityNames
+                    ],
+                    [
+                      'name': 'appearances.text',
+                      'value': $appearance.text,
+                      'validate': 'non-empty'
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'appearances.probability',
+                      'value': 'Common',
+                      'validate': 'non-empty',
+                      'type': 'selection',
+                      'choices': $entry.probabilityNames
+                    ],
+                    [
+                      'name': 'appearances.text',
+                      'value': '',
+                      'validate': 'non-empty'
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param color: '#008' /}
+        {param label: 'Wear' /}
+        {param value}
+          {call dma.edit.field_selection}
+            {param name: 'wearable.slot' /}
+            {param value: $entry.slot.string /}
+            {param choices: $entry.slot.names /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'wearable.don' /}
+            {param value: $entry.don.isPresent 
+              ? $entry.don.get : '' /}
+            {param validate: 'duration' /}
+            {param class: 'narrow' /}
+            {param caption: 'don' /}            
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'wearable.don_hastily' /}
+            {param value: $entry.don_hastily.isPresent 
+              ? $entry.don_hastily.get : '' /}
+            {param validate: 'duration' /}
+            {param class: 'narrow' /}
+            {param caption: 'don hastily' /}            
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'wearable.remove' /}
+            {param value: $entry.remove.isPresent 
+              ? $entry.remove.get : '' /}
+            {param validate: 'duration' /}
+            {param class: 'narrow' /}
+            {param caption: 'remove' /}            
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param color: '#008' /}
+        {param label: 'Armor' /}
+        {param value}
+          {call dma.edit.field_selection}
+            {param name: 'armor.type' /}
+            {param value: $entry.armor_type.string /}
+            {param choices: $entry.armor_type.names /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'armor.bonus' /}
+            {param value: $entry.armor_bonus.isPresent 
+              ? $entry.armor_bonus.get : '' /}
+            {param validate: 'modifier' /}
+            {param class: 'narrow' /}
+            {param caption: 'bonus' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'armor.max_dex' /}
+            {param value: $entry.max_dex.present 
+              ? $entry.armor.max_dex.get : '' /}
+            {param validate: 'number' /}
+            {param class: 'narrow' /}
+            {param caption: 'max dexterity' /}
+          {/call}            
+          {call dma.edit.field_input}
+            {param name: 'armor.check_penalty' /}
+            {param value: $entry.check_penalty.present 
+              ? $entry.armor.check_penalty.get : '' /}
+            {param validate: 'number' /}
+            {param class: 'narrow' /}
+            {param caption: 'check penalty' /}
+          {/call}            
+          {call dma.edit.field_input}
+            {param name: 'armor.arcane_failure' /}
+            {param value: $entry.arcane_failure.present
+              ? $entry.arcane_failure.get : '' /}
+            {param validate: 'number' /}
+            {param class: 'narrow' /}
+            {param caption: 'arcane failure' /}
+          {/call}            
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param color: '#008' /}
+        {param label: 'Damage' /}
+        {param value}
+          {call dma.edit.field_input}
+            {param name: 'weapo.damage.first' /}
+            {param value: $entry.damage.isPresent 
+              ? $entry.damage.get : '' /}
+            {param validate: 'damage' /}
+            {param class: 'narrow' /}            
+          {/call}
+          {sp}/{sp}
+          {call dma.edit.field_input}
+            {param name: 'weapon.damage.second' /}
+            {param value: $entry.secondary_damage.isPresent 
+              ? $entry.secondary_damage.get : '' /}
+            {param validate: 'damage' /}
+            {param class: 'narrow' /}            
+          {/call}
+          {sp}
+          {call dma.edit.field_input}
+            {param name: 'weapon.damage.splash' /}
+            {param value: $entry.splash.isPresent
+              ? $entry.splash.get : '' /}
+            {param validate: 'damage' /}
+            {param class: 'narrow' /}
+            {param caption: 'splash' /}            
+          {/call}
+          {sp}
+          {call dma.edit.field_input}
+            {param name: 'weapon.damage.critical' /}
+            {param value: $entry.critical.isPresent
+              ? $entry.critical.get : '' /}
+            {param validate: 'any' /}
+            {param class: 'narrow' /}
+            {param caption: 'critical' /}            
+          {/call}          
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param color: '#008' /}
+        {param label: 'Weappon' /}
+        {param value}
+          {call dma.edit.field_selection}
+            {param name: 'weapon.type' /}
+            {param value: $entry.weapon_type.string /}
+            {param choices: $entry.weapon_type.names /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_selection}
+            {param name: 'weapon.style' /}
+            {param value: $entry.weapon_style.string /}
+            {param choices: $entry.weapon_style.names /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_selection}
+            {param name: 'weapon.proficiency' /}
+            {param value: $entry.proficiency.string /}
+            {param choices: $entry.proficiency.names /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'weapon.range' /}
+            {param caption: 'range' /}
+            {param value: $entry.range.present 
+              ? $entry.range.get : '' /}
+            {param validate: 'distance' /}
+            {param class: 'narrow' /}
+          {/call}    
+          {call dma.edit.field_input}
+            {param name: 'weapon.reach' /}
+            {param caption: 'reach' /}
+            {param value: $entry.reach.present 
+              ? $entry.reach.get : '' /}
+            {param validate: 'distance' /}
+            {param class: 'narrow' /}
+          {/call}    
+          {call dma.edit.field_input}
+            {param name: 'weapon.max_attacks' /}
+            {param caption: 'max attacks' /}
+            {param value: $entry.max_attacks.present 
+              ? $entry.max_attacks.get : '' /}
+            {param validate: 'number' /}
+            {param class: 'narrow' /}
+          {/call}
+        {/param}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param color: '#008' /}
+        {param label: 'Commodity' /}
+        {param value}
+          {call dma.edit.field_input}
+            {param name: 'commodity.area' /}
+            {param value: $entry.area.isPresent 
+              ? $entry.area.get : '' /}
+            {param validate: 'area' /}
+            {param caption: 'area' /}            
+            {param class: 'narrow' /}            
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'commodity.length' /}
+            {param value: $entry.length.isPresent 
+              ? $entry.lemgth.get : '' /}
+            {param validate: 'distance' /}
+            {param caption: 'length' /}            
+            {param class: 'narrow' /}            
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param color: '#008' /}
+        {param label: 'Container' /}
+        {param value}
+          {call dma.edit.field_selection}
+            {param name: 'container.state' /}
+            {param value: $entry.state.string /}
+            {param choices: $entry.state.names /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'container.capacity' /}
+            {param value: $entry.capacity.isPresent 
+              ? $entry.capacity.get : '' /}
+            {param validate: 'volume' /}
+            {param caption: 'capacity' /}            
+            {param class: 'narrow' /}
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param color: '#008' /}
+        {param label: 'Count' /}
+        {param value}
+          {call dma.edit.field_input}
+            {param name: 'count' /}
+            {param value: $entry.count.isPresent 
+              ? $entry.count.get : '' /}
+            {param validate: 'number' /}
+            {param caption: 'count' /}            
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_selection}
+            {param name: 'count_unit' /}
+            {param value: $entry.count_unit.string /}
+            {param choices: $entry.count_unit.names /}
+            {param class: 'narrow' /}
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param color: '#008' /}
+        {param label: 'Light' /}
+        {param value}
+          {call dma.edit.field_selection}
+            {param name: 'light.shape' /}
+            {param value: $entry.light_shape.string /}
+            {param choices: $entry.light_shape.names /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'light.bright' /}
+            {param value: $entry.bright_light.isPresent 
+              ? $entry.bright_light.get : '' /}
+            {param validate: 'distance' /}
+            {param caption: 'bright' /}            
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'light.shadowy' /}
+            {param value: $entry.shadowy_light.isPresent 
+              ? $entry.shadowy_light.get : '' /}
+            {param validate: 'distance' /}
+            {param caption: 'shadowy' /}            
+            {param class: 'narrow' /}
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param color: '#008' /}
+        {param label: 'Timed' /}
+        {param value}
+          {call dma.edit.field_input}
+            {param name: 'timed' /}
+            {param value: $entry.timed.isPresent 
+              ? $entry.timed.get : '' /}
+            {param validate: 'duration' /}
+            {param caption: 'duration' /}            
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'magical' /}
+        {param color: '#008' /}
+        {param label: 'Magic' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $modifier in $entry.magical_modifiers}  
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'magical.type',
+                      'value': $modifier.type,
+                      'type': 'selection',
+                      'choices': $entry.modifier_type_names
+                    ],
+                    [
+                      'name': 'magical.modifier',
+                      'value': $modifier.modifier,
+                      'validate': 'modifier',
+                      'caption': 'modifier' 
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'magical.type',
+                      'value': '',
+                      'type': 'selection',
+                      'choices': $entry.modifier_type_names
+                    ],
+                    [
+                      'name': 'magical.modifier',
+                      'value': '',
+                      'validate': 'modifier',
+                      'caption': 'modifier' 
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}      
+      {/call}      
+      {call dma.edit.generic_value}
+        {param name: 'references' /}
+        {param color: '#008' /}
+        {param label: 'References' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $reference in $entry.references}  
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'references.name',
+                      'value': $reference.name,
+                      'validate': 'non-empty',
+                      'caption': 'name' 
+                    ],
+                    [
+                      'name': 'references.pages',
+                      'value': $reference.pagesString,
+                      'validate': 'any',
+                      'caption': 'pages' 
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'references.name',
+                      'value': '',
+                      'validate': 'non-empty',
+                      'caption': 'name' 
+                    ],
+                    [
+                      'name': 'references.pages',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'pages' 
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}            
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
