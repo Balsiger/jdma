@@ -79,7 +79,7 @@ public class Item extends CampaignEntry<BaseItem>
    */
   protected Item()
   {
-    super(TYPE, BASE_TYPE);
+    super(TYPE);
   }
 
   //........................................................................
@@ -93,7 +93,7 @@ public class Item extends CampaignEntry<BaseItem>
    */
   public Item(String inName)
   {
-    super(inName, TYPE, BASE_TYPE);
+    super(inName, TYPE);
   }
 
   //........................................................................
@@ -104,11 +104,10 @@ public class Item extends CampaignEntry<BaseItem>
    * base item.
    *
    * @param       inCampaign  the campaign this entry is in
-   * @param       inBases     the base items to take values from
    */
-  public Item(Campaign inCampaign, String ... inBases)
+  public Item(Campaign inCampaign)
   {
-    super(TYPE, BASE_TYPE, inCampaign, inBases);
+    super(TYPE, inCampaign);
   }
 
   //........................................................................

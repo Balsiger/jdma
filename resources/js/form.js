@@ -148,7 +148,7 @@ form.checkValue = function(inType, inValue)
       return inValue.match(/^\+?\d+$/);
       
     case 'money':
-      return inValue.match(/^(\s*\d+\s*(pp|gp|sp|cp))*$/);
+      return inValue.match(/^(\s*\d+\s*(pp|gp|sp|cp|armor|weapon))*$/);
 
     case 'weight':
       return inValue.match

@@ -38,6 +38,7 @@ import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
@@ -159,10 +160,10 @@ public abstract class DMAServlet extends BaseServlet
    * @return   the entry key for the path, if any
    *
    */
-  public static @Nullable AbstractEntry.EntryKey<? extends AbstractEntry>
+  public static @Nullable EntryKey<? extends AbstractEntry>
     extractKey(String inPath)
   {
-    return AbstractEntry.EntryKey.fromString(inPath);
+    return EntryKey.fromString(inPath);
   }
 
   //........................................................................
@@ -199,7 +200,7 @@ public abstract class DMAServlet extends BaseServlet
   public @Nullable AbstractEntry getEntry(DMARequest inRequest, String inPath)
   {
     String path = inPath.replaceAll("\\.[^\\./\\\\]*$", "");
-    AbstractEntry.EntryKey<? extends AbstractEntry> key = extractKey(path);
+    EntryKey<? extends AbstractEntry> key = extractKey(path);
     if(key == null)
       return null;
 
@@ -346,7 +347,7 @@ public abstract class DMAServlet extends BaseServlet
 
       for(int i = 0; i < tests.length; i += 3)
       {
-        AbstractEntry.EntryKey<?> key = DMAServlet.extractKey(tests[i + 1]);
+        EntryKey<?> key = DMAServlet.extractKey(tests[i + 1]);
         assertEquals(tests[i], tests[i + 2],
                      key == null ? null : key.toString());
       }

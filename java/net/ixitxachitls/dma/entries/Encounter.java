@@ -52,7 +52,7 @@ public class Encounter extends CampaignEntry<BaseEncounter>
    */
   public Encounter()
   {
-    super(TYPE, BASE_TYPE);
+    super(TYPE);
   }
 
   /**
@@ -62,7 +62,7 @@ public class Encounter extends CampaignEntry<BaseEncounter>
    */
   public Encounter(String inName)
   {
-    super(inName, TYPE, BASE_TYPE);
+    super(inName, TYPE);
   }
 
   /** The type of this entry. */

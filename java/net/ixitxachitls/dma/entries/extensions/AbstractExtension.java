@@ -42,6 +42,7 @@ import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
+import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.Variables;
 import net.ixitxachitls.dma.entries.indexes.Index;
@@ -68,8 +69,9 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public abstract class AbstractExtension<T extends AbstractEntry>
-  extends ValueGroup implements Serializable
+public abstract class AbstractExtension
+  <B extends BaseEntry, T extends AbstractEntry<B>>
+  extends ValueGroup<B> implements Serializable
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -131,9 +133,9 @@ public abstract class AbstractExtension<T extends AbstractEntry>
     Config.get("resource:html/dir.extensions", "extensions");
 
   /** All the possible auto extensions for each class (if any). */
-  protected static final Map<Class<? extends AbstractExtension<?>>, String []>
-    s_autoExtensions =
-    new HashMap<Class<? extends AbstractExtension<?>>, String []>();
+  protected static final Map<Class<?
+    extends AbstractExtension<?, ?>>, String []> s_autoExtensions =
+    new HashMap<Class<? extends AbstractExtension<?, ?>>, String []>();
 
   //........................................................................
 
@@ -196,7 +198,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *
    */
   @Override
-  public <S extends AbstractEntry> AbstractType<S> getType()
+  public <S extends AbstractEntry<B>> AbstractType<S> getType()
   {
     return m_entry.getType();
   }
@@ -212,7 +214,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    */
   @SuppressWarnings("unchecked")
   @Override
-  public AbstractEntry.EntryKey<? extends AbstractEntry> getKey()
+  public EntryKey<? extends AbstractEntry> getKey()
   {
     return m_entry.getKey();
   }
@@ -341,7 +343,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *
    */
   @Override
-  public List<BaseEntry> getBaseEntries()
+  public List<B> getBaseEntries()
   {
     return m_entry.getBaseEntries();
   }
@@ -507,7 +509,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * @param       inAbstractExtensions the automatic extensions to use
    */
   public static void setAutoExtensions
-    (Class<? extends AbstractExtension<?>> inClass,
+    (Class<? extends AbstractExtension<?, ?>> inClass,
      String ... inAbstractExtensions)
   {
     if(inAbstractExtensions.length == 0)
@@ -527,6 +529,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *
    * @return the proto representation
    */
+  @Override
   public Message toProto()
   {
     throw new IllegalStateException("must be derived");
@@ -538,6 +541,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *
    * @param   inProto  the proto buffer with all the data
    */
+  @Override
   public void fromProto(Message inProto)
   {
     throw new IllegalStateException("must be derived");

@@ -25,6 +25,7 @@ package net.ixitxachitls.dma.entries.extensions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.values.Duration;
 
@@ -46,7 +47,7 @@ import net.ixitxachitls.dma.values.Duration;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class Timed extends Extension<Item>
+public class Timed extends Extension<BaseItem, Item>
 {
   //--------------------------------------------------------- constructor(s)
 

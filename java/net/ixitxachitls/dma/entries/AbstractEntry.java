@@ -82,186 +82,9 @@ import net.ixitxachitls.util.logging.Log;
  */
 
 @ParametersAreNonnullByDefault
-public abstract class AbstractEntry extends ValueGroup
+public abstract class AbstractEntry<B extends BaseEntry> extends ValueGroup<B>
   implements Comparable<AbstractEntry>, Serializable
 {
-  /**
-   * The key for an entry for storage.
-   *
-   * @param     <T> the type of the entry represented by this key
-   */
-  @ParametersAreNonnullByDefault
-  public static class EntryKey<T extends AbstractEntry>
-  {
-    /**
-     * Create a key with a parent key.
-     *
-     * @param inID   the id of the entry
-     * @param inType the type of the entry
-     *
-     */
-    public EntryKey(String inID, AbstractType<T> inType)
-    {
-      m_id = inID;
-      m_type = inType;
-    }
-
-    /**
-     * Create a key with a parent key.
-     *
-     * @param inID     the id of the entry
-     * @param inType   the type of the entry
-     * @param inParent the parent key for the entry
-     *
-     */
-    public EntryKey(String inID, AbstractType<T> inType,
-                    EntryKey<? extends AbstractEntry> inParent)
-    {
-      this(inID, inType);
-
-      m_parent = inParent;
-    }
-
-    /** The entry key. */
-    private AbstractType<T> m_type;
-
-    /** The entry id. */
-    private String m_id;
-
-    /** The parent key, if any. */
-    private @Nullable EntryKey<?> m_parent;
-
-    /**
-     * Get the id of the entry represented by this key.
-     *
-     * @return the entry id
-     */
-    public String getID()
-    {
-      return m_id;
-    }
-
-    /**
-     * Get the type for the entry represented by the key.
-     *
-     * @return the type
-     *
-     */
-    public AbstractType<T> getType()
-    {
-      return m_type;
-    }
-
-    /**
-     * Get the parent key for this one, if any.
-     *
-     * @return the parent key or null if there is no parent
-     *
-     */
-    public @Nullable EntryKey<?> getParent()
-    {
-      return m_parent;
-    }
-
-    /**
-     * Convert the key to a string for debugging.
-     *
-     * @return the converted string
-     *
-     */
-    @Override
-    public String toString()
-    {
-      return (m_parent != null ? m_parent : "") + "/" + m_type + "/" + m_id;
-    }
-
-    /**
-     * Convert the given string to a key.
-     *
-     * @param   inText the text to convert
-     *
-     * @return  the converted key
-     */
-    public static @Nullable EntryKey<? extends AbstractEntry>
-      fromString(String inText)
-    {
-      String []paths = inText.split("/");
-      if(paths.length == 0)
-        return null;
-
-      return fromString(paths, paths.length - 1);
-    }
-
-    /**
-     * Extract the key from the given paths arraya nd index.
-     *
-     * @param    inPaths the paths pieces
-     * @param    inIndex the index to start from with computation (descending)
-     * @param    <T>     the type of entry to create the key for
-     *
-     * @return   the key for the path part or null if not found
-     *
-     */
-    @SuppressWarnings("unchecked") // creating wildcard type
-    private static @Nullable <T extends AbstractEntry> EntryKey<T>
-    fromString(String []inPaths, int inIndex)
-    {
-      if(inPaths.length <= inIndex || inIndex < 1)
-        return null;
-
-      String id = inPaths[inIndex--].replace("%20", " ");
-      AbstractType<T> type = (AbstractType<T>)
-        AbstractType.getTyped(inPaths[inIndex].replace("%20", " "));
-
-      if(type == null)
-        return null;
-
-      EntryKey<?> parent =
-        fromString(inPaths, inIndex - 1);
-
-      if(parent == null)
-        return new EntryKey<T>(id, type);
-
-      return new EntryKey<T>(id, type, parent);
-    }
-
-    /**
-     * Determine if this key is equal to the given object.
-     *
-     * @param inOther the object to compare for
-     *
-     * @return true if they are equal, false if not
-     */
-    @Override
-    public boolean equals(Object inOther)
-    {
-      if(this == inOther)
-        return true;
-
-      if(inOther == null)
-        return false;
-
-      if(!(inOther instanceof EntryKey))
-        return false;
-
-      EntryKey<?> other = (EntryKey<?>)inOther;
-      return m_id.equals(other.m_id) && m_type.equals(other.m_type)
-        && ((m_parent == null && other.m_parent == null)
-            || (m_parent != null && m_parent.equals(other.m_parent)));
-    }
-
-    /**
-     * Compute the hash code for the key.
-     *
-     * @return the hash value
-     */
-    @Override
-    public int hashCode()
-    {
-      return toString().hashCode();
-    }
-  }
-
   /**
    * The constructor with a type.
    *
@@ -341,12 +164,12 @@ public abstract class AbstractEntry extends ValueGroup
   protected boolean m_changed = false;
 
   /** All the extensions, indexed by name. */
-  protected Map<String, AbstractExtension<? extends AbstractEntry>>
+  protected Map<String, AbstractExtension<?, ? extends AbstractEntry>>
     m_extensions =
-    new TreeMap<String, AbstractExtension<? extends AbstractEntry>>();
+    new TreeMap<String, AbstractExtension<?, ? extends AbstractEntry>>();
 
-  /** The base entries for this entry, in the same order as the names. */
-  protected List<BaseEntry> m_baseEntries = Lists.newArrayList();
+  /** The base entries for this entry, in  Lists.newArrayList();the same order as the names. */
+  protected List<B> m_baseEntries = new ArrayList<>();
 
   /** The files for this entry. */
   protected transient List<File> m_files = new ArrayList<>();
@@ -393,9 +216,10 @@ public abstract class AbstractEntry extends ValueGroup
 
   /** All registered extension classes. */
   protected static final
-    Set<Class<? extends AbstractExtension<? extends AbstractEntry>>>
+    Set<Class<? extends AbstractExtension<?, ? extends AbstractEntry>>>
     s_extensions =
-    new HashSet<Class<? extends AbstractExtension<? extends AbstractEntry>>>();
+    new HashSet<Class<? extends
+      AbstractExtension<?, ? extends AbstractEntry>>>();
 
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
@@ -418,7 +242,7 @@ public abstract class AbstractEntry extends ValueGroup
    */
   @SuppressWarnings("unchecked")
   @Override
-  public <T extends AbstractEntry> EntryKey<T> getKey()
+  public <T extends AbstractEntry<B>> EntryKey<T> getKey()
   {
     return new EntryKey<T>(getName(), (AbstractType<T>)getType());
   }
@@ -508,16 +332,17 @@ public abstract class AbstractEntry extends ValueGroup
    * @return      the requested base entries; note that an entry can be null
    *              if it is not found
    */
+  @SuppressWarnings("unchecked")
   @Override
-  public List<BaseEntry> getBaseEntries()
+  public List<B> getBaseEntries()
   {
     if(m_baseEntries == null || m_baseEntries.isEmpty())
     {
-      m_baseEntries = new ArrayList<BaseEntry>();
+      m_baseEntries = new ArrayList<B>();
 
       // TODO: make this in a single datastore request
       for(String base : m_base)
-        m_baseEntries.add((BaseEntry)DMADataFactory.get()
+        m_baseEntries.add((B)DMADataFactory.get()
                           .getEntry(createKey(base, getType().getBaseType())));
     }
 
@@ -576,7 +401,7 @@ public abstract class AbstractEntry extends ValueGroup
    */
   @Override
   @SuppressWarnings("unchecked") // cast
-  public <T extends AbstractEntry> AbstractType<T> getType()
+  public <T extends AbstractEntry<B>> AbstractType<T> getType()
   {
     return (AbstractType<T>)m_type;
   }
@@ -618,9 +443,9 @@ public abstract class AbstractEntry extends ValueGroup
    * @return      true if an extension of this name is present, false if not
    */
   public boolean hasExtension
-    (Class<? extends AbstractExtension<?>> inExtension)
+    (Class<? extends AbstractExtension<?, ?>> inExtension)
   {
-    for(AbstractExtension<?> extension : m_extensions.values())
+    for(AbstractExtension<?, ?> extension : m_extensions.values())
       if(inExtension.isAssignableFrom(extension.getClass()))
          return true;
 
@@ -647,7 +472,7 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @return  the extension found, if any
    */
-  public @Nullable AbstractExtension<?> getExtension(String inName)
+  public @Nullable AbstractExtension<?, ?> getExtension(String inName)
   {
     return m_extensions.get(inName);
   }
@@ -661,10 +486,10 @@ public abstract class AbstractEntry extends ValueGroup
    * @return      the extension found or null if not found
    */
   @SuppressWarnings("unchecked")
-  public @Nullable <T extends AbstractExtension<?>> T
+  public @Nullable <T extends AbstractExtension<?, ?>> T
     getExtension(Class<T> inExtension)
   {
-    for(AbstractExtension<?> extension : m_extensions.values())
+    for(AbstractExtension<?, ?> extension : m_extensions.values())
       if(inExtension.isAssignableFrom(extension.getClass()))
          return (T)extension;
 
@@ -752,7 +577,7 @@ public abstract class AbstractEntry extends ValueGroup
       entries.add(base);
     }
 
-    for(AbstractExtension<?> extension : m_extensions.values())
+    for(AbstractExtension<?, ?> extension : m_extensions.values())
     {
       List<Entry<?>> subEntries = extension.getSubEntries(true);
       if(subEntries != null)
@@ -827,7 +652,7 @@ public abstract class AbstractEntry extends ValueGroup
       if(base != null)
         base.collect(inName, ioCombined);
 
-    for(AbstractExtension<?> extension : m_extensions.values())
+    for(AbstractExtension<?, ?> extension : m_extensions.values())
       extension.collect(inName, ioCombined);
   }
 
@@ -835,7 +660,7 @@ public abstract class AbstractEntry extends ValueGroup
   public Multimap<Index.Path, String> computeIndexValues()
   {
     Multimap<Index.Path, String> values = super.computeIndexValues();
-    for(AbstractExtension<? extends AbstractEntry> extension
+    for(AbstractExtension<?, ? extends AbstractEntry> extension
           : m_extensions.values())
       extension.computeIndexValues(values);
 
@@ -1068,7 +893,7 @@ public abstract class AbstractEntry extends ValueGroup
     }
 
     // check extensions for a value
-    for(AbstractExtension<?> extension : m_extensions.values())
+    for(AbstractExtension<?, ?> extension : m_extensions.values())
     {
       Object value = extension.compute(inKey);
       if(value != null)
@@ -1150,10 +975,10 @@ public abstract class AbstractEntry extends ValueGroup
    * @return      the created key
    *
    */
-  public static <T extends AbstractEntry> EntryKey<T>
+  public static <T extends AbstractEntry<?>> EntryKey<T>
     createKey(String inID, AbstractType<T> inType)
   {
-    return new EntryKey<T>(inID, inType);
+    return new EntryKey<>(inID, inType);
   }
 
   //........................................................................
@@ -1173,8 +998,7 @@ public abstract class AbstractEntry extends ValueGroup
    *
    */
 
-  public static <T extends AbstractEntry>
-    EntryKey<T> createKey
+  public static <T extends AbstractEntry<?>> EntryKey<T> createKey
     (String inID, AbstractType<T> inType,
      @Nullable String inParentID,
      @Nullable AbstractType<T> inParentType)
@@ -1182,8 +1006,8 @@ public abstract class AbstractEntry extends ValueGroup
     if(inParentID == null || inParentType == null)
       return createKey(inID, inType);
 
-    return new EntryKey<T>(inID, inType,
-                           new EntryKey<T>(inParentID, inParentType));
+    return new EntryKey<>(inID, inType,
+                          new EntryKey<>(inParentID, inParentType));
   }
 
   //........................................................................
@@ -1443,11 +1267,12 @@ public abstract class AbstractEntry extends ValueGroup
    * Setup all auto extensions from base entries.
    *
    */
+  @Deprecated
   public void setupExtensions()
   {
     ensureExtensions();
 
-    for(AbstractExtension<?> extension : m_extensions.values())
+    for(AbstractExtension<?, ?> extension : m_extensions.values())
       for(String name
             : AbstractExtension.getAutoExtensions(extension.getClass()))
       {
@@ -1461,8 +1286,9 @@ public abstract class AbstractEntry extends ValueGroup
             addExtension(name);
       }
 
+    /*
     if(!isBase())
-      for(BaseEntry base : getBaseEntries())
+      for(B base : getBaseEntries())
       {
         if(base == null)
           continue;
@@ -1473,6 +1299,7 @@ public abstract class AbstractEntry extends ValueGroup
             if(!name.startsWith("base "))
               addExtension(name);
       }
+      */
   }
 
   //........................................................................
@@ -1752,7 +1579,7 @@ public abstract class AbstractEntry extends ValueGroup
    *              not found)
    *
    */
-  public @Nullable AbstractExtension<?> addExtension(String inName)
+  public @Nullable AbstractExtension<?, ?> addExtension(String inName)
   {
     if(m_extensions.containsKey(inName) || inName.isEmpty())
       return null;
@@ -1779,7 +1606,7 @@ public abstract class AbstractEntry extends ValueGroup
 
       // can't use the generic class type here, because generic class arrays
       // cannot be built
-      AbstractExtension<?> extension = null;
+      AbstractExtension<?, ?> extension = null;
 
       // find the constructor to use (getConstructor does not acceptably treat
       // derivations, unfortunately)
@@ -1851,7 +1678,7 @@ public abstract class AbstractEntry extends ValueGroup
    *
    */
   public void addExtension
-    (String inName, AbstractExtension<? extends AbstractEntry> inExtension)
+    (String inName, AbstractExtension<?, ? extends AbstractEntry> inExtension)
   {
     m_extensions.put(inName, inExtension);
   }
@@ -1905,15 +1732,14 @@ public abstract class AbstractEntry extends ValueGroup
       if(inName.equalsIgnoreCase(getID()))
         return;
 
-    BaseEntry entry = (BaseEntry)
-      DMADataFactory.get().getEntry(createKey(inName, baseType));
+    B entry = (B)DMADataFactory.get().getEntry(createKey(inName, baseType));
     if(entry == null)
       Log.warning("base " + getType() + " '" + inName + "' not found");
     // else
     //   addExtensions(entry.getExtensionNames());
 
     if(m_baseEntries == null)
-      m_baseEntries = new ArrayList<BaseEntry>();
+      m_baseEntries = new ArrayList<B>();
 
     m_base.add(inName);
     m_baseEntries.add(entry);
@@ -2373,22 +2199,14 @@ public abstract class AbstractEntry extends ValueGroup
     @org.junit.Test
     public void init()
     {
-      AbstractEntry entry =
-        new AbstractEntry("just a test",
-                          new AbstractType.Test.TestType<AbstractEntry>
-                          (AbstractEntry.class)) {
-          /**
-                             *
-                             */
-                            private static final long serialVersionUID = 1L;
-
-          @SuppressWarnings("unchecked")
-          @Override
-          public <T extends AbstractEntry> EntryKey<T> getKey()
-          {
-            return new EntryKey<T>("guru", (AbstractType<T>)BaseEntry.TYPE);
-          }
-        };
+      AbstractEntry<BaseEntry<?>> entry =
+        new AbstractEntry<BaseEntry<?>>
+          ("just a test",
+            new AbstractType.Test.TestType<AbstractEntry>
+            (AbstractEntry.class))
+            {
+              private static final long serialVersionUID = 1L;
+            };
 
       // name
       assertEquals("name", "just a test", entry.getName());

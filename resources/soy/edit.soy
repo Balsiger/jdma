@@ -33,7 +33,7 @@
  * @param values The editable value content
  */
 {template .entry}
-  <div class="edit {$type}" id="{$id}">
+  <div class="edit {$type}" id="{escape($id)}">
     <div class="scroll">
       <div class="values">
         {$values |noescape}
@@ -41,14 +41,14 @@
     
       {call dma.edit.images}
         {param entry: $entry /}
-        {param id: $id + '-image' /}
+        {param id: escape($id) + '-image' /}
       {/call}
       
       <div class="actions-spacer"></div>
     </div> // scroll
     
     {call dma.edit.actions}
-      {param id: $id /}
+      {param id: escape($id) /}
       {param key: $entry.key /}
     {/call}
     

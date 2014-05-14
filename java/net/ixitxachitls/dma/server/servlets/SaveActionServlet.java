@@ -35,6 +35,7 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.util.Encodings;
 
@@ -94,8 +95,8 @@ public class SaveActionServlet extends ActionServlet
     if(keyParam == null || keyParam.isEmpty())
       return "gui.alert('Cannot save values, as no key is given');";
 
-    AbstractEntry.EntryKey<? extends AbstractEntry> key =
-      AbstractEntry.EntryKey.fromString(keyParam);
+    EntryKey<? extends AbstractEntry> key =
+      EntryKey.fromString(keyParam);
 
     if(key == null)
       return "gui.alert('Cannot create entry key for " + keyParam + "');";

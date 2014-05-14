@@ -61,6 +61,7 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.Campaign;
 import net.ixitxachitls.dma.entries.Entry;
+import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.util.CommandLineParser;
@@ -120,12 +121,13 @@ public final class Importer
    * @throws IOException unable to install remove api
    *
    */
-  public Importer(String inHost, int inPort, int inWebPort,
+  public Importer(String inHost, String inWebHost, int inPort, int inWebPort,
                   String inUserName, String inPassword, boolean inMain,
                   boolean inIndividual, boolean inBlobs, boolean inASCII)
     throws IOException
   {
     m_host = inHost;
+    m_webHost = inWebHost;
     m_webPort = inWebPort;
     m_mainImages = inMain;
     m_individual = inIndividual;
@@ -165,6 +167,7 @@ public final class Importer
 
   /** The hostname to connect to. */
   private String m_host;
+  private String m_webHost;
 
   /** The port of the web application. */
   private int m_webPort;
@@ -445,7 +448,7 @@ public final class Importer
 
     FileNameMap types = URLConnection.getFileNameMap();
     String type = types.getContentTypeFor(parts[parts.length - 1]);
-    AbstractEntry.EntryKey<AbstractEntry> key = inEntry.getKey();
+    EntryKey<AbstractEntry<?>> key = inEntry.getKey();
 
     if(key == null)
     {
@@ -466,7 +469,7 @@ public final class Importer
                   + " for " + key);
 
     URL url =
-      new URL("http", m_host, m_webPort,
+      new URL("http", m_webHost, m_webPort,
               "/__import"
                 + "?type=" + Encodings.urlEncode(type)
                 + "&name=" + Encodings.urlEncode(name)
@@ -582,6 +585,8 @@ public final class Importer
       new CommandLineParser
       (new CommandLineParser.StringOption
        ("h", "host", "The host to connect to.", "localhost"),
+       new CommandLineParser.StringOption
+       ("v", "webhost", "The webhost to connect to.", "localhost"),
        new CommandLineParser.IntegerOption
        ("p", "port", "The port to connect to.", 8888),
        new CommandLineParser.IntegerOption
@@ -608,8 +613,9 @@ public final class Importer
                              + ": "));
 
     Importer importer =
-      new Importer(clp.getString("host"), clp.getInteger("port"),
-                   clp.getInteger("webport"), clp.getString("username"),
+      new Importer(clp.getString("host"), clp.getString("webhost"),
+                   clp.getInteger("port"), clp.getInteger("webport"),
+                   clp.getString("username"),
                    password, clp.hasValue("main"), clp.hasValue("individual"),
                    clp.hasValue("blobs"), clp.hasValue("ascii"));
 

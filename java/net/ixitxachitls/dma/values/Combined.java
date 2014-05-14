@@ -555,7 +555,7 @@ public class Combined<T extends Value<T>>
    *
    */
   @SuppressWarnings("unchecked") // need to cast
-  private Node<T> collectValues(String inName, AbstractEntry inEntry)
+  private Node<T> collectValues(String inName, AbstractEntry<?> inEntry)
   {
     Node<T> root = null;
 

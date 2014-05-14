@@ -53,9 +53,12 @@ public class NewMoney extends NewValue.Addable<MoneyProto>
       int gold = 0;
       int silver = 0;
       int copper = 0;
+      int armor = 0;
+      int weapon = 0;
 
       List<String []> parts =
-        Strings.getAllPatterns(inValue, "(?:\\s*(\\d+)\\s*(pp|gp|sp|cp))");
+        Strings.getAllPatterns(inValue,
+                               "(?:\\s*(\\d+)\\s*(pp|gp|sp|cp|armor|weapon))");
       for(String []part : parts)
       {
         if(part.length != 2)
@@ -82,6 +85,14 @@ public class NewMoney extends NewValue.Addable<MoneyProto>
             case CP:
               copper += number;
               break;
+
+            case "armor":
+              armor += number;
+              break;
+
+            case "weapon":
+              weapon += number;
+              break;
           }
         }
         catch(NumberFormatException e)
@@ -90,16 +101,20 @@ public class NewMoney extends NewValue.Addable<MoneyProto>
         }
       }
 
-      return Optional.of(new NewMoney(platinum, gold, silver, copper));
+      return Optional.of(new NewMoney(platinum, gold, silver, copper,
+                                      armor, weapon));
     }
   }
 
-  public NewMoney(int inPlatinum, int inGold, int inSilver, int inCopper)
+  public NewMoney(int inPlatinum, int inGold, int inSilver, int inCopper,
+                  int inArmor, int inWeapon)
   {
     m_platinum = inPlatinum;
     m_gold = inGold;
     m_silver = inSilver;
     m_copper = inCopper;
+    m_armor = inArmor;
+    m_weapon = inWeapon;
   }
 
   public static final String PP = "pp";
@@ -113,6 +128,8 @@ public class NewMoney extends NewValue.Addable<MoneyProto>
   private final int m_gold;
   private final int m_silver;
   private final int m_copper;
+  private final int m_armor;
+  private final int m_weapon;
 
   public int getPlatinum()
   {
@@ -134,9 +151,20 @@ public class NewMoney extends NewValue.Addable<MoneyProto>
     return m_copper;
   }
 
+  public int getArmor()
+  {
+    return m_armor;
+  }
+
+  public int getWeapon()
+  {
+    return m_weapon;
+  }
+
   public double getAsGold()
   {
-    return m_platinum * 10 + m_gold + m_silver / 10.0 + m_copper / 100.0;
+    return m_platinum * 10 + m_gold + m_silver / 10.0 + m_copper / 100.0
+      + m_armor * m_armor * 1000 + m_weapon + m_weapon * m_weapon * 2000;
   }
 
   @Override
@@ -148,6 +176,30 @@ public class NewMoney extends NewValue.Addable<MoneyProto>
       parts.add(m_platinum + " " + CP);
     if(m_gold > 0)
       parts.add(m_gold + " " + GP);
+    if(m_silver > 0)
+      parts.add(m_silver + " " + SP);
+    if(m_copper > 0)
+      parts.add(m_copper + " " + CP);
+    if(m_armor > 0)
+      parts.add("+" + m_armor + " armor");
+    if(m_weapon > 0)
+      parts.add("+" + m_weapon + " weapon");
+
+    if(parts.isEmpty())
+      return "0 " + GP;
+
+    return Strings.SPACE_JOINER.join(parts);
+  }
+
+  public String toPureString()
+  {
+    List<String> parts = new ArrayList<>();
+
+    if(m_platinum > 0)
+      parts.add(m_platinum + " " + CP);
+    if(m_gold > 0 || m_armor > 0 || m_weapon > 0)
+      parts.add((m_gold + m_weapon * m_weapon * 2000 + m_armor * m_armor * 1000)
+                + " " + GP);
     if(m_silver > 0)
       parts.add(m_silver + " " + SP);
     if(m_copper > 0)
@@ -229,6 +281,10 @@ public class NewMoney extends NewValue.Addable<MoneyProto>
       builder.setSilver(m_silver);
     if(m_copper > 0)
       builder.setCopper(m_copper);
+    if(m_armor > 0)
+      builder.setMagicArmor(m_armor);
+    if(m_weapon > 0)
+      builder.setMagicWeapon(m_weapon);
 
     return builder.build();
   }
@@ -236,7 +292,8 @@ public class NewMoney extends NewValue.Addable<MoneyProto>
   public static NewMoney fromProto(MoneyProto inProto)
   {
     return new NewMoney(inProto.getPlatinum(), inProto.getGold(),
-                        inProto.getSilver(), inProto.getCopper());
+                        inProto.getSilver(), inProto.getCopper(),
+                        inProto.getMagicArmor(), inProto.getMagicWeapon());
   }
 
   @Override
@@ -253,7 +310,9 @@ public class NewMoney extends NewValue.Addable<MoneyProto>
     return new NewMoney(m_platinum + value.m_platinum,
                         m_gold + value.m_gold,
                         m_silver + value.m_silver,
-                        m_copper + value.m_copper);
+                        m_copper + value.m_copper,
+                        m_armor + value.m_armor,
+                        m_weapon + value.m_weapon);
   }
 
   @Override

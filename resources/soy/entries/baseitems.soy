@@ -526,7 +526,8 @@
       {call dma.edit.value}
         {param name: 'value' /}
         {param label: 'Value' /}
-        {param value: $entry.value.present ? $entry.value.get : '' /}
+        {param value: $entry.value.present 
+          ? $entry.value.get.string : '' /}
         {param validate: 'money' /}
         {param color: '#008' /}
       {/call}    
@@ -628,7 +629,7 @@
                   {param values: [
                     [
                       'name': 'appearances.probability',
-                      'value': 'Common',
+                      'value': 'Unknown',
                       'validate': 'non-empty',
                       'type': 'selection',
                       'choices': $entry.probabilityNames

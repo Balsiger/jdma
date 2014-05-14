@@ -188,7 +188,7 @@ public enum Substance implements EnumSelection.Named
     throw new IllegalStateException("invalid proto substance: " + inProto);
   }
 
-   /**
+  /**
    * All the possible names for the layout.
    *
    * @return the possible names

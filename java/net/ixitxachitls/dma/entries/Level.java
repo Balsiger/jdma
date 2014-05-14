@@ -43,7 +43,7 @@ public class Level extends Entry<BaseLevel>
    */
   public Level()
   {
-    super(TYPE, BASE_TYPE);
+    super(TYPE);
   }
 
   /**
@@ -53,7 +53,7 @@ public class Level extends Entry<BaseLevel>
    */
   public Level(String inName)
   {
-    super(inName, TYPE, BASE_TYPE);
+    super(inName, TYPE);
   }
 
   /** The type of this entry. */

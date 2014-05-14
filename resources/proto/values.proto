@@ -161,6 +161,9 @@ message MoneyProto
   optional int32 silver = 2;
   optional int32 gold = 3;
   optional int32 platinum = 4;
+  
+  optional int32 magic_armor = 5;
+  optional int32 magic_weapon = 6;
 }
 
 message WeightProto

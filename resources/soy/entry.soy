@@ -89,20 +89,24 @@
          {/call}
        {/if}
        
-      <div class="_new_value _new_description">
-        {call .concatenated}
-          {param value: $entry.description /}
-          {param concatenate: $entry.combined_description /}
-          {param lines: true /}
-        {/call}
-      </div>
+      {if def($entry.description)}
+        <div class="_new_value _new_description">
+          {call .concatenated}
+            {param value: $entry.description /}
+            {param concatenate: $entry.combined_description /}
+            {param lines: true /}
+          {/call}
+        </div>
+      {/if}
         
-      <div class="_new_value _new_short-description">
-        {call .concatenated}
-          {param value: $entry.short_description /}
-          {param concatenate: $entry.combined_short_description /}
-        {/call}
-      </div>
+      {if def($entry.short_description)}
+        <div class="_new_value _new_short-description">
+          {call .concatenated}
+            {param value: $entry.short_description /}
+            {param concatenate: $entry.combined_short_description /}
+          {/call}
+        </div>
+      {/if}
 
        <div class="_new_values">
          {$values} 
@@ -149,7 +153,7 @@
     <div class="actions">
       <div class="action sprite large edit"
            onclick="edit.show('{$entry.name}', '{$entry.path}', 
-                              'edit-{$entry.type.css}-{$entry.name |css}')">
+                              'edit-{$entry.type.css}-{escape($entry.name)}')">
       </div>
       <div class="action sprite large delete"
            onclick="if(confirm('Do you really want to delete this?'))
@@ -326,7 +330,11 @@
  */
 {template .added}
   {if $value.present}
-    {$value.get}
+    {if $value.get.pure_string}
+      {$value.get.pure_string}
+    {else}
+      {$value.get}
+    {/if}
   {else}
     <span class="combination-value">
       {$addable.value_string}
@@ -334,7 +342,11 @@
         {foreach $annotated in $addable.annotate}
           <div class="combination-source">
             <span class="combination-source-value">
-              {$annotated.value.string}
+              {if $annotated.value and $annotated.value.string}
+                {$annotated.value.string}
+              {else}
+                {$annotated.value}
+              {/if}
             </span>
             <span class="combination-source-origin">
               from {$annotated.source}
@@ -362,7 +374,7 @@
           {foreach $annotated in $combination.annotate}
               <div class="combination-source">
                 <span class="combination-source-value">
-                  {if $annotated.value.string}
+                  {if $annotated.value and $annotated.value.string}
                     {$annotated.value.string}
                   {else}
                     {$annotated.value}
@@ -723,7 +735,7 @@
             gui.addAction('edit', 'Edit', 
                           function() {lb}
                             edit.show('{$entry.name}', '{$entry.path}', 
-                                      'edit-{$entry.type.css}-{$entry.name}');
+                                      'edit-{$entry.type.css}-{escape($entry.name)}');
                           {rb});
           </script>
           {call dma.page.link}

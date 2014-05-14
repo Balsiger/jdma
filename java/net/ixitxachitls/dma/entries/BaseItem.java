@@ -84,7 +84,7 @@ import net.ixitxachitls.util.logging.Log;
  */
 
 @ParametersAreNonnullByDefault
-public class BaseItem extends BaseEntry
+public class BaseItem extends BaseEntry<BaseItem>
 {
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
@@ -257,8 +257,8 @@ public class BaseItem extends BaseEntry
     if(m_damage.isPresent())
       return true;
 
-    for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isWeapon())
+    for(BaseItem base : getBaseEntries())
+      if(base.isWeapon())
         return true;
 
     return false;
@@ -274,8 +274,8 @@ public class BaseItem extends BaseEntry
     if(m_count.isPresent())
       return true;
 
-    for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isCounted())
+    for(BaseItem base : getBaseEntries())
+      if(base.isCounted())
         return true;
 
     return false;
@@ -291,8 +291,8 @@ public class BaseItem extends BaseEntry
     if(m_brightLight.isPresent() || m_shadowyLight.isPresent())
       return true;
 
-    for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isLight())
+    for(BaseItem base : getBaseEntries())
+      if(base.isLight())
         return true;
 
     return false;
@@ -308,8 +308,8 @@ public class BaseItem extends BaseEntry
     if(m_timed.isPresent())
       return true;
 
-    for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isTimed())
+    for(BaseItem base : getBaseEntries())
+      if(base.isTimed())
         return true;
 
     return false;
@@ -325,8 +325,8 @@ public class BaseItem extends BaseEntry
     if(!m_magicalModifiers.isEmpty())
       return true;
 
-    for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isMagical())
+    for(BaseItem base : getBaseEntries())
+      if(base.isMagical())
         return true;
 
     return false;
@@ -342,8 +342,8 @@ public class BaseItem extends BaseEntry
     if(m_armorType != ArmorType.UNKNOWN)
       return true;
 
-    for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isArmor())
+    for(BaseItem base : getBaseEntries())
+      if(base.isArmor())
         return true;
 
     return false;
@@ -359,8 +359,8 @@ public class BaseItem extends BaseEntry
     if(m_area.isPresent() || m_length.isPresent())
       return true;
 
-    for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isCommodity())
+    for(BaseItem base : getBaseEntries())
+      if(base.isCommodity())
         return true;
 
     return false;
@@ -393,8 +393,8 @@ public class BaseItem extends BaseEntry
     if(m_slot != Slot.UNKNOWN)
       return true;
 
-    for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isContainer())
+    for(BaseItem base : getBaseEntries())
+      if(base.isContainer())
         return true;
 
     return false;
@@ -429,9 +429,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Integer(this, hp.get());
 
     List<Combination<Integer>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedHP());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedHP());
 
     return new Combination.Integer(this, combinations);
   }
@@ -463,9 +462,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<Integer>(this, m_hardness.get());
 
     List<Combination<Integer>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedHardness());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedHardness());
 
     return new Combination.Max<Integer>(this, combinations);
   }
@@ -491,9 +489,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<Integer>(this, m_break.get());
 
     List<Combination<Integer>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedBreakDC());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedBreakDC());
 
     return new Combination.Max<Integer>(this, combinations);
   }
@@ -519,9 +516,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<NewWeight>(this, m_weight.get());
 
     List<Combination<NewWeight>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedWeight());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedWeight());
 
     return new Combination.Addable<NewWeight>(this, combinations);
   }
@@ -547,9 +543,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<NewMoney>(this, m_value.get());
 
     List<Combination<NewMoney>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedValue());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedValue());
 
     return new Combination.Addable<NewMoney>(this, combinations);
   }
@@ -575,9 +570,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<Size>(this, m_size);
 
     List<Combination<Size>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedSize());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedSize());
 
     return new Combination.Max<Size>(this, combinations);
   }
@@ -603,9 +597,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<SizeModifier>(this, m_sizeModifier);
 
     List<Combination<SizeModifier>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedSizeModifier());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedSizeModifier());
 
     return new Combination.Max<SizeModifier>(this, combinations);
   }
@@ -631,9 +624,8 @@ public class BaseItem extends BaseEntry
       return new Combination.First<Substance>(this, m_substance);
 
     List<Combination<Substance>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedSubstance());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedSubstance());
 
     return new Combination.First<Substance>(this, combinations);
   }
@@ -659,9 +651,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<NewDistance>(this, m_thickness.get());
 
     List<Combination<NewDistance>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedThickness());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedThickness());
 
     return new Combination.Max<NewDistance>(this, combinations);
   }
@@ -687,9 +678,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<Probability>(this, m_probability);
 
     List<Combination<Probability>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedProbability());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedProbability());
 
     return new Combination.Max<Probability>(this, combinations);
   }
@@ -715,9 +705,8 @@ public class BaseItem extends BaseEntry
       return new Combination.String(this, m_playerName);
 
     List<Combination<String>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedPlayerName());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedPlayerName());
 
     return new Combination.String(this, combinations);
   }
@@ -738,9 +727,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Set<Appearance>(this, m_appearances);
 
     List<Combination<List<Appearance>>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedAppearances());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedAppearances());
 
     return new Combination.Set<Appearance>(combinations, this);
   }
@@ -796,9 +784,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<CountUnit>(this, m_countUnit);
 
     List<Combination<CountUnit>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedCountUnit());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedCountUnit());
 
     return new Combination.Max<CountUnit>(this, combinations);
   }
@@ -824,9 +811,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Integer(this, m_count.get());
 
     List<Combination<Integer>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedCount());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedCount());
 
     return new Combination.Integer(this, combinations);
   }
@@ -852,9 +838,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<AreaShape>(this, m_lightShape);
 
     List<Combination<AreaShape>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedLightShape());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedLightShape());
 
     return new Combination.Max<AreaShape>(this, combinations);
   }
@@ -881,9 +866,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<NewDistance>(this, m_brightLight.get());
 
     List<Combination<NewDistance>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedBrightLight());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedBrightLight());
 
     return new Combination.Max<NewDistance>(this, combinations);
   }
@@ -910,9 +894,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<NewDistance>(this, m_shadowyLight.get());
 
     List<Combination<NewDistance>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedShadowyLight());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedShadowyLight());
 
     return new Combination.Max<NewDistance>(this, combinations);
   }
@@ -939,9 +922,8 @@ public class BaseItem extends BaseEntry
       combinations.add
       (new Combination.List<NamedModifier>(this, m_magicalModifiers));
 
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedMagicalModifiers());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedMagicalModifiers());
 
     return new Combination.List<NamedModifier>(combinations, this);
   }
@@ -968,9 +950,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Min<NewDuration>(this, m_timed.get());
 
     List<Combination<NewDuration>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedTimed());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedTimed());
 
     return new Combination.Min<NewDuration>(this, combinations);
   }
@@ -996,9 +977,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<NewDamage>(this, m_damage.get());
 
     List<Combination<NewDamage>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedDamage());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedDamage());
 
     return new Combination.Addable<NewDamage>(this, combinations);
   }
@@ -1025,9 +1005,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<NewDamage>(this, m_secondaryDamage.get());
 
     List<Combination<NewDamage>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedSecondaryDamage());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedSecondaryDamage());
 
     return new Combination.Addable<NewDamage>(this, combinations);
   }
@@ -1054,9 +1033,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<NewDamage>(this, m_splash.get());
 
     List<Combination<NewDamage>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedSplash());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedSplash());
 
     return new Combination.Addable<NewDamage>(this, combinations);
   }
@@ -1082,9 +1060,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<WeaponType>(this, m_weaponType);
 
     List<Combination<WeaponType>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedWeaponType());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedWeaponType());
 
     return new Combination.Max<WeaponType>(this, combinations);
   }
@@ -1110,9 +1087,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<WeaponStyle>(this, m_style);
 
     List<Combination<WeaponStyle>> combinations = new ArrayList<>();
-    for(BaseEntry entry : this.getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedWeaponStyle());
+    for(BaseItem entry : this.getBaseEntries())
+      combinations.add(entry.getCombinedWeaponStyle());
 
     return new Combination.Max<WeaponStyle>(this, combinations);
   }
@@ -1138,9 +1114,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<Proficiency>(this, m_proficiency);
 
     List<Combination<Proficiency>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedProficiency());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedProficiency());
 
     return new Combination.Max<Proficiency>(this, combinations);
   }
@@ -1167,9 +1142,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Min<NewDistance>(this, m_range.get());
 
     List<Combination<NewDistance>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedRange());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedRange());
 
     return new Combination.Min<NewDistance>(this, combinations);
   }
@@ -1196,9 +1170,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Min<NewDistance>(this, m_reach.get());
 
     List<Combination<NewDistance>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedReach());
+    for(BaseItem entry : getBaseEntries())
+        combinations.add(entry.getCombinedReach());
 
     return new Combination.Min<NewDistance>(this, combinations);
   }
@@ -1225,9 +1198,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Min<Integer>(this, m_maxAttacks.get());
 
     List<Combination<Integer>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedMaxAttacks());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedMaxAttacks());
 
     return new Combination.Min<Integer>(this, combinations);
   }
@@ -1254,9 +1226,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<NewCritical>(this, m_critical.get());
 
     List<Combination<NewCritical>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedCritical());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedCritical());
 
     return new Combination.Addable<NewCritical>(this, combinations);
   }
@@ -1282,9 +1253,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<NewModifier>(this, m_armorBonus.get());
 
     List<Combination<NewModifier>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedArmorBonus());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedArmorBonus());
 
     return new Combination.Addable<NewModifier>(this, combinations);
   }
@@ -1310,9 +1280,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<ArmorType>(this, m_armorType);
 
     List<Combination<ArmorType>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedArmorType());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedArmorType());
 
     return new Combination.Max<ArmorType>(this, combinations);
   }
@@ -1338,9 +1307,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Min<Integer>(this, m_maxDex.get());
 
     List<Combination<Integer>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedMaxDex());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedMaxDex());
 
     return new Combination.Min<Integer>(this, combinations);
   }
@@ -1366,9 +1334,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Integer(this, m_checkPenalty.get());
 
     List<Combination<Integer>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedCheckPenalty());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedCheckPenalty());
 
     return new Combination.Integer(this, combinations);
   }
@@ -1394,9 +1361,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Integer(this, m_arcane.get());
 
     List<Combination<Integer>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedArcaneFailure());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedArcaneFailure());
 
     return new Combination.Integer(this, combinations);
   }
@@ -1422,9 +1388,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<NewDistance>(this, m_speedSlow.get());
 
     List<Combination<NewDistance>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedSlowSpeed());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedSlowSpeed());
 
     return new Combination.Addable<NewDistance>(this, combinations);
   }
@@ -1450,9 +1415,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<NewDistance>(this, m_speedFast.get());
 
     List<Combination<NewDistance>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedFastSpeed());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedFastSpeed());
 
     return new Combination.Addable<NewDistance>(this, combinations);
   }
@@ -1478,9 +1442,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<Area>(this, m_area.get());
 
     List<Combination<Area>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedArea());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedArea());
 
     return new Combination.Addable<Area>(this, combinations);
   }
@@ -1506,9 +1469,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<NewDistance>(this, m_length.get());
 
     List<Combination<NewDistance>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedLength());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedLength());
 
     return new Combination.Addable<NewDistance>(this, combinations);
   }
@@ -1534,9 +1496,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<Volume>(this, m_capacity.get());
 
     List<Combination<Volume>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedCapacity());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedCapacity());
 
     return new Combination.Addable<Volume>(this, combinations);
   }
@@ -1562,9 +1523,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<AggregationState>(this, m_state);
 
     List<Combination<AggregationState>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedState());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedState());
 
     return new Combination.Max<AggregationState>(this, combinations);
   }
@@ -1590,9 +1550,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Max<Slot>(this, m_slot);
 
     List<Combination<Slot>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedSlot());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedSlot());
 
     return new Combination.Max<Slot>(this, combinations);
   }
@@ -1619,9 +1578,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<NewDuration>(this, m_don.get());
 
     List<Combination<NewDuration>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedDon());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedDon());
 
     return new Combination.Addable<NewDuration>(this, combinations);
   }
@@ -1648,9 +1606,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<NewDuration>(this, m_donHastily.get());
 
     List<Combination<NewDuration>> combinations = new ArrayList<>();
-    for(BaseEntry entry : getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedDonHastily());
+    for(BaseItem entry : getBaseEntries())
+      combinations.add(entry.getCombinedDonHastily());
 
     return new Combination.Addable<NewDuration>(this, combinations);
   }
@@ -1677,9 +1634,8 @@ public class BaseItem extends BaseEntry
       return new Combination.Addable<NewDuration>(this, m_remove.get());
 
     List<Combination<NewDuration>> combinations = new ArrayList<>();
-    for(BaseEntry entry : this.getBaseEntries())
-      if(entry instanceof BaseItem)
-        combinations.add(((BaseItem)entry).getCombinedRemove());
+    for(BaseItem entry : this.getBaseEntries())
+      combinations.add(entry.getCombinedRemove());
 
     return new Combination.Addable<NewDuration>(this, combinations);
   }
@@ -2062,23 +2018,7 @@ public class BaseItem extends BaseEntry
                                  Probability.PARSER);
     m_substance = inValues.use("substance", m_substance, Substance.PARSER);
     m_appearances = inValues.use("appearances", m_appearances,
-      new NewValue.Parser<Appearance>(2)
-      {
-        @Override
-        public Optional<Appearance> doParse
-        (String inProbability, String inText)
-        {
-          Optional<Probability> probability =
-            Probability.fromString(inProbability);
-          String text = inText;
-          if(!probability.isPresent()
-            || text == null || text.isEmpty())
-            return Optional.absent();
-
-          return Optional.of(new Appearance(probability.get(), text));
-        }
-      },
-      "probability", "text");
+                                 Appearance.PARSER, "probability", "text");
     m_count = inValues.use("count", m_count, NewValue.INTEGER_PARSER);
     m_countUnit = inValues.use("count_unit", m_countUnit, CountUnit.PARSER);
     m_lightShape = inValues.use("light.shape", m_lightShape, AreaShape.PARSER);

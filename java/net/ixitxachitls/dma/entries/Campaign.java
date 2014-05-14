@@ -75,7 +75,7 @@ public class Campaign extends CampaignEntry<BaseCampaign>
    */
   protected Campaign()
   {
-    super(TYPE, BASE_TYPE);
+    super(TYPE);
   }
 
   //........................................................................
@@ -89,7 +89,7 @@ public class Campaign extends CampaignEntry<BaseCampaign>
    */
   public Campaign(String inName)
   {
-    super(inName, TYPE, BASE_TYPE);
+    super(inName, TYPE);
   }
 
   //........................................................................
@@ -139,10 +139,10 @@ public class Campaign extends CampaignEntry<BaseCampaign>
 
     return
       new EntryKey<Campaign>(getName(), Campaign.TYPE,
-                             new EntryKey<BaseCampaign>(names.size() > 0
-                                                        ? names.get(0)
-                                                        : "$undefined$",
-                                                        BaseCampaign.TYPE));
+                             new EntryKey<>(names.size() > 0
+                               ? names.get(0)
+                                 : "$undefined$",
+                                 BaseCampaign.TYPE));
   }
 
   //........................................................................
@@ -174,7 +174,7 @@ public class Campaign extends CampaignEntry<BaseCampaign>
   public @Nullable Item getItem(String inName)
   {
     return DMADataFactory.get().getEntry
-      (new AbstractEntry.EntryKey<Item>(inName, Item.TYPE, getKey()));
+      (new EntryKey<Item>(inName, Item.TYPE, getKey()));
   }
 
   //........................................................................

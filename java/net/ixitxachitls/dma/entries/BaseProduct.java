@@ -66,7 +66,7 @@ import net.ixitxachitls.util.logging.Log;
  */
 
 @ParametersAreNonnullByDefault
-public class BaseProduct extends BaseEntry
+public class BaseProduct extends BaseEntry<BaseProduct>
 {
   /** The serial version id. */
   private static final long serialVersionUID = 1L;

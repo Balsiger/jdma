@@ -42,6 +42,7 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.configuration.Config;
@@ -116,7 +117,7 @@ public class DMARequest extends HttpServletRequestWrapper
   private @Nullable BaseCharacter m_userOverride = null;
 
   /** The cached entries for the request. */
-  private Map<AbstractEntry.EntryKey<?>, AbstractEntry> m_entries =
+  private Map<EntryKey<?>, AbstractEntry> m_entries =
     Maps.newHashMap();
 
   /** The player for the request, if any. */
@@ -491,8 +492,7 @@ public class DMARequest extends HttpServletRequestWrapper
    *
    */
   @SuppressWarnings("unchecked") // need to cast result
-  public @Nullable <T extends AbstractEntry> T
-                      getEntry(AbstractEntry.EntryKey<T> inKey)
+  public @Nullable <T extends AbstractEntry<?>> T getEntry(EntryKey<T> inKey)
   {
     if(!m_entries.containsKey(inKey))
       m_entries.put(inKey, DMADataFactory.get().getEntry(inKey));

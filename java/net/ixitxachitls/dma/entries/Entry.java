@@ -37,31 +37,17 @@ import net.ixitxachitls.dma.proto.Entries.EntryProto;
 import net.ixitxachitls.dma.values.ID;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * This is the base class for all jDMA entries (not base entries!).
  *
  * @file          Entry.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  * @param         <B> the type of base entry associated with this entry
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ParametersAreNonnullByDefault
-public abstract class Entry<B extends BaseEntry> extends AbstractEntry
+public abstract class Entry<B extends BaseEntry> extends AbstractEntry<B>
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //-------------------------------- Entry ---------------------------------
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
@@ -70,112 +56,36 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
    *
    * @param       inName     the name of the entry
    * @param       inType     the type of the entry
-   * @param       inBaseType the type of the base entry to this one
-   *
    */
-  protected Entry(String inName, Type<? extends Entry<?>> inType,
-                  BaseType<? extends BaseEntry> inBaseType)
+  protected Entry(String inName, Type<? extends Entry<?>> inType)
   {
     super(inName, inType);
-
-    m_baseType = inBaseType;
   }
-
-  //........................................................................
-  //-------------------------------- Entry ---------------------------------
 
   /**
    * The default constructor.
    *
    * @param       inType     the type of the entry
-   * @param       inBaseType the type of the base entry to this one
-   *
    */
-  protected Entry(Type<? extends Entry<?>> inType,
-                  BaseType<? extends BaseEntry> inBaseType)
+  protected Entry(Type<? extends Entry<?>> inType)
   {
     super(inType);
-
-    m_baseType = inBaseType;
   }
-
-  //........................................................................
-  //-------------------------------- Entry ---------------------------------
-
-  /**
-   * The complete constructor.
-   *
-   * @param       inName     the name of the entry
-   * @param       inType     the type of the entry
-   * @param       inBaseType the type of the base entry to this one
-   * @param       inBases    the base entries to use
-   *
-   */
-  protected Entry(String inName, Type<? extends Entry<?>> inType,
-                  BaseType<? extends BaseEntry> inBaseType,
-                  String ... inBases)
-  {
-    super(inName, inType, inBases);
-
-    m_baseType = inBaseType;
-  }
-
-  //........................................................................
-  //-------------------------------- Entry ---------------------------------
-
-  /**
-   * The complete constructor.
-   *
-   * @param       inType     the type of the entry
-   * @param       inBaseType the type of the base entry to this one
-   * @param       inBases    the names of base entries to use
-   *
-   */
-  protected Entry(Type<? extends Entry<?>> inType,
-                  BaseType<? extends BaseEntry> inBaseType,
-                  String ... inBases)
-  {
-    super(inType, inBases);
-
-    m_baseType = inBaseType;
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  /** The type of the base entry. */
-  protected BaseType<? extends BaseEntry> m_baseType;
-
-  /** The type of the base to this entry. */
-  public static final BaseType<BaseEntry> BASE_TYPE =
-    BaseEntry.TYPE;
 
   /** The type of this entry. */
-  @SuppressWarnings("rawtypes")
   public static final Type<Entry<?>> TYPE =
     new Type<Entry<?>>(Entry.class, BaseEntry.TYPE);
-
-  /** The name of a temporary entry. */
-  public static final String TEMPORARY = "TEMPORARY";
 
   static
   {
     TYPE.withLink("entry", "entries");
-    extractVariables(Entry.class);
   }
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------- randomID -------------------------------
+  /** The name of a temporary entry. */
+  public static final String TEMPORARY = "TEMPORARY";
 
   /**
    * Set the id to a random value.
-   *
    */
   public void randomID()
   {
@@ -183,15 +93,10 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
     changed(true);
   }
 
-  //........................................................................
-
-  //-------------------------------- isBase --------------------------------
-
   /**
    * Check if the current entry represents a base entry or not.
    *
    * @return      true if this is a base entry, false else
-   *
    */
   @Override
   public boolean isBase()
@@ -199,18 +104,11 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
     return false;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------- complete -------------------------------
-
   /**
    * Complete the entry and make sure that all values are filled.
    *
    */
+  @Deprecated
   @OverridingMethodsMustInvokeSuper
   public void complete()
   {
@@ -225,16 +123,10 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
     }
 
     setupExtensions();
-    for(AbstractExtension<?> extension : m_extensions.values())
+    for(AbstractExtension<?, ?> extension : m_extensions.values())
       if(extension instanceof Extension)
         ((Extension)extension).complete();
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
 
   @Override
   public Message toProto()
@@ -272,6 +164,4 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
       Log.warning("could not properly parse proto: " + e);
     }
   }
-
-  //........................................................................
 }

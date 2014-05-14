@@ -22,6 +22,8 @@
 
 package net.ixitxachitls.dma.values;
 
+import com.google.common.base.Optional;
+
 
 public class Appearance implements Comparable<Appearance>
 {
@@ -33,6 +35,23 @@ public class Appearance implements Comparable<Appearance>
 
   private final Probability m_probability;
   private final String m_text;
+  public static final NewValue.Parser<Appearance> PARSER =
+    new NewValue.Parser<Appearance>(2)
+    {
+      @Override
+      public Optional<Appearance> doParse
+      (String inProbability, String inText)
+      {
+        Optional<Probability> probability =
+        Probability.fromString(inProbability);
+        String text = inText;
+        if(!probability.isPresent()
+          || text == null || text.isEmpty())
+          return Optional.absent();
+
+        return Optional.of(new Appearance(probability.get(), text));
+      }
+    };
 
   public Probability getProbability()
   {

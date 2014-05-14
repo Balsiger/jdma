@@ -611,7 +611,7 @@ public class Monster extends CampaignEntry<BaseMonster>
    */
   protected Monster()
   {
-    super(TYPE, BASE_TYPE);
+    super(TYPE);
   }
 
   //........................................................................
@@ -623,9 +623,9 @@ public class Monster extends CampaignEntry<BaseMonster>
    * @param       inName the name of the base item
    *
    */
-  public Monster(String inName)
+  public Monster(Campaign inCampaign)
   {
-    super(inName, TYPE, BASE_TYPE);
+    super(TYPE, inCampaign);
   }
 
   //........................................................................
@@ -655,7 +655,7 @@ public class Monster extends CampaignEntry<BaseMonster>
    */
   protected Monster(Type<? extends Monster> inType)
   {
-    super(inType, BASE_TYPE);
+    super(inType);
   }
 
   /**
@@ -666,7 +666,7 @@ public class Monster extends CampaignEntry<BaseMonster>
    */
    protected Monster(String inName, Type<? extends Monster> inType)
    {
-     super(inName, inType, BASE_TYPE);
+     super(inName, inType);
    }
 
   //........................................................................

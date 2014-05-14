@@ -72,7 +72,7 @@ public class ExtensionVariable extends Variable
    * @param       inPrintUndefined if printing the value when undefined
    *
    */
-  public ExtensionVariable(Class<? extends AbstractExtension<?>> inExtension,
+  public ExtensionVariable(Class<? extends AbstractExtension<?, ?>> inExtension,
                            String inKey, Field inField, boolean inStored,
                            boolean inPrintUndefined)
   {
@@ -88,7 +88,7 @@ public class ExtensionVariable extends Variable
   //-------------------------------------------------------------- variables
 
   /** The extension class for this variable. */
-  protected Class<? extends AbstractExtension<?>> m_extension;
+  protected Class<? extends AbstractExtension<?, ?>> m_extension;
 
   //........................................................................
 
@@ -107,10 +107,10 @@ public class ExtensionVariable extends Variable
   @Override
   public @Nullable Value<?> get(Object inEntry)
   {
-    AbstractExtension<?> extension = null;
+    AbstractExtension<?, ?> extension = null;
 
     if(inEntry instanceof AbstractExtension)
-      extension = (AbstractExtension<?>)inEntry;
+      extension = (AbstractExtension<?, ?>)inEntry;
     else if(inEntry instanceof AbstractEntry)
       extension = ((AbstractEntry)inEntry).getExtension(m_extension);
 
@@ -139,7 +139,7 @@ public class ExtensionVariable extends Variable
    * @return   the class of the extension
    *
    */
-  public Class<? extends AbstractExtension<?>> getExtension()
+  public Class<? extends AbstractExtension<?, ?>> getExtension()
   {
     return m_extension;
   }
@@ -207,7 +207,7 @@ public class ExtensionVariable extends Variable
 
     try
     {
-      AbstractExtension<?> extension =
+      AbstractExtension<?, ?> extension =
         ((AbstractEntry)inEntry).getExtension(m_extension);
       if(extension == null)
         super.set(inEntry, inValue);

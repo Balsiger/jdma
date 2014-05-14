@@ -189,7 +189,7 @@ public final class Exporter
    *
    * @throws IOException if writing fails
    */
-  private void export(AbstractEntry inEntry, String inRoot, boolean inBlobs)
+  private void export(AbstractEntry<?> inEntry, String inRoot, boolean inBlobs)
     throws IOException
   {
     String name = Files.encodeName(inEntry.getName());

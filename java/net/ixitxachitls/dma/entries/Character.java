@@ -153,7 +153,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    */
   protected Character()
   {
-    super(TYPE, TYPE.getBaseType());
+    super(TYPE);
   }
 
   //........................................................................
@@ -167,7 +167,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    */
   public Character(String inName)
   {
-    super(inName, TYPE, TYPE.getBaseType());
+    super(inName, TYPE);
   }
 
   //.......................................................................

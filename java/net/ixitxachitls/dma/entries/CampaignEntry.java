@@ -77,13 +77,10 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    *
    * @param       inName     the name of the entry
    * @param       inType     the type of the entry
-   * @param       inBaseType the type of the base entry to this one
-   *
    */
-  protected CampaignEntry(String inName, Type<? extends Entry<?>> inType,
-                          BaseType<? extends BaseEntry> inBaseType)
+  protected CampaignEntry(String inName, Type<? extends Entry<?>> inType)
   {
-    super(inName, inType, inBaseType);
+    super(inName, inType);
   }
 
   //........................................................................
@@ -93,13 +90,10 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * The default constructor.
    *
    * @param       inType     the type of the entry
-   * @param       inBaseType the type of the base entry to this one
-   *
    */
-  protected CampaignEntry(Type<? extends Entry<?>> inType,
-                          BaseType<? extends BaseEntry> inBaseType)
+  protected CampaignEntry(Type<? extends Entry<?>> inType)
   {
-    super(inType, inBaseType);
+    super(inType);
   }
 
   //........................................................................
@@ -116,11 +110,9 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    *
    */
   protected CampaignEntry(Type<? extends Entry<?>> inType,
-                          BaseType<? extends BaseEntry> inBaseType,
-                          Campaign inCampaign,
-                          String ... inBases)
+                          Campaign inCampaign)
   {
-    super(inType, inBaseType, inBases);
+    super(inType);
 
     EntryKey<?> key = inCampaign.getKey();
     m_campaign =
@@ -185,8 +177,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
       throw new IllegalStateException("expected campaign '" + m_campaign
                                       + "' not found");
 
-    return new EntryKey<AbstractEntry>(getName(), getType(),
-                                       campaign.getKey());
+    return new EntryKey<>(getName(), getType(), campaign.getKey());
   }
 
   //........................................................................
@@ -220,10 +211,8 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   {
     if(m_cachedCampaign == null && m_campaign.isDefined())
       m_cachedCampaign = DMADataFactory.get().getEntry
-        (new AbstractEntry.EntryKey<Campaign>
-         (m_campaign.get(1).toString(), Campaign.TYPE,
-          new AbstractEntry.EntryKey<BaseCampaign>(m_campaign.get(0).toString(),
-                                                   BaseCampaign.TYPE)));
+        (new EntryKey<>(m_campaign.get(1).toString(), Campaign.TYPE,
+          new EntryKey<>(m_campaign.get(0).toString(), BaseCampaign.TYPE)));
 
     return m_cachedCampaign;
   }

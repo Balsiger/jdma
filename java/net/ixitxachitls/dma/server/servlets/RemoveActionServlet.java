@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -257,8 +258,8 @@ public class RemoveActionServlet extends ActionServlet
       return "gui.alert('Must be logged in to delete!');";
 
     String keyParam = inRequest.getParam("key");
-    AbstractEntry.EntryKey<? extends AbstractEntry> key =
-      AbstractEntry.EntryKey.fromString(keyParam);
+    EntryKey<? extends AbstractEntry> key =
+      EntryKey.fromString(keyParam);
 
     if(key == null)
       return "gui.alert('Invalid key " + keyParam + "');";

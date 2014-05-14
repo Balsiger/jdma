@@ -203,7 +203,7 @@ public class SoyAbstract extends SoyMapData
   protected final String m_name;
 
   /** The entry with the data. */
-  protected final AbstractEntry m_entry;
+  protected final AbstractEntry<?> m_entry;
 
   //........................................................................
 

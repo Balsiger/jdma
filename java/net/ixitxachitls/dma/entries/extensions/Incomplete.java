@@ -25,6 +25,7 @@ package net.ixitxachitls.dma.entries.extensions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.values.Text;
 
@@ -44,7 +45,7 @@ import net.ixitxachitls.dma.values.Text;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class Incomplete extends Extension<Entry<?>>
+public class Incomplete extends Extension<BaseItem, Entry<BaseItem>>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -60,7 +61,7 @@ public class Incomplete extends Extension<Entry<?>>
    * @param       inName the name of the extension
    *
    */
-  public Incomplete(Entry<?> inEntry, String inName)
+  public Incomplete(Entry<BaseItem> inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -91,7 +92,6 @@ public class Incomplete extends Extension<Entry<?>>
 
   /** The time that is left for the item. */
   @Key("incomplete")
-  @DM
   @WithBases
   protected Text m_incomplete = new Text();
 

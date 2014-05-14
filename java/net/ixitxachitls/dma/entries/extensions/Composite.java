@@ -31,6 +31,7 @@ import java.util.Random;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Name;
@@ -56,7 +57,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class Composite extends Extension<Item>
+public class Composite extends Extension<BaseItem, Item>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -202,8 +203,7 @@ public class Composite extends Extension<Item>
         for(ValueList<Name> orList : andList)
         {
           String baseName = orList.get(s_random.nextInt(orList.size())).get();
-          Item item =
-            new Item(m_entry.getCampaign(), baseName);
+          Item item = new Item(m_entry.getCampaign());
           item.complete();
           item.save();
 

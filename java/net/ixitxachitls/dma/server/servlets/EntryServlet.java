@@ -41,6 +41,7 @@ import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
+import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
@@ -121,7 +122,7 @@ public class EntryServlet extends PageServlet
 
     if(entry == null)
     {
-      AbstractEntry.EntryKey<? extends AbstractEntry> key = extractKey(path);
+      EntryKey<? extends AbstractEntry> key = extractKey(path);
       if(key == null)
       {
         data.put("content", inRenderer.render("dma.errors.extract",
@@ -524,13 +525,13 @@ public class EntryServlet extends PageServlet
     @org.junit.Test
     public void path()
     {
-      BaseEntry entry = new net.ixitxachitls.dma.entries.BaseEntry("test");
+      BaseEntry<BaseEntry> entry = new BaseEntry<>("test");
       addEntry(entry);
       EntryServlet servlet = new EntryServlet();
 
       EasyMock.expect(m_request.getEntry
-                      ((AbstractEntry.EntryKey<BaseEntry>)
-                          DMAServlet.extractKey("/base entry/test")))
+                      ((EntryKey<BaseEntry<BaseEntry>>)
+                       DMAServlet.extractKey("/base entry/test")))
         .andStubReturn(entry);
 
       EasyMock.replay(m_request, m_response);

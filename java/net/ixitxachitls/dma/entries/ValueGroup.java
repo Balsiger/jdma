@@ -67,7 +67,7 @@ import net.ixitxachitls.util.logging.Log;
  */
 
 @ParametersAreNonnullByDefault
-public abstract class ValueGroup implements Changeable
+public abstract class ValueGroup<B extends BaseEntry> implements Changeable
 {
   /**
    * The annotations for variables.
@@ -211,6 +211,19 @@ public abstract class ValueGroup implements Changeable
     public String use(String inKey, String inDefault)
     {
       return use(inKey, inDefault, null);
+    }
+
+    public Optional<String> use(String inKey, Optional<String> inDefault)
+    {
+      String value = getFirst(inKey);
+      if(value == null)
+        return inDefault;
+
+      Optional<String> result = Optional.of(value);
+      if(!inDefault.equals(result))
+        m_changed = true;
+
+      return result;
     }
 
     public String use(String inKey, String inDefault,
@@ -364,7 +377,8 @@ public abstract class ValueGroup implements Changeable
     private boolean allEmpty(String ... inValues)
     {
       for(String value : inValues)
-        if(value != null && !value.isEmpty())
+        if(value != null && !value.isEmpty()
+          && !"unknown".equalsIgnoreCase(value))
           return false;
 
       return true;
@@ -583,7 +597,7 @@ public abstract class ValueGroup implements Changeable
    * @param       <T> the type of the entry the type is for
    *
    */
-  public abstract <T extends AbstractEntry> AbstractType<T> getType();
+  public abstract <T extends AbstractEntry<B>> AbstractType<T> getType();
 
   //........................................................................
   //----------------------------- getEditType ------------------------------
@@ -625,7 +639,7 @@ public abstract class ValueGroup implements Changeable
    * @return   the key for the entry
    *
    */
-  public <T extends AbstractEntry> AbstractEntry.EntryKey<T> getKey()
+  public <T extends AbstractEntry<B>> EntryKey<T> getKey()
   {
     throw new UnsupportedOperationException("must be derived");
   }
@@ -879,9 +893,9 @@ public abstract class ValueGroup implements Changeable
    * @return      the requested base entries
    *
    */
-  public List<BaseEntry> getBaseEntries()
+  public List<B> getBaseEntries()
   {
-    return new ArrayList<BaseEntry>();
+    return new ArrayList<>();
   }
 
   //........................................................................
@@ -1080,7 +1094,7 @@ public abstract class ValueGroup implements Changeable
         Variable variable;
         if(AbstractExtension.class.isAssignableFrom(inClass))
           variable =
-            new ExtensionVariable((Class<? extends AbstractExtension<?>>)
+            new ExtensionVariable((Class<? extends AbstractExtension<?, ?>>)
                                   inClass,
                                   key.value(), field,
                                   noStore == null || !noStore.value(),
@@ -1151,7 +1165,7 @@ public abstract class ValueGroup implements Changeable
    */
   protected static void
     extractVariables(Class<?> inEntryClass,
-                     Class<? extends AbstractExtension<?>> inExtensionClass)
+                     Class<? extends AbstractExtension<?, ?>> inExtensionClass)
   {
     Variables variables = s_variables.get(inEntryClass);
 
@@ -1394,7 +1408,7 @@ public abstract class ValueGroup implements Changeable
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
     /** A simple implementation of a value group for testing. */
-    public static class TestGroup extends AbstractEntry
+    public static class TestGroup extends AbstractEntry<BaseEntry>
     {
       /** The serial version id. */
       private static final long serialVersionUID = 1L;
@@ -1464,7 +1478,7 @@ public abstract class ValueGroup implements Changeable
        */
       @SuppressWarnings("unchecked") // unchecked creation
       @Override
-      public <T extends AbstractEntry> AbstractType<T> getType()
+      public <T extends AbstractEntry<BaseEntry>> AbstractType<T> getType()
       {
         return new AbstractType<T>((Class<T>)this.getClass());
       }

@@ -23,310 +23,107 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.EntryProto;
 import net.ixitxachitls.dma.proto.Entries.ProductProto;
-import net.ixitxachitls.dma.values.EnumSelection;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Text;
+import net.ixitxachitls.dma.values.ProductStatus;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is a real product.
  *
  * @file          Product.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class Product extends Entry<BaseProduct>
 {
-  //----------------------------------------------------------------- nested
-
-  //----- status -----------------------------------------------------------
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
-  /** The product status. */
-  public enum Status implements EnumSelection.Named,
-    EnumSelection.Proto<ProductProto.Status>
-  {
-    /** The product is available in the library. */
-    AVAILABLE("available", ProductProto.Status.AVAILABLE),
-    /** A highly desired product. */
-    DESIRED1("desired 1", ProductProto.Status.DESIRED_1),
-    /** A desired product. */
-    DESIRED2("desired 2", ProductProto.Status.DESIRED_2),
-    /** A marginally desired product. */
-    DESIRED3("desired 3", ProductProto.Status.DESIRED_3);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private ProductProto.Status m_proto;
-
-    /**
-     * Create the name.
-     *
-     * @param inName     the name of the value
-     * @param inProto    the proto enum value
-     */
-    private Status(String inName, ProductProto.Status inProto)
-    {
-      m_name = constant("product.status", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public ProductProto.Status toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Convert the proto value into the corresponding enum value.
-     *
-     * @param inProto the proto to convert
-     * @return the corresponding enum value
-     */
-    public static Status fromProto(ProductProto.Status inProto)
-    {
-      for(Status status : values())
-        if(status.m_proto == inProto)
-          return status;
-
-      throw new IllegalArgumentException("cannot convert status proto: "
-                                         + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- conditions -------------------------------------------------------
-
-  /** The product condition. */
-  public enum Condition implements EnumSelection.Named,
-    EnumSelection.Proto<ProductProto.Condition>
-  {
-    /** The product is as good as new and has not been or only carefully
-     * read. */
-    MINT("mint", ProductProto.Condition.MINT),
-    /** The product is in good shape but was read. */
-    GOOD("good", ProductProto.Condition.GOOD),
-    /** The product is used, but in good shape. Might have some pencil marks
-     * or the like. */
-    USED("used", ProductProto.Condition.USED),
-    /** The product is usable in play but might not look too nice. */
-    USABLE("usable", ProductProto.Condition.USABLE),
-    /** Some part of the product is missing. */
-    PARTIAL("partial", ProductProto.Condition.PARTIAL),
-    /** The product is not really usable. */
-    CRAP("crap", ProductProto.Condition.CRAP),
-    /** Nothing defined. */
-    none("none", ProductProto.Condition.NONE);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The enum proto value. */
-    private ProductProto.Condition m_proto;
-
-    /**
-     * Create the name.
-     *
-     * @param inName     the name of the value
-     * @param inProto    the proto value
-     */
-    private Condition(String inName, ProductProto.Condition inProto)
-    {
-      m_name = constant("product.condition", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public ProductProto.Condition toProto()
-    {
-      return m_proto;
-    }
-
-    public static Condition fromProto(ProductProto.Condition inProto)
-    {
-      for(Condition condition : values())
-        if(condition.m_proto == inProto)
-          return condition;
-
-      throw new IllegalArgumentException("cannot convert condition: "
-                                         + inProto);
-    }
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------- Product --------------------------------
-
   /**
    * This is the internal, default constructor.
-   *
    */
   protected Product()
   {
-    super(TYPE, BASE_TYPE);
+    super(TYPE);
   }
-
-  //........................................................................
-  //------------------------------- Product --------------------------------
 
   /**
    * This is the normal constructor.
    *
    * @param       inName the name of the base product
-   *
    */
   public Product(String inName)
   {
-    super(inName, TYPE, BASE_TYPE);
+    super(inName, TYPE);
   }
-
-  //........................................................................
-  //------------------------------- Product --------------------------------
-
-//   /**
-//    * This constructs the product with random values from the given
-//    * base product.
-//    *
-//    * @param       inBase the base product to take values from
-//    *
-//    * @undefined   never
-//    *
-//    */
-//   public Product(BaseProduct inBase)
-//   {
-//     super(inBase.getName(), TYPE, BASE_TYPE, inBase);
-//   }
-
-//   //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The type of this entry. */
   public static final Type<Product> TYPE =
     new Type<Product>(Product.class, BaseProduct.TYPE);
 
-  /** The type of the base entry. */
-  public static final BaseType<BaseProduct> BASE_TYPE = BaseProduct.TYPE;
-
-  //----- edition ----------------------------------------------------------
-
   /** The edition of the copy. */
-  @Key("edition")
-  protected Name m_edition = new Name();
-
-  //........................................................................
-  //----- printing ---------------------------------------------------------
+  protected Optional<String> m_edition = Optional.absent();
 
   /** The printing of the copy. */
-  @Key("printing")
-  protected Name m_printing = new Name();
-
-  //........................................................................
-  //----- owner ------------------------------------------------------------
+  protected Optional<String> m_printing = Optional.absent();
 
   /** The owner of the copy. */
-  @Key("owner")
-  protected Name m_owner = new Name();
-
-  //........................................................................
-  //----- status -----------------------------------------------------------
+  protected Optional<String> m_owner = Optional.absent();
 
   /** The status of the copy, if its available or not. */
-  @Key("status")
-  protected EnumSelection<Status> m_status =
-    new EnumSelection<Status>(Status.class);
-
-  //........................................................................
-  //----- condition --------------------------------------------------------
+  protected ProductStatus m_status = ProductStatus.UNKNOWN;
 
   /** The condition of the copy. */
-  @Key("condition")
-  protected Multiple m_condition =
-    new Multiple(new Multiple.Element []
-    { new Multiple.Element(new EnumSelection<Condition>(Condition.class)
-                           .withEditType("selection[condition]"),
-                           false),
-      new Multiple.Element(new Text()
-                           .withEditType("string[comment]"), true) });
+  protected ProductCondition m_condition = ProductCondition.UNKNOWN;
 
-  //........................................................................
-
-  static
-  {
-    extractVariables(Product.class);
-  }
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------- getPath --------------------------------
+  /** The comment for the condition. */
+  protected Optional<String> m_conditionComment = Optional.absent();
 
   /**
-   * Get the path to this entry.
+   * Get the edition of the product.
    *
-   * @return      the path to read this entry
-   *
+   * @return      the edition
    */
+  public Optional<String> getEdition()
+  {
+    return m_edition;
+  }
+
+  public Optional<String> getPrinting()
+  {
+    return m_printing;
+  }
+
+  public Optional<String> getOwner()
+  {
+    return m_owner;
+  }
+
+  public ProductStatus getStatus()
+  {
+    return m_status;
+  }
+
+  public ProductCondition getCondition()
+  {
+    return m_condition;
+  }
+
+  public Optional<String> getConditionComment()
+  {
+    return m_conditionComment;
+  }
+
   @Override
   public String getPath()
   {
@@ -334,15 +131,6 @@ public class Product extends Entry<BaseProduct>
       + getType().getLink() + "/" + getName();
   }
 
-  //........................................................................
-  //---------------------------- getNavigation -----------------------------
-
-  /**
-   * Get the navigation information to this entry.
-   *
-   * @return      an array with pairs for caption and link per navigation entry
-   *
-   */
   @Override
   public String [] getNavigation()
   {
@@ -360,15 +148,21 @@ public class Product extends Entry<BaseProduct>
     };
   }
 
-  //........................................................................
-  //-------------------------- getListNavigation ---------------------------
+  /*
+  public List<Object> getNavigation()
+  {
+    List<Object> list = new ArrayList<Object>();
 
-  /**
-   * Get the list navigation information to this entry.
-   *
-   * @return      an array with pairs for caption and link per navigation entry
-   *
-   */
+    list.add(new ImmutableMap.Builder<String, Object>()
+             .put("name", m_owner.get())
+             .put("path", "/user/" + m_owner.get())
+             .build());
+    list.add(this);
+
+    return list;
+  }
+  */
+
   @Override
   public String [] getListNavigation()
   {
@@ -383,34 +177,12 @@ public class Product extends Entry<BaseProduct>
     };
   }
 
-  //........................................................................
-  //----------------------------- getEditType ------------------------------
-
-  /**
-   * Get the type of the entry.
-   *
-   * @return      the requested name
-   *
-   */
   @Override
   public String getEditType()
   {
     return "/user/" + m_owner.get() + "/" + super.getEditType();
   }
 
-  //........................................................................
-
-  //--------------------------------- isDM ---------------------------------
-
-  /**
-   * Check whether the given user is the DM for this entry. Everybody is a DM
-   * for a base product.
-   *
-   * @param       inUser the user accessing
-   *
-   * @return      true for DM, false for not
-   *
-   */
   @Override
   public boolean isDM(@Nullable BaseCharacter inUser)
   {
@@ -420,42 +192,16 @@ public class Product extends Entry<BaseProduct>
     return inUser.getName().equalsIgnoreCase(m_owner.get());
   }
 
-  //........................................................................
-
-
-  //------------------------------ getOwner --------------------------------
-
-  /**
-   * Get the name of the owner of the product.
-   *
-   * @return      the owner of the product, if any
-   *
-   */
-  public @Nullable String getOwner()
-  {
-    if(m_owner.isDefined())
-      return m_owner.get();
-
-    return null;
-  }
-
-  //........................................................................
-  //------------------------------ getFullTitle ----------------------------
-
   /**
    * Get the full title of the product.
    *
    * @return      the requested title or null if undefined
-   *
    */
   public String getFullTitle()
   {
-    for(BaseEntry base : getBaseEntries())
+    for(BaseProduct base : getBaseEntries())
     {
-      if(!(base instanceof BaseProduct))
-        continue;
-
-      String title = ((BaseProduct)base).getFullTitle();
+      String title = base.getFullTitle();
       if(!title.isEmpty())
         return title;
     }
@@ -463,75 +209,18 @@ public class Product extends Entry<BaseProduct>
     return getName();
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------- getKey --------------------------------
-
-  /**
-   * Get the key uniqueliy identifying this entry.
-   *
-   * @return   the key
-   *
-   */
   @Override
   @SuppressWarnings("unchecked")
   public EntryKey<Product> getKey()
   {
-    return new EntryKey<Product>
-      (getName(), Product.TYPE,
-       new EntryKey<BaseCharacter>(getOwner(), BaseCharacter.TYPE));
+    if(m_owner.isPresent())
+      return new EntryKey<Product>
+        (getName(), Product.TYPE,
+          new EntryKey<>(m_owner.get(), BaseCharacter.TYPE));
+
+    return new EntryKey<Product>(getName(), Product.TYPE);
   }
 
-  //........................................................................
-  //------------------------------- compute --------------------------------
-
-  /**
-   * Compute a value for a given key, taking base entries into account if
-   * available.
-   *
-   * @param    inKey the key of the value to compute
-   *
-   * @return   the compute value
-   *
-   */
-  @Override
-  public @Nullable Object compute(String inKey)
-  {
-    if("navigation".equals(inKey))
-    {
-      List<Object> list = new ArrayList<Object>();
-
-      list.add(new ImmutableMap.Builder<String, Object>()
-               .put("name", m_owner.get())
-               .put("path", "/user/" + m_owner.get())
-               .build());
-      list.add(this);
-
-      return list;
-    }
-
-    if("fullTitle".equals(inKey))
-      return getFullTitle();
-
-    return super.compute(inKey);
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------ updateKey -------------------------------
-
-  /**
-   * Update the any values that are related to the key with new data.
-   *
-   * @param       inKey the new key of the entry
-   *
-   */
   @Override
   public void updateKey(EntryKey<? extends AbstractEntry> inKey)
   {
@@ -539,18 +228,9 @@ public class Product extends Entry<BaseProduct>
     if(parent == null)
       return;
 
-    m_owner = m_owner.as(parent.getID());
+    m_owner = Optional.of(parent.getID());
   }
 
-  //........................................................................
-  //--------------------------------- save ---------------------------------
-
-  /**
-   * Save the entry if it has been changed.
-   *
-   * @return      true if saved, false if not
-   *
-   */
   @Override
   public boolean save()
   {
@@ -563,56 +243,6 @@ public class Product extends Entry<BaseProduct>
     return super.save();
   }
 
-  //........................................................................
-
-//   //----------------------------- setEdition ------------------------------
-
-//   /**
-//    * Set the edition of the product.
-//    *
-//    * @param       inEdition the edition
-//    *
-//    * @return      true if set, false if not
-//    *
-//    * @undefined   never
-//    *
-//    */
-//   public boolean setEdition(String inEdition)
-//   {
-//     m_edition.set(inEdition);
-
-//     return true;
-//   }
-
-//   //........................................................................
-//   //---------------------------- setPrinting ------------------------------
-
-//   /**
-//    * Set the printing of the product.
-//    *
-//    * @param       inPrinting the printing
-//    *
-//    * @return      true if set, false if not
-//    *
-//    * @undefined   never
-//    *
-//    */
-//   public boolean setPrinting(String inPrinting)
-//   {
-//     m_printing.set(inPrinting);
-
-//     return true;
-//   }
-
-//   //........................................................................
-    //------------------------------- setOwner -------------------------------
-
-  /**
-   * Set the owner of the entry.
-   *
-   * @param       inOwner the owning entry
-   *
-   */
   @Override
   public void setOwner(AbstractEntry inOwner)
   {
@@ -620,80 +250,33 @@ public class Product extends Entry<BaseProduct>
       setOwner((BaseCharacter)inOwner);
   }
 
-  //........................................................................
-  //------------------------------ setOwner -------------------------------
-
   /**
    * Set the owner of the product.
    *
    * @param       inOwner the owner
    *
    * @return      true if set, false if not
-   *
    */
   public boolean setOwner(BaseCharacter inOwner)
   {
-    m_owner = m_owner.as(inOwner.getName());
+    m_owner = Optional.of(inOwner.getName());
     return true;
   }
 
-  //........................................................................
-//   //----------------------------- setStatus -------------------------------
+  @Override
+  public void set(Values inValues)
+  {
+    super.set(inValues);
 
-//   /**
-//    * Set the status of the product.
-//    *
-//    * @param       inStatus the status
-//    *
-//    * @return      true if set, false if not
-//    *
-//    * @undefined   never
-//    *
-//    */
-//   public boolean setStatus(Status inStatus)
-//   {
-//     return m_status.set(inStatus);
-//   }
+    m_owner = inValues.use("owner",  m_owner);
+    m_edition = inValues.use("edition", m_edition);
+    m_printing = inValues.use("printing", m_printing);
+    m_status = inValues.use("status", m_status, ProductStatus.PARSER);
+    m_condition = inValues.use("condition", m_condition,
+                               ProductCondition.PARSER);
+    m_conditionComment = inValues.use("condition_comment", m_conditionComment);
+  }
 
-//   //........................................................................
-//   //---------------------------- setCondition -----------------------------
-
-//   /**
-//    * Set the condition of the product.
-//    *
-//    * @param       inCondition the condition to set to
-//    * @param       inRemarks   the remarks about the condition
-//    *
-//    * @return      true if set, false if not
-//    *
-//    * @undefined   assertion if null given
-//    *
-//    */
-//   @SuppressWarnings("unchecked") // casting to enum selection
-//   public boolean setCondition(Condition inCondition, String inRemarks)
-//   {
-//     if(inCondition == null)
-//       return false;
-
-//     if(!((EnumSelection<Condition>)m_condition.get(0).getMutable())
-//        .set(inCondition))
-//       return false;
-
-//     if(inRemarks != null)
-//       ((Text)m_condition.get(1).getMutable()).set(inRemarks);
-//     else
-//       m_condition.get(1).getMutable().reset();
-
-//     return true;
-//   }
-
-//   //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  @SuppressWarnings("unchecked")
   @Override
   public Message toProto()
   {
@@ -701,29 +284,27 @@ public class Product extends Entry<BaseProduct>
 
     builder.setBase((EntryProto)super.toProto());
 
-    if(m_edition.isDefined())
+    if(m_edition.isPresent())
       builder.setEdition(m_edition.get());
 
-    if(m_printing.isDefined())
+    if(m_printing.isPresent())
       builder.setPrinting(m_printing.get());
 
-    if(m_owner.isDefined())
+    if(m_owner.isPresent())
       builder.setOwner(m_owner.get());
 
-    if(m_status.isDefined())
-      builder.setStatus(m_status.getSelected().toProto());
+    if(m_status != ProductStatus.UNKNOWN)
+      builder.setStatus(m_status.toProto());
 
-    if(m_condition.get(0).isDefined())
-      builder.setCondition(((EnumSelection<Condition>)m_condition.get(0))
-                           .getSelected().toProto());
+    if(m_condition != ProductCondition.UNKNOWN)
+      builder.setCondition(m_condition.toProto());
 
-    if(m_condition.get(1).isDefined())
-      builder.setConditionComment(((Text)m_condition.get(1)).get());
+    if(m_conditionComment.isPresent())
+      builder.setConditionComment(m_conditionComment.get());
 
     return builder.build();
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public void fromProto(Message inProto)
   {
@@ -736,27 +317,22 @@ public class Product extends Entry<BaseProduct>
     ProductProto proto = (ProductProto)inProto;
 
     if(proto.hasEdition())
-      m_edition = m_edition.as(proto.getEdition());
+      m_edition = Optional.of(proto.getEdition());
 
     if(proto.hasPrinting())
-      m_printing = m_printing.as(proto.getPrinting());
+      m_printing = Optional.of(proto.getPrinting());
 
     if(proto.hasOwner())
-      m_owner = m_owner.as(proto.getOwner());
+      m_owner = Optional.of(proto.getOwner());
 
     if(proto.hasStatus())
-      m_status = m_status.as(Status.fromProto(proto.getStatus()));
+      m_status = ProductStatus.fromProto(proto.getStatus());
 
-    if(proto.hasCondition() || proto.hasConditionComment())
-      m_condition =
-        m_condition.as(proto.hasCondition()
-                       ? ((EnumSelection<Condition>)m_condition.get(0))
-                         .as(Condition.fromProto(proto.getCondition()))
-                       : m_condition.get(0),
-                       proto.hasConditionComment()
-                       ? ((Text)m_condition.get(1))
-                         .as(proto.getConditionComment())
-                       : m_condition.get(1));
+    if(proto.hasCondition())
+      m_condition = ProductCondition.fromProto(proto.getCondition());
+
+    if(proto.hasConditionComment())
+      m_conditionComment = Optional.of(proto.getConditionComment());
 
     super.fromProto(proto.getBase());
   }
@@ -774,9 +350,7 @@ public class Product extends Entry<BaseProduct>
     }
   }
 
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
 //   /** The test.
 //    *
@@ -800,9 +374,6 @@ public class Product extends Entry<BaseProduct>
 //       + "  condition     good \"some test things\".\n"
 //       + "\n"
 //       + "#..............................................................";
-
-//     //......................................................................
-//     //----- read -----------------------------------------------------------
 
 //     /** Testing reading. */
 //     public void testRead()
@@ -833,9 +404,6 @@ public class Product extends Entry<BaseProduct>
 //       m_logger.addExpectedPattern("WARNING: base.not-found:.*"
 //                                   + "(base name 'WTTC 88686').*");
 //     }
-
-//     //......................................................................
-//     //----- print ----------------------------------------------------------
 
 //     /** Testing printing. */
 //     public void testPrint()
@@ -882,9 +450,6 @@ public class Product extends Entry<BaseProduct>
 //       assertEquals("printing", "3rd", extract(values, 12, 1, 2));
 //     }
 
-//     //......................................................................
-//     //----- get/set --------------------------------------------------------
-
 //     /** Test getting and setting. */
 //     public void testGetSet()
 //     {
@@ -904,9 +469,5 @@ public class Product extends Entry<BaseProduct>
 //       assertEquals("condition", "brand new, of course",
 //                    product.getConditionRemarks());
 //     }
-
-//     //......................................................................
 //   }
-
-  //........................................................................
 }

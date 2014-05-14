@@ -31,6 +31,7 @@ import java.util.Map;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.CampaignEntry;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.entries.ValueGroup;
@@ -60,7 +61,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class Contents extends Extension<Item>
+public class Contents extends Extension<BaseItem, Item>
 {
   //--------------------------------------------------------- constructor(s)
 

@@ -386,6 +386,9 @@ public abstract class Combination<T>
     if(value == null)
       return "";
 
+    if(value instanceof NewMoney)
+      return ((NewMoney)value).toPureString();
+
     return value.toString();
   }
 

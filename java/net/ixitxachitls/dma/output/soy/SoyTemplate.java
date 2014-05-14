@@ -62,6 +62,7 @@ import com.google.template.soy.tofu.restricted.SoyTofuFunction;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.util.Encodings;
@@ -130,8 +131,8 @@ public class SoyTemplate
     @Override
     public SoyData compute(List<SoyData> inArgs)
     {
-      AbstractEntry.EntryKey<? extends AbstractEntry> key =
-        AbstractEntry.EntryKey.fromString(inArgs.get(0).toString());
+      EntryKey<? extends AbstractEntry> key =
+        EntryKey.fromString(inArgs.get(0).toString());
 
       if(key == null)
       {
@@ -313,7 +314,7 @@ public class SoyTemplate
     public SoyData computeForTofu(List<SoyData> inArgs)
     {
       BaseEntry entry = (BaseEntry)DMADataFactory.get().getEntry
-        (AbstractEntry.EntryKey.fromString(inArgs.get(0).toString()));
+        (EntryKey.fromString(inArgs.get(0).toString()));
 
       if(entry == null)
         return inArgs.get(0);
@@ -388,6 +389,30 @@ public class SoyTemplate
   }
 
   //........................................................................
+
+  /** A plugin function to check if a value is a list. */
+  public static class EscapeFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "escape";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public SoyData computeForTofu(List<SoyData> inArgs)
+    {
+      return StringData.forValue(inArgs.get(0).toString()
+                                 .replace("+", "_")
+                                 .replace(" ",  "_"));
+    }
+  }
 
   //----- NumberDirective --------------------------------------------------
 
@@ -646,6 +671,7 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(IntegerFunction.class);
       soyFunctionsSetBinder.addBinding().to(LengthFunction.class);
       soyFunctionsSetBinder.addBinding().to(DefFunction.class);
+      soyFunctionsSetBinder.addBinding().to(EscapeFunction.class);
       soyFunctionsSetBinder.addBinding().to(FormatNumberFunction.class);
       soyFunctionsSetBinder.addBinding().to(IsListFunction.class);
       soyFunctionsSetBinder.addBinding().to(CamelFunction.class);

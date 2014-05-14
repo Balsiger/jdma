@@ -47,6 +47,7 @@ import com.google.common.collect.Multimap;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.server.ServerUtils;
 import net.ixitxachitls.server.servlets.BaseServlet;
@@ -124,7 +125,7 @@ public class BlobUploadServlet extends BaseServlet
 
       if(request.getParam("form") == null)
       {
-        AbstractEntry.EntryKey<?> key = DMAServlet.extractKey(keyName);
+        EntryKey<?> key = DMAServlet.extractKey(keyName);
         if(key == null)
           return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                                "invalid key '" + keyName + "' given");

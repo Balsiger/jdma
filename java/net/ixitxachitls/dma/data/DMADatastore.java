@@ -49,6 +49,7 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.Entry;
+import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.Variable;
 import net.ixitxachitls.dma.entries.indexes.Index;
@@ -102,8 +103,7 @@ public class DMADatastore
    * @return     the entry found, if any
    */
   @SuppressWarnings("unchecked")
-  public @Nullable <T extends AbstractEntry> T getEntry
-                      (AbstractEntry.EntryKey<T> inKey)
+  public @Nullable <T extends AbstractEntry<?>> T getEntry(EntryKey<T> inKey)
   {
     AbstractEntry entry = (AbstractEntry)s_entryCache.get(inKey.toString());
     if(entry == null)
@@ -131,7 +131,7 @@ public class DMADatastore
   @SuppressWarnings("unchecked") // need to cast
   public <T extends AbstractEntry> List<T> getEntries
             (AbstractType<T> inType,
-             @Nullable AbstractEntry.EntryKey
+             @Nullable EntryKey
              <? extends AbstractEntry> inParent,
              int inStart, int inSize)
   {
@@ -196,7 +196,7 @@ public class DMADatastore
    */
   public List<String> getIDs
     (AbstractType<? extends AbstractEntry> inType,
-     @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent)
+     @Nullable EntryKey<? extends AbstractEntry> inParent)
   {
     return m_data.getIDs(escapeType(inType.toString()), inType.getSortField(),
                          convert(inParent));
@@ -214,7 +214,7 @@ public class DMADatastore
   @SuppressWarnings("unchecked") // need to cast cache value
   public <T extends AbstractEntry> List<T> getRecentEntries
     (AbstractType<T> inType,
-     @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent)
+     @Nullable EntryKey<? extends AbstractEntry> inParent)
   {
     return (List<T>)
       convert(m_data.getRecentEntities(escapeType(inType.toString()),
@@ -257,7 +257,7 @@ public class DMADatastore
   @SuppressWarnings("unchecked") // need to cast return value for generics
   public <T extends AbstractEntry> List<T> getIndexEntries
     (String inIndex, AbstractType<T> inType,
-     @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent,
+     @Nullable EntryKey<? extends AbstractEntry> inParent,
      String inGroup, int inStart, int inSize)
   {
     List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
@@ -362,8 +362,7 @@ public class DMADatastore
    * @param      inKey the key of the entry to remove
    * @param      <T>   the type of entry to uncache
    */
-  public <T extends AbstractEntry> void uncacheEntry
-            (AbstractEntry.EntryKey<T> inKey)
+  public <T extends AbstractEntry<?>> void uncacheEntry(EntryKey<T> inKey)
   {
     s_entryCache.delete(inKey.toString());
   }
@@ -393,7 +392,7 @@ public class DMADatastore
    * @param       inEntry the entry to remove
    * @return      true if removed, false if not
    */
-  public boolean remove(AbstractEntry inEntry)
+  public boolean remove(AbstractEntry<?> inEntry)
   {
     // also remove all blobs for this entry
     for(File file : inEntry.getFiles())
@@ -573,14 +572,14 @@ public class DMADatastore
    * @return      the converted key
    */
   @SuppressWarnings("unchecked")
-  public @Nullable <T extends AbstractEntry> Key convert
-                      (@Nullable AbstractEntry.EntryKey<T> inKey)
+  public @Nullable <T extends AbstractEntry<?>> Key convert
+                      (@Nullable EntryKey<T> inKey)
   {
     if(inKey == null)
       return null;
 
-    AbstractEntry.EntryKey<T> parent =
-      (AbstractEntry.EntryKey<T>)inKey.getParent();
+    EntryKey<T> parent =
+      (EntryKey<T>)inKey.getParent();
     if(parent != null)
       return KeyFactory.createKey(convert(parent),
                                   escapeType(inKey.getType().toString()),
@@ -599,21 +598,19 @@ public class DMADatastore
    * @return      the converted key
    */
   @SuppressWarnings("unchecked") // not using proper types
-  public <T extends AbstractEntry> AbstractEntry.EntryKey<T> convert(Key inKey)
+  public <T extends AbstractEntry<?>> EntryKey<T> convert(Key inKey)
   {
     Key parent = inKey.getParent();
 
     if(parent != null)
-      return new AbstractEntry.EntryKey<T>
-        (inKey.getName(),
-         (AbstractType<T>)AbstractType
-         .getTyped(escapeType(inKey.getKind())),
-         convert(parent));
+      return new EntryKey<>(inKey.getName(),
+                            (AbstractType<T>)AbstractType
+                            .getTyped(escapeType(inKey.getKind())),
+                            convert(parent));
 
-    return new AbstractEntry.EntryKey<T>
-      (inKey.getName(),
-       (AbstractType<T>)AbstractType
-       .getTyped(escapeType(inKey.getKind())));
+    return new EntryKey<>(inKey.getName(),
+                          (AbstractType<T>)AbstractType
+                          .getTyped(escapeType(inKey.getKind())));
   }
 
   /**
@@ -721,7 +718,7 @@ public class DMADatastore
    * @return     the entry found, if any
    */
   @SuppressWarnings({ "rawtypes" })
-  public Entity convert(AbstractEntry inEntry)
+  public Entity convert(AbstractEntry<?> inEntry)
   {
     Entity entity = new Entity(convert(inEntry.getKey()));
 
