@@ -72,21 +72,21 @@ public class SoyServlet extends DMAServlet
   protected static final SoyTemplate TEMPLATE =
      new SoyTemplate("page", "errors", "about", "main", "navigation", "entry",
                      "commands", "value", "admin", "cards", "edit",
-                     "basecharacter", "character",
                      "entries/basecharacters",
-                     "product",
+                     //"character",
                      "entries/baseproducts", "entries/products",
-                     "baseitem", "item",
+                     "entries/basecampaigns", "entries/campaigns",
+                     //"item",
                      "entries/baseitems",
-                     "basecampaign", "campaign",
-                     "basequality",
-                     "basefeat",
-                     "baseskill",
-                     "basespell",
-                     "basemonster", "monster",
-                     "npc",
-                     "baseencounter", "encounter",
-                     "baselevel", "level");
+                     //"basequality",
+                     //"basefeat",
+                     //"baseskill",
+                     //"basespell",
+                     //"basemonster", "monster",
+                     //"npc",
+                     //"baseencounter", "encounter",
+                     //"baselevel", "level"
+                     );
 
   /**
    * Get the name of the template to render the page.

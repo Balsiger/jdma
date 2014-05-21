@@ -30,6 +30,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
@@ -63,7 +64,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
+public abstract class CampaignEntry extends Entry
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -78,7 +79,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @param       inName     the name of the entry
    * @param       inType     the type of the entry
    */
-  protected CampaignEntry(String inName, Type<? extends Entry<?>> inType)
+  protected CampaignEntry(String inName, Type<?> inType)
   {
     super(inName, inType);
   }
@@ -91,7 +92,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    *
    * @param       inType     the type of the entry
    */
-  protected CampaignEntry(Type<? extends Entry<?>> inType)
+  protected CampaignEntry(Type<?> inType)
   {
     super(inType);
   }
@@ -109,14 +110,13 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @param       inBases        the base items to take values from
    *
    */
-  protected CampaignEntry(Type<? extends Entry<?>> inType,
-                          Campaign inCampaign)
+  protected CampaignEntry(Type<?> inType, Campaign inCampaign)
   {
     super(inType);
 
-    EntryKey<?> key = inCampaign.getKey();
+    EntryKey key = inCampaign.getKey();
     m_campaign =
-      m_campaign.as(((Name)m_campaign.get(0)).as(key.getParent().getID()),
+      m_campaign.as(((Name)m_campaign.get(0)).as(key.getParent().get().getID()),
                     ((Name)m_campaign.get(1)).as(key.getID()));
   }
 
@@ -148,7 +148,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   //........................................................................
 
   /** The cached parent entry, if any. */
-  private @Nullable CampaignEntry<?> m_cachedParent;
+  private @Nullable CampaignEntry m_cachedParent;
 
   static
   {
@@ -169,7 +169,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    */
   @SuppressWarnings("unchecked")
   @Override
-  public EntryKey<? extends AbstractEntry> getKey()
+  public EntryKey getKey()
   {
     Campaign campaign = getCampaign();
 
@@ -177,7 +177,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
       throw new IllegalStateException("expected campaign '" + m_campaign
                                       + "' not found");
 
-    return new EntryKey<>(getName(), getType(), campaign.getKey());
+    return new EntryKey(getName(), getType(), Optional.of(campaign.getKey()));
   }
 
   //........................................................................
@@ -210,9 +210,10 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   public @Nullable Campaign getCampaign()
   {
     if(m_cachedCampaign == null && m_campaign.isDefined())
-      m_cachedCampaign = DMADataFactory.get().getEntry
-        (new EntryKey<>(m_campaign.get(1).toString(), Campaign.TYPE,
-          new EntryKey<>(m_campaign.get(0).toString(), BaseCampaign.TYPE)));
+      m_cachedCampaign = (Campaign)DMADataFactory.get().getEntry
+        (new EntryKey(m_campaign.get(1).toString(), Campaign.TYPE,
+         Optional.of(new EntryKey(m_campaign.get(0).toString(),
+                                  BaseCampaign.TYPE))));
 
     return m_cachedCampaign;
   }
@@ -226,11 +227,15 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @return      the campaign entry that includes this one
    *
    */
-  public @Nullable CampaignEntry<?> getParent()
+  public @Nullable CampaignEntry getParent()
   {
     if(m_cachedParent == null && m_parent.isDefined())
-      m_cachedParent = (CampaignEntry<?>)DMADataFactory.get().getEntry
-        (EntryKey.fromString(m_parent.get()));
+    {
+      Optional<EntryKey> parentKey = EntryKey.fromString(m_parent.get());
+     if(parentKey.isPresent());
+        m_cachedParent = (CampaignEntry)
+          DMADataFactory.get().getEntry(parentKey.get());
+    }
 
     return m_cachedParent;
   }
@@ -341,11 +346,11 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
 
     if("navigation".equals(inKey))
     {
-      List<CampaignEntry<?>> list = new ArrayList<CampaignEntry<?>>();
+      List<CampaignEntry> list = new ArrayList<CampaignEntry>();
 
       list.add(this);
 
-      for(CampaignEntry<?> parent = getParent(); parent != null;
+      for(CampaignEntry parent = getParent(); parent != null;
           parent = parent.getParent())
         list.add(parent);
 
@@ -372,7 +377,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    *
    * @param   inParent the key of the parent entry
    */
-  public void setParent(@Nullable EntryKey<?> inParent)
+  public void setParent(@Nullable EntryKey inParent)
   {
     if(inParent != null)
       m_parent = m_parent.as(inParent.toString());
@@ -395,7 +400,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @return      true if added, false if not
    *
    */
-  public boolean add(CampaignEntry<? extends BaseEntry> inEntry)
+  public boolean add(CampaignEntry inEntry)
   {
     Contents contents = (Contents)getExtension("contents");
     if(contents == null)
@@ -446,18 +451,18 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    *
    */
   @Override
-  public void updateKey(EntryKey<? extends AbstractEntry> inKey)
+  public void updateKey(EntryKey inKey)
   {
-    EntryKey<?> parent = inKey.getParent();
-    if(parent == null)
+    Optional<EntryKey> parent = inKey.getParent();
+    if(!parent.isPresent())
       return;
 
-    EntryKey<?> parentParent = parent.getParent();
-    if(parentParent == null)
+    Optional<EntryKey> parentParent = parent.get().getParent();
+    if(!parentParent.isPresent())
       return;
 
-    m_campaign = m_campaign.as(new Name(parentParent.getID()),
-                               new Name(parent.getID()));
+    m_campaign = m_campaign.as(new Name(parentParent.get().getID()),
+                               new Name(parent.get().getID()));
   }
 
   //........................................................................

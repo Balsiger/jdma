@@ -36,6 +36,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -131,16 +132,15 @@ public class SoyTemplate
     @Override
     public SoyData compute(List<SoyData> inArgs)
     {
-      EntryKey<? extends AbstractEntry> key =
-        EntryKey.fromString(inArgs.get(0).toString());
+      Optional<EntryKey> key = EntryKey.fromString(inArgs.get(0).toString());
 
-      if(key == null)
+      if(!key.isPresent())
       {
         Log.warning("invalid key for entry soy function for " + inArgs.get(0));
         return StringData.forValue("invalid key '" + inArgs.get(0) + "'");
       }
 
-      AbstractEntry entry = DMADataFactory.get().getEntry(key);
+      AbstractEntry entry = DMADataFactory.get().getEntry(key.get());
 
       if(entry == null)
       {
@@ -313,8 +313,12 @@ public class SoyTemplate
     @Override
     public SoyData computeForTofu(List<SoyData> inArgs)
     {
-      BaseEntry entry = (BaseEntry)DMADataFactory.get().getEntry
-        (EntryKey.fromString(inArgs.get(0).toString()));
+      Optional<EntryKey> key =
+        EntryKey.fromString(inArgs.get(0).toString());
+      if(!key.isPresent())
+        return inArgs.get(0);
+
+      BaseEntry entry = (BaseEntry)DMADataFactory.get().getEntry(key.get());
 
       if(entry == null)
         return inArgs.get(0);

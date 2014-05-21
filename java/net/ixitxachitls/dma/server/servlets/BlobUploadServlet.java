@@ -41,6 +41,7 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
@@ -125,13 +126,13 @@ public class BlobUploadServlet extends BaseServlet
 
       if(request.getParam("form") == null)
       {
-        EntryKey<?> key = DMAServlet.extractKey(keyName);
-        if(key == null)
+        Optional<EntryKey> key = DMAServlet.extractKey(keyName);
+        if(!key.isPresent())
           return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                                "invalid key '" + keyName + "' given");
 
         DMADatastore store = DMADataFactory.get();
-        AbstractEntry entry = store.getEntry(key);
+        AbstractEntry entry = store.getEntry(key.get());
 
         if(entry == null)
           return new TextError(HttpServletResponse.SC_BAD_REQUEST,

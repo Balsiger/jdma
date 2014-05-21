@@ -26,7 +26,7 @@ import java.util.TreeSet;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.entries.AbstractEntry;
 
 /**
  * A combination of values from the various base entries.
@@ -38,12 +38,12 @@ public abstract class Combination<T>
 {
   public static class Addable<V extends NewValue.Addable> extends Combination<V>
   {
-    public Addable(BaseEntry inEntry, V inValue)
+    public Addable(AbstractEntry inEntry, V inValue)
     {
       super(inEntry, inValue);
     }
 
-    public Addable(BaseEntry inEntry, java.util.List<Combination<V>> inValues)
+    public Addable(AbstractEntry inEntry, java.util.List<Combination<V>> inValues)
     {
       super(inEntry, inValues);
     }
@@ -70,12 +70,12 @@ public abstract class Combination<T>
 
   public static class Max<V extends Comparable> extends Combination<V>
   {
-    public Max(BaseEntry inEntry, V inValue)
+    public Max(AbstractEntry inEntry, V inValue)
     {
       super(inEntry, inValue);
     }
 
-    public Max(BaseEntry inEntry, java.util.List<Combination<V>> inValues)
+    public Max(AbstractEntry inEntry, java.util.List<Combination<V>> inValues)
     {
       super(inEntry, inValues);
     }
@@ -106,12 +106,12 @@ public abstract class Combination<T>
 
   public static class Min<V extends Comparable> extends Combination<V>
   {
-    public Min(BaseEntry inEntry, V inValue)
+    public Min(AbstractEntry inEntry, V inValue)
     {
       super(inEntry, inValue);
     }
 
-    public Min(BaseEntry inEntry, java.util.List<Combination<V>> inValues)
+    public Min(AbstractEntry inEntry, java.util.List<Combination<V>> inValues)
     {
       super(inEntry, inValues);
     }
@@ -142,12 +142,12 @@ public abstract class Combination<T>
 
   public static class First<V> extends Combination<V>
   {
-    public First(BaseEntry inEntry, V inValue)
+    public First(AbstractEntry inEntry, V inValue)
     {
       super(inEntry, inValue);
     }
 
-    public First(BaseEntry inEntry, java.util.List<Combination<V>> inValues)
+    public First(AbstractEntry inEntry, java.util.List<Combination<V>> inValues)
     {
       super(inEntry, inValues);
     }
@@ -167,12 +167,12 @@ public abstract class Combination<T>
 
   public static class Integer extends Combination<java.lang.Integer>
   {
-    public Integer(BaseEntry inEntry, java.lang.Integer inValue)
+    public Integer(AbstractEntry inEntry, java.lang.Integer inValue)
     {
       super(inEntry, inValue);
     }
 
-    public Integer(BaseEntry inEntry,
+    public Integer(AbstractEntry inEntry,
                    java.util.List<Combination<java.lang.Integer>> inValues)
     {
       super(inEntry, inValues);
@@ -199,18 +199,18 @@ public abstract class Combination<T>
 
   public static class String extends Combination<java.lang.String>
   {
-    public String(BaseEntry inEntry, java.lang.String inValue)
+    public String(AbstractEntry inEntry, java.lang.String inValue)
     {
       super(inEntry, inValue);
     }
 
-    public String(BaseEntry inEntry,
+    public String(AbstractEntry inEntry,
                   java.util.List<Combination<java.lang.String>> inValues)
     {
       super(inEntry, inValues);
     }
 
-    public String(BaseEntry inEntry, java.lang.String inValue,
+    public String(AbstractEntry inEntry, java.lang.String inValue,
                   java.util.List<Combination<java.lang.String>> inValues)
     {
       super(inEntry, inValue, inValues);
@@ -237,18 +237,18 @@ public abstract class Combination<T>
 
   public static class List<T> extends Combination<java.util.List<T>>
   {
-    public List(BaseEntry inEntry, java.util.List<T> inValue)
+    public List(AbstractEntry inEntry, java.util.List<T> inValue)
     {
       super(inEntry, inValue);
     }
 
     public List(java.util.List<Combination<java.util.List<T>>> inValues,
-                BaseEntry inEntry)
+                AbstractEntry inEntry)
     {
       super(inEntry, inValues);
     }
 
-    public List(BaseEntry inEntry, java.util.List<T> inValue,
+    public List(AbstractEntry inEntry, java.util.List<T> inValue,
                 java.util.List<Combination<java.util.List<T>>> inValues)
     {
       super(inEntry, inValue, inValues);
@@ -300,18 +300,18 @@ public abstract class Combination<T>
 
   public static class Set<T> extends Combination<java.util.List<T>>
   {
-    public Set(BaseEntry inEntry, java.util.List<T> inValue)
+    public Set(AbstractEntry inEntry, java.util.List<T> inValue)
     {
       super(inEntry, inValue);
     }
 
     public Set(java.util.List<Combination<java.util.List<T>>> inValues,
-               BaseEntry inEntry)
+               AbstractEntry inEntry)
     {
       super(inEntry, inValues);
     }
 
-    public Set(BaseEntry inEntry, java.util.List<T> inValue,
+    public Set(AbstractEntry inEntry, java.util.List<T> inValue,
                java.util.List<Combination<java.util.List<T>>> inValues)
     {
       super(inEntry, inValue, inValues);
@@ -352,21 +352,21 @@ public abstract class Combination<T>
     }
   }
 
-  public Combination(BaseEntry inEntry, T inValue)
+  public Combination(AbstractEntry inEntry, T inValue)
   {
     m_entry = inEntry;
     m_value = Optional.of(inValue);
     m_combinations = new ArrayList<>();
   }
 
-  public Combination(BaseEntry inEntry, java.util.List<Combination<T>> inValues)
+  public Combination(AbstractEntry inEntry, java.util.List<Combination<T>> inValues)
   {
     m_entry = inEntry;
     m_value = Optional.absent();
     m_combinations = inValues;
   }
 
-  public Combination(BaseEntry inEntry, T inValue,
+  public Combination(AbstractEntry inEntry, T inValue,
                      java.util.List<Combination<T>> inValues)
   {
     m_entry = inEntry;
@@ -374,7 +374,7 @@ public abstract class Combination<T>
     m_combinations = inValues;
   }
 
-  protected final BaseEntry m_entry;
+  protected final AbstractEntry m_entry;
   protected final Optional<T> m_value;
   protected final java.util.List<Combination<T>> m_combinations;
 

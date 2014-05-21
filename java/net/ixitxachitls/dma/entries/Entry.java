@@ -30,8 +30,6 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
-import net.ixitxachitls.dma.entries.extensions.Extension;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.EntryProto;
 import net.ixitxachitls.dma.values.ID;
@@ -46,7 +44,7 @@ import net.ixitxachitls.util.logging.Log;
  */
 
 @ParametersAreNonnullByDefault
-public abstract class Entry<B extends BaseEntry> extends AbstractEntry<B>
+public abstract class Entry extends AbstractEntry
 {
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
@@ -57,7 +55,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry<B>
    * @param       inName     the name of the entry
    * @param       inType     the type of the entry
    */
-  protected Entry(String inName, Type<? extends Entry<?>> inType)
+  protected Entry(String inName, Type<?> inType)
   {
     super(inName, inType);
   }
@@ -67,14 +65,14 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry<B>
    *
    * @param       inType     the type of the entry
    */
-  protected Entry(Type<? extends Entry<?>> inType)
+  protected Entry(Type<?> inType)
   {
     super(inType);
   }
 
   /** The type of this entry. */
-  public static final Type<Entry<?>> TYPE =
-    new Type<Entry<?>>(Entry.class, BaseEntry.TYPE);
+  public static final Type<Entry> TYPE =
+    new Type<Entry>(Entry.class, BaseEntry.TYPE);
 
   static
   {
@@ -106,9 +104,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry<B>
 
   /**
    * Complete the entry and make sure that all values are filled.
-   *
    */
-  @Deprecated
   @OverridingMethodsMustInvokeSuper
   public void complete()
   {
@@ -122,10 +118,8 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry<B>
       } while(DMADataFactory.get().getEntry(getKey()) != null);
     }
 
-    setupExtensions();
-    for(AbstractExtension<?, ?> extension : m_extensions.values())
-      if(extension instanceof Extension)
-        ((Extension)extension).complete();
+    // will only save if anything was changed
+    save();
   }
 
   @Override

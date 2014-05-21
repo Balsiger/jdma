@@ -42,6 +42,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.common.base.Optional;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
@@ -102,8 +103,7 @@ public class DMADatastore
    *
    * @return     the entry found, if any
    */
-  @SuppressWarnings("unchecked")
-  public @Nullable <T extends AbstractEntry<?>> T getEntry(EntryKey<T> inKey)
+  public @Nullable AbstractEntry getEntry(EntryKey inKey)
   {
     AbstractEntry entry = (AbstractEntry)s_entryCache.get(inKey.toString());
     if(entry == null)
@@ -114,7 +114,7 @@ public class DMADatastore
       //s_entryCache.put(inKey.toString(), entry);
     }
 
-    return (T)entry;
+    return entry;
   }
 
   /**
@@ -123,19 +123,18 @@ public class DMADatastore
    * @param    <T>      the type of entry to get
    * @param    inType   the type of entries to get
    * @param    inParent the key of the parent, if any
-   * @param    inStart  the starting number of entires to get (starts as 0)
+   * @param    inStart  the starting number of entries to get (starts as 0)
    * @param    inSize   the maximal number of entries to return
    *
    * @return   a list with all the entries
    */
-  @SuppressWarnings("unchecked") // need to cast
-  public <T extends AbstractEntry> List<T> getEntries
-            (AbstractType<T> inType,
-             @Nullable EntryKey
-             <? extends AbstractEntry> inParent,
-             int inStart, int inSize)
+  @SuppressWarnings("unchecked")
+  public <T extends AbstractEntry>
+  List<T> getEntries(AbstractType<T> inType,
+                     @Nullable EntryKey inParent,
+                     int inStart, int inSize)
   {
-    List<T> entries = new ArrayList<T>();
+    List<T> entries = new ArrayList<>();
     Iterable<Entity> entities =
       m_data.getEntities(escapeType(inType.toString()), convert(inParent),
                          inType.getSortField(), inStart, inSize);
@@ -158,8 +157,8 @@ public class DMADatastore
    * @return     the entry found, if any
    */
   @SuppressWarnings("unchecked") // casting return
-  public @Nullable <T extends AbstractEntry> T getEntry
-                      (AbstractType<T> inType, String inKey, String inValue)
+  public @Nullable <T extends AbstractEntry>
+  T getEntry(AbstractType<T> inType, String inKey, String inValue)
   {
     Log.debug("Getting entry for " + inKey + "=" + inValue);
     return (T)convert(m_data.getEntity(escapeType(inType.toString()),
@@ -178,8 +177,8 @@ public class DMADatastore
    * @return     the entries found
    */
   @SuppressWarnings("unchecked") // casting return
-  public @Nullable <T extends AbstractEntry> List<T> getEntries
-                      (AbstractType<T> inType, String inKey, String inValue)
+  public @Nullable <T extends AbstractEntry>
+  List<T> getEntries(AbstractType<T> inType, String inKey, String inValue)
   {
     return (List<T>)
       convert(m_data.getEntities(escapeType(inType.toString()), null, 0, 1000,
@@ -194,9 +193,8 @@ public class DMADatastore
    *
    * @return      all the ids
    */
-  public List<String> getIDs
-    (AbstractType<? extends AbstractEntry> inType,
-     @Nullable EntryKey<? extends AbstractEntry> inParent)
+  public List<String> getIDs(AbstractType<?> inType,
+                             @Nullable EntryKey inParent)
   {
     return m_data.getIDs(escapeType(inType.toString()), inType.getSortField(),
                          convert(inParent));
@@ -211,15 +209,12 @@ public class DMADatastore
    *
    * @return      all the ids
    */
-  @SuppressWarnings("unchecked") // need to cast cache value
-  public <T extends AbstractEntry> List<T> getRecentEntries
-    (AbstractType<T> inType,
-     @Nullable EntryKey<? extends AbstractEntry> inParent)
+  public <T extends AbstractEntry>
+  List<T> getRecentEntries(AbstractType<T> inType, @Nullable EntryKey inParent)
   {
-    return (List<T>)
-      convert(m_data.getRecentEntities(escapeType(inType.toString()),
-                                       BaseCharacter.MAX_PRODUCTS + 1,
-                                       convert(inParent)));
+    return convert(m_data.getRecentEntities(escapeType(inType.toString()),
+                                            BaseCharacter.MAX_PRODUCTS + 1,
+                                            convert(inParent)));
   }
 
   /**
@@ -254,11 +249,11 @@ public class DMADatastore
    *
    * @return   the entries matching the given index
    */
-  @SuppressWarnings("unchecked") // need to cast return value for generics
-  public <T extends AbstractEntry> List<T> getIndexEntries
-    (String inIndex, AbstractType<T> inType,
-     @Nullable EntryKey<? extends AbstractEntry> inParent,
-     String inGroup, int inStart, int inSize)
+  public List<AbstractEntry> getIndexEntries(String inIndex,
+                                             AbstractType<?> inType,
+                                             @Nullable EntryKey inParent,
+                                             String inGroup,
+                                             int inStart, int inSize)
   {
     List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
 
@@ -268,7 +263,7 @@ public class DMADatastore
                                            Index.PREFIX + inIndex, inGroup))
       entries.add(convert(entity));
 
-    return (List<T>)entries;
+    return entries;
   }
 
   /**
@@ -362,13 +357,13 @@ public class DMADatastore
    * @param      inKey the key of the entry to remove
    * @param      <T>   the type of entry to uncache
    */
-  public <T extends AbstractEntry<?>> void uncacheEntry(EntryKey<T> inKey)
+  public void uncacheEntry(EntryKey inKey)
   {
     s_entryCache.delete(inKey.toString());
   }
 
   /**
-   * Clear the cache of entires.
+   * Clear the cache of entries.
    */
   public void clearCache()
   {
@@ -392,7 +387,7 @@ public class DMADatastore
    * @param       inEntry the entry to remove
    * @return      true if removed, false if not
    */
-  public boolean remove(AbstractEntry<?> inEntry)
+  public boolean remove(AbstractEntry inEntry)
   {
     // also remove all blobs for this entry
     for(File file : inEntry.getFiles())
@@ -476,7 +471,7 @@ public class DMADatastore
    * @return     the numbert of enties updated
    */
   public int refresh(AbstractType<? extends AbstractEntry> inType,
-                       DMARequest inRequest)
+                     DMARequest inRequest)
   {
     Log.debug("refresh data for " + inType);
 
@@ -565,23 +560,21 @@ public class DMADatastore
 
   /**
    * Convert the given entry key into a corresponding entity key.
+   * @param <T>
    *
    * @param       inKey the key to convert
    * @param       <T>   the type of entry to convert
    *
    * @return      the converted key
    */
-  @SuppressWarnings("unchecked")
-  public @Nullable <T extends AbstractEntry<?>> Key convert
-                      (@Nullable EntryKey<T> inKey)
+  public @Nullable Key convert(@Nullable EntryKey inKey)
   {
     if(inKey == null)
       return null;
 
-    EntryKey<T> parent =
-      (EntryKey<T>)inKey.getParent();
-    if(parent != null)
-      return KeyFactory.createKey(convert(parent),
+    Optional<EntryKey> parent = inKey.getParent();
+    if(parent.isPresent())
+      return KeyFactory.createKey(convert(parent.get()),
                                   escapeType(inKey.getType().toString()),
                                   inKey.getID().toLowerCase(Locale.US));
     else
@@ -597,19 +590,22 @@ public class DMADatastore
    *
    * @return      the converted key
    */
-  @SuppressWarnings("unchecked") // not using proper types
-  public <T extends AbstractEntry<?>> EntryKey<T> convert(Key inKey)
+  public EntryKey convert(Key inKey)
   {
     Key parent = inKey.getParent();
 
     if(parent != null)
-      return new EntryKey<>(inKey.getName(),
-                            (AbstractType<T>)AbstractType
-                            .getTyped(escapeType(inKey.getKind())),
-                            convert(parent));
+    {
+      Optional<EntryKey> parentKey =
+        Optional.of(convert(parent));
+      return new EntryKey(inKey.getName(),
+                          AbstractType
+                          .getTyped(escapeType(inKey.getKind()))
+                          , parentKey);
+    }
 
-    return new EntryKey<>(inKey.getName(),
-                          (AbstractType<T>)AbstractType
+    return new EntryKey(inKey.getName(),
+                        AbstractType
                           .getTyped(escapeType(inKey.getKind())));
   }
 
@@ -623,10 +619,8 @@ public class DMADatastore
    *
    * @return     the converted entry, if any
    */
-  @SuppressWarnings("unchecked") // need to cast value gotten
-  public @Nullable <T extends AbstractEntry> T convert
-                      (String inID, AbstractType<T> inType,
-                       @Nullable Entity inEntity)
+  public <T extends AbstractEntry>
+  T convert(String inID, AbstractType<T> inType, @Nullable Entity inEntity)
   {
     if(inEntity == null)
       return null;
@@ -656,7 +650,8 @@ public class DMADatastore
       entry.parseFrom(blob.getBytes());
 
     // update any key related value
-    entry.updateKey(convert(inEntity.getKey()));
+    EntryKey key = convert(inEntity.getKey());
+    entry.updateKey(key);
 
     // update extensions, if necessary
     entry.setupExtensions();
@@ -673,14 +668,16 @@ public class DMADatastore
    *
    * @return     the entry found, if any
    */
-  public @Nullable AbstractEntry convert(@Nullable Entity inEntity)
+  public @Nullable <T extends AbstractEntry>
+  T convert(@Nullable Entity inEntity)
   {
     if(inEntity == null)
       return null;
 
     Key key = inEntity.getKey();
     String id = key.getName();
-    AbstractType<? extends AbstractEntry> type =
+    @SuppressWarnings("unchecked")
+    AbstractType<T> type = (AbstractType<T>)
       AbstractType.getTyped(unescapeType(key.getKind()));
 
     if(type == null || id == null)
@@ -700,12 +697,14 @@ public class DMADatastore
    *
    * @return     the entries found, if any
    */
-  public @Nullable List<AbstractEntry> convert(List<Entity> inEntities)
+  @SuppressWarnings("unchecked")
+  public @Nullable <T extends AbstractEntry>
+  List<T> convert(List<Entity> inEntities)
   {
-    List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
+    List<T> entries = new ArrayList<>();
 
     for(Entity entity : inEntities)
-      entries.add(convert(entity));
+      entries.add((T)convert(entity));
 
     return entries;
   }
@@ -718,7 +717,7 @@ public class DMADatastore
    * @return     the entry found, if any
    */
   @SuppressWarnings({ "rawtypes" })
-  public Entity convert(AbstractEntry<?> inEntry)
+  public Entity convert(AbstractEntry inEntry)
   {
     Entity entity = new Entity(convert(inEntry.getKey()));
 

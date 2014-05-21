@@ -448,7 +448,7 @@ public final class Importer
 
     FileNameMap types = URLConnection.getFileNameMap();
     String type = types.getContentTypeFor(parts[parts.length - 1]);
-    EntryKey<AbstractEntry<?>> key = inEntry.getKey();
+    EntryKey key = inEntry.getKey();
 
     if(key == null)
     {
@@ -516,7 +516,7 @@ public final class Importer
    *
    * @param   inEntry the entry to complete
    */
-  private void complete(Entry<?> inEntry)
+  private void complete(Entry inEntry)
   {
     inEntry.complete();
 

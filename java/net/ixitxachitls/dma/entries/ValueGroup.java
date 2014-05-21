@@ -54,7 +54,6 @@ import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -67,7 +66,7 @@ import net.ixitxachitls.util.logging.Log;
  */
 
 @ParametersAreNonnullByDefault
-public abstract class ValueGroup<B extends BaseEntry> implements Changeable
+public abstract class ValueGroup implements Changeable
 {
   /**
    * The annotations for variables.
@@ -597,7 +596,7 @@ public abstract class ValueGroup<B extends BaseEntry> implements Changeable
    * @param       <T> the type of the entry the type is for
    *
    */
-  public abstract <T extends AbstractEntry<B>> AbstractType<T> getType();
+  public abstract AbstractType<?> getType();
 
   //........................................................................
   //----------------------------- getEditType ------------------------------
@@ -632,14 +631,14 @@ public abstract class ValueGroup<B extends BaseEntry> implements Changeable
   //-------------------------------- getKey --------------------------------
 
   /**
-   * Get the key uniqueliy identifying this entry.
+   * Get the key uniquely identifying this entry.
    *
    * @param    <T> the type of entry getting the key for
    *
    * @return   the key for the entry
    *
    */
-  public <T extends AbstractEntry<B>> EntryKey<T> getKey()
+  public EntryKey getKey()
   {
     throw new UnsupportedOperationException("must be derived");
   }
@@ -893,7 +892,7 @@ public abstract class ValueGroup<B extends BaseEntry> implements Changeable
    * @return      the requested base entries
    *
    */
-  public List<B> getBaseEntries()
+  public List<BaseEntry> getBaseEntries()
   {
     return new ArrayList<>();
   }
@@ -1094,7 +1093,7 @@ public abstract class ValueGroup<B extends BaseEntry> implements Changeable
         Variable variable;
         if(AbstractExtension.class.isAssignableFrom(inClass))
           variable =
-            new ExtensionVariable((Class<? extends AbstractExtension<?, ?>>)
+            new ExtensionVariable((Class<? extends AbstractExtension<?>>)
                                   inClass,
                                   key.value(), field,
                                   noStore == null || !noStore.value(),
@@ -1165,7 +1164,7 @@ public abstract class ValueGroup<B extends BaseEntry> implements Changeable
    */
   protected static void
     extractVariables(Class<?> inEntryClass,
-                     Class<? extends AbstractExtension<?, ?>> inExtensionClass)
+                     Class<? extends AbstractExtension<?>> inExtensionClass)
   {
     Variables variables = s_variables.get(inEntryClass);
 
@@ -1379,7 +1378,7 @@ public abstract class ValueGroup<B extends BaseEntry> implements Changeable
    *
    */
   public @Nullable <T extends Value<T>>
-                      T sum(String inKey, List<? extends ValueGroup> inEntries)
+  T sum(String inKey, List<? extends ValueGroup> inEntries)
   {
     T total = null;
     for(ValueGroup entry : inEntries)
@@ -1399,228 +1398,6 @@ public abstract class ValueGroup<B extends BaseEntry> implements Changeable
   }
 
   //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
-
-  /** The testing class. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
-  {
-    /** A simple implementation of a value group for testing. */
-    public static class TestGroup extends AbstractEntry<BaseEntry>
-    {
-      /** The serial version id. */
-      private static final long serialVersionUID = 1L;
-
-      /** The change state. */
-      protected boolean m_testChanged = false;
-
-      /** A simple value. */
-      @Key("simple value")
-      protected Value<?> m_value = new Value.Test.TestValue();
-
-      /** A value for dms only. */
-      @Key(value = "dm value")
-      @DM
-      @Plural("dms value")
-      @NoStore
-      protected Value<?> m_dmValue = new Value.Test.TestValue();
-
-      /** A value for players only. */
-      @Key("player value")
-      @PlayerOnly
-      protected Value<?> m_playerValue = new Value.Test.TestValue();
-
-      /** A player editable value. */
-      @Key("player editable")
-      @PlayerEdit
-      protected Value<?> m_playerEditableValue = new Value.Test.TestValue();
-
-      /** Set the change state.
-       *
-       * @param inState the new state
-       */
-      @Override
-      public void changed(boolean inState)
-      {
-        m_testChanged = inState;
-      }
-
-      /**
-       * Get the id of the group.
-       *
-       * @return the id
-       */
-      @Override
-      @Deprecated
-      public String getID()
-      {
-        return "Test-ID";
-      }
-
-      /**
-       * Get the name of the group.
-       *
-       * @return the name
-       */
-      @Override
-      public String getName()
-      {
-        return "Test-Name";
-      }
-
-      /**
-       * Get the type of the group.
-       *
-       * @param  <T> the type of entry
-       * @return the type
-       */
-      @SuppressWarnings("unchecked") // unchecked creation
-      @Override
-      public <T extends AbstractEntry<BaseEntry>> AbstractType<T> getType()
-      {
-        return new AbstractType<T>((Class<T>)this.getClass());
-      }
-
-      /**
-       * Compute the maximal base value.
-       *
-       * @param       inName the name of the value to add up
-       * @return      the maximal base value found
-       */
-      public @Nullable Pair<Value<?>, BaseEntry>
-        maximalBaseValue(String inName)
-      {
-        throw new UnsupportedOperationException("not implemented");
-      }
-
-      /**
-       * Compute the minimal base value.
-       *
-       * @param       inName the name of the value to add up
-       * @return      the minimal base value found
-       */
-      public @Nullable Pair<Value<?>, BaseEntry>
-        minimalBaseValue(String inName)
-      {
-        throw new UnsupportedOperationException("not implemented");
-      }
-
-      /**
-       * Get the type of the entry.
-       *
-       * @return      the requested name
-       */
-      @Override
-      public String getEditType()
-      {
-        return "dummy";
-      }
-    }
-
-    /** Simple test setup. */
-    @org.junit.BeforeClass
-    public static void setUpClass()
-    {
-      extractVariables(TestGroup.class);
-    }
-
-    //----- variables ------------------------------------------------------
-
-    /** The variables Test. */
-    @org.junit.Test
-    public void variables()
-    {
-      Variables variables = s_variables.get(TestGroup.class);
-      assertTrue("variables", variables != null);
-      assertTrue("simple value", variables.getVariable("simple value") != null);
-      assertNull("invalid", variables.getVariable("invalid"));
-      assertFalse("stored", variables.getVariable("dm value").isStored());
-      assertTrue("stored", variables.getVariable("simple value").isStored());
-      assertEquals("plural", "dms value",
-                   variables.getVariable("dm value").getPluralKey());
-      assertEquals("plural", "player values",
-                   variables.getVariable("player value").getPluralKey());
-      assertTrue("dm", variables.getVariable("dm value").isDMOnly());
-      assertFalse("dm", variables.getVariable("player value").isDMOnly());
-      assertFalse("player", variables.getVariable("dm value").isPlayerOnly());
-      assertTrue("player",
-                 variables.getVariable("player value").isPlayerOnly());
-      assertTrue("player editable",
-                 variables.getVariable("player editable").isPlayerEditable());
-      assertFalse("editable",
-                  variables.getVariable("player value").isPlayerEditable());
-    }
-
-    //......................................................................
-    //----- formatting -----------------------------------------------------
-
-    /** The formatting Test. */
-    @org.junit.Test
-    public void formatting()
-    {
-      ValueGroup group = new TestGroup();
-
-      StringBuilder builder = new StringBuilder();
-      assertFalse("format", group.formatValues(builder, true, 5));
-      assertEquals("format", "", builder.toString());
-
-      group.set("simple value", "guru");
-      group.set("dm value", "guru");
-      group.set("player value", "guru");
-
-      assertTrue("format", group.formatValues(builder, true, 13));
-      assertEquals("format",
-                   "  simple value guru;\n"
-                   + "  player value guru",
-                   builder.toString());
-    }
-
-    //......................................................................
-    //----- values ---------------------------------------------------------
-
-    /** The values Test. */
-    @org.junit.Test
-    public void values()
-    {
-      TestGroup group = new TestGroup();
-      assertNull("set", group.set("simple value", "guru"));
-      assertNull("set", group.set("dm value", "guru"));
-      assertNull("set", group.set("player value", "guru"));
-
-      assertEquals("id", "Test-ID", group.getID());
-      assertEquals("name", "Test-Name", group.getName());
-      assertFalse("base", group.isBase());
-      assertEquals("value", "guru", group.getValue("simple value").toString());
-      assertNull("value", group.getValue("invalid"));
-      assertTrue("changed", group.m_testChanged);
-      group.changed(false);
-      assertFalse("changed", group.m_testChanged);
-    }
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** The read Test. */
-    @org.junit.Test
-    public void read()
-    {
-      ValueGroup group = new TestGroup();
-      try (ParseReader reader =
-        new ParseReader(new java.io.StringReader("guru gugus"), "test"))
-      {
-        assertTrue("read",
-                   group.readVariable(reader,
-                                      group.getVariable("simple value")));
-        assertEquals("value", "guru",
-                     group.getValue("simple value").toString());
-        assertTrue("expect", reader.expect("gugus"));
-      }
-    }
-
-    //......................................................................
-  }
 
   //........................................................................
 }

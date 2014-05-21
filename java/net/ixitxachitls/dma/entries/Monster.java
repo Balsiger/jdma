@@ -84,7 +84,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class Monster extends CampaignEntry<BaseMonster>
+public class Monster extends CampaignEntry
 {
   //----------------------------------------------------------------- nested
 
@@ -2100,7 +2100,7 @@ public class Monster extends CampaignEntry<BaseMonster>
         continue;
 
       items.put(name.get(), item);
-      items.putAll(item.containedItems(inDeep));
+      //items.putAll(item.containedItems(inDeep));
     }
 
     return items;
@@ -3312,7 +3312,7 @@ public class Monster extends CampaignEntry<BaseMonster>
    *
    */
   @Override
-  public boolean add(CampaignEntry<? extends BaseEntry> inEntry)
+  public boolean add(CampaignEntry inEntry)
   {
     String name = inEntry.getName();
     List<Name> names = new ArrayList<Name>();

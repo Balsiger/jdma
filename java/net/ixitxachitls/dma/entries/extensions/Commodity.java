@@ -25,7 +25,6 @@ package net.ixitxachitls.dma.entries.extensions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.values.Number;
 
@@ -47,7 +46,7 @@ import net.ixitxachitls.dma.values.Number;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class Commodity extends Extension<BaseItem, Item>
+public class Commodity extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
 

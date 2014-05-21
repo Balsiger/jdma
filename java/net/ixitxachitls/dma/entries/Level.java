@@ -36,7 +36,7 @@ import net.ixitxachitls.util.logging.Log;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class Level extends Entry<BaseLevel>
+public class Level extends Entry
 {
   /**
    * Create a default, unnamed level.

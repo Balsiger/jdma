@@ -19,12 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -32,16 +27,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.BaseCampaignProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is the base information about a campaign. It is also the place
@@ -51,31 +39,19 @@ import net.ixitxachitls.util.logging.Log;
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ParametersAreNonnullByDefault
 public class BaseCampaign extends BaseEntry
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //---------------------------- BaseCampaign ------------------------------
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**
    * This is the internal, default constructor for an undefined value.
-   *
    */
   public BaseCampaign()
   {
     super(TYPE);
   }
-
-  //........................................................................
-  //---------------------------- BaseCampaign ------------------------------
 
   /**
    * This is the normal constructor.
@@ -88,36 +64,11 @@ public class BaseCampaign extends BaseEntry
     super(inName, TYPE);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The type of this entry. */
   public static final BaseType<BaseCampaign> TYPE =
     new BaseType<BaseCampaign>(BaseCampaign.class);
 
-  static
-  {
-    extractVariables(BaseCampaign.class);
-  }
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------- compute --------------------------------
-
-  /**
-   * Compute a value for a given key, taking base entries into account if
-   * available.
-   *
-   * @param    inKey the key of the value to compute
-   *
-   * @return   the compute value
-   *
-   */
+  /*
   @Override
   public @Nullable Object compute(String inKey)
   {
@@ -132,20 +83,8 @@ public class BaseCampaign extends BaseEntry
 
     return super.compute(inKey);
   }
+  */
 
-  //........................................................................
-
-  //--------------------------------- isDM ---------------------------------
-
-  /**
-   * Check whether the given user is the DM for this entry. Every user is a DM
-   * for a base campaign.
-   *
-   * @param       inUser the user accessing
-   *
-   * @return      true for DM, false for not
-   *
-   */
   @Override
   public boolean isDM(@Nullable BaseCharacter inUser)
   {
@@ -154,15 +93,6 @@ public class BaseCampaign extends BaseEntry
 
     return inUser.hasAccess(BaseCharacter.Group.ADMIN);
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
 
   @Override
   public Message toProto()
@@ -202,12 +132,10 @@ public class BaseCampaign extends BaseEntry
     }
   }
 
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------------
 
   /** The test. @hidden */
-  public static class Test extends ValueGroup.Test
+  public static class Test //extends ValueGroup.Test
   {
     // TODO: fix tests
     //----- text -----------------------------------------------------------

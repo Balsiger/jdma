@@ -31,6 +31,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
@@ -39,12 +40,12 @@ import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.CharacterProto;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.File;
-import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.NewMoney;
+import net.ixitxachitls.dma.values.NewRational;
+import net.ixitxachitls.dma.values.NewWeight;
 import net.ixitxachitls.dma.values.Number;
-import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -70,7 +71,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class Character extends CampaignEntry<BaseCharacter>
+public class Character extends CampaignEntry
                        //implements Storage<Item>
 {
   //----------------------------------------------------------------- nested
@@ -107,7 +108,7 @@ public class Character extends CampaignEntry<BaseCharacter>
      */
     private State(String inName, CharacterProto.State inProto)
     {
-      m_name = constant("character.state", inName);
+      m_name = inName;
       m_proto = inProto;
     }
 
@@ -263,7 +264,7 @@ public class Character extends CampaignEntry<BaseCharacter>
         continue;
 
       items.put(name.get(), item);
-      items.putAll(item.containedItems(inDeep));
+      //items.putAll(item.containedItems(inDeep));
     }
 
     return items;
@@ -363,9 +364,9 @@ public class Character extends CampaignEntry<BaseCharacter>
    * @return      the gp value of all items
    *
    */
-  public Money totalWealth()
+  public NewMoney totalWealth()
   {
-    Money total = new Money(0, 0, 0, 0);
+    NewMoney total = new NewMoney(0, 0, 0, 0, 0, 0);
 
     for(Name name : m_items)
     {
@@ -373,9 +374,9 @@ public class Character extends CampaignEntry<BaseCharacter>
       if(item == null)
         continue;
 
-      Money value = item.getValue();
+      NewMoney value = item.getCombinedValue().getValue();
       if(value != null)
-        total = total.add(value);
+        total = (NewMoney)total.add(value);
     }
 
     return total;
@@ -390,9 +391,9 @@ public class Character extends CampaignEntry<BaseCharacter>
    * @return      the lb value of all items
    *
    */
-  public Weight totalWeight()
+  public NewWeight totalWeight()
   {
-    Weight total = new Weight(new Rational(0), null);
+    NewWeight total = new NewWeight(NewRational.ZERO, NewRational.ZERO);
 
     for(Name name : m_items)
     {
@@ -400,9 +401,9 @@ public class Character extends CampaignEntry<BaseCharacter>
       if(item == null)
         continue;
 
-      Weight weight = item.getTotalWeight();
+      NewWeight weight = item.getCombinedWeight().getValue();
       if(weight != null)
-        total = total.add(weight);
+        total = (NewWeight)total.add(weight);
     }
 
     return total;
@@ -435,7 +436,7 @@ public class Character extends CampaignEntry<BaseCharacter>
 
     if("wealth".equals(inKey))
       return new ImmutableMap.Builder<String, Object>()
-        .put("total", (int)totalWealth().getAsGold().getValue())
+        .put("total", (int)totalWealth().asGold())
         .put("lower", wealthPerLevel((int)m_level.get() - 1))
         .put("equal", wealthPerLevel((int)m_level.get()))
         .put("higher", wealthPerLevel((int)m_level.get() + 1))
@@ -464,7 +465,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    *
    */
   @Override
-  public boolean add(CampaignEntry<?> inEntry)
+  public boolean add(CampaignEntry inEntry)
   {
     String name = inEntry.getName();
     List<Name> names = new ArrayList<Name>();
@@ -494,18 +495,18 @@ public class Character extends CampaignEntry<BaseCharacter>
    *
    */
   @Override
-  public void updateKey(EntryKey<? extends AbstractEntry> inKey)
+  public void updateKey(EntryKey inKey)
   {
-    EntryKey<?> parent = inKey.getParent();
-    if(parent == null)
+    Optional<EntryKey> parent = inKey.getParent();
+    if(!parent.isPresent())
       return;
 
-    EntryKey<?> parentParent = parent.getParent();
-    if(parentParent == null)
+    Optional<EntryKey> parentParent = parent.get().getParent();
+    if(!parentParent.isPresent())
       return;
 
-    m_campaign = m_campaign.as(new Name(parentParent.getID()),
-                               new Name(parent.getID()));
+    m_campaign = m_campaign.as(new Name(parentParent.get().getID()),
+                               new Name(parent.get().getID()));
   }
 
   //........................................................................

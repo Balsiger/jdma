@@ -19,39 +19,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.google.common.collect.Lists;
+import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.entries.extensions.Composite;
-import net.ixitxachitls.dma.entries.extensions.Contents;
-import net.ixitxachitls.dma.entries.extensions.Incomplete;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.ItemProto;
-import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.FormattedText;
-import net.ixitxachitls.dma.values.Money;
-import net.ixitxachitls.dma.values.Number;
-import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.values.Weight;
+import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.NewMoney;
+import net.ixitxachitls.dma.values.NewWeight;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is a real item.
@@ -60,79 +45,19 @@ import net.ixitxachitls.util.logging.Log;
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ParametersAreNonnullByDefault
-public class Item extends CampaignEntry<BaseItem>
+public class Item extends CampaignEntry
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------- Item --------------------------------
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**
    * This is the internal, default constructor.
    */
-  protected Item()
+  public Item()
   {
     super(TYPE);
   }
-
-  //........................................................................
-  //------------------------------- Item --------------------------------
-
-  /**
-   * This is the normal constructor.
-   *
-   * @param       inName the name of the base item and the item
-   *
-   */
-  public Item(String inName)
-  {
-    super(inName, TYPE);
-  }
-
-  //........................................................................
-  //------------------------------- Item --------------------------------
-
-  /**
-   * This constructs the item with random values from the given
-   * base item.
-   *
-   * @param       inCampaign  the campaign this entry is in
-   */
-  public Item(Campaign inCampaign)
-  {
-    super(TYPE, inCampaign);
-  }
-
-  //........................................................................
-  //------------------------------- Item --------------------------------
-
-  /**
-   * This constructs the item with random values from the given
-   * base item.
-   *
-   * @param       inName  the name of the item
-   * @param       inBases the base items to take values from
-   *
-   * @undefined   never
-   *
-   */
-  // public Item(String inName, BaseItem ... inBases)
-  // {
-  //   super(inName, TYPE, BASE_TYPE, inBases);
-  // }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The type of this entry. */
   public static final Type<Item> TYPE =
@@ -141,149 +66,105 @@ public class Item extends CampaignEntry<BaseItem>
   /** The type of the base entry to this entry. */
   public static final BaseType<BaseItem> BASE_TYPE = BaseItem.TYPE;
 
-  /** Flag if extensions are initialized. */
-  private static boolean s_extensionsInitialized = false;
-
-  //----- hp ---------------------------------------------------------------
-
   /** The actual number of hit points the item currently has. */
-  @Key("hp")
-  protected Number m_hp = new Number(0, 10000);
-
-  //........................................................................
-  //----- value ------------------------------------------------------------
+  protected Integer m_hp = Integer.MIN_VALUE;
 
   /** The total value of the item. */
-  @Key("value")
-  @DM
-  protected Money m_value = new Money();
-
-  //........................................................................
-  //----- appearance -------------------------------------------------------
+  protected Optional<NewMoney> m_value = Optional.absent();
 
   /** The appearance text for this entry. */
-  @Key("appearance")
-  protected FormattedText m_appearance = new FormattedText();
-
-  //...........................................................................
-  //----- player notes --------------------------------------------------
+  protected String m_appearance = null;
 
   /** The player notes of the item. */
-  @Key("player notes")
-  protected Text m_playerNotes = new Text();
-
-  //........................................................................
-  //----- player name ------------------------------------------------------
+  protected Optional<String> m_playerNotes = Optional.absent();
 
   /** The name from the player for the item. */
-  @Key("player name")
-  @PlayerEdit
-  protected Text m_playerName = new Text();
-
-  //........................................................................
-  //----- dm notes ---------------------------------------------------------
+  protected Optional<String> m_playerName = Optional.absent();
 
   /** The DM notes of the item. */
-  @Key("dm notes")
-  @DM
-  protected Text m_dmNotes = new Text();
+  protected Optional<String> m_dmNotes = Optional.absent();
 
-  //........................................................................
-
-  static
+  /**
+   * Get the hit points of the base item.
+   *
+   * @return      the hit points
+   */
+  public int getHP()
   {
-    extractVariables(Item.class);
+    return m_hp;
   }
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //--------------------------------- getHP --------------------------------
-
   /**
-   * Get the hp of the item.
+   * Get the combined value of the item, including values of base items.
    *
-   * @return      the hp
-   *
+   * @return a combination value with the sum and their sources.
    */
-  // public long getHP()
-  // {
-  //   return m_hp.getLow().get();
-  // }
-
-  //........................................................................
-  //------------------------------- getMaxHP -------------------------------
-
-  /**
-   * Get the max hp of the item.
-   *
-   * @return      the max hp
-   *
-   */
-  // public long getMaxHP()
-  // {
-  //   return m_maxHP.getLow().get();
-  // }
-
-  //........................................................................
-  //------------------------------- getWeight ------------------------------
-
-  /**
-   * Get the total weight of the item.
-   *
-   * @return      the weight
-   *
-   */
-  public Weight getTotalWeight()
+  public Combination<Integer> getCombinedMaxHP()
   {
-    Combined<Weight> value = collect("weight");
-    return value.total();
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedHP());
+
+    return new Combination.Integer(this, combinations);
   }
 
-  //........................................................................
-  //----------------------------- getGoldValue -----------------------------
+  /**
+   * Get the combined value of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewWeight> getCombinedWeight()
+  {
+    List<Combination<NewWeight>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedWeight());
+
+    return new Combination.Addable<NewWeight>(this, combinations);
+  }
 
   /**
    * Get the value of the item in gold piece and their fraction (e.g. silver is
    * 0.1).
    *
    * @return      the value
-   *
    */
   public double getGoldValue()
   {
-    Money gold = getValue();
-    if (gold == null)
-      return 0;
-
-    return gold.getAsGold().getValue();
+    return getCombinedValue().getValue().asGold();
   }
-
-  //........................................................................
-  //------------------------------- getValue -------------------------------
 
   /**
    * Get the value of the item.
    *
    * @return      the value
-   *
    */
-  public @Nullable Money getValue()
+  public Optional<NewMoney> getValue()
   {
-    Combined<Money> value = collect("value");
-    return value.total();
+    return m_value;
   }
 
-  //........................................................................
-  //------------------------------- getName --------------------------------
+  /**
+   * Get the combined value of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewMoney> getCombinedValue()
+  {
+    if(m_value.isPresent())
+      return new Combination.Addable<NewMoney>(this, m_value.get());
+
+    List<Combination<NewMoney>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedValue());
+
+    return new Combination.Addable<NewMoney>(this, combinations);
+  }
 
   /**
    * Get the name of the entry. This time, also check for special quality
    * modifiers.
    *
    * @return      the requested name
-   *
    */
   // public String getName()
   // {
@@ -308,14 +189,10 @@ public class Item extends CampaignEntry<BaseItem>
   //     return qualities + " " + super.getName();
   // }
 
-  //........................................................................
-  //------------------------------- getSize --------------------------------
-
   /**
    * Get the size of the item.
    *
    * @return      the size or null if not defined
-   *
    */
   // public BaseItem.Size getSize()
   // {
@@ -337,9 +214,6 @@ public class Item extends CampaignEntry<BaseItem>
   //                         }
   //                       });
   // }
-
-  //........................................................................
-  //----------------------------- getBreakDC -------------------------------
 
   /**
    * Get the break DC of the item.
@@ -367,9 +241,6 @@ public class Item extends CampaignEntry<BaseItem>
   //                       });
   // }
 
-  //........................................................................
-  //---------------------------- getAppearance ----------------------------
-
   /**
    * Get the appearance of the item.
    *
@@ -378,87 +249,68 @@ public class Item extends CampaignEntry<BaseItem>
    */
   public String getAppearance()
   {
-    return m_appearance.get();
+    return m_appearance;
   }
-
-  //........................................................................
-  //---------------------------- getPlayerNotes ----------------------------
 
   /**
    * Get the player notes of the item.
    *
    * @return      the requested notes
-   *
    */
-  public String getPlayerNotes()
+  public Optional<String> getPlayerNotes()
   {
-    return m_playerNotes.get();
+    return m_playerNotes;
   }
-
-  //........................................................................
-  //------------------------------ getDMNotes ------------------------------
 
   /**
    * Get the dm notes of the item.
    *
    * @return      the requested notes
-   *
    */
-  public String getDMNotes()
+  public Optional<String> getDMNotes()
   {
-    return m_dmNotes.get();
+    return m_dmNotes;
   }
 
-  //........................................................................
-  //---------------------------- getPlayerName -----------------------------
+  /**
+   * Get the player name defined for this item.
+   *
+   * @return the name
+   */
+  public Optional<String> getItemPlayerName()
+  {
+    return m_playerName;
+  }
 
   /**
-   * Get the name of the entry as given to the plaer.
+   * Get the combined player name for the item.
    *
-   * @return      the requested name
+   * @return the combined name
    */
+  public Combination<String> getCombinedPlayerName()
+  {
+    if(m_playerName.isPresent())
+      return new Combination.String(this, m_playerName.get());
+
+    List<Combination<String>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedPlayerName());
+
+    return new Combination.String(this, combinations);
+  }
+
   @Override
   public String getPlayerName()
   {
-    Combined<Text> combinedPlayerName = collect("player name");
-    Text playerName = combinedPlayerName.total();
-    if(playerName != null && playerName.isDefined())
-      return Strings.trim(playerName.get());
-
-    for(BaseEntry base : getBaseEntries())
-      if(base != null)
-        return base.getName();
-
-    return getName();
+    return getCombinedPlayerName().getValue();
   }
 
-  //........................................................................
-  //------------------------------ getDMName -------------------------------
-
-  /**
-   * Get the name of the item for DMs.
-   *
-   * @return the dm specific name
-   */
   @Override
   public String getDMName()
   {
     List<String> parts = new ArrayList<String>();
-
     for(BaseEntry base : getBaseEntries())
-    {
-      if(base == null)
-        continue;
-
-      String name = base.getName();
-      List<String> synonyms = base.getSynonyms();
-      // if the first synonym does not contain a ',', we use that name as it
-      // might be better readable than the restricted real name
-      if(!synonyms.isEmpty() && synonyms.get(0).indexOf(',') < 0)
-        name = synonyms.get(0);
-
-      parts.add(name);
-    }
+      parts.add(base.getName());
 
     if(parts.isEmpty())
       parts.add(getName());
@@ -466,17 +318,14 @@ public class Item extends CampaignEntry<BaseItem>
     return Strings.SPACE_JOINER.join(parts);
   }
 
-  //........................................................................
-  //--------------------------- containedItems -----------------------------
-
   /**
    * Get all the items contained in this one.
    *
    * @param       inDeep true for returning all item, including nested ones,
    *                     false for only the top level items
    * @return      a list of all contained items
-   *
    */
+  /*
   public Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
@@ -505,474 +354,56 @@ public class Item extends CampaignEntry<BaseItem>
 
     return items;
   }
-
-  //........................................................................
-  //------------------------------- compute --------------------------------
-
-  /**
-   * Compute a value for a given key, taking base entries into account if
-   * available.
-   *
-   * @param    inKey the key of the value to compute
-   *
-   * @return   the compute value
-   *
-   */
-  @Override
-  public @Nullable Object compute(String inKey)
-  {
-    if("dmName".equals(inKey))
-      return getDMName();
-
-    if("playerName".equals(inKey))
-      return getPlayerName();
-
-    return super.compute(inKey);
-  }
-
-  //........................................................................
-
-  //--------------------------------- asJS ---------------------------------
-
-  /**
-   * Get the command use to set the item as an icon.
-   *
-   * @param       inDM true if setting for dm, false if not
-   *
-   * @return      the command to set the item as an icon
-   *
-   * @undefined   never
-   *
-   */
-  // public String asJS(boolean inDM)
-  // {
-  //   StringBuilder builder = new StringBuilder();
-
-  //   boolean first = true;
-  //   for(Entry entry : getSubEntries(true))
-  //   {
-  //     if(entry == this)
-  //       continue;
-
-  //     if(entry instanceof Item)
-  //     {
-  //       if(!first)
-  //         builder.append(", ");
-
-  //       builder.append(((Item)entry).asJS(inDM));
-
-  //       first = false;
-  //     }
-  //   }
-
-  //   String name = null;
-
-  //   if(inDM)
-  //     name = getName();
-  //   else
-  //     name = getPlayerName();
-
-  //   String type;
-  //   if(hasAttachment(Contents.class))
-  //     type = "Container";
-  //   else
-  //     type = "Item";
-
-  //   return "new " + type + "("
-  //     + Encodings.toJSString(getID()) + ", "
-  //     + Encodings.toJSString(name) + ", "
-  //     + Encodings.toJSString("/images/" + getID()) + ","
-  //     + Encodings.toJSString(m_weight.toString())
-  //     + ", [" + builder.toString() + "])";
-  // }
-
-  //........................................................................
-  //---------------------------- computeFullName ---------------------------
+  */
 
   /**
    * Get a command to format the name of the item.
    *
    * @return   the command to format the name
    */
-  public String computeFullName()
+  public String fullName()
   {
-    List<String> names = Lists.newArrayList();
-    for(BaseEntry base : getBaseEntries())
-    {
-      if(base == null)
-        continue;
+    String name = getDMName();
+    String playerName = getPlayerName();
+    if(name.equalsIgnoreCase(playerName))
+      return name;
 
-      List<String> synonyms = base.getSynonyms();
-      if(!synonyms.isEmpty() && synonyms.get(0).indexOf(',') < 0)
-        names.add(synonyms.get(0));
-      else
-        names.add(base.getName());
-    }
-
-    String name;
-    if(names.isEmpty())
-      name = getName();
-    else
-      name = Strings.SPACE_JOINER.join(names);
-
-    if (m_playerName.isDefined() && !name.equals(m_playerName.get()))
-      return m_playerName.get() + " (" + name + ")";
-
-    return name;
+    return playerName + " (" + name +")";
   }
 
-  //........................................................................
+  @Override
+  public void set(Values inValues)
+  {
+    super.set(inValues);
 
-  //........................................................................
+    m_hp = inValues.use("hp", m_hp);
+    m_value = inValues.use("value", m_value, NewMoney.PARSER);
+    m_appearance = inValues.use("appearance", m_appearance);
+    m_playerNotes = inValues.use("player_notes", m_playerNotes);
+    m_playerName = inValues.use("player_name", m_playerName);
+    m_dmNotes = inValues.use("dm_notes", m_dmNotes);
+  }
 
-  //----------------------------------------------------------- manipulators
-
-  //--------------------------------- setHP --------------------------------
-
-  /**
-   * Set the hp of the item.
-   *
-   * @param       inHP the hp to set to
-   *
-   * @return      true if set, false if not
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean setHP(long inHP)
-  // {
-  //   if(inHP < 0 || inHP > getMaxHP())
-  //     return false;
-
-  //   m_hp.reset();
-  //   m_hp.setBaseValue(new Number(inHP, 0, 100000));
-
-  //   return true;
-  // }
-
-  //........................................................................
-  //------------------------------- setValue -------------------------------
-
-  /**
-   * Set the value of the item.
-   *
-   * @param       inPlatinum the platinum value of the item
-   * @param       inGold     the gold piece value
-   * @param       inSilver   the silver piece value
-   * @param       inCopper   the copper piece value
-   *
-   * @return      true for successful set, false else
-   *
-   * @undefined   assertion if null given
-   *
-   */
-  // public boolean setValue(int inPlatinum, int inGold, int inSilver,
-  //                         int inCopper)
-  // {
-  //   Rational platinum = inPlatinum != 0 ? new Rational(inPlatinum) : null;
-  //   Rational gold     = inGold     != 0 ? new Rational(inGold)     : null;
-  //   Rational silver   = inSilver   != 0 ? new Rational(inSilver)   : null;
-  //   Rational copper   = inCopper   != 0 ? new Rational(inCopper)   : null;
-
-  //   m_value.reset();
-  // return m_value.getBaseValue().setStandard(platinum, gold, silver, copper);
-  // }
-
-  //........................................................................
-  //------------------------------ setWeight -------------------------------
-
-  /**
-   * Set the weight of the item.
-   *
-   * @param       inPounds the weight in pounds
-   *
-   * @return      true for successful set, false else
-   *
-   * @undefined   assertion if null given
-   *
-   */
-  // public boolean setWeight(Rational inPounds)
-  // {
-  //   if(inPounds == null)
-  //     return false;
-
-  //   return m_weight.getBaseValue().setPounds(inPounds, null);
-  // }
-
-  //........................................................................
-  //---------------------------- setDescription ----------------------------
-
-  /**
-   * Set the description of the item.
-   *
-   * @param       inDescription the new text
-   *
-   * @return      true if set, false if not
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean setDescription(String inDescription)
-  // {
-  //   if(inDescription == null)
-  //     return false;
-
-  //   m_description.set(inDescription);
-
-  //   return true;
-  // }
-
-  //........................................................................
-  //---------------------------- setPlayerNotes ----------------------------
-
-  /**
-   * Set the player notes of the item.
-   *
-   * @param       inNotes the new text
-   *
-   * @return      true if set, false if not
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean setPlayerNotes(String inNotes)
-  // {
-  //   if(inNotes == null)
-  //     return false;
-
-  //   m_playerNotes.set(inNotes);
-
-  //   return true;
-  // }
-
-  //........................................................................
-  //----------------------------- setPlayerName ----------------------------
-
-  /**
-   * Set the player name of the item.
-   *
-   * @param       inName the new name to set to
-   *
-   * @return      true if set, false if not
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean setPlayerName(String inName)
-  // {
-  //   if(inName == null)
-  //     return false;
-
-  //   m_playerName.set(inName);
-
-  //   return true;
-  // }
-
-  //........................................................................
-  //------------------------------ setDMNotes ------------------------------
-
-  /**
-   * Set the dm notes of the item.
-   *
-   * @param       inNotes the new text
-   *
-   * @return      true if set, false if not
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean setDMNotes(String inNotes)
-  // {
-  //   if(inNotes == null)
-  //     return false;
-
-  //   m_dmNotes.set(inNotes);
-
-  //   return true;
-  // }
-
-  //........................................................................
-  //----------------------------- setAppearance ----------------------------
-
-  /**
-   * Set the appearance of the item.
-   *
-   * @param       inText the appearance
-   *
-   * @return      true if set, false if not
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean setAppearance(String inText)
-  // {
-  //   if(inText == null)
-  //     return false;
-
-  //   m_appearance.set(inText);
-
-  //   return true;
-  // }
-
-  //........................................................................
-
-  //---------------------------- addMaxHPModifier --------------------------
-
-  /**
-   * Add a modifier to the maximal hp of the item.
-   *
-   * @param       inModifier the modifier to add
-   *
-   */
-  // public void addMaxHPModifier(BaseModifier inModifier)
-  // {
-  //   if(inModifier == null)
-  //     return;
-
-  //   m_maxHP.addModifier(inModifier);
-  // }
-
-  //........................................................................
-  //----------------------------- addHPModifier ----------------------------
-
-  /**
-   * Add a modifier to the maximal hp of the item.
-   *
-   * @param       inModifier the modifier to add
-   *
-   */
-  // public void addHPModifier(BaseModifier inModifier)
-  // {
-  //   if(inModifier == null)
-  //     return;
-
-  //   m_hp.addModifier(inModifier);
-  // }
-
-  //........................................................................
-  //--------------------------- addValueModifier ---------------------------
-
-  /**
-   * Add a modifier to the value of the item.
-   *
-   * @param       inModifier the modifier to add
-   *
-   */
-  // public void addValueModifier(BaseModifier inModifier)
-  // {
-  //   if(inModifier == null)
-  //     return;
-
-  //   m_value.addModifier(inModifier);
-  // }
-
-  //........................................................................
-  //--------------------------- addWeightModifier --------------------------
-
-  /**
-   * Add a modifier to the weight of the item.
-   *
-   * @param       inModifier the modifier to add
-   *
-   */
-  // public void addWeightModifier(BaseModifier inModifier)
-  // {
-  //   if(inModifier == null)
-  //     return;
-
-  //   m_weight.addModifier(inModifier);
-  // }
-
-  //........................................................................
-  //------------------------------ addQuality ------------------------------
-
-  /**
-   * Add a quality by name to the item.
-   *
-   * @param       inName the name of quality
-   *
-   * @return      true if added, false if not
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean addQuality(String inName)
-  // {
-  //   if(inName == null)
-  //     return false;
-
-  //   return addQuality(new Quality(inName));
-  // }
-
-  //........................................................................
-  //------------------------------ addQuality ------------------------------
-
-  /**
-   * Add a quality to the item.
-   *
-   * @param       inQuality the quality to add
-   *
-   * @return      true if added, false if not
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean addQuality(Quality inQuality)
-  // {
-  //   if(inQuality == null)
-  //     return false;
-
-  //   m_qualities.add(new EntryValue<Quality>(inQuality));
-  //   inQuality.complete();
-
-  //   return true;
-  // }
-
-  //........................................................................
-
-  //------------------------------- complete -------------------------------
-
-  /**
-   * Complete the entry and make sure that all values are filled. We do only
-   * the value and the appearance here and let the base class handle the rest.
-   *
-   */
   @Override
   public void complete()
   {
-    super.complete();
-
-    if(!m_hp.isDefined())
+    if(m_hp == Integer.MIN_VALUE)
     {
-      Combined<Number> combinedHp = collect("hp");
-      Number total = combinedHp.total();
-      if(total != null)
-      {
-        m_hp = m_hp.as(total.get());
-        changed();
-      }
+      m_hp = getCombinedMaxHP().getValue();
+      changed();
     }
 
-    // appearane
-    if(!m_appearance.isDefined())
+    if(m_appearance == null)
     {
-      changed();
-
       // correct the random value with the computation from the value in
       // relation to the base value
-      Combined<Money> combinedValue = collect("value");
-      Money total = combinedValue.total();
       double itemValue = getGoldValue();
-      double baseValue = m_value.isDefined() || total == null ? itemValue
-        : total.getAsGold().getValue();
+      double baseValue = getCombinedValue().getValue().asGold();
 
       // We have to try to get the value from our bases.
       List<String> appearances = new ArrayList<String>();
       for(BaseEntry base : getBaseEntries())
       {
-        if(base == null)
-          continue;
-
         String appearance =
           ((BaseItem)base).getRandomAppearance(itemValue / baseValue);
 
@@ -980,8 +411,10 @@ public class Item extends CampaignEntry<BaseItem>
           appearances.add(appearance);
       }
 
-      m_appearance = m_appearance.as(Strings.toString(appearances, " ", ""));
+      m_appearance = Strings.toString(appearances, " ", "");
+      changed();
     }
+
 //     //----- qualities ------------------------------------------------------
 
 //     if(!m_qualities.isDefined())
@@ -1051,140 +484,19 @@ public class Item extends CampaignEntry<BaseItem>
 //     // matcher.appendTail(replaced);
 
 //     // m_description.set(replaced.toString());
-  }
 
-  //......................................................................
-  //------------------------------- identify -------------------------------
+    super.complete();
+  }
 
   /**
    * Identify the item by filling out the player name (and maybe notes?).
-   *
    */
   public void identify()
   {
-    m_playerName = m_playerName.as(computeFullName());
+    m_playerName = Optional.of(fullName());
+    changed();
+    save();
   }
-
-  //........................................................................
-  //----------------------------- modifyValue ------------------------------
-
-  /**
-    * Modify the given value with information from the current attachment.
-    *
-    * @param       inType    the type of value to modify
-    * @param       inValue   the value to modify, return in this object
-    * @param       inDynamic a flag denoting if dynamic values are requested
-    *
-    * @return      the newly computed value (or null if no value to use)
-    *
-    * @undefined   never
-    *
-    */
-  // TODO: remove this
-//   public Modifier modifyValue(PropertyKey inType, Value inValue,
-//                               boolean inDynamic)
-//   {
-//     if(inValue == null || !inValue.isDefined() || !m_userSize.isDefined())
-//       return null;
-
-//     BaseItem.Size size = m_userSize.getSelected();
-
-//     // nothing to do for medium sized weapons
-//     if(size == BaseItem.Size.MEDIUM)
-//       return null;
-
-//     // if the user size is different from the standard size, we adjust
-//     // the real size of the object in the same amount
-//     if(inType == PropertyKey.getKey("size"))
-//       // larger than medium
-//       if(size.isBigger(BaseItem.Size.MEDIUM))
-//         return new Modifier(Modifier.Type.MULTIPLY,
-//                             size.difference(BaseItem.Size.MEDIUM));
-//       else
-//         // smaller than medium
-//         return new Modifier(Modifier.Type.DIVIDE,
-//                             BaseItem.Size.MEDIUM.difference(size));
-
-//     // this is only an adjustment of the BASE HP, not one of the item!
-//     if(inType == PropertyKey.getKey("weight")
-//        || inType == PropertyKey.getKey("hp"))
-//     {
-//       if(inType == PropertyKey.getKey("hp"))
-//         if(((Number)inValue).get() == 1)
-//           return null;
-
-//       // a small weapon is half as heavy, a large twice that (i.e. 2^x), the
-//       // same for hit points (cf. Player's Handbook p. 117, p. 158)
-//       if(size.isBigger(BaseItem.Size.MEDIUM))
-//         return new Modifier
-//           (Modifier.Type.MULTIPLY,
-//            (int)Math.pow(2, size.difference(BaseItem.Size.MEDIUM)));
-//       else
-//         return new Modifier
-//           (Modifier.Type.DIVIDE,
-//            (int)Math.pow(2, BaseItem.Size.MEDIUM.difference(size)));
-//     }
-
-//     return super.modifyValue(inType, inValue, inDynamic);
-//   }
-
-  //........................................................................
-  //------------------------------- execute --------------------------------
-
-  /**
-   * Execute the given action.
-   *
-   * @param       inAction the action to execute
-   *
-   * @return      true if executed and no more execution necessary, false if
-   *              execute but either unsuccessfully or other instances need to
-   *              execute as well.
-   *
-   * @undefined   IllegalArgumentException if no action given
-   *
-   */
-  // public boolean execute(Action inAction)
-  // {
-  //   // if the super class can handle it, let it
-  //   if(super.execute(inAction))
-  //     return true;
-
-  //   // do we have to move this item?
-  //   if(inAction instanceof Move)
-  //   {
-  //     // remove the item from the current storage space
-  //     return true;
-  //   }
-
-  //   return false;
-  // }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //--------------------------- ensureExtensions ---------------------------
-
-  /**
-   * Ensure that extensions are properly initialized.
-   *
-   */
-  @Override
-  protected void ensureExtensions()
-  {
-    // Since we have to prevent initialization loops, we load up extensions
-    // here in a non-static context.
-    if(!s_extensionsInitialized)
-    {
-      extractVariables(Item.class, Incomplete.class);
-    }
-
-    super.ensureExtensions();
-  }
-
-  //........................................................................
 
   @Override
   public Message toProto()
@@ -1193,22 +505,22 @@ public class Item extends CampaignEntry<BaseItem>
 
     builder.setBase((CampaignEntryProto)super.toProto());
 
-    if(m_hp.isDefined())
-      builder.setHitPoints((int)m_hp.get());
+    if(m_hp != Integer.MIN_VALUE)
+      builder.setHitPoints(m_hp);
 
-    if(m_value.isDefined())
-      builder.setValue(m_value.toProto());
+    if(m_value.isPresent())
+      builder.setValue(m_value.get().toProto());
 
-    if(m_appearance.isDefined())
-      builder.setAppearance(m_appearance.get());
+    if(!m_appearance.isEmpty())
+      builder.setAppearance(m_appearance);
 
-    if(m_playerNotes.isDefined())
+    if(m_playerNotes.isPresent())
       builder.setPlayerNotes(m_playerNotes.get());
 
-    if(m_playerName.isDefined())
+    if(m_playerName.isPresent())
       builder.setPlayerName(m_playerName.get());
 
-    if(m_dmNotes.isDefined())
+    if(m_dmNotes.isPresent())
       builder.setDmNotes(m_dmNotes.get());
 
     ItemProto proto = builder.build();
@@ -1227,22 +539,22 @@ public class Item extends CampaignEntry<BaseItem>
     ItemProto proto = (ItemProto)inProto;
 
     if(proto.hasHitPoints())
-      m_hp = m_hp.as(proto.getHitPoints());
+      m_hp = proto.getHitPoints();
 
     if(proto.hasValue())
-      m_value = m_value.fromProto(proto.getValue());
+      m_value = Optional.of(NewMoney.fromProto(proto.getValue()));
 
     if(proto.hasAppearance())
-      m_appearance = m_appearance.as(proto.getAppearance());
+      m_appearance = proto.getAppearance();
 
     if(proto.hasPlayerNotes())
-      m_playerNotes = m_playerNotes.as(proto.getPlayerNotes());
+      m_playerNotes = Optional.of(proto.getPlayerNotes());
 
     if(proto.hasPlayerName())
-      m_playerName = m_playerName.as(proto.getPlayerName());
+      m_playerName = Optional.of(proto.getPlayerName());
 
     if(proto.hasDmNotes())
-      m_dmNotes = m_dmNotes.as(proto.getDmNotes());
+      m_dmNotes = Optional.of(proto.getDmNotes());
 
     super.fromProto(proto.getBase());
   }
@@ -1260,12 +572,11 @@ public class Item extends CampaignEntry<BaseItem>
     }
   }
 
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------------
 
   /** The test. */
-  public static class Test extends ValueGroup.Test
+  public static class Test extends net.ixitxachitls.util.test.TestCase
+  //ValueGroup.Test
   {
     /** Storage to save the old, real random object. */
     //private java.util.Random m_random;

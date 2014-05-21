@@ -44,7 +44,7 @@ import net.ixitxachitls.util.logging.Log;
  */
 
 @ParametersAreNonnullByDefault
-public class Product extends Entry<BaseProduct>
+public class Product extends Entry
 {
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
@@ -199,9 +199,9 @@ public class Product extends Entry<BaseProduct>
    */
   public String getFullTitle()
   {
-    for(BaseProduct base : getBaseEntries())
+    for(BaseEntry base : getBaseEntries())
     {
-      String title = base.getFullTitle();
+      String title = ((BaseProduct)base).getFullTitle();
       if(!title.isEmpty())
         return title;
     }
@@ -211,24 +211,24 @@ public class Product extends Entry<BaseProduct>
 
   @Override
   @SuppressWarnings("unchecked")
-  public EntryKey<Product> getKey()
+  public EntryKey getKey()
   {
     if(m_owner.isPresent())
-      return new EntryKey<Product>
-        (getName(), Product.TYPE,
-          new EntryKey<>(m_owner.get(), BaseCharacter.TYPE));
+      return new EntryKey(getName(), Product.TYPE,
+                          Optional.of(new EntryKey(m_owner.get(),
+                                                   BaseCharacter.TYPE)));
 
-    return new EntryKey<Product>(getName(), Product.TYPE);
+    return new EntryKey(getName(), Product.TYPE);
   }
 
   @Override
-  public void updateKey(EntryKey<? extends AbstractEntry> inKey)
+  public void updateKey(EntryKey inKey)
   {
-    EntryKey<?> parent = inKey.getParent();
-    if(parent == null)
+    Optional<EntryKey> parent = inKey.getParent();
+    if(!parent.isPresent())
       return;
 
-    m_owner = Optional.of(parent.getID());
+    m_owner = Optional.of(parent.get().getID());
   }
 
   @Override

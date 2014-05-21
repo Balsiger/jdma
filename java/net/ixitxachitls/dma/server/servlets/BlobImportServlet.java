@@ -40,6 +40,7 @@ import com.google.appengine.api.files.FileServiceFactory;
 import com.google.appengine.api.files.FileWriteChannel;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMADatastore;
@@ -101,7 +102,7 @@ public class BlobImportServlet extends HttpServlet
     try
     {
       String keyName = request.getParam("key");
-      EntryKey<?> key = DMAServlet.extractKey(keyName);
+      Optional<EntryKey> key = DMAServlet.extractKey(keyName);
 
       if(key == null)
       {
@@ -111,7 +112,7 @@ public class BlobImportServlet extends HttpServlet
       else
       {
         DMADatastore store = DMADataFactory.get();
-        AbstractEntry entry = store.getEntry(key);
+        AbstractEntry entry = store.getEntry(key.get());
 
         if(entry == null)
         {

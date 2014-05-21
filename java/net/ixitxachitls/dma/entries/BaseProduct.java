@@ -66,7 +66,7 @@ import net.ixitxachitls.util.logging.Log;
  */
 
 @ParametersAreNonnullByDefault
-public class BaseProduct extends BaseEntry<BaseProduct>
+public class BaseProduct extends BaseEntry
 {
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
@@ -1976,7 +1976,8 @@ public class BaseProduct extends BaseEntry<BaseProduct>
   //------------------------------------------------------------------- test
 
   /** This is the test. */
-  public static class Test extends ValueGroup.Test
+  public static class Test extends net.ixitxachitls.util.test.TestCase
+  //ValueGroup.Test
   {
     //----- text -----------------------------------------------------------
 

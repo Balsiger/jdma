@@ -26,6 +26,8 @@ package net.ixitxachitls.dma.server.servlets;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Optional;
+
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
@@ -258,13 +260,12 @@ public class RemoveActionServlet extends ActionServlet
       return "gui.alert('Must be logged in to delete!');";
 
     String keyParam = inRequest.getParam("key");
-    EntryKey<? extends AbstractEntry> key =
-      EntryKey.fromString(keyParam);
+    Optional<EntryKey> key = EntryKey.fromString(keyParam);
 
-    if(key == null)
+    if(!key.isPresent())
       return "gui.alert('Invalid key " + keyParam + "');";
 
-    AbstractEntry entry = DMADataFactory.get().getEntry(key);
+    AbstractEntry entry = DMADataFactory.get().getEntry(key.get());
     if(entry == null)
       return "gui.alert('Could not find " + key + " to delete');";
 

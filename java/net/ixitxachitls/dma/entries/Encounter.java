@@ -45,7 +45,7 @@ import net.ixitxachitls.util.logging.Log;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class Encounter extends CampaignEntry<BaseEncounter>
+public class Encounter extends CampaignEntry
 {
   /**
    * Create a default, unnamed encounter.

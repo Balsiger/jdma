@@ -325,13 +325,14 @@ public class Reference<T extends AbstractEntry> extends Value<Reference<T>>
    * Resolve the referenced base product.
    *
    */
+  @SuppressWarnings("unchecked")
   public void resolve()
   {
     if(m_resolved)
       return;
 
     if(m_entry == null)
-      m_entry = DMADataFactory.get()
+      m_entry = (T)DMADataFactory.get()
         .getEntry(AbstractEntry.createKey(m_name.get(), m_type));
 
     m_resolved = true;

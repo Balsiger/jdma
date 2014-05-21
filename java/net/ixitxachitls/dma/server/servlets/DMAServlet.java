@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.utils.SystemProperty;
+import com.google.common.base.Optional;
 
 import org.easymock.EasyMock;
 
@@ -160,8 +161,8 @@ public abstract class DMAServlet extends BaseServlet
    * @return   the entry key for the path, if any
    *
    */
-  public static @Nullable EntryKey<? extends AbstractEntry>
-    extractKey(String inPath)
+  public static
+  Optional<EntryKey> extractKey(String inPath)
   {
     return EntryKey.fromString(inPath);
   }
@@ -200,11 +201,11 @@ public abstract class DMAServlet extends BaseServlet
   public @Nullable AbstractEntry getEntry(DMARequest inRequest, String inPath)
   {
     String path = inPath.replaceAll("\\.[^\\./\\\\]*$", "");
-    EntryKey<? extends AbstractEntry> key = extractKey(path);
-    if(key == null)
+    Optional<EntryKey> key = extractKey(path);
+    if(!key.isPresent())
       return null;
 
-    return inRequest.getEntry(key);
+    return inRequest.getEntry(key.get());
   }
 
   //........................................................................
@@ -347,9 +348,9 @@ public abstract class DMAServlet extends BaseServlet
 
       for(int i = 0; i < tests.length; i += 3)
       {
-        EntryKey<?> key = DMAServlet.extractKey(tests[i + 1]);
+        Optional<EntryKey> key = DMAServlet.extractKey(tests[i + 1]);
         assertEquals(tests[i], tests[i + 2],
-                     key == null ? null : key.toString());
+                     key == null ? null : key.get().toString());
       }
     }
 

@@ -171,7 +171,7 @@ public class ProductReference extends NewValue<BaseEntryProto.Reference>
       return;
 
     m_resolved = true;
-    m_product = DMADataFactory.get()
+    m_product = (BaseProduct)DMADataFactory.get()
       .getEntry(AbstractEntry.createKey(m_name, BaseProduct.TYPE));
   }
 

@@ -69,9 +69,8 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public abstract class AbstractExtension
-  <B extends BaseEntry, T extends AbstractEntry<B>>
-  extends ValueGroup<B> implements Serializable
+public abstract class AbstractExtension<T extends AbstractEntry>
+  extends ValueGroup implements Serializable
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -134,8 +133,8 @@ public abstract class AbstractExtension
 
   /** All the possible auto extensions for each class (if any). */
   protected static final Map<Class<?
-    extends AbstractExtension<?, ?>>, String []> s_autoExtensions =
-    new HashMap<Class<? extends AbstractExtension<?, ?>>, String []>();
+    extends AbstractExtension<?>>, String []> s_autoExtensions =
+    new HashMap<Class<? extends AbstractExtension<?>>, String []>();
 
   //........................................................................
 
@@ -198,7 +197,7 @@ public abstract class AbstractExtension
    *
    */
   @Override
-  public <S extends AbstractEntry<B>> AbstractType<S> getType()
+  public AbstractType<?> getType()
   {
     return m_entry.getType();
   }
@@ -212,9 +211,8 @@ public abstract class AbstractExtension
    * @return   the key for the entry
    *
    */
-  @SuppressWarnings("unchecked")
   @Override
-  public EntryKey<? extends AbstractEntry> getKey()
+  public EntryKey getKey()
   {
     return m_entry.getKey();
   }
@@ -258,7 +256,7 @@ public abstract class AbstractExtension
    * @return      the list with all the entries or null if none
    *
    */
-  public @Nullable List<Entry<?>> getSubEntries(boolean inDeep)
+  public @Nullable List<Entry> getSubEntries(boolean inDeep)
   {
     return null;
   }
@@ -343,7 +341,7 @@ public abstract class AbstractExtension
    *
    */
   @Override
-  public List<B> getBaseEntries()
+  public List<BaseEntry> getBaseEntries()
   {
     return m_entry.getBaseEntries();
   }
@@ -509,7 +507,7 @@ public abstract class AbstractExtension
    * @param       inAbstractExtensions the automatic extensions to use
    */
   public static void setAutoExtensions
-    (Class<? extends AbstractExtension<?, ?>> inClass,
+    (Class<? extends AbstractExtension<?>> inClass,
      String ... inAbstractExtensions)
   {
     if(inAbstractExtensions.length == 0)

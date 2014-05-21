@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
@@ -122,16 +123,16 @@ public class EntryServlet extends PageServlet
 
     if(entry == null)
     {
-      EntryKey<? extends AbstractEntry> key = extractKey(path);
-      if(key == null)
+      Optional<EntryKey> key = extractKey(path);
+      if(key.isPresent())
       {
         data.put("content", inRenderer.render("dma.errors.extract",
                                               map("name", path)));
         return data;
       }
 
-      AbstractType<? extends AbstractEntry> type = key.getType();
-      String id = key.getID();
+      AbstractType<? extends AbstractEntry> type = key.get().getType();
+      String id = key.get().getID();
 
       if(inRequest.hasParam("create") && inRequest.hasUser())
       {
@@ -149,7 +150,7 @@ public class EntryServlet extends PageServlet
             postfix = "-" + inRequest.getParam("store");
 
           entry = type.create(Entry.TEMPORARY + postfix);
-          entry.updateKey(key);
+          entry.updateKey(key.get());
 
           if(inRequest.hasParam("bases"))
             for(String base : inRequest.getParam("bases").split("\\s*,\\s*"))
@@ -521,28 +522,26 @@ public class EntryServlet extends PageServlet
     //----- path -----------------------------------------------------------
 
     /** The path Test. */
-    @SuppressWarnings("unchecked")
     @org.junit.Test
     public void path()
     {
-      BaseEntry<BaseEntry> entry = new BaseEntry<>("test");
+      BaseEntry entry = new BaseEntry("test");
       addEntry(entry);
       EntryServlet servlet = new EntryServlet();
 
       EasyMock.expect(m_request.getEntry
-                      ((EntryKey<BaseEntry<BaseEntry>>)
-                       DMAServlet.extractKey("/base entry/test")))
+                      (DMAServlet.extractKey("/base entry/test").get()))
         .andStubReturn(entry);
 
       EasyMock.replay(m_request, m_response);
 
       assertEquals("simple", "id",
-                   extractKey("/just/some/base entry/id").getID());
+                   extractKey("/just/some/base entry/id").get().getID());
 
       assertNull("simple", extractKey("guru/id"));
       assertEquals("simple", "id.txt-some",
                    extractKey("/just/some/base entry/id.txt-some")
-                   .getID());
+                   .get().getID());
       assertNull("simple", extractKey("id"));
 
       assertEquals("entry", "test",
@@ -556,11 +555,11 @@ public class EntryServlet extends PageServlet
       assertNull("entry", servlet.getEntry(m_request, "test/guru"));
 
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
-                   extractKey("/base entry/test").getType());
+                   extractKey("/base entry/test").get().getType());
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
-                   extractKey("/just/some/base entry/test").getType());
+                   extractKey("/just/some/base entry/test").get().getType());
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
-                   extractKey("/base entry/test").getType());
+                   extractKey("/base entry/test").get().getType());
       assertNull("type", extractKey(""));
 
       EasyMock.verify(m_request, m_response);

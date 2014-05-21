@@ -51,7 +51,7 @@ import net.ixitxachitls.util.logging.Log;
  */
 
 @ParametersAreNonnullByDefault
-public class BaseEntry<B extends BaseEntry> extends AbstractEntry<B>
+public class BaseEntry extends AbstractEntry
 {
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
@@ -102,17 +102,19 @@ public class BaseEntry<B extends BaseEntry> extends AbstractEntry<B>
   /**
    * The default constructor, with undefined values.
    */
+  /*
   protected BaseEntry()
   {
     super(TYPE);
   }
+  */
 
    /**
    * The default constructor, with undefined values.
    *
    * @param   inType the type of the entry
    */
-  protected BaseEntry(AbstractType<? extends BaseEntry> inType)
+  protected BaseEntry(AbstractType<?> inType)
   {
     super(inType);
   }
@@ -133,7 +135,7 @@ public class BaseEntry<B extends BaseEntry> extends AbstractEntry<B>
    * @param       inName     the name of the entry
    * @param       inType     the type of the entry
    */
-  protected BaseEntry(String inName, AbstractType<? extends BaseEntry> inType)
+  protected BaseEntry(String inName, AbstractType<?> inType)
   {
     super(inName, inType);
   }
@@ -185,7 +187,7 @@ public class BaseEntry<B extends BaseEntry> extends AbstractEntry<B>
       return new Combination.String(this, description);
 
     List<Combination<String>> combinations = new ArrayList<>();
-    for(BaseEntry<?> entry : getBaseEntries())
+    for(BaseEntry entry : getBaseEntries())
       combinations.add(entry.getCombinedDescription());
 
     return new Combination.String(this, combinations);
@@ -214,7 +216,8 @@ public class BaseEntry<B extends BaseEntry> extends AbstractEntry<B>
       return new Combination.String(this, description);
 
     List<Combination<String>> combinations = new ArrayList<>();
-    for(BaseEntry<?> entry : getBaseEntries())
+    for(BaseEntry entry : getBaseEntries())
+      if(entry instanceof BaseEntry)
       combinations.add(entry.getCombinedShortDescription());
 
     return new Combination.String(this, combinations);
@@ -276,7 +279,7 @@ public class BaseEntry<B extends BaseEntry> extends AbstractEntry<B>
       return new Combination.List<String>(this, m_worlds);
 
     List<Combination<List<String>>> combinations = new ArrayList<>();
-    for(BaseEntry<?> entry : getBaseEntries())
+    for(BaseEntry entry : getBaseEntries())
       combinations.add(entry.getCombinedWorlds());
 
     return new Combination.List<String>(combinations, this);
@@ -321,7 +324,7 @@ public class BaseEntry<B extends BaseEntry> extends AbstractEntry<B>
   public Combination<List<ProductReference>> getCombinedReferences()
   {
     List<Combination<List<ProductReference>>> combinations = new ArrayList<>();
-    for(BaseEntry<?> entry : getBaseEntries())
+    for(BaseEntry entry : getBaseEntries())
       combinations.add(entry.getCombinedReferences());
 
     if(m_categories.isEmpty())
@@ -350,7 +353,7 @@ public class BaseEntry<B extends BaseEntry> extends AbstractEntry<B>
   public Combination<List<String>> getCombinedCategories()
   {
     List<Combination<List<String>>> combinations = new ArrayList<>();
-    for(BaseEntry<?> entry : getBaseEntries())
+    for(BaseEntry entry : getBaseEntries())
       combinations.add(entry.getCombinedCategories());
 
     if(m_categories.isEmpty())
@@ -377,7 +380,7 @@ public class BaseEntry<B extends BaseEntry> extends AbstractEntry<B>
   public Combination<String> getCombinedIncomplete()
   {
     List<Combination<String>> combinations = new ArrayList<>();
-    for(BaseEntry<?> entry : getBaseEntries())
+    for(BaseEntry entry : getBaseEntries())
       combinations.add(entry.getCombinedIncomplete());
 
     if(m_incomplete.isEmpty())

@@ -62,7 +62,7 @@ import net.ixitxachitls.util.logging.Log;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
 @ParametersAreNonnullByDefault
-public class BaseLevel extends BaseEntry<BaseLevel>
+public class BaseLevel extends BaseEntry
 {
   /**
    * Create the base level.

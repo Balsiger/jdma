@@ -117,8 +117,7 @@ public class DMARequest extends HttpServletRequestWrapper
   private @Nullable BaseCharacter m_userOverride = null;
 
   /** The cached entries for the request. */
-  private Map<EntryKey<?>, AbstractEntry> m_entries =
-    Maps.newHashMap();
+  private Map<EntryKey, AbstractEntry> m_entries = Maps.newHashMap();
 
   /** The player for the request, if any. */
 //   private Character m_player = null;
@@ -492,7 +491,7 @@ public class DMARequest extends HttpServletRequestWrapper
    *
    */
   @SuppressWarnings("unchecked") // need to cast result
-  public @Nullable <T extends AbstractEntry<?>> T getEntry(EntryKey<T> inKey)
+  public @Nullable <T extends AbstractEntry> T getEntry(EntryKey inKey)
   {
     if(!m_entries.containsKey(inKey))
       m_entries.put(inKey, DMADataFactory.get().getEntry(inKey));
@@ -558,7 +557,7 @@ public class DMARequest extends HttpServletRequestWrapper
 
     String override = getParam("user");
     if(override != null && !override.isEmpty())
-      m_userOverride = DMADataFactory.get()
+      m_userOverride = (BaseCharacter)DMADataFactory.get()
         .getEntry(AbstractEntry.createKey(override, BaseCharacter.TYPE));
 
     m_extractedUser = true;

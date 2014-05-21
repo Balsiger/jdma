@@ -161,7 +161,7 @@ public class NewMoney extends NewValue.Addable<MoneyProto>
     return m_weapon;
   }
 
-  public double getAsGold()
+  public double asGold()
   {
     return m_platinum * 10 + m_gold + m_silver / 10.0 + m_copper / 100.0
       + m_armor * m_armor * 1000 + m_weapon + m_weapon * m_weapon * 2000;
@@ -214,7 +214,7 @@ public class NewMoney extends NewValue.Addable<MoneyProto>
   @Override
   public String group()
   {
-    double gold = getAsGold();
+    double gold = asGold();
     if(gold < 0.1)
       return "1 " + CP;
 

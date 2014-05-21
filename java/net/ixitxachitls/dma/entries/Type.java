@@ -51,7 +51,7 @@ import javax.annotation.concurrent.Immutable;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class Type<T extends Entry<?>> extends AbstractType<T>
+public class Type<T extends Entry> extends AbstractType<T>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -101,8 +101,8 @@ public class Type<T extends Entry<?>> extends AbstractType<T>
   private @Nullable BaseType<? extends BaseEntry> m_base;
 
   /** All the non-base types available. */
-  private static final Map<String, Type<? extends Entry<?>>> s_types =
-    new HashMap<String, Type<? extends Entry<?>>>();
+  private static final Map<String, Type<? extends Entry>> s_types =
+    new HashMap<String, Type<? extends Entry>>();
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;

@@ -29,6 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 
 import org.easymock.EasyMock;
 
@@ -95,16 +96,15 @@ public class SaveActionServlet extends ActionServlet
     if(keyParam == null || keyParam.isEmpty())
       return "gui.alert('Cannot save values, as no key is given');";
 
-    EntryKey<? extends AbstractEntry> key =
-      EntryKey.fromString(keyParam);
+    Optional<EntryKey> key = EntryKey.fromString(keyParam);
 
-    if(key == null)
+    if(!key.isPresent())
       return "gui.alert('Cannot create entry key for " + keyParam + "');";
 
-    AbstractEntry entry = DMADataFactory.get().getEntry(key);
+    AbstractEntry entry = DMADataFactory.get().getEntry(key.get());
     if(entry == null)
       if(inRequest.hasParam("_create_"))
-        entry = key.getType().create(key.getID());
+        entry = key.get().getType().create(key.get().getID());
       else
         return "gui.alert('Cannot find entry for " + key + "');";
 

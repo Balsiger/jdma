@@ -25,7 +25,6 @@ package net.ixitxachitls.dma.entries.extensions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.values.Text;
 
@@ -45,7 +44,7 @@ import net.ixitxachitls.dma.values.Text;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class Incomplete extends Extension<BaseItem, Entry<BaseItem>>
+public class Incomplete extends Extension<Entry>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -61,7 +60,7 @@ public class Incomplete extends Extension<BaseItem, Entry<BaseItem>>
    * @param       inName the name of the extension
    *
    */
-  public Incomplete(Entry<BaseItem> inEntry, String inName)
+  public Incomplete(Entry inEntry, String inName)
   {
     super(inEntry, inName);
   }

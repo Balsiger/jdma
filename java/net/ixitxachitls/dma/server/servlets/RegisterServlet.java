@@ -113,7 +113,7 @@ public class RegisterServlet extends ActionServlet
       return "You must login to register";
     }
 
-    BaseCharacter user = DMADataFactory.get().getEntry
+    BaseCharacter user = (BaseCharacter)DMADataFactory.get().getEntry
       (AbstractEntry.createKey(username, BaseCharacter.TYPE));
     if(user != null)
     {

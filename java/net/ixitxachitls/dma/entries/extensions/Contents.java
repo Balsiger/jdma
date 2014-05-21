@@ -30,18 +30,14 @@ import java.util.Map;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.ixitxachitls.dma.entries.BaseEntry;
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.CampaignEntry;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -61,7 +57,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class Contents extends Extension<BaseItem, Item>
+public class Contents extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -185,12 +181,14 @@ public class Contents extends Extension<BaseItem, Item>
       if(item == null || !inDeep)
         continue;
 
+      /*
       Map<String, Item> contained = item.containedItems(true);
       for(String key : contained.keySet())
         if(items.containsKey(key))
           Log.warning("depected item loop for " + key);
 
       items.putAll(item.containedItems(true));
+      */
     }
 
     return items;
@@ -212,7 +210,7 @@ public class Contents extends Extension<BaseItem, Item>
    * @return      true if added, false if not
    *
    */
-  public boolean add(CampaignEntry<? extends BaseEntry> inEntry)
+  public boolean add(CampaignEntry inEntry)
   {
     String name = inEntry.getName();
     List<Name> names = new ArrayList<Name>();
@@ -347,14 +345,14 @@ public class Contents extends Extension<BaseItem, Item>
         if(item == null)
           continue;
 
-        Money value = item.getValue();
-        if(value == null)
-          continue;
+        //Money value = item.getValue();
+        //if(value == null)
+        //  continue;
 
-        if(total == null)
-          total = value;
-        else
-          total = total.add(value);
+        //if(total == null)
+        //  total = value;
+        //else
+        //  total = total.add(value);
       }
 
       if(total != null)
@@ -371,14 +369,14 @@ public class Contents extends Extension<BaseItem, Item>
         if(item == null)
           continue;
 
-        Weight value = item.getTotalWeight();
-        if(value == null)
-          continue;
+        //Weight value = item.getTotalWeight();
+        //if(value == null)
+        //  continue;
 
-        if(total == null)
-          total = value;
-        else
-          total = total.add(value);
+        //if(total == null)
+        //  total = value;
+        //else
+        //  total = total.add(value);
       }
 
       if(total != null)
@@ -395,7 +393,8 @@ public class Contents extends Extension<BaseItem, Item>
   //------------------------------------------------------------------- test
 
   /** The test. */
-  public static class Test extends ValueGroup.Test
+  public static class Test extends net.ixitxachitls.util.test.TestCase
+  //ValueGroup.Test
   {
     //----- empty container ------------------------------------------------
 

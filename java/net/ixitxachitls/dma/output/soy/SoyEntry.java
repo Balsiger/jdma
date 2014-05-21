@@ -166,7 +166,7 @@ public class SoyEntry extends SoyAbstract
         }
       }
 
-      for(AbstractEntry<?> dependency : m_entry.collectDependencies())
+      for(AbstractEntry dependency : m_entry.collectDependencies())
         buffer.append(dependency.toString());
 
       buffer.append(m_entry.toString());

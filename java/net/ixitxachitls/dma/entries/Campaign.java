@@ -19,53 +19,32 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.CampaignProto;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is the storage container for campaign specific information.
  *
  * @file          Campaign.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ParametersAreNonnullByDefault
-public class Campaign extends CampaignEntry<BaseCampaign>
+public class Campaign extends CampaignEntry
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------- Campaign -------------------------------
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
@@ -78,25 +57,15 @@ public class Campaign extends CampaignEntry<BaseCampaign>
     super(TYPE);
   }
 
-  //........................................................................
-  //------------------------------- Campaign -------------------------------
-
   /**
    * This is the normal constructor.
    *
    * @param       inName  the name of the campaign
-   *
    */
   public Campaign(String inName)
   {
     super(inName, TYPE);
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The type of this entry. */
   public static final Type<Campaign> TYPE =
@@ -105,63 +74,38 @@ public class Campaign extends CampaignEntry<BaseCampaign>
   /** The type of the base entry to this entry. */
   public static final BaseType<BaseCampaign> BASE_TYPE = BaseCampaign.TYPE;
 
-  //----- dm ---------------------------------------------------------------
-
   /** The dm for this campaign. */
-  @Key("dm")
-  protected Name m_dm = new Name();
+  protected Optional<String> m_dm = Optional.absent();
 
-  //........................................................................
-
-  static
-  {
-    extractVariables(Campaign.class);
-  }
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //-------------------------------- getKey --------------------------------
-
-  /**
-   * Get the key uniqueliy identifying this entry.
-   *
-   * @return   the key
-   *
-   */
   @Override
-  public EntryKey<Campaign> getKey()
+  public EntryKey getKey()
   {
     List<String> names = getBaseNames();
     if(names.size() != 1)
       Log.warning("expected exactly one base for a campaign, but got " + names);
 
-    return
-      new EntryKey<Campaign>(getName(), Campaign.TYPE,
-                             new EntryKey<>(names.size() > 0
-                               ? names.get(0)
-                                 : "$undefined$",
-                                 BaseCampaign.TYPE));
+    return new EntryKey(getName(), Campaign.TYPE,
+                        Optional.of(new EntryKey(names.size() > 0
+                                                 ? names.get(0)
+                                                   : "$undefined$",
+                                                   BaseCampaign.TYPE)));
   }
 
-  //........................................................................
-  //------------------------------ getDMName -------------------------------
-
   /**
-   * Get the name of the DM of the campaign.
+   * Get the dm name.
    *
-   * @return      a String with the name
-   *
+   * @return the dm name
    */
+  public Optional<String> getDM()
+  {
+    return m_dm;
+  }
+
   @Override
   public String getDMName()
   {
     return m_dm.get();
   }
-
-  //........................................................................
-  //------------------------------- getItem --------------------------------
 
   /**
    * Get the item denoted with the given name from the campaign.
@@ -169,60 +113,24 @@ public class Campaign extends CampaignEntry<BaseCampaign>
    * @param       inName the name of the item to get
    *
    * @return      the item found or null if not found
-   *
    */
   public @Nullable Item getItem(String inName)
   {
-    return DMADataFactory.get().getEntry
-      (new EntryKey<Item>(inName, Item.TYPE, getKey()));
+    return (Item)
+      DMADataFactory.get().getEntry(new EntryKey(inName, Item.TYPE,
+                                                 Optional.of(getKey())));
   }
 
-  //........................................................................
-  //----------------------------- getCampaign ------------------------------
-
-  /**
-   * Get the campaign this character is in.
-   *
-   * @return      the Campaign for this character
-   *
-   */
   @Override
   public Campaign getCampaign()
   {
     return this;
   }
 
-  //........................................................................
-
-  //----------------------------- getFilenames -----------------------------
-
-  /**
-   * Get the names of the files read into this campaign.
-   *
-   * @return      a list with all the file names
-   *
-   * @undefined   never
-   *
-   */
-//  public List<String> getFilenames()
-//  {
-//    ArrayList<String> files = new ArrayList<String>();
-//
-//    for(DMAFile file : m_dmaFiles.values())
-//      files.add(file.getStorageName());
-//
-//    return files;
-//  }
-
-  //........................................................................
-
-  //------------------------------- monsters -------------------------------
-
   /**
    * Get the free roaming monsters in the campaign.
    *
    * @return  the list of monster names
-   *
    */
   public List<Monster> monsters()
   {
@@ -231,10 +139,6 @@ public class Campaign extends CampaignEntry<BaseCampaign>
 
     return monsters;
   }
-
-  //........................................................................
-
-  //------------------------------- compute --------------------------------
 
   /**
    * Compute a value for a given key, taking base entries into account if
@@ -245,6 +149,7 @@ public class Campaign extends CampaignEntry<BaseCampaign>
    * @return   the compute value
    *
    */
+  /*
   @Override
   public @Nullable Object compute(String inKey)
   {
@@ -347,15 +252,8 @@ public class Campaign extends CampaignEntry<BaseCampaign>
 
     return super.compute(inKey);
   }
+*/
 
-  //........................................................................
-  //------------------------------- getPath --------------------------------
-
-  /**
-   * Get the path to this entry.
-   *
-   * @return      the path to read this entry
-   */
   @Override
   public String getPath()
   {
@@ -366,14 +264,6 @@ public class Campaign extends CampaignEntry<BaseCampaign>
     return "/" + BaseCampaign.TYPE.getLink() + "/$undefined$/" + getName();
   }
 
-  //........................................................................
-  //----------------------------- getEditType ------------------------------
-
-  /**
-   * Get the path to this entry.
-   *
-   * @return      the path to read this entry
-   */
   @Override
   public String getEditType()
   {
@@ -381,18 +271,6 @@ public class Campaign extends CampaignEntry<BaseCampaign>
       + "/" + Campaign.TYPE + "/" + getName();
   }
 
-  //........................................................................
-  //--------------------------------- isDM ---------------------------------
-
-  /**
-   * Check whether the given user is the DM for this entry. Everybody is a DM
-   * for a base product.
-   *
-   * @param       inUser the user accessing
-   *
-   * @return      true for DM, false for not
-   *
-   */
   @Override
   public boolean isDM(@Nullable BaseCharacter inUser)
   {
@@ -402,14 +280,13 @@ public class Campaign extends CampaignEntry<BaseCampaign>
     return inUser.getName().equals(getDMName());
   }
 
-  //........................................................................
+  @Override
+  public void set(Values inValues)
+  {
+    super.set(inValues);
 
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
+    m_dm = inValues.use("DM", m_dm);
+  }
 
   @Override
   public Message toProto()
@@ -418,7 +295,7 @@ public class Campaign extends CampaignEntry<BaseCampaign>
 
     builder.setBase((CampaignEntryProto)super.toProto());
 
-    if(m_dm.isDefined())
+    if(m_dm.isPresent())
       builder.setDm(m_dm.get());
 
     CampaignProto proto = builder.build();
@@ -439,7 +316,7 @@ public class Campaign extends CampaignEntry<BaseCampaign>
     super.fromProto(proto.getBase());
 
     if(proto.hasDm())
-      m_dm = m_dm.as(proto.getDm());
+      m_dm = Optional.of(proto.getDm());
   }
 
   @Override
@@ -454,16 +331,4 @@ public class Campaign extends CampaignEntry<BaseCampaign>
       Log.warning("could not properly parse proto: " + e);
     }
   }
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
-
-  /** The test. */
-  /*  public static class Test extends net.ixitxachitls.util.test.TestCase
-  {
-  }
-  */
-
-  //........................................................................
 }

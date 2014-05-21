@@ -1,0 +1,238 @@
+/* ****************************************************************************
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/*
+ * Templates for products
+ */
+{namespace dma.entries.products}
+
+/**
+ * Show the given entry in standard format.
+ * 
+ * @param entry The entry to show.
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ */
+{template .show autoescape="true"}
+  {call dma.entry.show}
+    {param entry: $entry /}
+    {param type: 'product' /}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param list: $list /}
+    {param next: $next /}
+    {param last: $last /}
+    {param color: '#444' /}
+    {param title}
+      {call dma.entry._new_title}
+        {param title}
+          {$entry.full_title}
+        {/param}
+        {param color: '#444' /}
+      {/call}      
+    {/param}
+    {param values}            
+      {call dma.entry.value}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param color: '#444' /}
+      {/call}
+      {if length($entry.baseNames)}
+        {call dma.entry.value}
+          {param label: 'Base' /}
+          {param value}
+            {foreach $base in $entry.baseNames}
+              {call dma.page.link}
+                {param text: $base /}
+                {param url: '/product/'  + $base /}
+              {/call}
+              {if not isLast($base)}; {/if}
+            {/foreach}
+          {/param}
+          {param color: '#008' /}
+        {/call} 
+      {/if}      
+      {if $entry.owner.present}
+        {call dma.entry.value}
+          {param label: 'Owner' /}
+          {param value: $entry.owner.get /}
+          {param color: '#444' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'Edition' /}
+        {param value}
+           {if $entry.edition.present}
+             {$entry.edition.get} edition,
+           {/if} 
+           {if $entry.printing.present}
+             {$entry.printing.get} printing
+           {/if}
+        {/param}
+        {param color: '#444' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Status' /}
+        {param value}
+          {$entry.status.getName}
+        {/param}
+        {param color: '#444' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Condition' /}
+        {param value}
+          {$entry.condition} 
+          {if $entry.condition_comment.present}
+            {sp}{$entry.condition_comment.get}
+          {/if}
+        {/param} 
+        {param color: '#444' /}
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Formatting a list of entries.
+ *
+ * @param title The list title.
+ * @param start The start index
+ * @param pagesize The size of the page
+ * @param entries The entries printed
+ * @param label The navigation label for this page
+ * @param path The path to this page
+ *
+ */
+{template .list}
+  {call dma.entry.newlist}
+    {param title: $title /}
+    {param label: $label /}
+    {param path: $path /}
+    {param start: $start /}
+    {param pagesize: $pagesize /}
+    {param size: $entries ? length($entries) : 0 /}
+    {param titles: [ 'ID', 'Title', 'Status'] /}
+    {param entries}
+      {foreach $entry in $entries}
+        <tr onclick="util.link(event, '{$entry.path}')">
+          {call dma.entry.newListEntry}
+            {param path: $entry.path /}
+            {param values: [
+              $entry.name, $entry.fullt_title, $entry.status
+            ] /}
+          {/call}
+        </tr>
+      {/foreach}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Editiing the base character.
+ * 
+ * @param entry The character to edit. 
+ * @param id    THe id to use for the editing dialog.
+ */
+{template .edit autoescape="true"}
+  {call dma.edit.entry}
+    {param entry: $entry /}
+    {param type: 'product' /}
+    {param id: $id /}
+    {param values}
+      {call dma.edit.value}
+        {param name: 'name' /}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'base' /}
+        {param label: 'Base' /}
+        {param values: $entry.base_names /}
+        {param validate: 'non-empty' /}
+        {param color: '#008' /}
+        {param autocomplete: 'base product/name' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'owner' /}
+        {param label: 'Owner' /}
+        {param value: $entry.owner.present ? $entry.owner.get : '' /}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+        {param autocomplete: 'base character/name' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'edition' /}
+        {param label: 'Edition' /}        
+        {param value}
+          {call dma.edit.field_input}
+            {param name: 'edition' /}
+            {param value: $entry.edition.present ? $entry.edition.get : '' /}
+            {param validate: 'non-empty' /}
+            {param class: 'field2' /}
+            {param caption: 'edition' /}
+          {/call}             
+          {call dma.edit.field_input}
+            {param name: 'printing' /}
+            {param value: $entry.printing.present ? $entry.printing.get : '' /}
+            {param validate: 'non-empty' /}
+            {param class: 'field2' /}
+            {param caption: 'printing' /}
+          {/call}   
+        {/param}
+        {param validate: 'non-empty' /}
+        {param color: '#444' /}
+      {/call}     
+      {call dma.edit.value_selection}
+        {param name: 'status' /}
+        {param label: 'Status' /}
+        {param value: $entry.status.string /}
+        {param choices: $entry.status.names /}
+        {param color: '#444' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'condition' /}
+        {param label: 'Condition' /}
+        {param value} 
+          {call dma.edit.field_selection}
+            {param name: 'condition' /}
+            {param value: $entry.condition.string /}
+            {param choices: $entry.condition.names /}
+            {param class: 'narrow' /}            
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'condition_comment' /}
+            {param value: $entry.condition_comment.present 
+              ? $entry.condition_comment.get : '' /}
+            {param validate: 'any' /}
+            {param class: 'field2' /}
+            {param caption: 'comment' /}
+          {/call}   
+        {/param}
+        {param color: '#444' /}
+      {/call}    
+    {/param}
+  {/call}
+{/template}

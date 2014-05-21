@@ -89,7 +89,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class BaseMonster extends BaseEntry<BaseMonster>
+public class BaseMonster extends BaseEntry
 {
   //----------------------------------------------------------------- nested
 

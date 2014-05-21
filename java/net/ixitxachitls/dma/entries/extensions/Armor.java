@@ -27,7 +27,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.entries.indexes.Index;
 
@@ -49,7 +48,7 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class Armor extends Extension<BaseItem, Item>
+public class Armor extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
 

@@ -28,7 +28,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
-import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.indexes.Index;
 
@@ -52,8 +51,7 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public abstract class Extension<B extends BaseEntry, T extends Entry<B>>
-  extends AbstractExtension<B, T>
+public abstract class Extension<T extends Entry> extends AbstractExtension<T>
 {
   //--------------------------------------------------------- constructor(s)
 

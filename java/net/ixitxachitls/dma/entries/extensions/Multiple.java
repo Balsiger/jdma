@@ -26,7 +26,6 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Expression;
 import net.ixitxachitls.dma.values.Value;
@@ -136,7 +135,8 @@ public class Multiple extends Counted
   //------------------------------------------------------------------- test
 
   /** The test. */
-  public static class Test extends ValueGroup.Test
+  public static class Test extends net.ixitxachitls.util.test.TestCase
+  //ValueGroup.Test
   {
     //----- value ----------------------------------------------------------
 
