@@ -59,6 +59,16 @@ public class Item extends CampaignEntry
     super(TYPE);
   }
 
+  /**
+   * This is the internal, default constructor.
+   *
+   * @param inName the name of the item
+   */
+  public Item(String inName)
+  {
+    super(inName, TYPE);
+  }
+
   /** The type of this entry. */
   public static final Type<Item> TYPE =
     new Type<Item>(Item.class, BaseItem.TYPE);
@@ -67,7 +77,7 @@ public class Item extends CampaignEntry
   public static final BaseType<BaseItem> BASE_TYPE = BaseItem.TYPE;
 
   /** The actual number of hit points the item currently has. */
-  protected Integer m_hp = Integer.MIN_VALUE;
+  protected int m_hp = Integer.MIN_VALUE;
 
   /** The total value of the item. */
   protected Optional<NewMoney> m_value = Optional.absent();
@@ -130,7 +140,11 @@ public class Item extends CampaignEntry
    */
   public double getGoldValue()
   {
-    return getCombinedValue().getValue().asGold();
+    NewMoney value = getCombinedValue().getValue();
+    if (value == null)
+      return 0;
+
+    return value.asGold();
   }
 
   /**
@@ -389,7 +403,12 @@ public class Item extends CampaignEntry
   {
     if(m_hp == Integer.MIN_VALUE)
     {
-      m_hp = getCombinedMaxHP().getValue();
+      Integer hp = getCombinedMaxHP().getValue();
+      if(hp != null)
+        m_hp = hp;
+      else
+        m_hp = 1;
+
       changed();
     }
 
@@ -398,7 +417,10 @@ public class Item extends CampaignEntry
       // correct the random value with the computation from the value in
       // relation to the base value
       double itemValue = getGoldValue();
-      double baseValue = getCombinedValue().getValue().asGold();
+      NewMoney baseMoneyValue = getCombinedValue().getValue();
+      double baseValue = 0;
+      if (baseMoneyValue != null)
+        baseValue = baseMoneyValue.asGold();
 
       // We have to try to get the value from our bases.
       List<String> appearances = new ArrayList<String>();
@@ -511,7 +533,7 @@ public class Item extends CampaignEntry
     if(m_value.isPresent())
       builder.setValue(m_value.get().toProto());
 
-    if(!m_appearance.isEmpty())
+    if(m_appearance != null && !m_appearance.isEmpty())
       builder.setAppearance(m_appearance);
 
     if(m_playerNotes.isPresent())

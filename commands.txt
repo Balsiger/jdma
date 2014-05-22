@@ -1,4 +1,4 @@
-# start a test server
+:q# start a test server
 
 # import all data into local version
 java net.ixitxachitls.dma.server.Importer dma/BaseCharacters/Ixitxachitls.dma -n
@@ -41,3 +41,5 @@ java net.ixitxachitls.dma.server.Importer -b -n export-2013-11-30
 # download wizards art gallery images
 grep '/dnd/images/mof_gallery/M[^\.]*\.jpg' -o MF | xargs -n 1 -I file basename file | xargs -n 1 -I file curl http://www.wizards.com/dnd/images/mof_gallery/file -o file
 
+# import into production
+java net.ixitxachitls.dma.server.Importer -h jdmaixit-hrd.appspot.com -p 443 -b -m -v www.ixitxachitls.net -w 80 ...
