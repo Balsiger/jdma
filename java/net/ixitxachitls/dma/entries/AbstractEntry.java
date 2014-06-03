@@ -47,6 +47,7 @@ import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
@@ -86,6 +87,29 @@ import net.ixitxachitls.util.logging.Log;
 public abstract class AbstractEntry extends ValueGroup
   implements Comparable<AbstractEntry>, Serializable
 {
+  /** A simple auxiliary class to store a link with name. */
+  public static class Link
+  {
+    private final String m_name;
+    private final String m_url;
+
+    public Link(String inName, String inURL)
+    {
+      m_name = inName;
+      m_url = inURL;
+    }
+
+    public String getName()
+    {
+      return m_name;
+    }
+
+    public String getURL()
+    {
+      return m_url;
+    }
+  }
+
   /**
    * The constructor with a type.
    *
@@ -688,15 +712,6 @@ public abstract class AbstractEntry extends ValueGroup
     return false;
   }
 
-  //........................................................................
-  //------------------------------- hashCode -------------------------------
-
-  /**
-   * Compute the hash code for this class.
-   *
-   * @return      the hash code
-   *
-   */
   @Override
   public int hashCode()
   {
@@ -909,14 +924,13 @@ public abstract class AbstractEntry extends ValueGroup
   /**
    * Get the navigation information to this entry.
    *
-   * @return      an array with pairs for caption and link per navigation entry
+   * @return      the links with the parent entries
    */
-  public String [] getNavigation()
+  public List<Link> getNavigation()
   {
-    return new String [] {
-      getType().getLink(), "/" + getType().getMultipleLink(),
-      getName(), "/" + getType().getLink() + "/" + getName(),
-    };
+    return ImmutableList.of
+      (new Link(getType().getLink(), "/" + getType().getMultipleLink()),
+       new Link(getName(), "/" + getType().getLink() + "/" + getName()));
   }
 
   /**
@@ -952,7 +966,7 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @return      true if the entry can be seen, false if not
    */
-  public boolean isShownTo(BaseCharacter inUser)
+  public boolean isShownTo(Optional<BaseCharacter> inUser)
   {
     return true;
   }
@@ -973,9 +987,6 @@ public abstract class AbstractEntry extends ValueGroup
     return new EntryKey(inID, inType);
   }
 
-  //........................................................................
-  //------------------------------ createKey -------------------------------
-
   /**
    * Create a key for the given values. If parent id or type are null, no parent
    * will be used.
@@ -995,14 +1006,10 @@ public abstract class AbstractEntry extends ValueGroup
     if(inParentID.isPresent() && inParentType.isPresent())
       return createKey(inID, inType);
 
-    @SuppressWarnings("unchecked")
     EntryKey key = new EntryKey(inParentID.get(), inParentType.get());
 
     return new EntryKey(inID, inType, Optional.of(key));
   }
-
-  //........................................................................
-  //------------------------------ getSummary ------------------------------
 
   /**
    * Get a summary for the entry, using the given parameters.
@@ -1027,12 +1034,6 @@ public abstract class AbstractEntry extends ValueGroup
 
     return summary;
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
 
   public void addFile(String inName, String inType, String inPath,
                       String inIcon)

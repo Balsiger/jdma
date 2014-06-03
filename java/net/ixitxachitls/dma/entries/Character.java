@@ -257,15 +257,17 @@ public class Character extends CampaignEntry
   public Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
-    for(Name name : m_items)
-    {
-      Item item = getCampaign().getItem(name.get());
-      if(item == null)
-        continue;
 
-      items.put(name.get(), item);
-      //items.putAll(item.containedItems(inDeep));
-    }
+    if(getCampaign().isPresent())
+      for(Name name : m_items)
+      {
+        Item item = getCampaign().get().getItem(name.get());
+        if(item == null)
+          continue;
+
+        items.put(name.get(), item);
+        //items.putAll(item.containedItems(inDeep));
+      }
 
     return items;
   }
@@ -368,16 +370,17 @@ public class Character extends CampaignEntry
   {
     NewMoney total = new NewMoney(0, 0, 0, 0, 0, 0);
 
-    for(Name name : m_items)
-    {
-      Item item = getCampaign().getItem(name.get());
-      if(item == null)
-        continue;
+    if(getCampaign().isPresent())
+      for(Name name : m_items)
+      {
+        Item item = getCampaign().get().getItem(name.get());
+        if(item == null)
+          continue;
 
-      NewMoney value = item.getCombinedValue().getValue();
-      if(value != null)
-        total = (NewMoney)total.add(value);
-    }
+        NewMoney value = item.getCombinedValue().getValue();
+        if(value != null)
+          total = (NewMoney)total.add(value);
+      }
 
     return total;
   }
@@ -393,18 +396,20 @@ public class Character extends CampaignEntry
    */
   public NewWeight totalWeight()
   {
-    NewWeight total = new NewWeight(NewRational.ZERO, NewRational.ZERO);
+    NewWeight total = new NewWeight(Optional.of(NewRational.ZERO),
+                                    Optional.of(NewRational.ZERO));
 
-    for(Name name : m_items)
-    {
-      Item item = getCampaign().getItem(name.get());
-      if(item == null)
-        continue;
+    if(getCampaign().isPresent())
+      for(Name name : m_items)
+      {
+        Item item = getCampaign().get().getItem(name.get());
+        if(item == null)
+          continue;
 
-      NewWeight weight = item.getCombinedWeight().getValue();
-      if(weight != null)
-        total = (NewWeight)total.add(weight);
-    }
+        NewWeight weight = item.getCombinedWeight().getValue();
+        if(weight != null)
+          total = (NewWeight)total.add(weight);
+      }
 
     return total;
   }
@@ -478,35 +483,11 @@ public class Character extends CampaignEntry
     names.add(m_items.newElement().as(name));
     m_items = m_items.as(names);
 
-    inEntry.setParent(getKey());
+    inEntry.setParent(Optional.of(getKey()));
 
     changed();
     save();
     return true;
-  }
-
-  //........................................................................
-  //------------------------------ updateKey -------------------------------
-
-  /**
-   * Update the any values that are related to the key with new data.
-   *
-   * @param       inKey the new key of the entry
-   *
-   */
-  @Override
-  public void updateKey(EntryKey inKey)
-  {
-    Optional<EntryKey> parent = inKey.getParent();
-    if(!parent.isPresent())
-      return;
-
-    Optional<EntryKey> parentParent = parent.get().getParent();
-    if(!parentParent.isPresent())
-      return;
-
-    m_campaign = m_campaign.as(new Name(parentParent.get().getID()),
-                               new Name(parent.get().getID()));
   }
 
   //........................................................................

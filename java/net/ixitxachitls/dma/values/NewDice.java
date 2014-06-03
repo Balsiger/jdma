@@ -221,6 +221,10 @@ public class NewDice extends NewValue<DiceProto>
     return new NewDice(number, dice, modifier);
   }
 
+  public NewDice multiply(int inFactor)
+  {
+    return new NewDice(m_number * inFactor, m_dice, m_modifier * inFactor);
+  }
 
   @Override
   public DiceProto toProto()

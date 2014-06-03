@@ -38,7 +38,7 @@ import net.ixitxachitls.util.Strings;
  * @file   NewDistance.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
-public class NewDistance extends NewValue.Addable<DistanceProto>
+public class NewDistance extends NewValue.Arithmetic<DistanceProto>
   implements Comparable<NewDistance>
 {
   public static class DistanceParser extends Parser<NewDistance>
@@ -51,9 +51,9 @@ public class NewDistance extends NewValue.Addable<DistanceProto>
     @Override
     public Optional<NewDistance> doParse(String inValue)
     {
-      NewRational miles = null;
-      NewRational feet = null;
-      NewRational inches = null;
+      Optional<NewRational> miles = Optional.absent();
+      Optional<NewRational> feet = Optional.absent();
+      Optional<NewRational> inches = Optional.absent();
 
       List<String []> parts =
         Strings.getAllPatterns(inValue,
@@ -78,28 +78,19 @@ public class NewDistance extends NewValue.Addable<DistanceProto>
           case "ml":
           case "mile":
           case "miles":
-            if(miles == null)
-              miles = number.get();
-            else
-              miles = (NewRational)miles.add(number.get());
+            miles = add(miles, number);
             break;
 
           case "ft":
           case "feet":
           case "foot":
-            if(feet == null)
-              feet = number.get();
-            else
-              feet = (NewRational)feet.add(number.get());
+            feet = add(feet, number);
             break;
 
           case "in":
           case "inch":
           case "inches":
-            if(inches == null)
-              inches = number.get();
-            else
-              inches = (NewRational)inches.add(number.get());
+            inches = add(inches, number);
             break;
         }
       }
@@ -108,9 +99,9 @@ public class NewDistance extends NewValue.Addable<DistanceProto>
     }
   }
 
-  public NewDistance(@Nullable NewRational inMiles,
-                     @Nullable NewRational inFeet,
-                     @Nullable NewRational inInches)
+  public NewDistance(Optional<NewRational> inMiles,
+                     Optional<NewRational> inFeet,
+                     Optional<NewRational> inInches)
   {
     m_miles = inMiles;
     m_feet = inFeet;
@@ -119,46 +110,46 @@ public class NewDistance extends NewValue.Addable<DistanceProto>
 
   public static Parser<NewDistance> PARSER = new DistanceParser();
 
-  private final @Nullable NewRational m_miles;
-  private final @Nullable NewRational m_feet;
-  private final @Nullable NewRational m_inches;
+  private final Optional<NewRational> m_miles;
+  private final Optional<NewRational> m_feet;
+  private final Optional<NewRational> m_inches;
 
   public double asMiles()
   {
-    return (m_miles == null ? 0 : m_miles.asDouble())
-      + (m_feet == null ? 0 : m_feet.asDouble() / 5280)
-      + (m_inches == null ? 0 : m_inches.asDouble() / 63360);
+    return (m_miles.isPresent() ? m_miles.get().asDouble() : 0)
+      + (m_feet.isPresent() ? m_feet.get().asDouble() / 5280 : 0)
+      + (m_inches.isPresent() ? m_inches.get().asDouble() / 63360 : 0);
   }
 
   public double asFeet()
   {
-    return (m_miles == null ? 0 : m_miles.asDouble() * 5280)
-      + (m_feet == null ? 0 : m_feet.asDouble())
-      + (m_inches == null ? 0 : m_inches.asDouble() / 12);
+    return (m_miles.isPresent() ? m_miles.get().asDouble() * 5280 : 0)
+      + (m_feet.isPresent() ? m_feet.get().asDouble() : 0)
+      + (m_inches.isPresent() ? m_inches.get().asDouble() / 12 : 0);
   }
 
   public double asInches()
   {
-    return (m_miles == null ? 0 : m_miles.asDouble() * 63360)
-      + (m_feet == null ? 0 : m_feet.asDouble() * 12)
-      + (m_inches == null ? 0 : m_inches.asDouble());
+    return (m_miles.isPresent() ? m_miles.get().asDouble() * 63360 : 0)
+      + (m_feet.isPresent() ? m_feet.get().asDouble() * 12 : 0)
+      + (m_inches.isPresent() ? m_inches.get().asDouble() : 0);
   }
 
   @Override
   public String toString()
   {
-    if(m_miles == null && m_feet == null && m_inches == null)
+    if(!m_miles.isPresent() && !m_feet.isPresent() && !m_inches.isPresent())
       return "0 ft";
 
     List<String> parts = new ArrayList<>();
-    if(m_miles != null)
-      parts.add(m_miles + " ml");
+    if(m_miles.isPresent())
+      parts.add(m_miles.get() + " ml");
 
-    if(m_feet != null)
-      parts.add(m_feet + " ft");
+    if(m_feet.isPresent())
+      parts.add(m_feet.get() + " ft");
 
-    if(m_inches != null)
-      parts.add(m_inches + " in");
+    if(m_inches.isPresent())
+      parts.add(m_inches.get() + " in");
 
     return Strings.SPACE_JOINER.join(parts);
   }
@@ -228,12 +219,12 @@ public class NewDistance extends NewValue.Addable<DistanceProto>
   {
     DistanceProto.Imperial.Builder builder = DistanceProto.Imperial.newBuilder();
 
-    if(m_miles!= null)
-      builder.setMiles(m_miles.toProto());
-    if(m_feet != null)
-      builder.setFeet(m_feet.toProto());
-    if(m_inches != null)
-      builder.setInches(m_inches.toProto());
+    if(m_miles.isPresent())
+      builder.setMiles(m_miles.get().toProto());
+    if(m_feet.isPresent())
+      builder.setFeet(m_feet.get().toProto());
+    if(m_inches.isPresent())
+      builder.setInches(m_inches.get().toProto());
 
     return DistanceProto.newBuilder().setImperial(builder.build()).build();
   }
@@ -243,23 +234,26 @@ public class NewDistance extends NewValue.Addable<DistanceProto>
     if(!inProto.hasImperial())
       throw new IllegalArgumentException("expected an imperial weight");
 
-    NewRational miles = null;
-    NewRational feet = null;
-    NewRational inches = null;
+    Optional<NewRational> miles = Optional.absent();
+    Optional<NewRational> feet = Optional.absent();
+    Optional<NewRational> inches = Optional.absent();
 
     if(inProto.getImperial().hasMiles())
-      miles = NewRational.fromProto(inProto.getImperial().getMiles());
+      miles =
+        Optional.of(NewRational.fromProto(inProto.getImperial().getMiles()));
     if(inProto.getImperial().hasFeet())
-      feet = NewRational.fromProto(inProto.getImperial().getFeet());
+      feet =
+        Optional.of(NewRational.fromProto(inProto.getImperial().getFeet()));
     if(inProto.getImperial().hasInches())
-      inches = NewRational.fromProto(inProto.getImperial().getInches());
+      inches =
+        Optional.of(NewRational.fromProto(inProto.getImperial().getInches()));
 
     return new NewDistance(miles, feet, inches);
   }
 
   @Override
-  public NewValue.Addable<DistanceProto>
-    add(@Nullable NewValue.Addable<DistanceProto> inValue)
+  public NewValue.Arithmetic<DistanceProto>
+    add(@Nullable NewValue.Arithmetic<DistanceProto> inValue)
   {
     if(inValue == null)
       return this;
@@ -268,21 +262,24 @@ public class NewDistance extends NewValue.Addable<DistanceProto>
       throw new IllegalArgumentException("can only add another distance value");
 
     NewDistance value = (NewDistance)inValue;
-    return new NewDistance(m_miles == null
-                         ? value.m_miles
-                         : (NewRational)m_miles.add(value.m_miles),
-                         m_feet == null
-                         ? value.m_feet
-                         : (NewRational)m_feet.add(value.m_feet),
-                         m_inches == null
-                         ? value.m_inches
-                         : (NewRational)m_inches.add(value.m_inches));
+    return new NewDistance(add(m_miles, value.m_miles),
+                           add(m_feet, value.m_feet),
+                           add(m_inches, value.m_inches));
   }
 
   @Override
-  public boolean canAdd(NewValue.Addable<DistanceProto> inValue)
+  public boolean canAdd(NewValue.Arithmetic<DistanceProto> inValue)
   {
     return inValue instanceof NewDistance;
+  }
+
+  @Override
+  public NewValue.Arithmetic<DistanceProto> multiply(int inFactor)
+  {
+    return new NewDistance(multiply(m_miles, inFactor),
+                           multiply(m_feet, inFactor),
+                           multiply(m_inches, inFactor));
+
   }
 
   //----------------------------------------------------------------------------

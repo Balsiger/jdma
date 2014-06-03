@@ -36,14 +36,22 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
  */
 public abstract class Combination<T>
 {
-  public static class Addable<V extends NewValue.Addable> extends Combination<V>
+  public static class Arithmetic<V extends NewValue.Arithmetic>
+    extends Combination<V>
   {
-    public Addable(AbstractEntry inEntry, V inValue)
+    public Arithmetic(AbstractEntry inEntry, V inValue)
     {
       super(inEntry, inValue);
     }
 
-    public Addable(AbstractEntry inEntry, java.util.List<Combination<V>> inValues)
+    public Arithmetic(AbstractEntry inEntry, java.lang.String inDescription,
+                      int inFactor)
+    {
+      super(inEntry, inDescription, inFactor);
+    }
+
+    public Arithmetic(AbstractEntry inEntry,
+                      java.util.List<Combination<V>> inValues)
     {
       super(inEntry, inValues);
     }
@@ -56,13 +64,20 @@ public abstract class Combination<T>
         return m_value.get();
 
       V value = null;
+      int factor = 1;
       for(Combination<V> combination : m_combinations)
       {
-        if(value == null)
-          value = combination.getValue();
+        if(combination.hasFactor())
+          factor *= combination.getFactor();
         else
-          value = (V)value.add(combination.getValue());
+          if(value == null)
+            value = combination.getValue();
+          else
+            value = (V)value.add(combination.getValue());
       }
+
+      if(factor != 1)
+        value = (V)value.multiply(factor);
 
       return value;
     }
@@ -189,7 +204,7 @@ public abstract class Combination<T>
       {
         if(value == null)
           value = combination.getValue();
-        else
+        else if(combination.getValue() != null)
           value += combination.getValue();
       }
 
@@ -228,7 +243,7 @@ public abstract class Combination<T>
         if(value.isEmpty())
           value = combination.getValue();
         else
-          value += combination.getValue();
+          value += " " + combination.getValue();
       }
 
       return value;
@@ -280,13 +295,13 @@ public abstract class Combination<T>
     @SuppressWarnings("unchecked")
     private void add(java.util.List<T> inValues, T inValue)
     {
-      if(inValue instanceof NewValue.Addable)
+      if(inValue instanceof NewValue.Arithmetic)
       {
         for(T value : inValues)
-          if(value instanceof NewValue.Addable
-            && ((NewValue.Addable)value).canAdd((NewValue.Addable)inValue))
+          if(value instanceof NewValue.Arithmetic
+            && ((NewValue.Arithmetic)value).canAdd((NewValue.Arithmetic)inValue))
           {
-            ((NewValue.Addable)value).add((NewValue.Addable)inValue);
+            ((NewValue.Arithmetic)value).add((NewValue.Arithmetic)inValue);
             return;
           }
 
@@ -334,49 +349,88 @@ public abstract class Combination<T>
   {
     public Annotated(V inValue, java.lang.String inSource)
     {
+      this(Optional.of(inValue), 0, inSource);
+    }
+
+    public Annotated(int inFactor, java.lang.String inSource)
+    {
+      this(Optional.<V>absent(), inFactor, inSource);
+    }
+
+    private Annotated(Optional<V> inValue, int inFactor,
+                      java.lang.String inSource)
+    {
       m_value = inValue;
+      m_factor = inFactor;
       m_source = inSource;
     }
 
-    private final V m_value;
+    private final Optional<V> m_value;
     private final java.lang.String m_source;
+    private final int m_factor;
 
-    public V getValue()
+    public Optional<V> getValue()
     {
       return m_value;
+    }
+
+    public int getFactor()
+    {
+      return m_factor;
     }
 
     public java.lang.String getSource()
     {
       return m_source;
     }
+
+    public Annotated<V> withPrefix(java.lang.String inPrefix)
+    {
+      return new Annotated<V>(m_value, m_factor, inPrefix + "/" + m_source);
+    }
+  }
+
+  public Combination(AbstractEntry inEntry, java.lang.String inDescription,
+                     int inFactor)
+  {
+    this(inEntry, Optional.<T>absent(), new ArrayList<Combination<T>>(),
+         inFactor, inDescription);
   }
 
   public Combination(AbstractEntry inEntry, T inValue)
   {
-    m_entry = inEntry;
-    m_value = Optional.of(inValue);
-    m_combinations = new ArrayList<>();
+    this(inEntry, Optional.of(inValue), new ArrayList<Combination<T>>(),
+         0, "");
   }
 
-  public Combination(AbstractEntry inEntry, java.util.List<Combination<T>> inValues)
+  public Combination(AbstractEntry inEntry,
+                     java.util.List<Combination<T>> inValues)
   {
-    m_entry = inEntry;
-    m_value = Optional.absent();
-    m_combinations = inValues;
+    this(inEntry, Optional.<T>absent(), inValues, 0, "");
   }
 
   public Combination(AbstractEntry inEntry, T inValue,
                      java.util.List<Combination<T>> inValues)
   {
+    this(inEntry, Optional.of(inValue), inValues, 0, "");
+  }
+
+  private Combination(AbstractEntry inEntry, Optional<T> inValue,
+                      java.util.List<Combination<T>> inValues, int inFactor,
+                      java.lang.String inDescription)
+  {
     m_entry = inEntry;
-    m_value = Optional.of(inValue);
+    m_value = inValue;
     m_combinations = inValues;
+    m_factor = inFactor;
+    m_description = inDescription;
   }
 
   protected final AbstractEntry m_entry;
   protected final Optional<T> m_value;
   protected final java.util.List<Combination<T>> m_combinations;
+  protected final int m_factor;
+  protected final java.lang.String m_description;
 
   public abstract T getValue();
 
@@ -392,9 +446,34 @@ public abstract class Combination<T>
     return value.toString();
   }
 
+  public java.lang.String getValueShortString()
+  {
+    T value = getValue();
+    if(value == null)
+      return "";
+
+    if (value instanceof NewValue)
+      return ((NewValue)value).toShortString();
+
+    if (value instanceof EnumSelection.Short)
+      return ((EnumSelection.Short)value).getShort();
+
+    return value.toString();
+  }
+
+  public int getFactor()
+  {
+    return m_factor;
+  }
+
   public boolean hasValue()
   {
     return m_value.isPresent();
+  }
+
+  public boolean hasFactor()
+  {
+    return m_factor != 0;
   }
 
   public boolean hasAnyValue()
@@ -420,14 +499,18 @@ public abstract class Combination<T>
 
     for(Combination<T> combination : m_combinations)
     {
+      java.lang.String source = combination.getSource();
+      if(!combination.m_description.isEmpty())
+        source += " (" + combination.m_description + ")";
+
       if(combination.hasValue())
-        values.add(new Annotated<T>(combination.getValue(),
-                                    combination.getSource()));
+        values.add(new Annotated<T>(combination.getValue(), source));
+
+      if(combination.hasFactor())
+        values.add(new Annotated<T>(combination.getFactor(), source));
 
       for(Annotated<T> annotated : combination.annotate())
-        values.add(new Annotated<T>(annotated.getValue(),
-                                    combination.getSource() + "/"
-                                      + annotated.getSource()));
+        values.add(annotated.withPrefix(source));
     }
 
     return values;
@@ -438,6 +521,6 @@ public abstract class Combination<T>
   {
     return m_entry.getName() + ": "
       + (m_value.isPresent() ? m_value.get() : "(null)")
-      + " / " + m_combinations;
+      + " / " + m_combinations + " * " + m_factor;
   }
 }

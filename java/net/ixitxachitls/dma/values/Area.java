@@ -41,7 +41,7 @@ import net.ixitxachitls.util.Strings;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class Area extends NewValue.Addable<AreaProto>
+public class Area extends NewValue.Arithmetic<AreaProto>
 {
   public static final Parser<Area> PARSER = new Parser<Area>(1)
   {
@@ -287,7 +287,7 @@ public class Area extends NewValue.Addable<AreaProto>
   }
 
   @Override
-  public Addable<AreaProto> add(Addable<AreaProto> inValue)
+  public Arithmetic<AreaProto> add(Arithmetic<AreaProto> inValue)
   {
     if(!(inValue instanceof Area))
       return this;
@@ -303,9 +303,20 @@ public class Area extends NewValue.Addable<AreaProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Addable<AreaProto> inValue)
+  public boolean canAdd(NewValue.Arithmetic<AreaProto> inValue)
   {
     return inValue instanceof Area;
+  }
+
+  @Override
+  public NewValue.Arithmetic<AreaProto> multiply(int inFactor)
+  {
+    return new Area(multiply(m_sqYards, inFactor),
+                    multiply(m_sqFeet, inFactor),
+                    multiply(m_sqInches, inFactor),
+                    multiply(m_sqMeters, inFactor),
+                    multiply(m_sqDeciMeters, inFactor),
+                    multiply(m_sqCentiMeters, inFactor));
   }
 
   //---------------------------------------------------------------------------

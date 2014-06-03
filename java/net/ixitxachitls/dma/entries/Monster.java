@@ -1299,17 +1299,18 @@ public class Monster extends CampaignEntry
       abilityModifier(ability(BaseMonster.Ability.DEXTERITY).getMaxValue());
 
     // TODO: we should actually only consider worn items.
-    for(Name name : m_possessions)
-    {
-      Item item = getCampaign().getItem(name.get());
-      if(item == null)
-        continue;
+    if(getCampaign().isPresent())
+      for(Name name : m_possessions)
+      {
+        Item item = getCampaign().get().getItem(name.get());
+        if(item == null)
+          continue;
 
-      Combined<Number> combinedMaxDex = item.collect("max dexterity");
-      Number maxDex = combinedMaxDex.min();
-      if(maxDex != null && maxDex.isDefined() && maxDex.get() < dex)
-        dex = (int)maxDex.get();
-    }
+        Combined<Number> combinedMaxDex = item.collect("max dexterity");
+        Number maxDex = combinedMaxDex.min();
+        if(maxDex != null && maxDex.isDefined() && maxDex.get() < dex)
+          dex = (int)maxDex.get();
+      }
 
     return dex;
   }
@@ -1341,46 +1342,47 @@ public class Monster extends CampaignEntry
 
     List<Map<String, Object>> weaponAttacks =
       new ArrayList<Map<String, Object>>();
-    for(Name name : m_possessions)
-    {
-      Item item = getCampaign().getItem(name.get());
-      if(item == null)
-        continue;
+    if(getCampaign().isPresent())
+      for(Name name : m_possessions)
+      {
+        Item item = getCampaign().get().getItem(name.get());
+        if(item == null)
+          continue;
 
-      if(!item.hasExtension(Weapon.class))
-        continue;
+        if(!item.hasExtension(Weapon.class))
+          continue;
 
-      Combined<EnumSelection<WeaponStyle>> style =
-        item.collect("weapon style");
-      List<Long> baseAtks = new ArrayList<Long>(baseAttacks);
-      if(hasFeat("Rapid Shot"))
-        for(Value<?> styleValue : style.valuesOnly())
-          if(styleValue instanceof EnumSelection
-             && ((EnumSelection)styleValue).getSelected()
-             == WeaponStyle.RANGED)
-          {
-            baseAtks.add(0, baseAtks.get(0));
-            break;
-          }
+        Combined<EnumSelection<WeaponStyle>> style =
+          item.collect("weapon style");
+        List<Long> baseAtks = new ArrayList<Long>(baseAttacks);
+        if(hasFeat("Rapid Shot"))
+          for(Value<?> styleValue : style.valuesOnly())
+            if(styleValue instanceof EnumSelection
+               && ((EnumSelection)styleValue).getSelected()
+               == WeaponStyle.RANGED)
+            {
+              baseAtks.add(0, baseAtks.get(0));
+              break;
+            }
 
-      Map<String, Object> weapon = new HashMap<String, Object>();
-      long maxAttacks = item.collect("max attacks").modifier().getMinValue();
+        Map<String, Object> weapon = new HashMap<String, Object>();
+        long maxAttacks = item.collect("max attacks").modifier().getMinValue();
 
-      if(maxAttacks <= 0)
-        maxAttacks = Long.MAX_VALUE;
+        if(maxAttacks <= 0)
+          maxAttacks = Long.MAX_VALUE;
 
-      List<ModifiedNumber> attacks = new ArrayList<ModifiedNumber>();
-      for(int i = 0; i < maxAttacks && i < baseAtks.size(); i++)
-        attacks.add(weaponAttack(item, baseAtks.get(i)));
+        List<ModifiedNumber> attacks = new ArrayList<ModifiedNumber>();
+        for(int i = 0; i < maxAttacks && i < baseAtks.size(); i++)
+          attacks.add(weaponAttack(item, baseAtks.get(i)));
 
-      weapon.put("attacks", attacks);
-      weapon.put("style", style);
-      weapon.put("name", item.getDMName());
-      weapon.put("damage", collect("damage"));
-      weapon.put("critical", critical(item));
+        weapon.put("attacks", attacks);
+        weapon.put("style", style);
+        weapon.put("name", item.getDMName());
+        weapon.put("damage", collect("damage"));
+        weapon.put("critical", critical(item));
 
-      weaponAttacks.add(weapon);
-    }
+        weaponAttacks.add(weapon);
+      }
 
     return new ImmutableMap.Builder<String, Object>()
       .put("base", baseAttacks)
@@ -1955,14 +1957,15 @@ public class Monster extends CampaignEntry
                         saveAbility.getShort() + " of " + ability);
     }
 
-    for(Name name : m_possessions)
-    {
-      Item item = getCampaign().getItem(name.get());
-      if(item == null)
-        continue;
+    if(getCampaign().isPresent())
+      for(Name name : m_possessions)
+      {
+        Item item = getCampaign().get().getItem(name.get());
+        if(item == null)
+          continue;
 
-      item.collect(inName, ioCombined);
-    }
+        item.collect(inName, ioCombined);
+      }
 
     for(Reference<BaseFeat> reference : m_feats)
     {
@@ -2093,15 +2096,16 @@ public class Monster extends CampaignEntry
   public Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
-    for(Name name : m_possessions)
-    {
-      Item item = getCampaign().getItem(name.get());
-      if(item == null)
-        continue;
+    if(getCampaign().isPresent())
+      for(Name name : m_possessions)
+      {
+        Item item = getCampaign().get().getItem(name.get());
+        if(item == null)
+          continue;
 
-      items.put(name.get(), item);
-      //items.putAll(item.containedItems(inDeep));
-    }
+        items.put(name.get(), item);
+        //items.putAll(item.containedItems(inDeep));
+      }
 
     return items;
   }

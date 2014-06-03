@@ -679,26 +679,8 @@ DIV.card DIV.header
 {
   color: white;
   padding: 10px;
-}
-
-DIV.card.item DIV.header
-{
-  background-color: $color_Item;
-}
-
-DIV.card.feat DIV.header
-{
-  background-color: $color_Feat;
-}
-
-DIV.card.spell DIV.header
-{
-  background-color: $color_Spell;
-}
-
-DIV.card.quality DIV.header
-{
-  background-color: $color_Quality;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 DIV.card DIV.title
@@ -715,10 +697,10 @@ DIV.card DIV.title SPAN.subtitle
 
 DIV.card DIV.actions
 {
+  position: absolute;
+  margin-top: -7px;
   top: 12px;
   left: 10px;
-  display: inline-block;
-  width: 15%;
 }
 
 DIV.card DIV.extensions
@@ -733,24 +715,16 @@ DIV.card DIV.extensions
   width: 17%;
 }
 
-DIV.item.card DIV.contents
+DIV.tiny.card DIV.contents
 {
-  border: 1px solid $color_Item;
+  border-radius: 10px;
 }
 
-DIV.feat.card DIV.contents
+DIV.card DIV.contents
 {
-  border: 1px solid $color_Feat;
-}
-
-DIV.spell.card DIV.contents
-{
-  border: 1px solid $color_Spell;
-}
-
-DIV.quality.card DIV.contents
-{
-  border: 1px solid $color_Quality;
+  border: 1px solid;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px; 
 }
 
 DIV.invalid.card DIV.contents
@@ -760,8 +734,22 @@ DIV.invalid.card DIV.contents
 
 DIV.card DIV.top-block
 {
-  background-color: white;
-  padding: 5px 10px 10px 10px;
+  padding: 5px 10px 0 10px;
+}
+
+.card.entry .image-link
+{
+  box-shadow: none;
+  border: none;
+  padding: 0;
+  width: auto;
+  line-height: 0;
+}
+
+.card.entry .image-link:hover
+{
+  border: none;
+  box-shadow: none;
 }
 
 DIV.card DIV.contents DIV.image.main
@@ -858,6 +846,10 @@ DIV.card DIV.contents DIV.stack {
   margin: -3px 0 -3px 0;
 }
 
+DIV.card DIV.contents DIV.stack.lead {
+  padding-left: 5px;
+}
+
 DIV.card DIV.contents DIV.statistics-line SPAN.stack SPAN:nth-child(2n+1)
 {
 }
@@ -868,8 +860,7 @@ DIV.card DIV.contents DIV.statistics-line SPAN.stack SPAN:nth-child(2n)
 
 DIV.card DIV.bottom-block
 {
-  padding: 10px;
-  background-color: #eaeaea;
+  padding: 0 10px;
 }
 
 DIV.card DIV.incomplete
@@ -883,17 +874,10 @@ DIV.card DIV.appearance
   font-size: 14px;
   margin: 5px 0 5px 0;
   font-style: italic;
-  color: $color_Item;
-}
-
-DIV.card DIV.substance SPAN.value
-{
-  font-size: 13px;
 }
 
 DIV.card DIV.description
 {
-  font-style: italic;
   font-size: 12px;
   margin-top: 10px;
   text-align: justify;
@@ -902,6 +886,7 @@ DIV.card DIV.description
 DIV.card DIV.dm-notes.block,
 DIV.card DIV.player-notes.block {
   display: block;
+  padding: 4px 0;
 }
 
 DIV.card DIV.dm-notes
@@ -933,12 +918,6 @@ DIV.small.card
   vertical-align: top;
 }
 
-DIV.small.card DIV.actions
-{
-  position: absolute;
-  margin-top: -5px;
-}
-
 DIV.small.card DIV.header
 {
   padding: 5px;
@@ -959,7 +938,6 @@ DIV.small.card DIV.title SPAN.subtitle
 DIV.small.card DIV.contents
 {
   padding: 5px;
-  background-color: white;
 }
 
 DIV.small.card DIV.contents DIV.image.main
@@ -1015,7 +993,7 @@ DIV.small.card DIV.short-description
 
 DIV.tiny.card
 {
-  width: 180px;
+  width: 250px;
   vertical-align: top;
   padding: 3px;
   cursor: pointer;
@@ -1023,10 +1001,8 @@ DIV.tiny.card
 
 DIV.tiny.card DIV.contents
 {
-  background-color: white;
   margin: 3px;
   min-height: auto;
-  overflow: scroll;
   height: 35px;
 }
 
@@ -1042,7 +1018,7 @@ DIV.tiny.card DIV.title
 {
   font-size: 11px;
   display: inline-block;
-  width: 137px;
+  width: 207px;
   text-align: left;
   padding: 5px 0 0 0;
   vertical-align: top;
@@ -2558,14 +2534,16 @@ BODY.print
 
 .entry .combination-value:hover .combination-sources,
 .entry .combination-line:hover .combination-text-source,
-.entry .combination-text:hover .combination-text-source
+.entry .combination-text:hover .combination-text-source,
+.card .combination-value:hover .combination-sources
 {
   display: block;
 }
 
 .entry .combination-sources,
 .entry .combination-text .combination-text-source,
-.entry .combination-line .combination-text-source
+.entry .combination-line .combination-text-source,
+.card .combination-sources
 {
   display: none;
   position: absolute;

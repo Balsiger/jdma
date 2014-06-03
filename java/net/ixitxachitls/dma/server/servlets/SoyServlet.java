@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.common.base.Optional;
 
 import org.easymock.EasyMock;
 
@@ -197,22 +198,23 @@ public class SoyServlet extends DMAServlet
     (DMARequest inRequest, SoyRenderer inRenderer)
   {
     Tracer tracer = new Tracer("collecting soy injected data");
-    BaseCharacter user = inRequest.getUser();
+    Optional<BaseCharacter> user = inRequest.getUser();
     UserService userService = UserServiceFactory.getUserService();
 
     Map<String, Object> map = SoyTemplate.map
-      ("user", user == null ? "" : new SoyEntry(user),
+      ("user", user.isPresent() ? new SoyEntry(user.get()) : "",
        "isPublic", isPublic(inRequest),
        "originalPath", inRequest.getOriginalPath(),
        "loginURL", userService.createLoginURL(inRequest.getOriginalPath()),
        "logoutURL", userService.createLogoutURL(inRequest.getOriginalPath()),
        "registerScript",
-       user == null && userService.isUserLoggedIn()
+       user.isPresent() && userService.isUserLoggedIn()
        ? "$().ready(function(){ register(); } );" : "",
-       "userOverride",
-       inRequest.hasUserOverride() ? inRequest.getRealUser().getName() : "",
-       "isUser", user != null,
-       "isAdmin", user != null && user.hasAccess(BaseCharacter.Group.ADMIN));
+       "userOverride", inRequest.hasUserOverride()
+         ? inRequest.getRealUser().get().getName() : "",
+       "isUser", user.isPresent(),
+       "isAdmin", user.isPresent()
+                  && user.get().hasAccess(BaseCharacter.Group.ADMIN));
 
     tracer.done();
     return map;

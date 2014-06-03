@@ -39,7 +39,7 @@ import net.ixitxachitls.util.Strings;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class NewModifier extends NewValue.Addable<ModifierProto>
+public class NewModifier extends NewValue.Arithmetic<ModifierProto>
 {
   /** An interface for stackable objects. */
   public interface Stackable
@@ -367,8 +367,8 @@ public class NewModifier extends NewValue.Addable<ModifierProto>
    }
 
   @Override
-  public NewValue.Addable<ModifierProto>
-    add(NewValue.Addable<ModifierProto> inValue)
+  public NewValue.Arithmetic<ModifierProto>
+    add(NewValue.Arithmetic<ModifierProto> inValue)
   {
     if(!(inValue instanceof NewModifier))
       return this;
@@ -400,6 +400,16 @@ public class NewModifier extends NewValue.Addable<ModifierProto>
                              Optional.of((NewModifier)m_next.get().add(value)));
   }
 
+  @Override
+  public NewValue.Arithmetic<ModifierProto> multiply(int inFactor)
+  {
+    return new NewModifier(m_modifier * inFactor, m_type, m_condition,
+                           m_next.isPresent()
+                             ? Optional.of((NewModifier)
+                                           m_next.get().multiply(inFactor))
+                             : m_next);
+  }
+
   /**
    * Create a new modifier with the values from the given proto.
    *
@@ -426,7 +436,7 @@ public class NewModifier extends NewValue.Addable<ModifierProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Addable<ModifierProto> inValue)
+  public boolean canAdd(NewValue.Arithmetic<ModifierProto> inValue)
   {
     return inValue instanceof NewModifier;
   }

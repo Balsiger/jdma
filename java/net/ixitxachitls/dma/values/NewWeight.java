@@ -37,7 +37,7 @@ import net.ixitxachitls.util.Strings;
  * @file   NewWeight.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
-public class NewWeight extends NewValue.Addable<WeightProto>
+public class NewWeight extends NewValue.Arithmetic<WeightProto>
 {
   public static class WeightParser extends Parser<NewWeight>
   {
@@ -49,8 +49,8 @@ public class NewWeight extends NewValue.Addable<WeightProto>
     @Override
     public Optional<NewWeight> doParse(String inValue)
     {
-      NewRational pounds = null;
-      NewRational ounces = null;
+      Optional<NewRational> pounds = Optional.absent();
+      Optional<NewRational> ounces = Optional.absent();
 
       List<String []> parts =
         Strings.getAllPatterns(inValue,
@@ -75,19 +75,13 @@ public class NewWeight extends NewValue.Addable<WeightProto>
           case "lbs":
           case "pound":
           case "pounds":
-            if(pounds == null)
-              pounds = number.get();
-            else
-              pounds = (NewRational)pounds.add(number.get());
+            pounds = add(pounds, number);
             break;
 
           case "oz":
           case "ounce":
           case "ounces":
-            if(ounces == null)
-              ounces = number.get();
-            else
-              ounces = (NewRational)ounces.add(number.get());
+            ounces = add(ounces, number);
             break;
         }
       }
@@ -96,7 +90,8 @@ public class NewWeight extends NewValue.Addable<WeightProto>
     }
   }
 
-  public NewWeight(@Nullable NewRational inPounds, @Nullable NewRational inOunces)
+  public NewWeight(Optional<NewRational> inPounds,
+                   Optional<NewRational> inOunces)
   {
     m_pounds = inPounds;
     m_ounces = inOunces;
@@ -104,34 +99,34 @@ public class NewWeight extends NewValue.Addable<WeightProto>
 
   public static Parser<NewWeight> PARSER = new WeightParser();
 
-  private final @Nullable NewRational m_pounds;
-  private final @Nullable NewRational m_ounces;
+  private final Optional<NewRational> m_pounds;
+  private final Optional<NewRational> m_ounces;
 
   public double asPounds()
   {
-    return (m_pounds == null ? 0 : m_pounds.asDouble())
-      + (m_ounces == null ? 0 : m_ounces.asDouble() /  16);
+    return (m_pounds.isPresent() ? m_pounds.get().asDouble() : 0)
+      + (m_ounces.isPresent() ? m_ounces.get().asDouble() /  16 : 0);
   }
 
   public double asOunces()
   {
-    return (m_pounds == null ? 0 : m_pounds.asDouble() * 16)
-      + (m_ounces == null ? 0 : m_ounces.asDouble());
+    return (m_pounds.isPresent() ? m_pounds.get().asDouble() * 16 : 0)
+      + (m_ounces.isPresent() ? m_ounces.get().asDouble() : 0);
   }
 
   @Override
   public String toString()
   {
-    if(m_pounds == null && m_ounces == null)
+    if(!m_pounds.isPresent() && !m_ounces.isPresent())
       return "0 lb";
 
-    if(m_pounds == null)
-      return m_ounces + " oz";
+    if(!m_pounds.isPresent())
+      return m_ounces.get() + " oz";
 
-    if(m_ounces == null)
-      return m_pounds + " lb";
+    if(!m_ounces.isPresent())
+      return m_pounds.get() + " lb";
 
-    return m_pounds + " lb " + m_ounces + " oz";
+    return m_pounds.get() + " lb " + m_ounces.get() + " oz";
   }
 
   @Override
@@ -176,10 +171,10 @@ public class NewWeight extends NewValue.Addable<WeightProto>
   {
     WeightProto.Imperial.Builder builder = WeightProto.Imperial.newBuilder();
 
-    if(m_pounds != null)
-      builder.setPounds(m_pounds.toProto());
-    if(m_ounces != null)
-      builder.setOunces(m_ounces.toProto());
+    if(m_pounds.isPresent())
+      builder.setPounds(m_pounds.get().toProto());
+    if(m_ounces.isPresent())
+      builder.setOunces(m_ounces.get().toProto());
 
     return WeightProto.newBuilder().setImperial(builder.build()).build();
   }
@@ -189,20 +184,22 @@ public class NewWeight extends NewValue.Addable<WeightProto>
     if(!inProto.hasImperial())
       throw new IllegalArgumentException("expected an imperial weight");
 
-    NewRational pounds = null;
-    NewRational ounces = null;
+    Optional<NewRational> pounds = Optional.absent();
+    Optional<NewRational> ounces = Optional.absent();
 
     if(inProto.getImperial().hasPounds())
-      pounds = NewRational.fromProto(inProto.getImperial().getPounds());
+      pounds =
+        Optional.of(NewRational.fromProto(inProto.getImperial().getPounds()));
     if(inProto.getImperial().hasOunces())
-      ounces = NewRational.fromProto(inProto.getImperial().getOunces());
+      ounces =
+        Optional.of(NewRational.fromProto(inProto.getImperial().getOunces()));
 
     return new NewWeight(pounds, ounces);
   }
 
   @Override
-  public NewValue.Addable<WeightProto>
-    add(@Nullable NewValue.Addable<WeightProto> inValue)
+  public NewValue.Arithmetic<WeightProto>
+    add(@Nullable NewValue.Arithmetic<WeightProto> inValue)
   {
     if(inValue == null)
       return this;
@@ -211,20 +208,19 @@ public class NewWeight extends NewValue.Addable<WeightProto>
       throw new IllegalArgumentException("can only add another weight value");
 
     NewWeight value = (NewWeight)inValue;
-    return new NewWeight(m_pounds == null
-                         ? value.m_pounds
-                         : value.m_pounds == null
-                           ? m_pounds
-                           : (NewRational)m_pounds.add(value.m_pounds),
-                         m_ounces == null
-                         ? value.m_ounces
-                         : value.m_ounces == null
-                           ? m_ounces
-                           : (NewRational)m_ounces.add(value.m_ounces));
+    return new NewWeight(add(m_pounds, value.m_pounds),
+                         add(m_ounces, value.m_ounces));
   }
 
   @Override
-  public boolean canAdd(NewValue.Addable<WeightProto> inValue)
+  public NewValue.Arithmetic<WeightProto> multiply(int inFactor)
+  {
+    return new NewWeight(multiply(m_pounds, inFactor),
+                         multiply(m_ounces, inFactor));
+  }
+
+  @Override
+  public boolean canAdd(NewValue.Arithmetic<WeightProto> inValue)
   {
     return inValue instanceof NewWeight;
   }

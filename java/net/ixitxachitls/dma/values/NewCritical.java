@@ -35,7 +35,7 @@ import net.ixitxachitls.util.Strings;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class NewCritical extends NewValue.Addable<CriticalProto>
+public class NewCritical extends NewValue.Arithmetic<CriticalProto>
 {
   public static final Parser<NewCritical> PARSER = new Parser<NewCritical>(1)
   {
@@ -121,10 +121,9 @@ public class NewCritical extends NewValue.Addable<CriticalProto>
     return builder.build();
   }
 
-
   @Override
-  public NewValue.Addable<CriticalProto>
-    add(NewValue.Addable<CriticalProto> inValue)
+  public NewValue.Arithmetic<CriticalProto>
+    add(NewValue.Arithmetic<CriticalProto> inValue)
   {
     if(!(inValue instanceof NewCritical))
       return this;
@@ -142,6 +141,15 @@ public class NewCritical extends NewValue.Addable<CriticalProto>
 
     return new NewCritical(Math.max(m_multiplier, value.m_multiplier),
                            Math.min(m_threatLow, value.m_threatLow));
+  }
+
+  @Override
+  public NewValue.Arithmetic<CriticalProto> multiply(int inFactor)
+  {
+    if(inFactor >= 2)
+      return doubled();
+
+    return this;
   }
 
   public NewCritical doubled()
@@ -173,7 +181,7 @@ public class NewCritical extends NewValue.Addable<CriticalProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Addable<CriticalProto> inValue)
+  public boolean canAdd(NewValue.Arithmetic<CriticalProto> inValue)
   {
     return inValue instanceof NewCritical;
   }

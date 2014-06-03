@@ -109,10 +109,11 @@ public class PageServlet extends SoyServlet
     Tracer tracer = new Tracer("collecting page injected data");
     Map<String, Object> data = super.collectInjectedData(inRequest, inRenderer);
 
-    if(inRequest.getUser() == null)
+    if(inRequest.hasUser())
       data.put("dm", false);
     else
-      data.put("dm", inRequest.getUser().hasAccess(BaseCharacter.Group.DM));
+      data.put("dm",
+               inRequest.getUser().get().hasAccess(BaseCharacter.Group.DM));
 
     tracer.done();
     return data;

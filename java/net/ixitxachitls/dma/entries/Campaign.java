@@ -122,9 +122,9 @@ public class Campaign extends CampaignEntry
   }
 
   @Override
-  public Campaign getCampaign()
+  public Optional<Campaign> getCampaign()
   {
-    return this;
+    return Optional.of(this);
   }
 
   /**
@@ -272,12 +272,12 @@ public class Campaign extends CampaignEntry
   }
 
   @Override
-  public boolean isDM(@Nullable BaseCharacter inUser)
+  public boolean isDM(Optional<BaseCharacter> inUser)
   {
-    if(inUser == null)
+    if(!inUser.isPresent())
       return false;
 
-    return inUser.getName().equals(getDMName());
+    return inUser.get().getName().equals(getDMName());
   }
 
   @Override

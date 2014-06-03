@@ -27,7 +27,7 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.BaseMagicProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMagicProto.Modifier;
 
-public class NamedModifier extends NewValue.Addable<BaseMagicProto.Modifier>
+public class NamedModifier extends NewValue.Arithmetic<BaseMagicProto.Modifier>
 {
   public NamedModifier(ModifierType inType, NewModifier inModifier)
   {
@@ -85,7 +85,7 @@ public class NamedModifier extends NewValue.Addable<BaseMagicProto.Modifier>
   }
 
   @Override
-  public Addable<BaseMagicProto.Modifier> add(Addable inValue)
+  public Arithmetic<BaseMagicProto.Modifier> add(Arithmetic inValue)
   {
     if(!canAdd(inValue))
       return this;
@@ -97,13 +97,20 @@ public class NamedModifier extends NewValue.Addable<BaseMagicProto.Modifier>
   }
 
   @Override
-  public boolean canAdd(Addable inValue)
+  public boolean canAdd(Arithmetic inValue)
   {
     if(!(inValue instanceof NamedModifier))
       return false;
 
     NamedModifier value = (NamedModifier)inValue;
     return m_type == value.m_type;
+  }
+
+  @Override
+  public Arithmetic<BaseMagicProto.Modifier> multiply(int inFactor)
+  {
+    return new NamedModifier(m_type,
+                             (NewModifier)m_modifier.multiply(inFactor));
   }
 
   @Override

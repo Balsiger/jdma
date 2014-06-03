@@ -37,11 +37,12 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseArmorProto;
 import net.ixitxachitls.dma.proto.Entries.BaseCommodityProto;
 import net.ixitxachitls.dma.proto.Entries.BaseContainerProto;
-import net.ixitxachitls.dma.proto.Entries.BaseCountedProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
 import net.ixitxachitls.dma.proto.Entries.BaseLightProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMagicProto;
+import net.ixitxachitls.dma.proto.Entries.BaseMultipleProto;
+import net.ixitxachitls.dma.proto.Entries.BaseMultiuseProto;
 import net.ixitxachitls.dma.proto.Entries.BaseTimedProto;
 import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.proto.Entries.BaseWearableProto;
@@ -151,8 +152,11 @@ public class BaseItem extends BaseEntry
   /** The break DC for breaking this item (or bursting out of it). */
   protected Optional<Integer> m_break = Optional.absent();
 
-  /** The number of copies or uses. */
-  protected Optional<Integer> m_count = Optional.absent();
+  /** The number of copies. */
+  protected Optional<Integer> m_multiple = Optional.absent();
+
+  /** The number of uses. */
+  protected Optional<Integer> m_multiuse = Optional.absent();
 
   /** The unit count for multiples or multiuses. */
   protected CountUnit m_countUnit = CountUnit.UNKNOWN;
@@ -271,7 +275,7 @@ public class BaseItem extends BaseEntry
    */
   public boolean isCounted()
   {
-    if(m_count.isPresent())
+    if(m_multiple.isPresent() || m_multiuse.isPresent())
       return true;
 
     for(BaseEntry base : getBaseEntries())
@@ -394,7 +398,7 @@ public class BaseItem extends BaseEntry
       return true;
 
     for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isContainer())
+      if(((BaseItem)base).isWearable())
         return true;
 
     return false;
@@ -513,13 +517,13 @@ public class BaseItem extends BaseEntry
   public Combination<NewWeight> getCombinedWeight()
   {
     if(m_weight.isPresent())
-      return new Combination.Addable<NewWeight>(this, m_weight.get());
+      return new Combination.Arithmetic<NewWeight>(this, m_weight.get());
 
     List<Combination<NewWeight>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedWeight());
 
-    return new Combination.Addable<NewWeight>(this, combinations);
+    return new Combination.Arithmetic<NewWeight>(this, combinations);
   }
 
   /**
@@ -540,13 +544,13 @@ public class BaseItem extends BaseEntry
   public Combination<NewMoney> getCombinedValue()
   {
     if(m_value.isPresent())
-      return new Combination.Addable<NewMoney>(this, m_value.get());
+      return new Combination.Arithmetic<NewMoney>(this, m_value.get());
 
     List<Combination<NewMoney>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedValue());
 
-    return new Combination.Addable<NewMoney>(this, combinations);
+    return new Combination.Arithmetic<NewMoney>(this, combinations);
   }
 
   /**
@@ -705,6 +709,7 @@ public class BaseItem extends BaseEntry
       return new Combination.String(this, m_playerName.get());
 
     List<Combination<String>> combinations = new ArrayList<>();
+    combinations.add(new Combination.String(this, getName()));
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedPlayerName());
 
@@ -795,9 +800,19 @@ public class BaseItem extends BaseEntry
    *
    * @return      the count, as enum value
    */
-  public Optional<Integer> getCount()
+  public Optional<Integer> getMultiple()
   {
-    return m_count;
+    return m_multiple;
+  }
+
+  /**
+   * Get the count of the item.
+   *
+   * @return      the count, as enum value
+   */
+  public Optional<Integer> getMultiuse()
+  {
+    return m_multiuse;
   }
 
   /**
@@ -805,14 +820,31 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination.Integer getCombinedCount()
+  public Combination.Integer getCombinedMultiple()
   {
-    if(m_count.isPresent())
-      return new Combination.Integer(this, m_count.get());
+    if(m_multiple.isPresent())
+      return new Combination.Integer(this, m_multiple.get());
 
     List<Combination<Integer>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedCount());
+      combinations.add(((BaseItem)entry).getCombinedMultiple());
+
+    return new Combination.Integer(this, combinations);
+  }
+
+  /**
+   * Get the combined count of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination.Integer getCombinedMultiuse()
+  {
+    if(m_multiuse.isPresent())
+      return new Combination.Integer(this, m_multiuse.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedMultiuse());
 
     return new Combination.Integer(this, combinations);
   }
@@ -974,13 +1006,13 @@ public class BaseItem extends BaseEntry
   public Combination<NewDamage> getCombinedDamage()
   {
     if(m_damage.isPresent())
-      return new Combination.Addable<NewDamage>(this, m_damage.get());
+      return new Combination.Arithmetic<NewDamage>(this, m_damage.get());
 
     List<Combination<NewDamage>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedDamage());
 
-    return new Combination.Addable<NewDamage>(this, combinations);
+    return new Combination.Arithmetic<NewDamage>(this, combinations);
   }
 
   /**
@@ -1002,13 +1034,13 @@ public class BaseItem extends BaseEntry
   public Combination<NewDamage> getCombinedSecondaryDamage()
   {
     if(m_secondaryDamage.isPresent())
-      return new Combination.Addable<NewDamage>(this, m_secondaryDamage.get());
+      return new Combination.Arithmetic<NewDamage>(this, m_secondaryDamage.get());
 
     List<Combination<NewDamage>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedSecondaryDamage());
 
-    return new Combination.Addable<NewDamage>(this, combinations);
+    return new Combination.Arithmetic<NewDamage>(this, combinations);
   }
 
   /**
@@ -1030,13 +1062,13 @@ public class BaseItem extends BaseEntry
   public Combination<NewDamage> getCombinedSplash()
   {
     if(m_splash.isPresent())
-      return new Combination.Addable<NewDamage>(this, m_splash.get());
+      return new Combination.Arithmetic<NewDamage>(this, m_splash.get());
 
     List<Combination<NewDamage>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedSplash());
 
-    return new Combination.Addable<NewDamage>(this, combinations);
+    return new Combination.Arithmetic<NewDamage>(this, combinations);
   }
 
   /**
@@ -1223,13 +1255,13 @@ public class BaseItem extends BaseEntry
   public Combination<NewCritical> getCombinedCritical()
   {
     if(m_critical.isPresent())
-      return new Combination.Addable<NewCritical>(this, m_critical.get());
+      return new Combination.Arithmetic<NewCritical>(this, m_critical.get());
 
     List<Combination<NewCritical>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedCritical());
 
-    return new Combination.Addable<NewCritical>(this, combinations);
+    return new Combination.Arithmetic<NewCritical>(this, combinations);
   }
 
   /**
@@ -1250,13 +1282,13 @@ public class BaseItem extends BaseEntry
   public Combination<NewModifier> getCombinedArmorBonus()
   {
     if(m_armorBonus.isPresent())
-      return new Combination.Addable<NewModifier>(this, m_armorBonus.get());
+      return new Combination.Arithmetic<NewModifier>(this, m_armorBonus.get());
 
     List<Combination<NewModifier>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedArmorBonus());
 
-    return new Combination.Addable<NewModifier>(this, combinations);
+    return new Combination.Arithmetic<NewModifier>(this, combinations);
   }
 
   /**
@@ -1385,13 +1417,13 @@ public class BaseItem extends BaseEntry
   public Combination<NewDistance> getCombinedSlowSpeed()
   {
     if(m_speedSlow.isPresent())
-      return new Combination.Addable<NewDistance>(this, m_speedSlow.get());
+      return new Combination.Arithmetic<NewDistance>(this, m_speedSlow.get());
 
     List<Combination<NewDistance>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedSlowSpeed());
 
-    return new Combination.Addable<NewDistance>(this, combinations);
+    return new Combination.Arithmetic<NewDistance>(this, combinations);
   }
 
   /**
@@ -1412,13 +1444,13 @@ public class BaseItem extends BaseEntry
   public Combination<NewDistance> getCombinedFastSpeed()
   {
     if(m_speedFast.isPresent())
-      return new Combination.Addable<NewDistance>(this, m_speedFast.get());
+      return new Combination.Arithmetic<NewDistance>(this, m_speedFast.get());
 
     List<Combination<NewDistance>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedFastSpeed());
 
-    return new Combination.Addable<NewDistance>(this, combinations);
+    return new Combination.Arithmetic<NewDistance>(this, combinations);
   }
 
   /**
@@ -1439,13 +1471,13 @@ public class BaseItem extends BaseEntry
   public Combination<Area> getCombinedArea()
   {
     if(m_area.isPresent())
-      return new Combination.Addable<Area>(this, m_area.get());
+      return new Combination.Arithmetic<Area>(this, m_area.get());
 
     List<Combination<Area>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedArea());
 
-    return new Combination.Addable<Area>(this, combinations);
+    return new Combination.Arithmetic<Area>(this, combinations);
   }
 
   /**
@@ -1466,13 +1498,13 @@ public class BaseItem extends BaseEntry
   public Combination<NewDistance> getCombinedLength()
   {
     if(m_length.isPresent())
-      return new Combination.Addable<NewDistance>(this, m_length.get());
+      return new Combination.Arithmetic<NewDistance>(this, m_length.get());
 
     List<Combination<NewDistance>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedLength());
 
-    return new Combination.Addable<NewDistance>(this, combinations);
+    return new Combination.Arithmetic<NewDistance>(this, combinations);
   }
 
   /**
@@ -1493,13 +1525,13 @@ public class BaseItem extends BaseEntry
   public Combination<Volume> getCombinedCapacity()
   {
     if(m_capacity.isPresent())
-      return new Combination.Addable<Volume>(this, m_capacity.get());
+      return new Combination.Arithmetic<Volume>(this, m_capacity.get());
 
     List<Combination<Volume>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedCapacity());
 
-    return new Combination.Addable<Volume>(this, combinations);
+    return new Combination.Arithmetic<Volume>(this, combinations);
   }
 
   /**
@@ -1575,13 +1607,13 @@ public class BaseItem extends BaseEntry
   public Combination<NewDuration> getCombinedDon()
   {
     if(m_don.isPresent())
-      return new Combination.Addable<NewDuration>(this, m_don.get());
+      return new Combination.Arithmetic<NewDuration>(this, m_don.get());
 
     List<Combination<NewDuration>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedDon());
 
-    return new Combination.Addable<NewDuration>(this, combinations);
+    return new Combination.Arithmetic<NewDuration>(this, combinations);
   }
 
   /**
@@ -1603,13 +1635,13 @@ public class BaseItem extends BaseEntry
   public Combination<NewDuration> getCombinedDonHastily()
   {
     if(m_donHastily.isPresent())
-      return new Combination.Addable<NewDuration>(this, m_donHastily.get());
+      return new Combination.Arithmetic<NewDuration>(this, m_donHastily.get());
 
     List<Combination<NewDuration>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedDonHastily());
 
-    return new Combination.Addable<NewDuration>(this, combinations);
+    return new Combination.Arithmetic<NewDuration>(this, combinations);
   }
 
   /**
@@ -1631,13 +1663,13 @@ public class BaseItem extends BaseEntry
   public Combination<NewDuration> getCombinedRemove()
   {
     if(m_remove.isPresent())
-      return new Combination.Addable<NewDuration>(this, m_remove.get());
+      return new Combination.Arithmetic<NewDuration>(this, m_remove.get());
 
     List<Combination<NewDuration>> combinations = new ArrayList<>();
     for(BaseEntry entry : this.getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedRemove());
 
-    return new Combination.Addable<NewDuration>(this, combinations);
+    return new Combination.Arithmetic<NewDuration>(this, combinations);
   }
 
  /**
@@ -1687,12 +1719,12 @@ public class BaseItem extends BaseEntry
   }
 
   @Override
-  public boolean isDM(@Nullable BaseCharacter inUser)
+  public boolean isDM(Optional<BaseCharacter> inUser)
   {
-    if(inUser == null)
+    if(!inUser.isPresent())
       return false;
 
-    return inUser.hasAccess(BaseCharacter.Group.DM);
+    return inUser.get().hasAccess(BaseCharacter.Group.DM);
   }
 
   @Override
@@ -1716,8 +1748,10 @@ public class BaseItem extends BaseEntry
       values.put(Index.Path.BREAKS, m_break.get().toString());
     if(m_countUnit != CountUnit.UNKNOWN)
       values.put(Index.Path.UNITS, m_countUnit.toString());
-    if(m_count.isPresent())
-      values.put(Index.Path.COUNTS, m_count.get().toString());
+    if(m_multiple.isPresent())
+      values.put(Index.Path.COUNTS, m_multiple.get().toString());
+    if(m_multiuse.isPresent())
+      values.put(Index.Path.COUNTS, m_multiuse.get().toString());
     if(m_brightLight.isPresent())
       values.put(Index.Path.LIGHTS, m_brightLight.toString());
     if(m_shadowyLight.isPresent())
@@ -1945,21 +1979,25 @@ public class BaseItem extends BaseEntry
       if(m_remove.isPresent())
         wearableBuilder.setRemove(m_remove.get().toProto());
 
-      return builder.build();
+      builder.setWearable(wearableBuilder.build());
     }
 
-    if(m_countUnit != CountUnit.UNKNOWN
-      || m_count.isPresent())
+    if(m_multiple.isPresent())
     {
-      BaseCountedProto.Builder counted = BaseCountedProto.newBuilder();
+      BaseMultipleProto.Builder counted = BaseMultipleProto.newBuilder();
       if(m_countUnit != CountUnit.UNKNOWN)
         counted.setUnit(m_countUnit.toProto());
-      if(m_count.isPresent())
-        counted.setCount(m_count.get());
-      else
-        counted.setCount(1);
+      counted.setCount(m_multiple.get());
 
-      builder.setCounted(counted.build());
+      builder.setMultiple(counted.build());
+    }
+
+    if(m_multiuse.isPresent())
+    {
+      BaseMultiuseProto.Builder counted = BaseMultiuseProto.newBuilder();
+      counted.setCount(m_multiuse.get());
+
+      builder.setMultiuse(counted.build());
     }
 
     if(m_brightLight.isPresent() || m_shadowyLight.isPresent())
@@ -1997,6 +2035,7 @@ public class BaseItem extends BaseEntry
     }
 
     BaseItemProto proto = builder.build();
+    System.out.println(proto);
     return proto;
   }
 
@@ -2019,7 +2058,8 @@ public class BaseItem extends BaseEntry
     m_substance = inValues.use("substance", m_substance, Substance.PARSER);
     m_appearances = inValues.use("appearances", m_appearances,
                                  Appearance.PARSER, "probability", "text");
-    m_count = inValues.use("count", m_count, NewValue.INTEGER_PARSER);
+    m_multiple = inValues.use("multiple", m_multiple, NewValue.INTEGER_PARSER);
+    m_multiuse = inValues.use("multiuse", m_multiuse, NewValue.INTEGER_PARSER);
     m_countUnit = inValues.use("count_unit", m_countUnit, CountUnit.PARSER);
     m_lightShape = inValues.use("light.shape", m_lightShape, AreaShape.PARSER);
     m_brightLight = inValues.use("light.bright", m_brightLight,
@@ -2065,6 +2105,7 @@ public class BaseItem extends BaseEntry
 
     m_capacity = inValues.use("container.capacity", m_capacity, Volume.PARSER);
     m_state = inValues.use("container.state", m_state, AggregationState.PARSER);
+
     m_slot = inValues.use("wearable.slot", m_slot, Slot.PARSER);
     m_don = inValues.use("wearable.don", m_don, NewDuration.PARSER);
     m_donHastily = inValues.use("wearable.don_hastily", m_donHastily,
@@ -2125,12 +2166,18 @@ public class BaseItem extends BaseEntry
     if(proto.hasPlayerName())
       m_playerName = Optional.of(proto.getPlayerName());
 
-    if(proto.hasCounted())
+    if(proto.hasMultiple())
     {
-      if(proto.getCounted().hasUnit())
-        m_countUnit = CountUnit.fromProto(proto.getCounted().getUnit());
-      if(proto.getCounted().hasCount())
-        m_count = Optional.of(proto.getCounted().getCount());
+      if(proto.getMultiple().hasUnit())
+        m_countUnit = CountUnit.fromProto(proto.getMultiple().getUnit());
+      if(proto.getMultiple().hasCount())
+        m_multiple = Optional.of(proto.getMultiple().getCount());
+    }
+
+    if(proto.hasMultiuse())
+    {
+      if(proto.getMultiuse().hasCount())
+        m_multiuse = Optional.of(proto.getMultiuse().getCount());
     }
 
     if(proto.hasWeapon())
@@ -2147,7 +2194,8 @@ public class BaseItem extends BaseEntry
       if(weaponProto.hasType())
         m_weaponType = WeaponType.fromProto(weaponProto.getType());
       if(weaponProto.hasCritical())
-        m_critical = Optional.of(NewCritical.fromProto(weaponProto.getCritical()));
+        m_critical =
+        Optional.of(NewCritical.fromProto(weaponProto.getCritical()));
       if(weaponProto.hasStyle())
         m_style = WeaponStyle.fromProto(weaponProto.getStyle());
       if(weaponProto.hasProficiency())
@@ -2180,14 +2228,6 @@ public class BaseItem extends BaseEntry
     if(proto.hasMagic())
       for(BaseMagicProto.Modifier modifier : proto.getMagic().getModifierList())
         m_magicalModifiers.add(NamedModifier.fromProto(modifier));
-
-    if(proto.hasMultiple())
-    {
-      if(proto.getMultiple().hasUnit())
-        m_countUnit = CountUnit.fromProto(proto.getMultiple().getUnit());
-      if(proto.getMultiple().hasCount())
-        m_count = Optional.of(proto.getMultiple().getCount());
-    }
 
     if(proto.hasTimed())
       m_timed =
@@ -2248,13 +2288,6 @@ public class BaseItem extends BaseEntry
         m_lightShape =
           AreaShape.fromProto(proto.getLight().getShadowy().getShape());
       }
-    }
-
-    if(proto.hasMultiuse())
-    {
-      m_countUnit = CountUnit.USE;
-      if(proto.getMultiuse().hasCount())
-        m_count = Optional.of(proto.getMultiuse().getCount());
     }
   }
 

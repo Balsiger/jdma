@@ -34,6 +34,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
@@ -359,7 +360,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *
    */
   @Override
-  public boolean isDM(@Nullable BaseCharacter inUser)
+  public boolean isDM(Optional<BaseCharacter> inUser)
   {
     return m_entry.isDM(inUser);
   }

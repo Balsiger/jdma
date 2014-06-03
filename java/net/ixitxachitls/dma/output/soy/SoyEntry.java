@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.base.Optional;
 import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
@@ -156,10 +157,10 @@ public class SoyEntry extends SoyAbstract
       StringBuffer buffer = new StringBuffer();
       if (m_entry instanceof CampaignEntry)
       {
-        Campaign campaign = ((CampaignEntry)m_entry).getCampaign();
-        if(campaign != null)
+        Optional<Campaign> campaign = ((CampaignEntry)m_entry).getCampaign();
+        if(campaign.isPresent())
         {
-          for(AbstractEntry dependency : campaign.collectDependencies())
+          for(AbstractEntry dependency : campaign.get().collectDependencies())
             buffer.append(dependency.toString());
 
           buffer.append(campaign.toString());

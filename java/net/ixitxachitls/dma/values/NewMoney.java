@@ -37,7 +37,7 @@ import net.ixitxachitls.util.Strings;
  * @file   NewMoney.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
-public class NewMoney extends NewValue.Addable<MoneyProto>
+public class NewMoney extends NewValue.Arithmetic<MoneyProto>
 {
   public static class MoneyParser extends Parser<NewMoney>
   {
@@ -297,7 +297,7 @@ public class NewMoney extends NewValue.Addable<MoneyProto>
   }
 
   @Override
-  public NewValue.Addable<MoneyProto> add(NewValue.Addable<MoneyProto> inValue)
+  public NewValue.Arithmetic<MoneyProto> add(NewValue.Arithmetic<MoneyProto> inValue)
   {
     if(inValue == null)
       return this;
@@ -316,9 +316,20 @@ public class NewMoney extends NewValue.Addable<MoneyProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Addable<MoneyProto> inValue)
+  public boolean canAdd(NewValue.Arithmetic<MoneyProto> inValue)
   {
     return inValue instanceof NewMoney;
+  }
+
+  @Override
+  public NewValue.Arithmetic<MoneyProto> multiply(int inFactor)
+  {
+    return new NewMoney(m_platinum * inFactor,
+                        m_gold * inFactor,
+                        m_silver * inFactor,
+                        m_copper * inFactor,
+                        m_armor,
+                        m_weapon);
   }
 
   //----------------------------------------------------------------------------

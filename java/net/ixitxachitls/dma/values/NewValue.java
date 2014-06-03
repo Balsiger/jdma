@@ -95,10 +95,11 @@ public abstract class NewValue<T extends Message>
     }
   }
 
-  public static abstract class Addable<V extends Message> extends NewValue<V>
+  public static abstract class Arithmetic<V extends Message> extends NewValue<V>
   {
-    public abstract Addable<V> add(Addable<V> inValue);
-    public abstract boolean canAdd(Addable<V> inValue);
+    public abstract Arithmetic<V> add(Arithmetic<V> inValue);
+    public abstract boolean canAdd(Arithmetic<V> inValue);
+    public abstract Arithmetic<V> multiply(int inFactor);
   }
 
   public static final Parser<Integer> INTEGER_PARSER = new Parser<Integer>(1)
@@ -116,6 +117,11 @@ public abstract class NewValue<T extends Message>
       }
     }
   };
+
+  public String toShortString()
+  {
+    return toString();
+  }
 
   /**
    * Convert the value to a proto message.
@@ -143,5 +149,14 @@ public abstract class NewValue<T extends Message>
       return inFirst;
 
     return Optional.of((NewRational)inFirst.get().add(inSecond.get()));
+  }
+
+  protected static Optional<NewRational> multiply(Optional<NewRational> inValue,
+                                                  int inFactor)
+  {
+    if(!inValue.isPresent())
+      return inValue;
+
+    return Optional.of((NewRational)inValue.get().multiply(inFactor));
   }
 }

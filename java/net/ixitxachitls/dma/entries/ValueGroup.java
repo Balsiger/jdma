@@ -669,7 +669,6 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
-  //--------------------------------- isDM ---------------------------------
 
   /**
    * Check whether the given user is the DM for this entry.
@@ -677,14 +676,12 @@ public abstract class ValueGroup implements Changeable
    * @param       inUser the user accessing
    *
    * @return      true for DM, false for not
-   *
    */
-  public boolean isDM(@Nullable BaseCharacter inUser)
+  public boolean isDM(Optional<BaseCharacter> inUser)
   {
     return false;
   }
 
-  //........................................................................
   //-------------------------------- isOwner -------------------------------
 
   /**

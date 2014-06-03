@@ -325,27 +325,40 @@
 /**
  * Format an addable, combined value.
  * 
- * @param value   the normal value
- * @param addable the addable value
+ * @param  addable the addable value
+ * @param? value   the normal value
+ * @param?  short   whether to print short
  */
 {template .added}
   {if $value.present}
-    {if $value.get.pure_string}
-      {$value.get.pure_string}
+    {if $short}
+      {$value.short_string}
     {else}
-      {$value.get}
+      {if $value.get.pure_string and def($value.get.pure_string)}
+        {$value.get.pure_string}
+      {else}
+        {$value.get}
+      {/if}
     {/if}
   {else}
     <span class="combination-value">
-      {$addable.value_string}
+      {if $short}
+        {$addable.value_short_string}
+      {else}
+        {$addable.value_string}
+      {/if}
       <div class="combination-sources">
         {foreach $annotated in $addable.annotate}
           <div class="combination-source">
             <span class="combination-source-value">
-              {if $annotated.value and $annotated.value.string}
-                {$annotated.value.string}
+              {if $annotated.value.present and $annotated.value.get.string}
+                {$annotated.value.get.string}
               {else}
-                {$annotated.value}
+                {if $annotated.value.present}
+                  {$annotated.value.get}
+                {else}
+                  x {$annotated.factor}
+                {/if}
               {/if}
             </span>
             <span class="combination-source-origin">
@@ -394,8 +407,8 @@
 /**
  * Format a concatenated, combined value.
  * 
- * @param value       the normal value
- * @param concatenate the concatenate value
+ * @param? value       the normal value
+ * @param  concatenate the concatenate value
  * @param? lines      whether to format the text in lines
  */
 {template .concatenated}
@@ -404,7 +417,12 @@
   {else}
     {foreach $concat in $concatenate.annotate}
       <span class="combination-{if $lines}line{else}text{/if}">
-        {commands($concat.value)}{if not $lines}{sp}{/if}
+        {if $concat.value.present}
+          {commands($concat.value.get)}
+        {else}
+          {commands($concat.value)}
+        {/if}
+        {if not $lines}{sp}{/if}
         <div class="combination-text-source">
           from {$concat.source}
         </div>

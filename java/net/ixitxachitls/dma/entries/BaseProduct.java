@@ -1617,12 +1617,12 @@ public class BaseProduct extends BaseEntry
   }
 
   @Override
-  public boolean isDM(@Nullable BaseCharacter inUser)
+  public boolean isDM(Optional<BaseCharacter> inUser)
   {
-    if(inUser == null)
+    if(!inUser.isPresent())
       return false;
 
-    return inUser.hasAccess(BaseCharacter.Group.USER);
+    return inUser.get().hasAccess(BaseCharacter.Group.USER);
   }
 
   /**

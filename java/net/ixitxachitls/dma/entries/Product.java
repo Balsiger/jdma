@@ -23,10 +23,12 @@
 
 package net.ixitxachitls.dma.entries;
 
-import javax.annotation.Nullable;
+import java.util.List;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
@@ -132,36 +134,20 @@ public class Product extends Entry
   }
 
   @Override
-  public String [] getNavigation()
+  public List<Link> getNavigation()
   {
-    return new String [] {
-      BaseCharacter.TYPE.getLink(),
-      "/" + BaseCharacter.TYPE.getMultipleLink(),
-      m_owner.toString(),
-      "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner,
-      getType().getLink(),
-      "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
-      + "/" + getType().getMultipleLink(),
-      getName(),
-      "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
-      + "/" + getType().getLink() + "/" + getName(),
-    };
+    return ImmutableList.of
+      (new Link(BaseCharacter.TYPE.getLink(),
+                "/" + BaseCharacter.TYPE.getMultipleLink()),
+      new Link(m_owner.toString(),
+               "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner),
+      new Link(getType().getLink(),
+               "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
+               + "/" + getType().getMultipleLink()),
+      new Link(getName(),
+               "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
+               + "/" + getType().getLink() + "/" + getName()));
   }
-
-  /*
-  public List<Object> getNavigation()
-  {
-    List<Object> list = new ArrayList<Object>();
-
-    list.add(new ImmutableMap.Builder<String, Object>()
-             .put("name", m_owner.get())
-             .put("path", "/user/" + m_owner.get())
-             .build());
-    list.add(this);
-
-    return list;
-  }
-  */
 
   @Override
   public String [] getListNavigation()
@@ -184,12 +170,12 @@ public class Product extends Entry
   }
 
   @Override
-  public boolean isDM(@Nullable BaseCharacter inUser)
+  public boolean isDM(Optional<BaseCharacter> inUser)
   {
-    if(inUser == null)
+    if(!inUser.isPresent())
       return false;
 
-    return inUser.getName().equalsIgnoreCase(m_owner.get());
+    return inUser.get().getName().equalsIgnoreCase(m_owner.get());
   }
 
   /**

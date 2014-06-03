@@ -185,7 +185,9 @@ public class BlobUploadServlet extends BaseServlet
         entry.addFile(m_image, name, fileType, blobKey);
         entry.save();
 
-        Log.event(request.getUser().getName(), "upload",
+        Log.event(request.hasUser()
+                  ? request.getUser().get().getName() : "[no user]",
+                  "upload",
                   "Uploaded " + fileType + " file " + name + " for " + key);
 
         String url =

@@ -151,7 +151,7 @@ public class SaveActionServlet extends ActionServlet
         ("/base entry/test::name", "guru");
 
       EasyMock.expect(user.getName()).andStubReturn("user");
-      EasyMock.expect(request.getUser()).andStubReturn(user);
+      EasyMock.expect(request.getUser()).andStubReturn(Optional.of(user));
       EasyMock.expect(request.getParams()).andStubReturn(params);
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andStubReturn(true);
@@ -191,7 +191,7 @@ public class SaveActionServlet extends ActionServlet
         com.google.common.collect.ImmutableMultimap.of
         ("/base entry/test::name", "guru");
 
-      EasyMock.expect(request.getUser()).andStubReturn(user);
+      EasyMock.expect(request.getUser()).andStubReturn(Optional.of(user));
       EasyMock.expect(request.getParams()).andStubReturn(params);
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andStubReturn(false);
@@ -233,7 +233,7 @@ public class SaveActionServlet extends ActionServlet
         com.google.common.collect.ImmutableMultimap.of
         ("/base entry/guru::name", "guru");
 
-      EasyMock.expect(request.getUser()).andStubReturn(user);
+      EasyMock.expect(request.getUser()).andStubReturn(Optional.of(user));
       EasyMock.expect(request.getParams()).andStubReturn(params);
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andStubReturn(true);
@@ -277,7 +277,7 @@ public class SaveActionServlet extends ActionServlet
         com.google.common.collect.ImmutableMultimap.of
         ("guru/test::name", "guru");
 
-      EasyMock.expect(request.getUser()).andStubReturn(user);
+      EasyMock.expect(request.getUser()).andStubReturn(Optional.of(user));
       EasyMock.expect(request.getParams()).andStubReturn(params);
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andStubReturn(false);
@@ -318,7 +318,7 @@ public class SaveActionServlet extends ActionServlet
         ("/base entry/test::guru", "guru",
          "/base entry/test::description", "\"test\"");
 
-      EasyMock.expect(request.getUser()).andStubReturn(user);
+      EasyMock.expect(request.getUser()).andStubReturn(Optional.of(user));
       EasyMock.expect(request.getParams()).andStubReturn(params);
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andStubReturn(true);

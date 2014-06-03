@@ -129,7 +129,7 @@ public abstract class DMAServlet extends BaseServlet
       return true;
 
     // normal user access
-    return inRequest.hasUser() && inRequest.getUser().hasAccess(m_group);
+    return inRequest.hasUser() && inRequest.getUser().get().hasAccess(m_group);
   }
 
   //........................................................................

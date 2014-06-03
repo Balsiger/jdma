@@ -37,7 +37,7 @@ import net.ixitxachitls.util.Strings;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class NewDuration extends NewValue.Addable<DurationProto>
+public class NewDuration extends NewValue.Arithmetic<DurationProto>
   implements Comparable<NewDuration>
 {
   public static final Parser<NewDuration> PARSER = new Parser<NewDuration>(1)
@@ -219,6 +219,43 @@ public class NewDuration extends NewValue.Addable<DurationProto>
     return Strings.SPACE_JOINER.join(parts);
   }
 
+  public String toShortString()
+  {
+    List<String> parts = new ArrayList<>();
+
+    if(m_days.isPresent())
+      parts.add(m_days.get() + "d");
+
+    if(m_hours.isPresent())
+      parts.add(m_hours.get() + "h");
+
+    if(m_minutes.isPresent())
+      parts.add(m_minutes.get() + "m");
+
+    if(m_seconds.isPresent())
+      parts.add(m_seconds.get() + "s");
+
+    if(m_rounds.isPresent())
+      parts.add(m_rounds.get() + "r");
+
+    if(m_standardActions.isPresent())
+      parts.add(m_standardActions.get() + "st");
+
+    if(m_moveActions.isPresent())
+      parts.add(m_moveActions.get() + "mv");
+
+    if(m_swiftActions.isPresent())
+      parts.add(m_swiftActions.get() + "sw");
+
+    if(m_freeActions.isPresent())
+      parts.add(m_freeActions.get() + "fr");
+
+    if(parts.isEmpty())
+      return "0s";
+
+    return Strings.SPACE_JOINER.join(parts);
+  }
+
   public int asSeconds() {
     int seconds = 0;
 
@@ -287,6 +324,8 @@ public class NewDuration extends NewValue.Addable<DurationProto>
         actions.setSwiftActions(m_swiftActions.get().toProto());
       if(m_freeActions.isPresent())
         actions.setFreeActions(m_freeActions.get().toProto());
+
+      builder.setActions(actions.build());
     }
 
     return builder.build();
@@ -294,8 +333,8 @@ public class NewDuration extends NewValue.Addable<DurationProto>
 
 
   @Override
-  public NewValue.Addable<DurationProto>
-    add(NewValue.Addable<DurationProto> inValue)
+  public NewValue.Arithmetic<DurationProto>
+    add(NewValue.Arithmetic<DurationProto> inValue)
   {
     if(!(inValue instanceof NewDuration))
       return this;
@@ -311,6 +350,20 @@ public class NewDuration extends NewValue.Addable<DurationProto>
                            add(m_moveActions, value.m_moveActions),
                            add(m_swiftActions, value.m_swiftActions),
                            add(m_freeActions, value.m_freeActions));
+  }
+
+  @Override
+  public NewValue.Arithmetic<DurationProto> multiply(int inFactor)
+  {
+    return new NewDuration(multiply(m_days, inFactor),
+                           multiply(m_hours, inFactor),
+                           multiply(m_minutes, inFactor),
+                           multiply(m_seconds, inFactor),
+                           multiply(m_rounds, inFactor),
+                           multiply(m_standardActions, inFactor),
+                           multiply(m_moveActions, inFactor),
+                           multiply(m_swiftActions, inFactor),
+                           multiply(m_freeActions, inFactor));
   }
 
   /**
@@ -385,7 +438,7 @@ public class NewDuration extends NewValue.Addable<DurationProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Addable<DurationProto> inValue)
+  public boolean canAdd(NewValue.Arithmetic<DurationProto> inValue)
   {
     return inValue instanceof NewDuration;
   }

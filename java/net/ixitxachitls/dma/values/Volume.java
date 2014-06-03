@@ -41,7 +41,7 @@ import net.ixitxachitls.util.Strings;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class Volume extends NewValue.Addable<VolumeProto>
+public class Volume extends NewValue.Arithmetic<VolumeProto>
 {
   public static final Parser<Volume> PARSER = new Parser<Volume>(1)
   {
@@ -296,6 +296,53 @@ public class Volume extends NewValue.Addable<VolumeProto>
     return Strings.SPACE_JOINER.join(parts);
   }
 
+    @Override
+  public String toShortString()
+  {
+    List<String> parts = new ArrayList<>();
+
+    if(m_feet.isPresent())
+      parts.add(m_feet.get() + "ft&sup3;");
+
+    if(m_inches.isPresent())
+      parts.add(m_inches.get() + "in&sup3;");
+
+    if(m_meters.isPresent())
+      parts.add(m_meters.get() + "m&sup3;");
+
+    if(m_decimeters.isPresent())
+      parts.add(m_decimeters.get() + "dm&sup3;");
+
+    if(m_centimeters.isPresent())
+      parts.add(m_centimeters.get() + "cm&sup3;");
+
+    if(m_gallons.isPresent())
+      parts.add(m_gallons.get() + "gal");
+
+    if(m_quarts.isPresent())
+      parts.add(m_quarts.get() + "qt");
+
+    if(m_pints.isPresent())
+      parts.add(m_pints.get() + "pt");
+
+    if(m_cups.isPresent())
+      parts.add(m_cups.get() + "c");
+
+    if(m_liters.isPresent())
+      parts.add(m_liters.get() + "l");
+
+    if(m_deciliters.isPresent())
+      parts.add(m_deciliters.get() + "dl");
+
+    if(m_centiliters.isPresent())
+      parts.add(m_centiliters.get() + "cl");
+
+    if(parts.isEmpty())
+      return "0ft&sup3;";
+
+    return Strings.SPACE_JOINER.join(parts);
+  }
+
   /**
    * Create a proto for the value.
    *
@@ -446,7 +493,7 @@ public class Volume extends NewValue.Addable<VolumeProto>
   }
 
   @Override
-  public Addable<VolumeProto> add(Addable<VolumeProto> inValue)
+  public Arithmetic<VolumeProto> add(Arithmetic<VolumeProto> inValue)
   {
     if(inValue == null)
       return this;
@@ -470,7 +517,24 @@ public class Volume extends NewValue.Addable<VolumeProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Addable<VolumeProto> inValue)
+  public Arithmetic<VolumeProto> multiply(int inFactor)
+  {
+    return new Volume(multiply(m_feet, inFactor),
+                      multiply(m_inches, inFactor),
+                      multiply(m_meters, inFactor),
+                      multiply(m_decimeters, inFactor),
+                      multiply(m_centimeters, inFactor),
+                      multiply(m_gallons, inFactor),
+                      multiply(m_quarts, inFactor),
+                      multiply(m_pints, inFactor),
+                      multiply(m_cups, inFactor),
+                      multiply(m_liters, inFactor),
+                      multiply(m_deciliters, inFactor),
+                      multiply(m_centiliters, inFactor));
+  }
+
+  @Override
+  public boolean canAdd(NewValue.Arithmetic<VolumeProto> inValue)
   {
     return inValue instanceof Volume;
   }

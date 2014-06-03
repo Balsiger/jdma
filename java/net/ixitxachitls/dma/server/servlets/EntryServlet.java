@@ -168,7 +168,7 @@ public class EntryServlet extends PageServlet
           if(entry instanceof Entry)
             ((Entry)entry).complete();
         }
-        entry.setOwner(inRequest.getUser());
+        entry.setOwner(inRequest.getUser().get());
       }
 
       if(entry == null)
@@ -244,7 +244,7 @@ public class EntryServlet extends PageServlet
                                                     SoyRenderer inRenderer)
   {
     Tracer tracer = new Tracer("collecting entry injected data");
-    BaseCharacter user = inRequest.getUser();
+    Optional<BaseCharacter> user = inRequest.getUser();
     AbstractEntry entry = getEntry(inRequest);
 
     Map<String, Object> data = super.collectInjectedData(inRequest, inRenderer);
@@ -253,7 +253,8 @@ public class EntryServlet extends PageServlet
     // should have access to it.
     data.put("isDM", user != null && (entry == null || entry.isDM(user)));
     data.put("isDev", DMAServlet.isDev() || inRequest.hasParam("dev"));
-    data.put("isOwner", user != null && (entry == null || entry.isOwner(user)));
+    data.put("isOwner",
+             user.isPresent() && (entry == null || entry.isOwner(user.get())));
 
     Tracer tracer2 = new Tracer("collecting request parameters");
     Map<String, Object> params = Maps.newHashMap();

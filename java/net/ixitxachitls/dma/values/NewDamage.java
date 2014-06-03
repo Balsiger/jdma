@@ -37,7 +37,7 @@ import net.ixitxachitls.util.Strings;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class NewDamage extends NewValue.Addable<DamageProto>
+public class NewDamage extends NewValue.Arithmetic<DamageProto>
 {
   public static class DamageParser extends Parser<NewDamage>
   {
@@ -388,8 +388,8 @@ public class NewDamage extends NewValue.Addable<DamageProto>
   }
 
   @Override
-  public NewValue.Addable<DamageProto>
-    add(NewValue.Addable<DamageProto> inValue)
+  public NewValue.Arithmetic<DamageProto>
+    add(NewValue.Arithmetic<DamageProto> inValue)
   {
     if(inValue == null)
       return this;
@@ -425,9 +425,21 @@ public class NewDamage extends NewValue.Addable<DamageProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Addable<DamageProto> inValue)
+  public boolean canAdd(NewValue.Arithmetic<DamageProto> inValue)
   {
     return inValue instanceof NewDamage;
+  }
+
+  @Override
+  public NewValue.Arithmetic<DamageProto> multiply(int inFactor)
+  {
+    return new NewDamage(m_dice.multiply(inFactor),
+                         m_type,
+                         m_other.isPresent()
+                           ? Optional.of((NewDamage)
+                                         m_other.get().multiply(inFactor))
+                           : m_other,
+                         m_effect);
   }
 
   //----------------------------------------------------------------------------

@@ -173,9 +173,10 @@ public class Contents extends Extension<Item>
   public Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
+    if(m_entry.getCampaign().isPresent())
     for(Name name : m_contents)
     {
-      Item item = m_entry.getCampaign().getItem(name.get());
+      Item item = m_entry.getCampaign().get().getItem(name.get());
       items.put(name.get(), item);
 
       if(item == null || !inDeep)
@@ -339,21 +340,22 @@ public class Contents extends Extension<Item>
     {
       // add the value of all contained objects
       Money total = null;
-      for(Name name : m_contents)
-      {
-        Item item = m_entry.getCampaign().getItem(name.get());
-        if(item == null)
-          continue;
+      if(m_entry.getCampaign().isPresent())
+        for(Name name : m_contents)
+        {
+          Item item = m_entry.getCampaign().get().getItem(name.get());
+          if(item == null)
+            continue;
 
-        //Money value = item.getValue();
-        //if(value == null)
-        //  continue;
+          //Money value = item.getValue();
+          //if(value == null)
+          //  continue;
 
-        //if(total == null)
-        //  total = value;
-        //else
-        //  total = total.add(value);
-      }
+          //if(total == null)
+          //  total = value;
+          //else
+          //  total = total.add(value);
+        }
 
       if(total != null)
         ioCombined.addValue((V)total, this, "contents");
@@ -363,21 +365,22 @@ public class Contents extends Extension<Item>
     {
       // add the value of all contained objects
       Weight total = null;
-      for(Name name : m_contents)
-      {
-        Item item = m_entry.getCampaign().getItem(name.get());
-        if(item == null)
-          continue;
+      if(m_entry.getCampaign().isPresent())
+        for(Name name : m_contents)
+        {
+          Item item = m_entry.getCampaign().get().getItem(name.get());
+          if(item == null)
+            continue;
 
-        //Weight value = item.getTotalWeight();
-        //if(value == null)
-        //  continue;
+          //Weight value = item.getTotalWeight();
+          //if(value == null)
+          //  continue;
 
-        //if(total == null)
-        //  total = value;
-        //else
-        //  total = total.add(value);
-      }
+          //if(total == null)
+          //  total = value;
+          //else
+          //  total = total.add(value);
+        }
 
       if(total != null)
         ioCombined.addValue((V)total, this, "contents");

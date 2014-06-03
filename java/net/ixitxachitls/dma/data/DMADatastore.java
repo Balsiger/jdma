@@ -178,11 +178,12 @@ public class DMADatastore
    */
   @SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry>
-  List<T> getEntries(AbstractType<T> inType, String inKey, String inValue)
+  List<T> getEntries(AbstractType<T> inType, @Nullable EntryKey inParent,
+                     String inKey, String inValue)
   {
     return (List<T>)
-      convert(m_data.getEntities(escapeType(inType.toString()), null, 0, 1000,
-                                 inKey, inValue));
+      convert(m_data.getEntities(escapeType(inType.toString()),
+                                 convert(inParent), 0, 1000, inKey, inValue));
   }
 
   /**

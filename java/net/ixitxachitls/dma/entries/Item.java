@@ -30,11 +30,30 @@ import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.ItemProto;
+import net.ixitxachitls.dma.values.AggregationState;
+import net.ixitxachitls.dma.values.Area;
+import net.ixitxachitls.dma.values.AreaShape;
+import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.CountUnit;
+import net.ixitxachitls.dma.values.NewCritical;
+import net.ixitxachitls.dma.values.NewDamage;
+import net.ixitxachitls.dma.values.NewDistance;
+import net.ixitxachitls.dma.values.NewDuration;
+import net.ixitxachitls.dma.values.NewModifier;
 import net.ixitxachitls.dma.values.NewMoney;
+import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.NewWeight;
+import net.ixitxachitls.dma.values.Proficiency;
+import net.ixitxachitls.dma.values.Size;
+import net.ixitxachitls.dma.values.Slot;
+import net.ixitxachitls.dma.values.Substance;
+import net.ixitxachitls.dma.values.Volume;
+import net.ixitxachitls.dma.values.WeaponStyle;
+import net.ixitxachitls.dma.values.WeaponType;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -94,6 +113,18 @@ public class Item extends CampaignEntry
   /** The DM notes of the item. */
   protected Optional<String> m_dmNotes = Optional.absent();
 
+  /** The count for multiple, similar items. */
+  protected Optional<Integer> m_multiple = Optional.absent();
+
+  /** The count for a multiuse item. */
+  protected Optional<Integer> m_multiuse = Optional.absent();
+
+  /** The time remaining for a timed item. */
+  protected Optional<NewDuration> m_timeLeft = Optional.absent();
+
+  /** The cached contents. */
+  private Optional<List<Item>> m_contents = Optional.absent();
+
   /**
    * Get the hit points of the base item.
    *
@@ -129,7 +160,44 @@ public class Item extends CampaignEntry
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedWeight());
 
-    return new Combination.Addable<NewWeight>(this, combinations);
+    if(isContainer())
+      for(Item item : getContents())
+        combinations.add(item.getCombinedWeight());
+
+    if(m_multiple.isPresent())
+      combinations.add(new Combination.Arithmetic<NewWeight>
+        (this, m_multiple.get() + " " + getCombinedCountUnit().getValueString(),
+          m_multiple.get()));
+
+    return new Combination.Arithmetic<NewWeight>(this, combinations);
+  }
+
+  /**
+   * Get the combined size of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Size> getCombinedSize()
+  {
+    List<Combination<Size>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedSize());
+
+    return new Combination.Max<Size>(this, combinations);
+  }
+
+  /**
+   * Get the combined hardness of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Integer> getCombinedHardness()
+  {
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedHardness());
+
+    return new Combination.Max<Integer>(this, combinations);
   }
 
   /**
@@ -165,13 +233,550 @@ public class Item extends CampaignEntry
   public Combination<NewMoney> getCombinedValue()
   {
     if(m_value.isPresent())
-      return new Combination.Addable<NewMoney>(this, m_value.get());
+      return new Combination.Arithmetic<NewMoney>(this, m_value.get());
 
     List<Combination<NewMoney>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
       combinations.add(((BaseItem)entry).getCombinedValue());
 
-    return new Combination.Addable<NewMoney>(this, combinations);
+    if(isContainer())
+      for(Item item : getContents())
+        combinations.add(item.getCombinedValue());
+
+    if(m_multiple.isPresent())
+      combinations.add(new Combination.Arithmetic<NewMoney>
+        (this, m_multiple.get() + " " + getCombinedCountUnit().getValueString(),
+          m_multiple.get()));
+
+    if(m_multiuse.isPresent())
+      combinations.add(new Combination.Arithmetic<NewMoney>
+        (this, m_multiuse.get() + " uses",m_multiple.get()));
+
+    return new Combination.Arithmetic<NewMoney>(this, combinations);
+  }
+
+  public List<Item> getContents()
+  {
+    if(!m_contents.isPresent())
+      m_contents = Optional.of
+        (DMADataFactory.get().getEntries(Item.TYPE,
+                                         getCampaign().get().getKey(),
+                                         "index-parent",
+                                         "item/" + getName().toLowerCase()));
+
+    return m_contents.get();
+  }
+
+  /**
+   * Get the combined hardness of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Integer> getCombinedBreakDC()
+  {
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedBreakDC());
+
+    return new Combination.Max<Integer>(this, combinations);
+  }
+
+  /**
+   * Get the combined substance of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Substance> getCombinedSubstance()
+  {
+    List<Combination<Substance>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedSubstance());
+
+    return new Combination.First<Substance>(this, combinations);
+  }
+
+  /**
+   * Get the combined thickness of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDistance> getCombinedThickness()
+  {
+    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedThickness());
+
+    return new Combination.Max<NewDistance>(this, combinations);
+  }
+
+  /**
+   * Get the combined count of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination.Integer getCombinedMaxMultiple()
+  {
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedMultiple());
+
+    return new Combination.Integer(this, combinations);
+  }
+
+  /**
+   * Get the combined count of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<CountUnit> getCombinedCountUnit()
+  {
+    List<Combination<CountUnit>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedCountUnit());
+
+    return new Combination.Max<CountUnit>(this, combinations);
+  }
+
+  /**
+   * Get the combined count of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Volume> getCombinedCapacity()
+  {
+    List<Combination<Volume>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedCapacity());
+
+    return new Combination.Arithmetic<Volume>(this, combinations);
+  }
+
+  /**
+   * Get the combined count of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<AggregationState> getCombinedState()
+  {
+    List<Combination<AggregationState>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedState());
+
+    return new Combination.Max<AggregationState>(this, combinations);
+  }
+
+  /**
+   * Get the combined count of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Slot> getCombinedSlot()
+  {
+    List<Combination<Slot>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedSlot());
+
+    return new Combination.Max<Slot>(this, combinations);
+  }
+
+  /**
+   * Get the combined count of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination.Integer getCombinedMaxMultiuse()
+  {
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedMultiuse());
+
+    return new Combination.Integer(this, combinations);
+  }
+
+  /**
+   * Get the combined duration for donning of the item, including values of
+   * base wearable.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDuration> getCombinedDon()
+  {
+    List<Combination<NewDuration>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedDon());
+
+    return new Combination.Arithmetic<NewDuration>(this, combinations);
+  }
+
+  /**
+   * Get the combined duration for donning of the item hastily, including
+   * values of base wearable.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDuration> getCombinedDonHastily()
+  {
+    List<Combination<NewDuration>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedDonHastily());
+
+    return new Combination.Arithmetic<NewDuration>(this, combinations);
+  }
+
+ /**
+   * Get the combined duration for rewmoving of the item, including values of
+   * base wearable.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDuration> getCombinedRemove()
+  {
+    List<Combination<NewDuration>> combinations = new ArrayList<>();
+    for(BaseEntry entry : this.getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedRemove());
+
+    return new Combination.Arithmetic<NewDuration>(this, combinations);
+  }
+
+  /**
+   * Get the combined light shape of the item, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<AreaShape> getCombinedLightShape()
+  {
+    List<Combination<AreaShape>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedLightShape());
+
+    return new Combination.Max<AreaShape>(this, combinations);
+  }
+
+  /**
+   * Get the combined bright light radius of the item, including values of
+   * base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDistance> getCombinedBrightLight()
+  {
+    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedBrightLight());
+
+    return new Combination.Max<NewDistance>(this, combinations);
+  }
+
+    /**
+   * Get the combined shadowylight radius of the item, including values of
+   * base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDistance> getCombinedShadowyLight()
+  {
+    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedShadowyLight());
+
+    return new Combination.Max<NewDistance>(this, combinations);
+  }
+
+  /**
+   * Get the duration this still item operates.
+   *
+   * @return      the time
+   */
+  public Optional<NewDuration> getTimeLeft()
+  {
+    return m_timeLeft;
+  }
+
+  /**
+   * Get the combined time of the item, including values of
+   * base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDuration> getCombinedTimed()
+  {
+    List<Combination<NewDuration>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedTimed());
+
+    return new Combination.Min<NewDuration>(this, combinations);
+  }
+
+  /**
+   * Get the combined length of this commodity, including values of bases.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDistance> getCombinedLength()
+  {
+    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedLength());
+
+    return new Combination.Arithmetic<NewDistance>(this, combinations);
+  }
+
+  /**
+   * Get the combined area of this commodity, including values of bases.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Area> getCombinedArea()
+  {
+    List<Combination<Area>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedArea());
+
+    return new Combination.Arithmetic<Area>(this, combinations);
+  }
+
+  /**
+   * Get the combined damage of the weapon, including values of base weapons.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDamage> getCombinedDamage()
+  {
+    List<Combination<NewDamage>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedDamage());
+
+    return new Combination.Arithmetic<NewDamage>(this, combinations);
+  }
+
+  /**
+   * Get the combined secondary damage of the weapon, including values of base
+   * weapons.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDamage> getCombinedSecondaryDamage()
+  {
+    List<Combination<NewDamage>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedSecondaryDamage());
+
+    return new Combination.Arithmetic<NewDamage>(this, combinations);
+  }
+
+  /**
+   * Get the combined splash damage of the weapon, including values of base
+   * weapons.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDamage> getCombinedSplash()
+  {
+    List<Combination<NewDamage>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedSplash());
+
+    return new Combination.Arithmetic<NewDamage>(this, combinations);
+  }
+
+  /**
+   * Get the combined weapon type.
+   *
+   * @return a combination value with the maximal weapon type
+   */
+  public Combination<WeaponType> getCombinedWeaponType()
+  {
+    List<Combination<WeaponType>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedWeaponType());
+
+    return new Combination.Max<WeaponType>(this, combinations);
+  }
+
+  /**
+   * Get the combined weapon style.
+   *
+   * @return a combination value with the maximal weapon style
+   */
+  public Combination<WeaponStyle> getCombinedWeaponStyle()
+  {
+    List<Combination<WeaponStyle>> combinations = new ArrayList<>();
+    for(BaseEntry entry : this.getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedWeaponStyle());
+
+    return new Combination.Max<WeaponStyle>(this, combinations);
+  }
+
+  /**
+   * Get the combined weapon style.
+   *
+   * @return a combination value with the maximal weapon style
+   */
+  public Combination<Proficiency> getCombinedProficiency()
+  {
+    List<Combination<Proficiency>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedProficiency());
+
+    return new Combination.Max<Proficiency>(this, combinations);
+  }
+
+  /**
+   * Get the combined range of the weapon, including values of base
+   * weapons.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDistance> getCombinedRange()
+  {
+    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedRange());
+
+    return new Combination.Min<NewDistance>(this, combinations);
+  }
+
+  /**
+   * Get the combined reach of the weapon, including values of base
+   * weapons.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDistance> getCombinedReach()
+  {
+    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+        combinations.add(((BaseItem)entry).getCombinedReach());
+
+    return new Combination.Min<NewDistance>(this, combinations);
+  }
+
+  /**
+   * Get the combined maximal attqcks of the weapon, including values of base
+   * weapons.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Integer> getCombinedMaxAttacks()
+  {
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedMaxAttacks());
+
+    return new Combination.Min<Integer>(this, combinations);
+  }
+
+  /**
+   * Get the combined critical of the weapon, including values of base
+   * weapons.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewCritical> getCombinedCritical()
+  {
+    List<Combination<NewCritical>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedCritical());
+
+    return new Combination.Arithmetic<NewCritical>(this, combinations);
+  }
+
+  /**
+   * Get the combined ac bonus of the armor, including values of base armor.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewModifier> getCombinedArmorBonus()
+  {
+    List<Combination<NewModifier>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedArmorBonus());
+
+    return new Combination.Arithmetic<NewModifier>(this, combinations);
+  }
+
+  /**
+   * Get the combined armor type, including values of base armor.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<ArmorType> getCombinedArmorType()
+  {
+    List<Combination<ArmorType>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedArmorType());
+
+    return new Combination.Max<ArmorType>(this, combinations);
+  }
+
+  /**
+   * Get the combined max dexterity, including values of base armor.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Integer> getCombinedMaxDex()
+  {
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedMaxDex());
+
+    return new Combination.Min<Integer>(this, combinations);
+  }
+
+  /**
+   * Get the combined check penalty, including values of base armor.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Integer> getCombinedCheckPenalty()
+  {
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedCheckPenalty());
+
+    return new Combination.Integer(this, combinations);
+  }
+
+  /**
+   * Get the combined arcane check penalty, including values of base armor.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<Integer> getCombinedArcaneFailure()
+  {
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedArcaneFailure());
+
+    return new Combination.Integer(this, combinations);
+  }
+
+  /**
+   * Get the combined slow speed, including values of base armor.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDistance> getCombinedSlowSpeed()
+  {
+    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedSlowSpeed());
+
+    return new Combination.Arithmetic<NewDistance>(this, combinations);
+  }
+
+  /**
+   * Get the combined fast speed, including values of base armor.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<NewDistance> getCombinedFastSpeed()
+  {
+    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseItem)entry).getCombinedFastSpeed());
+
+    return new Combination.Arithmetic<NewDistance>(this, combinations);
   }
 
   /**
@@ -201,58 +806,6 @@ public class Item extends CampaignEntry
   //     return super.getName();
   //   else
   //     return qualities + " " + super.getName();
-  // }
-
-  /**
-   * Get the size of the item.
-   *
-   * @return      the size or null if not defined
-   */
-  // public BaseItem.Size getSize()
-  // {
-  //   return getBaseValue(new Extractor<BaseItem, BaseItem.Size>()
-  //                       {
-  //                         public BaseItem.Size get(BaseItem inBase)
-  //                         {
-  //                           return inBase.getSize();
-  //                         }
-  //                       }, new Combiner<BaseItem.Size, BaseItem.Size>()
-  //                       {
-  //                         public BaseItem.Size combine(BaseItem.Size inOld,
-  //                                                      BaseItem.Size inNew)
-  //                         {
-  //                           if(inNew.ordinal() > inOld.ordinal())
-  //                             return inNew;
-
-  //                           return inOld;
-  //                         }
-  //                       });
-  // }
-
-  /**
-   * Get the break DC of the item.
-   *
-   * @return      the break dc
-   *
-   */
-  // public long getBreakDC()
-  // {
-  //   return getBaseValue(new Extractor<BaseItem, Long>()
-  //                       {
-  //                         public Long get(BaseItem inBase)
-  //                         {
-  //                           return inBase.m_break.get();
-  //                         }
-  //                       }, new Combiner<Long, Long>()
-  //                       {
-  //                         public Long combine(Long inOld, Long inNew)
-  //                         {
-  //                           if(inNew > inOld)
-  //                             return inNew;
-
-  //                           return inOld;
-  //                         }
-  //                       });
   // }
 
   /**
@@ -303,7 +856,7 @@ public class Item extends CampaignEntry
    */
   public Combination<String> getCombinedPlayerName()
   {
-    if(m_playerName.isPresent())
+    if(m_playerName.isPresent() && !m_playerName.get().isEmpty())
       return new Combination.String(this, m_playerName.get());
 
     List<Combination<String>> combinations = new ArrayList<>();
@@ -330,6 +883,75 @@ public class Item extends CampaignEntry
       parts.add(getName());
 
     return Strings.SPACE_JOINER.join(parts);
+  }
+
+  public Optional<Integer> getMultiple()
+  {
+    return m_multiple;
+  }
+
+  public Optional<Integer> getMultiuse()
+  {
+    return m_multiuse;
+  }
+
+  public boolean isContainer()
+  {
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseItem)base).isContainer())
+        return true;
+
+    return false;
+  }
+
+  public boolean isLight()
+  {
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseItem)base).isLight())
+        return true;
+
+    return false;
+  }
+
+  public boolean isTimed()
+  {
+    return m_timeLeft.isPresent();
+  }
+
+  public boolean isWearable()
+  {
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseItem)base).isWearable())
+        return true;
+
+    return false;
+  }
+
+  public boolean isArmor()
+  {
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseItem)base).isArmor())
+        return true;
+
+    return false;
+  }
+
+  public boolean isWeapon()
+  {
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseItem)base).isWeapon())
+        return true;
+
+    return false;
+  }
+
+  public boolean isCommodity()
+  {
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseItem)base).isCommodity())
+        return true;
+
+    return false;
   }
 
   /**
@@ -396,6 +1018,12 @@ public class Item extends CampaignEntry
     m_playerNotes = inValues.use("player_notes", m_playerNotes);
     m_playerName = inValues.use("player_name", m_playerName);
     m_dmNotes = inValues.use("dm_notes", m_dmNotes);
+    m_multiple = inValues.use("multiple", m_multiple, NewValue.INTEGER_PARSER);
+    m_multiuse = inValues.use("multiuse", m_multiuse, NewValue.INTEGER_PARSER);
+    m_timeLeft = inValues.use("time_left", m_timeLeft, NewDuration.PARSER);
+
+    if(m_parentName.isPresent() && !m_parentName.get().contains("/"))
+      m_parentName = Optional.of("item/" + m_parentName.get());
   }
 
   @Override
@@ -410,6 +1038,27 @@ public class Item extends CampaignEntry
         m_hp = 1;
 
       changed();
+    }
+
+    if(!m_multiple.isPresent())
+    {
+      m_multiple = Optional.fromNullable(getCombinedMaxMultiple().getValue());
+      if(m_multiple.isPresent())
+        changed();
+    }
+
+    if(!m_multiuse.isPresent())
+    {
+      m_multiuse = Optional.fromNullable(getCombinedMaxMultiuse().getValue());
+      if(m_multiuse.isPresent())
+        changed();
+    }
+
+    if(!m_timeLeft.isPresent())
+    {
+      m_timeLeft = Optional.fromNullable(getCombinedTimed().getValue());
+      if(m_timeLeft.isPresent())
+        changed();
     }
 
     if(m_appearance == null)
@@ -545,6 +1194,15 @@ public class Item extends CampaignEntry
     if(m_dmNotes.isPresent())
       builder.setDmNotes(m_dmNotes.get());
 
+    if(m_multiple.isPresent())
+      builder.setMultiple(m_multiple.get());
+
+    if(m_multiuse.isPresent())
+      builder.setMultiuse(m_multiuse.get());
+
+    if(m_timeLeft.isPresent())
+      builder.setTimeLeft(m_timeLeft.get().toProto());
+
     ItemProto proto = builder.build();
     return proto;
   }
@@ -577,6 +1235,15 @@ public class Item extends CampaignEntry
 
     if(proto.hasDmNotes())
       m_dmNotes = Optional.of(proto.getDmNotes());
+
+    if(proto.hasMultiple())
+      m_multiple = Optional.of(proto.getMultiple());
+
+    if(proto.hasMultiuse())
+      m_multiuse = Optional.of(proto.getMultiuse());
+
+    if(proto.hasTimeLeft())
+      m_timeLeft = Optional.of(NewDuration.fromProto(proto.getTimeLeft()));
 
     super.fromProto(proto.getBase());
   }

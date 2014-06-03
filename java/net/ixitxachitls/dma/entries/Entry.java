@@ -23,6 +23,9 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -32,7 +35,9 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.EntryProto;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.ID;
+import net.ixitxachitls.dma.values.ProductReference;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -81,6 +86,65 @@ public abstract class Entry extends AbstractEntry
 
   /** The name of a temporary entry. */
   public static final String TEMPORARY = "TEMPORARY";
+
+  /**
+   * Get the combined description of the entry, including values of base items.
+   *
+   * @return a combined description with the sum and their sources.
+   */
+  public Combination<String> getCombinedDescription()
+  {
+    List<Combination<String>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(entry.getCombinedDescription());
+
+    return new Combination.String(this, combinations);
+  }
+
+  /**
+   * Get the combined short description of the entry, including values of base
+   * items.
+   *
+   * @return a combined description with the sum and their sources.
+   */
+  public Combination<String> getCombinedShortDescription()
+  {
+    List<Combination<String>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      if(entry instanceof BaseEntry)
+      combinations.add(entry.getCombinedShortDescription());
+
+    return new Combination.String(this, combinations);
+  }
+
+  /**
+   * Get the combined incomplete data, including values of base items.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<String> getCombinedIncomplete()
+  {
+    List<Combination<String>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(entry.getCombinedIncomplete());
+
+    return new Combination.String(this, combinations);
+  }
+
+  /**
+   * Get the combined references of the entry, including values from base
+   * entries.
+   *
+   * @return a combination value with the sum and their sources.
+   */
+  public Combination<List<ProductReference>> getCombinedReferences()
+  {
+    List<Combination<List<ProductReference>>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(entry.getCombinedReferences());
+
+    return new Combination.Set<ProductReference>(combinations, this);
+  }
 
   /**
    * Set the id to a random value.
@@ -144,6 +208,8 @@ public abstract class Entry extends AbstractEntry
     EntryProto proto = (EntryProto)inProto;
 
     super.fromProto(proto.getAbstract());
+
+    complete();
   }
 
   @Override

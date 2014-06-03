@@ -37,6 +37,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 
@@ -192,7 +193,7 @@ public class ForwardingFilter implements Filter
                              inRequest.getRequestURI());
     }
 
-    BaseCharacter user = null;
+    Optional<BaseCharacter> user = null;
     for(Map.Entry<String, String> entry : m_mappings.entries())
     {
       String pattern = entry.getKey();
@@ -206,13 +207,13 @@ public class ForwardingFilter implements Filter
         {
           user = ((DMARequest)inRequest).getUser();
 
-          if(user == null)
+          if(!user.isPresent())
             continue;
 
           if(forward.contains("@user"))
-            forward = forward.replace("@user", user.getName());
+            forward = forward.replace("@user", user.get().getName());
           else if(forward.startsWith("user:"))
-            if(!user.hasAccess(BaseCharacter.Group.USER))
+            if(!user.get().hasAccess(BaseCharacter.Group.USER))
               continue;
             else
               forward = forward.substring(5);

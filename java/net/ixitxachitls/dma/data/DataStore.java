@@ -325,14 +325,14 @@ public class DataStore
   public List<Entity> getEntities(String inType, @Nullable Key inParent,
                                   int inStart, int inSize, String ... inFilters)
   {
-    Log.debug("getting multiple " + inType + " with "
-              + Arrays.toString(inFilters));
-
     String key = Arrays.toString(inFilters);
     List<Entity> entities = (List<Entity>)s_cacheListByValue.get(key);
 
     if(entities == null)
     {
+      Log.debug("getting multiple " + inType + " with "
+                + Arrays.toString(inFilters) + " (uncached)");
+
       Query query;
       if(inParent == null)
         query = new Query(inType);
@@ -363,7 +363,9 @@ public class DataStore
         entities.add(entity);
 
       s_cacheListByValue.put(key, entities, s_expiration);
-    }
+    } else
+      Log.debug("getting multiple " + inType + " with "
+                + Arrays.toString(inFilters) + " (cached)");
 
     return entities;
   }

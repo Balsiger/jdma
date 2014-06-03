@@ -37,6 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -201,13 +202,13 @@ public class AdminServlet extends SoyServlet
 
     DMARequest request = (DMARequest)inRequest;
 
-    BaseCharacter user = request.getUser();
-    if(user == null || !user.hasAccess(BaseCharacter.Group.ADMIN))
+    Optional<BaseCharacter> user = request.getUser();
+    if(!user.isPresent() || !user.get().hasAccess(BaseCharacter.Group.ADMIN))
     {
-      if(user == null)
-        Log.warning("admin request without valid user");
+      if(user.isPresent())
+        Log.warning("admin request by non-admin " + user.get().getName());
       else
-        Log.warning("admin request by non-admin " + user.getName());
+        Log.warning("admin request without valid user");
 
       return new TextError(HttpServletResponse.SC_FORBIDDEN,
                            "action not allowed");
@@ -234,7 +235,7 @@ public class AdminServlet extends SoyServlet
                        + " entries updated.');");
       }
 
-      Log.event(user.getName(), "admin index reset",
+      Log.event(user.get().getName(), "admin index reset",
                 "index " + reset + " was reset for " + size + " entries");
       return null;
     }
@@ -254,7 +255,7 @@ public class AdminServlet extends SoyServlet
       MemcacheServiceFactory.getMemcacheService("recent").clearAll();
       MemcacheServiceFactory.getMemcacheService("values").clearAll();
       MemcacheServiceFactory.getMemcacheService("multiValues").clearAll();
-      Log.event(user.getName(), "admin clear cache",
+      Log.event(user.get().getName(), "admin clear cache",
                 "All caches have been cleared");
 
       try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
@@ -279,7 +280,7 @@ public class AdminServlet extends SoyServlet
 
       int size = DMADataFactory.get().refresh(type, request);
 
-      Log.event(user.getName(), "admin refresh " + refresh,
+      Log.event(user.get().getName(), "admin refresh " + refresh,
                 size + " entries of " + refresh + " have been refreshed.");
 
       try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))

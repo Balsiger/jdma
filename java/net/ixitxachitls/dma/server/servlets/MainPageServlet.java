@@ -36,6 +36,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 // import javax.servlet.http.HttpServletRequest;
 // import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Optional;
+
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.Campaign;
@@ -131,23 +133,27 @@ public class MainPageServlet extends PageServlet
   {
     Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
-    BaseCharacter user = inRequest.getUser();
+    Optional<BaseCharacter> user = inRequest.getUser();
 
-    if(user == null)
+    if(!user.isPresent())
       return data;
 
     SortedSet<Campaign> campaigns = new TreeSet<Campaign>();
     Map<String, List<SoyEntry>> characters =
       new HashMap<String, List<SoyEntry>>();
     for(Character character : DMADataFactory.get().getEntries
-          (Character.TYPE, "base", user.getName()))
+          (Character.TYPE, null, "base", user.get().getName()))
     {
-      campaigns.add(character.getCampaign());
-      List<SoyEntry> list = characters.get(character.getCampaign().getName());
+      if(!character.getCampaign().isPresent())
+        continue;
+
+      campaigns.add(character.getCampaign().get());
+      List<SoyEntry> list =
+        characters.get(character.getCampaign().get().getName());
       if(list == null)
       {
         list = new ArrayList<SoyEntry>();
-        characters.put(character.getCampaign().getName(), list);
+        characters.put(character.getCampaign().get().getName(), list);
       }
 
       list.add(new SoyEntry(character));
@@ -158,7 +164,8 @@ public class MainPageServlet extends PageServlet
       soyCampaigns.add(new SoyEntry(campaign));
 
     List<Campaign> dmCampaigns =
-      DMADataFactory.get().getEntries(Campaign.TYPE, "dm", user.getName());
+      DMADataFactory.get().getEntries(Campaign.TYPE, null, "dm",
+                                      user.get().getName());
     List<SoyEntry> soyDMCampaigns = new ArrayList<SoyEntry>();
     Map<String, List<SoyEntry>> dmCharacters =
       new HashMap<String, List<SoyEntry>>();

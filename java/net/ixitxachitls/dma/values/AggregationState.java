@@ -27,33 +27,35 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseContainerProto;
 
 /** The possible sizes in the game. */
 public enum AggregationState implements EnumSelection.Named,
-  EnumSelection.Proto<BaseContainerProto.State>
+  EnumSelection.Short, EnumSelection.Proto<BaseContainerProto.State>
 {
   /** Unknown state. */
-  UNKNOWN("unknown", BaseContainerProto.State.UNKNOWN),
+  UNKNOWN("unknown", "unk", BaseContainerProto.State.UNKNOWN),
 
   /** Made of paper. */
-  SOLID("solid", BaseContainerProto.State.SOLID),
+  SOLID("solid", "sol", BaseContainerProto.State.SOLID),
 
   /** Made of cloth. */
-  GRANULAR("granular", BaseContainerProto.State.GRANULAR),
+  GRANULAR("granular", "gran", BaseContainerProto.State.GRANULAR),
 
   /** Made of rope. */
-  LIQUID("liquid", BaseContainerProto.State.LIQUID),
+  LIQUID("liquid", "liq", BaseContainerProto.State.LIQUID),
 
   /** Made of glass. */
-  GASEOUS("gaseous", BaseContainerProto.State.GASEOUS);
+  GASEOUS("gaseous", "gas", BaseContainerProto.State.GASEOUS);
 
   /** The value's name. */
-  private String m_name;
+  private final String m_name;
+
+  /** The short name. */
+  private final String m_short;
 
   /** The proto enum value. */
-  private BaseContainerProto.State m_proto;
+  private final BaseContainerProto.State m_proto;
 
   /** The parser for aggregation states. */
   public static final NewValue.Parser<AggregationState> PARSER =
@@ -71,9 +73,11 @@ public enum AggregationState implements EnumSelection.Named,
    * @param inName     the name of the value
    * @param inProto    the proto enum value
    */
-  private AggregationState(String inName, BaseContainerProto.State inProto)
+  private AggregationState(String inName, String inShort,
+                           BaseContainerProto.State inProto)
   {
-    m_name = BaseItem.constant("substance.state", inName);
+    m_name = inName;
+    m_short = inShort;
     m_proto = inProto;
   }
 
@@ -81,6 +85,12 @@ public enum AggregationState implements EnumSelection.Named,
   public String getName()
   {
     return m_name;
+  }
+
+  @Override
+  public String getShort()
+  {
+    return m_short;
   }
 
   @Override
@@ -119,7 +129,8 @@ public enum AggregationState implements EnumSelection.Named,
   public static Optional<AggregationState> fromString(String inValue)
   {
     for(AggregationState state : values())
-      if(state.getName().equalsIgnoreCase(inValue))
+      if(state.getName().equalsIgnoreCase(inValue)
+        || state.getShort().equalsIgnoreCase(inValue))
         return Optional.of(state);
 
     return Optional.absent();

@@ -284,18 +284,18 @@ public class BaseCharacter extends BaseEntry
   }
 
   @Override
-  public boolean isShownTo(@Nullable BaseCharacter inUser)
+  public boolean isShownTo(Optional<BaseCharacter> inUser)
   {
-    return inUser != null;
+    return inUser.isPresent();
   }
 
   @Override
-  public boolean isDM(@Nullable BaseCharacter inUser)
+  public boolean isDM(Optional<BaseCharacter> inUser)
   {
-    if(inUser == null)
+    if(!inUser.isPresent())
       return false;
 
-    return inUser.hasAccess(Group.ADMIN) || inUser == this;
+    return inUser.get().hasAccess(Group.ADMIN);
   }
 
   @Override

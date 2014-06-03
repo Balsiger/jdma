@@ -28,7 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
@@ -2834,12 +2833,12 @@ public class BaseMonster extends BaseEntry
    *
    */
   @Override
-  public boolean isDM(@Nullable BaseCharacter inUser)
+  public boolean isDM(Optional<BaseCharacter> inUser)
   {
-    if(inUser == null)
+    if(!inUser.isPresent())
       return false;
 
-    return inUser.hasAccess(BaseCharacter.Group.DM);
+    return inUser.get().hasAccess(BaseCharacter.Group.DM);
   }
 
   //........................................................................

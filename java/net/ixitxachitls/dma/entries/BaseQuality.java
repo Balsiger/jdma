@@ -29,6 +29,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
@@ -600,12 +601,12 @@ public class BaseQuality extends BaseEntry
    *
    */
   @Override
-  public boolean isDM(@Nullable BaseCharacter inUser)
+  public boolean isDM(Optional<BaseCharacter> inUser)
   {
-    if(inUser == null)
+    if(!inUser.isPresent())
       return false;
 
-    return inUser.hasAccess(BaseCharacter.Group.DM);
+    return inUser.get().hasAccess(BaseCharacter.Group.DM);
   }
 
   //........................................................................

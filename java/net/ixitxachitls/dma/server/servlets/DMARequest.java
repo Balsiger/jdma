@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.apphosting.api.ApiProxy;
+import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
@@ -111,10 +112,10 @@ public class DMARequest extends HttpServletRequestWrapper
   private boolean m_extractedUser = false;
 
   /** The user doing the request, if any. */
-  private @Nullable BaseCharacter m_user = null;
+  private Optional<BaseCharacter> m_user = Optional.absent();
 
   /** The user override for doing the request, if any. */
-  private @Nullable BaseCharacter m_userOverride = null;
+  private Optional<BaseCharacter> m_userOverride = Optional.absent();
 
   /** The cached entries for the request. */
   private Map<EntryKey, AbstractEntry> m_entries = Maps.newHashMap();
@@ -140,8 +141,9 @@ public class DMARequest extends HttpServletRequestWrapper
   public String toString()
   {
     return "DMA Request: "
-      + (m_user == null ? "no user" : m_user.getName())
-      + (m_userOverride == null ? "" : " (" + m_userOverride.getName() + ")")
+      + (m_user.isPresent() ? m_user.get().getName() : "[no user]")
+      + (m_userOverride.isPresent()
+          ? " (" + m_userOverride.get().getName() + ")": "" )
       + ", params " + m_params;
 
   }
@@ -172,7 +174,7 @@ public class DMARequest extends HttpServletRequestWrapper
   public boolean hasUserOverride()
   {
     extractUser();
-    return m_userOverride != null;
+    return m_userOverride.isPresent();
   }
 
   //........................................................................
@@ -403,16 +405,15 @@ public class DMARequest extends HttpServletRequestWrapper
    *
    * @return the currently logged in user or the user on whose behalve we are
    *         acting
-   *
    */
-  public @Nullable BaseCharacter getUser()
+  public Optional<BaseCharacter> getUser()
   {
     Tracer tracer = new Tracer("getting user");
     extractUser();
 
     // only admin are allows to do that
-    if(m_userOverride != null && hasUser()
-       && m_user.hasAccess(BaseCharacter.Group.ADMIN))
+    if(m_userOverride.isPresent() && hasUser()
+       && m_user.get().hasAccess(BaseCharacter.Group.ADMIN))
       return m_userOverride;
 
     tracer.done();
@@ -428,7 +429,7 @@ public class DMARequest extends HttpServletRequestWrapper
    * @return the currently logged in user
    *
    */
-  public @Nullable BaseCharacter getRealUser()
+  public Optional<BaseCharacter> getRealUser()
   {
     extractUser();
     return m_user;
@@ -542,23 +543,21 @@ public class DMARequest extends HttpServletRequestWrapper
     if (userService.isUserLoggedIn())
     {
       // TODO: this is the old email format!
-      m_user = DMADataFactory.get()
+      m_user = Optional.fromNullable(DMADataFactory.get()
           .getEntry(BaseCharacter.TYPE, "email", new Text(userService
-              .getCurrentUser().getEmail()).toString());
-      if (m_user == null)
-        m_user = DMADataFactory.get()
+              .getCurrentUser().getEmail()).toString()));
+      if (!m_user.isPresent())
+        m_user = Optional.fromNullable(DMADataFactory.get()
           .getEntry(BaseCharacter.TYPE, "email",
-                    userService.getCurrentUser().getEmail());
+                    userService.getCurrentUser().getEmail()));
     }
-    if (m_user != null)
-      m_user.action();
-    else
-      m_user = null;
+    if (m_user.isPresent())
+      m_user.get().action();
 
     String override = getParam("user");
     if(override != null && !override.isEmpty())
-      m_userOverride = (BaseCharacter)DMADataFactory.get()
-        .getEntry(AbstractEntry.createKey(override, BaseCharacter.TYPE));
+      m_userOverride = Optional.fromNullable((BaseCharacter)DMADataFactory.get()
+        .getEntry(AbstractEntry.createKey(override, BaseCharacter.TYPE)));
 
     m_extractedUser = true;
   }

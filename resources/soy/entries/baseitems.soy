@@ -66,16 +66,18 @@
           {param color: '#008' /}
         {/call} 
       {/if}      
-      {call dma.entry.value}
-        {param label: 'Player Name' /}
-        {param value}
-          {call dma.entry.concatenated}
-            {param value: $entry.player_name /}
-            {param concatenate: $entry.combined_player_name /}
-          {/call}
-        {/param}
-        {param color: '#008' /}
-      {/call}
+      {if $entry.player_name.present}
+        {call dma.entry.value}
+          {param label: 'Player Name' /}
+          {param value}
+            {call dma.entry.concatenated}
+              {param value: $entry.player_name.get /}
+              {param concatenate: $entry.combined_player_name /}
+            {/call}
+          {/param}
+          {param color: '#008' /}
+        {/call}
+      {/if}
       {if length($entry.synonyms)}
         {call dma.entry.value}
           {param label: 'Synonyms' /}
@@ -374,20 +376,33 @@
         {/call}
       {/if}
       {if $entry.counted}
-        {call dma.entry.value}
-          {param label: 'Count' /}        
-          {param color: '#008' /}
-          {param value}
-            {call dma.entry.single}
-              {param value: $entry.count /}
-              {param combination: $entry.combined_count /}
-            {/call}{sp}
-            {call dma.entry.single}
-              {param value: $entry.count_unit /}
-              {param combination: $entry.combined_count_unit /}
-            {/call}
-          {/param}
-        {/call}
+        {if $entry.multiple.present}
+          {call dma.entry.value}
+            {param label: 'Multiple' /}        
+            {param color: '#008' /}
+            {param value}
+              {call dma.entry.single}
+                {param value: $entry.multiple /}
+                {param combination: $entry.combined_multiple /}
+              {/call}{sp}
+              {call dma.entry.single}
+                {param value: $entry.count_unit /}
+                {param combination: $entry.combined_count_unit /}
+              {/call}
+            {/param}
+          {/call}
+        {else}
+          {call dma.entry.value}
+            {param label: 'Multiuse' /}        
+            {param color: '#008' /}
+            {param value}
+              {call dma.entry.single}
+                {param value: $entry.multiuse /}
+                {param combination: $entry.combined_multiuse /}
+              {/call}{sp}
+            {/param}
+          {/call}
+        {/if}
       {/if}
       {if $entry.is_light}
         {call dma.entry.value}
@@ -522,14 +537,15 @@
         {param validate: 'non-empty' /}
         {param color: '#008' /}
         {param autocomplete: 'base item/name' /}
-      {/call}    
+      {/call}
       {call dma.edit.value}
         {param name: 'player_name' /}
         {param label: 'Player Name' /}
-        {param value: $entry.player_name /}
+        {param value: $entry.player_name.present ? 
+          $entry.player_name.get : '' /}
         {param validate: 'any' /}
         {param color: '#008' /}
-      {/call}    
+      {/call}
       {call dma.edit.value_list}
         {param name: 'synonyms' /}
         {param label: 'Synonyms' /}
@@ -645,7 +661,7 @@
                   {param values: [
                     [
                       'name': 'appearances.probability',
-                      'value': $appearance.probability,
+                      'value': $appearance.probability.string,
                       'validate': 'non-empty',
                       'type': 'selection',
                       'choices': $entry.probabilityNames
@@ -896,11 +912,19 @@
         {param label: 'Count' /}
         {param value}
           {call dma.edit.field_input}
-            {param name: 'count' /}
-            {param value: $entry.count.isPresent 
-              ? $entry.count.get : '' /}
+            {param name: 'multiuse' /}
+            {param value: $entry.multiuse.isPresent 
+              ? $entry.multiuse.get : '' /}
             {param validate: 'number' /}
-            {param caption: 'count' /}            
+            {param caption: 'uses' /}            
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'multiple' /}
+            {param value: $entry.multiple.isPresent 
+              ? $entry.multiple.get : '' /}
+            {param validate: 'number' /}
+            {param caption: 'copies' /}            
             {param class: 'narrow' /}
           {/call}
           {call dma.edit.field_selection}

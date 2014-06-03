@@ -254,9 +254,9 @@ public class RemoveActionServlet extends ActionServlet
   protected String doAction(DMARequest inRequest,
                             HttpServletResponse inResponse)
   {
-    BaseCharacter user = inRequest.getUser();
+    Optional<BaseCharacter> user = inRequest.getUser();
 
-    if(user == null)
+    if(!user.isPresent())
       return "gui.alert('Must be logged in to delete!');";
 
     String keyParam = inRequest.getParam("key");
