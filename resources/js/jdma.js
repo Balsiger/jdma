@@ -211,12 +211,13 @@ function details(inPath)
     .html("Loading...")
     .dialog({
       modal: true,
-      width: 600,
+      width: 710,
+      position: 'center',
       resizable: false,
       dialogClass: 'card-inline'
       });
 
-  util.ajax(inPath + '?body&card', null, function(html) {
+  util.ajax(inPath + '.card?body', null, function(html) {
       dialog.html(html);
     });
 }

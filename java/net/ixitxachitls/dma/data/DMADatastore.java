@@ -654,9 +654,6 @@ public class DMADatastore
     EntryKey key = convert(inEntity.getKey());
     entry.updateKey(key);
 
-    // update extensions, if necessary
-    entry.setupExtensions();
-
     //s_entryCache.put(entry.getKey().toString(), entry);
     tracer.done("uncached");
     return entry;

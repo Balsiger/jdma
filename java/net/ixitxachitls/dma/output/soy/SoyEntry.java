@@ -103,9 +103,6 @@ public class SoyEntry extends SoyAbstract
   @Override
   public @Nullable SoyData getSingle(String inName)
   {
-    if(inName.startsWith("extension_"))
-      return BooleanData.forValue(m_entry.hasExtension(inName.substring(10)));
-
     if("key".equals(inName))
       return StringData.forValue(m_entry.getKey().toString());
 

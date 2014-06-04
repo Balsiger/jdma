@@ -24,19 +24,15 @@
 package net.ixitxachitls.dma.entries;
 
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,29 +46,22 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
-import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
-import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.File;
 import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.util.Classes;
-import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -181,10 +170,6 @@ public abstract class AbstractEntry extends ValueGroup
   /** Flag if this entry has been changed but not saved. */
   protected boolean m_changed = false;
 
-  /** All the extensions, indexed by name. */
-  protected Map<String, AbstractExtension<?>> m_extensions =
-    new TreeMap<String, AbstractExtension<?>>();
-
   /** The base entries for this entry, in the same order as the names. */
   protected List<BaseEntry> m_baseEntries = new ArrayList<>();
 
@@ -230,10 +215,6 @@ public abstract class AbstractEntry extends ValueGroup
   /** The pattern for expressions. */
   protected static final Pattern PATTERN_EXPR =
     Pattern.compile("\\[\\[(.*?)\\]\\]");
-
-  /** All registered extension classes. */
-  protected static final
-    Set<Class<? extends AbstractExtension<?>>> s_extensions = new HashSet<>();
 
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
@@ -432,101 +413,6 @@ public abstract class AbstractEntry extends ValueGroup
   }
 
   /**
-   * Get an all the names of the extensions.
-   *
-   * @return      the requested names
-   */
-  @Deprecated
-  public Set<String> getExtensionNames()
-  {
-    Set<String> extensions = Sets.newHashSet();
-    extensions.addAll(m_extensions.keySet());
-
-    for(AbstractEntry base : getBaseEntries())
-      if(base != null)
-        extensions.addAll(base.getExtensionNames());
-
-    return extensions;
-  }
-
-  /**
-   * Check if the entry (or one of is bases) has an extension with the given
-   * class.
-   *
-   * @param       inExtension the class of the extension to look for
-   *
-   * @return      true if an extension of this name is present, false if not
-   */
-  public boolean hasExtension
-    (Class<? extends AbstractExtension<?>> inExtension)
-  {
-    for(AbstractExtension<?> extension : m_extensions.values())
-      if(inExtension.isAssignableFrom(extension.getClass()))
-         return true;
-
-    return false;
-  }
-
-  /**
-   * Check if the entry (or one of is bases) has an extension with the given
-   * name.
-   *
-   * @param       inExtension the name of the extension to look for
-   *
-   * @return      true if an extension of this name is present, false if not
-   */
-  public boolean hasExtension(String inExtension)
-  {
-    return m_extensions.keySet().contains(inExtension);
-  }
-
-  /**
-   * Get the extension given by name.
-   *
-   * @param   inName the name of the extension
-   *
-   * @return  the extension found, if any
-   */
-  public @Nullable AbstractExtension<?> getExtension(String inName)
-  {
-    return m_extensions.get(inName);
-  }
-
-  /**
-   * Get the extension with the given class.
-   *
-   * @param       inExtension the class of the attachment to look for
-   * @param       <T> the type of extension to get
-   *
-   * @return      the extension found or null if not found
-   */
-  @SuppressWarnings("unchecked")
-  public @Nullable <T extends AbstractExtension<?>> T
-    getExtension(Class<T> inExtension)
-  {
-    for(AbstractExtension<?> extension : m_extensions.values())
-      if(inExtension.isAssignableFrom(extension.getClass()))
-         return (T)extension;
-
-    return null;
-  }
-
-  /**
-   * Get the current quantifiers.
-   *
-   * @return      A string with the current quantifiers.
-   */
-  @Deprecated // now in m_base as a real value
-  protected String getQuantifiers()
-  {
-    // if(m_base.size() > 1 || !m_base.get(0).get().equals(getName()))
-    //   return s_baseStart + Strings.toString(m_base, ", ", "")
-    //     + s_baseEnd + " ";
-
-    return "";
-  }
-
-  /**
    * Get the files associated with this entry.
    *
    * @return      the associated files
@@ -668,23 +554,6 @@ public abstract class AbstractEntry extends ValueGroup
     for(AbstractEntry base : getBaseEntries())
       if(base != null)
         base.collect(inName, ioCombined);
-
-    for(AbstractExtension<?> extension : m_extensions.values())
-      extension.collect(inName, ioCombined);
-  }
-
-  @Override
-  public Multimap<Index.Path, String> computeIndexValues()
-  {
-    Multimap<Index.Path, String> values = super.computeIndexValues();
-    for(AbstractExtension<?> extension
-          : m_extensions.values())
-      extension.computeIndexValues(values);
-
-    for(String extension : m_extensions.keySet())
-      values.put(Index.Path.EXTENSIONS, extension);
-
-    return values;
   }
 
   /**
@@ -803,18 +672,8 @@ public abstract class AbstractEntry extends ValueGroup
     result.append(m_type);
     result.append(' ');
 
-    if(m_extensions.size() > 0)
-    {
-      result.append("with ");
-      result.append(Strings.toString(m_extensions.keySet(), ", ",
-                                     "incomplete"));
-      result.append(' ');
-    }
-
     result.append(m_name);
     result.append(' ');
-
-    result.append(getQuantifiers());
 
     result.append(INTRODUCER);
     result.append("\n\n");
@@ -860,10 +719,6 @@ public abstract class AbstractEntry extends ValueGroup
       if(!var.isStored())
         continue;
 
-      if(var instanceof ExtensionVariable
-         && !hasExtension(((ExtensionVariable)var).getExtension()))
-        continue;
-
       Value<?> value = var.get(this);
 
       // We don't store this if we don't have a value.
@@ -874,41 +729,6 @@ public abstract class AbstractEntry extends ValueGroup
     }
 
     return values;
-  }
-
-  @Override
-  public @Nullable Object compute(String inKey)
-  {
-    if("extensions".equals(inKey))
-    {
-      List<Name> values = new ArrayList<Name>();
-      for (String extension : getExtensionNames())
-        values.add(new Name(extension).withTemplate("extension"));
-
-      ValueList<Name> list;
-      if(values.isEmpty())
-        list = new ValueList<Name>(new Name(), ", ");
-      else
-        list = new ValueList<Name>(values, ", ");
-
-      list.withEditType("multiselection")
-        .withChoices("armor||commodity||composite||container||counted"
-                     + "||incomplete||light||magic||multiple||multiuse||timed"
-                     + "||weapon||wearable")
-        .withTemplate("extensions");
-
-      return list;
-    }
-
-    // check extensions for a value
-    for(AbstractExtension<?> extension : m_extensions.values())
-    {
-      Object value = extension.compute(inKey);
-      if(value != null)
-        return value;
-    }
-
-    return super.compute(inKey);
   }
 
   /**
@@ -1090,39 +910,6 @@ public abstract class AbstractEntry extends ValueGroup
     return false;
   }
 
-
-
-  //--------------------------------- set ----------------------------------
-
-  /**
-   * Set the value for the given key.
-   *
-   * @param       inKey  the name of the key to set the value for
-   * @param       inText the text to set the value to
-   *
-   * @return      the part of the string that could not be parsed
-   *
-   */
-  @Override
-  public @Nullable String set(String inKey, String inText)
-  {
-    if("extensions".equals(inKey))
-    {
-      List<String> extensions = Arrays.asList(inText.split(",\\s+"));
-      for(Iterator<String> i = m_extensions.keySet().iterator(); i.hasNext(); )
-        if(!extensions.contains(i.next()))
-          i.remove();
-
-      for(String extension : extensions)
-        if(!m_extensions.containsKey(extension))
-          addExtension(extension);
-
-      return null;
-    }
-
-    return super.set(inKey, inText);
-  }
-
   @Override
   public void set(Values inValues)
   {
@@ -1253,49 +1040,6 @@ public abstract class AbstractEntry extends ValueGroup
 //   }
 
   //........................................................................
-  //--------------------------- setupExtensions ----------------------------
-
-  /**
-   * Setup all auto extensions from base entries.
-   *
-   */
-  @Deprecated
-  public void setupExtensions()
-  {
-    ensureExtensions();
-
-    for(AbstractExtension<?> extension : m_extensions.values())
-      for(String name
-            : AbstractExtension.getAutoExtensions(extension.getClass()))
-      {
-        if(isBase())
-        {
-          if(name.startsWith("base "))
-            addExtension(name.substring(5));
-        }
-        else
-          if(!name.startsWith("base "))
-            addExtension(name);
-      }
-
-    /*
-    if(!isBase())
-      for(B base : getBaseEntries())
-      {
-        if(base == null)
-          continue;
-
-        for(AbstractExtension<?> extension : base.m_extensions.values())
-          for(String name
-                : AbstractExtension.getAutoExtensions(extension.getClass()))
-            if(!name.startsWith("base "))
-              addExtension(name);
-      }
-      */
-  }
-
-  //........................................................................
-
   //--------------------------------- read ---------------------------------
 
   /**
@@ -1560,151 +1304,6 @@ public abstract class AbstractEntry extends ValueGroup
 
   //........................................................................
 
-  //---------------------------- addExtension ------------------------------
-
-  /**
-   * Add an extension denoted by a String to the entry.
-   *
-   * @param       inName the name of the extension to add
-   *
-   * @return      the extension added or null if none added (already there or
-   *              not found)
-   *
-   */
-  public @Nullable AbstractExtension<?> addExtension(String inName)
-  {
-    if(m_extensions.containsKey(inName) || inName.isEmpty())
-      return null;
-
-    // TODO: clean up names if tags are not used anmore
-    String []names = inName.split(":");
-
-    String name;
-    // if(names.length > 1)
-    //   name = names[1];
-    // else
-    //   name = names[0];
-
-    if(isBase())
-      name = "Base " + inName;
-    else
-      name = inName;
-
-    try
-    {
-      Class<?> cls = Class.forName(Classes.toClassName
-                                   (name,
-                                    "net.ixitxachitls.dma.entries.extensions"));
-
-      // can't use the generic class type here, because generic class arrays
-      // cannot be built
-      AbstractExtension<?> extension = null;
-
-      // find the constructor to use (getConstructor does not acceptably treat
-      // derivations, unfortunately)
-      Object []arguments = new Object[names.length + 1];
-      arguments[0] = this;
-
-      for(int i = 0; i < names.length; i++)
-        arguments[i + 1] = names[i];
-
-      loop : for(Constructor<?> constructor : cls.getConstructors())
-      {
-        Class<?> []types = constructor.getParameterTypes();
-
-        // check if we have the right number of arguments
-        if(types.length != arguments.length)
-          continue;
-
-        for(int i = 0; i < types.length; i++)
-          if(!types[i].isAssignableFrom(arguments[i].getClass()))
-            continue loop;
-
-        extension = (AbstractExtension)constructor.newInstance(arguments);
-        break;
-      }
-
-      if(extension == null)
-        return null;
-
-      //addExtension(inName, extension);
-
-      return extension;
-    }
-    catch(ClassNotFoundException e)
-    {
-      Log.warning("could not find class for extension " + name
-                  + ", extension ignored");
-      e.printStackTrace(System.out);
-    }
-    catch(InstantiationException e)
-    {
-      Log.warning("could not instantiate class for extension " + name
-                  + ", extension ignored");
-      e.printStackTrace(System.out);
-    }
-    catch(IllegalAccessException e)
-    {
-      Log.warning("could access constructor for extension " + name
-                  + ", extension ignored");
-      e.printStackTrace(System.out);
-    }
-    catch(java.lang.reflect.InvocationTargetException e)
-    {
-      Log.warning("could not invoke constructor for extension " + name
-                  + ", extension ignored (" + e.getCause() + ")");
-      e.printStackTrace(System.out);
-    }
-
-    return null;
-  }
-
-  //........................................................................
-  //---------------------------- addExtension ------------------------------
-
-  /**
-   * Add the given extension to the entry.
-   *
-   * @param       inName      the name of the extension added
-   * @param       inExtension the extension to add
-   *
-   */
-  public void addExtension
-    (String inName, AbstractExtension<?> inExtension)
-  {
-    m_extensions.put(inName, inExtension);
-  }
-
-  //........................................................................
-  //---------------------------- addExtensions -----------------------------
-
-  /**
-   * Add a list of extensions.
-   *
-   * @param       inNames the names of the extensions to add
-   *
-   */
-  protected void addExtensions(List<String> inNames)
-  {
-    addExtensions(inNames.iterator());
-  }
-
-  //........................................................................
-  //---------------------------- addExtensions -----------------------------
-
-  /**
-   * Add the attachements given to the entry.
-   *
-   * @param       inNames the names of the extensions to add
-   *
-   */
-  protected void addExtensions(Iterator<String> inNames)
-  {
-    for(Iterator<String> i = inNames; i.hasNext(); )
-      addExtension(i.next());
-  }
-
-  //........................................................................
   //------------------------------- addBase --------------------------------
 
   /**
@@ -2133,8 +1732,6 @@ public abstract class AbstractEntry extends ValueGroup
     builder.setName(m_name);
     builder.setType(m_type.toString());
     builder.addAllBase(m_base);
-    for(String name : m_extensions.keySet())
-      builder.addExtensions(name);
     for(File file : m_files)
       builder.addFiles(file.toProto());
 

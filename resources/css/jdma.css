@@ -687,7 +687,6 @@ DIV.card DIV.title
 {
   font-weight: bold;
   text-align: center;
-  width: 100%;
 }
 
 DIV.card DIV.title SPAN.subtitle
@@ -2570,7 +2569,8 @@ BODY.print
  * Edit pages
  *****************************************************************************/
  
-.edit-dialog .ui-dialog-content 
+.ui-dialog .edit-dialog.ui-dialog-content,
+.ui-dialog .details-card.ui-dialog-content 
 {
   padding: 0;
 }

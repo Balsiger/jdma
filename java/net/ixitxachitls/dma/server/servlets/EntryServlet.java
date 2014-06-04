@@ -159,12 +159,6 @@ public class EntryServlet extends PageServlet
           if(inRequest.hasParam("identified") && entry instanceof Item)
             ((Item)entry).identify();
 
-          if(inRequest.hasParam("extensions"))
-            for(String extension
-                  : inRequest.getParam("extensions").split("\\s*,\\s*"))
-              if(extension != null && !extension.isEmpty())
-                entry.addExtension(extension);
-
           if(entry instanceof Entry)
             ((Entry)entry).complete();
         }
@@ -206,6 +200,12 @@ public class EntryServlet extends PageServlet
       case "summary":
         extension = ".summary";
         template = "dma.entry.summarycontainer";
+        break;
+
+      case "card":
+        extension = ".card";
+        template = "dma.entries."
+          + entry.getType().getMultipleDir().toLowerCase() + ".large";
         break;
 
       case "edit":

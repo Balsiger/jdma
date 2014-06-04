@@ -42,7 +42,6 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.entries.extensions.Weapon;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
@@ -1349,8 +1348,8 @@ public class Monster extends CampaignEntry
         if(item == null)
           continue;
 
-        if(!item.hasExtension(Weapon.class))
-          continue;
+        //if(!item.hasExtension(Weapon.class))
+        //  continue;
 
         Combined<EnumSelection<WeaponStyle>> style =
           item.collect("weapon style");

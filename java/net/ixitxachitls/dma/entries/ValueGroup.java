@@ -46,8 +46,6 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
-import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.NewValue;
@@ -1087,20 +1085,10 @@ public abstract class ValueGroup implements Changeable
 
         // we have to use a variable class in the package of extensions to be
         // able to access extension variables.
-        Variable variable;
-        if(AbstractExtension.class.isAssignableFrom(inClass))
-          variable =
-            new ExtensionVariable((Class<? extends AbstractExtension<?>>)
-                                  inClass,
-                                  key.value(), field,
-                                  noStore == null || !noStore.value(),
-                                  printUndefined == null
-                                  ? false : printUndefined.value());
-        else
-          variable = new Variable(key.value(), field,
-                                  noStore == null || !noStore.value(),
-                                  printUndefined == null
-                                  ? false : printUndefined.value());
+        Variable variable = new Variable(key.value(), field,
+                                         noStore == null || !noStore.value(),
+                                         printUndefined == null
+                                         ? false : printUndefined.value());
         variables.add(variable
                       .withSearchable(searchable != null && searchable.value())
                       .withDM(dm != null && dm.value())
@@ -1147,37 +1135,6 @@ public abstract class ValueGroup implements Changeable
       return;
 
     s_variables.put(inClass, new Variables(extractClassVariables(inClass)));
-  }
-
-  //........................................................................
-  //---------------------------- extractVariables ---------------------------
-
-  /**
-   * Extract all the keyed variables from the given class.
-   *
-   * @param       inEntryClass     the entry class to extract for
-   * @param       inExtensionClass the extension class to extract from
-   *
-   */
-  protected static void
-    extractVariables(Class<?> inEntryClass,
-                     Class<? extends AbstractExtension<?>> inExtensionClass)
-  {
-    Variables variables = s_variables.get(inEntryClass);
-
-    if(variables == null)
-    {
-      Log.warning("cannot extract variables for " + inExtensionClass
-                  + " as the variables for " + inEntryClass
-                  + " were not found");
-      return;
-    }
-
-    List<Variable> vars = extractClassVariables(inExtensionClass);
-    variables.add(vars);
-
-    if(!s_variables.containsKey(inExtensionClass))
-      s_variables.put(inExtensionClass, new Variables(vars));
   }
 
   //........................................................................
