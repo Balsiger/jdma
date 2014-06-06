@@ -192,7 +192,10 @@ public class NPC extends Monster
       if (baseLevel == null)
         abbreviations.add("invalid " + level);
       else
-        abbreviations.add(baseLevel.getAbbreviation());
+        if(baseLevel.getAbbreviation().isPresent())
+          abbreviations.add(baseLevel.getAbbreviation().get());
+        else
+          abbreviations.add(baseLevel.getName());
     }
 
     SortedSet<String> classes = new TreeSet<>();
@@ -212,17 +215,20 @@ public class NPC extends Monster
     Multiset<String> levels = HashMultiset.create();
     for(Reference<BaseLevel> level : m_levels)
     {
+      /*
       levels.add(level.getName());
       if(level.hasEntry())
          level.getEntry().collect(levels.count(level.getName()), inName,
                                   ioCombined,
                                   level.getName() + " "
                                   + levels.count(level.getName()));
+                                  */
     }
 
     switch(inName)
     {
       case "hit dice":
+        /*
         for(Reference<BaseLevel> level : m_levels)
           if(level.hasEntry())
           {
@@ -230,6 +236,7 @@ public class NPC extends Monster
             ioCombined.addValue((T)baseLevel.getHitDie(), baseLevel,
                                 baseLevel.getAbbreviation());
           }
+          */
 
         break;
 

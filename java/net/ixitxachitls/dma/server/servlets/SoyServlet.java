@@ -77,7 +77,8 @@ public class SoyServlet extends DMAServlet
                      //"character",
                      "entries/baseproducts", "entries/products",
                      "entries/basecampaigns", "entries/campaigns",
-                     "entries/baseitems", "entries/items"//,
+                     "entries/baseitems", "entries/items",
+                     "entries/baselevels"//, "entries/levels"//,
                      //"basequality",
                      //"basefeat",
                      //"baseskill",
@@ -85,7 +86,6 @@ public class SoyServlet extends DMAServlet
                      //"basemonster", "monster",
                      //"npc",
                      //"baseencounter", "encounter",
-                     //"baselevel", "level"
                      );
 
   /**

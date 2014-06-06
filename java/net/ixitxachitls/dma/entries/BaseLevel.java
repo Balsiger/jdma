@@ -22,6 +22,7 @@
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -35,24 +36,11 @@ import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseLevelProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
-import net.ixitxachitls.dma.proto.Values.ParametersProto;
 import net.ixitxachitls.dma.values.ArmorType;
-import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Damage;
-import net.ixitxachitls.dma.values.Dice;
-import net.ixitxachitls.dma.values.Distance;
-import net.ixitxachitls.dma.values.EnumSelection;
-import net.ixitxachitls.dma.values.LongFormattedText;
-import net.ixitxachitls.dma.values.Modifier;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Number;
-import net.ixitxachitls.dma.values.Parameters;
+import net.ixitxachitls.dma.values.NewDice;
+import net.ixitxachitls.dma.values.NewReference;
+import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Proficiency;
-import net.ixitxachitls.dma.values.Reference;
-import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.dma.values.conditions.Condition;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -64,6 +52,74 @@ import net.ixitxachitls.util.logging.Log;
 @ParametersAreNonnullByDefault
 public class BaseLevel extends BaseEntry
 {
+  public static class QualityReference
+  {
+    public QualityReference(String inName, int inLevel, int inUsesPerDay,
+                            Optional<String> inCondition)
+    {
+      m_reference = new NewReference<BaseQuality>(BaseQuality.TYPE, inName);
+      m_level = inLevel;
+      m_usesPerDay = inUsesPerDay;
+      m_condition = inCondition;
+    }
+
+    private final NewReference<BaseQuality> m_reference;
+    private final int m_level;
+    private final int m_usesPerDay;
+    private final Optional<String> m_condition;
+
+    public static final NewValue.Parser<QualityReference> PARSER =
+      new NewValue.Parser<QualityReference>(4)
+      {
+        @Override
+        public Optional<QualityReference> doParse
+        (String inName, String inLevel, String inPerDay, String inCondition)
+        {
+          String name = inName;
+          int level = Integer.parseInt(inLevel);
+          int perDay = inPerDay.isEmpty() ? 0 : Integer.parseInt(inPerDay);
+          Optional<String> condition = inCondition.isEmpty()
+            ? Optional.<String>absent() : Optional.of(inCondition);
+
+          return Optional.of(new QualityReference(name, level, perDay,
+                                                  condition));
+        }
+      };
+
+    public String getName()
+    {
+      return m_reference.getName();
+    }
+
+    public NewReference<BaseQuality> getReference()
+    {
+      return m_reference;
+    }
+
+    public int getLevel()
+    {
+      return m_level;
+    }
+
+    public int getUsesPerDay()
+    {
+      return m_usesPerDay;
+    }
+
+    public Optional<String> getCondition()
+    {
+      return m_condition;
+    }
+
+    @Override
+    public String toString()
+    {
+      return m_level + ": " + m_reference
+        + (m_usesPerDay > 0 ? ", " + m_usesPerDay + "/day" : "")
+        + (m_condition.isPresent() ? ", if " + m_condition.get() : "");
+    }
+  }
+
   /**
    * Create the base level.
    */
@@ -90,183 +146,71 @@ public class BaseLevel extends BaseEntry
   private static final long serialVersionUID = 1L;
 
   /** The short name for the class. */
-  @Key("abbreviation")
-  protected Name m_abbreviation = new Name();
+  protected Optional<String> m_abbreviation = Optional.absent();
 
   /** The adventures typical for the class. */
-  @Key("adventures")
-  protected LongFormattedText m_adventures = new LongFormattedText();
+  protected Optional<String> m_adventures = Optional.absent();
 
   /** The characteristics of the class. */
-  @Key("characteristics")
-  protected LongFormattedText m_characteristics = new LongFormattedText();
+  protected Optional<String> m_characteristics = Optional.absent();
 
   /** The alignment options for this class. */
-  @Key("alignment options")
-  protected LongFormattedText m_alignmentOptions = new LongFormattedText();
+  protected Optional<String> m_alignmentOptions = Optional.absent();
 
   /** The religious views of the class. */
-  @Key("religion")
-  protected LongFormattedText m_religion = new LongFormattedText();
+  protected Optional<String> m_religion = Optional.absent();
 
   /** The usual backgrounds for the class. */
-  @Key("background")
-  protected LongFormattedText m_background = new LongFormattedText();
+  protected Optional<String> m_background = Optional.absent();
 
   /** The races suited for this class. */
-  @Key("races")
-  protected LongFormattedText m_races = new LongFormattedText();
+  protected Optional<String> m_races = Optional.absent();
 
   /** The relation to other classes. */
-  @Key("other classes")
-  protected LongFormattedText m_otherClasses = new LongFormattedText();
+  protected Optional<String> m_otherClasses = Optional.absent();
 
   /** The role of the class. */
-  @Key("role")
-  protected LongFormattedText m_role = new LongFormattedText();
+  protected Optional<String> m_role = Optional.absent();
 
   /** The important abilities for the class. */
-  @Key("important abilities")
-  protected LongFormattedText m_importantAbilities = new LongFormattedText();
+  protected Optional<String> m_importantAbilities = Optional.absent();
 
-  /** The alignemts allowed for the class. */
-  @Key("allowed alignments")
-  protected ValueList<EnumSelection<BaseMonster.Alignment>>
-    m_allowedAlignments = new ValueList<EnumSelection<BaseMonster.Alignment>>
-      (", ",
-        new EnumSelection<BaseMonster.Alignment>(BaseMonster.Alignment.class));
+  /** The alignments allowed for the class. */
+  protected List<BaseMonster.Alignment> m_allowedAlignments =
+    new ArrayList<>();
 
   /** The hit die. */
-  @Key("hit die")
-  protected Dice m_hitDie = new Dice();
+  protected Optional<NewDice> m_hitDie = Optional.absent();
 
   /** Skill points per level (x4 at first level, +Int modifier). */
-  @Key("skill points")
-  protected Number m_skillPoints = new Number(1, 10);
+  protected Optional<Integer> m_skillPoints = Optional.absent();
 
   /** The class skills. */
-  @Key("class skills")
-  protected ValueList<Reference<BaseSkill>> m_classSkill =
-    new ValueList<>(new Reference<BaseSkill>(BaseSkill.TYPE));
+  protected List<NewReference<BaseSkill>> m_classSkills = new ArrayList<>();
 
   /** The weapon proficiencies. */
-  @Key("weapon proficiencies")
-  protected ValueList<EnumSelection<Proficiency>>
-    m_weaponProficiencies =
-      new ValueList<>(new EnumSelection<Proficiency>
-        (Proficiency.class));
+  protected List<Proficiency> m_weaponProficiencies = new ArrayList<>();
 
-  /** The weapon proficiencies. */
-  @Key("armor proficiencies")
-  protected ValueList<EnumSelection<ArmorType>>
-    m_armorProficiencies =
-      new ValueList<>(new EnumSelection<ArmorType>
-        (ArmorType.class));
+  /** The armor proficiencies. */
+  protected List<ArmorType> m_armorProficiencies = new ArrayList<>();
 
   /** Special attacks. */
-  @Key("special attacks")
-  @WithBases
-  protected ValueList<Multiple> m_specialAttacks =
-  new ValueList<Multiple>
-  (", ",
-    new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element(new Number(1, 100).withEditType("number[level]"),
-                           false),
-      new Multiple.Element(new Multiple(new Multiple.Element []
-      {
-        new Multiple.Element
-          (new Reference<BaseQuality>(BaseQuality.TYPE)
-           .withParameter("Range", new Distance(), Parameters.Type.MAX)
-           .withParameter("Increment", new Distance(), Parameters.Type.MAX)
-           .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
-           .withParameter("Summary", new Name(), Parameters.Type.ADD)
-           .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
-           .withParameter("SpellLevel", new Number(0, 100), Parameters.Type.ADD)
-           .withParameter("Value", new Number(1, 100), Parameters.Type.ADD)
-           .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
-           .withParameter("Dice", new Dice(), Parameters.Type.ADD)
-           .withParameter("Times", new Number(1, 100), Parameters.Type.ADD)
-           .withParameter("Class", new EnumSelection<BaseSpell.SpellClass>
-                          (BaseSpell.SpellClass.class), Parameters.Type.ADD)
-           .withParameter("Ability", new Number(0, 100), Parameters.Type.MAX)
-           .withParameter("Type", new Name(), Parameters.Type.UNIQUE)
-           .withParameter("Duration", new Name(), Parameters.Type.ADD)
-           .withParameter("Initial", new Name(), Parameters.Type.UNIQUE)
-           .withParameter("Secondary", new Name(), Parameters.Type.UNIQUE)
-           .withParameter("Damage", new Damage(), Parameters.Type.ADD)
-           .withParameter("Incubation", new Name(), Parameters.Type.MIN)
-           .withParameter("DC", new Number(1, 100), Parameters.Type.MAX)
-           .withParameter("HP", new Number(1, 1000), Parameters.Type.MAX)
-           .withParameter("Burst", new Number(1, 100), Parameters.Type.MAX)
-           .withParameter("Str", new Number(-100, 100), Parameters.Type.ADD)
-           .withParameter("Dex", new Number(-100, 100), Parameters.Type.ADD)
-           .withParameter("Con", new Number(-100, 100), Parameters.Type.ADD)
-           .withParameter("Wis", new Number(-100, 100), Parameters.Type.ADD)
-           .withParameter("Int", new Number(-100, 100), Parameters.Type.ADD)
-           .withParameter("Cha", new Number(-100, 100), Parameters.Type.ADD)
-           .withTemplate("reference", "/quality/"), false),
-        new Multiple.Element(new Number(1, 100)
-          .withEditType("name[per day]"), true, "/", null)
-        }), false),
-      }));
+  protected List<QualityReference> m_specialAttacks = new ArrayList<>();
 
   /** Special qualities. */
-  @Key("special qualities")
-  protected ValueList<Multiple> m_specialQualities =
-  new ValueList<Multiple>
-  (", ",
-    new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element(new Number(1, 100).withEditType("number[level]"),
-                           false, null, ": "),
-      new Multiple.Element(new Multiple(new Multiple.Element []
-      {
-        new Multiple.Element
-          (new Reference<BaseQuality>(BaseQuality.TYPE)
-           .withParameter("Range", new Distance(), Parameters.Type.MAX)
-           .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
-           .withParameter("Summary", new Name(), Parameters.Type.ADD)
-           .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
-           .withParameter("SpellLevel", new Number(0, 100),
-                          Parameters.Type.ADD)
-           .withParameter("Racial",
-                          new Number(-50, 50, true), Parameters.Type.ADD)
-           .withParameter("Value", new Number(0, 100), Parameters.Type.ADD)
-           .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
-           .withTemplate("reference", "/quality/"), false),
-        new Multiple.Element(new Condition()
-                             .withEditType("string[condition]"),
-                             true, " :if ", null),
-        new Multiple.Element(new Number(1, 100).withEditType("name[per day]"),
-                             true, "/", null),
-      }), false, null, null),
-    }));
+  protected List<QualityReference> m_specialQualities = new ArrayList<>();
 
   /** The base attack bonuses per level. */
-  @Key("base attacks")
-  protected ValueList<Number> m_baseAttacks =
-    new ValueList<Number>(new Number(0, 20));
+  protected List<Integer> m_baseAttacks = new ArrayList<>();
 
   /** The fortitude saves per level. */
-  @Key("fortitude saves")
-  protected ValueList<Number> m_fortitudeSaves =
-    new ValueList<Number>(new Number(0, 20));
+  protected List<Integer> m_fortitudeSaves = new ArrayList<>();
 
   /** The reflex saves per level. */
-  @Key("reflex saves")
-  protected ValueList<Number> m_reflexSaves =
-    new ValueList<Number>(new Number(0, 20));
+  protected List<Integer> m_reflexSaves = new ArrayList<>();
 
   /** The will saves per level. */
-  @Key("will saves")
-  protected ValueList<Number> m_willSaves =
-    new ValueList<Number>(new Number(0, 20));
-
-  static
-  {
-    extractVariables(BaseLevel.class);
-  }
+  protected List<Integer> m_willSaves = new ArrayList<>();
 
   @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
@@ -339,9 +283,59 @@ public class BaseLevel extends BaseEntry
    *
    * @return the level abbreviation
    */
-  public String getAbbreviation()
+  public Optional<String> getAbbreviation()
   {
-    return m_abbreviation.get();
+    return m_abbreviation;
+  }
+
+  public Optional<String> getAdventures()
+  {
+    return m_adventures;
+  }
+
+  public Optional<String> getCharacteristics()
+  {
+    return m_characteristics;
+  }
+
+  public Optional<String> getAlignmentOptions()
+  {
+    return m_alignmentOptions;
+  }
+
+  public Optional<String> getReligion()
+  {
+    return m_religion;
+  }
+
+  public Optional<String> getRaces()
+  {
+    return m_races;
+  }
+
+  public Optional<String> getOtherClasses()
+  {
+    return m_otherClasses;
+  }
+
+  public Optional<String> getRole()
+  {
+    return m_role;
+  }
+
+  public Optional<String> getBackground()
+  {
+    return m_background;
+  }
+
+  public Optional<String> getImportantAbilities()
+  {
+    return m_importantAbilities;
+  }
+
+  public List<BaseMonster.Alignment> getAllowedAlignments()
+  {
+    return Collections.unmodifiableList(m_allowedAlignments);
   }
 
   /**
@@ -349,9 +343,74 @@ public class BaseLevel extends BaseEntry
    *
    * @return  the hit die
    */
-  public Dice getHitDie()
+  public Optional<NewDice> getHitDie()
   {
     return m_hitDie;
+  }
+
+  public Optional<Integer> getSkillPoints()
+  {
+    return m_skillPoints;
+  }
+
+  public List<NewReference<BaseSkill>> getClassSkills()
+  {
+    return Collections.unmodifiableList(m_classSkills);
+  }
+
+  public List<Proficiency> getWeaponProficiencies()
+  {
+    return Collections.unmodifiableList(m_weaponProficiencies);
+  }
+
+  public List<ArmorType> getArmorProficiencies()
+  {
+    return Collections.unmodifiableList(m_armorProficiencies);
+  }
+
+  public List<QualityReference> getSpecialAttacks()
+  {
+    return Collections.unmodifiableList(m_specialAttacks);
+  }
+
+  public List<QualityReference> getSpecialQualities()
+  {
+    return Collections.unmodifiableList(m_specialQualities);
+  }
+
+  public List<Integer> getBaseAttacks()
+  {
+    return Collections.unmodifiableList(m_baseAttacks);
+  }
+
+  public List<Integer> getFortitudeSaves()
+  {
+    return Collections.unmodifiableList(m_fortitudeSaves);
+  }
+
+  public List<Integer> getReflexSaves()
+  {
+    return Collections.unmodifiableList(m_reflexSaves);
+  }
+
+  public List<Integer> getWillSaves()
+  {
+    return Collections.unmodifiableList(m_willSaves);
+  }
+
+  public List<String> getAlignmentNames()
+  {
+    return BaseMonster.Alignment.names();
+  }
+
+  public List<String> getWeaponProficiencyNames()
+  {
+    return Proficiency.names();
+  }
+
+  public List<String> getArmorProficiencyNames()
+  {
+    return ArmorType.names();
   }
 
   /**
@@ -363,6 +422,7 @@ public class BaseLevel extends BaseEntry
    * @param inDescription the description for what to collect the data
    * @param <T>           the type of value to be collected
    */
+  /*
   @SuppressWarnings("unchecked")
   public <T extends Value<T>> void collect(int inLevel, String inName,
                                            Combined<T> ioCombined,
@@ -428,6 +488,7 @@ public class BaseLevel extends BaseEntry
         break;
     }
   }
+  */
 
   /**
    * Collect special qualities from all levels.
@@ -435,6 +496,7 @@ public class BaseLevel extends BaseEntry
    * @param  inLevel the level for which to compute qualities
    * @return all the special quality references for the given level
    */
+  /*
   @SuppressWarnings("unchecked")
   public List<Reference<BaseQuality>> collectSpecialQualities(int inLevel)
   {
@@ -456,6 +518,53 @@ public class BaseLevel extends BaseEntry
 
     return qualities;
   }
+  */
+
+  @Override
+  public void set(Values inValues)
+  {
+    super.set(inValues);
+
+    m_abbreviation = inValues.use("abbreviation", m_abbreviation);
+    m_adventures = inValues.use("adventures", m_adventures);
+    m_characteristics = inValues.use("characteristics", m_characteristics);
+    m_alignmentOptions = inValues.use("alignment_options", m_alignmentOptions);
+    m_religion = inValues.use("religion", m_religion);
+    m_background = inValues.use("background", m_background);
+    m_races = inValues.use("races", m_races);
+    m_otherClasses = inValues.use("other_classes", m_otherClasses);
+    m_role = inValues.use("role", m_role);
+    m_importantAbilities =
+      inValues.use("important_abilities", m_importantAbilities);
+    m_allowedAlignments =
+      inValues.use("allowed_alignment", m_allowedAlignments,
+                   BaseMonster.Alignment.PARSER);
+    m_hitDie = inValues.use("hit_die", m_hitDie, NewDice.PARSER);
+    m_classSkills =
+      inValues.use("class_skill", m_classSkills,
+                   new NewReference.ReferenceParser<>(BaseSkill.TYPE));
+    m_weaponProficiencies =
+      inValues.use("weapon_proficiency", m_weaponProficiencies,
+                   Proficiency.PARSER);
+    m_armorProficiencies =
+      inValues.use("armor_proficiency", m_armorProficiencies,
+                   ArmorType.PARSER);
+    m_specialAttacks =
+      inValues.use("special_attack", m_specialAttacks, QualityReference.PARSER,
+                   "name", "level", "per_day", "condition");
+    m_specialQualities =
+      inValues.use("special_quality",
+                   m_specialQualities, QualityReference.PARSER,
+                   "name", "level", "per_day", "condition");
+    m_baseAttacks =
+      inValues.use("base_attack", m_baseAttacks, NewValue.INTEGER_PARSER);
+    m_fortitudeSaves =
+      inValues.use("fortitude_save", m_fortitudeSaves, NewValue.INTEGER_PARSER);
+    m_reflexSaves =
+      inValues.use("relfex_save", m_reflexSaves, NewValue.INTEGER_PARSER);
+    m_willSaves =
+      inValues.use("will_save", m_willSaves, NewValue.INTEGER_PARSER);
+  }
 
   @Override
   public Message toProto()
@@ -464,129 +573,109 @@ public class BaseLevel extends BaseEntry
 
     builder.setBase((BaseEntryProto)super.toProto());
 
-    if(m_abbreviation.isDefined())
+    if(m_abbreviation.isPresent())
       builder.setAbbreviation(m_abbreviation.get());
 
-    if(m_adventures.isDefined())
+    if(m_adventures.isPresent())
       builder.setAdventures(m_adventures.get());
 
-    if(m_characteristics.isDefined())
+    if(m_characteristics.isPresent())
       builder.setCharacteristics(m_characteristics.get());
 
-    if(m_alignmentOptions.isDefined())
+    if(m_alignmentOptions.isPresent())
       builder.setAlignmentOptions(m_alignmentOptions.get());
 
-    if(m_religion.isDefined())
+    if(m_religion.isPresent())
       builder.setReligion(m_religion.get());
 
-    if(m_background.isDefined())
+    if(m_background.isPresent())
       builder.setBackground(m_background.get());
 
-    if(m_races.isDefined())
+    if(m_races.isPresent())
       builder.setRaces(m_races.get());
 
-    if(m_otherClasses.isDefined())
+    if(m_otherClasses.isPresent())
       builder.setOtherClasses(m_otherClasses.get());
 
-    if(m_role.isDefined())
+    if(m_role.isPresent())
       builder.setRole(m_role.get());
 
-    if(m_importantAbilities.isDefined())
+    if(m_importantAbilities.isPresent())
       builder.setImportantAbilities(m_importantAbilities.get());
 
-    if(m_allowedAlignments.isDefined())
-      for(EnumSelection<BaseMonster.Alignment> alignment : m_allowedAlignments)
-        builder.addAllowedAlignment(alignment.getSelected().toProto());
+    for(BaseMonster.Alignment alignment : m_allowedAlignments)
+      builder.addAllowedAlignment(alignment.toProto());
 
-    if(m_hitDie.isDefined())
-      builder.setHitDice(m_hitDie.toProto());
+    if(m_hitDie.isPresent())
+      builder.setHitDice(m_hitDie.get().toProto());
 
-    if(m_skillPoints.isDefined())
-      builder.setSkillPoints((int)m_skillPoints.get());
+    if(m_skillPoints.isPresent())
+      builder.setSkillPoints(m_skillPoints.get());
 
-    if(m_classSkill.isDefined())
-      for(Reference<BaseSkill> reference : m_classSkill)
-        builder.addClassSkill(reference.getName());
+    for(NewReference<BaseSkill> reference : m_classSkills)
+      builder.addClassSkill(reference.getName());
 
-    if(m_weaponProficiencies.isDefined())
-      for(EnumSelection<Proficiency> proficiency
-        : m_weaponProficiencies)
-        builder.addWeaponProficiency(proficiency.getSelected().toProto());
+    for(Proficiency proficiency : m_weaponProficiencies)
+      builder.addWeaponProficiency(proficiency.toProto());
 
-    if(m_armorProficiencies.isDefined())
-      for(EnumSelection<ArmorType> proficiency
-        : m_armorProficiencies)
-        builder.addArmorProficiency(proficiency.getSelected().toProto());
+    for(ArmorType proficiency : m_armorProficiencies)
+        builder.addArmorProficiency(proficiency.toProto());
 
-    if(m_specialAttacks.isDefined())
-      for(Multiple special : m_specialAttacks)
-      {
-        BaseMonsterProto.QualityReference.Builder reference =
-          BaseMonsterProto.QualityReference.newBuilder();
+    for(QualityReference special : m_specialAttacks)
+    {
+      BaseMonsterProto.QualityReference.Builder reference =
+        BaseMonsterProto.QualityReference.newBuilder();
 
-        Multiple quality = (Multiple)special.get(1);
-        @SuppressWarnings("unchecked")
-        Reference<BaseQuality> ref = (Reference<BaseQuality>)quality.get(0);
-        reference.setReference
-        (BaseMonsterProto.Reference.newBuilder()
-         .setName(ref.getName())
-         .setParameters(ref.getParameters() != null
-         ? ParametersProto.getDefaultInstance()
-         : ref.getParameters().toProto())
-         .build());
+      NewReference<BaseQuality> ref = special.getReference();
+      reference.setReference(BaseMonsterProto.Reference.newBuilder()
+                             .setName(ref.getName())
+                             .build());
 
-        if(quality.get(1).isDefined())
-          reference.setPerDay((int)((Number)quality.get(1)).get());
+      if(special.getUsesPerDay() > 0)
+        reference.setPerDay(special.getUsesPerDay());
 
-        builder.addSpecialAttack(BaseLevelProto.LeveledQuality.newBuilder()
-                                 .setLevel((int)((Number)special.get(0)).get())
-                                 .setQuality(reference.build())
-                                 .build());
-      }
+      if(special.getCondition().isPresent())
+        reference.setCondition(special.getCondition().get());
 
-    if(m_specialQualities.isDefined())
-      for(Multiple special : m_specialQualities)
-      {
-        BaseMonsterProto.QualityReference.Builder reference =
-          BaseMonsterProto.QualityReference.newBuilder();
+      builder.addSpecialAttack(BaseLevelProto.LeveledQuality.newBuilder()
+                               .setLevel(special.getLevel())
+                               .setQuality(reference.build())
+                               .build());
+    }
 
-        Multiple quality = (Multiple)special.get(1);
-        @SuppressWarnings("unchecked")
-        Reference<BaseQuality> ref = (Reference<BaseQuality>)quality.get(0);
-        reference.setReference
-        (BaseMonsterProto.Reference.newBuilder()
-         .setName(ref.getName())
-         .setParameters(ref.getParameters() != null
-         ? ParametersProto.getDefaultInstance()
-         : ref.getParameters().toProto())
-         .build());
+    for(QualityReference special : m_specialQualities)
+    {
+      BaseMonsterProto.QualityReference.Builder reference =
+        BaseMonsterProto.QualityReference.newBuilder();
 
-        if(quality.get(1).isDefined())
-          reference.setCondition(((Condition)special.get(1)).getDescription());
-        if(quality.get(2).isDefined())
-          reference.setPerDay((int)((Number)special.get(2)).get());
+      NewReference<BaseQuality> ref = special.getReference();
+      reference.setReference(BaseMonsterProto.Reference.newBuilder()
+                             .setName(ref.getName())
+                             .build());
 
-        builder.addSpecialQuality(BaseLevelProto.LeveledQuality.newBuilder()
-                                 .setLevel((int)((Number)special.get(0)).get())
-                                 .setQuality(reference.build())
-                                 .build());
-      }
+      if(special.getUsesPerDay() > 0)
+        reference.setPerDay(special.getUsesPerDay());
 
-    if(m_baseAttacks.isDefined())
-      for(Number number : m_baseAttacks)
-        builder.addBaseAttack((int)number.get());
+      if(special.getCondition().isPresent())
+        reference.setCondition(special.getCondition().get());
 
-    if(m_fortitudeSaves.isDefined())
-      for(Number number : m_fortitudeSaves)
-        builder.addFortitudeSave((int)number.get());
+      builder.addSpecialQuality(BaseLevelProto.LeveledQuality.newBuilder()
+                                .setLevel(special.getLevel())
+                                .setQuality(reference.build())
+                                .build());
+    }
 
-    if(m_reflexSaves.isDefined())
-      for(Number number : m_reflexSaves)
-        builder.addReflexSave((int)number.get());
-    if(m_willSaves.isDefined())
-      for(Number number : m_willSaves)
-        builder.addWillSave((int)number.get());
+    for(Integer number : m_baseAttacks)
+      builder.addBaseAttack(number);
 
+    for(Integer number : m_fortitudeSaves)
+      builder.addFortitudeSave(number);
+
+    for(Integer number : m_reflexSaves)
+      builder.addReflexSave(number);
+
+    for(Integer number : m_willSaves)
+      builder.addWillSave(number);
 
     BaseLevelProto proto = builder.build();
     return proto;
@@ -606,190 +695,86 @@ public class BaseLevel extends BaseEntry
     super.fromProto(proto.getBase());
 
     if(proto.hasAbbreviation())
-      m_abbreviation = m_abbreviation.as(proto.getAbbreviation());
+      m_abbreviation = Optional.of(proto.getAbbreviation());
 
     if(proto.hasAdventures())
-      m_adventures = m_adventures.as(proto.getAdventures());
+      m_adventures = Optional.of(proto.getAdventures());
 
     if(proto.hasCharacteristics())
-      m_characteristics = m_characteristics.as(proto.getCharacteristics());
+      m_characteristics = Optional.of(proto.getCharacteristics());
 
     if(proto.hasAlignmentOptions())
-      m_alignmentOptions = m_alignmentOptions.as(proto.getAlignmentOptions());
+      m_alignmentOptions = Optional.of(proto.getAlignmentOptions());
 
     if(proto.hasReligion())
-      m_religion = m_religion.as(proto.getReligion());
+      m_religion = Optional.of(proto.getReligion());
 
     if(proto.hasBackground())
-      m_background = m_background.as(proto.getBackground());
+      m_background = Optional.of(proto.getBackground());
 
     if(proto.hasOtherClasses())
-      m_otherClasses = m_otherClasses.as(proto.getOtherClasses());
+      m_otherClasses = Optional.of(proto.getOtherClasses());
 
     if(proto.hasRaces())
-      m_races = m_races.as(proto.getRaces());
+      m_races = Optional.of(proto.getRaces());
 
     if(proto.hasRole())
-      m_role = m_role.as(proto.getRole());
+      m_role = Optional.of(proto.getRole());
 
     if(proto.hasImportantAbilities())
-      m_importantAbilities =
-        m_importantAbilities.as(proto.getImportantAbilities());
+      m_importantAbilities = Optional.of(proto.getImportantAbilities());
 
-    if(proto.getAllowedAlignmentCount() > 0)
-    {
-      List<EnumSelection<BaseMonster.Alignment>> alignments = new ArrayList<>();
-      for(BaseMonsterProto.Alignment alignment
-        : proto.getAllowedAlignmentList())
-        alignments.add(m_allowedAlignments.createElement()
-                       .as(BaseMonster.Alignment.fromProto(alignment)));
-
-      m_allowedAlignments = m_allowedAlignments.as(alignments);
-    }
+    for(BaseMonsterProto.Alignment alignment : proto.getAllowedAlignmentList())
+      m_allowedAlignments.add(BaseMonster.Alignment.fromProto(alignment));
 
     if(proto.hasHitDice())
-      m_hitDie = m_hitDie.fromProto(proto.getHitDice());
+      m_hitDie = Optional.of(NewDice.fromProto(proto.getHitDice()));
 
     if(proto.hasSkillPoints())
-      m_skillPoints = m_skillPoints.as(proto.getSkillPoints());
+      m_skillPoints = Optional.of(proto.getSkillPoints());
 
-    if(proto.getClassSkillCount() > 0)
-    {
-      List<Reference<BaseSkill>> references = new ArrayList<>();
-      for(String ref : proto.getClassSkillList())
-        references.add(m_classSkill.createElement().as(ref));
+    for(String ref : proto.getClassSkillList())
+      m_classSkills.add(new NewReference<BaseSkill>(BaseSkill.TYPE, ref));
 
-      m_classSkill = m_classSkill.as(references);
-    }
+    for(BaseWeaponProto.Proficiency proficiency
+      : proto.getWeaponProficiencyList())
+      m_weaponProficiencies.add(Proficiency.fromProto(proficiency));
 
-    if(proto.getWeaponProficiencyCount() > 0)
-    {
-      List<EnumSelection<Proficiency>> proficiencies =
-        new ArrayList<>();
-      for(BaseWeaponProto.Proficiency proficiency
-        : proto.getWeaponProficiencyList())
-        proficiencies.add(m_weaponProficiencies.createElement()
-                          .as(Proficiency.fromProto(proficiency)));
+    for(BaseArmorProto.Type proficiency : proto.getArmorProficiencyList())
+      m_armorProficiencies.add(ArmorType.fromProto(proficiency));
 
-      m_weaponProficiencies = m_weaponProficiencies.as(proficiencies);
-    }
+    for(BaseLevelProto.LeveledQuality quality : proto.getSpecialAttackList())
+      m_specialAttacks.add(new QualityReference
+                           (quality.getQuality().getReference().getName(),
+                            quality.getLevel(),
+                            quality.getQuality().getPerDay(),
+                            quality.getQuality().hasCondition()
+                            ? Optional.<String>of
+                              (quality.getQuality().getCondition())
+                            : Optional.<String>absent()));
 
-    if(proto.getArmorProficiencyCount() > 0)
-    {
-      List<EnumSelection<ArmorType>> proficiencies =
-        new ArrayList<>();
-      for(BaseArmorProto.Type proficiency
-        : proto.getArmorProficiencyList())
-        proficiencies.add(m_armorProficiencies.createElement()
-                          .as(ArmorType.fromProto(proficiency)));
+    for(BaseLevelProto.LeveledQuality quality : proto.getSpecialQualityList())
+      m_specialQualities.add(new QualityReference
+                             (quality.getQuality().getReference().getName(),
+                              quality.getLevel(),
+                              quality.getQuality().getPerDay(),
+                              quality.getQuality().hasCondition()
+                              ? Optional.<String>of
+                                (quality.getQuality().getCondition())
+                              : Optional.<String>absent()));
 
-      m_armorProficiencies = m_armorProficiencies.as(proficiencies);
-    }
+    for(int baseAttack : proto.getBaseAttackList())
+      m_baseAttacks.add(baseAttack);
 
-    if(proto.getSpecialAttackCount() > 0)
-    {
-      List<Multiple> references = new ArrayList<>();
-      for(BaseLevelProto.LeveledQuality quality
-        : proto.getSpecialAttackList())
-      {
-        Multiple multiple = m_specialAttacks.createElement();
+    for(int save : proto.getFortitudeSaveList())
+      m_fortitudeSaves.add(save);
 
-        Multiple qMultiple = (Multiple)multiple.get(1);
-        @SuppressWarnings("unchecked")
-        Reference<BaseQuality> ref = (Reference<BaseQuality>)qMultiple.get(0);
-        multiple =
-          multiple.as(((Number)multiple.get(0)).as(quality.getLevel()),
-                      qMultiple.as(ref.as(quality.getQuality().getReference()
-                                          .getName())
-                                   .withParameters(ref.getParameters()
-                                                   .fromProto(quality
-                                                              .getQuality()
-                                                              .getReference()
-                                                              .getParameters())
-                                                              ),
-                                   quality.getQuality().hasPerDay()
-                                   ? ((Number)qMultiple.get(1))
-                                     .as(quality.getQuality().getPerDay())
-                                     : qMultiple.get(1)));
+    for(int save : proto.getReflexSaveList())
+      m_reflexSaves.add(save);
 
-        references.add(multiple);
-      }
-
-      m_specialAttacks = m_specialAttacks.as(references);
-    }
-
-    if(proto.getSpecialQualityCount() > 0)
-    {
-      List<Multiple> references = new ArrayList<>();
-      for(BaseLevelProto.LeveledQuality quality
-        : proto.getSpecialQualityList())
-      {
-        Multiple multiple = m_specialQualities.createElement();
-
-        Multiple qMultiple = (Multiple)multiple.get(1);
-        @SuppressWarnings("unchecked")
-        Reference<BaseQuality> ref = (Reference<BaseQuality>)qMultiple.get(0);
-        multiple =
-          multiple.as(((Number)multiple.get(0)).as(quality.getLevel()),
-                      qMultiple.as(ref.as(quality.getQuality().getReference()
-                                          .getName())
-                                   .withParameters(ref.getParameters()
-                                                   .fromProto(quality
-                                                              .getQuality()
-                                                              .getReference()
-                                                              .getParameters())
-                                                              ),
-                                   quality.getQuality().hasCondition()
-                                   ? new Condition(quality.getQuality()
-                                                   .getCondition())
-                                   : qMultiple.get(1),
-                                   quality.getQuality().hasPerDay()
-                                   ? ((Number)qMultiple.get(2))
-                                     .as(quality.getQuality().getPerDay())
-                                   : qMultiple.get(2)));
-
-        references.add(multiple);
-      }
-
-      m_specialQualities = m_specialQualities.as(references);
-    }
-
-    if(proto.getBaseAttackCount() > 0)
-    {
-      List<Number> attacks = new ArrayList<>();
-      for(int baseAttack : proto.getBaseAttackList())
-        attacks.add(m_baseAttacks.createElement().as(baseAttack));
-
-      m_baseAttacks = m_baseAttacks.as(attacks);
-    }
-
-    if(proto.getFortitudeSaveCount() > 0)
-    {
-      List<Number> saves = new ArrayList<>();
-      for(int save : proto.getFortitudeSaveList())
-        saves.add(m_fortitudeSaves.createElement().as(save));
-
-      m_fortitudeSaves = m_fortitudeSaves.as(saves);
-    }
-
-    if(proto.getReflexSaveCount() > 0)
-    {
-      List<Number> saves = new ArrayList<>();
-      for(int save : proto.getReflexSaveList())
-        saves.add(m_reflexSaves.createElement().as(save));
-
-      m_reflexSaves = m_reflexSaves.as(saves);
-    }
-
-    if(proto.getWillSaveCount() > 0)
-    {
-      List<Number> saves = new ArrayList<>();
-      for(int save : proto.getWillSaveList())
-        saves.add(m_willSaves.createElement().as(save));
-
-      m_willSaves = m_willSaves.as(saves);
-    }
-}
+    for(int save : proto.getWillSaveList())
+      m_willSaves.add(save);
+  }
 
   @Override
   public void parseFrom(byte []inBytes)
@@ -803,6 +788,5 @@ public class BaseLevel extends BaseEntry
       Log.warning("could not properly parse proto: " + e);
     }
   }
-
 }
 

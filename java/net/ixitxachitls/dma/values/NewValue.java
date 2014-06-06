@@ -70,6 +70,9 @@ public abstract class NewValue<T extends Message>
       if(m_arguments == 3)
         return doParse(inValues[0], inValues[1], inValues[2]);
 
+      if(m_arguments == 4)
+        return doParse(inValues[0], inValues[1], inValues[2], inValues[3]);
+
       return doParse(inValues);
     }
 
@@ -85,6 +88,12 @@ public abstract class NewValue<T extends Message>
 
     protected Optional<P> doParse(String inFirst, String inSecond,
                                   String inThird)
+    {
+      return Optional.absent();
+    }
+
+    protected Optional<P> doParse(String inFirst, String inSecond,
+                                  String inThird, String inFourth)
     {
       return Optional.absent();
     }

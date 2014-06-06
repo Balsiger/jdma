@@ -54,6 +54,7 @@ import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Range;
@@ -1150,6 +1151,17 @@ public class BaseMonster extends BaseEntry
     /** The proto enum value. */
     private BaseMonsterProto.Alignment m_proto;
 
+  /** The parser for armor types. */
+  public static final NewValue.Parser<Alignment> PARSER =
+    new NewValue.Parser<Alignment>(1)
+    {
+      @Override
+      public Optional<Alignment> doParse(String inValue)
+      {
+        return Alignment.fromString(inValue);
+      }
+    };
+
     /**
      * Create the name.
      *
@@ -1203,6 +1215,35 @@ public class BaseMonster extends BaseEntry
 
       throw new IllegalArgumentException("cannot convert alignment: "
                                          + inProto);
+    }
+
+    /**
+     * Get the alignment from the given string.
+     *
+     * @param inValue the string representation
+     * @return the matching alignment, if any
+     */
+    public static Optional<Alignment> fromString(String inValue)
+    {
+      for(Alignment alignment : values())
+        if(alignment .getName().equalsIgnoreCase(inValue))
+          return Optional.of(alignment);
+
+      return Optional.absent();
+    }
+
+    /**
+     * Get the possible names of types.
+     *
+     * @return a list of the names
+     */
+    public static List<String> names()
+    {
+      List<String> names = new ArrayList<>();
+      for(Alignment type : values())
+        names.add(type.getName());
+
+      return names;
     }
   }
 

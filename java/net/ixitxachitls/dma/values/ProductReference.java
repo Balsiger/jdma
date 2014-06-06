@@ -33,22 +33,19 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 
-import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Values.RangeProto;
 
 @ParametersAreNonnullByDefault
-public class ProductReference extends NewValue<BaseEntryProto.Reference>
-  implements Comparable<ProductReference>
+public class ProductReference extends NewReference<BaseProduct>
 {
   public static class ProductReferenceParser
-    extends Parser<ProductReference>
+    extends ReferenceParser<BaseProduct, ProductReference>
   {
     public ProductReferenceParser()
     {
-      super(2);
+      super(BaseProduct.TYPE, 2);
     }
 
     @Override
@@ -60,7 +57,7 @@ public class ProductReference extends NewValue<BaseEntryProto.Reference>
 
   public ProductReference(String inName)
   {
-    m_name = inName;
+    super(BaseProduct.TYPE, inName);
   }
 
   public ProductReference(String inName, NewRange ... inPages)
@@ -83,30 +80,7 @@ public class ProductReference extends NewValue<BaseEntryProto.Reference>
   public static final Parser<ProductReference> PARSER =
     new ProductReferenceParser();
 
-  private final String m_name;
   private final List<NewRange> m_pages = new ArrayList<>();
-  @Nullable private BaseProduct m_product = null;
-  private boolean m_resolved = false;
-
-  /**
-   * Get the product referenced.
-   *
-   * @return the product name
-   */
-  public String getName()
-  {
-    return m_name;
-  }
-
-  /**
-   * Get the url to the product referenced.
-   *
-   * @return the url
-   */
-  public String getUrl()
-  {
-    return "/product/" + m_name;
-  }
 
   /**
    * Get the product title.
@@ -117,19 +91,19 @@ public class ProductReference extends NewValue<BaseEntryProto.Reference>
   {
     resolve();
 
-    if(m_product == null)
+    if(!m_entry.isPresent())
       return m_name;
 
-    return m_product.getFullTitle();
+    return m_entry.get().getFullTitle();
   }
 
   @Override
   public String toString()
   {
     if(m_pages.isEmpty())
-      return m_name;
+      return super.toString();
 
-    return m_name + " " + COMMA_JOINER.join(m_pages);
+    return super.toString() + " " + COMMA_JOINER.join(m_pages);
   }
 
   /**
@@ -165,19 +139,8 @@ public class ProductReference extends NewValue<BaseEntryProto.Reference>
     return reference.build();
   }
 
-  private void resolve()
-  {
-    if(m_resolved)
-      return;
-
-    m_resolved = true;
-    m_product = (BaseProduct)DMADataFactory.get()
-      .getEntry(AbstractEntry.createKey(m_name, BaseProduct.TYPE));
-  }
-
   /**
    * Create a new reference from the given proto message.
-   *
    *
    * @param inProto the proto message
    * @return the newly create reference
@@ -237,11 +200,11 @@ public class ProductReference extends NewValue<BaseEntryProto.Reference>
   }
 
   @Override
-  public int compareTo(ProductReference inOther)
+  public int compareTo(NewReference inOther)
   {
     if(inOther == this)
       return 0;
 
-     return m_name.compareTo(inOther.m_name);
+    return toString().compareTo(inOther.toString());
   }
 }
