@@ -650,10 +650,9 @@ public class DMADatastore
     if (blob != null)
       entry.parseFrom(blob.getBytes());
 
-//    if(entry instanceof BaseQuality)
+//    if(entry instanceof BaseSkill)
 //    {
-//      BaseQuality quality = (BaseQuality)entry;
-//      quality.m_description = "guru guru";
+//      BaseSkill skill = (BaseSkill)entry;
 //      for(Map.Entry<String, Object> property
 //        : inEntity.getProperties().entrySet())
 //      {
@@ -669,81 +668,110 @@ public class DMADatastore
 //        switch(name)
 //        {
 //          case "name":
-//            quality.m_name = value.toString();
+//            skill.m_name = value.toString();
 //            break;
 //
 //          case "base":
 //            for(String base : (List<String>)value)
-//              quality.m_base.add(base);
+//              skill.m_base.add(base);
 //            break;
 //
 //          case "categories":
 //            for(String category : (List<String>)value)
-//              quality.m_categories.add(category);
-//            break;
-//
-//          case "effects":
-//            for(String effect : (List<String>)value)
-//            {
-//              String []parts = Strings.getPatterns
-//                (effect, "(\\w+[ \\w+].*):? ([\\+\\-].*)(?: if \"(.*)\")?");
-//
-//              String affects = parts.length >= 1 ? parts[0] : "";
-//              String modifier = parts.length >= 2 ? parts[1] : "";
-//              String text = parts.length >= 3 ? parts[2] : "";
-//
-//              if (Affects.fromString(affects).isPresent())
-//                quality.m_effects.add(new Effect(Affects.fromString(affects).get(),
-//                                                 Optional.<String>absent(),
-//                                                 NewModifier.PARSER.parse(modifier),
-//                                                 Optional.fromNullable(text)));
-//              else
-//                quality.m_effects.add(new Effect(Affects.UNKNOWN,
-//                                                 Optional.fromNullable(affects),
-//                                                 NewModifier.PARSER.parse(modifier),
-//                                                 Optional.fromNullable(text)));
-//            }
+//              skill.m_categories.add(category);
 //            break;
 //
 //          case "incomplete":
-//            quality.m_incomplete = ((Text)value).getValue().replace("\"", "");
+//            skill.m_incomplete = ((Text)value).getValue().replace("\"", "");
 //            break;
 //
-//          case "qualifier":
+//          case "check":
 //            if(!value.toString().startsWith("$"))
-//              quality.m_qualifier = Optional.of(value.toString());
+//              skill.m_check = Optional.of(((Text)value).getValue().replace("\"", ""));
 //            break;
 //
-//          case "references":
+//          case "action":
+//            if(!value.toString().startsWith("$"))
+//              skill.m_action = Optional.of(((Text)value).getValue().replace("\"", ""));
+//            break;
+//
+//          case "retry":
+//            if(!value.toString().startsWith("$"))
+//              skill.m_retry = Optional.of(((Text)value).getValue().replace("\"", ""));
+//            break;
+//
+//          case "special":
+//            if(!value.toString().startsWith("$"))
+//              skill.m_special = Optional.of(((Text)value).getValue().replace("\"", ""));
+//            break;
+//
+//          case "restriction":
+//            if(!value.toString().startsWith("$"))
+//              skill.m_restriction = Optional.of(((Text)value).getValue().replace("\"", ""));
+//            break;
+//
+//          case "untrained":
+//            if(!value.toString().startsWith("$"))
+//              skill.m_untrained = Optional.of(value.toString().replace("\"", ""));
+//            break;
+//
+//         case "references":
 //            for(String reference : (List<String>)value)
 //              if(ProductReference.PARSER.parse(reference.split(":")).isPresent())
-//                quality.m_references.add
+//                skill.m_references.add
 //                (ProductReference.PARSER.parse(reference.split(":")).get());
 //
 //            break;
 //
 //          case "short_description":
-//            quality.m_short = value.toString().replace("\"", "");
+//            skill.m_short = value.toString().replace("\"", "");
 //            break;
 //
 //          case "synonyms":
 //            for(String synonym : (List<String>)value)
-//              quality.m_synonyms.add(synonym.replace("\"", ""));
+//              skill.m_synonyms.add(synonym.replace("\"", ""));
 //            break;
 //
-//          case "type":
-//            if(EffectType.fromString(value.toString()).isPresent())
-//              quality.m_qualityType =
-//                EffectType.fromString(value.toString()).get();
+//          case "synergies":
+//            for(String synergy: (List<String>)value)
+//              skill.m_synergies.add(synergy.replace("\"", ""));
+//            break;
+//
+//          case "ability":
+//            if(BaseMonster.Ability.fromString(value.toString()).isPresent())
+//              skill.m_ability =
+//                BaseMonster.Ability.fromString(value.toString()).get();
+//            break;
+//
+//          case "restrictions":
+//            for(String synergy: (List<String>)value)
+//              if(SkillRestriction.fromString(value.toString()).isPresent())
+//                skill.m_restrictions.add
+//                (SkillRestriction.fromString(value.toString()).get());
+//            break;
+//
+//          case "modifiers":
+//            for(String synergy: (List<String>)value)
+//              if(SkillModifier.fromString(value.toString()).isPresent())
+//                skill.m_modifiers.add
+//                (SkillModifier.fromString(value.toString()).get());
+//            break;
+//
+//          case "dc":
+//            for(String dc: (List<String>)value)
+//            {
+//              String []parts = Strings.getPatterns(dc, "(\\d+)\\s+\"(.*)\"");
+//              skill.m_dcs.add(BaseSkill.DC.PARSER.parse(parts).get());
+//            }
 //            break;
 //
 //          case "worlds":
 //            for(String world : (List<String>)value)
-//              quality.m_worlds.add(world);
+//              skill.m_worlds.add(world);
 //            break;
 //
 //          case "description":
-//            quality.m_description = ((Text)value).getValue().replace("\"", "");
+//            skill.m_description = ((Text)value).getValue().replace("\"", "");
 //            break;
 //
 //

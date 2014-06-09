@@ -114,37 +114,37 @@ public class BaseSkill extends BaseEntry
     new BaseType<BaseSkill>(BaseSkill.class);
 
   /** The base ability for this skill. */
-  protected BaseMonster.Ability m_ability = BaseMonster.Ability.UNKNOWN;
+  public BaseMonster.Ability m_ability = BaseMonster.Ability.UNKNOWN;
 
   /** The check to make. */
-  protected Optional<String> m_check = Optional.absent();
+  public Optional<String> m_check = Optional.absent();
 
   /** The action that can be done. */
-  protected Optional<String> m_action = Optional.absent();
+  public Optional<String> m_action = Optional.absent();
 
   /** Can it be tried again. */
-  protected Optional<String> m_retry = Optional.absent();
+  public Optional<String> m_retry = Optional.absent();
 
   /** The special remarks. */
-  protected Optional<String> m_special = Optional.absent();
+  public Optional<String> m_special = Optional.absent();
 
   /** The synergies to other skills. */
-  protected List<String> m_synergies = new ArrayList<String>();
+  public List<String> m_synergies = new ArrayList<String>();
 
   /** The restrictions. */
-  protected Optional<String> m_restriction = Optional.absent();
+  public Optional<String> m_restriction = Optional.absent();
 
   /** What can be done untrained. */
-  protected Optional<String> m_untrained = Optional.absent();
+  public Optional<String> m_untrained = Optional.absent();
 
   /** Restrictions when using the skill. */
-  protected List<SkillRestriction> m_restrictions = new ArrayList<>();
+  public List<SkillRestriction> m_restrictions = new ArrayList<>();
 
   /** A list of special modifiers to recognize. */
-  protected List<SkillModifier> m_modifiers = new ArrayList<>();
+  public List<SkillModifier> m_modifiers = new ArrayList<>();
 
   /** Various DCs for this skill. */
-  protected List<DC> m_dcs = new ArrayList<>();
+  public List<DC> m_dcs = new ArrayList<>();
 
   /**
    * Get the index of the skills base ability.
@@ -196,9 +196,19 @@ public class BaseSkill extends BaseEntry
     return m_restrictions;
   }
 
+  public List<SkillModifier> getModifiers()
+  {
+    return m_modifiers;
+  }
+
   public List<DC> getDCs()
   {
     return m_dcs;
+  }
+
+  public List<String> getModifierNames()
+  {
+    return SkillModifier.names();
   }
 
   @Override
@@ -257,8 +267,8 @@ public class BaseSkill extends BaseEntry
     m_untrained = inValues.use("untrained", m_untrained);
     m_restrictions= inValues.use("restrictions", m_restrictions,
                                  SkillRestriction.PARSER);
-    m_modifiers = inValues.use("modifiers", m_modifiers, SkillModifier.PARSER);
-    m_dcs = inValues.use("dcs", m_dcs, DC.PARSER);
+    m_modifiers = inValues.use("modifier", m_modifiers, SkillModifier.PARSER);
+    m_dcs = inValues.use("dcs", m_dcs, DC.PARSER, "dc", "text");
   }
 
   @Override

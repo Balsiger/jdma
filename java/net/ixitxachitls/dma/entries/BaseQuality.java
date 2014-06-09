@@ -75,13 +75,13 @@ public class BaseQuality extends BaseEntry
     .withLink("quality", "qualities");
 
   /** The type of the effect. */
-  public EffectType m_qualityType = EffectType.UNKNOWN;
+  private EffectType m_qualityType = EffectType.UNKNOWN;
 
   /** The effects of the feat. */
-  public List<Effect> m_effects = new ArrayList<>();
+  private List<Effect> m_effects = new ArrayList<>();
 
   /** The name qualifier, if any. */
-  public Optional<String> m_qualifier = Optional.absent();
+  private Optional<String> m_qualifier = Optional.absent();
 
   public EffectType getQualityType()
   {
