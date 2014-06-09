@@ -145,25 +145,25 @@ public class BaseEntry extends AbstractEntry
     new BaseType<BaseEntry>(BaseEntry.class, "Base Entries");
 
   /** The world. */
-  protected List<String> m_worlds = new ArrayList<>();
+  public List<String> m_worlds = new ArrayList<>();
 
   /** The references for this entry. */
-  protected List<ProductReference> m_references = new ArrayList<>();
+  public List<ProductReference> m_references = new ArrayList<>();
 
   /** The descriptive text for this entry. */
-  protected String m_description = UNDEFINED_STRING;
+  public String m_description = UNDEFINED_STRING;
 
   /** The short description text for this entry. */
-  protected String m_short = UNDEFINED_STRING;
+  public String m_short = UNDEFINED_STRING;
 
   /** The synonyms for this entry. */
-  protected List<String> m_synonyms = new ArrayList<>();
+  public List<String> m_synonyms = new ArrayList<>();
 
   /** The categories. */
-  protected List<String> m_categories = new ArrayList<>();
+  public List<String> m_categories = new ArrayList<>();
 
   /** The information that is incomplete for the entry. */
-  protected String m_incomplete = UNDEFINED_STRING;
+  public String m_incomplete = UNDEFINED_STRING;
 
   /**
    * Get the entry description.

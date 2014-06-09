@@ -223,10 +223,10 @@ public abstract class AbstractEntry extends ValueGroup
   public static final String UNDEFINED_STRING = "";
 
   /** The name of the abstract entry. */
-  protected String m_name = UNDEFINED_STRING;
+  public String m_name = UNDEFINED_STRING;
 
   /** The base entries for this one. */
-  protected List<String> m_base = new ArrayList<>();
+  public List<String> m_base = new ArrayList<>();
 
   /**
    * Get the key uniquely identifying this entry.

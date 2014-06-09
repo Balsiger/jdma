@@ -650,6 +650,107 @@ public class DMADatastore
     if (blob != null)
       entry.parseFrom(blob.getBytes());
 
+//    if(entry instanceof BaseQuality)
+//    {
+//      BaseQuality quality = (BaseQuality)entry;
+//      quality.m_description = "guru guru";
+//      for(Map.Entry<String, Object> property
+//        : inEntity.getProperties().entrySet())
+//      {
+//        String name = m_data.fromPropertyName(property.getKey());
+//        if(name.startsWith(Index.PREFIX) || "change".equals(name)
+//          || "extensions".equals(name) || "proto".equals(name))
+//          continue;
+//
+//        Object value = property.getValue();
+//        if(value == null)
+//          continue;
+//
+//        switch(name)
+//        {
+//          case "name":
+//            quality.m_name = value.toString();
+//            break;
+//
+//          case "base":
+//            for(String base : (List<String>)value)
+//              quality.m_base.add(base);
+//            break;
+//
+//          case "categories":
+//            for(String category : (List<String>)value)
+//              quality.m_categories.add(category);
+//            break;
+//
+//          case "effects":
+//            for(String effect : (List<String>)value)
+//            {
+//              String []parts = Strings.getPatterns
+//                (effect, "(\\w+[ \\w+].*):? ([\\+\\-].*)(?: if \"(.*)\")?");
+//
+//              String affects = parts.length >= 1 ? parts[0] : "";
+//              String modifier = parts.length >= 2 ? parts[1] : "";
+//              String text = parts.length >= 3 ? parts[2] : "";
+//
+//              if (Affects.fromString(affects).isPresent())
+//                quality.m_effects.add(new Effect(Affects.fromString(affects).get(),
+//                                                 Optional.<String>absent(),
+//                                                 NewModifier.PARSER.parse(modifier),
+//                                                 Optional.fromNullable(text)));
+//              else
+//                quality.m_effects.add(new Effect(Affects.UNKNOWN,
+//                                                 Optional.fromNullable(affects),
+//                                                 NewModifier.PARSER.parse(modifier),
+//                                                 Optional.fromNullable(text)));
+//            }
+//            break;
+//
+//          case "incomplete":
+//            quality.m_incomplete = ((Text)value).getValue().replace("\"", "");
+//            break;
+//
+//          case "qualifier":
+//            if(!value.toString().startsWith("$"))
+//              quality.m_qualifier = Optional.of(value.toString());
+//            break;
+//
+//          case "references":
+//            for(String reference : (List<String>)value)
+//              if(ProductReference.PARSER.parse(reference.split(":")).isPresent())
+//                quality.m_references.add
+//                (ProductReference.PARSER.parse(reference.split(":")).get());
+//
+//            break;
+//
+//          case "short_description":
+//            quality.m_short = value.toString().replace("\"", "");
+//            break;
+//
+//          case "synonyms":
+//            for(String synonym : (List<String>)value)
+//              quality.m_synonyms.add(synonym.replace("\"", ""));
+//            break;
+//
+//          case "type":
+//            if(EffectType.fromString(value.toString()).isPresent())
+//              quality.m_qualityType =
+//                EffectType.fromString(value.toString()).get();
+//            break;
+//
+//          case "worlds":
+//            for(String world : (List<String>)value)
+//              quality.m_worlds.add(world);
+//            break;
+//
+//          case "description":
+//            quality.m_description = ((Text)value).getValue().replace("\"", "");
+//            break;
+//
+//
+//        }
+//      }
+//    }
+
     // update any key related value
     EntryKey key = convert(inEntity.getKey());
     entry.updateKey(key);

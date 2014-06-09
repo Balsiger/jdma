@@ -19,14 +19,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
@@ -37,406 +35,99 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
-import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.EnumSelection;
-import net.ixitxachitls.dma.values.Expression;
-import net.ixitxachitls.dma.values.Modifier;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Parameters;
-import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.dma.values.conditions.Condition;
+import net.ixitxachitls.dma.values.NewModifier;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is the basic jDMA base quality.
  *
  * @file          BaseQuality.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class BaseQuality extends BaseEntry
 {
-  //----------------------------------------------------------------- nested
-
-  //----- effect types -----------------------------------------------------
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
-  /** The possible spell components (cf. PHB 174). */
-  public enum EffectType implements EnumSelection.Named, EnumSelection.Short
-  {
-    /** Extraordinary effects. */
-    EXTRAORDINARY("Extraordinary", "Ex", BaseQualityProto.Type.EXTRAORDINARY),
-
-    /** Spell like effects. */
-    SPELL_LIKE("Spell-like", "Sp", BaseQualityProto.Type.SPELL_LIKE),
-
-    /** Supernatural effects. */
-    SUPERNATURAL("Supernatural", "Su", BaseQualityProto.Type.SUPERNATURAL);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The value's short name. */
-    private String m_short;
-
-    /** The enum proto value. */
-    private BaseQualityProto.Type m_proto;
-
-    /** Create the effect type.
-     *
-     * @param inName      the name of the value
-     * @param inShort     the short name of the value
-     * @param inProto     the proto enum value
-     */
-    private EffectType(String inName, String inShort,
-                       BaseQualityProto.Type inProto)
-    {
-      m_name = constant("type", inName);
-      m_short = constant("type.short", inShort);
-      m_proto = inProto;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    /** Get the short name of the value.
-     *
-     * @return the short name of the value
-     *
-     */
-    @Override
-    public String getShort()
-    {
-      return m_short;
-    }
-
-    /**
-     * Get the proto value for this value.
-     *
-     * @return the proto enum value
-     */
-    public BaseQualityProto.Type getProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the group matching the given proto value.
-     *
-     * @param  inProto     the proto value to look for
-     * @return the matched enum (will throw exception if not found)
-     */
-    public static EffectType fromProto(BaseQualityProto.Type inProto)
-    {
-      for(EffectType type : values())
-        if(type.m_proto == inProto)
-          return type;
-
-      throw new IllegalStateException("invalid proto type: " + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- affects ----------------------------------------------------------
-
-  /** The possible affects in the game. */
-  public enum Affects implements EnumSelection.Named, EnumSelection.Short
-  {
-    /** The fortitude save. */
-    FORTITUDE_SAVE("Fortitude Save", "Fort",
-                   BaseQualityProto.Effect.Affects.FORTITUDE_SAVE),
-
-    /** The reflex save. */
-    REFLEX_SAVE("Reflex Save", "Ref",
-                BaseQualityProto.Effect.Affects.REFLEX_SAVE),
-
-    /** The will save. */
-    WILL_SAVE("Will Save", "Will", BaseQualityProto.Effect.Affects.WILL_SAVE),
-
-    /** The skill. */
-    SKILL("Skill", "Skill", BaseQualityProto.Effect.Affects.SKILL),
-
-    /** A grapple modifier. */
-    GRAPPLE("Grapple", "Grp", BaseQualityProto.Effect.Affects.GRAPPLE),
-
-    /** An initiative modifier. */
-    INIT("Initiative", "Init", BaseQualityProto.Effect.Affects.INIT),
-
-    /** A modifier to the armor class. */
-    AC("Armor Class", "AC", BaseQualityProto.Effect.Affects.AC),
-
-    /** A modifier to the attack roll. */
-    ATTACK("Attack", "Atk", BaseQualityProto.Effect.Affects.ATTACK),
-
-    /** A modifier to damage. */
-    DAMAGE("Damage", "Dmg", BaseQualityProto.Effect.Affects.DAMAGE),
-
-    /** A modifier to Speed. */
-    SPEED("Speed", "Spd", BaseQualityProto.Effect.Affects.SPEED),
-
-    /** A modifier to the hit points. */
-    HP("Hit Points", "HP", BaseQualityProto.Effect.Affects.HP),
-
-    /** A modifier to strength. */
-    STRENGTH("Strength", "Str", BaseQualityProto.Effect.Affects.STRENGTH),
-
-    /** A modifier to dexterity. */
-    DEXTERITY("Dexterity", "Dex", BaseQualityProto.Effect.Affects.DEXTERITY),
-
-    /** A modifier to constitution. */
-    CONSTITUTION("Constitution", "Con",
-                 BaseQualityProto.Effect.Affects.CONSTITUTION),
-
-    /** A modifier to intelligence. */
-    INTELLIGENCE("Intelligence", "Int",
-                 BaseQualityProto.Effect.Affects.INTELLIGENCE),
-
-    /** A modifier to wisdom. */
-    WISDOM("Wisdom", "Wis", BaseQualityProto.Effect.Affects.WISDOM),
-
-    /** A modifier to strength. */
-    CHARISMA("Charisma", "Cha", BaseQualityProto.Effect.Affects.CHARISMA);
-
-    /** The value's name. */
-    private final String m_name;
-
-    /** The value's short name. */
-    private final String m_short;
-
-    /** The proto enum value. */
-    private final BaseQualityProto.Effect.Affects m_proto;
-
-    /** Create the name.
-     *
-     * @param inName      the name of the value
-     * @param inShort     the short name of the value
-     * @param inProto     the prot enum value
-     */
-    private Affects(String inName, String inShort,
-                    BaseQualityProto.Effect.Affects inProto)
-    {
-      m_name = constant("affects", inName);
-      m_short = constant("affects.short", inShort);
-      m_proto = inProto;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    /** Get the short name of the value.
-     *
-     * @return the short name of the value
-     *
-     */
-    @Override
-    public String getShort()
-    {
-      return m_short;
-    }
-
-    /**
-     * Get the proto value for this value.
-     *
-     * @return the proto enum value
-     */
-    public BaseQualityProto.Effect.Affects getProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the group matching the given proto value.
-     *
-     * @param  inProto     the proto value to look for
-     * @return the matched enum (will throw exception if not found)
-     */
-    public static Affects fromProto(BaseQualityProto.Effect.Affects inProto)
-    {
-      for(Affects affects : values())
-        if(affects.m_proto == inProto)
-          return affects;
-
-      throw new IllegalStateException("invalid proto affects: " + inProto);
-    }
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- BaseQuality ------------------------------
-
   /**
    * This is the internal, default constructor for an undefined value.
-   *
    */
   protected BaseQuality()
   {
     super(TYPE);
   }
 
-  //........................................................................
-  //----------------------------- BaseQuality ------------------------------
-
   /**
    * This is the normal constructor.
    *
    * @param       inName the name of the base item
-   *
    */
   public BaseQuality(String inName)
   {
     super(inName, TYPE);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The type of this entry. */
   public static final BaseType<BaseQuality> TYPE =
     new BaseType<BaseQuality>(BaseQuality.class, "Base Qualities")
     .withLink("quality", "qualities");
 
-  //----- type -------------------------------------------------------------
-
   /** The type of the effect. */
-  @Key("type")
-  protected EnumSelection<EffectType> m_qualityType =
-    new EnumSelection<EffectType>(EffectType.class);
-
-  static
-  {
-    addIndex(new Index(Index.Path.EFFECT_TYPES, "Type", TYPE));
-  }
-
-  //........................................................................
-  //----- effects ----------------------------------------------------------
+  public EffectType m_qualityType = EffectType.UNKNOWN;
 
   /** The effects of the feat. */
-  @Key("effects")
-  protected ValueList<Multiple> m_effects =
-    new ValueList<Multiple>(", ", new Multiple(new Multiple.Element []
-      { new Multiple.Element(new EnumSelection<Affects>(Affects.class), false),
-        new Multiple.Element(new Name(), true),
-        new Multiple.Element(new Modifier(), true, ": ", null),
-        new Multiple.Element(new Text(), true, " = ", null),
-      }));
-
-  static
-  {
-    addIndex(new Index(Index.Path.AFFECTS, "Affects", TYPE));
-    addIndex(new Index(Index.Path.MODIFIERS, "Modifiers", TYPE));
-  }
-
-  //........................................................................
-  //----- qualifier --------------------------------------------------------
+  public List<Effect> m_effects = new ArrayList<>();
 
   /** The name qualifier, if any. */
-  @Key("qualifier")
-  protected Name m_qualifier = new Name();
+  public Optional<String> m_qualifier = Optional.absent();
 
-  //........................................................................
-
-  static
+  public EffectType getQualityType()
   {
-    extractVariables(BaseQuality.class);
+    return m_qualityType;
   }
 
-  //----- special indexes --------------------------------------------------
-
-  static
+  public List<Effect> getEffects()
   {
-    addIndex(new Index(Index.Path.WORLDS, "Worlds", TYPE));
-    addIndex(new Index(Index.Path.REFERENCES, "References", TYPE));
-    addIndex(new Index(Index.Path.EXTENSIONS, "Extensions", TYPE));
+    return Collections.unmodifiableList(m_effects);
   }
 
-  //........................................................................
+  public Optional<String> getQualifier()
+  {
+    return m_qualifier;
+  }
 
-  //........................................................................
+  public List<String> getAffectNames()
+  {
+    return Affects.names();
+  }
 
-  //-------------------------------------------------------------- accessors
+  @Override
+  public void set(Values inValues)
+  {
+    super.set(inValues);
 
-  //-------------------------- computeIndexValues --------------------------
+    m_qualityType = inValues.use("quality_type", m_qualityType,
+                                 EffectType.PARSER);
+    m_effects = inValues.use("effect", m_effects, Effect.PARSER,
+                             "affects", "name", "modifier", "text");
+    m_qualifier = inValues.use("qualifier", m_qualifier);
+  }
 
-  /**
+ /**
    * Get all the values for all the indexes.
    *
    * @return      a multi map of values per index name
-   *
    */
   @Override
   public Multimap<Index.Path, String> computeIndexValues()
   {
     Multimap<Index.Path, String> values = super.computeIndexValues();
 
-    values.put(Index.Path.EFFECT_TYPES, m_qualityType.group());
-    for(Multiple effect : m_effects)
-    {
-      values.put(Index.Path.AFFECTS, effect.get(0).toString()
-                 + (effect.get(1).isDefined() ? " " + effect.get(1) : ""));
-      for(String modifier : ((Modifier)effect.get(2)).getBase())
-        values.put(Index.Path.MODIFIERS, modifier);
-    }
+    values.put(Index.Path.EFFECT_TYPES, m_qualityType.toString());
+    for(Effect effect : m_effects)
+      values.put(Index.Path.AFFECTS, effect.getAffects().toString());
 
     return values;
   }
@@ -453,6 +144,7 @@ public class BaseQuality extends BaseEntry
    * @return      the modifier, if any
    *
    */
+  /*
   @SuppressWarnings("unchecked")
   public @Nullable Modifier computeSkillModifier
     (String inName, Parameters inParameters)
@@ -468,6 +160,7 @@ public class BaseQuality extends BaseEntry
 
     return result;
   }
+  */
 
   /**
    * Compute the modifier base on an expression.
@@ -477,6 +170,7 @@ public class BaseQuality extends BaseEntry
    *
    * @return  the modifier with evaluated expressions
    */
+  /*
   private @Nullable Modifier computeModifierExpression
     (Modifier inModifier, Parameters inParameters)
   {
@@ -504,9 +198,7 @@ public class BaseQuality extends BaseEntry
 
     return inModifier.as(next);
   }
-
-  //........................................................................
-  //-------------------------------- collect -------------------------------
+  */
 
   /**
    * Collect a name value.
@@ -518,6 +210,7 @@ public class BaseQuality extends BaseEntry
    * @param       inCondition     the condition for collecting
    * @param       <T>             the type of value collected
    */
+  /*
   @SuppressWarnings("unchecked")
   protected <T extends Value<T>> void
                collect(String inName, Combined<T> ioCombined,
@@ -587,18 +280,13 @@ public class BaseQuality extends BaseEntry
       }
     }
   }
-
-  //........................................................................
-
-  //--------------------------------- isDM ---------------------------------
+  */
 
   /**
    * Check whether the given user is the DM for this entry.
    *
    * @param       inUser the user accessing
-   *
    * @return      true for DM, false for not
-   *
    */
   @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
@@ -609,39 +297,6 @@ public class BaseQuality extends BaseEntry
     return inUser.get().hasAccess(BaseCharacter.Group.DM);
   }
 
-  //........................................................................
-
-  //------------------------------ printCommand ----------------------------
-
-  /**
-   * Print the item to the document, in the general section.
-   *
-   * @param       inDM   true if set for DM, false for player
-   * @param       inEditable true if values are editable, false if not
-   *
-   * @return      the command representing this item in a list
-   *
-   */
-  // public PrintCommand printCommand(boolean inDM, boolean inEditable)
-  // {
-  //   PrintCommand commands = super.printCommand(inDM, inEditable);
-
-  //   commands.type = "quality";
-
-  //   commands.temp = new ArrayList<Object>();
-  //   commands.temp.add(PAGE_COMMAND.transform(new ValueTransformer(commands,
-  //                                                                 inDM)));
-
-  //   return commands;
-  // }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  @SuppressWarnings("unchecked")
   @Override
   public Message toProto()
   {
@@ -649,28 +304,26 @@ public class BaseQuality extends BaseEntry
 
     builder.setBase((BaseEntryProto)super.toProto());
 
-    if(m_qualityType.isDefined())
-      builder.setType(m_qualityType.getSelected().getProto());
+    if(m_qualityType != EffectType.UNKNOWN)
+      builder.setType(m_qualityType.toProto());
 
-    if(m_effects.isDefined())
-      for(Multiple effect : m_effects)
-      {
-        BaseQualityProto.Effect.Builder effectBuilder =
-          BaseQualityProto.Effect.newBuilder();
+    for(Effect effect : m_effects)
+    {
+      BaseQualityProto.Effect.Builder effectBuilder =
+        BaseQualityProto.Effect.newBuilder();
 
-        effectBuilder.setAffects
-          (((EnumSelection<Affects>)effect.get(0)).getSelected().getProto());
-        if(effect.get(1).isDefined())
-          effectBuilder.setReference(((Name)effect.get(1)).get());
-        if(effect.get(2).isDefined())
-          effectBuilder.setModifier(((Modifier)effect.get(2)).toProto());
-        if(effect.get(3).isDefined())
-          effectBuilder.setText(((Text)effect.get(3)).get());
+      effectBuilder.setAffects(effect.getAffects().toProto());
+      if(effect.getName().isPresent())
+        effectBuilder.setReference(effect.getName().get());
+      if(effect.getModifier().isPresent())
+        effectBuilder.setModifier(effect.getModifier().get().toProto());
+      if(effect.getText().isPresent())
+        effectBuilder.setText(effect.getText().get());
 
-        builder.addEffect(effectBuilder.build());
-      }
+      builder.addEffect(effectBuilder.build());
+    }
 
-    if(m_qualifier.isDefined())
+    if(m_qualifier.isPresent())
       builder.setQualifier(m_qualifier.get());
 
     BaseQualityProto proto = builder.build();
@@ -678,7 +331,6 @@ public class BaseQuality extends BaseEntry
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseQualityProto))
@@ -692,37 +344,24 @@ public class BaseQuality extends BaseEntry
     super.fromProto(proto.getBase());
 
     if(proto.hasType())
-      m_qualityType = m_qualityType.as(EffectType.fromProto(proto.getType()));
+      m_qualityType = EffectType.fromProto(proto.getType());
 
-    if(proto.getEffectCount() > 0)
-    {
-      List<Multiple> effects = new ArrayList<>();
-      for(BaseQualityProto.Effect effect : proto.getEffectList())
-      {
-        Multiple multiple = m_effects.createElement();
-        multiple = multiple.as(((EnumSelection<Affects>)multiple.get(0))
-                               .as(Affects.fromProto(effect.getAffects())),
-                               effect.hasReference()
-                               ? ((Name)multiple.get(1))
-                                 .as(effect.getReference())
-                               : multiple.get(1),
-                               effect.hasModifier()
-                               ? ((Modifier)multiple.get(2))
-                                 .fromProto(effect.getModifier())
-                               : multiple.get(2),
-                               effect.hasText()
-                               ? ((Text)multiple.get(3))
-                                 .as(effect.getText())
-                               : multiple.get(3));
+    for(BaseQualityProto.Effect effect : proto.getEffectList())
+      m_effects.add(new Effect
+                    (Affects.fromProto(effect.getAffects()),
+                     effect.hasReference()
+                       ? Optional.of(effect.getReference())
+                       : Optional.<String>absent(),
+                     effect.hasModifier()
+                       ? Optional.of(NewModifier.fromProto
+                                     (effect.getModifier()))
+                       : Optional.<NewModifier>absent(),
+                     effect.hasText()
+                       ? Optional.of(effect.getText())
+                       : Optional.<String>absent()));
 
-        effects.add(multiple);
-      }
-
-      if(proto.hasQualifier())
-        m_qualifier = m_qualifier.as(proto.getQualifier());
-
-      m_effects = m_effects.as(effects);
-    }
+    if(proto.hasQualifier())
+      m_qualifier = Optional.of(proto.getQualifier());
   }
 
   @Override
@@ -738,12 +377,7 @@ public class BaseQuality extends BaseEntry
     }
   }
 
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase

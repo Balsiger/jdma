@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
@@ -36,272 +34,62 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
-import net.ixitxachitls.dma.proto.Values.SharedProto;
-import net.ixitxachitls.dma.proto.Values.SharedProto.SkillSubtype;
-import net.ixitxachitls.dma.values.EnumSelection;
-import net.ixitxachitls.dma.values.FormattedText;
-import net.ixitxachitls.dma.values.LongFormattedText;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Number;
-import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.values.Union;
-import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is the basic jDMA base spell.
  *
  * @file          BaseSkill.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class BaseSkill extends BaseEntry
 {
-  //----------------------------------------------------------------- nested
-
-  //----- subtype ----------------------------------------------------------
-
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
-
-  /** The possible sizes in the game. */
-  public enum Subtype implements EnumSelection.Named,
-    EnumSelection.Proto<SharedProto.SkillSubtype>
+  public static class DC
   {
-    /** Drow religion. */
-    DROW_RELIGION("Drow Religion", SharedProto.SkillSubtype.DROW_RELIGION),
-
-    /** Religion. */
-    RELIGION("Religion", SharedProto.SkillSubtype.RELIGION),
-
-    /** Arcana. */
-    ARCANA("Arcana", SharedProto.SkillSubtype.ARCANA),
-
-    /** Alchemy. */
-    ALCHEMY("Alchemy", SharedProto.SkillSubtype.ALCHEMY),
-
-    /** Any sub type. */
-    ANY_ONE("Any One", SharedProto.SkillSubtype.ANY_ONE);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private SharedProto.SkillSubtype m_proto;
-
-    /** Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inProto      the proto enum value
-     */
-    private Subtype(String inName, SharedProto.SkillSubtype inProto)
+    public DC(int inDC, String inDescription)
     {
-      m_name = constant("skill.subtype", inName);
-      m_proto = inProto;
+      m_dc = inDC;
+      m_description = inDescription;
     }
 
-    @Override
-    public String getName()
+    private final int m_dc;
+    private final String m_description;
+
+    public static final NewValue.Parser<DC> PARSER =
+      new NewValue.Parser<DC>(2)
+      {
+        @Override
+        public Optional<DC> doParse(String inValue, String inText)
+        {
+          try
+          {
+            int value = Integer.parseInt(inValue);
+            return Optional.of(new DC(value, inText));
+          }
+          catch(NumberFormatException e)
+          {
+            return Optional.absent();
+          }
+        }
+      };
+
+    public int getDC()
     {
-      return m_name;
+      return m_dc;
     }
 
-    @Override
-    public String toString()
+    public String getDescription()
     {
-      return m_name;
-    }
-
-    @Override
-    public SkillSubtype toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Convert the given proto to an enum value.
-     *
-     * @param inProto the proto value to convert
-     * @return the corresponding enum value
-     */
-    public static Subtype fromProto(SharedProto.SkillSubtype inProto)
-    {
-      for(Subtype subtype : values())
-        if(subtype.m_proto == inProto)
-          return subtype;
-
-      throw new IllegalArgumentException("cannot convert skill subtype: "
-                                         + inProto);
+      return m_description;
     }
   }
 
-  //........................................................................
-  //----- restrictions -----------------------------------------------------
-
-  /** The possible sizes in the game. */
-  public enum Restrictions implements EnumSelection.Named
-  {
-    /** Trained only. */
-    TRAINED_ONLY("Trained Only", BaseSkillProto.Restriction.TRAINED_ONLY),
-
-    /** Armor check penalty. */
-    ARMOR_CHECK_PENALTY("Armor Check Penalty",
-                        BaseSkillProto.Restriction.ARMOR_CHECK_PENALTY),
-
-    /** Armor check penalty. */
-    SUBTYPE_ONLY("Subtype Only", BaseSkillProto.Restriction.SUBTYPE_ONLY);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The prot enum value. */
-    private BaseSkillProto.Restriction m_proto;
-
-    /** Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inProto      the proto enum value
-     */
-    private Restrictions(String inName, BaseSkillProto.Restriction inProto)
-    {
-      m_name = constant("skill.restrictions", inName);
-      m_proto = inProto;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    /** Get the save as string.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    /**
-     * Get the proto value for this value.
-     *
-     * @return the proto enum value
-     */
-    public BaseSkillProto.Restriction getProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the group matching the given proto value.
-     *
-     * @param  inProto     the proto value to look for
-     * @return the matched enum (will throw exception if not found)
-     */
-    public static Restrictions fromProto(BaseSkillProto.Restriction inProto)
-    {
-      for(Restrictions restriction : values())
-        if(restriction.m_proto == inProto)
-          return restriction;
-
-      throw new IllegalStateException("invalid proto restriction: " + inProto);
-    }
-  };
-
-  //........................................................................
-  //----- modifiers --------------------------------------------------
-
-  /** The possible sizes in the game. */
-  public enum SkillModifier implements EnumSelection.Named
-  {
-    /** The skill is modified by a creatures speed. */
-    SPEED("Speed", BaseSkillProto.Modifier.SPEED),
-
-    /** The skill is modified by a creatures size. */
-    SIZE("Size", BaseSkillProto.Modifier.SIZE);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The prot enum value. */
-    private BaseSkillProto.Modifier m_proto;
-
-    /** Create the name.
-     *
-     * @param inName      the name of the value
-     * @param inProto     the prot enum value
-     */
-    private SkillModifier(String inName, BaseSkillProto.Modifier inProto)
-    {
-      m_name = constant("skill.modifier", inName);
-      m_proto = inProto;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    /**
-     * Get the proto value for this value.
-     *
-     * @return the proto enum value
-     */
-    public BaseSkillProto.Modifier getProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the group matching the given proto value.
-     *
-     * @param  inProto     the proto value to look for
-     * @return the matched enum (will throw exception if not found)
-     */
-    public static SkillModifier fromProto(BaseSkillProto.Modifier inProto)
-    {
-      for(SkillModifier modifier: values())
-        if(modifier.m_proto == inProto)
-          return modifier;
-
-      throw new IllegalStateException("invalid proto modifier: " + inProto);
-    }
-  };
-
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------ BaseSkill -------------------------------
+  /** The serial version id. */
+  private static final long serialVersionUID = 1L;
 
   /**
    * This is the internal, default constructor for an undefined value.
@@ -311,167 +99,108 @@ public class BaseSkill extends BaseEntry
     super(TYPE);
   }
 
-  //........................................................................
-  //------------------------------ BaseSkill -------------------------------
-
   /**
    * This is the normal constructor.
    *
    * @param       inName the name of the base item
-   *
    */
   public BaseSkill(String inName)
   {
     super(inName, TYPE);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The type of this entry. */
   public static final BaseType<BaseSkill> TYPE =
     new BaseType<BaseSkill>(BaseSkill.class);
 
-  //----- ability ----------------------------------------------------------
-
   /** The base ability for this skill. */
-  @Key("ability")
-  protected EnumSelection<BaseMonster.Ability> m_ability =
-    new EnumSelection<BaseMonster.Ability>(BaseMonster.Ability.class);
-
-  static
-  {
-    addIndex(new Index(Index.Path.ABILITIES, "Abilities", TYPE));
-  }
-
-  //........................................................................
-  //----- check ------------------------------------------------------------
+  protected BaseMonster.Ability m_ability = BaseMonster.Ability.UNKNOWN;
 
   /** The check to make. */
-  @Key("check")
-  protected LongFormattedText m_check = new LongFormattedText();
-
-  //........................................................................
-  //----- action -----------------------------------------------------------
+  protected Optional<String> m_check = Optional.absent();
 
   /** The action that can be done. */
-  @Key("action")
-  protected LongFormattedText m_action = new LongFormattedText();
-
-  //........................................................................
-  //----- try again --------------------------------------------------------
+  protected Optional<String> m_action = Optional.absent();
 
   /** Can it be tried again. */
-  @Key("try again")
-  protected LongFormattedText m_retry = new LongFormattedText();
-
-  //........................................................................
-  //----- special ----------------------------------------------------------
+  protected Optional<String> m_retry = Optional.absent();
 
   /** The special remarks. */
-  @Key("special")
-  protected LongFormattedText m_special = new LongFormattedText();
-
-  //........................................................................
-  //----- synergy ----------------------------------------------------------
+  protected Optional<String> m_special = Optional.absent();
 
   /** The synergies to other skills. */
-  @Key("synergy")
-  protected Union m_synergy =
-    new Union(new LongFormattedText(), new ValueList<Name>(", ", new Name()));
-
-  //........................................................................
-  //----- restriction ------------------------------------------------------
+  protected List<String> m_synergies = new ArrayList<String>();
 
   /** The restrictions. */
-  @Key("restriction")
-  protected LongFormattedText m_restriction = new LongFormattedText();
-
-  //........................................................................
-  //----- untrained --------------------------------------------------------
+  protected Optional<String> m_restriction = Optional.absent();
 
   /** What can be done untrained. */
-  @Key("untrained")
-  protected FormattedText m_untrained = new FormattedText();
-
-  //........................................................................
-  //----- restrictions -----------------------------------------------------
+  protected Optional<String> m_untrained = Optional.absent();
 
   /** Restrictions when using the skill. */
-  @Key("restrictions")
-  protected ValueList<EnumSelection<Restrictions>> m_restrictions =
-    new ValueList<EnumSelection<Restrictions>>
-    (new EnumSelection<Restrictions>(Restrictions.class), ", ");
-
-  static
-  {
-    addIndex(new Index(Index.Path.RESTRICTIONS, "Restrictions", TYPE));
-  }
-
-  //........................................................................
-  //----- modifiers --------------------------------------------------------
+  protected List<SkillRestriction> m_restrictions = new ArrayList<>();
 
   /** A list of special modifiers to recognize. */
-  @Key("modifiers")
-  protected ValueList<EnumSelection<SkillModifier>> m_modifiers =
-    new ValueList<EnumSelection<SkillModifier>>
-    (new EnumSelection<SkillModifier>(SkillModifier.class), ", ");
-
-  static
-  {
-    addIndex(new Index(Index.Path.MODIFIERS, "Modifiers", TYPE));
-  }
-
-  //........................................................................
-  //----- dc ---------------------------------------------------------------
+  protected List<SkillModifier> m_modifiers = new ArrayList<>();
 
   /** Various DCs for this skill. */
-  @Key("dc")
-  protected ValueList<Multiple> m_dcs =
-    new ValueList<Multiple>
-    (", ", new Multiple(new Multiple.Element(new Number(1, 100), false),
-                        new Multiple.Element(new Text(), false)));
-
-  //........................................................................
-
-  static
-  {
-    extractVariables(BaseSkill.class);
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------ getAbility ------------------------------
+  protected List<DC> m_dcs = new ArrayList<>();
 
   /**
    * Get the index of the skills base ability.
    *
    * @return      the base ability of the skill.
-   *
    */
   public BaseMonster.Ability getAbility()
   {
-    return m_ability.getSelected();
+    return m_ability;
   }
 
-  //........................................................................
-  //--------------------------------- isDM ---------------------------------
+  public Optional<String> getCheck()
+  {
+    return m_check;
+  }
 
-  /**
-   * Check whether the given user is the DM for this entry.
-   *
-   * @param       inUser the user accessing
-   *
-   * @return      true for DM, false for not
-   *
-   */
+  public Optional<String> getAction()
+  {
+    return m_action;
+  }
+
+  public Optional<String> getRetry()
+  {
+    return m_retry;
+  }
+
+  public Optional<String> getSpecial()
+  {
+    return m_special;
+  }
+
+  public List<String> getSynergies()
+  {
+    return m_synergies;
+  }
+
+  public Optional<String> getRestriction()
+  {
+    return m_restriction;
+  }
+
+  public Optional<String> getUntrained()
+  {
+    return m_untrained;
+  }
+
+  public List<SkillRestriction> getRestrictions()
+  {
+    return m_restrictions;
+  }
+
+  public List<DC> getDCs()
+  {
+    return m_dcs;
+  }
+
   @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
   {
@@ -481,10 +210,6 @@ public class BaseSkill extends BaseEntry
     return inUser.get().hasAccess(BaseCharacter.Group.DM);
   }
 
-  //........................................................................
-
-  //----------------------------- isUntrained ------------------------------
-
   /**
    * Check if the skill can be used untrained.
    *
@@ -493,49 +218,49 @@ public class BaseSkill extends BaseEntry
    */
   public boolean isUntrained()
   {
-    for(EnumSelection<Restrictions> value : m_restrictions)
-      if(value.getSelected() == Restrictions.TRAINED_ONLY)
-        return false;
-
-    return true;
+    return !m_restrictions.contains(SkillRestriction.TRAINED_ONLY);
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //-------------------------- computeIndexValues --------------------------
 
   /**
    * Get all the values for all the indexes.
    *
    * @return      a multi map of values per index name
-   *
    */
   @Override
   public Multimap<Index.Path, String> computeIndexValues()
   {
     Multimap<Index.Path, String> values = super.computeIndexValues();
 
-    values.put(Index.Path.ABILITIES, m_ability.group());
+    values.put(Index.Path.ABILITIES, m_ability.toString());
 
-    for(EnumSelection<SkillModifier> modifier : m_modifiers)
-      values.put(Index.Path.MODIFIERS, modifier.group());
+    for(SkillModifier modifier : m_modifiers)
+      values.put(Index.Path.MODIFIERS, modifier.toString());
 
-    for(EnumSelection<Restrictions> restriction : m_restrictions)
-      values.put(Index.Path.MODIFIERS, restriction.group());
+    for(SkillRestriction restriction : m_restrictions)
+      values.put(Index.Path.MODIFIERS, restriction.toString());
 
     return values;
   }
 
-  //........................................................................
+  @Override
+  public void set(Values inValues)
+  {
+    super.set(inValues);
 
-  @SuppressWarnings("unchecked")
+    m_ability = inValues.use("ability", m_ability, BaseMonster.Ability.PARSER);
+    m_check = inValues.use("check", m_check);
+    m_action = inValues.use("action", m_action);
+    m_retry= inValues.use("retry", m_retry);
+    m_special = inValues.use("special", m_special);
+    m_synergies = inValues.use("synergies", m_synergies);
+    m_restriction = inValues.use("restriction", m_restriction);
+    m_untrained = inValues.use("untrained", m_untrained);
+    m_restrictions= inValues.use("restrictions", m_restrictions,
+                                 SkillRestriction.PARSER);
+    m_modifiers = inValues.use("modifiers", m_modifiers, SkillModifier.PARSER);
+    m_dcs = inValues.use("dcs", m_dcs, DC.PARSER);
+  }
+
   @Override
   public Message toProto()
   {
@@ -543,55 +268,47 @@ public class BaseSkill extends BaseEntry
 
     builder.setBase((BaseEntryProto)super.toProto());
 
-    if(m_ability.isDefined())
-      builder.setAbility(m_ability.getSelected().toProto());
+    if(m_ability != BaseMonster.Ability.UNKNOWN)
+      builder.setAbility(m_ability.toProto());
 
-    if(m_check.isDefined())
+    if(m_check.isPresent())
       builder.setCheck(m_check.get());
 
-    if(m_action.isDefined())
+    if(m_action.isPresent())
       builder.setAction(m_action.get());
 
-    if(m_retry.isDefined())
+    if(m_retry.isPresent())
       builder.setRetry(m_retry.get());
 
-    if(m_special.isDefined())
+    if(m_special.isPresent())
       builder.setSpecial(m_special.get());
 
-    if(m_synergy.isDefined())
-      if(m_synergy.getIndex() == 0)
-        builder.setSynergyText(((LongFormattedText)m_synergy.get()).get());
-      else
-        for(Name synergy : (ValueList<Name>)m_synergy.get())
-          builder.addSynergy(synergy.get());
+    for(String synergy : m_synergies)
+      builder.addSynergy(synergy);
 
-    if(m_restriction.isDefined())
+    if(m_restriction.isPresent())
       builder.setRestrictionText(m_restriction.get());
 
-    if(m_untrained.isDefined())
+    if(m_untrained.isPresent())
       builder.setUntrained(m_untrained.get());
 
-    if(m_restrictions.isDefined())
-      for(EnumSelection<Restrictions> restriction : m_restrictions)
-        builder.addRestriction(restriction.getSelected().getProto());
+    for(SkillRestriction restriction : m_restrictions)
+      builder.addRestriction(restriction.toProto());
 
-    if(m_modifiers.isDefined())
-      for(EnumSelection<SkillModifier> modifier : m_modifiers)
-        builder.addModifier(modifier.getSelected().getProto());
+    for(SkillModifier modifier : m_modifiers)
+      builder.addModifier(modifier.toProto());
 
-    if(m_dcs.isDefined())
-      for(Multiple dc : m_dcs)
-        builder.addDc(BaseSkillProto.DC.newBuilder()
-                      .setNumber((int)((Number)dc.get(0)).get())
-                      .setText(((Text)dc.get(1)).get())
-                      .build());
+    for(DC dc : m_dcs)
+      builder.addDc(BaseSkillProto.DC.newBuilder()
+                    .setNumber(dc.getDC())
+                    .setText(dc.getDescription())
+                    .build());
 
     BaseSkillProto proto = builder.build();
     return proto;
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseSkillProto))
@@ -605,75 +322,38 @@ public class BaseSkill extends BaseEntry
     super.fromProto(proto.getBase());
 
     if(proto.hasAbility())
-      m_ability =
-        m_ability.as(BaseMonster.Ability.fromProto(proto.getAbility()));
+      m_ability = BaseMonster.Ability.fromProto(proto.getAbility());
 
     if(proto.hasCheck())
-      m_check = m_check.as(proto.getCheck());
+      m_check = Optional.of(proto.getCheck());
 
     if(proto.hasAction())
-      m_action = m_action.as(proto.getAction());
+      m_action = Optional.of(proto.getAction());
 
     if(proto.hasRetry())
-      m_retry = m_retry.as(proto.getRetry());
+      m_retry = Optional.of(proto.getRetry());
 
     if(proto.hasSpecial())
-      m_special = m_special.as(proto.getSpecial());
+      m_special = Optional.of(proto.getSpecial());
 
-    if(proto.getSynergyCount() > 0)
-    {
-      List<Name> synergies = new ArrayList<>();
 
-      m_synergy =
-        m_synergy.as(1, ((ValueList<Name>)m_synergy.get(1)).as(synergies));
-    }
-    else
-      if(proto.hasSynergyText())
-        m_synergy = m_synergy.as(0, ((LongFormattedText)m_synergy.get(0))
-                                 .as(proto.getSynergyText()));
+    for(String synergy : proto.getSynergyList())
+      m_synergies.add(synergy);
 
     if(proto.hasRestrictionText())
-      m_restriction = m_restriction.as(proto.getRestrictionText());
+      m_restriction = Optional.of(proto.getRestrictionText());
 
     if(proto.hasUntrained())
-      m_untrained = m_untrained.as(proto.getUntrained());
+      m_untrained = Optional.of(proto.getUntrained());
 
-    if(proto.getRestrictionCount() > 0)
-    {
-      List<EnumSelection<Restrictions>> restrictions = new ArrayList<>();
+    for(BaseSkillProto.Restriction restriction : proto.getRestrictionList())
+      m_restrictions.add(SkillRestriction.fromProto(restriction));
 
-      for(BaseSkillProto.Restriction restriction : proto.getRestrictionList())
-        restrictions.add(m_restrictions.createElement()
-                         .as(Restrictions.fromProto(restriction)));
+    for(BaseSkillProto.Modifier modifier : proto.getModifierList())
+      m_modifiers.add(SkillModifier.fromProto(modifier));
 
-      m_restrictions = m_restrictions.as(restrictions);
-    }
-
-    if(proto.getModifierCount() > 0)
-    {
-      List<EnumSelection<SkillModifier>> modifiers = new ArrayList<>();
-
-      for(BaseSkillProto.Modifier modifier : proto.getModifierList())
-        modifiers.add(m_modifiers.createElement()
-                      .as(SkillModifier.fromProto(modifier)));
-
-      m_modifiers = m_modifiers.as(modifiers);
-    }
-
-    if(proto.getDcCount() > 0)
-    {
-      List<Multiple> dcs = new ArrayList<>();
-
-      for(BaseSkillProto.DC dc : proto.getDcList())
-      {
-        Multiple multiple = m_dcs.createElement();
-        multiple = multiple.as(((Number)multiple.get(0)).as(dc.getNumber()),
-                               ((Text)multiple.get(1)).as(dc.getText()));
-        dcs.add(multiple);
-      }
-
-      m_dcs = m_dcs.as(dcs);
-    }
+    for(BaseSkillProto.DC dc : proto.getDcList())
+      m_dcs.add(new DC(dc.getNumber(), dc.getText()));
   }
 
   @Override
@@ -689,9 +369,7 @@ public class BaseSkill extends BaseEntry
     }
   }
 
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
@@ -781,6 +459,4 @@ public class BaseSkill extends BaseEntry
 
     //......................................................................
   }
-
-  //........................................................................
 }

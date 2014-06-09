@@ -37,8 +37,8 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import net.ixitxachitls.dma.entries.BaseSkill;
 import net.ixitxachitls.dma.entries.BaseSpell;
+import net.ixitxachitls.dma.entries.SkillType;
 import net.ixitxachitls.dma.proto.Values.ParametersProto;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
@@ -482,11 +482,11 @@ public class Parameters extends Value<Parameters>
                           .build());
         else if(entry.getValue() instanceof EnumSelection
           && ((EnumSelection)entry.getValue()).getSelected()
-              instanceof BaseSkill.Subtype)
+              instanceof SkillType)
           builder.addSkillSubtype(ParametersProto.SkillSubtype.newBuilder()
                                   .setName(entry.getKey())
                                   .setSkillSubtype
-                                  (((EnumSelection<BaseSkill.Subtype>)
+                                  (((EnumSelection<SkillType>)
                                     entry.getValue()).getSelected().toProto())
                                     .build());
 
@@ -532,9 +532,9 @@ public class Parameters extends Value<Parameters>
                               (spellClass.getSpellClass())));
     for(ParametersProto.SkillSubtype skill : inProto.getSkillSubtypeList())
       params.m_values.put(skill.getName(),
-                          ((EnumSelection<BaseSkill.Subtype>)
+                          ((EnumSelection<SkillType>)
                             params.m_values.get(skill.getName()))
-                          .as(BaseSkill.Subtype.fromProto
+                          .as(SkillType.fromProto
                               (skill.getSkillSubtype())));
 
     return params;

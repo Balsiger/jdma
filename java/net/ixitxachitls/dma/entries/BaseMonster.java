@@ -1634,6 +1634,17 @@ public class BaseMonster extends BaseEntry
     /** The proto enum value. */
     private BaseMonsterProto.Ability m_proto;
 
+    /** The parser for abilities. */
+    public static final NewValue.Parser<Ability> PARSER =
+      new NewValue.Parser<Ability>(1)
+      {
+        @Override
+        public Optional<Ability> doParse(String inValue)
+        {
+          return Ability.fromString(inValue);
+        }
+      };
+
     /** Create the name.
      *
      * @param inName       the name of the value
@@ -2176,8 +2187,8 @@ public class BaseMonster extends BaseEntry
         new Multiple.Element
         (new Reference<BaseSkill>(BaseSkill.TYPE)
          .withParameter("Subtype",
-                        new EnumSelection<BaseSkill.Subtype>
-                        (BaseSkill.Subtype.class), Parameters.Type.UNIQUE),
+                        new EnumSelection<SkillType>
+                        (SkillType.class), Parameters.Type.UNIQUE),
          false),
         new Multiple.Element(new Modifier(0, Modifier.Type.GENERAL)
                              .withEditType("modifier[modifier]"),
@@ -2592,29 +2603,31 @@ public class BaseMonster extends BaseEntry
   {
     super.collect(inName, ioCombined);
 
-    for(Multiple multiple : m_specialQualities)
-    {
-      // TODO: also use base values? See collectedSpecialQualities?
-      Reference<BaseQuality> reference =
-        (Reference<BaseQuality>)multiple.get(0);
-      BaseQuality quality = reference.getEntry();
-
-      if(quality == null)
-        continue;
-
-      Condition<?> condition = (Condition<?>)multiple.get(1);
-      quality.collect(inName, ioCombined, null, reference.getParameters(),
-                      condition.isDefined() ? condition : null);
-    }
-
-    for(Reference<BaseFeat> reference : m_feats)
-    {
-      BaseFeat feat = reference.getEntry();
-      if(feat == null)
-        continue;
-
-      feat.collect(inName, ioCombined, reference.getParameters());
-    }
+//    for(Multiple multiple : m_specialQualities)
+//    {
+//      // TODO: also use base values? See collectedSpecialQualities?
+//      Reference<BaseQuality> reference =
+//        (Reference<BaseQuality>)multiple.get(0);
+//      BaseQuality quality = reference.getEntry();
+//
+//      if(quality == null)
+//        continue;
+//
+//      /*
+//      Condition<?> condition = (Condition<?>)multiple.get(1);
+//      quality.collect(inName, ioCombined, null, reference.getParameters(),
+//                      condition.isDefined() ? condition : null);
+//                      */
+//    }
+//
+//    for(Reference<BaseFeat> reference : m_feats)
+//    {
+//      BaseFeat feat = reference.getEntry();
+//      if(feat == null)
+//        continue;
+//
+//      feat.collect(inName, ioCombined, reference.getParameters());
+//    }
 
     if("level".equals(inName))
     {

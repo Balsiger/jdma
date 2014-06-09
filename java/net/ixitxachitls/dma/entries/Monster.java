@@ -763,8 +763,8 @@ public class Monster extends CampaignEntry
       {
         new Multiple.Element
         (new Reference<BaseSkill>(BaseSkill.TYPE)
-         .withParameter("Subtype", new EnumSelection<BaseSkill.Subtype>
-                        (BaseSkill.Subtype.class), Parameters.Type.UNIQUE),
+         .withParameter("Subtype", new EnumSelection<SkillType>
+                        (SkillType.class), Parameters.Type.UNIQUE),
          false),
         new Multiple.Element(new Number(0, 100, true)
                              .withEditType("number[modifier]"),
@@ -1966,14 +1966,14 @@ public class Monster extends CampaignEntry
         item.collect(inName, ioCombined);
       }
 
-    for(Reference<BaseFeat> reference : m_feats)
-    {
-      BaseFeat feat = reference.getEntry();
-      if(feat == null)
-        continue;
-
-      feat.collect(inName, ioCombined, reference.getParameters());
-    }
+//    for(Reference<BaseFeat> reference : m_feats)
+//    {
+//      BaseFeat feat = reference.getEntry();
+//      if(feat == null)
+//        continue;
+//
+//      feat.collect(inName, ioCombined, reference.getParameters());
+//    }
 
     if("hit dice".equals(inName))
     {

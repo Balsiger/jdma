@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
@@ -33,254 +31,100 @@ import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.entries.BaseQuality.Affects;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
-import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.EnumSelection;
-import net.ixitxachitls.dma.values.Expression;
-import net.ixitxachitls.dma.values.FormattedText;
-import net.ixitxachitls.dma.values.LongFormattedText;
-import net.ixitxachitls.dma.values.Modifier;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Parameters;
-import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.dma.values.NewModifier;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is the basic jDMA base spell.
  *
  * @file          BaseFeat.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class BaseFeat extends BaseEntry
 {
-  //----------------------------------------------------------------- nested
-
-  //----- type -------------------------------------------------------------
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
-  /** The possible areas to affect (cf. PHB 175). */
-  public enum Type implements EnumSelection.Named
-  {
-    /** A general feat. */
-    GENERAL("General", BaseFeatProto.Type.GENERAL),
-
-    /** An item creation feat. */
-    ITEM_CREATION("Item Creation", BaseFeatProto.Type.ITEM_CREATION),
-
-    /** A metamagic feat. */
-    METAMAGIC("Metamagic", BaseFeatProto.Type.METAMAGIC),
-
-    /** A regional feat. */
-    REGIONAL("Regional", BaseFeatProto.Type.REGIONAL),
-
-    /** A special feat. */
-    SPECIAL("Special", BaseFeatProto.Type.SPECIAL),
-
-    /** A fighter feat. */
-    FIGHTER("Fighter", BaseFeatProto.Type.FIGHTER);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseFeatProto.Type m_proto;
-
-    /** Create the name.
-     *
-     * @param inName     the name of the value
-     * @param inProto    the proto enum value
-     *
-     */
-    private Type(String inName, BaseFeatProto.Type inProto)
-    {
-      m_name = constant("feat.type", inName);
-      m_proto = inProto;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    /**
-     * Get the proto value for this value.
-     *
-     * @return the proto enum value
-     */
-    public BaseFeatProto.Type getProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the group matching the given proto value.
-     *
-     * @param  inProto     the proto value to look for
-     * @return the matched enum (will throw exception if not found)
-     */
-    public static Type fromProto(BaseFeatProto.Type inProto)
-    {
-      for(Type type: values())
-        if(type.m_proto == inProto)
-          return type;
-
-      throw new IllegalStateException("invalid proto type: " + inProto);
-    }
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------- BaseFeat -------------------------------
-
   /**
     * This is the internal, default constructor for an undefined value.
-    *
     */
   protected BaseFeat()
   {
     super(TYPE);
   }
 
-  //........................................................................
-  //------------------------------- BaseFeat -------------------------------
-
   /**
     * This is the normal constructor.
     *
     * @param       inName the name of the base item
-    *
     */
   public BaseFeat(String inName)
   {
     super(inName, TYPE);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The type of this entry. */
   public static final BaseType<BaseFeat> TYPE =
     new BaseType<BaseFeat>(BaseFeat.class);
 
-  //----- type -------------------------------------------------------------
-
   /** The type of the feat. */
-  @Key("type")
-  protected EnumSelection<Type> m_featType =
-    new EnumSelection<Type>(Type.class);
-
-  static
-  {
-    addIndex(new Index(Index.Path.TYPES, "Types", TYPE));
-  }
-
-  //........................................................................
-  //----- benefit ----------------------------------------------------------
+  protected FeatType m_featType = FeatType.UNKNOWN;
 
   /** The benefits. */
-  @Key("benefit")
-  protected LongFormattedText m_benefit = new LongFormattedText();
-
-  //........................................................................
-  //----- special ----------------------------------------------------------
+  protected Optional<String> m_benefit = Optional.absent();
 
   /** The special remarks. */
-  @Key("special")
-  protected LongFormattedText m_special = new LongFormattedText();
-
-  //........................................................................
-  //----- normal -----------------------------------------------------------
+  protected Optional<String> m_special = Optional.absent();
 
   /** The special remarks. */
-  @Key("normal")
-  protected FormattedText m_normal = new FormattedText();
-
-  //........................................................................
-  //----- prerequisites ----------------------------------------------------
+  protected Optional<String> m_normal = Optional.absent();
 
   /** The prerequisites. */
-  @Key("prerequisites")
-  protected LongFormattedText m_prerequisites =
-    new LongFormattedText();
-
-  //........................................................................
-  //----- effects ----------------------------------------------------------
+  protected Optional<String> m_prerequisites = Optional.absent();
 
   /** The effects of the feat. */
-  @Key("effects")
-  protected ValueList<Multiple> m_effects =
-    new ValueList<Multiple>(", ", new Multiple(new Multiple.Element []
-      { new Multiple.Element(new EnumSelection<BaseQuality.Affects>
-                             (BaseQuality.Affects.class), false),
-        new Multiple.Element(new Name(), true),
-        new Multiple.Element(new Modifier(), true, ": ", null),
-      }));
+  protected List<Effect> m_effects = new ArrayList<>();
 
-  //........................................................................
-
-  static
+  public FeatType getFeatType()
   {
-    extractVariables(BaseFeat.class);
+    return m_featType;
   }
 
-  //----- special indexes --------------------------------------------------
-
-  static
+  public Optional<String> getBenefit()
   {
-    addIndex(new Index(Index.Path.WORLDS, "Worlds", TYPE));
-    addIndex(new Index(Index.Path.REFERENCES, "References", TYPE));
-    addIndex(new Index(Index.Path.EXTENSIONS, "Extensions", TYPE));
+    return m_benefit;
   }
 
-  //........................................................................
+  public Optional<String> getSpecial()
+  {
+    return m_special;
+  }
 
-  //........................................................................
+  public Optional<String> getNormal()
+  {
+    return m_normal;
+  }
 
-  //-------------------------------------------------------------- accessors
+  public Optional<String> getPrerequisites()
+  {
+    return m_prerequisites;
+  }
 
-  //--------------------------------- isDM ---------------------------------
+  public List<Effect> getEffects()
+  {
+    return m_effects;
+  }
+
+  public List<String> getAffectNames()
+  {
+    return Affects.names();
+  }
 
   /**
    * Check whether the given user is the DM for this entry.
@@ -288,7 +132,6 @@ public class BaseFeat extends BaseEntry
    * @param       inUser the user accessing
    *
    * @return      true for DM, false for not
-   *
    */
   @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
@@ -299,27 +142,34 @@ public class BaseFeat extends BaseEntry
     return inUser.get().hasAccess(BaseCharacter.Group.DM);
   }
 
-  //........................................................................
-  //-------------------------- computeIndexValues --------------------------
-
   /**
    * Get all the values for all the indexes.
    *
    * @return      a multi map of values per index name
-   *
    */
   @Override
   public Multimap<Index.Path, String> computeIndexValues()
   {
     Multimap<Index.Path, String> values = super.computeIndexValues();
 
-    values.put(Index.Path.TYPES, m_featType.group());
+    values.put(Index.Path.TYPES, m_featType.toString());
 
     return values;
   }
 
-  //........................................................................
-  //-------------------------------- collect -------------------------------
+  @Override
+  public void set(Values inValues)
+  {
+    super.set(inValues);
+
+    m_featType = inValues.use("feat_type", m_featType, FeatType.PARSER);
+    m_benefit = inValues.use("benefit", m_benefit);
+    m_special = inValues.use("special", m_special);
+    m_normal = inValues.use("normal", m_normal);
+    m_prerequisites = inValues.use("prerequisites", m_prerequisites);
+    m_effects = inValues.use("effect", m_effects, Effect.PARSER,
+                             "affects", "name", "modifier", "text");
+  }
 
   /**
    * Add contributions for this entry to the given list.
@@ -328,6 +178,7 @@ public class BaseFeat extends BaseEntry
    * @param       ioCombined      the combined value to collect into
    * @param       inParameters    parameters to adjust values
    */
+  /*
   public void collect(String inName, Combined<?> ioCombined,
                       Parameters inParameters)
   {
@@ -359,17 +210,8 @@ public class BaseFeat extends BaseEntry
       }
     }
   }
+  */
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  @SuppressWarnings("unchecked")
   @Override
   public Message toProto()
   {
@@ -377,43 +219,40 @@ public class BaseFeat extends BaseEntry
 
     builder.setBase((BaseEntryProto)super.toProto());
 
-    if(m_featType.isDefined())
-      builder.setType(m_featType.getSelected().getProto());
+    if(m_featType != FeatType.UNKNOWN)
+      builder.setType(m_featType.toProto());
 
-    if(m_benefit.isDefined())
+    if(m_benefit.isPresent())
       builder.setBenefit(m_benefit.get());
 
-    if(m_special.isDefined())
+    if(m_special.isPresent())
       builder.setSpecial(m_special.get());
 
-    if(m_normal.isDefined())
+    if(m_normal.isPresent())
       builder.setNormal(m_normal.get());
 
-    if(m_prerequisites.isDefined())
+    if(m_prerequisites.isPresent())
       builder.setPrerequisites(m_prerequisites.get());
 
-    if(m_effects.isDefined())
-      for(Multiple effect : m_effects)
-      {
-        BaseFeatProto.Effect.Builder effectBuilder =
-          BaseFeatProto.Effect.newBuilder();
+    for(Effect effect : m_effects)
+    {
+      BaseFeatProto.Effect.Builder effectBuilder =
+        BaseFeatProto.Effect.newBuilder();
 
-        effectBuilder.setAffects
-          (((EnumSelection<Affects>)effect.get(0)).getSelected().getProto());
-        if(effect.get(1).isDefined())
-          effectBuilder.setReference(((Name)effect.get(1)).get());
-        if(effect.get(2).isDefined())
-          effectBuilder.setModifier(((Modifier)effect.get(2)).toProto());
+      effectBuilder.setAffects(effect.getAffects().toProto());
+      if(effect.getName().isPresent())
+        effectBuilder.setReference(effect.getName().get());
+      if(effect.getModifier().isPresent())
+        effectBuilder.setModifier(effect.getModifier().get().toProto());
 
-        builder.addEffect(effectBuilder.build());
-      }
+      builder.addEffect(effectBuilder.build());
+    }
 
     BaseFeatProto proto = builder.build();
     return proto;
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseFeatProto))
@@ -427,42 +266,30 @@ public class BaseFeat extends BaseEntry
     super.fromProto(proto.getBase());
 
     if(proto.hasType())
-      m_featType = m_featType.as(Type.fromProto(proto.getType()));
+      m_featType = FeatType.fromProto(proto.getType());
 
     if(proto.hasBenefit())
-      m_benefit = m_benefit.as(proto.getBenefit());
+      m_benefit = Optional.of(proto.getBenefit());
 
     if(proto.hasSpecial())
-      m_special = m_special.as(proto.getSpecial());
+      m_special = Optional.of(proto.getSpecial());
 
     if(proto.hasNormal())
-      m_normal = m_normal.as(proto.getNormal());
+      m_normal = Optional.of(proto.getNormal());
 
     if(proto.hasPrerequisites())
-      m_prerequisites = m_prerequisites.as(proto.getPrerequisites());
+      m_prerequisites = Optional.of(proto.getPrerequisites());
 
-    if(proto.getEffectCount() > 0)
-    {
-      List<Multiple> effects = new ArrayList<>();
-      for(BaseFeatProto.Effect effect : proto.getEffectList())
-      {
-        Multiple multiple = m_effects.createElement();
-        multiple = multiple.as(((EnumSelection<Affects>)multiple.get(0))
-                               .as(Affects.fromProto(effect.getAffects())),
+    for(BaseFeatProto.Effect effect : proto.getEffectList())
+      m_effects.add(new Effect(Affects.fromProto(effect.getAffects()),
                                effect.hasReference()
-                               ? ((Name)multiple.get(1))
-                                 .as(effect.getReference())
-                               : multiple.get(1),
+                                 ? Optional.of(effect.getReference())
+                                 : Optional.<String>absent(),
                                effect.hasModifier()
-                               ? ((Modifier)multiple.get(2))
-                                 .fromProto(effect.getModifier())
-                               : multiple.get(2));
-
-        effects.add(multiple);
-      }
-
-      m_effects = m_effects.as(effects);
-    }
+                                 ? Optional.of(NewModifier.fromProto
+                                               (effect.getModifier()))
+                                 : Optional.<NewModifier>absent(),
+                               Optional.<String>absent()));
   }
 
   @Override
@@ -478,9 +305,7 @@ public class BaseFeat extends BaseEntry
     }
   }
 
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
