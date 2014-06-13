@@ -62,7 +62,7 @@ public class NewDistance extends NewValue.Arithmetic<DistanceProto>
                                  + "|ml|mile|miles|ft|feet|foot))");
 
       if(parts.isEmpty())
-        return null;
+        return Optional.absent();
 
       for(String []part : parts)
       {
@@ -232,7 +232,7 @@ public class NewDistance extends NewValue.Arithmetic<DistanceProto>
   public static NewDistance fromProto(DistanceProto inProto)
   {
     if(!inProto.hasImperial())
-      throw new IllegalArgumentException("expected an imperial weight");
+      throw new IllegalArgumentException("expected an imperial distance");
 
     Optional<NewRational> miles = Optional.absent();
     Optional<NewRational> feet = Optional.absent();

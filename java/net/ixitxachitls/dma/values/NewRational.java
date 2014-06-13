@@ -53,7 +53,7 @@ public class NewRational extends NewValue.Arithmetic<RationalProto>
                             "^\\s*(\\d+)?\\s*(?:(\\d+)\\s*/\\s*(\\d+))?$");
 
       if(parts.length != 3)
-        return null;
+        return Optional.absent();
 
       try
       {

@@ -37,8 +37,8 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import net.ixitxachitls.dma.entries.BaseSpell;
 import net.ixitxachitls.dma.entries.SkillType;
+import net.ixitxachitls.dma.entries.SpellClass;
 import net.ixitxachitls.dma.proto.Values.ParametersProto;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
@@ -473,12 +473,12 @@ public class Parameters extends Value<Parameters>
                               .build());
         else if(entry.getValue() instanceof EnumSelection
           && ((EnumSelection)entry.getValue()).getSelected()
-              instanceof BaseSpell.SpellClass)
+              instanceof SpellClass)
           builder.addSpellClass(ParametersProto.SpellClass.newBuilder()
                           .setName(entry.getKey())
                           .setSpellClass
-                          (((EnumSelection<BaseSpell.SpellClass>)
-                            entry.getValue()).getSelected().getProto())
+                          (((EnumSelection<SpellClass>)
+                            entry.getValue()).getSelected().toProto())
                           .build());
         else if(entry.getValue() instanceof EnumSelection
           && ((EnumSelection)entry.getValue()).getSelected()
@@ -526,9 +526,9 @@ public class Parameters extends Value<Parameters>
                           .fromProto(damage.getDamage()));
     for(ParametersProto.SpellClass spellClass : inProto.getSpellClassList())
       params.m_values.put(spellClass.getName(),
-                          ((EnumSelection<BaseSpell.SpellClass>)
+                          ((EnumSelection<SpellClass>)
                             params.m_values.get(spellClass.getName()))
-                          .as(BaseSpell.SpellClass.fromProto
+                          .as(SpellClass.fromProto
                               (spellClass.getSpellClass())));
     for(ParametersProto.SkillSubtype skill : inProto.getSkillSubtypeList())
       params.m_values.put(skill.getName(),

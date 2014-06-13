@@ -61,19 +61,27 @@ public abstract class NewValue<T extends Message>
       if(m_arguments > 0 && inValues.length != m_arguments)
         return Optional.absent();
 
-      if(m_arguments == 1)
-        return doParse(inValues[0]);
+      switch(m_arguments)
+      {
+        case 1:
+          return doParse(inValues[0]);
 
-      if(m_arguments == 2)
-        return doParse(inValues[0], inValues[1]);
+        case 2:
+          return doParse(inValues[0], inValues[1]);
 
-      if(m_arguments == 3)
-        return doParse(inValues[0], inValues[1], inValues[2]);
+        case 3:
+          return doParse(inValues[0], inValues[1], inValues[2]);
 
-      if(m_arguments == 4)
-        return doParse(inValues[0], inValues[1], inValues[2], inValues[3]);
+        case 4:
+          return doParse(inValues[0], inValues[1], inValues[2], inValues[3]);
 
-      return doParse(inValues);
+        case 5:
+          return doParse(inValues[0], inValues[1], inValues[2], inValues[3],
+                         inValues[4]);
+
+        default:
+          return doParse(inValues);
+      }
     }
 
     protected Optional<P> doParse(String inValue)
@@ -94,6 +102,13 @@ public abstract class NewValue<T extends Message>
 
     protected Optional<P> doParse(String inFirst, String inSecond,
                                   String inThird, String inFourth)
+    {
+      return Optional.absent();
+    }
+
+    protected Optional<P> doParse(String inFirst, String inSecond,
+                                  String inThird, String inFourth,
+                                  String inFifth)
     {
       return Optional.absent();
     }

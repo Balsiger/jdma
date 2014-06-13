@@ -310,6 +310,7 @@ public final class Importer
     AbstractType lastType = null;
     for(String file : m_protoFiles)
     {
+      Log.important("Processing file " + file);
       String []parts = file.split("/");
 
       AbstractType type;

@@ -620,6 +620,7 @@ public class DMADatastore
    *
    * @return     the converted entry, if any
    */
+  @SuppressWarnings("unchecked")
   public <T extends AbstractEntry>
   T convert(String inID, AbstractType<T> inType, @Nullable Entity inEntity)
   {
@@ -650,134 +651,201 @@ public class DMADatastore
     if (blob != null)
       entry.parseFrom(blob.getBytes());
 
-//    if(entry instanceof BaseSkill)
-//    {
-//      BaseSkill skill = (BaseSkill)entry;
-//      for(Map.Entry<String, Object> property
-//        : inEntity.getProperties().entrySet())
-//      {
-//        String name = m_data.fromPropertyName(property.getKey());
-//        if(name.startsWith(Index.PREFIX) || "change".equals(name)
-//          || "extensions".equals(name) || "proto".equals(name))
-//          continue;
-//
-//        Object value = property.getValue();
-//        if(value == null)
-//          continue;
-//
-//        switch(name)
-//        {
-//          case "name":
-//            skill.m_name = value.toString();
-//            break;
-//
-//          case "base":
-//            for(String base : (List<String>)value)
-//              skill.m_base.add(base);
-//            break;
-//
-//          case "categories":
-//            for(String category : (List<String>)value)
-//              skill.m_categories.add(category);
-//            break;
-//
-//          case "incomplete":
-//            skill.m_incomplete = ((Text)value).getValue().replace("\"", "");
-//            break;
-//
-//          case "check":
-//            if(!value.toString().startsWith("$"))
-//              skill.m_check = Optional.of(((Text)value).getValue().replace("\"", ""));
-//            break;
-//
-//          case "action":
-//            if(!value.toString().startsWith("$"))
-//              skill.m_action = Optional.of(((Text)value).getValue().replace("\"", ""));
-//            break;
-//
-//          case "retry":
-//            if(!value.toString().startsWith("$"))
-//              skill.m_retry = Optional.of(((Text)value).getValue().replace("\"", ""));
-//            break;
-//
-//          case "special":
-//            if(!value.toString().startsWith("$"))
-//              skill.m_special = Optional.of(((Text)value).getValue().replace("\"", ""));
-//            break;
-//
-//          case "restriction":
-//            if(!value.toString().startsWith("$"))
-//              skill.m_restriction = Optional.of(((Text)value).getValue().replace("\"", ""));
-//            break;
-//
-//          case "untrained":
-//            if(!value.toString().startsWith("$"))
-//              skill.m_untrained = Optional.of(value.toString().replace("\"", ""));
-//            break;
-//
-//         case "references":
-//            for(String reference : (List<String>)value)
-//              if(ProductReference.PARSER.parse(reference.split(":")).isPresent())
-//                skill.m_references.add
-//                (ProductReference.PARSER.parse(reference.split(":")).get());
-//
-//            break;
-//
-//          case "short_description":
-//            skill.m_short = value.toString().replace("\"", "");
-//            break;
-//
-//          case "synonyms":
-//            for(String synonym : (List<String>)value)
-//              skill.m_synonyms.add(synonym.replace("\"", ""));
-//            break;
-//
-//          case "synergies":
-//            for(String synergy: (List<String>)value)
-//              skill.m_synergies.add(synergy.replace("\"", ""));
-//            break;
-//
-//          case "ability":
-//            if(BaseMonster.Ability.fromString(value.toString()).isPresent())
-//              skill.m_ability =
-//                BaseMonster.Ability.fromString(value.toString()).get();
-//            break;
-//
-//          case "restrictions":
-//            for(String synergy: (List<String>)value)
-//              if(SkillRestriction.fromString(value.toString()).isPresent())
-//                skill.m_restrictions.add
-//                (SkillRestriction.fromString(value.toString()).get());
-//            break;
-//
-//          case "modifiers":
-//            for(String synergy: (List<String>)value)
-//              if(SkillModifier.fromString(value.toString()).isPresent())
-//                skill.m_modifiers.add
-//                (SkillModifier.fromString(value.toString()).get());
-//            break;
-//
-//          case "dc":
-//            for(String dc: (List<String>)value)
-//            {
-//              String []parts = Strings.getPatterns(dc, "(\\d+)\\s+\"(.*)\"");
-//              skill.m_dcs.add(BaseSkill.DC.PARSER.parse(parts).get());
-//            }
-//            break;
-//
-//          case "worlds":
-//            for(String world : (List<String>)value)
-//              skill.m_worlds.add(world);
-//            break;
-//
-//          case "description":
-//            skill.m_description = ((Text)value).getValue().replace("\"", "");
-//            break;
-//
-//
-//        }
-//      }
-//    }
+    /*
+    if(entry instanceof BaseSpell)
+    {
+      BaseSpell e = (BaseSpell)entry;
+      for(Map.Entry<String, Object> property
+        : inEntity.getProperties().entrySet())
+      {
+        String name = m_data.fromPropertyName(property.getKey());
+        if(name.startsWith(Index.PREFIX) || "change".equals(name)
+          || "extensions".equals(name) || "proto".equals(name))
+          continue;
+
+        Object value = property.getValue();
+        if(value == null)
+          continue;
+
+        switch(name)
+        {
+          case "name":
+            e.m_name = value.toString();
+            break;
+
+          case "base":
+            for(String base : (List<String>)value)
+              e.m_base.add(base);
+            break;
+
+          case "categories":
+            for(String category : (List<String>)value)
+              e.m_categories.add(category);
+            break;
+
+          case "incomplete":
+            e.m_incomplete = ((Text)value).getValue().replace("\"", "");
+            break;
+
+         case "references":
+            for(String reference : (List<String>)value)
+              if(ProductReference.PARSER.parse(reference.split(":")).isPresent())
+                e.m_references.add
+                (ProductReference.PARSER.parse(reference.split(":")).get());
+
+            break;
+
+          case "short_description":
+            e.m_short = value.toString().replace("\"", "");
+            break;
+
+          case "synonyms":
+            for(String synonym : (List<String>)value)
+              e.m_synonyms.add(synonym.replace("\"", ""));
+            break;
+
+          case "worlds":
+            for(String world : (List<String>)value)
+              e.m_worlds.add(world);
+            break;
+
+          case "description":
+            e.m_description = ((Text)value).getValue().replace("\"", "");
+            break;
+
+
+          case "area":
+            if(!value.toString().startsWith("$"))
+              e.m_area = Optional.of(value.toString().replace("\"", ""));
+            break;
+
+          case "casting_time":
+            e.m_castingTime = NewDuration.PARSER.parse(value.toString());
+            break;
+
+          case "components":
+            for(String component: (List<String>)value)
+              e.m_components.add(SpellComponent.fromString(component).get());
+            break;
+
+          case "descriptor":
+            for(String descriptor: (List<String>)value)
+              e.m_descriptors.add(SpellDescriptor.fromString(descriptor).get());
+            break;
+
+          case "duration":
+            if(!"$undefined$".equals(value.toString()))
+            {
+              String []parts = Strings.getPatterns
+                (value.toString(),
+                 "^(.*?)(?:/(.*?))?(?:\\s*\\+(.*?))?(\\s*\\(D\\))?(?:\"(.*)\")?$");
+
+              String first = parts[0]
+                + (parts[1] != null ? "/" + parts[1] : "")
+                + (parts[2] != null ? " + " + parts[2] : "");
+              if(Arrays.asList(BaseSpell.SPELL_DURATIONS).contains(first)
+                || !NewDuration.PARSER.parse(parts[0]).isPresent()
+                || (parts[2] != null && !NewDuration.PARSER.parse(parts[2]).isPresent()))
+                e.m_duration = Optional.of(
+                  new BaseSpell.Duration(first, parts[3] != null,
+                                         Optional.fromNullable(parts[4])));
+              else
+                e.m_duration = Optional.of(
+                new BaseSpell.Duration(NewDuration.PARSER.parse(parts[0]).get(),
+                                       Optional.fromNullable(parts[1]),
+                                       parts[2] != null
+                                       ? NewDuration.PARSER.parse(parts[2])
+                                       : Optional.<NewDuration>absent(),
+                                       parts[3] != null,
+                                       Optional.fromNullable(parts[4])));
+            }
+            break;
+
+          case "effect":
+            if(!"$undefined$".equals(value.toString()))
+            {
+              String []parts = Strings.getPatterns
+                (value.toString(),
+                 "^([^\"]*?)?\\s*(Ray|Spread)?\\s*(?:\"(.*)\")$");
+
+              e.m_effect = Optional.of(new BaseSpell.Effect
+                (NewDistance.PARSER.parse(parts[0]),
+                 SpellEffect.PARSER.parse(parts[1]),
+                 parts[2]));
+            }
+            break;
+
+          case "focus":
+            if(!"$undefined$".equals(value.toString()))
+            {
+              String []parts = Strings.getPatterns
+                (value.toString(), "^(.*):\\s*(.*)$");
+
+              e.m_focus = Optional.of(new BaseSpell.Material
+                (parts[0],
+                 Strings.COMMA_SPLITTER.splitToList(parts[1].replace("\"",  ""))));
+            }
+            break;
+
+          case "level":
+            for(String level: (List<String>)value)
+              e.m_levels.add(new BaseSpell.Level(SpellClass.fromString(level.split(" ")[0]).get(),
+                                                 Integer.parseInt(level.split(" ")[1])));
+            break;
+
+          case "material":
+            for(String material: (List<String>)value)
+            {
+              String []parts = Strings.getPatterns
+                (material, "^(.*):\\s*(.*)$");
+
+              e.m_materials.add(new BaseSpell.Material
+                (parts[0],
+                 Strings.COMMA_SPLITTER.splitToList(parts[1].replace("\"",  ""))));
+            }
+            break;
+
+          case "range":
+            if(SpellRange.fromString(value.toString()).isPresent())
+              e.m_range = SpellRange.fromString(value.toString()).get();
+            break;
+
+          case "saving_throw":
+            if(!value.toString().startsWith("$"))
+              e.m_savingThrow = Optional.of(((Text)value).getValue().replace("\"", ""));
+            break;
+
+          case "school":
+            if(!"$undefined$".equals(value.toString()))
+            {
+              String []parts = Strings.getPatterns
+                (value.toString(), "^(.*?)\\s*(?:\\((.*)\\))?$");
+
+              e.m_school = School.fromString(parts[0]).get();
+              if(parts[1] != null)
+                for(String sub : parts[1].split(",\\s*"))
+                  e.m_subschools.add(Subschool.fromString(sub).get());
+            }
+            break;
+
+          case "spell_resistance":
+            if(!value.toString().startsWith("$"))
+              e.m_resistance = Optional.of(((Text)value).getValue().replace("\"", ""));
+            break;
+
+          case "summary":
+            if(!value.toString().startsWith("$"))
+              e.m_summary = Optional.of(((Text)value).getValue().replace("\"", ""));
+            break;
+
+          case "target":
+            if(!value.toString().startsWith("$"))
+              e.m_target = Optional.of(value.toString().replace("\"", ""));
+            break;
+        }
+      }
+    }
+    */
 
     // update any key related value
     EntryKey key = convert(inEntity.getKey());

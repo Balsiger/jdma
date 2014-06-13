@@ -2169,9 +2169,9 @@ public class Monster extends CampaignEntry
    * @return      the spellcasting class
    *
    */
-  public BaseSpell.SpellClass getSpellClass()
+  public SpellClass getSpellClass()
   {
-    return BaseSpell.SpellClass.SORCERER;
+    return SpellClass.SORCERER;
   }
 
   //........................................................................
@@ -2189,9 +2189,9 @@ public class Monster extends CampaignEntry
   public int getSpellAbilityModifier(@Nullable Value<?> inClassParam)
   {
     BaseMonster.Ability ability;
-    BaseSpell.SpellClass spellClass;
+    SpellClass spellClass;
     if(inClassParam != null && inClassParam.isDefined())
-      spellClass = ((EnumSelection<BaseSpell.SpellClass>)inClassParam)
+      spellClass = ((EnumSelection<SpellClass>)inClassParam)
       .getSelected();
     else
       spellClass = getSpellClass();

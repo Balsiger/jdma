@@ -19,947 +19,287 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.proto.Values.SharedProto;
-import net.ixitxachitls.dma.values.Distance;
-import net.ixitxachitls.dma.values.Duration;
-import net.ixitxachitls.dma.values.EnumSelection;
-import net.ixitxachitls.dma.values.LongFormattedText;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Number;
-import net.ixitxachitls.dma.values.Parameters;
-import net.ixitxachitls.dma.values.Selection;
-import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.values.Union;
-import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.dma.values.NewDistance;
+import net.ixitxachitls.dma.values.NewDuration;
+import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * This is the basic jDMA base spell.
  *
  * @file          BaseSpell.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class BaseSpell extends BaseEntry
 {
-  //----------------------------------------------------------------- nested
-
-  //----- schools ----------------------------------------------------------
-
-  /** The possible spell schools (cf. PHB 172/173). */
-  public enum School implements EnumSelection.Named, EnumSelection.Short
+  public static class Level
   {
-    /** Abjuration. */
-    ABJURATION("Abjuration", "Abjur", BaseSpellProto.School.ABJURATION),
-
-    /** Conjuration. */
-    CONJURATION("Conjuration", "Conj", BaseSpellProto.School.CONJURATION),
-
-    /** Divination. */
-    DIVINATION("Divination", "Div", BaseSpellProto.School.DIVINATION),
-
-    /** Enchantment. */
-    ENCHANTMENT("Enchantment", "Ench", BaseSpellProto.School.ENCHANTMENT),
-
-    /** Evocation. */
-    EVOCATION("Evocation", "Evoc", BaseSpellProto.School.EVOACATION),
-
-    /** Illusion. */
-    ILLUSION("Illusion", "Illus", BaseSpellProto.School.ILLUSION),
-
-    /** Necromancy. */
-    NECROMANCY("Necromancy", "Necro", BaseSpellProto.School.NECROMANCY),
-
-    /** Transmutation. */
-    TRANSMUTATION("Transmutation", "Trans",
-                  BaseSpellProto.School.TRANSMUTATION),
-
-    /** Universal. */
-    UNIVERSAL("Universal", "Univ", BaseSpellProto.School.UNIVERSAL);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseSpellProto.School m_proto;
-
-    /** The value's short name. */
-    private String m_short;
-
-    /** Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inShort      the short name of the value
-     * @param inProto      the proto enum value
-     *
-     */
-    private School(String inName, String inShort, BaseSpellProto.School inProto)
+    public Level(SpellClass inClass, int inLevel)
     {
-      m_name = constant("school.name", inName);
-      m_short = constant("school.short", inShort);
-      m_proto = inProto;
+      m_class = inClass;
+      m_level = inLevel;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
+    private final SpellClass m_class;
+    private final int m_level;
+    public static final NewValue.Parser<Level> PARSER = new NewValue.Parser<Level>(2)
     {
-      return m_name;
+      @Override
+      public Optional<Level> doParse(String inClass, String inLevel)
+      {
+        try
+        {
+          Optional<SpellClass> spellClass = SpellClass.fromString(inClass);
+          if(!spellClass.isPresent())
+            return Optional.absent();
+          int level = Integer.parseInt(inLevel);
+          return Optional.of(new Level(spellClass.get(), level));
+        }
+        catch(NumberFormatException e)
+        {
+          return Optional.absent();
+        }
+      }
+    };
+
+    public SpellClass getSpellClass()
+    {
+      return m_class;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the short name of the value
-     *
-     */
-    @Override
-    public String getShort()
+    public int getLevel()
     {
-      return m_short;
+      return m_level;
     }
 
-    /** Get the save as string.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String toString()
     {
-      return m_name;
-    }
-
-    /**
-     * Get the proto value for this value.
-     *
-     * @return the proto enum value
-     */
-    public BaseSpellProto.School getProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the group matching the given proto value.
-     *
-     * @param  inProto     the proto value to look for
-     * @return the matched enum (will throw exception if not found)
-     */
-    public static School fromProto(BaseSpellProto.School inProto)
-    {
-      for(School school: values())
-        if(school.m_proto == inProto)
-          return school;
-
-      throw new IllegalStateException("invalid proto school: " + inProto);
+      return m_class.getShort() + m_level;
     }
   }
 
-  //........................................................................
-  //----- subschools -------------------------------------------------------
-
-  /** The possible spell schools (cf. PHB 172/173). */
-  public enum Subschool implements EnumSelection.Named
+  public static class Material
   {
-    /** None. */
-    NONE("None", BaseSpellProto.Subschool.NONE),
-
-    /** Calling. */
-    CALLING("Calling", BaseSpellProto.Subschool.CALLING),
-
-    /** Creation or Calling. */
-    CREATION_OR_CALLING("Creation or Calling",
-                        BaseSpellProto.Subschool.CREATION_OR_CALLING),
-
-    /** Creation. */
-    CREATION("Creation", BaseSpellProto.Subschool.CREATION),
-
-    /** Healing. */
-    HEALING("Healing", BaseSpellProto.Subschool.HEALING),
-
-    /** Summoning. */
-    SUMMONING("Summoning", BaseSpellProto.Subschool.SUMMONING),
-
-    /** Teleportation. */
-    TELEPORTATION("Teleportation", BaseSpellProto.Subschool.TELEPORTATION),
-
-    /** Scrying. */
-    SCRYING("Scrying", BaseSpellProto.Subschool.SCRYING),
-
-    /** Charmn. */
-    CHARM("Charm", BaseSpellProto.Subschool.CHARM),
-
-    /** Compulsion. */
-    COMPULSION("Compulsion", BaseSpellProto.Subschool.COMPULSION),
-
-    /** Figment or Glamer. */
-    FIGMENT_OR_GLAMER("Figment or Glamer",
-                      BaseSpellProto.Subschool.FIGMENT_OR_GLAMER),
-
-    /** Figment. */
-    FIGMENT("Figment", BaseSpellProto.Subschool.FIGMENT),
-
-    /** Glamer. */
-    GLAMER("Glamer", BaseSpellProto.Subschool.GLAMER),
-
-    /** Pattern. */
-    PATTERN("Pattern", BaseSpellProto.Subschool.PATTERN),
-
-    /** Phantasm. */
-    PHANTASM("Phantasm", BaseSpellProto.Subschool.PHANTASM),
-
-    /** Shadow. */
-    SHADOW("Shadow", BaseSpellProto.Subschool.SHADOW);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseSpellProto.Subschool m_proto;
-
-    /** Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inProto      the proto enum value
-     *
-     */
-    private Subschool(String inName, BaseSpellProto.Subschool inProto)
+    public Material(String inUse, List<String> inComponents)
     {
-      m_name = constant("subschool.name", inName);
-      m_proto = inProto;
+      m_use = inUse;
+      m_components = inComponents;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
+    private final String m_use;
+    private final List<String> m_components;
+    public static final NewValue.Parser<Material> PARSER =
+      new NewValue.Parser<Material>(2)
+      {
+        @Override
+        public Optional<Material> doParse(String inUse, String inComponents)
+        {
+          return Optional.of(new Material(inUse,
+                                          Strings.COMMA_SPLITTER
+                                          .splitToList(inComponents)));
+        }
+      };
+
+    public String getUse()
     {
-      return m_name;
+      return m_use;
     }
 
-    /** Get the save as string.
-     *
-     * @return the name of the value
-     *
-     */
+    public List<String> getComponents()
+    {
+      return Collections.unmodifiableList(m_components);
+    }
+
+    public String getComponentsString()
+    {
+      return Strings.COMMA_JOINER.join(m_components);
+    }
+
     @Override
     public String toString()
     {
-      return m_name;
-    }
-
-    /**
-     * Get the proto value for this value.
-     *
-     * @return the proto enum value
-     */
-    public BaseSpellProto.Subschool getProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the group matching the given proto value.
-     *
-     * @param  inProto     the proto value to look for
-     * @return the matched enum (will throw exception if not found)
-     */
-    public static Subschool fromProto(BaseSpellProto.Subschool inProto)
-    {
-      for(Subschool subschool: values())
-        if(subschool.m_proto == inProto)
-          return subschool;
-
-      throw new IllegalStateException("invalid proto subschool: " + inProto);
+      return m_use + ": " + Strings.COMMA_JOINER.join(m_components);
     }
   }
 
-  //........................................................................
-  //----- descriptors ------------------------------------------------------
-
-  /** The possible spell descriptors. */
-  public enum Descriptor implements EnumSelection.Named
+  public static class Effect
   {
-    /** Acid. */
-    ACID("Acid", BaseSpellProto.Descriptor.ACID),
-
-    /** Air. */
-    AIR("Air", BaseSpellProto.Descriptor.AIR),
-
-    /** Chaotic. */
-    CHAOTIC("Chaotic", BaseSpellProto.Descriptor.CHAOTIC),
-
-    /** Cold. */
-    COLD("Cold", BaseSpellProto.Descriptor.COLD),
-
-    /** Darkness. */
-    DARKNESS("Darkness", BaseSpellProto.Descriptor.DARKNESS),
-
-    /** Death. */
-    DEATH("Death", BaseSpellProto.Descriptor.DEATH),
-
-    /** Earth. */
-    EARTH("Earth", BaseSpellProto.Descriptor.EARTH),
-
-    /** Electricity. */
-    ELECTRICITY("Electricity", BaseSpellProto.Descriptor.ELECTRICITY),
-
-    /** Evil. */
-    EVIL("Evil", BaseSpellProto.Descriptor.EVIL),
-
-    /** Fear. */
-    FEAR("Fear", BaseSpellProto.Descriptor.FEAR),
-
-    /** Fire or Cold. */
-    FIRE_OR_COLD("Fire or Cold", BaseSpellProto.Descriptor.FIRE_OR_COLD),
-
-    /** Fire. */
-    FIRE("Fire", BaseSpellProto.Descriptor.FIRE),
-
-    /** Force. */
-    FORCE("Force", BaseSpellProto.Descriptor.FORCE),
-
-    /** Good. */
-    GOOD("Good", BaseSpellProto.Descriptor.GOOD),
-
-    /** Language-dependent. */
-    LANGUAGE_DEPENDENT("Language-dependent",
-                       BaseSpellProto.Descriptor.LANGUAGE_DEPENDENT),
-
-    /** Lawful. */
-    LAWFUL("Lawful", BaseSpellProto.Descriptor.LAWFUL),
-
-    /** Light. */
-    LIGHT("Light", BaseSpellProto.Descriptor.LIGHT),
-
-    /** Mind-affecting. */
-    MIND_AFFECTING("Mind-affecting", BaseSpellProto.Descriptor.MIND_AFFECTING),
-
-    /** Scrying. */
-    SCRYING("Scrying", BaseSpellProto.Descriptor.SCRYING_DESCRIPTOR),
-
-    /** Sonic. */
-    SONIC("Sonic", BaseSpellProto.Descriptor.SONIC),
-
-    /** Water. */
-    WATER("Water", BaseSpellProto.Descriptor.WATER),
-
-    /** See Text. */
-    SEE_TEXT("See Text", BaseSpellProto.Descriptor.SEE_TEXT);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseSpellProto.Descriptor m_proto;
-
-    /** The value's short name. */
-    @SuppressWarnings("unused")
-    private String m_short;
-
-    /** Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inProto      the proto enum value
-     *
-     */
-    private Descriptor(String inName, BaseSpellProto.Descriptor inProto)
+    public Effect(Optional<NewDistance> inDistance,
+                  Optional<SpellEffect> inEffect, String inText)
     {
-      m_name = constant("descriptor.name", inName);
-      m_proto = inProto;
+      m_distance = inDistance;
+      m_effect = inEffect;
+      m_text = inText;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
+    private final Optional<NewDistance> m_distance;
+    private final Optional<SpellEffect> m_effect;
+    private final String m_text;
+    public static final NewValue.Parser<Effect> PARSER =
+      new NewValue.Parser<Effect>(3)
+      {
+        @Override
+        public Optional<Effect> doParse(String inDistance, String inEffect,
+                                        String inText)
+        {
+          return Optional.of(new Effect(NewDistance.PARSER.parse(inDistance),
+                                        SpellEffect.fromString(inEffect),
+                                        inText));
+        }
+      };
+
+    public Optional<NewDistance> getDistance()
     {
-      return m_name;
+      return m_distance;
     }
 
-    /** Get the save as string.
-     *
-     * @return the name of the value
-     *
-     */
+    public Optional<SpellEffect> getEffect()
+    {
+      return m_effect;
+    }
+
+    public String getText()
+    {
+      return m_text;
+    }
+
     @Override
     public String toString()
     {
-      return m_name;
-    }
-
-    /**
-     * Get the proto value for this value.
-     *
-     * @return the proto enum value
-     */
-    public BaseSpellProto.Descriptor getProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the group matching the given proto value.
-     *
-     * @param  inProto     the proto value to look for
-     * @return the matched enum (will throw exception if not found)
-     */
-    public static Descriptor fromProto(BaseSpellProto.Descriptor inProto)
-    {
-      for(Descriptor descriptor : values())
-        if(descriptor.m_proto == inProto)
-          return descriptor;
-
-      throw new IllegalStateException("invalid proto descriptor: " + inProto);
+      return (m_distance.isPresent() ? m_distance + " " : "")
+        + (m_effect.isPresent() ? m_effect + " " : "") + m_text;
     }
   }
 
-  //........................................................................
-  //----- spell class ------------------------------------------------------
-
-  /** The possible spell classes. */
-  public enum SpellClass implements EnumSelection.Named, EnumSelection.Short
+  public static class Duration
   {
-    /** Assassin. */
-    ASSASSIN("Assassin", "Asn", SharedProto.SpellClass.ASSASSIN),
-
-    /** Bard. */
-    BARD("Bard", "Brd", SharedProto.SpellClass.BARD),
-
-    /** Clecric. */
-    CLERIC("Cleric", "Clr", SharedProto.SpellClass.CLERIC),
-
-    /** Druid. */
-    DRUID("Druid", "Drd", SharedProto.SpellClass.DRUID),
-
-    /** Paladin. */
-    PALADIN("Paladin", "Pal", SharedProto.SpellClass.PALADIN),
-
-    /** Ranger. */
-    RANGER("Ranger", "Rgr", SharedProto.SpellClass.RANGER),
-
-    /** Sorcerer. */
-    SORCERER("Sorcerer", "Sor", SharedProto.SpellClass.SORCERER),
-
-    /** Wizard. */
-    WIZARD("Wizard", "Wiz", SharedProto.SpellClass.WIZARD),
-
-    /** Air. */
-    AIR("Air", "Air", SharedProto.SpellClass.AIR),
-
-    /** Animal. */
-    ANIMAL("Animal", "Animal", SharedProto.SpellClass.ANIMAL),
-
-    /** Chaos. */
-    CHAOS("Chaos", "Chaos", SharedProto.SpellClass.CHAOS),
-
-    /** Death. */
-    DEATH("Death", "Death", SharedProto.SpellClass.DEATH),
-
-    /** Destruction. */
-    DESTRUCTION("Destruction", "Destruction",
-                SharedProto.SpellClass.DESTRUCTION),
-
-    /** Drow. */
-    DROW("Drow", "Drow", SharedProto.SpellClass.DROW),
-
-    /** Earth. */
-    EARTH("Earth", "Earth", SharedProto.SpellClass.EARTH),
-
-    /** Evil. */
-    EVIL("Evil", "Evil", SharedProto.SpellClass.EVIL),
-
-    /** Fire. */
-    FIRE("Fire", "Fire", SharedProto.SpellClass.FIRE),
-
-    /** Good. */
-    GOOD("Good", "Good", SharedProto.SpellClass.GOOD),
-
-    /** Healing. */
-    HEALING("Healing", "Healing", SharedProto.SpellClass.HEALING),
-
-    /** Knowledge. */
-    KNOWLEDGE("Knowledge", "Knowledge", SharedProto.SpellClass.KNOWLEDGE),
-
-    /** Law. */
-    LAW("Law", "Law", SharedProto.SpellClass.LAW),
-
-    /** Luck. */
-    LUCK("Luck", "Luck", SharedProto.SpellClass.LUCK),
-
-    /** Magic. */
-    MAGIC("Magic", "Magic", SharedProto.SpellClass.MAGIC),
-
-    /** Plant. */
-    PLANT("Plant", "Plant", SharedProto.SpellClass.PLANT),
-
-    /** Protection. */
-    PROTECTION("Protection", "Protection",
-               SharedProto.SpellClass.PROTECTION),
-
-    /** Strength. */
-    STRENGTH("Strength", "Strength", SharedProto.SpellClass.STRENGTH),
-
-    /** Sun. */
-    SUN("Sun", "Sun", SharedProto.SpellClass.SUN),
-
-    /** Travel. */
-    TRAVEL("Travel", "Travel", SharedProto.SpellClass.TRAVEL),
-
-    /** Trickery. */
-    TRICKERY("Trickery", "Trickery", SharedProto.SpellClass.TRICKERY),
-
-    /** War. */
-    WAR("War", "War", SharedProto.SpellClass.WAR),
-
-    /** Water. */
-    Water("Water", "Water", SharedProto.SpellClass.WATER);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private SharedProto.SpellClass m_proto;
-
-    /** The value's short name. */
-    private String m_short;
-
-    /** Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inShort      the short name of the value
-     * @param inProto      the proto enum value
-     *
-     */
-    private SpellClass(String inName, String inShort,
-                       SharedProto.SpellClass inProto)
+    public Duration(String inDuration, boolean inDismissable,
+                    Optional<String> inText)
     {
-      m_name = constant("spellclass.name", inName);
-      m_short = constant("spellclass.short", inShort);
-      m_proto = inProto;
+      m_durationText = Optional.of(inDuration);
+      m_duration = Optional.absent();
+      m_levels = Optional.absent();
+      m_plusDuration = Optional.absent();
+      m_dismissable = inDismissable;
+      m_text = inText;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
+    public Duration(NewDuration inDuration, Optional<String> inLevels,
+                    Optional<NewDuration> inPlusDuration,
+                    boolean inDismissable, Optional<String> inText)
     {
-      return m_name;
+      m_durationText = Optional.absent();
+      m_duration = Optional.of(inDuration);
+      m_levels = inLevels;
+      m_plusDuration = inPlusDuration;
+      m_dismissable = inDismissable;
+      m_text = inText;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the short name of the value
-     *
-     */
-    @Override
-    public String getShort()
+    private final Optional<String> m_durationText;
+    private final Optional<NewDuration> m_duration;
+    private final Optional<String> m_levels;
+    private final Optional<NewDuration> m_plusDuration;
+    private final boolean m_dismissable;
+    private final Optional<String> m_text;
+    public static final NewValue.Parser<Duration> PARSER =
+      new NewValue.Parser<Duration>(5)
+      {
+        @Override
+        public Optional<Duration> doParse(String inDuration, String inLevels,
+                                          String inPlusDuration,
+                                          String inDismissable,
+                                          String inText)
+        {
+          Optional<NewDuration> duration = NewDuration.PARSER.parse(inDuration);
+          if(!duration.isPresent())
+          {
+            return Optional.of(new Duration
+                               (inDuration
+                                + (inLevels.isEmpty() ? "" : "/" + inLevels)
+                                + (inPlusDuration.isEmpty()
+                                   ? "" : " " + inPlusDuration),
+                                   !inDismissable.isEmpty(),
+                                   Optional.fromNullable(inText)));
+          }
+
+          return Optional.of(new Duration
+                             (duration.get(),
+                              Optional.of(inLevels),
+                              NewDuration.PARSER.parse(inPlusDuration),
+                              !inDismissable.isEmpty(), Optional.of(inText)));
+
+        }
+      };
+
+    public Optional<String> getDurationText()
     {
-      return m_short;
+      return m_durationText;
     }
 
-    /** Get the save as string.
-    *
-    * @return the name of the value
-    *
-    */
-   @Override
-   public String toString()
-   {
-     return m_name;
-   }
-
-   /**
-    * Get the proto value for this value.
-    *
-    * @return the proto enum value
-    */
-   public SharedProto.SpellClass getProto()
-   {
-     return m_proto;
-   }
-
-   /**
-    * Get the group matching the given proto value.
-    *
-    * @param  inProto     the proto value to look for
-    * @return the matched enum (will throw exception if not found)
-    */
-   public static SpellClass fromProto(SharedProto.SpellClass inProto)
-   {
-     for(SpellClass spellClass: values())
-       if(spellClass.m_proto == inProto)
-         return spellClass;
-
-     throw new IllegalStateException("invalid proto class: " + inProto);
-   }
-  }
-
-  //........................................................................
-  //----- components -------------------------------------------------------
-
-  /** The possible spell components. */
-  public enum Components implements EnumSelection.Named, EnumSelection.Short
-  {
-    /** Verbose. */
-    VERBOSE("Verbose", "V", BaseSpellProto.Components.VERBOSE),
-
-    /** Somatic. */
-    SOMATIC("Somatic", "S", BaseSpellProto.Components.SOMATIC),
-
-    /** Material/Divine Focus. */
-    MATERIAL_DEVINE_FOCUS("Material/Divine Focus", "M/DF",
-                          BaseSpellProto.Components.MATERIAL_DEVINE_FOCUS),
-
-    /** Material. */
-    MATERIAL("Material", "M", BaseSpellProto.Components.MATERIAL),
-
-    /** Focus/Divine Focus. */
-    FOCUS_DIVINE_FOCUS("Focus/Divine Focus", "F/DF",
-                       BaseSpellProto.Components.FOCUS_DIVINE_FOCUS),
-
-    /** Focus. */
-    FOCUS("Focus", "F", BaseSpellProto.Components.FOCUS),
-
-    /** Divine Focus. */
-    DIVINE_FOCUS("Divine Focus", "DF", BaseSpellProto.Components.DIVINE_FOCUS),
-
-    /** Experience points. */
-    EXPERIENCE_POINTS("Experience Points", "XP",
-                      BaseSpellProto.Components.EXPERIENCE_POINTS);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The value's short name. */
-    private String m_short;
-
-    /** The proto enum value. */
-    private BaseSpellProto.Components m_proto;
-
-    /** Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inShort      the short name of the value
-     * @param inProto      the proto enum value
-     *
-     */
-    private Components(String inName, String inShort,
-                       BaseSpellProto.Components inProto)
+    public Optional<NewDuration> getDuration()
     {
-      m_name = constant("school.name", inName);
-      m_short = constant("school.short", inShort);
-      m_proto = inProto;
+      return m_duration;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
+    public Optional<String> getLevels()
     {
-      return m_name;
+      return m_levels;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the short name of the value
-     *
-     */
-    @Override
-    public String getShort()
+    public Optional<NewDuration> getPlusDuration()
     {
-      return m_short;
+      return m_plusDuration;
     }
 
-    /** Get the save as string.
-     *
-     * @return the name of the value
-     *
-     */
+    public boolean getDismissable()
+    {
+      return m_dismissable;
+    }
+
+    public Optional<String> getText()
+    {
+      return m_text;
+    }
+
     @Override
     public String toString()
     {
-      return m_name;
-    }
+      if(m_durationText.isPresent())
+        return m_durationText.get()
+          + (m_dismissable ? " (D)" : "")
+          + (m_text.isPresent() ? ", " + m_text.get() : "");
 
-    /**
-     * Get the proto value for this value.
-     *
-     * @return the proto enum value
-     */
-    public BaseSpellProto.Components getProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the group matching the given proto value.
-     *
-     * @param  inProto     the proto value to look for
-     * @return the matched enum (will throw exception if not found)
-     */
-    public static Components fromProto(BaseSpellProto.Components inProto)
-    {
-      for(Components components : values())
-        if(components.m_proto == inProto)
-          return components;
-
-      throw new IllegalStateException("invalid proto components: " + inProto);
+      return m_duration.get()
+        + (m_levels.isPresent() ? "/" + m_levels.get() : "")
+        + (m_plusDuration.isPresent() ? " + " + m_plusDuration.get() : "")
+          + (m_dismissable ? " (D)" : "")
+          + (m_text.isPresent() ? ", " + m_text.get() : "");
     }
   }
-
-  //........................................................................
-  //----- range ------------------------------------------------------------
-
-  /** The possible spell ranges. */
-  public enum Range implements EnumSelection.Named
-  {
-    /** Personal or Touch. */
-    PERSONAL_OR_TOUCH("Personal or Touch",
-                      BaseSpellProto.Range.PERSONAL_OR_TOUCH),
-
-    /** Personal and Touch. */
-    PERSONAL_AND_TOUCH("Personal and Touch",
-                       BaseSpellProto.Range.PERSONAL_AND_TOUCH),
-
-    /** Personal or Close. */
-    PERSONAL_OR_CLOSE("Personal or Close",
-                      BaseSpellProto.Range.PERSONAL_OR_CLOSE),
-
-    /** Personal. */
-    PERSONAL("Personal", BaseSpellProto.Range.PERSONAL),
-
-    /** Touch. */
-    TOUCH("Touch", BaseSpellProto.Range.TOUCH),
-
-    /** Close. */
-    CLOSE("Close", BaseSpellProto.Range.CLOSE),
-
-    /** Medium. */
-    MEDIUM("Medium", BaseSpellProto.Range.MEDIUM),
-
-    /** Long. */
-    LONG("Long", BaseSpellProto.Range.LONG),
-
-    /** Unlimited. */
-    UNLIMITED("Unlimited", BaseSpellProto.Range.UNLIMITED),
-
-    /** 40 ft/level. */
-    FOURTY_FEET_PER_LEVEL("40 ft/level",
-                          BaseSpellProto.Range.FOURTY_FEET_PER_LEVEL),
-
-    /** See Text. */
-    SEE_TEXT("See Text", BaseSpellProto.Range.SEE_TEXT_RANGE),
-
-    /** Anywhere within the area to be warded. */
-    ANYWHERE_WITHIN_AREA_WARDED
-      ("Anywhere within the area to be warded",
-       BaseSpellProto.Range.ANYWHERE_WITHIN_AREA_WARDED),
-
-    /** Up to 10 ft/level. */
-    UP_TO_TEN_FEET_PER_LEVEL("Up to 10 ft/level",
-                             BaseSpellProto.Range.UP_TO_TEN_FEE_PER_LEVEL),
-
-    /** 1 mile/level. */
-    ONE_MILE_PER_LEVEL("1 mile/level", BaseSpellProto.Range.ONE_MILE_PER_LEVEL);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The prot enum value. */
-    private BaseSpellProto.Range m_proto;
-
-    /** Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inProto      the proto enum value
-     *
-     */
-    private Range(String inName, BaseSpellProto.Range inProto)
-    {
-      m_name = constant("range.name", inName);
-      m_proto = inProto;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    /** Get the save as string.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    /**
-     * Get the proto value for this value.
-     *
-     * @return the proto enum value
-     */
-    public BaseSpellProto.Range getProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the group matching the given proto value.
-     *
-     * @param  inProto     the proto value to look for
-     * @return the matched enum (will throw exception if not found)
-     */
-    public static Range fromProto(BaseSpellProto.Range inProto)
-    {
-      for(Range range : values())
-        if(range.m_proto == inProto)
-          return range;
-
-      throw new IllegalStateException("invalid proto range: " + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- effect -----------------------------------------------------------
-
-  /** The possible spell ranges. */
-  public enum Effect implements EnumSelection.Named
-  {
-    /** Ray. */
-    RAY("Ray", BaseSpellProto.Effect.Type.RAY),
-
-    /** Spread. */
-    SPREAD("Spread", BaseSpellProto.Effect.Type.SPREAD);
-
-    /** The value's name. */
-    private final String m_name;
-
-    /** The proto enum value. */
-    private final BaseSpellProto.Effect.Type m_proto;
-
-    /** Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inProto      the proto enum value
-     */
-    private Effect(String inName, BaseSpellProto.Effect.Type inProto)
-    {
-      m_name = constant("effect.name", inName);
-      m_proto = inProto;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    /** Get the save as string.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    /**
-     * Get the proto value for this value.
-     *
-     * @return the proto enum value
-     */
-    public BaseSpellProto.Effect.Type getProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the group matching the given proto value.
-     *
-     * @param  inProto     the proto value to look for
-     * @return the matched enum (will throw exception if not found)
-     */
-    public static Effect fromProto(BaseSpellProto.Effect.Type inProto)
-    {
-      for(Effect effect : values())
-        if(effect.m_proto == inProto)
-          return effect;
-
-      throw new IllegalStateException("invalid proto effect: " + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- spell durations --------------------------------------------------
 
   /** The possible spell durations (cf. PHB 176). */
-  static final String []SPELL_DURATIONS =
+  public static final String []SPELL_DURATIONS =
     Config.get("/game/spell.durations", new String []
       {
         "Instantaneous or concentration (up to 1 round/level)",
@@ -1022,9 +362,6 @@ public class BaseSpell extends BaseEntry
         + "reached)",
      });
 
-  //........................................................................
-  //----- levels -----------------------------------------------------------
-
   /** The possible level measurements. */
   static final String []LEVELS =
     Config.get("/game/levels", new String []
@@ -1034,18 +371,12 @@ public class BaseSpell extends BaseEntry
         "3 level",
       });
 
-  //........................................................................
-  //----- spell durations --------------------------------------------------
-
   /** The possible spell duration. */
   static final String []SPELL_DURATION_FLAGS =
     Config.get("/game/spell.duration.flags", new String []
       {
         "(D)",
       });
-
-  //........................................................................
-  //----- saving throws ----------------------------------------------------
 
   /** The possible spell saving throws (PHB p. 176/177). */
   static final String []SAVING_THROWS =
@@ -1103,9 +434,6 @@ public class BaseSpell extends BaseEntry
         "See Text",
       });
 
-  //........................................................................
-  //----- spell resistance -------------------------------------------------
-
   /** The possible spell resistances. */
   static final String []SPELL_RESISTANCES =
     Config.get("/game/spell.resistance", new String []
@@ -1129,25 +457,13 @@ public class BaseSpell extends BaseEntry
         "See Text",
       });
 
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------ BaseSpell -------------------------------
-
   /**
    * This is the internal, default constructor for an undefined value.
-   *
    */
   protected BaseSpell()
   {
     super(TYPE);
   }
-
-  //........................................................................
-  //------------------------------ BaseSpell -------------------------------
 
   /**
    * This is the normal constructor.
@@ -1159,12 +475,6 @@ public class BaseSpell extends BaseEntry
     super(inName, TYPE);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The type of this entry. */
   public static final BaseType<BaseSpell> TYPE =
     new BaseType<BaseSpell>(BaseSpell.class);
@@ -1172,241 +482,166 @@ public class BaseSpell extends BaseEntry
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
-  //----- school -----------------------------------------------------------
+  /** The school of the spell. */
+  protected School m_school = School.UNKNOWN;
 
-  /** The total standard value of the base item. */
-  @Key("school")
-  protected Multiple m_school = new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element(new EnumSelection<School>(School.class), false),
-      new Multiple.Element(new ValueList<EnumSelection<Subschool>>
-                           (new EnumSelection<Subschool>(Subschool.class), ","),
-                           true, " (", ")"),
-    });
-
-  static
-  {
-    addIndex(new Index(Index.Path.SCHOOLS, "Schools", TYPE));
-  }
-
-  //........................................................................
-  //----- summary ----------------------------------------------------------
+  /** The subschools of the spell. */
+  protected List<Subschool> m_subschools = new ArrayList<>();
 
   /** The summary text for the spell. */
-  @Key("summary")
-  protected LongFormattedText m_summary = new LongFormattedText();
-
-  //........................................................................
-  //----- descriptor -------------------------------------------------------
+  protected Optional<String> m_summary = Optional.absent();
 
   /** The spell descriptor. */
-  @Key("descriptor")
-  protected ValueList<EnumSelection<Descriptor>> m_descriptor =
-    new ValueList<EnumSelection<Descriptor>>
-    (new EnumSelection<Descriptor>(Descriptor.class), ",");
+  protected List<SpellDescriptor> m_descriptors = new ArrayList<>();
 
-  static
-  {
-    addIndex(new Index(Index.Path.DESCRIPTORS, "Descriptors", TYPE));
-  }
-
-  //........................................................................
-  //----- level ------------------------------------------------------------
-
-  /** The spell level. */
-  @Key("level")
-  protected ValueList<Multiple> m_level =
-    new ValueList<Multiple>(new Multiple(new Multiple.Element []
-      {
-        new Multiple.Element
-        (new EnumSelection<SpellClass>(SpellClass.class), false),
-        new Multiple.Element(new Number(0, 9), false),
-      }), ", ");
-
-  static
-  {
-    addIndex(new Index(Index.Path.CLASSES, "Classes", TYPE));
-    addIndex(new Index(Index.Path.LEVELS, "Levels", TYPE));
-  }
-
-  //........................................................................
-  //----- components -------------------------------------------------------
+  /** The spell levels. */
+  protected List<Level> m_levels = new ArrayList<>();
 
   /** The various components. */
-  @Key("components")
-  protected ValueList<EnumSelection<Components>> m_components =
-    new ValueList<EnumSelection<Components>>
-    (new EnumSelection<Components>(Components.class), ", ");
-
-  static
-  {
-    addIndex(new Index(Index.Path.COMPONENTS, "Components", TYPE));
-  }
-
-  //........................................................................
-  //----- material ---------------------------------------------------------
+  protected List<SpellComponent> m_components = new ArrayList<>();
 
   /** The specific material components. */
-  @Key("material")
-  protected ValueList<Multiple> m_material =
-    new ValueList<Multiple>(new Multiple(new Multiple.Element []
-      {
-        new Multiple.Element(new Name(), false, null, ":"),
-        new Multiple.Element(new ValueList<Text>(new Text(), ", "), false),
-      }), ", ");
-
-  static
-  {
-    addIndex(new Index(Index.Path.MATERIALS, "Materials", TYPE));
-  }
-
-  //........................................................................
-  //----- focus ------------------------------------------------------------
+  protected List<Material> m_materials = new ArrayList<>();
 
   /** The specific material components. */
-  @Key("focus")
-  protected Multiple m_focus = new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element(new Name(), false, null, ":"),
-      new Multiple.Element(new ValueList<Text>(new Text(), ", "), false),
-    });
-
-  static
-  {
-    addIndex(new Index(Index.Path.FOCUSES, "Focuses", TYPE));
-  }
-
-  //........................................................................
-  //----- casting time -----------------------------------------------------
+  protected Optional<Material> m_focus = Optional.absent();
 
   /** The casting time required for this spell. */
-  @Key("casting time")
-  protected Duration m_castingTime = new Duration();
-
-  static
-  {
-    addIndex(new Index(Index.Path.CASTING_TIMES, "Casting Times", TYPE));
-  }
-
-  //........................................................................
-  //----- range ------------------------------------------------------------
+  protected Optional<NewDuration> m_castingTime = Optional.absent();
 
   /** The range of the spell. */
-  @Key("range")
-  protected Union m_range =
-    new Union(new EnumSelection<Range>(Range.class), new Distance())
-    .withEditType("name");
+  protected SpellRange m_range = SpellRange.UNKNOWN;
 
-  static
-  {
-    addIndex(new Index(Index.Path.RANGES, "Ranges", TYPE));
-  }
-
-  //........................................................................
-  //----- effect -----------------------------------------------------------
+  /** The distance the spell works at. */
+  protected Optional<NewDistance> m_distance = Optional.absent();
 
   /** The target of the spell. */
-  @Key("effect")
-  protected Multiple m_effect = new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element(new Distance(), true),
-      new Multiple.Element(new EnumSelection<Effect>(Effect.class), true),
-      new Multiple.Element(new Text(), false),
-    });
-
-  static
-  {
-    addIndex(new Index(Index.Path.EFFECT_TYPES, "Effect Types", TYPE));
-    addIndex(new Index(Index.Path.EFFECTS, "Effects", TYPE));
-  }
-
-  //........................................................................
-  //----- target -----------------------------------------------------------
+  protected Optional<Effect> m_effect = Optional.absent();
 
   /** The target of the spell. */
-  @Key("target")
-  protected Text m_target = new Text();
-
-  //........................................................................
-  //----- area -------------------------------------------------------------
+  protected Optional<String> m_target = Optional.absent();
 
   /** The area of the spell. */
-  @Key("area")
-  protected Text m_area = new Text();
-
-  //........................................................................
-  //----- duration ---------------------------------------------------------
+  protected Optional<String> m_area = Optional.absent();
 
   /** The duration of the spell. */
-  @Key("duration")
-  protected Multiple m_duration = new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element
-      (new Union
-       (new Selection(SPELL_DURATIONS),
-        new Multiple(new Multiple.Element []
-          {
-            new Multiple.Element(new Duration(), false),
-            new Multiple.Element(new Selection(LEVELS), true, "/", null),
-            new Multiple.Element(new Duration(), true, "+", null),
-          })), false),
-      new Multiple.Element(new Selection(SPELL_DURATION_FLAGS), true),
-      new Multiple.Element(new Text(), true),
-    }).withEditType("non-empty");
-
-  static
-  {
-    addIndex(new Index(Index.Path.DURATIONS, "Durations", TYPE));
-  }
-
-  //........................................................................
-  //----- saving throw -----------------------------------------------------
+  protected Optional<Duration> m_duration = Optional.absent();
 
   /** The saving throw for the spell. */
-  @Key("saving throw")
-  protected Selection m_savingThrow = new Selection(SAVING_THROWS);
-
-  static
-  {
-    addIndex(new Index(Index.Path.SAVING_THROWS, "Saving Throws", TYPE));
-  }
-
-  //........................................................................
-  //----- spell resistance -------------------------------------------------
+  protected Optional<String> m_savingThrow = Optional.absent();
 
   /** The spell resistance for the spell. */
-  @Key("spell resistance")
-  protected Selection m_resistance = new Selection(SPELL_RESISTANCES);
+  protected Optional<String> m_resistance = Optional.absent();
 
-  static
+  public School getSchool()
   {
-    addIndex(new Index(Index.Path.SPELL_RESISTANCES, "Spell Resistances",
-                       TYPE));
+    return m_school;
   }
 
-  //........................................................................
-
-  static
+  public List<Subschool> getSubschools()
   {
-    extractVariables(BaseSpell.class);
+    return m_subschools;
   }
 
-  //----- special indexes --------------------------------------------------
-
-  static
+  public Optional<String> getSummary()
   {
-    addIndex(new Index(Index.Path.WORLDS, "Worlds", TYPE));
-    addIndex(new Index(Index.Path.REFERENCES, "References", TYPE));
-    addIndex(new Index(Index.Path.EXTENSIONS, "Extensions", TYPE));
+    return m_summary;
   }
 
-  //........................................................................
+  public List<SpellDescriptor> getDescriptors()
+  {
+    return m_descriptors;
+  }
 
-  //........................................................................
+  public List<Level> getLevels()
+  {
+    return m_levels;
+  }
 
-  //-------------------------------------------------------------- accessors
+  public List<SpellComponent> getComponents()
+  {
+    return m_components;
+  }
 
-  //------------------------------ getSummary ------------------------------
+  public List<Material> getMaterials()
+  {
+    return m_materials;
+  }
+
+  public Optional<Material> getFocus()
+  {
+    return m_focus;
+  }
+
+  public Optional<NewDuration> getCastingTime()
+  {
+    return m_castingTime;
+  }
+
+  public SpellRange getRange()
+  {
+    return m_range;
+  }
+
+  public Optional<NewDistance> getDistance()
+  {
+    return m_distance;
+  }
+
+  public Optional<Effect> getEffect()
+  {
+    return m_effect;
+  }
+
+  public Optional<String> getTarget()
+  {
+    return m_target;
+  }
+
+  public Optional<String> getArea()
+  {
+    return m_area;
+  }
+
+  public Optional<Duration> getDuration()
+  {
+    return m_duration;
+  }
+
+  public Optional<String> getSavingThrow()
+  {
+    return m_savingThrow;
+  }
+
+  public Optional<String> getResistance()
+  {
+    return m_resistance;
+  }
+
+  public List<String> getDescriptorNames()
+  {
+    return SpellDescriptor.names();
+  }
+
+  public List<String> getSpellEffectNames()
+  {
+    return SpellEffect.names();
+  }
+
+  public List<String> getSpellClassNames()
+  {
+    return SpellClass.names();
+  }
+
+  public List<String> getSubschoolNames()
+  {
+    return Subschool.names();
+  }
+
+  public List<String> getComponentNames()
+  {
+    return SpellComponent.names();
+  }
 
   /**
    * Get a summary for the entry.
@@ -1416,8 +651,8 @@ public class BaseSpell extends BaseEntry
    *                            level and the second is the dc)
    *
    * @return      the string with the summary
-   *
    */
+  /*
   public String getSummary(String ... inParameters)
   {
     SpellClass kind = null;
@@ -1458,9 +693,7 @@ public class BaseSpell extends BaseEntry
 
     return getSummary(kind, level, dc);
   }
-
-  //........................................................................
-  //------------------------------ getSummary ------------------------------
+  */
 
   /**
    * Get the summary of the spell description, with appropriate level and
@@ -1471,8 +704,8 @@ public class BaseSpell extends BaseEntry
    * @param       inDC    the DC for the spell to compute
    *
    * @return      a string with the summary
-   *
    */
+  /*
   @SuppressWarnings("unchecked")
   public String getSummary(@Nullable SpellClass inKind, int inLevel,
                                     int inDC)
@@ -1502,9 +735,7 @@ public class BaseSpell extends BaseEntry
        .with("level", new Number(inLevel, 0, 100), Parameters.Type.ADD)
        .with("dc", new Number(dc, -100, 100), Parameters.Type.MAX));
   }
-
-  //........................................................................
-  //------------------------------ getSummary ------------------------------
+  */
 
   /**
    * Get a summary for the entry, using the given parameters.
@@ -1513,6 +744,7 @@ public class BaseSpell extends BaseEntry
    *
    * @return      the string with the summary
    */
+  /*
   @Override
   @SuppressWarnings("unchecked")
   public String getSummary(@Nullable Parameters inParameters)
@@ -1580,7 +812,7 @@ public class BaseSpell extends BaseEntry
     summary.append(", range ");
     if(casterLevel >= 0 && m_range.isDefined()
        && m_range.get() instanceof EnumSelection)
-      switch(((EnumSelection<Range>)m_range.get()).getSelected())
+      switch(((EnumSelection<SpellRange>)m_range.get()).getSelected())
       {
         case PERSONAL_OR_TOUCH:
         case PERSONAL_AND_TOUCH:
@@ -1902,53 +1134,7 @@ public class BaseSpell extends BaseEntry
 
     return summary.toString();
   }
-
-  //........................................................................
-  //-------------------------- computeIndexValues --------------------------
-
-  /**
-   * Get all the values for all the indexes.
-   *
-   * @return      a multi map of values per index name
-   *
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public Multimap<Index.Path, String> computeIndexValues()
-  {
-    Multimap<Index.Path, String> values = super.computeIndexValues();
-
-    values.put(Index.Path.SCHOOLS, m_school.get(0).group());
-    values.put(Index.Path.DESCRIPTORS, m_descriptor.group());
-    values.put(Index.Path.CASTING_TIMES, m_castingTime.group());
-    values.put(Index.Path.RANGES, m_range.group());
-    values.put(Index.Path.EFFECT_TYPES, m_effect.get(1).group());
-    values.put(Index.Path.DURATIONS, m_duration.get(0).group());
-    values.put(Index.Path.SAVING_THROWS, m_savingThrow.group());
-    values.put(Index.Path.SPELL_RESISTANCES, m_resistance.group());
-    values.put(Index.Path.FOCUSES, m_focus.get(0).group());
-
-    for(Multiple level : m_level)
-    {
-      values.put(Index.Path.LEVELS, level.get(1).group());
-      values.put(Index.Path.CLASSES, level.get(0).group());
-    }
-
-    for(EnumSelection<Components> component : m_components)
-      values.put(Index.Path.COMPONENTS, component.group());
-
-    for(Multiple material : m_material)
-      values.put(Index.Path.MATERIALS, material.group());
-
-    for(EnumSelection<Subschool> subschool
-          : (ValueList<EnumSelection<Subschool>>)m_school.get(1))
-      values.put(Index.Path.SUBSCHOOLS, subschool.group());
-
-    return values;
-  }
-
-  //........................................................................
-  //--------------------------------- isDM ---------------------------------
+  */
 
   /**
    * Check whether the given user is the DM for this entry. Every user is a DM
@@ -1957,7 +1143,6 @@ public class BaseSpell extends BaseEntry
    * @param       inUser the user accessing
    *
    * @return      true for DM, false for not
-   *
    */
   @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
@@ -1968,16 +1153,38 @@ public class BaseSpell extends BaseEntry
     return inUser.get().hasAccess(BaseCharacter.Group.ADMIN);
   }
 
-  //........................................................................
+  @Override
+  public void set(Values inValues)
+  {
+    super.set(inValues);
 
-  //........................................................................
+    m_school = inValues.use("school", m_school, School.PARSER);
+    m_subschools = inValues.use("subschool", m_subschools, Subschool.PARSER);
+    m_summary = inValues.use("summary", m_summary);
+    m_descriptors = inValues.use("descriptor", m_descriptors,
+                                 SpellDescriptor.PARSER);
+    m_levels = inValues.use("level", m_levels, Level.PARSER, "class", "level");
+    m_components = inValues.use("component", m_components,
+                                SpellComponent.PARSER);
+    m_materials = inValues.use("material", m_materials, Material.PARSER,
+                               "use", "components");
+    m_focus = inValues.use("focus", m_focus, Material.PARSER,
+                           "use", "components");
+    m_castingTime = inValues.use("casting_time", m_castingTime,
+                                 NewDuration.PARSER);
+    m_range = inValues.use("range", m_range, SpellRange.PARSER);
+    m_distance = inValues.use("distance", m_distance, NewDistance.PARSER);
+    m_effect = inValues.use("effect", m_effect, Effect.PARSER,
+                            "distance", "effect", "text");
+    m_target = inValues.use("target", m_target);
+    m_area = inValues.use("area", m_area);
+    m_duration = inValues.use("duration", m_duration, Duration.PARSER,
+                              "duration", "levels", "plus", "dismissable",
+                              "text");
+    m_savingThrow = inValues.use("saving_throw", m_savingThrow);
+    m_resistance = inValues.use("resistance", m_resistance);
+  }
 
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  @SuppressWarnings("unchecked")
   @Override
   public Message toProto()
   {
@@ -1985,134 +1192,108 @@ public class BaseSpell extends BaseEntry
 
     builder.setBase((BaseEntryProto)super.toProto());
 
-    if(m_school.isDefined())
+    if(m_school != School.UNKNOWN)
     {
-      builder.setSchool(((EnumSelection<School>)m_school.get(0)).getSelected()
-                        .getProto());
-      for(EnumSelection<Subschool> subschool
-        : ((ValueList<EnumSelection<Subschool>>)m_school.get(1)))
-        if(subschool.isDefined())
-          builder.addSubschool(subschool.getSelected().getProto());
+      builder.setSchool(m_school.toProto());
+      for(Subschool subschool : m_subschools)
+          builder.addSubschool(subschool.toProto());
     }
 
-    if(m_summary.isDefined())
+    if(m_summary.isPresent())
       builder.setSummary(m_summary.get());
 
-    if(m_descriptor.isDefined())
-      for(EnumSelection<Descriptor> descriptor : m_descriptor)
-        builder.addDescriptor(descriptor.getSelected().getProto());
+    for(SpellDescriptor descriptor : m_descriptors)
+        builder.addDescriptor(descriptor.toProto());
 
-    if(m_level.isDefined())
-      for(Multiple level : m_level)
+    for(Level level : m_levels)
         builder.addLevel
           (BaseSpellProto.Level.newBuilder()
-           .setSpellClass(((EnumSelection<SpellClass>)level.get(0))
-                          .getSelected().getProto())
-           .setLevel((int)((Number)level.get(1)).get())
+           .setSpellClass(level.getSpellClass().toProto())
+           .setLevel(level.getLevel())
            .build());
 
-    if(m_components.isDefined())
-      for(EnumSelection<Components> components : m_components)
-        builder.addComponents(components.getSelected().getProto());
+    for(SpellComponent components : m_components)
+        builder.addComponents(components.toProto());
 
-    if(m_material.isDefined())
-      for(Multiple material : m_material)
-      {
-        BaseSpellProto.Material.Builder materialBuilder =
-          BaseSpellProto.Material.newBuilder();
+    for(Material material : m_materials)
+      builder.addMaterial(BaseSpellProto.Material.newBuilder()
+                          .setUse(material.getUse())
+                          .addAllComponent(material.getComponents())
+                          .build());
 
-        materialBuilder.setUse(((Name)material.get(0)).get());
-        for(Text component : (ValueList<Text>)material.get(1))
-          materialBuilder.addComponent(component.get());
+    if(m_focus.isPresent())
+    builder.setFocus(BaseSpellProto.Material.newBuilder()
+                     .setUse(m_focus.get().getUse())
+                     .addAllComponent(m_focus.get().getComponents())
+                     .build());
 
-        builder.addMaterial(materialBuilder.build());
-      }
+    if(m_castingTime.isPresent())
+      builder.setCastingTime(m_castingTime.get().toProto());
 
-    if(m_focus.isDefined())
-    {
-      BaseSpellProto.Material.Builder materialBuilder =
-        BaseSpellProto.Material.newBuilder();
+    if(m_range != SpellRange.UNKNOWN)
+      builder.setSpecialRange(m_range.toProto());
 
-      materialBuilder.setUse(((Name)m_focus.get(0)).get());
-      for(Text component : (ValueList<Text>)m_focus.get(1))
-        materialBuilder.addComponent(component.get());
+    if(m_distance.isPresent())
+      builder.setRange(m_distance.get().toProto());
 
-      builder.setFocus(materialBuilder.build());
-    }
-
-    if(m_castingTime.isDefined())
-      builder.setCastingTime(m_castingTime.toProto());
-
-    if(m_range.isDefined())
-      if(m_range.getIndex() == 0)
-        builder.setSpecialRange(((EnumSelection<Range>)m_range.get())
-                                .getSelected().getProto());
-      else
-       builder.setRange(((Distance)m_range.get()).toProto());
-
-    if(m_effect.isDefined())
+    if(m_effect.isPresent())
     {
       BaseSpellProto.Effect.Builder effect = BaseSpellProto.Effect.newBuilder();
 
-      if(m_effect.get(0).isDefined())
-        effect.setDistance(((Distance)m_effect.get(0)).toProto());
-      if(m_effect.get(1).isDefined())
-        effect.setType(((EnumSelection<Effect>)m_effect.get(1))
-                       .getSelected().getProto());
-      if(m_effect.get(2).isDefined())
-        effect.setDescription(((Text)m_effect.get(2)).get());
+      System.out.println(m_effect.get().getDistance());
+      if(m_effect.get().getDistance().isPresent())
+        effect.setDistance(m_effect.get().getDistance().get().toProto());
+      if(m_effect.get().getEffect().isPresent())
+        effect.setType(m_effect.get().getEffect().get().toProto());
 
+      effect.setDescription(m_effect.get().getText());
       builder.setEffect(effect.build());
     }
 
-    if(m_target.isDefined())
+    if(m_target.isPresent())
       builder.setTarget(m_target.get());
 
-    if(m_area.isDefined())
+    if(m_area.isPresent())
       builder.setArea(m_area.get());
 
-    if(m_duration.isDefined())
+    if(m_duration.isPresent())
     {
       BaseSpellProto.Duration.Builder duration =
         BaseSpellProto.Duration.newBuilder();
 
-      if(m_duration.get(0).isDefined())
-        if(((Union)m_duration.get(0)).getIndex() == 0)
-          duration.setDurationDescription
-            (((Union)m_duration.get(0)).get().toString());
-        else
-        {
-          Multiple multiple = (Multiple)((Union)m_duration.get(0)).get();
-          if(multiple.get(0).isDefined())
-            duration.setDuration(((Duration)multiple.get(0)).toProto());
-          if(multiple.get(1).isDefined())
-            duration.setLevels(((Selection)multiple.get(1)).toString());
-          if(multiple.get(2).isDefined())
-            duration.setAdditionalDuration(((Duration)multiple.get(2))
-                                           .toProto());
-        }
+      if(m_duration.get().getDurationText().isPresent())
+        duration.setDurationDescription
+            (m_duration.get().getDurationText().get());
+      else
+      {
+        duration.setDuration(m_duration.get().getDuration().get().toProto());
+        if(m_duration.get().getLevels().isPresent())
+          duration.setLevels(m_duration.get().getLevels().get());
+        if(m_duration.get().getPlusDuration().isPresent())
+          duration.setAdditionalDuration(m_duration.get().getPlusDuration()
+                                         .get().toProto());
+      }
 
-      if(m_duration.get(1).isDefined())
-        duration.setFlags(((Selection)m_duration.get(1)).toString());
+      if(m_duration.get().getDismissable())
+        duration.setFlags("(D)");
 
-      if(m_duration.get(2).isDefined())
-        duration.setDescription(((Text)m_duration.get(2)).get());
+      if(m_duration.get().getText().isPresent())
+        duration.setDescription(m_duration.get().getText().get());
 
       builder.setDuration(duration.build());
     }
 
-    if(m_savingThrow.isDefined())
-      builder.setSavingThrow(m_savingThrow.toString());
+    if(m_savingThrow.isPresent())
+      builder.setSavingThrow(m_savingThrow.get());
 
-    if(m_resistance.isDefined())
-      builder.setSpellResistance(m_resistance.toString());
+    if(m_resistance.isPresent())
+      builder.setSpellResistance(m_resistance.get());
 
     BaseSpellProto proto = builder.build();
     return proto;
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseSpellProto))
@@ -2126,161 +1307,89 @@ public class BaseSpell extends BaseEntry
     super.fromProto(proto.getBase());
 
     if(proto.hasSchool())
-    {
-      ValueList<EnumSelection<Subschool>> subschoolsList =
-        (ValueList<EnumSelection<Subschool>>)m_school.get(1);
-      List<EnumSelection<Subschool>> subschools = new ArrayList<>();
-      for (BaseSpellProto.Subschool subschool : proto.getSubschoolList())
-        subschools.add(subschoolsList.createElement()
-                       .as(Subschool.fromProto(subschool)));
+      m_school = School.fromProto(proto.getSchool());
 
-      m_school =
-        m_school.as(((EnumSelection<School>)m_school.get(0))
-                    .as(School.fromProto(proto.getSchool())),
-                    subschoolsList.as(subschools));
-    }
+    for (BaseSpellProto.Subschool subschool : proto.getSubschoolList())
+      m_subschools.add(Subschool.fromProto(subschool));
 
     if(proto.hasSummary())
-      m_summary = m_summary.as(proto.getSummary());
+      m_summary = Optional.of(proto.getSummary());
 
-    if(proto.getDescriptorCount() > 0)
-    {
-      List<EnumSelection<Descriptor>> descriptors = new ArrayList<>();
-      for(BaseSpellProto.Descriptor descriptor : proto.getDescriptorList())
-        descriptors.add(m_descriptor.createElement()
-                        .as(Descriptor.fromProto(descriptor)));
+    for(BaseSpellProto.Descriptor descriptor : proto.getDescriptorList())
+      m_descriptors.add(SpellDescriptor.fromProto(descriptor));
 
-      m_descriptor = m_descriptor.as(descriptors);
-    }
+    for(BaseSpellProto.Level level : proto.getLevelList())
+      m_levels.add(new Level(SpellClass.fromProto(level.getSpellClass()),
+                             level.getLevel()));
 
-    if(proto.getLevelCount() > 0)
-    {
-      Multiple example = m_level.createElement();
-      List<Multiple> levels = new ArrayList<>();
-      for(BaseSpellProto.Level level : proto.getLevelList())
-        levels.add(example.as(((EnumSelection<SpellClass>)example.get(0))
-                              .as(SpellClass.fromProto(level.getSpellClass())),
-                              ((Number)example.get(1)).as(level.getLevel())));
+    for(BaseSpellProto.Components component : proto.getComponentsList())
+      m_components.add(SpellComponent.fromProto(component));
 
-      m_level = m_level.as(levels);
-    }
-
-    if(proto.getComponentsCount() > 0)
-    {
-      List<EnumSelection<Components>> components = new ArrayList<>();
-      for(BaseSpellProto.Components component : proto.getComponentsList())
-        components.add(m_components.createElement()
-                       .as(Components.fromProto(component)));
-
-      m_components = m_components.as(components);
-    }
-
-    if(proto.getMaterialCount() > 0)
-    {
-      List<Multiple> materials = new ArrayList<>();
-      for(BaseSpellProto.Material material : proto.getMaterialList())
-      {
-        List<Text> components = new ArrayList<>();
-        for(String component : material.getComponentList())
-          components.add(new Text(component));
-
-        Multiple multiple = m_material.createElement();
-        materials.add(multiple
-                      .as(((Name)multiple.get(0)).as(material.getUse()),
-                          ((ValueList<Text>)multiple.get(1)).as(components)));
-      }
-
-      m_material = m_material.as(materials);
-    }
+    for(BaseSpellProto.Material material : proto.getMaterialList())
+      m_materials.add(new Material(material.getUse(),
+                                   material.getComponentList()));
 
     if(proto.hasFocus())
-    {
-      List<Text> components = new ArrayList<>();
-      for(String component : proto.getFocus().getComponentList())
-        components.add(new Text(component));
-
-      m_focus =
-        m_focus.as(((Name)m_focus.get(0)).as(proto.getFocus().getUse()),
-                   ((ValueList<Text>)m_focus.get(1)).as(components));
-    }
+      m_focus = Optional.of(new Material(proto.getFocus().getUse(),
+                                         proto.getFocus().getComponentList()));
 
     if(proto.hasCastingTime())
-      m_castingTime = m_castingTime.fromProto(proto.getCastingTime());
+      m_castingTime =
+        Optional.of(NewDuration.fromProto(proto.getCastingTime()));
 
     if(proto.hasSpecialRange())
-      m_range = m_range.as(0, ((EnumSelection<Range>)m_range.get(0))
-                              .as(Range.fromProto(proto.getSpecialRange())));
-    else if(proto.hasRange())
-      m_range = m_range.as(1, ((Distance)m_range.get(1))
-                              .fromProto(proto.getRange()));
+      m_range = SpellRange.fromProto(proto.getSpecialRange());
+
+    if(proto.hasRange())
+      m_distance = Optional.of(NewDistance.fromProto(proto.getRange()));
 
     if(proto.hasEffect())
-      m_effect = m_effect.as(proto.getEffect().hasDistance()
-                             ? ((Distance)m_effect.get(0))
-                               .fromProto(proto.getEffect().getDistance())
-                             : m_effect.get(0),
-                             proto.getEffect().hasType()
-                             ? ((EnumSelection<Effect>)m_effect.get(1))
-                               .as(Effect.fromProto
-                                   (proto.getEffect().getType()))
-                             : m_effect.get(1),
-                             proto.getEffect().hasDescription()
-                             ? ((Text)m_effect.get(2))
-                               .as(proto.getEffect().getDescription())
-                             : m_effect.get(2));
+      m_effect = Optional.of
+        (new Effect(proto.getEffect().hasDistance()
+                    ? Optional.of(NewDistance.fromProto
+                                  (proto.getEffect().getDistance()))
+                    : Optional.<NewDistance>absent(),
+                    proto.getEffect().hasType()
+                    ? Optional.of(SpellEffect.fromProto
+                                  (proto.getEffect().getType()))
+                    : Optional.<SpellEffect>absent(),
+                    proto.getEffect().getDescription()));
 
     if(proto.hasTarget())
-      m_target = m_target.as(proto.getTarget());
+      m_target = Optional.of(proto.getTarget());
 
     if(proto.hasArea())
-      m_area = m_area.as(proto.getArea());
+      m_area = Optional.of(proto.getArea());
 
     if(proto.hasDuration())
-    {
-      Value []values = new Value[3];
-
       if(proto.getDuration().hasDurationDescription())
-        values[0] = ((Union)m_duration.get(0))
-          .as(0, ((Selection)((Union)m_duration.get(0)).get(0))
-              .as(proto.getDuration().getDurationDescription()));
+        m_duration = Optional.of
+          (new Duration(proto.getDuration().getDurationDescription(),
+                        proto.getDuration().hasFlags(),
+                        proto.getDuration().hasDescription()
+                        ? Optional.of(proto.getDuration().getDescription())
+                        : Optional.<String>absent()));
       else
-      {
-        Multiple old = (Multiple)((Union)m_duration.get(0)).get(1);
-        values[0] = ((Union)m_duration.get(0))
-          .as(1, old.as(proto.getDuration().hasDuration()
-                        ? ((Duration)old.get(0))
-                          .fromProto(proto.getDuration().getDuration())
-                        : old.get(0),
+        m_duration = Optional.of
+          (new Duration(NewDuration.fromProto(proto.getDuration().getDuration()),
                         proto.getDuration().hasLevels()
-                        ? ((Selection)old.get(1))
-                          .as(proto.getDuration().getLevels())
-                        : old.get(1),
+                        ? Optional.of(proto.getDuration().getLevels())
+                        : Optional.<String>absent(),
                         proto.getDuration().hasAdditionalDuration()
-                        ? ((Duration)old.get(2)).fromProto
-                          (proto.getDuration().getAdditionalDuration())
-                        : old.get(2)));
-      }
-
-      if(proto.getDuration().hasFlags())
-        values[1] =
-          ((Selection)m_duration.get(1)).as(proto.getDuration().getFlags());
-      else
-        values[1] = m_duration.get(1);
-
-      if(proto.getDuration().hasDescription())
-        values[2] =
-          ((Text)m_duration.get(2)).as(proto.getDuration().getDescription());
-      else
-        values[2] = m_duration.get(2);
-
-      m_duration = m_duration.as(values);
-    }
+                        ? Optional.of
+                          (NewDuration.fromProto(proto.getDuration()
+                                                 .getAdditionalDuration()))
+                        : Optional.<NewDuration>absent(),
+                        proto.getDuration().hasFlags(),
+                        proto.getDuration().hasDescription()
+                        ? Optional.of(proto.getDuration().getDescription())
+                        : Optional.<String>absent()));
 
     if(proto.hasSavingThrow())
-      m_savingThrow = m_savingThrow.as(proto.getSavingThrow());
+      m_savingThrow = Optional.of(proto.getSavingThrow());
 
     if(proto.hasSpellResistance())
-      m_resistance = m_resistance.as(proto.getSpellResistance());
+      m_resistance = Optional.of(proto.getSpellResistance());
   }
 
   @Override
@@ -2296,9 +1405,7 @@ public class BaseSpell extends BaseEntry
     }
   }
 
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase

@@ -2121,8 +2121,8 @@ public class BaseMonster extends BaseEntry
           .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
           .withParameter("Dice", new Dice(), Parameters.Type.ADD)
           .withParameter("Times", new Number(1, 100), Parameters.Type.ADD)
-          .withParameter("Class", new EnumSelection<BaseSpell.SpellClass>
-                         (BaseSpell.SpellClass.class), Parameters.Type.ADD)
+          .withParameter("Class", new EnumSelection<SpellClass>
+                         (SpellClass.class), Parameters.Type.ADD)
           .withParameter("Ability", new Number(0, 100), Parameters.Type.MAX)
           .withParameter("Type", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Duration", new Name(), Parameters.Type.ADD)
