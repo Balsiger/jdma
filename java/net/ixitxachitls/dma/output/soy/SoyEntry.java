@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.output.soy;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.base.Optional;
 import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
@@ -39,69 +39,46 @@ import com.google.template.soy.data.restricted.StringData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
-import net.ixitxachitls.dma.entries.Campaign;
-import net.ixitxachitls.dma.entries.CampaignEntry;
 import net.ixitxachitls.dma.values.File;
 import net.ixitxachitls.util.Classes;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * A soy wrapper around an abstract Entry.
  *
  *
  * @file          SoyEntry.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @Immutable
 @ParametersAreNonnullByDefault
 public class SoyEntry extends SoyAbstract
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------- SoyEntry -------------------------------
-
   /**
    * Create the soy entry data.
    *
    * @param       inEntry    the entry with the values
-   *
    */
   public SoyEntry(AbstractEntry inEntry)
   {
     super(inEntry.getName(), inEntry);
   }
 
-  //........................................................................
+  /** The cache for values obtained so far. */
+  Map<String, SoyData> m_cache = new HashMap<>();
 
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------ getSingle -------------------------------
-
-  /**
-   * Get a single value out of the entry.
-   *
-   * @param  inName the name of the value to get
-   *
-   * @return the value found or null if not found
-   */
   @Override
   public @Nullable SoyData getSingle(String inName)
+  {
+    if(m_cache.containsKey(inName))
+      return m_cache.get(inName);
+
+    SoyData data = value(inName);
+    m_cache.put(inName, data);
+    return data;
+  }
+
+  private @Nullable SoyData value(String inName)
   {
     if("key".equals(inName))
       return StringData.forValue(m_entry.getKey().toString());
@@ -146,31 +123,6 @@ public class SoyEntry extends SoyAbstract
                             "other", data);
     }
 
-    if("dma".equals(inName))
-      return StringData.forValue(m_entry.toString());
-
-    if("deepdma".equals(inName))
-    {
-      StringBuffer buffer = new StringBuffer();
-      if (m_entry instanceof CampaignEntry)
-      {
-        Optional<Campaign> campaign = ((CampaignEntry)m_entry).getCampaign();
-        if(campaign.isPresent())
-        {
-          for(AbstractEntry dependency : campaign.get().collectDependencies())
-            buffer.append(dependency.toString());
-
-          buffer.append(campaign.toString());
-        }
-      }
-
-      for(AbstractEntry dependency : m_entry.collectDependencies())
-        buffer.append(dependency.toString());
-
-      buffer.append(m_entry.toString());
-      return StringData.forValue(buffer.toString());
-    }
-
     String name = inName.replace("__", "").replace("_", " ");
 
     Object value;
@@ -197,17 +149,6 @@ public class SoyEntry extends SoyAbstract
     return new Undefined(m_name + "." + name);
   }
 
-  //........................................................................
-  //-------------------------------- equals --------------------------------
-
-  /**
-   * Checks if the given object is equal to this one.
-   *
-   * @param    inOther the object to compare against
-   *
-   * @return   true if the other is equal, false if not
-   *
-   */
   @Override
   public boolean equals(Object inOther)
   {
@@ -221,49 +162,17 @@ public class SoyEntry extends SoyAbstract
       && super.equals(inOther);
   }
 
-  //........................................................................
-  //------------------------------- hashCode -------------------------------
-
-  /**
-   * Compute the hash code of the object.
-   *
-   * @return      the object's hash code
-   *
-   */
   @Override
   public int hashCode()
   {
     return super.hashCode() + m_entry.hashCode();
   }
 
-  //........................................................................
-  //------------------------------- toString -------------------------------
-
-  /**
-   * Convert the soy entry into a string for debugging.
-   *
-   * @return  the value converted into a string
-   *
-   */
   @Override
   public String toString()
   {
     return m_entry.getName() + " (soy)";
   }
-
-  //........................................................................
-
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
 
   /** The tests. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
@@ -315,6 +224,4 @@ public class SoyEntry extends SoyAbstract
 
     //......................................................................
   }
-
-  //........................................................................
 }

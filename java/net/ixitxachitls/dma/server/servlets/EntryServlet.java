@@ -124,7 +124,7 @@ public class EntryServlet extends PageServlet
     if(entry == null)
     {
       Optional<EntryKey> key = extractKey(path);
-      if(key.isPresent())
+      if(!key.isPresent())
       {
         data.put("content", inRenderer.render("dma.errors.extract",
                                               map("name", path)));
@@ -134,7 +134,8 @@ public class EntryServlet extends PageServlet
       AbstractType<? extends AbstractEntry> type = key.get().getType();
       String id = key.get().getID();
 
-      if(inRequest.hasParam("create") && inRequest.hasUser())
+      if(inRequest.hasUser()
+        && (inRequest.hasParam("create") || "CREATE".equals(id)))
       {
         action = "edit";
 

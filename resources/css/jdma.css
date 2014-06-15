@@ -1725,6 +1725,17 @@ DIV.edit-checkbox INPUT
  * actions
  *****************************************************************************/
 
+.action
+{
+  cursor: pointer;
+}
+
+.action:hover
+{
+  text-decoration: underline;
+}
+
+
 DIV.action-container
 {
   top: 52px;

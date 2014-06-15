@@ -62,6 +62,7 @@ import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -497,7 +498,11 @@ public abstract class AbstractEntry extends ValueGroup
    */
   public Map<String, Object> collectSearchables()
   {
-    return new HashMap<>();
+    Map<String, Object> searchables = new HashMap<>();
+    searchables.put("bases",
+                    new ArrayList<>(Strings.toLowerCase(getBaseNames())));
+
+    return searchables;
   }
 
   /**

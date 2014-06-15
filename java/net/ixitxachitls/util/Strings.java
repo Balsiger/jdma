@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.util;
 
 import java.text.NumberFormat;
@@ -47,46 +45,24 @@ import com.google.common.base.Splitter;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  *
  * This class encapsulates some basic String methods.
  *
  * @file          Strings.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ThreadSafe
 @ParametersAreNonnullByDefault
 public final class Strings
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //-------------------------------- Strings -------------------------------
-
   /**
     * Private constructor to prevent instantiation of the class.
-    *
     */
   private Strings()
   {
     // nothing to do
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** A simple variable to store a bunch of spaces to easily access variable
    *  number of space only substrings. */
@@ -862,6 +838,14 @@ public final class Strings
     return Optional.of(inFirst.get() + inDelimiter + inSecond.get());
   }
 
+  public static List<String> toLowerCase(List<String> inList)
+  {
+    List<String> result = new ArrayList<>();
+    for (String element : inList)
+      result.add(element.toLowerCase(Locale.US));
+
+    return result;
+  }
 
   //----------------------------------------------------------------------------
 

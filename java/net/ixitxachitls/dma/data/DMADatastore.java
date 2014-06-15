@@ -43,7 +43,8 @@ import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.base.Optional;
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -225,11 +226,12 @@ public class DMADatastore
    *
    * @return   a multi map from owner to ids
    */
-  public Multimap<String, String> getOwners(String inID)
+  public ListMultimap<String, String> getOwners(String inID)
   {
-    Multimap<String, String> owners = HashMultimap.create();
+    Log.debug("getting owners for " + inID);
+    ListMultimap<String, String> owners = ArrayListMultimap.create();
     for(Entity entity : m_data.getIDs(escapeType(Product.TYPE.toString()),
-                                      "base", inID.toLowerCase(Locale.US)))
+                                      "bases", inID.toLowerCase(Locale.US)))
       owners.put(entity.getKey().getParent().getName(),
                  entity.getKey().getName());
 

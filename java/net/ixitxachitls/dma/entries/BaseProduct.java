@@ -35,6 +35,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
@@ -1630,9 +1631,9 @@ public class BaseProduct extends BaseEntry
    *
    * @return   the compute value
    */
-  public Multimap<String, String> owners()
+  public Map<String, List<String>> owners()
   {
-    return DMADataFactory.get().getOwners(this.getName());
+    return Multimaps.asMap(DMADataFactory.get().getOwners(this.getName()));
   }
 
   @Override

@@ -327,30 +327,33 @@
           {param color: '#444' /}
         {/call}
       {/if}
-      /*
-      {call dma.entry.value}
-        {param label: 'Owners' /}
-        {param value}
-          {foreach $owner in $entry.owners}
-            {call dma.page.link}
-              {param url: '/user/' + $owner.multi.1.print + '/product/'
-                  + $owner.multi.0.print /}
-              {param text: $owner.multi.1.print /}
-            {/call}
-            {if not isLast($owner)}, {/if}
-          {/foreach}
-          {if $ij.user}
-          {sp}| {call dma.page.link}
-              {param url: '/user/' + $ij.user.name + '/product/' + $entry.name
-                  + '?create' /}
-              {param text: 'add' /}
-              {param tooltip: 'Add this product for yourself.' /}
-            {/call}
-          {/if}
-        {/param}
-        {param color: '#444' /}
-      {/call}      
-      */
+      {if $ij.user}
+        {call dma.entry.value}
+          {param label: 'Owners' /}
+          {param value}
+            {foreach $owner in keys($entry.owners)}
+              {foreach $id in $entry.owners[$owner]}                  
+                {call dma.page.link}
+                  {param url: '/user/' + $owner+ '/product/' + $id /}
+                  {param text: $owner /}
+                {/call}
+                {if not isLast($id)}, {/if}
+              {/foreach}
+              {if not isLast($owner)}, {/if}
+            {ifempty}
+              none
+            {/foreach}
+            {sp}|{sp}            
+            <span class="action" onclick="edit.show(
+                           '$entry.name', 
+                           '/user/{$ij.user.name}/product/CREATE', 
+                           '{escape($entry.name)}', '{$entry.name}')">
+              add
+            </span>
+          {/param}
+          {param color: '#444' /}
+        {/call}
+      {/if}      
     {/param}
   {/call}
 {/template}

@@ -42,13 +42,15 @@ edit.all = [];
 /**
  * Show the edit window for editing an entry.
  *
- * @param inName the name of the entry edited
- * @param inPath the path of the entry to edit
- * @param inID   the id of the element to create
+ * @param inName   the name of the entry edited
+ * @param inPath   the path of the entry to edit
+ * @param inID     the id of the element to create
+ * @param inBases  the bases for the entry, if any
  */
-edit.show = function(inName, inPath, inID)
+edit.show = function(inName, inPath, inID, inBases)
 {
-  var contents = util.ajax(inPath + '.edit?body&id=' + inID);
+  var contents = util.ajax(inPath + '.edit?body&id=' + inID 
+      + '&bases=' + inBases);
   var dialog = $('<div id="dialog-' + inID + '"/>')
     .html(contents)
     .dialog({
