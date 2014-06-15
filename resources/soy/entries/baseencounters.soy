@@ -1,0 +1,475 @@
+/* ****************************************************************************
+ * Copyright (C) 2002-2014 Peter 'Merlin' Balsiger And Fred 'Mythos' Dobler
+ * All Rights Reserved
+ *
+ * This File Is Part Of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant Is Free Software; You Can Redistribute It And/Or
+ * Modify It Under The Terms Of The Gnu General Public License As Published By
+ * The Free Software Foundation; Either Version 2 Of The License, Or
+ * (At Your Option) Any Later Version.
+ *
+ * Dungeon Master Assistant Is Distributed In The Hope That It Will Be Useful,
+ * But Without Any Warranty; Without Even The Implied Warranty Of
+ * Merchantability Or Fitness For A Particular Purpose.  See The
+ * Gnu General Public License For More Details.
+ *
+ * You Should Have Received A Copy Of The Gnu General Public License
+ * Along With Dungeon Master Assistant; If Not, Write To The Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, Ma  02111-1307  Usa
+ *****************************************************************************/
+
+ /*
+ * Templates for base products.
+ */
+{namespace dma.entries.baseencounters}
+
+/**
+ * Show the given entry in standard format.
+ * 
+ * @param entry The entry to show.
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ */
+{template .show autoescape="true"}
+  {call dma.entry.show}
+    {param entry: $entry /}
+    {param type: 'base-level' /}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param list: $list /}
+    {param next: $next /}
+    {param last: $last /}
+    {param color: '#aaf' /}
+    {param title}
+      {call dma.entry._new_title}
+        {param title: $entry.name /}
+        {param color: '#aaf' /}
+      {/call}
+    {/param}
+    {param values}            
+      {if length($entry.baseNames)}
+        {call dma.entry.value}
+          {param label: 'Base' /}
+          {param value}
+            {foreach $base in $entry.baseNames}
+              {call dma.page.link}
+                {param text: $base /}
+                {param url: '/quality/'  + $base /}
+              {/call}
+              {if not isLast($base)}; {/if}
+            {/foreach}
+          {/param}
+          {param color: '#aaf' /}
+        {/call} 
+      {/if}      
+      {if length($entry.synonyms)}
+        {call dma.entry.value}
+          {param label: 'Synonyms' /}
+          {param value}
+            {foreach $synonym in $entry.synonyms}
+              {$synonym}
+              {if not isLast($synonym)}; {/if}
+            {/foreach}
+          {/param}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}      
+      {if length($entry.categories) or 
+          length($entry.combined_categories.annotate)}
+        {call dma.entry.value}
+          {param label: 'Categories' /}
+          {param value}
+            {if length($entry.categories)}
+              {foreach $category in $entry.categories}
+                {$category}
+                {if not isLast($category)}, {/if}
+              {/foreach}
+            {/if}
+            {if length($entry.combined_categories.annotate)}
+              {if length($entry.categories)},{sp}{/if}
+              {call dma.entry.concatenated_list}
+                {param values: [] /}
+                {param concatenate: $entry.combined_categories /}
+              {/call}
+            {/if}
+          {/param}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'Worlds' /}        
+        {param value}
+          {call dma.entry.concatenated_list}
+            {param values: $entry.worlds /}
+            {param concatenate: $entry.combined_worlds /}
+          {/call}
+        {/param}
+        {param color: '#aaf' /}
+      {/call}
+      {if $entry.incomplete or length($entry.combined_incomplete.annotate) > 0}
+        {call dma.entry.value}
+          {param label: 'Incomplete' /}
+          {param value}
+            {if $entry.incomplete}
+              {$entry.incomplete}{sp}
+            {/if}
+            {call dma.entry.concatenated}
+              {param value: '' /}
+              {param concatenate: $entry.combined_incomplete /}
+            {/call}
+          {/param}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if $entry.adventure.present}
+        {call dma.entry.value}
+          {param label: 'Adventure' /}
+          {param value: $entry.adventure.get /}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if length($entry.locations) > 0}
+        {call dma.entry.value}
+          {param label: 'Locations' /}
+          {param value}
+            {foreach $location in $entry.locations}
+              {$location}
+              {if not isLast($location)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if $entry.doors.present}
+        {call dma.entry.value}
+          {param label: 'Doors' /}
+          {param value: $entry.doors.get /}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if $entry.floor.present}
+        {call dma.entry.value}
+          {param label: 'Floor' /}
+          {param value: $entry.floor.get /}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if $entry.ceiling.present}
+        {call dma.entry.value}
+          {param label: 'Ceiling' /}
+          {param value: $entry.ceiling.get /}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if $entry.walls.present}
+        {call dma.entry.value}
+          {param label: 'Walls' /}
+          {param value: $entry.walls.get /}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if $entry.feel.present}
+        {call dma.entry.value}
+          {param label: 'Feel' /}
+          {param value: $entry.feel.get /}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if $entry.sound.present}
+        {call dma.entry.value}
+          {param label: 'Sound' /}
+          {param value: $entry.sound.get /}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if $entry.smell.present}
+        {call dma.entry.value}
+          {param label: 'Small' /}
+          {param value: $entry.smell.get /}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if $entry.taste.present}
+        {call dma.entry.value}
+          {param label: 'Taste' /}
+          {param value: $entry.taste.get /}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if $entry.light.present}
+        {call dma.entry.value}
+          {param label: 'Light' /}
+          {param value: $entry.light.get /}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if length($entry.skills) > 0}
+        {call dma.entry.value}
+          {param label: 'Skills' /}
+          {param value}
+            {foreach $location in $entry.skills}
+              {$location}
+              {if not isLast($location)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'References' /}
+        {param value}
+          {call dma.entry.concatenated_list}
+            {param values: [] /}
+            {param concatenate: $entry.combined_references /}
+          {/call}
+        {/param}
+        {param color: '#aaf' /}
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Formatting a list of entries.
+ *
+ * @param title The list title.
+ * @param start The start index
+ * @param pagesize The size of the page
+ * @param entries The entries printed
+ * @param label The navigation label for this page
+ * @param path The path to this page
+ *
+ */
+{template .list}
+  {call dma.entry.newlist}
+    {param title: $title /}
+    {param label: $label /}
+    {param path: $path /}
+    {param start: $start /}
+    {param pagesize: $pagesize /}
+    {param size: $entries ? length($entries) : 0 /}
+    {param titles: [ 'Name', 'Worlds', 'Short Descriptoion'] /}
+    {param entries}
+      {foreach $entry in $entries}
+        <tr onclick="util.link(event, '{$entry.path}')">
+          {call dma.entry.newListEntry}
+            {param path: $entry.path /}
+            {param values: [
+              $entry.name, $entry.worldsString, $entry.short_description
+            ] /}
+          {/call}
+        </tr>
+      {/foreach}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Editiing the base item.
+ * 
+ * @param entry The item to edit. 
+ * @param id    THe id to use for the editing dialog.
+ */
+{template .edit autoescape="true"}
+  {call dma.edit.entry}
+    {param entry: $entry /}
+    {param type: 'base-level' /}
+    {param id: $id /}
+    {param values}
+      {call dma.edit.value}
+        {param name: 'name' /}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param validate: 'non-empty' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value_text}
+        {param name: 'description' /}
+        {param label: 'Description' /}
+        {param value: $entry.description /}
+        {param validate: 'any' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'short-description' /}
+        {param label: 'Short Description' /}
+        {param value: $entry.short_description /}
+        {param validate: 'any' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'base' /}
+        {param label: 'Base' /}
+        {param values: $entry.base_names /}
+        {param validate: 'non-empty' /}
+        {param color: '#aaf' /}
+        {param autocomplete: 'base item/name' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'synonyms' /}
+        {param label: 'Synonyms' /}
+        {param values: $entry.synonyms /}
+        {param validate: 'non-empty' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'categories' /}
+        {param label: 'Categories' /}
+        {param values: $entry.categories /}
+        {param validate: 'non-empty' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'worlds' /}
+        {param label: 'Worlds' /}
+        {param values: $entry.worlds/}
+        {param validate: 'non-empty' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'incomplete' /}
+        {param label: 'Incomplete' /}
+        {param value: $entry.incomplete /}
+        {param validate: 'any' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'adventure' /}
+        {param label: 'Adventure' /}
+        {param value: $entry.adventure.present ? $entry.adventure.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'location' /}
+        {param label: 'Locations' /}
+        {param values: $entry.locations /}
+        {param validate: 'non-empty' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'doors' /}
+        {param label: 'Doors' /}
+        {param value: $entry.doors.present ? $entry.doors.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'floor' /}
+        {param label: 'Floor' /}
+        {param value: $entry.floor.present ? $entry.floor.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'ceiling' /}
+        {param label: 'Ceiling' /}
+        {param value: $entry.ceiling.present ? $entry.ceiling.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'walls' /}
+        {param label: 'Walls' /}
+        {param value: $entry.walls.present ? $entry.walls.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'feel' /}
+        {param label: 'Fell' /}
+        {param value: $entry.feel.present ? $entry.feel.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'sound' /}
+        {param label: 'Sound' /}
+        {param value: $entry.sound.present ? $entry.sound.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'smell' /}
+        {param label: 'Smell' /}
+        {param value: $entry.smell.present ? $entry.smell.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'taste' /}
+        {param label: 'Taste' /}
+        {param value: $entry.taste.present ? $entry.taste.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'light' /}
+        {param label: 'Light' /}
+        {param value: $entry.light.present ? $entry.light.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#aaf' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'skill' /}
+        {param label: 'Skill' /}
+        {param values: $entry.skills /}
+        {param validate: 'non-empty' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'references' /}
+        {param color: '#aaf' /}
+        {param label: 'References' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $reference in $entry.references}  
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'references.name',
+                      'value': $reference.name,
+                      'validate': 'non-empty',
+                      'caption': 'name' 
+                    ],
+                    [
+                      'name': 'references.pages',
+                      'value': $reference.pagesString,
+                      'validate': 'any',
+                      'caption': 'pages' 
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'references.name',
+                      'value': '',
+                      'validate': 'non-empty',
+                      'caption': 'name' 
+                    ],
+                    [
+                      'name': 'references.pages',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'pages' 
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}            
+      {/call}
+    {/param}
+  {/call}
+{/template}
+

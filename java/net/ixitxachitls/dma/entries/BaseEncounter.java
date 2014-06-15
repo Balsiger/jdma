@@ -19,14 +19,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//--------------------------------------------------------------------- Imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -34,13 +30,7 @@ import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.proto.Entries.BaseEncounterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
-import net.ixitxachitls.dma.values.LongFormattedText;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.util.logging.Log;
-
-//.............................................................................
 
 /**
  * A base encounter.
@@ -76,57 +66,100 @@ public class BaseEncounter extends BaseEntry
   private static final long serialVersionUID = 1L;
 
   /** The adventure this encounter takes places. */
-  @Key("adventure")
-  protected Text m_adventure = new Text();
+  protected Optional<String> m_adventure = Optional.absent();
 
   /** The location where this encounter takes place. */
   // TODO: long term, this should be a link to a location object
-  @Key("location")
-  protected ValueList<Name> m_location = new ValueList<Name>(new Name());
+  protected List<String> m_locations = new ArrayList<>();
 
   /** A description of the doors. */
-  @Key("doors")
-  protected LongFormattedText m_doors = new LongFormattedText();
+  protected Optional<String> m_doors = Optional.absent();
 
   /** A description of the floor. */
-  @Key("floor")
-  protected LongFormattedText m_floor = new LongFormattedText();
+  protected Optional<String> m_floor = Optional.absent();
 
   /** A description of the ceiling. */
-  @Key("ceiling")
-  protected LongFormattedText m_ceiling = new LongFormattedText();
+  protected Optional<String> m_ceiling = Optional.absent();
 
   /** A description of the walls. */
-  @Key("walls")
-  protected LongFormattedText m_walls = new LongFormattedText();
+  protected Optional<String> m_walls = Optional.absent();
 
   /** A description of the temperature. */
-  @Key("feel")
-  protected LongFormattedText m_feel = new LongFormattedText();
+  protected Optional<String> m_feel = Optional.absent();
 
   /** A description of the sounds. */
-  @Key("sound")
-  protected LongFormattedText m_sound = new LongFormattedText();
+  protected Optional<String> m_sound = Optional.absent();
 
   /** A description of the odors. */
-  @Key("smell")
-  protected LongFormattedText m_smell = new LongFormattedText();
+  protected Optional<String> m_smell = Optional.absent();
 
   /** A description of the odors. */
-  @Key("taste")
-  protected LongFormattedText m_taste = new LongFormattedText();
+  protected Optional<String> m_taste = Optional.absent();
 
   /** A description of the light. */
-  @Key("light")
-  protected LongFormattedText m_light = new LongFormattedText();
+  protected Optional<String> m_light = Optional.absent();
 
   /** The base skills relevant for this encounter. */
-  @Key("skills")
-  protected ValueList<Name> m_skills = new ValueList<Name>(new Name());
+  protected List<String> m_skills = new ArrayList<>();
 
-  static
+  public Optional<String> getAdventure()
   {
-    extractVariables(BaseEncounter.class);
+    return m_adventure;
+  }
+
+  public List<String> getLocations()
+  {
+    return m_locations;
+  }
+
+  public Optional<String> getDoors()
+  {
+    return m_doors;
+  }
+
+  public Optional<String> getFloor()
+  {
+    return m_floor;
+  }
+
+  public Optional<String> getCeiling()
+  {
+    return m_ceiling;
+  }
+
+  public Optional<String> getWalls()
+  {
+    return m_walls;
+  }
+
+  public Optional<String> getFeel()
+  {
+    return m_feel;
+  }
+
+  public Optional<String> getSound()
+  {
+    return m_sound;
+  }
+
+  public Optional<String> getSmell()
+  {
+    return m_smell;
+  }
+
+  public Optional<String> getTaste()
+  {
+    return m_taste;
+  }
+
+  public Optional<String> getLight()
+  {
+    return m_light;
+  }
+
+  public List<String> getSkills()
+  {
+    return m_skills;
   }
 
   @Override
@@ -139,49 +172,69 @@ public class BaseEncounter extends BaseEntry
   }
 
   @Override
+  public void set(Values inValues)
+  {
+    super.set(inValues);
+
+    m_adventure = inValues.use("adventure", m_adventure);
+    m_locations = inValues.use("location", m_locations);
+    m_doors = inValues.use("doors", m_doors);
+    m_floor = inValues.use("floor", m_floor);
+    m_ceiling = inValues.use("ceiling", m_ceiling);
+    m_walls = inValues.use("walls", m_walls);
+    m_feel = inValues.use("feel", m_feel);
+    m_ceiling = inValues.use("ceiling", m_ceiling);
+    m_walls = inValues.use("walls", m_walls);
+    m_feel = inValues.use("feel", m_feel);
+    m_sound = inValues.use("sound", m_sound);
+    m_smell = inValues.use("smell", m_smell);
+    m_taste = inValues.use("taste", m_taste);
+    m_light = inValues.use("light", m_light);
+    m_skills = inValues.use("skill", m_skills);
+  }
+
+  @Override
   public Message toProto()
   {
     BaseEncounterProto.Builder builder = BaseEncounterProto.newBuilder();
 
     builder.setBase((BaseEntryProto)super.toProto());
 
-    if(m_adventure.isDefined())
+    if(m_adventure.isPresent())
       builder.setAdventure(m_adventure.get());
 
-    if(m_location.isDefined())
-      for(Name location : m_location)
-        builder.addLocation(location.get());
+    for(String location : m_locations)
+        builder.addLocation(location);
 
-    if(m_doors.isDefined())
+    if(m_doors.isPresent())
       builder.setDoors(m_doors.get());
 
-    if(m_floor.isDefined())
+    if(m_floor.isPresent())
       builder.setFloor(m_floor.get());
 
-    if(m_ceiling.isDefined())
+    if(m_ceiling.isPresent())
       builder.setCeiling(m_ceiling.get());
 
-    if(m_walls.isDefined())
+    if(m_walls.isPresent())
       builder.setWalls(m_walls.get());
 
-    if(m_feel.isDefined())
+    if(m_feel.isPresent())
       builder.setFeel(m_feel.get());
 
-    if(m_sound.isDefined())
+    if(m_sound.isPresent())
       builder.setSound(m_sound.get());
 
-    if(m_smell.isDefined())
+    if(m_smell.isPresent())
       builder.setSmell(m_smell.get());
 
-    if(m_taste.isDefined())
+    if(m_taste.isPresent())
       builder.setTaste(m_taste.get());
 
-    if(m_light.isDefined())
+    if(m_light.isPresent())
       builder.setLight(m_light.get());
 
-    if(m_skills.isDefined())
-      for(Name skill : m_skills)
-        builder.addSkill(skill.get());
+    for(String skill : m_skills)
+        builder.addSkill(skill);
 
     BaseEncounterProto proto = builder.build();
     return proto;
@@ -201,52 +254,42 @@ public class BaseEncounter extends BaseEntry
     super.fromProto(proto.getBase());
 
     if(proto.hasAdventure())
-      m_adventure = m_adventure.as(proto.getAdventure());
+      m_adventure = Optional.of(proto.getAdventure());
 
     if(proto.getLocationCount() > 0)
-    {
-      List<Name> locations = new ArrayList<>();
       for(String location : proto.getLocationList())
-        locations.add(m_location.createElement().as(location));
-
-      m_location = m_location.as(locations);
-    }
+        m_locations.add(location);
 
     if(proto.hasDoors())
-      m_doors = m_doors.as(proto.getDoors());
+      m_doors = Optional.of(proto.getDoors());
 
     if(proto.hasFloor())
-      m_floor = m_floor.as(proto.getFloor());
+      m_floor = Optional.of(proto.getFloor());
 
     if(proto.hasCeiling())
-      m_ceiling = m_ceiling.as(proto.getCeiling());
+      m_ceiling = Optional.of(proto.getCeiling());
 
     if(proto.hasWalls())
-      m_walls = m_walls.as(proto.getWalls());
+      m_walls = Optional.of(proto.getWalls());
 
     if(proto.hasFeel())
-      m_feel = m_feel.as(proto.getFeel());
+      m_feel = Optional.of(proto.getFeel());
 
     if(proto.hasSound())
-      m_sound = m_sound.as(proto.getSound());
+      m_sound = Optional.of(proto.getSound());
 
     if(proto.hasSmell())
-      m_smell = m_smell.as(proto.getSmell());
+      m_smell = Optional.of(proto.getSmell());
 
     if(proto.hasTaste())
-      m_taste = m_taste.as(proto.getTaste());
+      m_taste = Optional.of(proto.getTaste());
 
     if(proto.hasLight())
-      m_light = m_light.as(proto.getLight());
+      m_light = Optional.of(proto.getLight());
 
     if(proto.getSkillCount() > 0)
-    {
-      List<Name> skills = new ArrayList<>();
       for(String skill : proto.getSkillList())
-        skills.add(m_skills.createElement().as(skill));
-
-      m_skills = m_skills.as(skills);
-    }
+        m_skills.add(skill);
   }
 
   @Override

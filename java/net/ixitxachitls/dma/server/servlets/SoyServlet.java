@@ -82,10 +82,10 @@ public class SoyServlet extends DMAServlet
                      "entries/baselevels",
                      "entries/basefeats",
                      "entries/baseskills",
-                     "entries/basespells"//,
+                     "entries/baseencounters",
+                     "entries/basespells"
                      //"basemonster", "monster",
                      //"npc",
-                     //"baseencounter", "encounter",
                      );
 
   /**
