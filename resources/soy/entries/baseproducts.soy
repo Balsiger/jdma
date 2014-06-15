@@ -345,9 +345,9 @@
             {/foreach}
             {sp}|{sp}            
             <span class="action" onclick="edit.show(
-                           '$entry.name', 
+                           '{escape($entry.name)}', 
                            '/user/{$ij.user.name}/product/CREATE', 
-                           '{escape($entry.name)}', '{$entry.name}')">
+                           '{escape($entry.name)}', '{escape($entry.name)}')">
               add
             </span>
           {/param}

@@ -49,6 +49,7 @@ edit.all = [];
  */
 edit.show = function(inName, inPath, inID, inBases)
 {
+  window.console.log(inName, inPath, inID, inBases);
   var contents = util.ajax(inPath + '.edit?body&id=' + inID 
       + '&bases=' + inBases);
   var dialog = $('<div id="dialog-' + inID + '"/>')

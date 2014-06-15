@@ -418,6 +418,30 @@ public class SoyTemplate
     }
   }
 
+  /** A plugin function to check if a value is a list. */
+  public static class JsEscapeFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "jsescape";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public SoyData computeForTofu(List<SoyData> inArgs)
+    {
+      return StringData.forValue(inArgs.get(0).toString()
+                                 .replace("'", "\\'")
+                                 .replace("\"",  "\\\""));
+    }
+  }
+
   //----- NumberDirective --------------------------------------------------
 
   /** A directive to nicely format a number. */
@@ -676,6 +700,7 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(LengthFunction.class);
       soyFunctionsSetBinder.addBinding().to(DefFunction.class);
       soyFunctionsSetBinder.addBinding().to(EscapeFunction.class);
+      soyFunctionsSetBinder.addBinding().to(JsEscapeFunction.class);
       soyFunctionsSetBinder.addBinding().to(FormatNumberFunction.class);
       soyFunctionsSetBinder.addBinding().to(IsListFunction.class);
       soyFunctionsSetBinder.addBinding().to(CamelFunction.class);

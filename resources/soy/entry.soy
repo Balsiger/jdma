@@ -152,8 +152,9 @@
   <div class="toolbar">
     <div class="actions">
       <div class="action sprite large edit"
-           onclick="edit.show('{$entry.name}', '{$entry.path}', 
-                              'edit-{$entry.type.css}-{escape($entry.name)}')">
+           onclick="edit.show('{$entry.name|escapeJsString}', 
+                              '{$entry.path|escapeJsString}', 
+                'edit-{$entry.type.css}-{escape($entry.name)|escapeJsString}')">
       </div>
       <div class="action sprite large delete"
            onclick="if(confirm('Do you really want to delete this?'))
