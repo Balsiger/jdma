@@ -49,10 +49,9 @@ edit.all = [];
  */
 edit.show = function(inName, inPath, inID, inBases)
 {
-  window.console.log(inName, inPath, inID, inBases);
   var contents = util.ajax(inPath + '.edit?body&id=' + inID 
       + '&bases=' + inBases);
-  var dialog = $('<div id="dialog-' + inID + '"/>')
+  var dialog = $('<div id="dialog-' + inID.replace(/ /g, "_") + '"/>')
     .html(contents)
     .dialog({
       title: 'Edit ' + inName,
@@ -60,7 +59,7 @@ edit.show = function(inName, inPath, inID, inBases)
       resizable: false,
       width: $(window).width() * 3 / 4,
       height: $(window).height(),
-      closeOnEscape: true,
+      closeOnEscape: false,
       dialogClass: 'edit-dialog',
     });
   
@@ -168,13 +167,10 @@ edit.save = function(inKey, inID)
   // remove the move away code
   window.onbeforeunload = undefined;
 
-  window.console.log("eval", eval);
   // close the dialog
   if(eval)
   {
-    window.console.log("dialog", $('#dialog-' + inID), $('#dialog-' + inID));
-    $('#dialog-' + inID).dialog("destroy");
-    $('#dialog-' + inID).remove();
+    $('#dialog-' + inID).dialog('close').dialog('destroy').remove();
 
     // reload the saved entry
     util.link(null, null, null);

@@ -1,0 +1,1175 @@
+/* ****************************************************************************
+ * Copyright (C) 2002-2014 Peter 'Merlin' Balsiger And Fred 'Mythos' Dobler
+ * All Rights Reserved
+ *
+ * This File Is Part Of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant Is Free Software; You Can Redistribute It And/Or
+ * Modify It Under The Terms Of The Gnu General Public License As Published By
+ * The Free Software Foundation; Either Version 2 Of The License, Or
+ * (At Your Option) Any Later Version.
+ *
+ * Dungeon Master Assistant Is Distributed In The Hope That It Will Be Useful,
+ * But Without Any Warranty; Without Even The Implied Warranty Of
+ * Merchantability Or Fitness For A Particular Purpose.  See The
+ * Gnu General Public License For More Details.
+ *
+ * You Should Have Received A Copy Of The Gnu General Public License
+ * Along With Dungeon Master Assistant; If Not, Write To The Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, Ma  02111-1307  Usa
+ *****************************************************************************/
+
+ /*
+ * Templates for base products.
+ */
+{namespace dma.entries.basemonsters}
+
+/**
+ * Show the given entry in standard format.
+ * 
+ * @param entry The entry to show.
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ */
+{template .show autoescape="true"}
+  {call dma.entry.show}
+    {param entry: $entry /}
+    {param type: 'base-level' /}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param list: $list /}
+    {param next: $next /}
+    {param last: $last /}
+    {param color: '#080' /}
+    {param title}
+      {call dma.entry._new_title}
+        {param title: $entry.name /}
+        {param color: '#080' /}
+      {/call}
+    {/param}
+    {param values}            
+      {if length($entry.baseNames)}
+        {call dma.entry.value}
+          {param label: 'Base' /}
+          {param value}
+            {foreach $base in $entry.baseNames}
+              {call dma.page.link}
+                {param text: $base /}
+                {param url: '/quality/'  + $base /}
+              {/call}
+              {if not isLast($base)}; {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call} 
+      {/if}      
+      {if length($entry.synonyms)}
+        {call dma.entry.value}
+          {param label: 'Synonyms' /}
+          {param value}
+            {foreach $synonym in $entry.synonyms}
+              {$synonym}
+              {if not isLast($synonym)}; {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}      
+      {if length($entry.categories) or 
+          length($entry.combined_categories.annotate)}
+        {call dma.entry.value}
+          {param label: 'Categories' /}
+          {param value}
+            {if length($entry.categories)}
+              {foreach $category in $entry.categories}
+                {$category}
+                {if not isLast($category)}, {/if}
+              {/foreach}
+            {/if}
+            {if length($entry.combined_categories.annotate)}
+              {if length($entry.categories)},{sp}{/if}
+              {call dma.entry.concatenated_list}
+                {param values: [] /}
+                {param concatenate: $entry.combined_categories /}
+              {/call}
+            {/if}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'Worlds' /}        
+        {param value}
+          {call dma.entry.concatenated_list}
+            {param values: $entry.worlds /}
+            {param concatenate: $entry.combined_worlds /}
+          {/call}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {if $entry.incomplete or length($entry.combined_incomplete.annotate) > 0}
+        {call dma.entry.value}
+          {param label: 'Incomplete' /}
+          {param value}
+            {if $entry.incomplete}
+              {$entry.incomplete}{sp}
+            {/if}
+            {call dma.entry.concatenated}
+              {param value: '' /}
+              {param concatenate: $entry.combined_incomplete /}
+            {/call}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'Type' /}
+        {param value}
+          {$entry.monster_type}
+          {if length($entry.monster_subtypes)}
+            {sp}(
+              {foreach $subtype in $entry.monster_subtypes}
+                {$subtype}
+                {if not isLast($subtype)}, {/if}
+              {/foreach}
+            )
+          {/if}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Size' /}
+        {param value}
+          {$entry.size}
+          {if $entry.size_modifier.string != 'Unknown'}
+            {sp}({$entry.size_modifier})
+          {/if}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {if $entry.hit_dice.present}
+        {call dma.entry.value}
+          {param label: 'Hit Dice' /}
+          {param value: $entry.hit_dice.get /}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'Speed' /}
+        {param value}
+          {foreach $speed in $entry.speeds}
+            {$speed}
+            {if not isLast($speed)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Natural Armor' /}
+        {param value: $entry.natural_armor.preseent 
+          ? $entry.natural_armor.get : '' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Base Attack' /}
+        {param value: $entry.attack /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Attributes' /}
+        {param value}
+          Str {$entry.strength.present ? $entry.strength.get : '-'},
+          Dex {$entry.dexterity.present ? $entry.dexterity.get : '-'},
+          Con {$entry.constitution.present ? $entry.constitution.get : '-'},
+          Int {$entry.intelligence.present ? $entry.intelligence.get : '-'},
+          Wis {$entry.wisdom.present ? $entry.wisdom.get : '-'},
+          Cha {$entry.charisma.present ? $entry.charisma.get : '-'}
+        {/param}
+        {param color: '#080' /}
+      {/call}      
+      {call dma.entry.value}
+        {param label: 'Saves' /}
+        {param value}
+          Ref {$entry.reflex_save},
+          Will {$entry.will_save},
+          For {$entry.fortitude_save}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Attack' /}
+        {param value}
+          {foreach $attack in $entry.primary_attacks}
+            {$attack}
+            {if not isLast($attack)}, {/if}
+          {/foreach};{sp}
+          {foreach $attack in $entry.secondary_attacks}
+            {$attack}
+            {if not isLast($attack)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Space/Reach' /}
+        {param value}
+          {$entry.space.present ? $entry.space.get : ''}
+          /
+          {$entry.reach.present ? $entry.reach.get : ''}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Special Attacks' /}
+        {param value}
+          {foreach $special in $entry.special_attacks}
+            <a href="/quality/{$special}">{$special}</a>
+            {if not isLast($special)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Special Qualities' /}
+        {param value}
+          {foreach $special in $entry.special_qualities}
+            <a href="/quality/{$special}">{$special}</a>
+            {if not isLast($special)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Class Skills' /}
+        {param value}
+          {foreach $skill in $entry.class_skills}
+            <a href="/skill/{$skill}">{$skill}</a>
+            {if not isLast($skill)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Feats' /}
+        {param value}
+          {foreach $feat in $entry.feats}
+            <a href="/skill/{$feat}">{$feat}</a>
+            {if not isLast($feat)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#080' /}
+      {/call} 
+      {call dma.entry.value}
+        {param label: 'Environment' /}
+        {param value}
+          {$entry.climate} {$entry.terrain}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {if $entry.cr.present }
+        {call dma.entry.value}
+          {param label: 'CR' /}
+          {param value: $entry.cr.get /}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'Organization' /}
+        {param value}
+          {foreach $group in $entry.organizations}
+            {$group}
+            {if not isLast($group)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Treasure' /}
+        {param value: $entry.treasure /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Alignment' /}
+        {param value}
+          {$entry.alignment_status} {$entry.alignment}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Advancement' /}
+        {param value}
+          {foreach $advancement in $entry.advancements}
+            {$advancement}
+            {if not isLast($advancement)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {if $entry.level_adjustment.present }
+        {call dma.entry.value}
+          {param label: 'Level Adjustment' /}
+          {param value: $entry.level_adjustment.get /}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'Language' /}
+        {param value}
+          {foreach $language in $entry.languages}
+            {$language}
+            {if not isLast($language)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Possessions' /}
+        {param value}
+          {foreach $possession in $entry.possessions}
+            {$possession}
+            {if not isLast($possession)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Good Saves' /}
+        {param value}
+          {foreach $save in $entry.good_saves}
+            {$save}
+            {if not isLast($save)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {if $entry.encounter.present }
+        {call dma.entry.value}
+          {param label: 'Encounter' /}
+          {param value: commands($entry.encounter.get) /}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if $entry.combat.present }
+        {call dma.entry.value}
+          {param label: 'Combat' /}
+          {param value: commands($entry.combat.get) /}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if $entry.tactics.present }
+        {call dma.entry.value}
+          {param label: 'Tactics' /}
+          {param value: commands($entry.tactics.get) /}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if $entry.character.present }
+        {call dma.entry.value}
+          {param label: 'Character' /}
+          {param value: commands($entry.character.get) /}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if $entry.reproduction.present }
+        {call dma.entry.value}
+          {param label: 'Reproduction' /}
+          {param value: commands($entry.reproduction.get) /}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'References' /}
+        {param value}
+          {call dma.entry.concatenated_list}
+            {param values: [] /}
+            {param concatenate: $entry.combined_references /}
+          {/call}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Formatting a list of entries.
+ *
+ * @param title The list title.
+ * @param start The start index
+ * @param pagesize The size of the page
+ * @param entries The entries printed
+ * @param label The navigation label for this page
+ * @param path The path to this page
+ *
+ */
+{template .list}
+  {call dma.entry.newlist}
+    {param title: $title /}
+    {param label: $label /}
+    {param path: $path /}
+    {param start: $start /}
+    {param pagesize: $pagesize /}
+    {param size: $entries ? length($entries) : 0 /}
+    {param titles: [ 'Name', 'Worlds', 'Short Descriptoion'] /}
+    {param entries}
+      {foreach $entry in $entries}
+        <tr onclick="util.link(event, '{$entry.path}')">
+          {call dma.entry.newListEntry}
+            {param path: $entry.path /}
+            {param values: [
+              $entry.name, $entry.worldsString, $entry.short_description
+            ] /}
+          {/call}
+        </tr>
+      {/foreach}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Editiing the base item.
+ * 
+ * @param entry The item to edit. 
+ * @param id    THe id to use for the editing dialog.
+ */
+{template .edit autoescape="true"}
+  {call dma.edit.entry}
+    {param entry: $entry /}
+    {param type: 'base-level' /}
+    {param id: $id /}
+    {param values}
+      {call dma.edit.value}
+        {param name: 'name' /}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value_text}
+        {param name: 'description' /}
+        {param label: 'Description' /}
+        {param value: $entry.description /}
+        {param validate: 'any' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'short-description' /}
+        {param label: 'Short Description' /}
+        {param value: $entry.short_description /}
+        {param validate: 'any' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'base' /}
+        {param label: 'Base' /}
+        {param values: $entry.base_names /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+        {param autocomplete: 'base item/name' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'synonyms' /}
+        {param label: 'Synonyms' /}
+        {param values: $entry.synonyms /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'categories' /}
+        {param label: 'Categories' /}
+        {param values: $entry.categories /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'worlds' /}
+        {param label: 'Worlds' /}
+        {param values: $entry.worlds/}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'incomplete' /}
+        {param label: 'Incomplete' /}
+        {param value: $entry.incomplete /}
+        {param validate: 'any' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param label: 'Size' /}
+        {param color: '#080' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {call dma.edit.field_selection}
+                {param name: 'size' /}
+                {param value: $entry.size.string /}
+                {param choices: $entry.size.names /}
+                {param class: 'narrow' /}
+              {/call}
+              {call dma.edit.field_selection}
+                {param name: 'size_modifier' /}
+                {param value: $entry.size_modifier.string /}
+                {param choices: $entry.size_modifier.names /}
+                {param class: 'narrow' /}              
+              {/call}
+            {/param}
+          {/call}
+        {/param}
+      {/call}    
+      {call dma.edit.value_selection}
+        {param name: 'type' /}
+        {param label: 'Type' /}
+        {param value: $entry.monster_type.string /}
+        {param choices: $entry.monster_type.names /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'subtype' /}
+        {param label: 'Subtype' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $subtype in $entry.monster_subtypes}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'subtype',
+                    'value': $subtype.string,
+                    'type': 'selection',
+                    'choices': $entry.monster_subtype_names
+                  ]] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'subtype',
+                    'value': '',
+                    'type': 'selection',
+                    'choices': $entry.monster_subtype_names
+                  ]] /}
+                {/call}
+              {/foreach}          
+            {/param}
+          {/call}
+        {/param}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'hit_dice' /}
+        {param label: 'Hit Dice' /}
+        {param value: $entry.hit_dice.present ? $entry.hit_dice.get : '' /}
+        {param validate: 'dice' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'speed' /}
+        {param label: 'Speed' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $speed in $entry.speeds}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'speed.mode',
+                    'value': $speed.mode,
+                    'type': 'selection',
+                    'choices': $entry.movement_mode_names
+                  ], [
+                    'name': 'speed.speed',
+                    'value': $speed.speed,
+                    'validate': 'distance' 
+                  ], [
+                    'name': 'speed.maneuverability',
+                    'value': $speed.maneuverability,
+                    'type': 'selection',
+                    'choices': $entry.maneuverability_names
+                  ]] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'speed.mode',
+                    'value': '',
+                    'type': 'selection',
+                    'choices': $entry.movement_mode_names
+                  ], [
+                    'name': 'speed.speed',
+                    'value': '',
+                    'validate': 'distance' 
+                  ], [
+                    'name': 'speed.maneuverability',
+                    'value': '',
+                    'type': 'selection',
+                    'choices': $entry.maneuverability_names
+                  ]] /}
+                {/call}
+              {/foreach}          
+            {/param}
+          {/call}
+        {/param}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'natural_armor' /}
+        {param label: 'Natural Armor' /}
+        {param value: $entry.natural_armor.present 
+          ? $entry.natural_armor.get : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'attack' /}
+        {param label: 'Base Attack Bonus' /}
+        {param value: $entry.attack /}
+        {param validate: 'number' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param label: 'Abilites' /}
+        {param color: '#080' /}
+        {param value}
+          {call dma.edit.field_input}
+            {param name: 'strength' /}
+            {param value: $entry.strength.present ? $entry.strength.get : '' /}
+            {param validate: 'number' /}
+            {param caption: 'Strength' /}
+            {param class: 'field6' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'dexterity' /}
+            {param value: $entry.dexterity.present ? $entry.dexterity.get : '' /}
+            {param validate: 'number' /}
+            {param caption: 'Dexterity' /}
+            {param class: 'field6' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'constitution' /}
+            {param value: $entry.constitution.present 
+              ? $entry.constitution.get : '' /}
+            {param validate: 'number' /}
+            {param caption: 'Constitution' /}
+            {param class: 'field6' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'intelligence' /}
+            {param value: $entry.intelligence.present 
+              ? $entry.intelligence.get : '' /}
+            {param validate: 'number' /}
+            {param caption: 'Intelligence' /}
+            {param class: 'field6' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'wisdom' /}
+            {param value: $entry.wisdom.present ? $entry.wisdom.get : '' /}
+            {param validate: 'number' /}
+            {param caption: 'Wisdom' /}
+            {param class: 'field6' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'charisma' /}
+            {param value: $entry.charisma.present ? $entry.charisma.get : '' /}
+            {param validate: 'number' /}
+            {param caption: 'Charisma' /}
+            {param class: 'field6' /}
+          {/call}
+        {/param}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param label: 'Saves' /}
+        {param color: '#080' /}
+        {param value}
+          {call dma.edit.field_input}
+            {param name: 'reflex_save' /}
+            {param value: $entry.reflex_save /}
+            {param validate: 'number' /}
+            {param caption: 'Reflex' /}
+            {param class: 'field3' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'will_save' /}
+            {param value: $entry.will_save /}
+            {param validate: 'number' /}
+            {param caption: 'Will' /}
+            {param class: 'field3' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'fortitude_save' /}
+            {param value: $entry.fortitude_save /}
+            {param validate: 'number' /}
+            {param caption: 'Fortitude' /}
+            {param class: 'field3' /}
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'primary_attack' /}
+        {param label: 'Primary Attacks' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $attack in $entry.primary_attacks}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'primary_attack.number',
+                    'value': $attack.number,
+                    'validate': 'dice'
+                  ], [
+                    'name': 'primary_attack.mode',
+                    'value': $attack.mode,
+                    'type': 'selection',
+                    'choices': $entry.attack_mode_names 
+                  ], [
+                    'name': 'primary_attack.style',
+                    'value': $attack.style,
+                    'type': 'selection',
+                    'choices': $entry.attack_style_names 
+                  ], [
+                    'name': 'primary_attack.damage',
+                    'value': $attack.damage,
+                    'validate': 'damage'
+                  ]] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'primary_attack.number',
+                    'value': '',
+                    'validate': 'dice'
+                  ], [
+                    'name': 'primary_attack.mode',
+                    'value': '',
+                    'type': 'selection',
+                    'choices': $entry.attack_mode_names 
+                  ], [
+                    'name': 'primary_attack.style',
+                    'value': '',
+                    'type': 'selection',
+                    'choices': $entry.attack_style_names 
+                  ], [
+                    'name': 'primary_attack.damage',
+                    'value': '',
+                    'validate': 'damage'
+                  ]] /}
+                {/call}
+              {/foreach}          
+            {/param}
+          {/call}
+        {/param}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'secondary_attack' /}
+        {param label: 'Secondary Attacks' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $attack in $entry.secondary_attacks}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'secondary_attack.number',
+                    'value': $attack.number,
+                    'validate': 'dice'
+                  ], [
+                    'name': 'secondary_attack.mode',
+                    'value': $attack.mode,
+                    'type': 'selection',
+                    'choices': $entry.attack_mode_names 
+                  ], [
+                    'name': 'secondary_attack.style',
+                    'value': $attack.style,
+                    'type': 'selection',
+                    'choices': $entry.attack_style_names 
+                  ], [
+                    'name': 'secondary_attack.damage',
+                    'value': $attack.damage,
+                    'validate': 'damage'
+                  ]] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'secondary_attack.number',
+                    'value': '',
+                    'validate': 'dice'
+                  ], [
+                    'name': 'secondary_attack.mode',
+                    'value': '',
+                    'type': 'selection',
+                    'choices': $entry.attack_mode_names 
+                  ], [
+                    'name': 'secondary_attack.style',
+                    'value': '',
+                    'type': 'selection',
+                    'choices': $entry.attack_style_names 
+                  ], [
+                    'name': 'secondary_attack.damage',
+                    'value': '',
+                    'validate': 'damage'
+                  ]] /}
+                {/call}
+              {/foreach}          
+            {/param}
+          {/call}
+        {/param}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'space' /}
+        {param label: 'Space' /}
+        {param value: $entry.space.present ? $entry.space.get : '' /}
+        {param validate: 'distance' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'reach' /}
+        {param label: 'Reach' /}
+        {param value: $entry.reach.present ? $entry.reach.get : '' /}
+        {param validate: 'distance' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'special_attacks' /}
+        {param label: 'Special Attacks' /}
+        {param values: $entry.special_attacks /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'special_qualities' /}
+        {param label: 'Special Qualities' /}
+        {param values: $entry.special_qualities /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'class_skills' /}
+        {param label: 'Class Skills' /}
+        {param values: $entry.class_skills /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'feats' /}
+        {param label: 'Feats' /}
+        {param values: $entry.feats /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param label: 'Environment' /}
+        {param color: '#080' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {call dma.edit.field_selection}
+                {param name: 'climate' /}
+                {param value: $entry.climate.string /}
+                {param choices: $entry.climate.names /}
+                {param class: 'narrow' /}
+              {/call}
+              {call dma.edit.field_selection}
+                {param name: 'terrain' /}
+                {param value: $entry.terrain.string /}
+                {param choices: $entry.terrain.names /}
+                {param class: 'narrow' /}              
+              {/call}
+            {/param}
+          {/call}
+        {/param}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'organization' /}
+        {param label: 'Organization' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $group in $entry.organizations}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'organization.organization',
+                    'value': $group.organization,
+                    'type': 'selection',
+                    'choices': $entry.organization_names
+                  ], [
+                    'name': 'organization.number',
+                    'value': $group.number,
+                    'validate': 'dice'
+                  ], [
+                    'name': 'organization.plus',
+                    'value': $group.plus.present ? $group.plus.get : '',
+                    'validate': 'any'
+                  ]] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'organization.organization',
+                    'value': '',
+                    'type': 'selection',
+                    'choices': $entry.organization_names
+                  ], [
+                    'name': 'organization.number',
+                    'value': '',
+                    'validate': 'dice'
+                  ], [
+                    'name': 'organization.plus',
+                    'value': '',
+                    'validate': 'any'
+                  ]] /}
+                {/call}
+              {/foreach}          
+            {/param}
+          {/call}
+        {/param}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'cr' /}
+        {param label: 'CR' /}
+        {param value: $entry.cr.present ? $entry.cr.get : '' /}
+        {param validate: 'rational' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value_selection}
+        {param name: 'treasure' /}
+        {param label: 'Treasure' /}
+        {param value: $entry.treasure.string /}
+        {param choices: $entry.treasure.names /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param label: 'Alignment' /}
+        {param color: '#080' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {call dma.edit.field_selection}
+                {param name: 'alignment_status' /}
+                {param value: $entry.alignment_status.string /}
+                {param choices: $entry.alignment_status.names /}
+                {param class: 'narrow' /}
+              {/call}
+              {call dma.edit.field_selection}
+                {param name: 'alignment' /}
+                {param value: $entry.alignment.string /}
+                {param choices: $entry.alignment.names /}
+                {param class: 'narrow' /}              
+              {/call}
+            {/param}
+          {/call}
+        {/param}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'advancement' /}
+        {param label: 'Advancement' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $advancement in $entry.advancements}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'advancement.range',
+                    'value': $advancement.range,
+                    'validate': 'distance'
+                  ], [
+                    'name': 'advancement.size',
+                    'value': $advancement.size,
+                    'type': 'selection',
+                    'choices': $entry.size_names
+                  ]] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'advancement.range',
+                    'value': '',
+                    'validate': 'distance'
+                  ], [
+                    'name': 'advancement.size',
+                    'value': '',
+                    'type': 'selection',
+                    'choices': $entry.size_names
+                  ]] /}
+                {/call}
+              {/foreach}          
+            {/param}
+          {/call}
+        {/param}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'level_adjustment' /}
+        {param label: 'Level Adjustment' /}
+        {param value: $entry.level_adjustment.present 
+          ? $entry.level_adjustment.get : '' /}
+        {param validate: 'number' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'language' /}
+        {param label: 'Language' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $language in $entry.languages}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'language.language',
+                    'value': $language.language,
+                    'type': 'selection',
+                    'choices': $entry.language_names
+                  ], [
+                    'name': 'language.modifier',
+                    'value': $language.modifier, 
+                    'type': 'selection',
+                    'choices': $entry.language_modifier_names
+                  ]] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'language.language',
+                    'value': '',
+                    'type': 'selection',
+                    'choices': $entry.language_names
+                  ], [
+                    'name': 'language.modifier',
+                    'value': '', 
+                    'type': 'selection',
+                    'choices': $entry.language_modifier_names
+                  ]] /}
+                {/call}
+              {/foreach}          
+            {/param}
+          {/call}
+        {/param}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value_text}
+        {param name: 'encounter' /}
+        {param label: 'Encounter' /}
+        {param value: $entry.encounter.present ? $entry.combat.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_text}
+        {param name: 'combat' /}
+        {param label: 'Combat' /}
+        {param value: $entry.combat.present ? $entry.combat.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_text}
+        {param name: 'tacticts' /}
+        {param label: 'Tactics' /}
+        {param value: $entry.tactics.present ? $entry.combat.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_text}
+        {param name: 'character' /}
+        {param label: 'Character' /}
+        {param value: $entry.character.present ? $entry.character.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_text}
+        {param name: 'reproduction' /}
+        {param label: 'Reproduction' /}
+        {param value: $entry.reproduction.present 
+          ? $entry.reproduction.get : '' /}
+        {param validate: 'any' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'possession' /}
+        {param label: 'Possessions' /}
+        {param values: $entry.possessions /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'good_saves' /}
+        {param label: 'Good Saves' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $save in $entry.good_saves}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'good_save',
+                    'value': $save.string,
+                    'type': 'selection',
+                    'choices': $entry.save_names
+                  ]] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'good_save',
+                    'value': '',
+                    'type': 'selection',
+                    'choices': $entry.save_names
+                  ]] /}
+                {/call}
+              {/foreach}          
+            {/param}
+          {/call}
+        {/param}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'references' /}
+        {param color: '#080' /}
+        {param label: 'References' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $reference in $entry.references}  
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'references.name',
+                      'value': $reference.name,
+                      'validate': 'non-empty',
+                      'caption': 'name' 
+                    ],
+                    [
+                      'name': 'references.pages',
+                      'value': $reference.pagesString,
+                      'validate': 'any',
+                      'caption': 'pages' 
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'references.name',
+                      'value': '',
+                      'validate': 'non-empty',
+                      'caption': 'name' 
+                    ],
+                    [
+                      'name': 'references.pages',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'pages' 
+                    ]
+                  ] 
+                  /}
+                {/call}          
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}            
+      {/call}
+    {/param}
+  {/call}
+{/template}
+

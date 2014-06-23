@@ -435,7 +435,7 @@ public class BaseEntry extends AbstractEntry
     super.set(inValues);
 
     m_description = inValues.use("description", m_description);
-    m_short = inValues.use("short description", m_short);
+    m_short = inValues.use("short_description", m_short);
     m_worlds = inValues.use("worlds", m_worlds, new Values.Checker()
     {
       @Override

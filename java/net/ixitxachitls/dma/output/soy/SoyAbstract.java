@@ -43,28 +43,17 @@ import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.Pair;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * An abstract soy value.
  *
  * @file          SoyAbstract.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @Immutable
 @ParametersAreNonnullByDefault
 public class SoyAbstract extends SoyMapData
 {
-  //----------------------------------------------------------------- nested
-
   /**
    * An undefined value that can still be dereferenced, resulting in another
    * undefined value.
@@ -178,10 +167,6 @@ public class SoyAbstract extends SoyMapData
       return m_value.toString();
     }
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
 
   /**
    * Create the abstract soy value.

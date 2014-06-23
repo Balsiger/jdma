@@ -19,11 +19,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +30,6 @@ import java.util.Set;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
@@ -39,2425 +37,735 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Attack.Mode;
-import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Attack.Style;
-import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Subtype;
-import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Type;
-import net.ixitxachitls.dma.proto.Values.ParametersProto;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Damage;
-import net.ixitxachitls.dma.values.Dice;
-import net.ixitxachitls.dma.values.Distance;
-import net.ixitxachitls.dma.values.EnumSelection;
-import net.ixitxachitls.dma.values.Group;
-import net.ixitxachitls.dma.values.LongFormattedText;
-import net.ixitxachitls.dma.values.Modifier;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.NewDamage;
+import net.ixitxachitls.dma.values.NewDice;
+import net.ixitxachitls.dma.values.NewDistance;
+import net.ixitxachitls.dma.values.NewModifier;
+import net.ixitxachitls.dma.values.NewRange;
+import net.ixitxachitls.dma.values.NewRational;
 import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.Number;
-import net.ixitxachitls.dma.values.Parameters;
-import net.ixitxachitls.dma.values.Range;
-import net.ixitxachitls.dma.values.Rational;
-import net.ixitxachitls.dma.values.Reference;
-import net.ixitxachitls.dma.values.Selection;
 import net.ixitxachitls.dma.values.Size;
 import net.ixitxachitls.dma.values.SizeModifier;
-import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.values.Union;
 import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.dma.values.conditions.Condition;
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is the basic jDMA base monster.
  *
  * @file          BaseMonster.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ParametersAreNonnullByDefault
 public class BaseMonster extends BaseEntry
 {
-  //----------------------------------------------------------------- nested
+  public static class Speed
+  {
+    public Speed(MovementMode inMode, NewDistance inSpeed,
+                 Optional<Maneuverability> inManeuverability)
+    {
+      m_mode = inMode;
+      m_speed = inSpeed;
+      m_maneuverability = inManeuverability;
+    }
 
-  //----- monster type -----------------------------------------------------
+    private MovementMode m_mode;
+    private NewDistance m_speed;
+    private Optional<Maneuverability> m_maneuverability;
+
+    /** The parser for armor types. */
+    public static final NewValue.Parser<Speed> PARSER =
+      new NewValue.Parser<Speed>(3)
+      {
+        @Override
+        public Optional<Speed> doParse(String inMode, String inSpeed,
+                                       String inManeuverability)
+        {
+          Optional<MovementMode> mode = MovementMode.fromString(inMode);
+          if(!mode.isPresent())
+            return Optional.absent();
+
+          Optional<NewDistance> speed =NewDistance.PARSER.parse(inSpeed);
+          if(!speed.isPresent())
+            return Optional.absent();
+
+          return Optional.of(new Speed
+                             (mode.get(), speed.get(),
+                              Maneuverability.PARSER.parse(inManeuverability)));
+        }
+      };
+
+    public MovementMode getMode()
+    {
+      return m_mode;
+    }
+
+    public NewDistance getSpeed()
+    {
+      return m_speed;
+    }
+
+    public Optional<Maneuverability> getManeuverability()
+    {
+      return m_maneuverability;
+    }
+
+    @Override
+    public String toString()
+    {
+      return (m_mode != MovementMode.RUN && m_mode != MovementMode.UNKNOWN
+        ? m_mode + " " : "")
+        + m_speed.toString()
+        + (m_maneuverability.isPresent() ? " (" + m_maneuverability + ")" : "");
+    }
+  }
+
+  public static class Attack
+  {
+    public Attack(NewDice inNumber, AttackMode inMode, AttackStyle inStyle,
+                  NewDamage inDamage)
+    {
+      m_number = inNumber;
+      m_mode = inMode;
+      m_style = inStyle;
+      m_damage = inDamage;
+    }
+
+    private NewDice m_number;
+    private AttackMode m_mode;
+    private AttackStyle m_style;
+    private NewDamage m_damage;
+
+    public static final NewValue.Parser<Attack> PARSER =
+      new NewValue.Parser<Attack>(4)
+      {
+        @Override
+        public Optional<Attack> doParse(String inNumber, String inMode,
+                                        String inStyle, String inDamage)
+        {
+          Optional<NewDice> number = NewDice.PARSER.parse(inNumber);
+          if(!number.isPresent())
+            return Optional.absent();
+
+          Optional<AttackMode> mode = AttackMode.fromString(inMode);
+          if(!mode.isPresent())
+            return Optional.absent();
+
+          Optional<AttackStyle> style = AttackStyle.fromString(inStyle);
+          if(!style.isPresent())
+            return Optional.absent();
+
+          Optional<NewDamage> damage = NewDamage.PARSER.parse(inDamage);
+          if(!damage.isPresent())
+            return Optional.absent();
+
+          return Optional.of(new Attack(number.get(), mode.get(), style.get(),
+                                        damage.get()));
+        }
+      };
+
+    public NewDice getNumber()
+    {
+      return m_number;
+    }
+    public AttackMode getMode()
+    {
+      return m_mode;
+    }
+    public AttackStyle getStyle()
+    {
+      return m_style;
+    }
+    public NewDamage getDamage()
+    {
+      return m_damage;
+    }
+
+    @Override
+    public String toString()
+    {
+      return m_number + " " + m_mode + " " + m_style + " (" + m_damage + ")";
+    }
+  }
+
+  public static class Group
+  {
+    public Group(Organization inOrganization, NewDice inNumber,
+                 Optional<String> inPlus)
+    {
+      m_organization = inOrganization;
+      m_number = inNumber;
+      m_plus = inPlus;
+    }
+
+    private Organization m_organization;
+    private NewDice m_number;
+    private Optional<String> m_plus;
+
+    public static final NewValue.Parser<Group> PARSER =
+      new NewValue.Parser<Group>(3)
+      {
+        @Override
+        public Optional<Group> doParse(String inOrganization,
+                                       String inNumber, String inPlus)
+        {
+          Optional<Organization> organization =
+            Organization.fromString(inOrganization);
+          if(!organization.isPresent())
+            return Optional.absent();
+
+          Optional<NewDice> number = NewDice.PARSER.parse(inNumber);
+          if(!number.isPresent())
+            return Optional.absent();
+
+          Optional<String> plus =
+            inPlus.isEmpty() ? Optional.<String>absent() : Optional.of(inPlus);
+
+          return Optional.of(new Group(organization.get(), number.get(), plus));
+        }
+      };
+
+    public Organization getOrganization()
+    {
+      return m_organization;
+    }
+    public NewDice getNumber()
+    {
+      return m_number;
+    }
+    public Optional<String> getPlus()
+    {
+      return m_plus;
+    }
+
+    @Override
+    public String toString()
+    {
+      return m_organization + " "
+        + m_number
+        + (m_plus.isPresent() && !m_plus.get().isEmpty()
+            ? " plus " + m_plus.get() : "");
+    }
+  }
+
+  public static class Advancement
+  {
+    public Advancement(NewRange inRange, Size inSize)
+    {
+      m_range = inRange;
+      m_size = inSize;
+    }
+
+    private NewRange m_range;
+    private Size m_size;
+
+    public static final NewValue.Parser<Advancement> PARSER =
+      new NewValue.Parser<Advancement>(3)
+      {
+        @Override
+        public Optional<Advancement> doParse(String inRange, String inSize)
+        {
+          Optional<NewRange> range = NewRange.PARSER.parse(inRange);
+          if(!range.isPresent())
+            return Optional.absent();
+
+          Optional<Size> size = Size.fromString(inSize);
+          if(!size.isPresent())
+            return Optional.absent();
+
+          return Optional.of(new Advancement(range.get(), size.get()));
+        }
+      };
+
+    public NewRange getRange()
+    {
+      return m_range;
+    }
+    public Size getSize()
+    {
+      return m_size;
+    }
+
+    @Override
+    public String toString()
+    {
+      return m_range + " HD (" + m_size + ")";
+    }
+  }
+
+  public static class LanguageOption
+  {
+    public LanguageOption(Language inLanguage, LanguageModifier inModifier)
+    {
+      m_language = inLanguage;
+      m_modifier = inModifier;
+    }
+
+    private Language m_language;
+    private LanguageModifier m_modifier;
+
+    public static final NewValue.Parser<LanguageOption> PARSER =
+      new NewValue.Parser<LanguageOption>(2)
+      {
+        @Override
+        public Optional<LanguageOption> doParse(String inLanguage,
+                                                String inModifier)
+        {
+          Optional<Language> language = Language.fromString(inLanguage);
+          if(!language.isPresent())
+            return Optional.absent();
+
+          Optional<LanguageModifier> modifier =
+            LanguageModifier.fromString(inModifier);
+          if(!modifier.isPresent())
+            return Optional.absent();
+
+          return
+            Optional.of(new LanguageOption(language.get(), modifier.get()));
+        }
+      };
+
+    public Language getLanguage()
+    {
+      return m_language;
+    }
+    public LanguageModifier getModifier()
+    {
+      return m_modifier;
+    }
+
+    @Override
+    public String toString()
+    {
+      return m_modifier + " " + m_language;
+    }
+  }
 
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
-  /** The possible monster types in the game. */
-  @ParametersAreNonnullByDefault
-  public enum MonsterType implements EnumSelection.Named,
-    EnumSelection.Proto<BaseMonsterProto.Type>
-  {
-    /** Aberration. */
-    ABERRATION("Aberration", BaseMonsterProto.Type.ABERRATION),
-
-    /** Animal. */
-    ANIMAL("Animal", BaseMonsterProto.Type.ANIMAL),
-
-    /** Construct. */
-    CONSTRUCT("Construct", BaseMonsterProto.Type.CONSTRUCT),
-
-    /** Dragon. */
-    DRAGON("Dragon", BaseMonsterProto.Type.DRAGON),
-
-    /** Elemental. */
-    ELEMENTAL("Elemental", BaseMonsterProto.Type.ELEMENTAL),
-
-    /** Fey. */
-    FEY("Fey", BaseMonsterProto.Type.FEY),
-
-    /** Giant. */
-    GIANT("Giant", BaseMonsterProto.Type.GIANT),
-
-    /** Humanoid. */
-    HUMANOID("Humanoid", BaseMonsterProto.Type.HUMANOID),
-
-    /** Magical Beast. */
-    MAGICAL_BEAST("Magical Beast", BaseMonsterProto.Type.MAGICAL_BEAST),
-
-    /** Monstrous Humanoid. */
-    MONSTROUS_HUMANOID("Monstrous Humanoid",
-                       BaseMonsterProto.Type.MONSTROUS_HUMANOID),
-
-    /** Ooze. */
-    OOZE("Ooze", BaseMonsterProto.Type.OOZE),
-
-    /** Outsider. */
-    OUTSIDER("Outsider", BaseMonsterProto.Type.OUTSIDER),
-
-    /** Plant. */
-    PLANT("Plant", BaseMonsterProto.Type.PLANT),
-
-    /** Undead. */
-    UNDEAD("Undead", BaseMonsterProto.Type.UNDEAD),
-
-    /** Vermin. */
-    VERMIN("Vermin", BaseMonsterProto.Type.VERMIN);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Type m_proto;
-
-    /**
-     * Create the enum value.
-     *
-     * @param inName  the name of the value
-     * @param inProto the proto enum value
-     */
-    private MonsterType(String inName, BaseMonsterProto.Type inProto)
-    {
-      m_name = constant("monster.type", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public Type toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the monster type corresponding to the given proto enum value.
-     *
-     * @param inProto the proto value to get for
-     * @return the corresponding enum value
-     */
-    public static MonsterType fromProto(BaseMonsterProto.Type inProto)
-    {
-      for(MonsterType type : values())
-        if(type.m_proto == inProto)
-          return type;
-
-      throw new IllegalArgumentException("cannot convert monster type:"
-        + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- monster subtype --------------------------------------------------
-
-  /** The possible monster sub types in the game. */
-  @ParametersAreNonnullByDefault
-  public enum MonsterSubtype implements EnumSelection.Named,
-    EnumSelection.Proto<BaseMonsterProto.Subtype>
-  {
-    /** None. */
-    NONE("None", BaseMonsterProto.Subtype.NONE_SUBTYPE),
-
-    /** Air. */
-    AIR("Air", BaseMonsterProto.Subtype.AIR),
-
-    /** Aquatic. */
-    AQUATIC("Aquatic", BaseMonsterProto.Subtype.AQUATIC),
-
-    /** Archon. */
-    ARCHON("Archon", BaseMonsterProto.Subtype.ARCHON),
-
-    /** Augmented. */
-    AUGMENTED("Augmented", BaseMonsterProto.Subtype.AUGMENTED),
-
-    /** Baatezu. */
-    BAATEZU("Baatezu", BaseMonsterProto.Subtype.BAATEZU),
-
-    /** Chaotic. */
-    CHAOTIC("Chaotic", BaseMonsterProto.Subtype.CHAOTIC),
-
-    /** Cold. */
-    COLD("Cold", BaseMonsterProto.Subtype.COLD),
-
-    /** Earth. */
-    EARTH("Earth", BaseMonsterProto.Subtype.EARTH),
-
-    /** Eladrin. */
-    ELADRIN("Eladrin", BaseMonsterProto.Subtype.ELADRIN),
-
-    /** Elf. */
-    ELF("Elf", BaseMonsterProto.Subtype.ELF),
-
-    /** Evil. */
-    EVIL("Evil", BaseMonsterProto.Subtype.EVIL),
-
-    /** Extraplanar. */
-    EXTRAPLANAR("Extraplanar", BaseMonsterProto.Subtype.EXTRAPLANAR),
-
-    /** Fire. */
-    FIRE("Fire", BaseMonsterProto.Subtype.FIRE),
-
-    /** Goblinoid. */
-    GOBLINOID("Goblinoid", BaseMonsterProto.Subtype.GOBLINOID),
-
-    /** Good. */
-    GOOD("Good", BaseMonsterProto.Subtype.GOOD),
-
-    /** Guardinal. */
-    GUARDINAL("Guardinal", BaseMonsterProto.Subtype.GUARDINAL),
-
-    /** Human. */
-    HUMAN("Human", BaseMonsterProto.Subtype.HUMAN),
-
-    /** Incorporeal. */
-    INCORPOREAL("Incorporeal", BaseMonsterProto.Subtype.INCORPOREAL),
-
-    /** Lawful. */
-    LAWFUL("Lawful", BaseMonsterProto.Subtype.LAEFUL),
-
-    /** Native. */
-    NATIVE("Native", BaseMonsterProto.Subtype.NATIVE),
-
-    /** Orc. */
-    ORC("Orc", BaseMonsterProto.Subtype.ORC),
-
-    /** Reptilian. */
-    REPTILIAN("Reptilian", BaseMonsterProto.Subtype.REPTILIAN),
-
-    /** Shapechanger. */
-    SHAPECHANGER("Shapechanger", BaseMonsterProto.Subtype.SHAPECHANGER),
-
-    /** Swarm. */
-    SWARM("Swarm", BaseMonsterProto.Subtype.SWARM),
-
-    /** Water. */
-    WATER("Water", BaseMonsterProto.Subtype.WATER);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The corresponding proto enum value. */
-    private BaseMonsterProto.Subtype m_proto;
-
-    /**
-     * Create the enum value.
-     *
-     * @param inName the name of the value
-     * @param inProto the corresponding proto value
-     */
-    private MonsterSubtype(String inName, BaseMonsterProto.Subtype inProto)
-    {
-      m_name = constant("monster.type", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public Subtype toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the subtype corresponding to the given proto value.
-     *
-     * @param inProto the proto value to get for
-     * @return the corresponding subtype
-     */
-    public static MonsterSubtype fromProto(BaseMonsterProto.Subtype inProto)
-    {
-      for(MonsterSubtype type : values())
-        if(type.m_proto == inProto)
-          return type;
-
-      throw new IllegalArgumentException("cannot convert monster subtype: "
-                                         + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- movement mode ----------------------------------------------------
-
-  /** The possible movement modes in the game. */
-  @ParametersAreNonnullByDefault
-  public enum MovementMode implements EnumSelection.Named,
-    EnumSelection.Proto<BaseMonsterProto.Speed.Mode>
-  {
-    /** Burrowing movement. */
-    BURROW("Burrow", BaseMonsterProto.Speed.Mode.BURROW),
-
-    /** Climbing. */
-    CLIMB("Climb", BaseMonsterProto.Speed.Mode.CLIMB),
-
-    /** Flying. */
-    FLY("Fly", BaseMonsterProto.Speed.Mode.FLY),
-
-    /** Swimming. */
-    SWIM("Swim", BaseMonsterProto.Speed.Mode.SWIM),
-
-    /** Running. */
-    RUN("", BaseMonsterProto.Speed.Mode.RUN);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Speed.Mode m_proto;
-
-    /**
-     * Create the enum value.
-     *
-     * @param inName the name of the value
-     * @param inProto the corresponding proto value
-     */
-    private MovementMode(String inName, BaseMonsterProto.Speed.Mode inProto)
-    {
-      m_name = constant("movement.mode", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public BaseMonsterProto.Speed.Mode toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Convert the proto value to the corresponding enum value.
-     *
-     * @param inProto the proto to convert
-     * @return the corresponding enum value
-     */
-    public static MovementMode fromProto(BaseMonsterProto.Speed.Mode inProto)
-    {
-      for(MovementMode mode : values())
-        if(mode.m_proto == inProto)
-          return mode;
-
-      throw new IllegalArgumentException("cannot convert movement mode: "
-                                         + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- maneuverability --------------------------------------------------
-
-  /** The possible movement modes in the game. */
-  @ParametersAreNonnullByDefault
-  public enum Maneuverability implements EnumSelection.Named,
-    EnumSelection.Proto<BaseMonsterProto.Speed.Maneuverability>
-  {
-    /** Perfect maneuverability. */
-    PERFECT("Pefect", BaseMonsterProto.Speed.Maneuverability.PERFECT),
-
-    /** Good maneuverability. */
-    GOOD("Good", BaseMonsterProto.Speed.Maneuverability.GOOD),
-
-    /** Average maneuverability. */
-    AVERAGE("Average", BaseMonsterProto.Speed.Maneuverability.AVERAGE),
-
-    /** Poor maneuverability. */
-    POOR("Poor", BaseMonsterProto.Speed.Maneuverability.POOR),
-
-    /** Clumsy maneuverability. */
-    CLUMSY("Clumsy", BaseMonsterProto.Speed.Maneuverability.CLUMSY),
-
-    /** Clumsy maneuverability. */
-    NONE("", BaseMonsterProto.Speed.Maneuverability.NONE);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Speed.Maneuverability m_proto;
-
-    /**
-     * Create the enum value.
-     *
-     * @param inName the name of the value
-     * @param inProto the proto value
-     */
-    private Maneuverability(String inName,
-                            BaseMonsterProto.Speed.Maneuverability inProto)
-    {
-      m_name = constant("maneuverability", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public BaseMonsterProto.Speed.Maneuverability toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Convert the proto value into the corresponding enum value.
-     *
-     * @param inProto the proto value to convert
-     * @return the corresponding enum value
-     */
-    public static Maneuverability
-      fromProto(BaseMonsterProto.Speed.Maneuverability inProto)
-    {
-      for(Maneuverability maneuverability : values())
-        if(maneuverability.m_proto == inProto)
-          return maneuverability;
-
-      throw new IllegalArgumentException("cannot convert maneuverability: "
-                                         + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- climate ----------------------------------------------------------
-
-  /** The possible climates in the game. */
-  @ParametersAreNonnullByDefault
-  public enum Climate implements EnumSelection.Named,
-    EnumSelection.Proto<BaseMonsterProto.Climate>
-  {
-    /** Warm climate. */
-    WARM("Warm", BaseMonsterProto.Climate.WARM),
-
-    /** Cold climate. */
-    COLD("cold", BaseMonsterProto.Climate.COLD_CLIMATE),
-
-    /** Any climate. */
-    ANY("Any", BaseMonsterProto.Climate.ANY),
-
-    /** Temparete climate. */
-    TEMPERATE("Temperate", BaseMonsterProto.Climate.TEMPERATE);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Climate m_proto;
-
-    /** Create the enum value.
-     *
-     * @param inName  the name of the value
-     * @param inProto the proto enum value
-     */
-    private Climate(String inName, BaseMonsterProto.Climate inProto)
-    {
-      m_name = constant("climate", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Climate
-      toProto()
-    {
-      return m_proto;
-    }
-
-
-    /**
-     * Create a enum value from a given proto.
-     *
-     * @param inProto the proto to convert
-     * @return the corresponding enum value
-     */
-    public static Climate fromProto(BaseMonsterProto.Climate inProto)
-    {
-      for(Climate climate : values())
-        if(climate.m_proto == inProto)
-          return climate;
-
-      throw new IllegalArgumentException("cannot convert climate: "
-                                         + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- terrain ----------------------------------------------------------
-
-  /** The possible terrains in the game. */
-  @ParametersAreNonnullByDefault
-  public enum Terrain implements EnumSelection.Named,
-    EnumSelection.Proto<BaseMonsterProto.Terrain>
-  {
-    /** Forest terrain. */
-    FOREST("Forest", BaseMonsterProto.Terrain.FOREST),
-
-    /** Marsh terrain. */
-    MARSH("Marsh", BaseMonsterProto.Terrain.MARSH),
-
-    /** Hills terrain. */
-    HILLS("Hills", BaseMonsterProto.Terrain.HILLS),
-
-    /** Mountain terrain. */
-    MOUNTAIN("Mountain", BaseMonsterProto.Terrain.MOUNTAIN),
-
-    /** Desert terrain. */
-    DESERT("Desert", BaseMonsterProto.Terrain.DESERT),
-
-    /** Plains terrain. */
-    PLAINS("Plains", BaseMonsterProto.Terrain.PLAINS),
-
-    /** Aquatic terrain. */
-    AQUATIC("Aquatic", BaseMonsterProto.Terrain.AQUATIC_TERRAIN),
-
-    /** Underground terrain. */
-    UNDERGROUND("Underground", BaseMonsterProto.Terrain.UNDERGROUND),
-
-    /** Infernal Battlefield of Acheron terrain. */
-    INFENRAL_BATTLEFIELD_OF_ACHERON
-    ("Infernal Battlefield of Acheron",
-     BaseMonsterProto.Terrain.INFERNAL_BATTLEFIELD_OF_ACHERON),
-
-    /** Infinite Layers of the Abyss terrain. */
-    INFINITE_LAYERS_OF_THE_ABYSS
-    ("Infinite Layers of the Abyss",
-     BaseMonsterProto.Terrain.INFINITE_LAYERS_OF_THE_ABYSS),
-
-    /** Elemental Plane of Air. */
-    ELEMENTAL_PLANE_OF_AIR("Elemental Plane of Air",
-                           BaseMonsterProto.Terrain.ELEMENTAL_PLANE_OF_AIR),
-
-    /** Elemental Plane of Earth. */
-    ELEMENTAL_PLANE_OF_EARTH("Elemental Plane of Earth",
-                             BaseMonsterProto.Terrain.ELEMENTAL_PLANE_OF_EARTH),
-
-    /** Elemental Plane of Fire. */
-    ELEMENTAL_PLANE_OF_FIRE("Elemental Plane of Fire",
-                            BaseMonsterProto.Terrain.ELEMENTAL_PLANE_OF_FIRE),
-
-    /** Elemental Plane of Water. */
-    ELEMENTAL_PLANE_OF_WATER("Elemental Plane of Water",
-                             BaseMonsterProto.Terrain.ELEMENTAL_PLANE_OF_WATER),
-
-    /** Windswept dephts of pandemonium. */
-    WINDSWEPT_DEPTHS_OF_PANDEMONIUM
-    ("Windswept Depths of Pandemonium",
-     BaseMonsterProto.Terrain.WINDSWEPT_DEPTHS_OF_PANDEMONIUM),
-
-    /** Any terrain. */
-    ANY("Any", BaseMonsterProto.Terrain.ANY_TERRAIN);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Terrain m_proto;
-
-    /**
-     * Create the enum value.
-     *
-     * @param inName the name of the value
-     * @param inProto the proto enum value
-     */
-    private Terrain(String inName, BaseMonsterProto.Terrain inProto)
-    {
-      m_name = constant("terrain", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public BaseMonsterProto.Terrain toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Convert the proto to the corresponding enum value.
-     *
-     * @param inProto the proto to convert
-     * @return the corresponding enum value
-     */
-    public static Terrain fromProto(BaseMonsterProto.Terrain inProto)
-    {
-      for(Terrain terrain : values())
-        if(terrain.m_proto == inProto)
-          return terrain;
-
-      throw new IllegalArgumentException("cannot convert terrain: " + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- organization -----------------------------------------------------
-
-  /** The possible terrains in the game. */
-  @ParametersAreNonnullByDefault
-  public enum Organization implements EnumSelection.Named,
-    EnumSelection.Proto<BaseMonsterProto.Organization.Type>
-  {
-    /** Any organization. */
-    ANY("Any", BaseMonsterProto.Organization.Type.ANY),
-
-    /** Band organization. */
-    BAND("Band", BaseMonsterProto.Organization.Type.BAND),
-
-    /** Brood organization. */
-    BROOD("Brood", BaseMonsterProto.Organization.Type.BROOD),
-
-    /** Colony organization. */
-    COLONY("Colony", BaseMonsterProto.Organization.Type.COLONY),
-
-    /** Covey organization. */
-    COVEY("Covey", BaseMonsterProto.Organization.Type.COVEY),
-
-    /** Flight organization. */
-    FLIGHT("Flight", BaseMonsterProto.Organization.Type.FLIGHT),
-
-    /** Flock organization. */
-    FLOCK("Flock", BaseMonsterProto.Organization.Type.FLOCK),
-
-    /** Gang organization. */
-    GANG("Gang", BaseMonsterProto.Organization.Type.GANG),
-
-    /** Herd organization. */
-    HERD("Herd", BaseMonsterProto.Organization.Type.HERD),
-
-    /** Infestation organization. */
-    INFESTATION("Infestation", BaseMonsterProto.Organization.Type.INFESTATION),
-
-    /** Nest organization. */
-    NEST("Nest", BaseMonsterProto.Organization.Type.NEST),
-
-    /** Pack organization. */
-    PACK("Pack", BaseMonsterProto.Organization.Type.PACK),
-
-    /** Pair organization. */
-    PAIR("Pair", BaseMonsterProto.Organization.Type.PAIR),
-
-    /** Patrol organization. */
-    PATROL("Patrol", BaseMonsterProto.Organization.Type.PATROL),
-
-    /** Slaver Brood organization. */
-    SLAVER_BROOD("Slaver Brood",
-                 BaseMonsterProto.Organization.Type.SLAVER_BROOD),
-
-    /** Solitary organization. */
-    SOLITARY("Solitary", BaseMonsterProto.Organization.Type.SOLITARY),
-
-    /** Squad organization. */
-    SQUAD("Qquad", BaseMonsterProto.Organization.Type.SQUAD),
-
-    /** Storm organization. */
-    STORM("Storm", BaseMonsterProto.Organization.Type.STORM),
-
-    /** Swarm organization. */
-    SWARM("Swarm", BaseMonsterProto.Organization.Type.SWARM),
-
-    /** Tangle organization. */
-    TANGLE("Tangle", BaseMonsterProto.Organization.Type.TANGLE),
-
-    /** Troupe organization. */
-    TROUPE("Troupe", BaseMonsterProto.Organization.Type.TROUPE);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Organization.Type m_proto;
-
-    /**
-     * Create the enum value.
-     *
-     * @param inName the name of the value
-     * @param inProto the proto enum value
-     */
-    private Organization(String inName,
-                         BaseMonsterProto.Organization.Type inProto)
-    {
-      m_name = constant("organization", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public BaseMonsterProto.Organization.Type toProto()
-    {
-      return m_proto;
-    }
-
-    public static Organization
-      fromProto(BaseMonsterProto.Organization.Type inProto)
-    {
-      for(Organization organization : values())
-        if(organization.m_proto == inProto)
-          return organization;
-
-      throw new IllegalArgumentException("cannot convert organization: "
-                                         + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- attack style -----------------------------------------------------
-
-  /** The possible attack styles in the game. */
-  @ParametersAreNonnullByDefault
-  public enum AttackStyle implements EnumSelection.Named,
-    EnumSelection.Proto<BaseMonsterProto.Attack.Style>
-  {
-    /** A melee attack. */
-    MELEE("melee", BaseMonsterProto.Attack.Style.MELEE),
-
-    /** A ranged attack. */
-    RANGED("ranged", BaseMonsterProto.Attack.Style.RANGED);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Attack.Style m_proto;
-
-    /**
-     * Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inProto      the proto enum value
-     */
-    private AttackStyle(String inName, BaseMonsterProto.Attack.Style inProto)
-    {
-      m_name = constant("attack.style", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public Style toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Convert the proto enum value to its enum value.
-     *
-     * @param inProto  the proto value to convert
-     * @return         the corresponding enum value
-     */
-    public static AttackStyle fromProto(BaseMonsterProto.Attack.Style inProto)
-    {
-      for(AttackStyle style : values())
-        if(style.m_proto == inProto)
-          return style;
-
-      throw new IllegalArgumentException("cannot convert attack style: "
-                                         + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- attack mode -----------------------------------------------------
-
-  /** The possible attack styles in the game. */
-  @ParametersAreNonnullByDefault
-  public enum AttackMode implements EnumSelection.Named,
-    EnumSelection.Proto<BaseMonsterProto.Attack.Mode>
-  {
-    /** A tentacle attack. */
-    TENTACLE("Tentacle", false, BaseMonsterProto.Attack.Mode.TENTACLE),
-
-    /** A claw attack. */
-    CLAW("Claw", false, BaseMonsterProto.Attack.Mode.CLAW),
-
-    /** A bite attack. */
-    BITE("bite", false, BaseMonsterProto.Attack.Mode.BITE),
-
-    /** A fist attack. */
-    FIST("Fist", false, BaseMonsterProto.Attack.Mode.FIST),
-
-    /** A quill attack. */
-    QUILL("Quill", true, BaseMonsterProto.Attack.Mode.QUILL),
-
-    /** A weapon attack. */
-    WEAPON("Weapon", false, BaseMonsterProto.Attack.Mode.WEAPON),
-
-    /** A touch attack. */
-    TOUCH("Touch", true, BaseMonsterProto.Attack.Mode.TOUCH),
-
-    /** An incorporeal touch attack. */
-    INCORPOREAL_TOUCH("Incorporeal Touch", true,
-                      BaseMonsterProto.Attack.Mode.INCORPOREAL_TOUCH),
-
-    /** A slam attack. */
-    SLAM("Slam", false, BaseMonsterProto.Attack.Mode.SLAM),
-
-    /** A sting attack. */
-    STING("Sting", false, BaseMonsterProto.Attack.Mode.STING),
-
-    /** A swarm attack. */
-    SWARM("Swarm", false, BaseMonsterProto.Attack.Mode.SWARM),
-
-    /** A ray attack. */
-    RAY("Ray", true, BaseMonsterProto.Attack.Mode.RAY),
-
-    /** A hoof attack. */
-    HOOF("Hoof", true, BaseMonsterProto.Attack.Mode.HOOF),
-
-    /** A snakes attack. */
-    SNAKES("Snakes", true, BaseMonsterProto.Attack.Mode.SNAKES),
-
-    /** A web attack. */
-    WEB("Web", true, BaseMonsterProto.Attack.Mode.WEB);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** Flag if to use dexterity when attacking. */
-    private boolean m_dexterity;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Attack.Mode m_proto;
-
-    /**
-     * Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inDexterity  whether dexterity is used for the attack
-     * @param inProto      the proto enum value
-     */
-    private AttackMode(String inName, boolean inDexterity,
-                       BaseMonsterProto.Attack.Mode inProto)
-    {
-      m_name = constant("attack.mode", inName);
-      m_dexterity = inDexterity;
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    /**
-     * Check whether to use dexterity for attacking.
-     *
-     * @return true if using dexterity for attacking
-     */
-    public boolean useDexterity()
-    {
-      return m_dexterity;
-    }
-
-    @Override
-    public Mode toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Convert the proto value to an enum value.
-     *
-     * @param inProto  the proto value to convert
-     * @return the corresponding enum value
-     */
-    public static AttackMode fromProto(BaseMonsterProto.Attack.Mode inProto)
-    {
-      for(AttackMode mode : values())
-        if(mode.m_proto == inProto)
-          return mode;
-
-      throw new IllegalArgumentException("cannot convert attack mode: "
-                                         + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- treasure ---------------------------------------------------------
-
-  /** The possible sizes in the game. */
-  @ParametersAreNonnullByDefault
-  public enum Treasure implements EnumSelection.Named,
-    EnumSelection.Proto<BaseMonsterProto.Treasure>
-  {
-    /** No treasure at all. */
-    NONE("none", 0, BaseMonsterProto.Treasure.NONE_TREASURE),
-
-    /** Standard treasure. */
-    STANDARD("standard", 1, BaseMonsterProto.Treasure.STANDARD),
-
-    /** Double the standard treasure. */
-    DOUBLE("double standard", 2, BaseMonsterProto.Treasure.DOUBLE),
-
-    /** Triple the standard treasure. */
-    TRIPLE("triple standard", 3, BaseMonsterProto.Treasure.TRIPLE),
-
-    /** Quadruple the standard treasure. */
-    QUADRUPLE("quadruple standard", 4, BaseMonsterProto.Treasure.QUADRUPLE);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The multiplier for treasures. */
-    private int m_multiplier;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Treasure m_proto;
-
-    /**
-     * Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inMultiplier how much treasure we get
-     * @param inProto      the proto enum value
-     */
-    private Treasure(String inName, int inMultiplier,
-                     BaseMonsterProto.Treasure inProto)
-    {
-      m_name = constant("skill.modifier", inName);
-      m_multiplier = inMultiplier;
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    /**
-     * Get the multiplier for this treasure type.
-     *
-     * @return the multiplier to use for computing treasure amounts
-     */
-    public int multiplier()
-    {
-      return m_multiplier;
-    }
-
-    @Override
-    public BaseMonsterProto.Treasure toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the treasure value associated with the given proto value.
-     *
-     * @param inProto the proto to convert
-     * @return the converted treasure value
-     */
-    public static Treasure fromProto(BaseMonsterProto.Treasure inProto)
-    {
-      for(Treasure treasure : values())
-        if(treasure.m_proto == inProto)
-          return treasure;
-
-      throw new IllegalArgumentException("cannot convert treasure: " + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- alignment --------------------------------------------------------
-
-  /** The possible sizes in the game. */
-  @ParametersAreNonnullByDefault
-  public enum Alignment implements EnumSelection.Named, EnumSelection.Short,
-    EnumSelection.Proto<BaseMonsterProto.Alignment>
-  {
-    /** Lawful Evil. */
-    LE("Lawful Evil", "LE", BaseMonsterProto.Alignment.LAEWFUL_EVIL),
-
-    /** Lawful Neutral. */
-    LN("Lawful Neutral", "LN", BaseMonsterProto.Alignment.LAWFUL_NEUTRAL),
-
-    /** Lawful Good. */
-    LG("Lawful Good", "LG", BaseMonsterProto.Alignment.LAWFUL_GOOD),
-
-    /** Chaotic Evil. */
-    CE("Chaotic Evil", "CE", BaseMonsterProto.Alignment.CHAOTIC_EVIL),
-
-    /** Chaotic Neutral. */
-    CN("Chaotic Neutral", "CN", BaseMonsterProto.Alignment.CHOATIC_NETURAL),
-
-    /** Chaotic Good. */
-    CG("Chaotic Good", "CG", BaseMonsterProto.Alignment.CHAOTIC_GOOD),
-
-    /** Neutral Evil. */
-    NE("Neutral Evil", "NE", BaseMonsterProto.Alignment.NEUTRAL_EVIL),
-
-    /** True Neutral. */
-    N("Neutral", "N", BaseMonsterProto.Alignment.TRUE_NEUTRAL),
-
-    /** Neutral Good. */
-    NG("Neutral Good", "NG", BaseMonsterProto.Alignment.NEUTRAL_GOOD),
-
-    /** Any chaotic alignment. */
-    ANY_CHAOTIC("Any Chaotic", "AC", BaseMonsterProto.Alignment.ANY_CHAOTIC),
-
-    /** Any evil alignment. */
-    ANY_EVIL("Any Evil", "AE", BaseMonsterProto.Alignment.ANY_EVIL),
-
-    /** Any good alignment. */
-    ANY_GOOD("Any Good", "AG", BaseMonsterProto.Alignment.ANY_GOOD),
-
-    /** Any lawful alignment. */
-    ANY_LAWFUL("Any Lawful", "AL", BaseMonsterProto.Alignment.ANY_LAWFUL),
-
-    /** Any alignment. */
-    ANY("Any", "A", BaseMonsterProto.Alignment.ANY_ALIGNMENT);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The value's short name. */
-    private String m_short;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Alignment m_proto;
-
-  /** The parser for armor types. */
-  public static final NewValue.Parser<Alignment> PARSER =
-    new NewValue.Parser<Alignment>(1)
-    {
-      @Override
-      public Optional<Alignment> doParse(String inValue)
-      {
-        return Alignment.fromString(inValue);
-      }
-    };
-
-    /**
-     * Create the name.
-     *
-     * @param inName      the name of the value
-     * @param inShort     the short name of the value
-     * @param inProto     the proto value
-     */
-    private Alignment(String inName, String inShort,
-                      BaseMonsterProto.Alignment inProto)
-    {
-      m_name = constant("alignment",       inName);
-      m_short = constant("alignment.short", inShort);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String getShort()
-    {
-      return m_short;
-    }
-
-    @Override
-    public BaseMonsterProto.Alignment toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Convert the proto to the corresponding enum value.
-     *
-     * @param inProto the proto to convert
-     * @return the corresponding enum value
-     */
-    public static Alignment fromProto(BaseMonsterProto.Alignment inProto)
-    {
-      for(Alignment alignment : values())
-        if(alignment.m_proto == inProto)
-          return alignment;
-
-      throw new IllegalArgumentException("cannot convert alignment: "
-                                         + inProto);
-    }
-
-    /**
-     * Get the alignment from the given string.
-     *
-     * @param inValue the string representation
-     * @return the matching alignment, if any
-     */
-    public static Optional<Alignment> fromString(String inValue)
-    {
-      for(Alignment alignment : values())
-        if(alignment .getName().equalsIgnoreCase(inValue))
-          return Optional.of(alignment);
-
-      return Optional.absent();
-    }
-
-    /**
-     * Get the possible names of types.
-     *
-     * @return a list of the names
-     */
-    public static List<String> names()
-    {
-      List<String> names = new ArrayList<>();
-      for(Alignment type : values())
-        names.add(type.getName());
-
-      return names;
-    }
-  }
-
-  //........................................................................
-  //----- alignment status -------------------------------------------------
-
-  /** The possible alignment modifiers in the game. */
-  @ParametersAreNonnullByDefault
-  public enum AlignmentStatus implements EnumSelection.Named,
-    EnumSelection.Proto<BaseMonsterProto.AlignmentStatus>
-  {
-    /** Always. */
-    ALWAYS("Always", BaseMonsterProto.AlignmentStatus.ALWAYS),
-
-    /** Usually. */
-    USUALLY("Usually", BaseMonsterProto.AlignmentStatus.USUALLY),
-
-    /** Often. */
-    OFTEN("Often", BaseMonsterProto.AlignmentStatus.OFTEN);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto value. */
-    private BaseMonsterProto.AlignmentStatus m_proto;
-
-    /**
-     * Create the name.
-     *
-     * @param inName      the name of the value
-     * @param inProto     the proto value
-     */
-    private AlignmentStatus(String inName,
-                            BaseMonsterProto.AlignmentStatus inProto)
-    {
-      m_name = constant("alignment.status", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public BaseMonsterProto.AlignmentStatus toProto()
-    {
-      return m_proto;
-    }
-
-    private static AlignmentStatus
-      fromProto(BaseMonsterProto.AlignmentStatus inProto)
-    {
-      for(AlignmentStatus status : values())
-        if(status.m_proto == inProto)
-          return status;
-
-      throw new IllegalArgumentException("cannot convert alignment status: "
-                                         + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- language ---------------------------------------------------------
-
-  /** The possible sizes in the game. */
-  @ParametersAreNonnullByDefault
-  public enum Language implements EnumSelection.Named,
-    EnumSelection.Proto<BaseMonsterProto.Language.Name>
-  {
-    /** Aboleth. */
-    ABOLETH("Aboleth", BaseMonsterProto.Language.Name.ABOLETH),
-
-    /** Abyssal. */
-    ABYSSAL("Abyssal", BaseMonsterProto.Language.Name.ABYSSAL),
-
-    /** Aquan. */
-    AQUAN("Aquan", BaseMonsterProto.Language.Name.AQUAN),
-
-    /** Auran. */
-    AURAN("Auran", BaseMonsterProto.Language.Name.AURAN),
-
-    /** Celestial. */
-    CELESTIAL("Celestial", BaseMonsterProto.Language.Name.CELESTIAL),
-
-    /** Common. */
-    COMMON("Common", BaseMonsterProto.Language.Name.COMMON),
-
-    /** Draconic. */
-    DRACONIC("Draconic", BaseMonsterProto.Language.Name.DRACONIC),
-
-    /** Drow Sign Language. */
-    DROW_SIGN("Drow Sign", BaseMonsterProto.Language.Name.DROW_SIGN),
-
-    /** Druidic. */
-    DRUIDIC("Druidic", BaseMonsterProto.Language.Name.DRUIDIC),
-
-    /** Dwarven. */
-    DWARVEN("Dwarven", BaseMonsterProto.Language.Name.DWARVEN),
-
-    /** Elven. */
-    ELVEN("Elven", BaseMonsterProto.Language.Name.ELVEN),
-
-    /** Giant. */
-    GIANT("Giant", BaseMonsterProto.Language.Name.GIANT),
-
-    /** Gnome. */
-    GNOME("Gnome", BaseMonsterProto.Language.Name.GNOME),
-
-    /** Goblin. */
-    GOBLIN("Goblin", BaseMonsterProto.Language.Name.GOBLIN),
-
-    /** Gnoll. */
-    GNOLL("Gnoll", BaseMonsterProto.Language.Name.GNOLL),
-
-    /** Halfling. */
-    HALFLING("Halfling", BaseMonsterProto.Language.Name.HALFLING),
-
-    /** Ignan. */
-    IGNAN("Ignan", BaseMonsterProto.Language.Name.IGNAN),
-
-    /** Infernal. */
-    INFERNAL("Infernal", BaseMonsterProto.Language.Name.INFERNAL),
-
-    /** Kuo-toa. */
-    KUO_TOA("Kuo-toa", BaseMonsterProto.Language.Name.KUO_TOA),
-
-    /** Orc. */
-    ORC("Orc", BaseMonsterProto.Language.Name.ORC),
-
-    /** Sylvan. */
-    SYLVAN("Sylvan", BaseMonsterProto.Language.Name.SYLVAN),
-
-    /** Terran. */
-    TERRAN("Terran", BaseMonsterProto.Language.Name.TERRAN),
-
-    /** Undercommon. */
-    UNDERCOMMON("Undercommon", BaseMonsterProto.Language.Name.UNDERCOMMON),
-
-    /** None. */
-    NONE("-", BaseMonsterProto.Language.Name.NONE);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Language.Name m_proto;
-
-    /**
-     * Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inProto      the proto enum value
-     */
-    private Language(String inName, BaseMonsterProto.Language.Name inProto)
-    {
-      m_name = constant("language", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public BaseMonsterProto.Language.Name toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Convert the given proto value to the corresponding enum value.
-     *
-     * @param inProto the proto value to convert
-     * @return the corresponding enum value
-     */
-    public static Language fromProto(BaseMonsterProto.Language.Name inProto)
-    {
-      for(Language language : values())
-        if(language.m_proto == inProto)
-          return language;
-
-      throw new IllegalArgumentException("cannot convert language: " + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- language modifier ------------------------------------------------
-
-  /** The possible sizes in the game. */
-  @ParametersAreNonnullByDefault
-  public enum LanguageModifier implements EnumSelection.Named,
-    EnumSelection.Proto<BaseMonsterProto.Language.Modifier>
-  {
-    /** Automatic. */
-    AUTOMATIC("Automatic", BaseMonsterProto.Language.Modifier.AUTOMATIC),
-
-    /** Bonus. */
-    BONUS("Bonus", BaseMonsterProto.Language.Modifier.BONUS),
-
-    /** Some. */
-    SOME("Some", BaseMonsterProto.Language.Modifier.SOME),
-
-    /** Understand. */
-    UNDERSTAND("Understand", BaseMonsterProto.Language.Modifier.UNDERSTAND);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Language.Modifier m_proto;
-
-    /**
-     * Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inProto      the proto value
-     */
-    private LanguageModifier(String inName,
-                             BaseMonsterProto.Language.Modifier inProto)
-    {
-      m_name = constant("language.modifier", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public BaseMonsterProto.Language.Modifier toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Convert a proto value to the enum value.
-     *
-     * @param inProto the proto value to convert
-     * @return the corresponding enum value
-     */
-    public static LanguageModifier
-      fromProto(BaseMonsterProto.Language.Modifier inProto)
-    {
-      for(LanguageModifier modifier : values())
-        if(modifier.m_proto == inProto)
-          return modifier;
-
-      throw new IllegalArgumentException("cannot convert language modifier: "
-                                         + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- save ------------------------------------------------------------
-
-  /** The possible sizes in the game. */
-  @ParametersAreNonnullByDefault
-  public enum Save implements EnumSelection.Named, EnumSelection.Short,
-    EnumSelection.Proto<BaseMonsterProto.Save>
-  {
-    /** Fortitude. */
-    FORTITUDE("Fortitude", "For", BaseMonsterProto.Save.FORTITUDE),
-
-    /** Reflex. */
-    REFLEX("Reflex", "Ref", BaseMonsterProto.Save.REFLEX),
-
-    /** Wisdom. */
-    WISDOM("Wisdom", "Wis", BaseMonsterProto.Save.WISDOM_SAVE);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The value's short name. */
-    private String m_short;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Save m_proto;
-
-    /**
-     * Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inShort      the short name of the value
-     * @param inProto      the proto value
-     */
-    private Save(String inName, String inShort, BaseMonsterProto.Save inProto)
-    {
-      m_name = constant("save.name", inName);
-      m_short = constant("save.short", inShort);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String getShort()
-    {
-      return m_short;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public BaseMonsterProto.Save toProto()
-    {
-      return m_proto;
-    }
-
-    public static Save fromProto(BaseMonsterProto.Save inProto)
-    {
-      for(Save save : values())
-        if(save.m_proto == inProto)
-          return save;
-
-      throw new IllegalArgumentException("cannot convert save: " + inProto);
-    }
-  }
-
-  //........................................................................
-  //----- ability ---------------------------------------------------------
-
-  /** The possible sizes in the game. */
-  @ParametersAreNonnullByDefault
-  public enum Ability implements EnumSelection.Named, EnumSelection.Short
-  {
-    /** Unknown.*/
-    UNKNOWN("Unknown", "Unk", BaseMonsterProto.Ability.UNKNOWN),
-
-    /** Strength. */
-    STRENGTH("Strength", "Str", BaseMonsterProto.Ability.STRENGTH),
-
-    /** Dexterity. */
-    DEXTERITY("Dexterity", "Dex", BaseMonsterProto.Ability.DEXTERITY),
-
-    /** Constitution. */
-    CONSTITUTION("Constitution", "Con", BaseMonsterProto.Ability.CONSTITUTION),
-
-    /** Intelligence. */
-    INTELLIGENCE("Intelligence", "Int", BaseMonsterProto.Ability.INTELLIGENCE),
-
-    /** Wisdom. */
-    WISDOM("Wisdom", "Wis", BaseMonsterProto.Ability.WISDOM),
-
-    /** Charisma. */
-    CHARISMA("Charisma", "Cha", BaseMonsterProto.Ability.CHARISMA),
-
-    /** No ability. */
-    NONE("None", "-", BaseMonsterProto.Ability.NONE);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The value's short name. */
-    private String m_short;
-
-    /** The proto enum value. */
-    private BaseMonsterProto.Ability m_proto;
-
-    /** The parser for abilities. */
-    public static final NewValue.Parser<Ability> PARSER =
-      new NewValue.Parser<Ability>(1)
-      {
-        @Override
-        public Optional<Ability> doParse(String inValue)
-        {
-          return Ability.fromString(inValue);
-        }
-      };
-
-    /** Create the name.
-     *
-     * @param inName       the name of the value
-     * @param inShort      the short name of the value
-     * @param inProto      the proto enum value
-     *
-     */
-    private Ability(String inName, String inShort,
-                    BaseMonsterProto.Ability inProto)
-    {
-      m_name = constant("ability.name", inName);
-      m_short = constant("ability.short", inShort);
-      m_proto = inProto;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    /** Get the name of the value.
-     *
-     * @return the short name of the value
-     *
-     */
-    @Override
-    public String getShort()
-    {
-      return m_short;
-    }
-
-    /** Get the save as string.
-     *
-     * @return the name of the value
-     *
-     */
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    /**
-     * Get the proto value for this value.
-     *
-     * @return the proto enum value
-     */
-    public BaseMonsterProto.Ability toProto()
-    {
-      return m_proto;
-    }
-
-    /**
-     * Get the group matching the given proto value.
-     *
-     * @param  inProto     the proto value to look for
-     * @return the matched enum (will throw exception if not found)
-     */
-    public static Ability fromProto(BaseMonsterProto.Ability inProto)
-    {
-      for(Ability ability : values())
-        if(ability.m_proto == inProto)
-          return ability;
-
-      throw new IllegalStateException("invalid proto ability: " + inProto);
-    }
-
-   /**
-     * All the possible names for the layout.
-     *
-     * @return the possible names
-     */
-    public static List<String> names()
-    {
-      List<String> names = new ArrayList<>();
-
-      for(Ability ability : values())
-        names.add(ability.getName());
-
-      return names;
-    }
-
-    /**
-     * Get the layout matching the given text.
-     */
-    public static Optional<Ability> fromString(String inText)
-    {
-      for(Ability ability : values())
-        if(ability.m_name.equalsIgnoreCase(inText))
-          return Optional.of(ability);
-
-      return Optional.absent();
-    }
-  };
-
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- BaseMonster ------------------------------
-
   /**
     * This is the internal, default constructor for an undefined value.
-    *
     */
   protected BaseMonster()
   {
     super(TYPE);
   }
 
-  //........................................................................
-  //----------------------------- BaseMonster ------------------------------
-
   /**
     * This is the normal constructor.
     *
     * @param       inName the name of the base item
-    *
     */
   public BaseMonster(String inName)
   {
     super(inName, TYPE);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The type of this entry. */
   public static final BaseType<BaseMonster> TYPE =
     new BaseType<BaseMonster>(BaseMonster.class);
 
-  //----- size -------------------------------------------------------------
-
   /** The monsters size. */
-  @Key("size")
-  protected Multiple m_size = new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element
-      (new EnumSelection<Size>(Size.class), false),
-      new Multiple.Element
-      (new EnumSelection<SizeModifier>(SizeModifier.class),
-       true, " (", ")"),
-    });
+  protected Size m_size = Size.UNKNOWN;
 
-  static
-  {
-    addIndex(new Index(Index.Path.SIZES, "Sizes", TYPE));
-  }
+  /** The size modifier. */
+  protected SizeModifier m_sizeModifier = SizeModifier.UNKNOWN;
 
-  //........................................................................
-  //----- type -------------------------------------------------------------
+  /** The monster type. */
+  protected MonsterType m_monsterType = MonsterType.UNKNOWN;
 
-  /** The monster type and subtype. */
-  @Key("type")
-  protected Multiple m_monsterType =
-    new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element(new EnumSelection<MonsterType>(MonsterType.HUMANOID),
-                           false),
-      new Multiple.Element(new ValueList<EnumSelection<MonsterSubtype>>
-                           (", ", new EnumSelection<MonsterSubtype>
-                            (MonsterSubtype.HUMAN)), true, " (", ")"),
-    });
-
-  static
-  {
-    addIndex(new Index(Index.Path.TYPES, "Types", TYPE));
-    addIndex(new Index(Index.Path.SUBTYPES, "Subtypes", TYPE));
-  }
-
-  //........................................................................
-  //----- hit dice ---------------------------------------------------------
+  /** The monster subtypes. */
+  protected List<MonsterSubtype> m_monsterSubtypes = new ArrayList<>();
 
   /** The monster's hit dice. */
-  @Key("hit dice")
-  protected Dice m_hitDice = new Dice();
-
-  // the indexes for number of dices and dice type
-  static
-  {
-    addIndex(new Index(Index.Path.HDS, "HDs", TYPE));
-    addIndex(new Index(Index.Path.DICES, "Dices", TYPE));
-  }
-
-  //........................................................................
-  //----- speed ------------------------------------------------------------
+  protected Optional<NewDice> m_hitDice = Optional.absent();
 
   /** The monster's speed. */
-  @Key("speed")
-  protected ValueList<Multiple> m_speed =
-    new ValueList<Multiple>(", ", new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element(new EnumSelection<MovementMode>(MovementMode.class),
-                           true),
-      new Multiple.Element(new Distance(), false),
-      new Multiple.Element(new EnumSelection<Maneuverability>
-                           (Maneuverability.class), true, " (", ")"),
-    }));
-
-  static
-  {
-    addIndex(new Index(Index.Path.MOVEMENT_MODES, "Movement Modes", TYPE));
-    addIndex(new Index(Index.Path.SPEEDS, "Speeds", TYPE));
-    addIndex(new Index(Index.Path.MANEUVERABILITIES, "Maneuverabilitys", TYPE));
-  }
-
-  //........................................................................
-  //----- natural armor ----------------------------------------------------
+  protected List<Speed> m_speeds = new ArrayList<>();
 
   /** The natural armor of the monster. */
-  @Key("natural armor")
-  protected Modifier m_natural =
-    new Modifier(0, Modifier.Type.NATURAL_ARMOR)
-    .withDefaultType(Modifier.Type.NATURAL_ARMOR);
-
-  static
-  {
-    addIndex(new Index(Index.Path.NATURAL_ARMORS, "Natural Armors", TYPE));
-  }
-
-  //........................................................................
-  //----- base attack ------------------------------------------------------
+  protected Optional<NewModifier> m_naturalArmor = Optional.absent();
 
   /** The base attack bonus. */
-  @Key("base attack")
-  protected Number m_attack = new Number(-1, 100, true);
-
-  static
-  {
-    addIndex(new Index(Index.Path.BASE_ATTACKS, "Base Attacks", TYPE));
-  }
-
-  //........................................................................
-  //----- strength ---------------------------------------------------------
+  protected int m_attack = 0;
 
   /** The monster's Strength. */
-  @Key("strength")
-  protected Number m_strength = new Number(-1, 100, false);
-
-  static
-  {
-    addIndex(new Index(Index.Path.STRENGTHS, "Strengths", TYPE));
-  }
-
-  //........................................................................
-  //----- dexterity --------------------------------------------------------
+  protected Optional<Integer> m_strength = Optional.absent();
 
   /** The monster's Dexterity. */
-  @Key("dexterity")
-  protected Number m_dexterity = new Number(-1, 100, false);
-
-  static
-  {
-    addIndex(new Index(Index.Path.DEXTERITIES, "Dexterities", TYPE));
-  }
-
-  //........................................................................
-  //----- constitution -----------------------------------------------------
+  protected Optional<Integer> m_dexterity = Optional.absent();
 
   /** The monster's Constitution. */
-  @Key("constitution")
-  protected Number m_constitution = new Number(-1, 100, false);
-
-  static
-  {
-    addIndex(new Index(Index.Path.CONSTITUTIONS, "Constitutions", TYPE));
-  }
-
-  //........................................................................
-  //----- intelligence -----------------------------------------------------
+  protected Optional<Integer> m_constitution = Optional.absent();
 
   /** The monster's Intelligence. */
-  @Key("intelligence")
-  protected Number m_intelligence = new Number(-1, 100, false);
-
-  static
-  {
-    addIndex(new Index(Index.Path.INTELLIGENCES, "Intelligences", TYPE));
-  }
-
-  //........................................................................
-  //----- wisdom -----------------------------------------------------------
+  protected Optional<Integer> m_intelligence = Optional.absent();
 
   /** The monster's Wisdom. */
-  @Key("wisdom")
-  protected Number m_wisdom = new Number(-1, 100, false);
-
-  static
-  {
-    addIndex(new Index(Index.Path.WISDOMS, "Wisdoms", TYPE));
-  }
-
-  //........................................................................
-  //----- charisma ---------------------------------------------------------
+  protected Optional<Integer> m_wisdom = Optional.absent();
 
   /** The monster's Charisma. */
-  @Key("charisma")
-  protected Number m_charisma = new Number(-1, 100, false);
-
-  static
-  {
-    addIndex(new Index(Index.Path.CHARISMAS, "Charismas", TYPE));
-  }
-
-  //........................................................................
-  //----- fortitude save ---------------------------------------------------
+  protected Optional<Integer> m_charisma = Optional.absent();
 
   /** The monster's fortitude save. */
-  @Key("fortitude save")
-  protected Number m_fortitudeSave = new Number(-1, 100, true);
-
-  static
-  {
-    addIndex(new Index(Index.Path.FORTITUDE_SAVES, "Fortitude Saves", TYPE));
-  }
-
-  //........................................................................
-  //----- will save --------------------------------------------------------
+  protected int m_fortitudeSave = 0;
 
   /** The monster's will save. */
-  @Key("will save")
-  protected Number m_willSave = new Number(-1, 100, true);
-
-  static
-  {
-    addIndex(new Index(Index.Path.WILL_SAVES, "Will Saves", TYPE));
-  }
-
-  //........................................................................
-  //----- reflex save ------------------------------------------------------
+  protected int m_willSave = 0;
 
   /** The monster's reflex save. */
-  @Key("reflex save")
-  protected Number m_reflexSave = new Number(-1, 100, true);
-
-  static
-  {
-    addIndex(new Index(Index.Path.REFLEX_SAVES, "Reflex Saves", TYPE));
-  }
-
-  //........................................................................
-  //----- primary attacks --------------------------------------------------
+  protected int m_reflexSave = 0;
 
   /** The monster's attacks. */
-  @Key("primary attacks")
-  protected ValueList<Multiple> m_primaryAttacks
-    = new ValueList<Multiple>(",", new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element(new Dice().withEditType("name[dice]"), true),
-      new Multiple.Element(new EnumSelection<AttackMode>(AttackMode.class),
-                           false),
-      new Multiple.Element(new EnumSelection<AttackStyle>(AttackStyle.class),
-                           false),
-      new Multiple.Element(new Damage().withEditType("name[damage]"),
-                           false, " (", ")"),
-    }));
+  protected List<Attack> m_primaryAttacks = new ArrayList<>();
 
-  //........................................................................
-  //----- secondary attacks ------------------------------------------------
-
-  /** The monster's attacks. */
-  @Key("secondary attacks")
-  protected ValueList<Multiple> m_secondaryAttacks = m_primaryAttacks;
-
-  //........................................................................
-  //----- space ------------------------------------------------------------
-
-  /** The formatter for space. */
-  // protected static ValueFormatter<Distance> s_spaceFormatter =
-  //   new LinkFormatter<Distance>("/index/spaces/");
-
-  /** The grouping for space values. */
-  protected static final Group<Distance, Long, String> s_spaceGrouping =
-    new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
-      {
-        /**
-         *
-         */
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Long extract(Distance inValue)
-        {
-          if(inValue == null)
-            throw new IllegalArgumentException("must have a distance here");
-
-          return 10L * (long)inValue.getAsFeet().getValue();
-        }
-      }, new Long [] { 5L, 10L, 25L, 50L, 100L, 150L, 200L, 300L, },
-      new String [] { "0.5 ft", "1 ft", "2.5 ft", "5 ft",
-                      "10 ft", "15 ft", "20 ft", "30 ft", "Infinite", },
-      "$undefined$");
+  /** The monster's secondary attacks. */
+  protected List<Attack> m_secondaryAttacks = new ArrayList<>();
 
   /** The space the monster occupies (computed). */
-  @Key("space")
-  protected Distance m_space = new Distance()
-    .withGrouping(s_spaceGrouping);
-
-  static
-  {
-    addIndex(new Index(Index.Path.SPACES, "Spaces", TYPE));
-  }
-
-  //........................................................................
-  //----- reach ------------------------------------------------------------
-
-  /** The formatter for space. */
-  // protected static ValueFormatter<Distance> s_reachFormatter =
-  //   new LinkFormatter<Distance>("/index/reaches/");
-
-  /** The grouping for space values. */
-  protected static final Group<Distance, Long, String> s_reachGrouping =
-    new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
-      {
-        /**
-         *
-         */
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Long extract(Distance inValue)
-        {
-          if(inValue == null)
-            throw new IllegalArgumentException("must have a distance here");
-
-          return (long)inValue.getAsFeet().getValue();
-        }
-      }, new Long [] { 0L, 5L, 10L, 15L, 20L, 30L, },
-      new String [] { "0 ft", "5 ft", "10 ft", "15 ft", "20 ft", "30 ft",
-                      "Infinite", },
-      "$undefined$");
+  protected Optional<NewDistance> m_space = Optional.absent();
 
   /** The reach of the monster. */
-  @Key("reach")
-  protected Distance m_reach = new Distance()
-    .withGrouping(s_reachGrouping);
-
-  static
-  {
-    addIndex(new Index(Index.Path.REACHES, "Reaches", TYPE));
-  }
-
-  //........................................................................
-  //----- special attacks --------------------------------------------------
+  protected Optional<NewDistance> m_reach = Optional.absent();
 
   /** The special attacks. */
-  @Key("special attacks")
-  @WithBases
-  protected ValueList<Multiple> m_specialAttacks =
-    new ValueList<Multiple>
-    (", ",
-     new Multiple(new Multiple.Element []
-       {
-         new Multiple.Element
-         (new Reference<BaseQuality>(BaseQuality.TYPE)
-          .withParameter("Range", new Distance(), Parameters.Type.MAX)
-          .withParameter("Increment", new Distance(), Parameters.Type.MAX)
-          .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
-          .withParameter("Summary", new Name(), Parameters.Type.ADD)
-          .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
-          .withParameter("SpellLevel", new Number(0, 100), Parameters.Type.ADD)
-          .withParameter("Value", new Number(1, 100), Parameters.Type.ADD)
-          .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
-          .withParameter("Dice", new Dice(), Parameters.Type.ADD)
-          .withParameter("Times", new Number(1, 100), Parameters.Type.ADD)
-          .withParameter("Class", new EnumSelection<SpellClass>
-                         (SpellClass.class), Parameters.Type.ADD)
-          .withParameter("Ability", new Number(0, 100), Parameters.Type.MAX)
-          .withParameter("Type", new Name(), Parameters.Type.UNIQUE)
-          .withParameter("Duration", new Name(), Parameters.Type.ADD)
-          .withParameter("Initial", new Name(), Parameters.Type.UNIQUE)
-          .withParameter("Secondary", new Name(), Parameters.Type.UNIQUE)
-          .withParameter("Damage", new Damage(), Parameters.Type.ADD)
-          .withParameter("Incubation", new Name(), Parameters.Type.MIN)
-          .withParameter("DC", new Number(1, 100), Parameters.Type.MAX)
-          .withParameter("HP", new Number(1, 1000), Parameters.Type.MAX)
-          .withParameter("Burst", new Number(1, 100), Parameters.Type.MAX)
-          .withParameter("Str", new Number(-100, 100), Parameters.Type.ADD)
-          .withParameter("Dex", new Number(-100, 100), Parameters.Type.ADD)
-          .withParameter("Con", new Number(-100, 100), Parameters.Type.ADD)
-          .withParameter("Wis", new Number(-100, 100), Parameters.Type.ADD)
-          .withParameter("Int", new Number(-100, 100), Parameters.Type.ADD)
-          .withParameter("Cha", new Number(-100, 100), Parameters.Type.ADD)
-          .withTemplate("reference", "/quality/"), false),
-         new Multiple.Element(new Number(1, 100)
-                              .withEditType("name[per day]"), true, "/", null)
-       }));
-
-  //........................................................................
-  //----- special qualities ------------------------------------------------
+  List<String> m_specialAttacks = new ArrayList<>();
 
   /** The special qualities. */
-  @Key("special qualities")
-  @WithBases
-  @SuppressWarnings("rawtypes") // raw condition
-  protected ValueList<Multiple> m_specialQualities =
-  new ValueList<Multiple>
-  (", ",
-   new Multiple(new Multiple.Element []
-     {
-       new Multiple.Element
-       (new Reference<BaseQuality>(BaseQuality.TYPE)
-        .withParameter("Range", new Distance(), Parameters.Type.MAX)
-        .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
-        .withParameter("Summary", new Name(), Parameters.Type.ADD)
-        .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
-        .withParameter("SpellLevel", new Number(0, 100), Parameters.Type.ADD)
-        .withParameter("Racial",
-                       new Number(-50, 50, true), Parameters.Type.ADD)
-        .withParameter("Value", new Number(0, 100), Parameters.Type.ADD)
-        .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
-        .withTemplate("reference", "/quality/"), false),
-       new Multiple.Element(new Condition()
-                            .withEditType("string[condition]"),
-                            true, " if ", null),
-       new Multiple.Element(new Number(1, 100)
-                            .withEditType("name[per day]"), true, "/", null),
-     }));
-
-
-  //........................................................................
-  //----- class skills -----------------------------------------------------
+  protected List<String> m_specialQualities = new ArrayList<>();
 
   /** The class skills. */
-  @Key("class skills")
-  protected ValueList<Multiple> m_classSkills =
-    new ValueList<Multiple>(", ", new Multiple(new Multiple.Element []
-      {
-        new Multiple.Element
-        (new Reference<BaseSkill>(BaseSkill.TYPE)
-         .withParameter("Subtype",
-                        new EnumSelection<SkillType>
-                        (SkillType.class), Parameters.Type.UNIQUE),
-         false),
-        new Multiple.Element(new Modifier(0, Modifier.Type.GENERAL)
-                             .withEditType("modifier[modifier]"),
-                             false, ": ", null),
-      }));
-
-  //........................................................................
-  //----- feats ------------------------------------------------------------
+  protected List<String> m_classSkills = new ArrayList<>();
 
   /** The feats. */
-  @Key("feats")
-  protected ValueList<Reference<BaseFeat>> m_feats =
-    new ValueList<Reference<BaseFeat>>
-    (", ", new Reference<BaseFeat>(BaseFeat.TYPE)
-     .withParameter("Name", new Name(), Parameters.Type.UNIQUE));
+  protected List<String> m_feats = new ArrayList<>();
 
-  //........................................................................
-  //----- environment ------------------------------------------------------
+  /** The terrain. */
+  protected Terrain m_terrain = Terrain.UNKNOWN;
 
-  /** The environment. */
-  @Key("environment")
-  protected Multiple m_environment =
-    new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element(new EnumSelection<Climate>(Climate.ANY), true),
-      new Multiple.Element(new EnumSelection<Terrain>(Terrain.ANY), false),
-    });
-
-  static
-  {
-    addIndex(new Index(Index.Path.CLIMATES, "Climates", TYPE));
-    addIndex(new Index(Index.Path.TERRAINS, "Terrains", TYPE));
-  }
-
-  //........................................................................
-  //----- organization -----------------------------------------------------
+  /** The climate. */
+  protected Climate m_climate = Climate.UNKNOWN;
 
   /** The monster's organization. */
-  @Key("organization")
-  protected ValueList<Multiple> m_organizations =
-    new ValueList<Multiple>(", ", new Multiple(new Multiple.Element []
-      {
-        new Multiple.Element(new EnumSelection<Organization>
-                             (Organization.class), false),
-        new Multiple.Element(new Dice().withEditType("dice[number]"), true),
-        new Multiple.Element(new ValueList<Multiple>
-                             (", ",
-                              new Multiple(new Multiple.Element []
-                                {
-                                  new Multiple.Element(new Dice(), false),
-                                  new Multiple.Element(new Name(), false),
-                                })),
-                             true, " plus ", null),
-      }));
-
-  static
-  {
-    addIndex(new Index(Index.Path.ORGANIZATIONS, "Organizations", TYPE));
-  }
-
-  //........................................................................
-  //----- challenge rating -------------------------------------------------
+  protected List<Group> m_organizations = new ArrayList<>();
 
   /** The monsters challenge rating. */
-  @Key("challenge rating")
-  protected Rational m_cr = new Rational();
-
-  static
-  {
-    addIndex(new Index(Index.Path.CRS, "CRs", TYPE));
-  }
-
-  //........................................................................
-  //----- treasure ---------------------------------------------------------
+  protected Optional<NewRational> m_cr = Optional.absent();
 
   /** The monster's possible treasure. */
-  @Key("treasure")
-  protected EnumSelection<Treasure> m_treasure =
-    new EnumSelection<Treasure>(Treasure.class);
-
-  static
-  {
-    addIndex(new Index(Index.Path.TREASURES, "Treasures", TYPE));
-  }
-
-  //........................................................................
-  //----- alignment --------------------------------------------------------
+  protected Treasure m_treasure = Treasure.UNKNOWN;
 
   /** The monster's alignment. */
-  @Key("alignment")
-  protected Multiple m_alignment =
-    new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element(new EnumSelection<AlignmentStatus>
-                           (AlignmentStatus.class), false),
-      new Multiple.Element(new EnumSelection<Alignment>(Alignment.class),
-                           false, " ", null),
-    });
+  protected Alignment m_alignment = Alignment.UNKNOWN;
 
-  static
-  {
-    addIndex(new Index(Index.Path.ALIGNMENTS, "Alignments", TYPE));
-  }
-
-  //........................................................................
-  //----- advancements -----------------------------------------------------
+  /** The monster's alignemnt status. */
+  protected AlignmentStatus m_alignmentStatus = AlignmentStatus.UNKNOWN;
 
   /** The monster's advancement. */
-  @Key("advancements")
-  protected ValueList<Multiple> m_advancements =
-    new ValueList<Multiple>(", ", new Multiple(new Multiple.Element []
-      {
-        new Multiple.Element(new Range(1, 100), false),
-        new Multiple.Element
-        (new EnumSelection<Size>(Size.class), false,
-         " HD (", ")"),
-      }));
-
-  //........................................................................
-  //----- level adjustment -------------------------------------------------
+  protected List<Advancement> m_advancements = new ArrayList<>();
 
   /** The monsters level adjustment. */
-  @Key("level adjustment")
-  protected Union m_levelAdjustment =
-    new Union(new Selection(new String [] { "-" }),
-              new Number(0, 20, true)).withEditType("name");
-
-  static
-  {
-    addIndex(new Index(Index.Path.LEVEL_ADJUSTMENTS, "Level Adjustments",
-                       TYPE));
-  }
-
-  //........................................................................
-  //----- languages --------------------------------------------------------
+  protected Optional<Integer> m_levelAdjustment = Optional.absent();
 
   /** The monsters languages. */
-  @Key("languages")
-  protected ValueList<Multiple> m_languages =
-    new ValueList<Multiple>(", ", new Multiple(new Multiple.Element []
-      {
-        new Multiple.Element(new EnumSelection<LanguageModifier>
-                             (LanguageModifier.class), true),
-        new Multiple.Element(new EnumSelection<Language>(Language.class),
-                             false),
-      }));
-
-  static
-  {
-    addIndex(new Index(Index.Path.LANGUAGES, "Languages", TYPE));
-  }
-
-  //........................................................................
-  //----- encounter --------------------------------------------------------
+  protected List<LanguageOption> m_languages = new ArrayList<>();
 
   /** The monsters encounter. */
-  @Key("encounter")
-  protected LongFormattedText m_encounter = new LongFormattedText();
-
-  //........................................................................
-  //----- combat -----------------------------------------------------------
+  protected Optional<String> m_encounter = Optional.absent();
 
   /** The monsters combat tactics. */
-  @Key("combat")
-  protected LongFormattedText m_combat = new LongFormattedText();
-
-  //........................................................................
-  //----- tactics ----------------------------------------------------------
+  protected Optional<String> m_combat = Optional.absent();
 
   /** The monsters tactics. */
-  @Key("tactics")
-  protected LongFormattedText m_tactics = new LongFormattedText();
-
-  //........................................................................
-  //----- character --------------------------------------------------------
+  protected Optional<String> m_tactics = Optional.absent();
 
   /** The monsters character. */
-  @Key("character")
-  protected LongFormattedText m_character = new LongFormattedText();
-
-  //........................................................................
-  //----- reproduction -----------------------------------------------------
+  protected Optional<String> m_character = Optional.absent();
 
   /** The monsters reproduction. */
-  @Key("reproduction")
-  protected LongFormattedText m_reproduction =
-    new LongFormattedText();
-
-  //........................................................................
-  //----- possessions ------------------------------------------------------
+  protected Optional<String> m_reproduction = Optional.absent();
 
   /** The standard possessions. */
-  @Key("possessions")
-  protected ValueList<Multiple> m_possessions =
-    new ValueList<Multiple>(", ", new Multiple(new Multiple.Element []
-      {
-        new Multiple.Element(new Name(), true),
-        new Multiple.Element(new Text(), true),
-      }));
-
-  //........................................................................
-  //----- good saves -------------------------------------------------------
+  protected List<String> m_possessions = new ArrayList<>();
 
   /** The good saving throws. */
-  @Key("good saves")
-  protected ValueList<EnumSelection<Save>> m_goodSaves =
-    new ValueList<EnumSelection<Save>>(new EnumSelection<Save>(Save.class),
-                                       ", ");
-  //........................................................................
+  protected List<Save> m_goodSaves = new ArrayList<>();
 
   /** The feats entries. */
   protected Set<BaseFeat> m_featEntries = new HashSet<BaseFeat>();
 
-  static
+  public Size getSize()
   {
-    extractVariables(BaseMonster.class);
+    return m_size;
   }
 
-  //........................................................................
+  public SizeModifier getSizeModifier()
+  {
+    return m_sizeModifier;
+  }
 
-  //........................................................................
+  public MonsterType getMonsterType()
+  {
+    return m_monsterType;
+  }
 
-  //-------------------------------------------------------------- accessors
+  public List<MonsterSubtype> getMonsterSubtypes()
+  {
+    return Collections.unmodifiableList(m_monsterSubtypes);
+  }
 
-  //------------------------------ getAttacks ------------------------------
+  public Optional<NewDice> getHitDice()
+  {
+    return m_hitDice;
+  }
 
-  /**
-   * Get the different attacks made by this monster.
-   *
-   * @return      an iterator with all the values
-   *
-   */
-  // public Iterator<Multiple> getPrimaryAttacks()
-  // {
-  //   return m_primaryAttacks.iterator();
-  // }
+  public List<Speed> getSpeeds()
+  {
+    return Collections.unmodifiableList(m_speeds);
+  }
 
-  //........................................................................
-  //-------------------------------- getSize -------------------------------
+  public Optional<NewModifier> getNaturalArmor()
+  {
+    return m_naturalArmor;
+  }
 
-  /**
-   * Get the size of the monster.
-   *
-   * @return      the index in the size table.
-   *
-   */
-  // @SuppressWarnings(value = "unchecked")
-  // public BaseItem.Size getSize()
-  // {
-  //   return ((EnumSelection<BaseItem.Size>)
-  //           m_size.get(0).get()).getSelected();
-  // }
+  public int getAttack()
+  {
+    return m_attack;
+  }
 
-  //........................................................................
-  //------------------------------- getReach -------------------------------
+  public Optional<Integer> getStrength()
+  {
+    return m_strength;
+  }
+
+  public Optional<Integer> getDexterity()
+  {
+    return m_dexterity;
+  }
+
+  public Optional<Integer> getConstitution()
+  {
+    return m_constitution;
+  }
+
+  public Optional<Integer> getIntelligence()
+  {
+    return m_intelligence;
+  }
+
+  public Optional<Integer> getWisdom()
+  {
+    return m_wisdom;
+  }
+
+  public Optional<Integer> getCharisma()
+  {
+    return m_charisma;
+  }
+
+  public int getFortitudeSave()
+  {
+    return m_fortitudeSave;
+  }
+
+  public int getWillSave()
+  {
+    return m_willSave;
+  }
+
+  public int getReflexSave()
+  {
+    return m_reflexSave;
+  }
+
+  public List<Attack> getPrimaryAttacks()
+  {
+    return Collections.unmodifiableList(m_primaryAttacks);
+  }
+
+  public List<Attack> getSecondaryAttacks()
+  {
+    return Collections.unmodifiableList(m_secondaryAttacks);
+  }
+
+  public Optional<NewDistance> getSpace()
+  {
+    return m_space;
+  }
+
+  public List<String> getSpecialAttacks()
+  {
+    return Collections.unmodifiableList(m_specialAttacks);
+  }
+
+  public List<String> getSpecialQualities()
+  {
+    return Collections.unmodifiableList(m_specialQualities);
+  }
+
+  public List<String> getClassSkills()
+  {
+    return Collections.unmodifiableList(m_classSkills);
+  }
+
+  public List<String> getFeats()
+  {
+    return Collections.unmodifiableList(m_feats);
+  }
+
+  public Terrain getTerrain()
+  {
+    return m_terrain;
+  }
+
+  public Climate getClimate()
+  {
+    return m_climate;
+  }
+
+  public List<Group> getOrganizations()
+  {
+    return Collections.unmodifiableList(m_organizations);
+  }
+
+  public Optional<NewRational> getCr()
+  {
+    return m_cr;
+  }
+
+  public Treasure getTreasure()
+  {
+    return m_treasure;
+  }
+
+  public Alignment getAlignment()
+  {
+    return m_alignment;
+  }
+
+  public AlignmentStatus getAlignmentStatus()
+  {
+    return m_alignmentStatus;
+  }
+
+  public List<Advancement> getAdvancements()
+  {
+    return m_advancements;
+  }
+
+  public Optional<Integer> getLevelAdjustment()
+  {
+    return m_levelAdjustment;
+  }
+
+  public List<LanguageOption> getLanguages()
+  {
+    return m_languages;
+  }
+
+  public Optional<String> getEncounter()
+  {
+    return m_encounter;
+  }
+
+  public Optional<String> getCombat()
+  {
+    return m_combat;
+  }
+
+  public Optional<String> getTactics()
+  {
+    return m_tactics;
+  }
+
+  public Optional<String> getCharacter()
+  {
+    return m_character;
+  }
+
+  public Optional<String> getReproduction()
+  {
+    return m_reproduction;
+  }
+
+  public List<String> getPossessions()
+  {
+    return m_possessions;
+  }
+
+  public List<Save> getGoodSaves()
+  {
+    return m_goodSaves;
+  }
+
+  public Set<BaseFeat> getFeatEntries()
+  {
+    return m_featEntries;
+  }
 
   /**
    * Get the monster's reach.
    *
    * @return      the monsters reach
-   *
    */
-  public Distance getReach()
+  public Optional<NewDistance> getReach()
   {
     return m_reach;
   }
 
-  //........................................................................
-  //-------------------------- getAbilityModifier --------------------------
+  public List<String> getMonsterSubtypeNames()
+  {
+    return MonsterSubtype.names();
+  }
+
+  public List<String> getMovementModeNames()
+  {
+    return MovementMode.names();
+  }
+
+  public List<String> getManeuverabilityNames()
+  {
+    return Maneuverability.names();
+  }
+
+  public List<String> getAttackModeNames()
+  {
+    return AttackMode.names();
+  }
+
+  public List<String> getAttackStyleNames()
+  {
+    return AttackStyle.names();
+  }
+
+  public List<String> getOrganizationNames()
+  {
+    return Organization.names();
+  }
+
+  public List<String> getSizeNames()
+  {
+    return Size.names();
+  }
+
+  public List<String> getLanguageNames()
+  {
+    return Language.names();
+  }
+
+  public List<String> getLanguageModifierNames()
+  {
+    return LanguageModifier.names();
+  }
+
+  public List<String> getSaveNames()
+  {
+    return Save.names();
+  }
 
   /**
    * Get the current modifier for the given ability.
@@ -2465,7 +773,6 @@ public class BaseMonster extends BaseEntry
    * @param       inAbility the ability to get the modifier for
    *
    * @return      the ability modifier
-   *
    */
   // public int getAbilityModifier(Global.Ability inAbility)
   // {
@@ -2504,22 +811,15 @@ public class BaseMonster extends BaseEntry
   //   }
   // }
 
-  //........................................................................
-  //------------------------------- getMaxHP -------------------------------
-
   /**
    * Determine the maximally possible hit points (without any modifiers).
    *
    * @return      the maximally possible hit points
-   *
    */
   // public int getMaxHP()
   // {
   //   return (int)m_hitDice.getMax();
   // }
-
-  //........................................................................
-  //------------------------------- getMinHP -------------------------------
 
   /**
    * Determine the minimally possible hit points (without any modifiers).
@@ -2532,29 +832,12 @@ public class BaseMonster extends BaseEntry
   //   return (int)m_hitDice.getMin();
   // }
 
-  //........................................................................
-  //------------------------------- getFeats -------------------------------
-
-  /**
-   * Get the base feats of this monster.
-   *
-   * @return      an iterator over all base feats
-   *
-   */
-  // public Iterator<BaseFeat> getFeats()
-  // {
-  //   return m_featEntries.iterator();
-  // }
-
-  //........................................................................
-  //----------------------- collectSpecialQualities ------------------------
-
   /**
    * Get the special qualities for this and all base monsters.
    *
    * @return  a list of base qualities
-   *
    */
+  /*
   @SuppressWarnings("unchecked") // need to cast multiple part
   public List<Reference<BaseQuality>> collectSpecialQualities()
   {
@@ -2573,16 +856,14 @@ public class BaseMonster extends BaseEntry
 
     return qualities;
   }
-
-  //........................................................................
-  //----------------------------- collectFeats -----------------------------
+  */
 
   /**
    * Collect the feats by entry.
    *
    * @param       ioFeats the feats store
-   *
    */
+  /*
   public void collectFeats(Multimap<Reference<BaseFeat>, String> ioFeats)
   {
     for(Reference<BaseFeat> feat : m_feats)
@@ -2592,9 +873,7 @@ public class BaseMonster extends BaseEntry
       if(base instanceof BaseMonster)
         ((BaseMonster)base).collectFeats(ioFeats);
   }
-
-  //........................................................................
-  //-------------------------------- collect -------------------------------
+  */
 
   @Override
   @SuppressWarnings("unchecked")
@@ -2629,30 +908,27 @@ public class BaseMonster extends BaseEntry
 //      feat.collect(inName, ioCombined, reference.getParameters());
 //    }
 
+    /*
     if("level".equals(inName))
     {
       if(m_hitDice.isDefined())
         ioCombined.addModifier(new Modifier(m_hitDice.getNumber()), this, null);
     }
+    */
   }
-
-  //........................................................................
-
-  //-------------------------------- level ---------------------------------
 
   /**
    * Get the level of the monster.
    *
    * @return      the monster's level or hit dice
-   *
    */
   public int level()
   {
-    return m_hitDice.getNumber();
-  }
+    if(m_hitDice.isPresent())
+      return m_hitDice.get().getNumber();
 
-  //........................................................................
-  //------------------------------ abilityMod ------------------------------
+    return 0;
+  }
 
   /**
    * Get the ability modifier for the given value.
@@ -2660,7 +936,6 @@ public class BaseMonster extends BaseEntry
    * @param       inAbility the ability to compute the modifier for
    *
    * @return      the ability modifier
-   *
    */
   // public static int abilityMod(long inAbility)
   // {
@@ -2671,14 +946,10 @@ public class BaseMonster extends BaseEntry
   //   return (int)(inAbility / 2) - 5;
   // }
 
-  //........................................................................
-  //----------------------------- skillPoints ------------------------------
-
   /**
    * Get the number of skill points of the monster.
    *
    * @return      the number of skill points
-   *
    */
   // public int skillPoints()
   // {
@@ -2692,17 +963,12 @@ public class BaseMonster extends BaseEntry
   //              Global.SKILL_POINTS[type] + abilityMod(m_intelligence.get()));
   // }
 
-  //........................................................................
-  //----------------------------- skillRanks -------------------------------
-
   /**
    * Get the number of skill ranks in a specific skill.
    *
    * @param       inSkill the name of the skill to get the ranks of
    *
    * @return      the number of skill ranks
-   *
-   *
    */
   // public int skillRanks(String inSkill)
   // {
@@ -2720,24 +986,15 @@ public class BaseMonster extends BaseEntry
   //   return 0;
   // }
 
-  //........................................................................
-
-  //------------------------------ rollMaxHP -------------------------------
-
   /**
    * Roll the maximal hit points of the monster, including all modifiers.
    *
    * @return      the maximal hit point a monster of this type has
-   *
    */
   // public int rollMaxHP()
   // {
   //   return m_hitDice.roll();
   // }
-
-  //........................................................................
-
-  //------------------------------ hasQuality ------------------------------
 
   /**
    * Determine if the monster has the given quality.
@@ -2745,8 +1002,8 @@ public class BaseMonster extends BaseEntry
    * @param       inQuality the quality to look for
    *
    * @return      true if the quality is there, false if not
-   *
    */
+  /*
   public boolean hasQuality(String inQuality)
   {
     for(Multiple value : m_specialQualities)
@@ -2764,9 +1021,7 @@ public class BaseMonster extends BaseEntry
 
     return false;
   }
-
-  //........................................................................
-  //-------------------------------- hasFeat -------------------------------
+  */
 
   /**
    * Determine if the monster has the given feat.
@@ -2774,8 +1029,8 @@ public class BaseMonster extends BaseEntry
    * @param       inFeat the feat to look for
    *
    * @return      true if the feat is there, false if not
-   *
    */
+  /*
   public boolean hasFeat(String inFeat)
   {
     for(Reference<BaseFeat> value : m_feats)
@@ -2789,9 +1044,7 @@ public class BaseMonster extends BaseEntry
 
     return false;
   }
-
-  //........................................................................
-  //------------------------------ hasLanguage -----------------------------
+  */
 
   /**
    * Determine if the monster understands the given lanauge.
@@ -2799,7 +1052,6 @@ public class BaseMonster extends BaseEntry
    * @param       inLanguage the language to look for
    *
    * @return      true if the language is there, false if not
-   *
    */
   // public boolean hasLanguage(String inLanguage)
   // {
@@ -2810,16 +1062,12 @@ public class BaseMonster extends BaseEntry
   //   return false;
   // }
 
-  //........................................................................
-  //------------------------------ hasSubtype ------------------------------
-
   /**
    * Determine if the monster has the given subtype.
    *
    * @param       inType the type to look for
    *
    * @return      true if the language is there, false if not
-   *
    */
   // @SuppressWarnings("unchecked") // casting for Multiple
   // public boolean hasSubtype(String inType)
@@ -2832,16 +1080,12 @@ public class BaseMonster extends BaseEntry
   //   return false;
   // }
 
-  //........................................................................
-  //--------------------------- hasMovementMode ----------------------------
-
   /**
    * Determine if the monster has the given movement mode.
    *
    * @param       inType the movement mode to look for
    *
    * @return      true if the language is there, false if not
-   *
    */
   // public boolean hasMovementMode(String inType)
   // {
@@ -2852,16 +1096,12 @@ public class BaseMonster extends BaseEntry
   //   return false;
   // }
 
-  //........................................................................
-  //----------------------------- isClassSkill -----------------------------
-
   /**
    * Check if the given name is a describing a class skill of the monster.
    *
    * @param       inName the name of the skill to check
    *
    * @return      true if it is a class skill, false if not
-   *
    */
   // public boolean isClassSkill(String inName)
   // {
@@ -2875,16 +1115,12 @@ public class BaseMonster extends BaseEntry
   //   return false;
   // }
 
-  //........................................................................
-  //--------------------------------- isDM ---------------------------------
-
   /**
    * Check whether the given user is the DM for this entry.
    *
    * @param       inUser the user accessing
    *
    * @return      true for DM, false for not
-   *
    */
   @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
@@ -2895,17 +1131,6 @@ public class BaseMonster extends BaseEntry
     return inUser.get().hasAccess(BaseCharacter.Group.DM);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //---------------------------- checkQualities ----------------------------
-
   /**
    *
    * Check that the monster has the given qualities.
@@ -2913,7 +1138,6 @@ public class BaseMonster extends BaseEntry
    * @param       inQualities the qualities to check for
    *
    * @return      true if everything is ok, false if not
-   *
    */
   // public boolean checkQualities(String ... inQualities)
   // {
@@ -2931,14 +1155,10 @@ public class BaseMonster extends BaseEntry
   //   return result;
   // }
 
-  //........................................................................
-  //-------------------------- computeIndexValues --------------------------
-
   /**
    * Get all the values for all the indexes.
    *
    * @return      a multi map of values per index name
-   *
    */
   @Override
   @SuppressWarnings("unchecked") // casting
@@ -2946,52 +1166,64 @@ public class BaseMonster extends BaseEntry
   {
     Multimap<Index.Path, String> values = super.computeIndexValues();
 
-    values.put(Index.Path.SIZES, m_size.group());
-    values.put(Index.Path.TYPES, m_monsterType.get(0).group());
+    values.put(Index.Path.SIZES, m_size.toString());
+    values.put(Index.Path.TYPES, m_monsterType.toString());
 
-    for(Value<?> value : ((ValueList<? extends Value<?>>)m_monsterType.get(1)))
-      values.put(Index.Path.SUBTYPES, value.group());
+    for(MonsterSubtype type : m_monsterSubtypes)
+      values.put(Index.Path.SUBTYPES, type.toString());
 
-    values.put(Index.Path.HDS, "" + m_hitDice.getNumber());
-    values.put(Index.Path.DICES, "" + m_hitDice.getDice());
-
-    for(Multiple value : m_speed)
+    if(m_hitDice.isPresent())
     {
-      values.put(Index.Path.MOVEMENT_MODES, value.get(0).group());
-      values.put(Index.Path.SPEEDS, "" + value.get(1).group());
-      values.put(Index.Path.MANEUVERABILITIES, "" + value.get(2).group());
+      values.put(Index.Path.HDS, "" + m_hitDice.get().toString());
+      values.put(Index.Path.DICES, "" + m_hitDice.get().toString());
     }
 
-    values.put(Index.Path.NATURAL_ARMORS, m_natural.group());
-    values.put(Index.Path.BASE_ATTACKS, m_attack.group());
-    values.put(Index.Path.STRENGTHS, m_strength.group());
-    values.put(Index.Path.DEXTERITIES, m_dexterity.group());
-    values.put(Index.Path.CONSTITUTIONS, m_constitution.group());
-    values.put(Index.Path.INTELLIGENCES, m_intelligence.group());
-    values.put(Index.Path.WISDOMS, m_wisdom.group());
-    values.put(Index.Path.CHARISMAS, m_charisma.group());
-    values.put(Index.Path.SPACES, m_space.group());
-    values.put(Index.Path.REACHES, m_reach.group());
-    values.put(Index.Path.CLIMATES, m_environment.get(0).group());
-    values.put(Index.Path.TERRAINS, m_environment.get(1).group());
+    for(Speed speed : m_speeds)
+    {
+      values.put(Index.Path.MOVEMENT_MODES, speed.getMode().toString());
+      values.put(Index.Path.SPEEDS, speed.getSpeed().toString());
+      values.put(Index.Path.MANEUVERABILITIES,
+                 speed.getManeuverability().toString());
+    }
 
-    for(Multiple organization : m_organizations)
-      values.put(Index.Path.ORGANIZATIONS, organization.get(0).group());
+    values.put(Index.Path.NATURAL_ARMORS, "" + m_naturalArmor);
+    values.put(Index.Path.BASE_ATTACKS, "" + m_attack);
+    if(m_strength.isPresent())
+      values.put(Index.Path.STRENGTHS, m_strength.get().toString());
+    if(m_dexterity.isPresent())
+      values.put(Index.Path.DEXTERITIES, m_dexterity.get().toString());
+    if(m_constitution.isPresent())
+      values.put(Index.Path.CONSTITUTIONS, m_constitution.get().toString());
+    if(m_intelligence.isPresent())
+      values.put(Index.Path.INTELLIGENCES, m_intelligence.get().toString());
+    if(m_wisdom.isPresent())
+      values.put(Index.Path.WISDOMS, m_wisdom.get().toString());
+    if(m_charisma.isPresent())
+      values.put(Index.Path.CHARISMAS, m_charisma.get().toString());
+    if(m_space.isPresent())
+      values.put(Index.Path.SPACES, m_space.get().toString());
+    if(m_reach.isPresent())
+      values.put(Index.Path.REACHES, m_reach.get().toString());
+    values.put(Index.Path.CLIMATES, m_climate.toString());
+    values.put(Index.Path.TERRAINS, m_terrain.toString());
 
-    values.put(Index.Path.CRS, m_cr.group());
-    values.put(Index.Path.TREASURES, m_treasure.group());
-    values.put(Index.Path.ALIGNMENTS, m_alignment.get(1).group());
-    values.put(Index.Path.LEVEL_ADJUSTMENTS, m_levelAdjustment.group());
+    for(Group organization : m_organizations)
+      values.put(Index.Path.ORGANIZATIONS,
+                 organization.getOrganization().toString());
 
-    for(Multiple language : m_languages)
-      values.put(Index.Path.LANGUAGES, language.get(1).group());
+    if(m_cr.isPresent())
+      values.put(Index.Path.CRS, m_cr.get().toString());
+    values.put(Index.Path.TREASURES, m_treasure.toString());
+    values.put(Index.Path.ALIGNMENTS, m_alignment.toString());
+    if(m_levelAdjustment.isPresent())
+    values.put(Index.Path.LEVEL_ADJUSTMENTS,
+               m_levelAdjustment.get().toString());
+
+    for(LanguageOption language : m_languages)
+      values.put(Index.Path.LANGUAGES, language.getLanguage().toString());
 
     return values;
   }
-
-  //........................................................................
-
-  //-------------------------------- check ---------------------------------
 
   /**
    * Check the entry for possible problems.
@@ -2999,7 +1231,6 @@ public class BaseMonster extends BaseEntry
    * @param       inCampaign the campaign with all the data
    *
    * @return      false if a problem was found, true if not
-   *
    */
   // public boolean check(CampaignData inCampaign)
   // {
@@ -4023,12 +2254,8 @@ public class BaseMonster extends BaseEntry
   //   return super.check() & result;
   // }
 
-  //........................................................................
-  //------------------------------- complete -------------------------------
-
   /**
    * Complete the entry and make sure that all values are filled.
-   *
    */
   // @SuppressWarnings(value = "unchecked")
   // public void complete()
@@ -4084,9 +2311,6 @@ public class BaseMonster extends BaseEntry
     //......................................................................
   // }
 
-  //........................................................................
-  //----------------------------- modifyValue ------------------------------
-
   /**
    * Modify the given value with information from the current attachment.
    *
@@ -4095,7 +2319,6 @@ public class BaseMonster extends BaseEntry
    * @param       inDynamic a flag denoting if dynamic values are requested
    *
    * @return      the newly computed value (or null if no value to use)
-   *
    */
 //   public Modifier modifyValue(PropertyKey inType, Value inValue,
 //                               boolean inDynamic)
@@ -4110,17 +2333,12 @@ public class BaseMonster extends BaseEntry
 //     return super.modifyValue(inType, inValue, inDynamic);
 //   }
 
-  //........................................................................
-
-  //------------------------------- groupHP --------------------------------
-
   /**
    * Make a grouping of the given HPs.
    *
    * @param       inHP the input value
    *
    * @return      the grouped value (as a String)
-   *
    */
   // protected static String groupHP(long inHP)
   // {
@@ -4168,7 +2386,75 @@ public class BaseMonster extends BaseEntry
 
   //........................................................................
 
-  @SuppressWarnings("unchecked")
+  @Override
+  public void set(Values inValues)
+  {
+    super.set(inValues);
+
+    m_size = inValues.use("size", m_size, Size.PARSER);
+    m_sizeModifier = inValues.use("size_modifier", m_sizeModifier,
+                                  SizeModifier.PARSER);
+    m_monsterType = inValues.use("monster_type", m_monsterType,
+                                 MonsterType.PARSER);
+    m_monsterSubtypes = inValues.use("monster_subtype", m_monsterSubtypes,
+                                     MonsterSubtype.PARSER);
+    m_hitDice = inValues.use("hit_dice", m_hitDice, NewDice.PARSER);
+    m_speeds = inValues.use("speed", m_speeds, Speed.PARSER,
+                            "mode", "speed", "maneuverability");
+    m_naturalArmor = inValues.use("natural_armor", m_naturalArmor,
+                                  NewModifier.PARSER);
+    m_attack = inValues.use("attack", m_attack, NewValue.INTEGER_PARSER);
+    m_strength = inValues.use("strength", m_strength, NewValue.INTEGER_PARSER);
+    m_dexterity = inValues.use("dexterity", m_dexterity,
+                               NewValue.INTEGER_PARSER);
+    m_constitution = inValues.use("constitution", m_constitution,
+                                  NewValue.INTEGER_PARSER);
+    m_intelligence = inValues.use("intelligence", m_intelligence,
+                                  NewValue.INTEGER_PARSER);
+    m_wisdom = inValues.use("wisdom", m_wisdom, NewValue.INTEGER_PARSER);
+    m_charisma = inValues.use("charisma", m_charisma, NewValue.INTEGER_PARSER);
+    m_reflexSave = inValues.use("reflex_save", m_reflexSave,
+                                NewValue.INTEGER_PARSER);
+    m_willSave = inValues.use("will_save", m_willSave, NewValue.INTEGER_PARSER);
+    m_fortitudeSave = inValues.use("fortitude_save", m_fortitudeSave,
+                                   NewValue.INTEGER_PARSER);
+    m_primaryAttacks = inValues.use("primary_attack", m_primaryAttacks,
+                                    Attack.PARSER,
+                                    "number", "mode", "style", "damage");
+    m_secondaryAttacks = inValues.use("secondary_attack", m_primaryAttacks,
+                                      Attack.PARSER,
+                                      "number", "mode", "style", "damage");
+    m_space = inValues.use("space", m_space, NewDistance.PARSER);
+    m_reach = inValues.use("reach", m_reach, NewDistance.PARSER);
+    m_specialAttacks = inValues.use("special_attack", m_specialAttacks);
+    m_specialQualities = inValues.use("special_quality", m_specialQualities);
+    m_classSkills = inValues.use("class_skill", m_classSkills);
+    m_feats = inValues.use("feats", m_feats);
+    m_terrain = inValues.use("terrain", m_terrain, Terrain.PARSER);
+    m_climate = inValues.use("climate", m_climate, Climate.PARSER);
+    m_cr = inValues.use("cr", m_cr, NewRational.PARSER);
+    m_organizations = inValues.use("organization", m_organizations, Group.PARSER,
+                                   "organization", "number", "plus");
+    m_treasure = inValues.use("treasure", m_treasure, Treasure.PARSER);
+    m_alignment = inValues.use("alignment", m_alignment, Alignment.PARSER);
+    m_alignmentStatus = inValues.use("alignment_status", m_alignmentStatus,
+                                     AlignmentStatus.PARSER);
+    m_advancements = inValues.use("advancement", m_advancements,
+                                  Advancement.PARSER,
+                                  "range", "size");
+    m_levelAdjustment = inValues.use("level_adjustment", m_levelAdjustment,
+                                     NewValue.INTEGER_PARSER);
+    m_languages = inValues.use("language", m_languages, LanguageOption.PARSER,
+                               "language", "modifier");
+    m_encounter = inValues.use("encounter", m_encounter);
+    m_combat = inValues.use("combat", m_combat);
+    m_tactics = inValues.use("tactics", m_tactics);
+    m_character = inValues.use("character", m_character);
+    m_reproduction = inValues.use("reproduction", m_reproduction);
+    m_possessions = inValues.use("possessions", m_possessions);
+    m_goodSaves = inValues.use("good_saves", m_goodSaves, Save.PARSER);
+  }
+
   @Override
   public Message toProto()
   {
@@ -4176,317 +2462,191 @@ public class BaseMonster extends BaseEntry
 
     builder.setBase((BaseEntryProto)super.toProto());
 
-    if(m_size.isDefined())
+    if(m_size != Size.UNKNOWN)
+      builder.setSize(m_size.toProto());
+    if(m_sizeModifier != SizeModifier.UNKNOWN)
+      builder.setSizeModifier(m_sizeModifier.toProto());
+
+    if(m_monsterType != MonsterType.UNKNOWN)
+      builder.setType(m_monsterType.toProto());
+    for(MonsterSubtype subtype : m_monsterSubtypes)
+      builder.addSubtype(subtype.toProto());
+
+    if(m_hitDice.isPresent())
+      builder.setHitDice(m_hitDice.get().toProto());
+
+    for(Speed speed : m_speeds)
     {
-      builder.setSize(((EnumSelection<Size>)m_size.get(0))
-                      .getSelected().toProto());
-      builder.setSizeModifier(((EnumSelection<SizeModifier>)
-                              m_size.get(1)).getSelected().toProto());
+      BaseMonsterProto.Speed.Builder speedBuilder =
+        BaseMonsterProto.Speed.newBuilder();
+
+      speedBuilder.setMode(speed.getMode().toProto());
+      speedBuilder.setDistance(speed.getSpeed().toProto());
+      if(speed.getManeuverability().isPresent())
+          speedBuilder.setManeuverability(speed.getManeuverability().get()
+                                          .toProto());
+
+      builder.addSpeed(speedBuilder.build());
     }
 
-    if(m_monsterType.isDefined())
+    if(m_naturalArmor.isPresent())
+      builder.setNaturalArmor(m_naturalArmor.get().toProto());
+
+    builder.setBaseAttack(m_attack);
+
+    if(m_strength.isPresent())
+      builder.setStrength(m_strength.get());
+
+    if(m_dexterity.isPresent())
+      builder.setDexterity(m_dexterity.get());
+
+    if(m_constitution.isPresent())
+      builder.setConstitution(m_constitution.get());
+
+    if(m_wisdom.isPresent())
+      builder.setWisdom(m_wisdom.get());
+
+    if(m_intelligence.isPresent())
+      builder.setIntelligence(m_intelligence.get());
+
+    if(m_charisma.isPresent())
+      builder.setCharisma(m_charisma.get());
+
+    builder.setFortitudeSave(m_fortitudeSave);
+    builder.setWillSave(m_willSave);
+    builder.setReflexSave(m_reflexSave);
+
+    for(Attack attack : m_primaryAttacks)
     {
-      builder.setType(((EnumSelection<MonsterType>)m_monsterType.get(0))
-                      .getSelected().toProto());
-      for(EnumSelection<MonsterSubtype> subtype
-        : (ValueList<EnumSelection<MonsterSubtype>>)m_monsterType.get(1))
-        builder.addSubtype(subtype.getSelected().toProto());
+      BaseMonsterProto.Attack.Builder attackBuilder =
+        BaseMonsterProto.Attack.newBuilder();
+
+      attackBuilder.setAttacks(attack.getNumber().toProto());
+      attackBuilder.setMode(attack.getMode().toProto());
+      attackBuilder.setStyle(attack.getStyle().toProto());
+      attackBuilder.setDamage(attack.getDamage().toProto());
+
+      builder.addPrimaryAttack(attackBuilder.build());
     }
 
-    if(m_hitDice.isDefined())
-      builder.setHitDice(m_hitDice.toProto());
+    for(Attack attack : m_secondaryAttacks)
+    {
+      BaseMonsterProto.Attack.Builder attackBuilder =
+        BaseMonsterProto.Attack.newBuilder();
 
-    if(m_speed.isDefined())
-      for(Multiple speed : m_speed)
-      {
-        BaseMonsterProto.Speed.Builder speedBuilder =
-          BaseMonsterProto.Speed.newBuilder();
+      attackBuilder.setAttacks(attack.getNumber().toProto());
+      attackBuilder.setMode(attack.getMode().toProto());
+      attackBuilder.setStyle(attack.getStyle().toProto());
+      attackBuilder.setDamage(attack.getDamage().toProto());
 
-        if(speed.get(0).isDefined())
-          speedBuilder.setMode(((EnumSelection<MovementMode>)speed.get(0))
-                               .getSelected().toProto());
+      builder.addSecondaryAttack(attackBuilder.build());
+    }
 
-        speedBuilder.setDistance(((Distance)speed.get(1)).toProto());
+    if(m_space.isPresent())
+      builder.setSpace(m_space.get().toProto());
 
-        if(speed.get(2).isDefined())
-          speedBuilder.setManeuverability(((EnumSelection<Maneuverability>)
-                                          speed.get(2))
-                                          .getSelected().toProto());
+    if(m_reach.isPresent())
+      builder.setReach(m_reach.get().toProto());
 
-        builder.addSpeed(speedBuilder.build());
-      }
+    for(String special : m_specialAttacks)
+      builder.addSpecialAttack
+        (BaseMonsterProto.QualityReference.newBuilder()
+         .setReference(BaseMonsterProto.Reference.newBuilder()
+                       .setName(special)
+                       .build())
+                       .build());
 
-    if(m_natural.isDefined())
-      builder.setNaturalArmor(m_natural.toProto());
+    for(String special : m_specialQualities)
+      builder.addSpecialQuality
+        (BaseMonsterProto.QualityReference.newBuilder()
+         .setReference(BaseMonsterProto.Reference.newBuilder()
+                       .setName(special)
+                       .build())
+                       .build());
 
-    if(m_attack.isDefined())
-      builder.setBaseAttack((int)m_attack.get());
+    for(String skill : m_classSkills)
+      builder.addClassSkill
+        (BaseMonsterProto.SkillReference.newBuilder()
+         .setReference(BaseMonsterProto.Reference.newBuilder()
+                       .setName(skill)
+                       .build())
+                       .build());
 
-    if(m_strength.isDefined())
-      builder.setStrength((int)m_strength.get());
+    for(String feat : m_feats)
+      builder.addFeat(BaseMonsterProto.Reference.newBuilder()
+                      .setName(feat)
+                      .build());
 
-    if(m_dexterity.isDefined())
-      builder.setDexterity((int)m_dexterity.get());
+    if(m_climate != Climate.UNKNOWN)
+      builder.setClimate(m_climate.toProto());
 
-    if(m_constitution.isDefined())
-      builder.setConstitution((int)m_constitution.get());
+    if(m_terrain != Terrain.UNKNOWN)
+      builder.setTerrain(m_terrain.toProto());
 
-    if(m_wisdom.isDefined())
-      builder.setWisdom((int)m_wisdom.get());
+    for(Group organization : m_organizations)
+    {
+      BaseMonsterProto.Organization.Builder org =
+        BaseMonsterProto.Organization.newBuilder();
 
-    if(m_intelligence.isDefined())
-      builder.setIntelligence((int)m_intelligence.get());
+      org.setType(organization.getOrganization().toProto());
+      org.setNumber(organization.getNumber().toProto());
+      if(organization.getPlus().isPresent())
+        org.addPlus(BaseMonsterProto.Organization.Plus.newBuilder()
+                    .setText(organization.getPlus().get())
+                    .build());
 
-    if(m_charisma.isDefined())
-      builder.setCharisma((int)m_charisma.get());
+      builder.addOrganization(org.build());
+    }
 
-    if(m_fortitudeSave.isDefined())
-      builder.setFortitudeSave((int)m_fortitudeSave.get());
+    if(m_cr.isPresent())
+      builder.setChallengeRating(m_cr.get().toProto());
 
-    if(m_willSave.isDefined())
-      builder.setWillSave((int)m_willSave.get());
+    if(m_treasure != Treasure.UNKNOWN)
+      builder.setTreasure(m_treasure.toProto());
 
-    if(m_reflexSave.isDefined())
-      builder.setReflexSave((int)m_reflexSave.get());
+    if(m_alignment != Alignment.UNKNOWN)
+      builder.setAlignment(m_alignment.toProto());
+    if(m_alignmentStatus != AlignmentStatus.UNKNOWN)
+      builder.setAlignmentStatus(m_alignmentStatus.toProto());
 
-    if(m_primaryAttacks.isDefined())
-      for(Multiple attack : m_primaryAttacks)
-      {
-        BaseMonsterProto.Attack.Builder attackBuilder =
-          BaseMonsterProto.Attack.newBuilder();
-
-        if(attack.get(0).isDefined())
-          attackBuilder.setAttacks(((Dice)attack.get(0)).toProto());
-
-        if(attack.get(1).isDefined())
-          attackBuilder.setMode(((EnumSelection<AttackMode>)attack.get(1))
-                                .getSelected().toProto());
-
-        if(attack.get(2).isDefined())
-          attackBuilder.setStyle(((EnumSelection<AttackStyle>)attack.get(2))
-                                 .getSelected().toProto());
-
-        if(attack.get(3).isDefined())
-          attackBuilder.setDamage(((Damage)attack.get(3)).toProto());
-
-        builder.addPrimaryAttack(attackBuilder.build());
-      }
-
-    if(m_secondaryAttacks.isDefined())
-      for(Multiple attack : m_secondaryAttacks)
-      {
-        BaseMonsterProto.Attack.Builder attackBuilder =
-          BaseMonsterProto.Attack.newBuilder();
-
-        if(attack.get(0).isDefined())
-          attackBuilder.setAttacks(((Dice)attack.get(0)).toProto());
-
-        if(attack.get(1).isDefined())
-          attackBuilder.setMode(((EnumSelection<AttackMode>)attack.get(1))
-                                .getSelected().toProto());
-
-        if(attack.get(2).isDefined())
-          attackBuilder.setStyle(((EnumSelection<AttackStyle>)attack.get(2))
-                                 .getSelected().toProto());
-
-        if(attack.get(3).isDefined())
-          attackBuilder.setDamage(((Damage)attack.get(3)).toProto());
-
-        builder.addSecondaryAttack(attackBuilder.build());
-      }
-
-    if(m_space.isDefined())
-      builder.setSpace(m_space.toProto());
-
-    if(m_reach.isDefined())
-      builder.setReach(m_reach.toProto());
-
-    if(m_specialAttacks.isDefined())
-      for(Multiple special : m_specialAttacks)
-      {
-        BaseMonsterProto.QualityReference.Builder reference =
-          BaseMonsterProto.QualityReference.newBuilder();
-
-        Reference<BaseQuality> ref = (Reference<BaseQuality>)special.get(0);
-        reference.setReference
-        (BaseMonsterProto.Reference.newBuilder()
-         .setName(ref.getName())
-         .setParameters(ref.getParameters() != null
-         ? ParametersProto.getDefaultInstance()
-         : ref.getParameters().toProto())
-         .build());
-
-        if(special.get(1).isDefined())
-          reference.setPerDay((int)((Number)special.get(1)).get());
-
-        builder.addSpecialAttack(reference.build());
-      }
-
-    if(m_specialQualities.isDefined())
-      for(Multiple special : m_specialQualities)
-      {
-        BaseMonsterProto.QualityReference.Builder reference =
-          BaseMonsterProto.QualityReference.newBuilder();
-
-        Reference<BaseQuality> ref = (Reference<BaseQuality>)special.get(0);
-        reference.setReference
-        (BaseMonsterProto.Reference.newBuilder()
-         .setName(ref.getName())
-         .setParameters(ref.getParameters() != null
-         ? ParametersProto.getDefaultInstance()
-         : ref.getParameters().toProto())
-         .build());
-
-        if(special.get(1).isDefined())
-          reference.setCondition(((Condition)special.get(1)).getDescription());
-        if(special.get(2).isDefined())
-          reference.setPerDay((int)((Number)special.get(2)).get());
-
-        builder.addSpecialQuality(reference.build());
-      }
-
-    if(m_classSkills.isDefined())
-      for(Multiple skill : m_classSkills)
-      {
-        BaseMonsterProto.SkillReference.Builder reference =
-          BaseMonsterProto.SkillReference.newBuilder();
-
-        Reference<BaseSkill> ref = (Reference<BaseSkill>)skill.get(0);
-        reference.setReference
-        (BaseMonsterProto.Reference.newBuilder()
-         .setName(ref.getName())
-         .setParameters(ref.getParameters() != null
-         ? ParametersProto.getDefaultInstance()
-         : ref.getParameters().toProto())
-         .build());
-
-        if(skill.get(1).isDefined())
-          reference.setModifier(((Modifier)skill.get(1)).toProto());
-
-        builder.addClassSkill(reference);
-      }
-
-    if(m_feats.isDefined())
-      for(Reference<BaseFeat> feat : m_feats)
-      {
-        BaseMonsterProto.Reference.Builder reference =
-          BaseMonsterProto.Reference.newBuilder();
-
-        reference.setName(feat.getName());
-        if(feat.getParameters() != null)
-          reference.setParameters(feat.getParameters().toProto());
-
-        builder.addFeat(reference);
-      }
-
-    if(m_environment.get(0).isDefined())
-      builder.setClimate(((EnumSelection<Climate>)m_environment.get(0))
-                         .getSelected().toProto());
-
-    if(m_environment.get(1).isDefined())
-      builder.setTerrain(((EnumSelection<Terrain>)m_environment.get(1))
-                         .getSelected().toProto());
-
-    if(m_organizations.isDefined())
-      for(Multiple organization : m_organizations)
-      {
-        BaseMonsterProto.Organization.Builder org =
-          BaseMonsterProto.Organization.newBuilder();
-
-        if(organization.get(0).isDefined())
-          org.setType(((EnumSelection<Organization>)organization.get(0))
-                      .getSelected().toProto());
-        if(organization.get(1).isDefined())
-          org.setNumber(((Dice)organization.get(1)).toProto());
-        if(organization.get(2).isDefined())
-          for(Multiple plus : (ValueList<Multiple>)organization.get(2))
-            org.addPlus(BaseMonsterProto.Organization.Plus.newBuilder()
-                        .setNumber(((Dice)plus.get(0)).toProto())
-                        .setText(((Name)plus.get(1)).get())
-                        .build());
-
-        builder.addOrganization(org.build());
-      }
-
-    if(m_cr.isDefined())
-      builder.setChallengeRating(m_cr.toProto());
-
-    if(m_treasure.isDefined())
-      builder.setTreasure(m_treasure.getSelected().toProto());
-
-    if(m_alignment.isDefined() && m_alignment.get(0).isDefined())
-      builder.setAlignmentStatus(((EnumSelection<AlignmentStatus>)
-                                 m_alignment.get(0)).getSelected().toProto());
-    if(m_alignment.isDefined() && m_alignment.get(1).isDefined())
-      builder.setAlignment(((EnumSelection<Alignment>)m_alignment.get(1))
-                           .getSelected().toProto());
-
-    if(m_advancements.isDefined())
-      for(Multiple advancement : m_advancements)
-        builder.addAdvancement
+    for(Advancement advancement : m_advancements)
+      builder.addAdvancement
           (BaseMonsterProto.Advancement.newBuilder()
-           .setRange(((Range)advancement.get(0)).toProto())
-           .setSize(((EnumSelection<Size>)advancement.get(1))
-                    .getSelected().toProto())
+           .setRange(advancement.getRange().toProto())
+           .setSize(advancement.getSize().toProto())
            .build());
 
-    if(m_levelAdjustment.isDefined())
-      if(m_levelAdjustment.getIndex() == 0)
-        builder.setLevelAdjustment(0);
-      else
-        builder.setLevelAdjustment((int)((Number)m_levelAdjustment.get())
-                                   .get());
+    if(m_levelAdjustment.isPresent())
+      builder.setLevelAdjustment(m_levelAdjustment.get());
 
-    if(m_languages.isDefined())
-      for(Multiple language : m_languages)
-      {
-        BaseMonsterProto.Language.Builder lang =
-          BaseMonsterProto.Language.newBuilder();
-        lang.setName(((EnumSelection<Language>)language.get(1))
-                     .getSelected().toProto());
-        if(language.get(0).isDefined())
-          lang.setModifier(((EnumSelection<LanguageModifier>)language.get(0))
-                           .getSelected().toProto());
+    for(LanguageOption language : m_languages)
+      builder.addLanguage(BaseMonsterProto.Language.newBuilder()
+                          .setName(language.getLanguage().toProto())
+                          .setModifier(language.getModifier().toProto())
+                          .build());
 
-        builder.addLanguage(lang.build());
-      }
-
-    if(m_encounter.isDefined())
+    if(m_encounter.isPresent())
       builder.setEncounter(m_encounter.get());
 
-    if(m_combat.isDefined())
+    if(m_combat.isPresent())
       builder.setCombat(m_combat.get());
 
-    if(m_tactics.isDefined())
+    if(m_tactics.isPresent())
       builder.setTactics(m_tactics.get());
 
-    if(m_character.isDefined())
+    if(m_character.isPresent())
       builder.setCharacter(m_character.get());
 
-    if(m_reproduction.isDefined())
+    if(m_reproduction.isPresent())
       builder.setReproduction(m_reproduction.get());
 
-    if(m_possessions.isDefined())
-      for(Multiple possession : m_possessions)
-      {
-        if(!possession.isDefined() ||
-          (!possession.get(0).isDefined() && !possession.get(1).isDefined()))
-          continue;
+    for(String possession : m_possessions)
+      builder.addPossession(BaseMonsterProto.Possession.newBuilder()
+                            .setText(possession)
+                            .build());
 
-        BaseMonsterProto.Possession.Builder pos =
-          BaseMonsterProto.Possession.newBuilder();
-
-        if(possession.get(0).isDefined())
-          pos.setName(((Name)possession.get(0)).get());
-        if(possession.get(1).isDefined())
-          pos.setText(((Text)possession.get(1)).get());
-
-        builder.addPossession(pos.build());
-      }
-
-    if(m_goodSaves.isDefined())
-      for(EnumSelection<Save> save : m_goodSaves)
-        builder.addGoodSave(save.getSelected().toProto());
+    for(Save save : m_goodSaves)
+      builder.addGoodSave(save.toProto());
 
     BaseMonsterProto proto = builder.build();
     return proto;
@@ -4504,416 +2664,160 @@ public class BaseMonster extends BaseEntry
 
     BaseMonsterProto proto = (BaseMonsterProto)inProto;
 
-    if(proto.hasSize() && proto.hasSizeModifier())
-      m_size =
-        m_size.as(((EnumSelection<Size>)m_size.get(0))
-                  .as(Size.fromProto(proto.getSize())),
-                  ((EnumSelection<SizeModifier>)m_size.get(1))
-                  .as(SizeModifier
-                      .fromProto(proto.getSizeModifier())));
-
+    if(proto.hasSize())
+      m_size = Size.fromProto(proto.getSize());
+    if(proto.hasSizeModifier())
+      m_sizeModifier = SizeModifier.fromProto(proto.getSizeModifier());
     if(proto.hasType())
-    {
-      List<EnumSelection<MonsterSubtype>> subtypes = new ArrayList<>();
-      for(BaseMonsterProto.Subtype subtype : proto.getSubtypeList())
-        subtypes.add(((ValueList<EnumSelection<MonsterSubtype>>)
-                     m_monsterType.get(1)).createElement()
-                     .as(MonsterSubtype.fromProto(subtype)));
+      m_monsterType = MonsterType.fromProto(proto.getType());
 
-      m_monsterType =
-        m_monsterType.as(((EnumSelection<MonsterType>)m_monsterType.get(0))
-                         .as(MonsterType.fromProto(proto.getType())),
-                         ((ValueList<EnumSelection<MonsterSubtype>>)
-                           m_monsterType.get(1))
-                           .as(subtypes));
-    }
+    for(BaseMonsterProto.Subtype subtype : proto.getSubtypeList())
+      m_monsterSubtypes.add(MonsterSubtype.fromProto(subtype));
 
     if(proto.hasHitDice())
-      m_hitDice = m_hitDice.fromProto(proto.getHitDice());
+      m_hitDice = Optional.of(NewDice.fromProto(proto.getHitDice()));
 
-    if(proto.getSpeedCount() > 0)
-    {
-      List<Multiple> speeds = new ArrayList<>();
-      for(BaseMonsterProto.Speed speed : proto.getSpeedList())
-      {
-        Multiple multiple = m_speed.createElement();
-        multiple = multiple.as(speed.hasMode()
-                               ? ((EnumSelection<MovementMode>)multiple.get(0))
-                                 .as(MovementMode.fromProto(speed.getMode()))
-                               : multiple.get(0),
-                               ((Distance)multiple.get(1))
-                               .fromProto(speed.getDistance()),
-                               speed.hasManeuverability()
-                               ? ((EnumSelection<Maneuverability>)
-                                 multiple.get(2))
-                                 .as(Maneuverability
-                                     .fromProto(speed.getManeuverability()))
-                               : multiple.get(2));
-        speeds.add(multiple);
-      }
-
-      m_speed = m_speed.as(speeds);
-    }
+    for(BaseMonsterProto.Speed speed : proto.getSpeedList())
+      m_speeds.add(new Speed
+                   (MovementMode.fromProto(speed.getMode()),
+                    NewDistance.fromProto(speed.getDistance()),
+                    speed.hasManeuverability()
+                      ? Optional.of(Maneuverability.fromProto(speed.getManeuverability()))
+                      : Optional.<Maneuverability>absent()));
 
     if(proto.hasNaturalArmor())
-      m_natural = m_natural.fromProto(proto.getNaturalArmor());
+      m_naturalArmor =
+        Optional.of(NewModifier.fromProto(proto.getNaturalArmor()));
 
     if(proto.hasBaseAttack())
-      m_attack = m_attack.as(proto.getBaseAttack());
+      m_attack = proto.getBaseAttack();
 
     if(proto.hasStrength())
-      m_strength = m_strength.as(proto.getStrength());
+      m_strength = Optional.of(proto.getStrength());
 
     if(proto.hasDexterity())
-      m_dexterity = m_dexterity.as(proto.getDexterity());
+      m_dexterity = Optional.of(proto.getDexterity());
 
     if(proto.hasConstitution())
-      m_constitution = m_constitution.as(proto.getConstitution());
+      m_constitution = Optional.of(proto.getConstitution());
 
     if(proto.hasIntelligence())
-      m_intelligence = m_intelligence.as(proto.getIntelligence());
+      m_intelligence = Optional.of(proto.getIntelligence());
 
     if(proto.hasWisdom())
-      m_wisdom = m_wisdom.as(proto.getWisdom());
+      m_wisdom = Optional.of(proto.getWisdom());
 
     if(proto.hasCharisma())
-      m_charisma = m_charisma.as(proto.getCharisma());
+      m_charisma = Optional.of(proto.getCharisma());
 
     if(proto.hasFortitudeSave())
-      m_fortitudeSave = m_fortitudeSave.as(proto.getFortitudeSave());
+      m_fortitudeSave = proto.getFortitudeSave();
 
     if(proto.hasWillSave())
-      m_willSave = m_willSave.as(proto.getWillSave());
+      m_willSave = proto.getWillSave();
 
     if(proto.hasReflexSave())
-      m_reflexSave = m_reflexSave.as(proto.getReflexSave());
+      m_reflexSave = proto.getReflexSave();
 
-    if(proto.getPrimaryAttackCount() > 0)
-    {
-      List<Multiple> attacks = new ArrayList<>();
-      Multiple multiple = m_primaryAttacks.createElement();
+    for(BaseMonsterProto.Attack attack : proto.getPrimaryAttackList())
+      m_primaryAttacks.add(new Attack(NewDice.fromProto(attack.getAttacks()),
+                                      AttackMode.fromProto(attack.getMode()),
+                                      AttackStyle.fromProto(attack.getStyle()),
+                                      NewDamage.fromProto(attack.getDamage())));
 
-      for(BaseMonsterProto.Attack attack : proto.getPrimaryAttackList())
-      {
-        multiple =
-          multiple.as(attack.hasAttacks()
-                      ? ((Dice)multiple.get(0)).fromProto(attack.getAttacks())
-                      : multiple.get(0),
-                      attack.hasMode()
-                      ? ((EnumSelection<AttackMode>)multiple.get(1))
-                        .as(AttackMode.fromProto(attack.getMode()))
-                      : multiple.get(1),
-                      attack.hasStyle()
-                      ? ((EnumSelection<AttackStyle>)multiple.get(2))
-                        .as(AttackStyle.fromProto(attack.getStyle()))
-                      : multiple.get(2),
-                      attack.hasDamage()
-                      ? ((Damage)multiple.get(3)).fromProto(attack.getDamage())
-                      : multiple.get(3));
-        attacks.add(multiple);
-      }
-
-      m_primaryAttacks = m_primaryAttacks.as(attacks);
-    }
-
-    if(proto.getSecondaryAttackCount() > 0)
-    {
-      List<Multiple> attacks = new ArrayList<>();
-      Multiple multiple = m_secondaryAttacks.createElement();
-
-      for(BaseMonsterProto.Attack attack : proto.getSecondaryAttackList())
-      {
-        multiple =
-          multiple.as(attack.hasAttacks()
-                      ? ((Dice)multiple.get(0)).fromProto(attack.getAttacks())
-                      : multiple.get(0),
-                      attack.hasMode()
-                      ? ((EnumSelection<AttackMode>)multiple.get(1))
-                        .as(AttackMode.fromProto(attack.getMode()))
-                      : multiple.get(1),
-                      attack.hasStyle()
-                      ? ((EnumSelection<AttackStyle>)multiple.get(2))
-                        .as(AttackStyle.fromProto(attack.getStyle()))
-                      : multiple.get(2),
-                      attack.hasDamage()
-                      ? ((Damage)multiple.get(3)).fromProto(attack.getDamage())
-                      : multiple.get(3));
-        attacks.add(multiple);
-      }
-
-      m_secondaryAttacks = m_secondaryAttacks.as(attacks);
-    }
+    for(BaseMonsterProto.Attack attack : proto.getSecondaryAttackList())
+      m_secondaryAttacks.add
+      (new Attack(NewDice.fromProto(attack.getAttacks()),
+                  AttackMode.fromProto(attack.getMode()),
+                  AttackStyle.fromProto(attack.getStyle()),
+                  NewDamage.fromProto(attack.getDamage())));
 
     if(proto.hasSpace())
-      m_space = m_space.fromProto(proto.getSpace());
+      m_space = Optional.of(NewDistance.fromProto(proto.getSpace()));
 
     if(proto.hasReach())
-      m_reach = m_reach.fromProto(proto.getReach());
+      m_reach = Optional.of(NewDistance.fromProto(proto.getReach()));
 
-    if(proto.getSpecialAttackCount() > 0)
+    for(BaseMonsterProto.QualityReference reference
+      : proto.getSpecialAttackList())
+      m_specialAttacks.add(reference.getReference().getName());
+
+    for(BaseMonsterProto.QualityReference reference
+      : proto.getSpecialQualityList())
+      m_specialQualities.add(reference.getReference().getName());
+    for(BaseMonsterProto.SkillReference reference
+      : proto.getClassSkillList())
+      m_classSkills.add(reference.getReference().getName());
+
+    for(BaseMonsterProto.Reference feat : proto.getFeatList())
+      m_feats.add(feat.getName());
+
+    if(proto.hasClimate())
+      m_climate = Climate.fromProto(proto.getClimate());
+
+    if(proto.hasTerrain())
+      m_terrain = Terrain.fromProto(proto.getTerrain());
+
+    for(BaseMonsterProto.Organization org : proto.getOrganizationList())
     {
-      List<Multiple> references = new ArrayList<>();
-      for(BaseMonsterProto.QualityReference reference
-        : proto.getSpecialAttackList())
-      {
-        Multiple multiple = m_specialAttacks.createElement();
+      List<String> pluses = new ArrayList<>();
+      for(BaseMonsterProto.Organization.Plus plus : org.getPlusList())
+        pluses.add(plus.getNumber() + plus.getText());
 
-        Reference<BaseQuality> ref = (Reference<BaseQuality>)multiple.get(0);
-        multiple =
-          multiple.as(ref.as(reference.getReference().getName())
-                      .withParameters(ref.getParameters()
-                                      .fromProto(reference.getReference()
-                                                 .getParameters())),
-                      reference.hasPerDay()
-                      ? ((Number)multiple.get(1)).as(reference.getPerDay())
-                      : multiple.get(1));
-
-        references.add(multiple);
-      }
-
-      m_specialAttacks = m_specialAttacks.as(references);
-    }
-
-    if(proto.getSpecialQualityCount() > 0)
-    {
-      List<Multiple> references = new ArrayList<>();
-      for(BaseMonsterProto.QualityReference reference
-        : proto.getSpecialQualityList())
-      {
-        Multiple multiple = m_specialQualities.createElement();
-
-        Reference<BaseQuality> ref = (Reference<BaseQuality>)multiple.get(0);
-        multiple =
-          multiple.as(ref.as(reference.getReference().getName())
-                      .withParameters(ref.getParameters()
-                                      .fromProto(reference.getReference()
-                                                 .getParameters())),
-                      reference.hasCondition()
-                      ? new Condition(reference.getCondition())
-                      : multiple.get(1),
-                      reference.hasPerDay()
-                      ? ((Number)multiple.get(2)).as(reference.getPerDay())
-                      : multiple.get(2));
-
-        references.add(multiple);
-      }
-
-      m_specialQualities = m_specialQualities.as(references);
-    }
-
-    if(proto.getClassSkillCount() > 0)
-    {
-      List<Multiple> references = new ArrayList<>();
-      for(BaseMonsterProto.SkillReference reference
-        : proto.getClassSkillList())
-      {
-        Multiple multiple = m_classSkills.createElement();
-
-        Reference<BaseSkill> ref = (Reference<BaseSkill>)multiple.get(0);
-        multiple =
-          multiple.as(ref.as(reference.getReference().getName())
-                      .withParameters(ref.getParameters()
-                                      .fromProto(reference.getReference()
-                                                 .getParameters())),
-                      reference.hasModifier()
-                      ? ((Modifier)multiple.get(1))
-                        .fromProto(reference.getModifier())
-                      : multiple.get(1));
-
-        references.add(multiple);
-      }
-
-      m_classSkills = m_classSkills.as(references);
-    }
-
-    if(proto.getFeatCount() > 0)
-    {
-      List<Reference<BaseFeat>> references = new ArrayList<>();
-      for(BaseMonsterProto.Reference feat : proto.getFeatList())
-      {
-        Reference<BaseFeat> ref = m_feats.createElement();
-        ref = ref.as(feat.getName())
-          .withParameters(ref.getParameters().fromProto(feat.getParameters()));
-        references.add(ref);
-      }
-
-      m_feats = m_feats.as(references);
-    }
-
-    if(proto.hasClimate() && proto.hasTerrain())
-      m_environment = m_environment
-        .as(((EnumSelection<Climate>)m_environment.get(0))
-            .as(Climate.fromProto(proto.getClimate())),
-            ((EnumSelection<Terrain>)m_environment.get(1))
-            .as(Terrain.fromProto(proto.getTerrain())));
-    else if(proto.hasClimate())
-      m_environment = m_environment
-        .as(((EnumSelection<Climate>)m_environment.get(0))
-            .as(Climate.fromProto(proto.getClimate())),
-            m_environment.get(1));
-    else if(proto.hasTerrain())
-      m_environment = m_environment
-        .as(m_environment.get(0),
-            ((EnumSelection<Terrain>)m_environment.get(1))
-            .as(Terrain.fromProto(proto.getTerrain())));
-
-    if(proto.getOrganizationCount() > 0)
-    {
-      List<Multiple> organizations = new ArrayList<>();
-      for(BaseMonsterProto.Organization org : proto.getOrganizationList())
-      {
-        Multiple multiple = m_organizations.createElement();
-        List<Multiple> pluses = new ArrayList<>();
-        for(BaseMonsterProto.Organization.Plus plus : org.getPlusList())
-        {
-          Multiple plusMultiple =
-            ((ValueList<Multiple>)multiple.get(2)).createElement();
-          pluses.add(plusMultiple.as(((Dice)plusMultiple.get(0))
-                                     .fromProto(plus.getNumber()),
-                                     ((Name)plusMultiple.get(1))
-                                     .as(plus.getText())));
-        }
-
-        multiple = multiple.as(org.hasType()
-                               ? ((EnumSelection<Organization>)multiple.get(0))
-                                 .as(Organization.fromProto(org.getType()))
-                               : multiple.get(0),
-                               org.hasNumber()
-                               ? ((Dice)multiple.get(1))
-                                 .fromProto(org.getNumber())
-                               : multiple.get(1),
-                               pluses.isEmpty()
-                               ? multiple.get(2)
-                               : ((ValueList<Multiple>)multiple.get(2))
-                                 .as(pluses));
-        organizations.add(multiple);
-      }
-
-      m_organizations = m_organizations.as(organizations);
+      m_organizations.add
+      (new Group(Organization.fromProto(org.getType()),
+                 NewDice.fromProto(org.getNumber()),
+                 Optional.of(Strings.COMMA_JOINER.join(pluses))));
     }
 
     if(proto.hasChallengeRating())
-      m_cr = Rational.fromProto(proto.getChallengeRating());
+      m_cr = Optional.of(NewRational.fromProto(proto.getChallengeRating()));
 
     if(proto.hasTreasure())
-      m_treasure = m_treasure.as(Treasure.fromProto(proto.getTreasure()));
+      m_treasure = Treasure.fromProto(proto.getTreasure());
 
-    if(proto.hasAlignment() && proto.hasAlignmentStatus())
-      m_alignment = m_alignment.as
-      (((EnumSelection<AlignmentStatus>)m_alignment.get(0))
-       .as(AlignmentStatus.fromProto(proto.getAlignmentStatus())),
-       ((EnumSelection<Alignment>)m_alignment.get(1))
-       .as(Alignment.fromProto(proto.getAlignment())));
-    else if(proto.hasAlignmentStatus())
-      m_alignment = m_alignment.as
-      (((EnumSelection<AlignmentStatus>)m_alignment.get(0))
-       .as(AlignmentStatus.fromProto(proto.getAlignmentStatus())),
-       m_alignment.get(1));
-    else if(proto.hasAlignment())
-      m_alignment = m_alignment.as
-       (m_alignment.get(0),
-       ((EnumSelection<Alignment>)m_alignment.get(1))
-       .as(Alignment.fromProto(proto.getAlignment())));
+    if(proto.hasAlignment())
+      m_alignment = Alignment.fromProto(proto.getAlignment());
 
-    if(proto.getAdvancementCount() > 0)
-    {
-      List<Multiple> advancements = new ArrayList<>();
-      for(BaseMonsterProto.Advancement advancement : proto.getAdvancementList())
-      {
-        Multiple multiple = m_advancements.createElement();
-        multiple =
-          multiple.as(((Range)multiple.get(0))
-                      .fromProto(advancement.getRange()),
-                      ((EnumSelection<Size>)multiple.get(1))
-                      .as(Size.fromProto(advancement.getSize())));
-        advancements.add(multiple);
-      }
+    if(proto.hasAlignmentStatus())
+      m_alignmentStatus = AlignmentStatus.fromProto(proto.getAlignmentStatus());
 
-      m_advancements = m_advancements.as(advancements);
-    }
+    for(BaseMonsterProto.Advancement advancement : proto.getAdvancementList())
+      m_advancements.add
+      (new Advancement(NewRange.fromProto(advancement.getRange()),
+                       Size.fromProto(advancement.getSize())));
 
     if(proto.hasLevelAdjustment())
-      if(proto.getLevelAdjustment() == 0)
-        m_levelAdjustment =
-          m_levelAdjustment.as(0, ((Selection)m_levelAdjustment.get(0))
-                               .as(0));
-      else
-        m_levelAdjustment =
-          m_levelAdjustment.as(1, ((Number)m_levelAdjustment.get(1))
-                               .as(proto.getLevelAdjustment()));
+      m_levelAdjustment = Optional.of(proto.getLevelAdjustment());
 
-    if(proto.getLanguageCount() > 0)
-    {
-      List<Multiple> languages = new ArrayList<>();
-      for(BaseMonsterProto.Language language : proto.getLanguageList())
-      {
-        Multiple multiple = m_languages.createElement();
-        if(language.hasModifier())
-          multiple =
-            multiple.as(((EnumSelection<LanguageModifier>)multiple.get(0))
-                        .as(LanguageModifier.fromProto(language.getModifier())),
-                        ((EnumSelection<Language>)multiple.get(1))
-                        .as(Language.fromProto(language.getName())));
-        else
-          multiple =
-            multiple.as(multiple.get(0),
-                        ((EnumSelection<Language>)multiple.get(1))
-                        .as(Language.fromProto(language.getName())));
-
-        languages.add(multiple);
-      }
-
-      m_languages = m_languages.as(languages);
-    }
+    for(BaseMonsterProto.Language language : proto.getLanguageList())
+      m_languages.add
+      (new LanguageOption(Language.fromProto(language.getName()),
+                          LanguageModifier.fromProto(language.getModifier())));
 
     if(proto.hasEncounter())
-      m_encounter = m_encounter.as(proto.getEncounter());
+      m_encounter = Optional.of(proto.getEncounter());
 
     if(proto.hasCombat())
-      m_combat = m_combat.as(proto.getCombat());
+      m_combat = Optional.of(proto.getCombat());
 
     if(proto.hasTactics())
-      m_tactics = m_tactics.as(proto.getTactics());
+      m_tactics = Optional.of(proto.getTactics());
 
     if(proto.hasCharacter())
-      m_character = m_character.as(proto.getCharacter());
+      m_character = Optional.of(proto.getCharacter());
 
     if(proto.hasReproduction())
-      m_reproduction = m_reproduction.as(proto.getReproduction());
+      m_reproduction = Optional.of(proto.getReproduction());
 
-    if(proto.getPossessionCount() > 0)
-    {
-      List<Multiple> possessions = new ArrayList<>();
-      for(BaseMonsterProto.Possession possession : proto.getPossessionList())
-      {
-        Multiple multiple = m_possessions.createElement();
-        if(possession.hasName() && possession.hasText())
-          multiple =
-            multiple.as(((Name)multiple.get(0)).as(possession.getName()),
-                       ((Text)multiple.get(1)).as(possession.getText()));
-        else if(possession.hasName())
-          multiple =
-            multiple.as(((Name)multiple.get(0)).as(possession.getName()),
-                        multiple.get(1));
-        else if(possession.hasText())
-          multiple =
-            multiple.as(multiple.get(0),
-                       ((Text)multiple.get(1)).as(possession.getText()));
+    for(BaseMonsterProto.Possession possession : proto.getPossessionList())
+      if(possession.hasName())
+        m_possessions.add(possession.getName());
+      else
+        m_possessions.add(possession.getText());
 
-        possessions.add(multiple);
-      }
-
-      m_possessions = m_possessions.as(possessions);
-    }
-
-    if(proto.getGoodSaveCount() > 0)
-    {
-      List<EnumSelection<Save>> saves = new ArrayList<>();
-      for(BaseMonsterProto.Save save : proto.getGoodSaveList())
-        saves.add(m_goodSaves.createElement().as(Save.fromProto(save)));
-
-      m_goodSaves = m_goodSaves.as(saves);
-    }
+    for(BaseMonsterProto.Save save : proto.getGoodSaveList())
+      m_goodSaves.add(Save.fromProto(save));
 
     super.fromProto(proto.getBase());
   }
@@ -4931,9 +2835,7 @@ public class BaseMonster extends BaseEntry
     }
   }
 
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase

@@ -176,7 +176,7 @@ public class BaseLevel extends BaseEntry
   protected Optional<String> m_importantAbilities = Optional.absent();
 
   /** The alignments allowed for the class. */
-  protected List<BaseMonster.Alignment> m_allowedAlignments =
+  protected List<Alignment> m_allowedAlignments =
     new ArrayList<>();
 
   /** The hit die. */
@@ -333,7 +333,7 @@ public class BaseLevel extends BaseEntry
     return m_importantAbilities;
   }
 
-  public List<BaseMonster.Alignment> getAllowedAlignments()
+  public List<Alignment> getAllowedAlignments()
   {
     return Collections.unmodifiableList(m_allowedAlignments);
   }
@@ -400,7 +400,7 @@ public class BaseLevel extends BaseEntry
 
   public List<String> getAlignmentNames()
   {
-    return BaseMonster.Alignment.names();
+    return Alignment.names();
   }
 
   public List<String> getWeaponProficiencyNames()
@@ -538,7 +538,7 @@ public class BaseLevel extends BaseEntry
       inValues.use("important_abilities", m_importantAbilities);
     m_allowedAlignments =
       inValues.use("allowed_alignment", m_allowedAlignments,
-                   BaseMonster.Alignment.PARSER);
+                   Alignment.PARSER);
     m_hitDie = inValues.use("hit_die", m_hitDie, NewDice.PARSER);
     m_classSkills =
       inValues.use("class_skill", m_classSkills,
@@ -603,7 +603,7 @@ public class BaseLevel extends BaseEntry
     if(m_importantAbilities.isPresent())
       builder.setImportantAbilities(m_importantAbilities.get());
 
-    for(BaseMonster.Alignment alignment : m_allowedAlignments)
+    for(Alignment alignment : m_allowedAlignments)
       builder.addAllowedAlignment(alignment.toProto());
 
     if(m_hitDie.isPresent())
@@ -725,7 +725,7 @@ public class BaseLevel extends BaseEntry
       m_importantAbilities = Optional.of(proto.getImportantAbilities());
 
     for(BaseMonsterProto.Alignment alignment : proto.getAllowedAlignmentList())
-      m_allowedAlignments.add(BaseMonster.Alignment.fromProto(alignment));
+      m_allowedAlignments.add(Alignment.fromProto(alignment));
 
     if(proto.hasHitDice())
       m_hitDie = Optional.of(NewDice.fromProto(proto.getHitDice()));

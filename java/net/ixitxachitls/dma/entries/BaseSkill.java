@@ -114,7 +114,7 @@ public class BaseSkill extends BaseEntry
     new BaseType<BaseSkill>(BaseSkill.class);
 
   /** The base ability for this skill. */
-  public BaseMonster.Ability m_ability = BaseMonster.Ability.UNKNOWN;
+  public Ability m_ability = Ability.UNKNOWN;
 
   /** The check to make. */
   public Optional<String> m_check = Optional.absent();
@@ -151,7 +151,7 @@ public class BaseSkill extends BaseEntry
    *
    * @return      the base ability of the skill.
    */
-  public BaseMonster.Ability getAbility()
+  public Ability getAbility()
   {
     return m_ability;
   }
@@ -257,7 +257,7 @@ public class BaseSkill extends BaseEntry
   {
     super.set(inValues);
 
-    m_ability = inValues.use("ability", m_ability, BaseMonster.Ability.PARSER);
+    m_ability = inValues.use("ability", m_ability, Ability.PARSER);
     m_check = inValues.use("check", m_check);
     m_action = inValues.use("action", m_action);
     m_retry= inValues.use("retry", m_retry);
@@ -278,7 +278,7 @@ public class BaseSkill extends BaseEntry
 
     builder.setBase((BaseEntryProto)super.toProto());
 
-    if(m_ability != BaseMonster.Ability.UNKNOWN)
+    if(m_ability != Ability.UNKNOWN)
       builder.setAbility(m_ability.toProto());
 
     if(m_check.isPresent())
@@ -332,7 +332,7 @@ public class BaseSkill extends BaseEntry
     super.fromProto(proto.getBase());
 
     if(proto.hasAbility())
-      m_ability = BaseMonster.Ability.fromProto(proto.getAbility());
+      m_ability = Ability.fromProto(proto.getAbility());
 
     if(proto.hasCheck())
       m_check = Optional.of(proto.getCheck());

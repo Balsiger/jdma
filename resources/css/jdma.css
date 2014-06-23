@@ -2667,6 +2667,30 @@ BODY.print
   display: inline-block;
 }
  
+.edit .field.field3
+{
+  width: 33%;
+  display: inline-block;
+}
+ 
+.edit .field.field4
+{
+  width: 25%;
+  display: inline-block;
+}
+ 
+.edit .field.field5
+{
+  width: 20%;
+  display: inline-block;
+}
+ 
+.edit .field.field6
+{
+  width: 16%;
+  display: inline-block;
+}
+ 
  .edit SELECT.field
  {
    width: auto;

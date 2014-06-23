@@ -37,21 +37,19 @@ public class Content extends NewValue<BaseProductProto.Content> {
     }
 
     @Override
-    public Optional<Content> doParse(String ... inValues)
+    public Optional<Content> doParse(String inPart, String inDescription,
+                                     String inAmount)
     {
-      if(inValues[0].isEmpty())
-        return null;
-
       Optional<BaseProduct.Part> part =
-        BaseProduct.Part.fromString(inValues[0]);
+        BaseProduct.Part.fromString(inPart);
       if(!part.isPresent())
         return Optional.absent();
 
       try
       {
         return Optional
-          .of(new Content(part.get(), inValues[1],
-                          Integer.parseInt(inValues[2])));
+          .of(new Content(part.get(), inDescription,
+                          Integer.parseInt(inAmount)));
       }
       catch(NumberFormatException e)
       {

@@ -755,7 +755,7 @@ public class BaseItem extends BaseEntry
    */
   public List<String> getAbilityNames()
   {
-    return BaseMonster.Ability.names();
+    return Ability.names();
   }
 
   /**
@@ -2047,6 +2047,7 @@ public class BaseItem extends BaseEntry
     m_playerName = inValues.use("player_name", m_playerName);
     m_value = inValues.use("value", m_value, NewMoney.PARSER);
     m_weight = inValues.use("weight", m_weight, NewWeight.PARSER);
+    m_hp = inValues.use("hp", m_hp, NewValue.INTEGER_PARSER);
     m_size = inValues.use("size", m_size, Size.PARSER);
     m_sizeModifier = inValues.use("size_modifier", m_sizeModifier,
                                   SizeModifier.PARSER);

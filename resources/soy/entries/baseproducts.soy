@@ -345,9 +345,9 @@
             {/foreach}
             {sp}|{sp}            
             <span class="action" onclick="edit.show(
-                           '{escape($entry.name)}', 
+                           '{$entry.name|escapeJs}', 
                            '/user/{$ij.user.name}/product/CREATE', 
-                           '{escape($entry.name)}', '{escape($entry.name)}')">
+                           '{$entry.name|escapeJs}', '{$entry.name|escapeJs}')">
               add
             </span>
           {/param}
@@ -463,7 +463,7 @@
         {param color: '#444' /}
       {/call}
       {call dma.edit.value}
-        {param name: 'short-description' /}
+        {param name: 'short_description' /}
         {param label: 'Short Description' /}
         {param value: $entry.short_description /}
         {param validate: 'any' /}

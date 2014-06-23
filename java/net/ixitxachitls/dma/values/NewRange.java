@@ -24,6 +24,7 @@ package net.ixitxachitls.dma.values;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 
 import net.ixitxachitls.dma.proto.Values.RangeProto;
@@ -49,7 +50,42 @@ public class NewRange extends NewValue<RangeProto>
 
   private final long m_low;
   private final long m_high;
+
   private static final Splitter DASH_SPLITTER = Splitter.on('-').trimResults();
+  public static final Parser<NewRange> PARSER = new Parser<NewRange>(1)
+  {
+    @Override
+    public Optional<NewRange> doParse(String inRange)
+    {
+      int i = 0;
+      long low = 0;
+      long high = 0;
+      for(String part : DASH_SPLITTER.split(inRange))
+      {
+        if(i > 1)
+          return Optional.absent();
+
+        try
+        {
+          if(i == 0)
+          {
+            low = Long.parseLong(part);
+            high = low;
+          }
+          else
+            high = Long.parseLong(part);
+        }
+        catch(NumberFormatException e)
+        {
+          return Optional.absent();
+        }
+
+        i++;
+      }
+
+      return Optional.of(new NewRange(low, high));
+    }
+  };
 
   /**
    * Get the low value of the range.
@@ -99,44 +135,6 @@ public class NewRange extends NewValue<RangeProto>
   public static NewRange fromProto(RangeProto inProto)
   {
     return new NewRange(inProto.getLow(), inProto.getHigh());
-  }
-
-
-  /**
-   * Parse the given string into a range.
-   *
-   * @param inRange the range to parse
-   * @return the parse new range, or null if it could not be parsed
-   */
-  public static @Nullable NewRange parse(String inRange)
-  {
-    int i = 0;
-    long low = 0;
-    long high = 0;
-    for(String part : DASH_SPLITTER.split(inRange))
-    {
-      if(i > 1)
-        return null;
-
-      try
-      {
-        if(i == 0)
-        {
-          low = Long.parseLong(part);
-          high = low;
-        }
-        else
-          high = Long.parseLong(part);
-      }
-      catch(NumberFormatException e)
-      {
-        return null;
-      }
-
-      i++;
-    }
-
-    return new NewRange(low, high);
   }
 
   @Override

@@ -776,8 +776,8 @@ public class Monster extends CampaignEntry
 
   /** The monster's alignment. */
   @Key("alignment")
-  protected EnumSelection<BaseMonster.Alignment> m_alignment =
-    new EnumSelection<BaseMonster.Alignment>(BaseMonster.Alignment.class);
+  protected EnumSelection<Alignment> m_alignment =
+    new EnumSelection<Alignment>(Alignment.class);
 
   //........................................................................
   //----- fortitude save ---------------------------------------------------
@@ -1167,7 +1167,7 @@ public class Monster extends CampaignEntry
    *
    * @return      the compute modifier
    */
-  public int abilityModifier(BaseMonster.Ability inAbility)
+  public int abilityModifier(Ability inAbility)
   {
     return abilityModifier(ability(inAbility).getMaxValue());
   }
@@ -1201,7 +1201,7 @@ public class Monster extends CampaignEntry
    *
    * @return      the combined ability score
    */
-  public Combined<Number> ability(BaseMonster.Ability inAbility)
+  public Combined<Number> ability(Ability inAbility)
   {
    return collect(inAbility.toString().toLowerCase(Locale.US));
   }
@@ -1219,7 +1219,7 @@ public class Monster extends CampaignEntry
   {
     ModifiedNumber initiative = collect("initiative").modifier();
 
-    int dexterity = ability(BaseMonster.Ability.DEXTERITY).getMaxValue();
+    int dexterity = ability(Ability.DEXTERITY).getMaxValue();
     initiative.withModifier
       (new Modifier(abilityModifier(dexterity), Modifier.Type.ABILITY),
        "Dex of " + dexterity);
@@ -1295,7 +1295,7 @@ public class Monster extends CampaignEntry
   public int dexterityModifierForAC()
   {
     int dex =
-      abilityModifier(ability(BaseMonster.Ability.DEXTERITY).getMaxValue());
+      abilityModifier(ability(Ability.DEXTERITY).getMaxValue());
 
     // TODO: we should actually only consider worn items.
     if(getCampaign().isPresent())
@@ -1418,21 +1418,21 @@ public class Monster extends CampaignEntry
     for(Value<?> list : attacksValue.valuesOnly())
       for(Multiple attack : (ValueList<Multiple>)list)
       {
-        BaseMonster.AttackMode attackMode =
-          ((EnumSelection<BaseMonster.AttackMode>)attack.get(1)).getSelected();
+        AttackMode attackMode =
+          ((EnumSelection<AttackMode>)attack.get(1)).getSelected();
 
-        if(attackMode == BaseMonster.AttackMode.WEAPON)
+        if(attackMode == AttackMode.WEAPON)
           continue;
 
         boolean melee =
-          ((EnumSelection<BaseMonster.AttackStyle>)
-           attack.get(2)).getSelected() == BaseMonster.AttackStyle.MELEE;
+          ((EnumSelection<AttackStyle>)
+           attack.get(2)).getSelected() == AttackStyle.MELEE;
 
-        BaseMonster.Ability keyAbility;
+        Ability keyAbility;
         if(weaponFinesse || !melee || attackMode.useDexterity())
-          keyAbility = BaseMonster.Ability.DEXTERITY;
+          keyAbility = Ability.DEXTERITY;
         else
-          keyAbility = BaseMonster.Ability.STRENGTH;
+          keyAbility = Ability.STRENGTH;
 
         List<ModifiedNumber> attacks = Lists.newArrayList();
         attacks.add(naturalAttack
@@ -1471,7 +1471,7 @@ public class Monster extends CampaignEntry
     long baseAttack = collect("base attack").getMaxValue();
     ModifiedNumber grapple = new ModifiedNumber(0);
     grapple.withModifier(new Modifier((int)baseAttack), "base attack");
-    int strength = ability(BaseMonster.Ability.STRENGTH).getMaxValue();
+    int strength = ability(Ability.STRENGTH).getMaxValue();
     grapple.withModifier
       (new Modifier(abilityModifier(strength), Modifier.Type.ABILITY),
        "Str of " + strength);
@@ -1508,12 +1508,12 @@ public class Monster extends CampaignEntry
   public ModifiedNumber weaponAttack(Item inItem, long inBaseAttack)
   {
     // Strength bonus (or dexterity)
-    BaseMonster.Ability keyAbility = BaseMonster.Ability.STRENGTH;
+    Ability keyAbility = Ability.STRENGTH;
     Combined<EnumSelection<WeaponStyle>> weaponStyle =
       collect("weapon style");
     EnumSelection<WeaponStyle> weaponStyleMin = weaponStyle.min();
     if(weaponStyleMin != null && !weaponStyle.min().getSelected().isMelee())
-      keyAbility = BaseMonster.Ability.DEXTERITY;
+      keyAbility = Ability.DEXTERITY;
     else
       // Somehow handle this in the feat!
       for(Pair<Reference<BaseFeat>, List<String>> feat : allFeats())
@@ -1530,7 +1530,7 @@ public class Monster extends CampaignEntry
 
               if(base.getName().equalsIgnoreCase(name.get()))
               {
-                keyAbility = BaseMonster.Ability.DEXTERITY;
+                keyAbility = Ability.DEXTERITY;
                 break;
               }
             }
@@ -1539,7 +1539,7 @@ public class Monster extends CampaignEntry
 
     ModifiedNumber modified =
       naturalAttack(keyAbility, inBaseAttack, true,
-                    BaseMonster.AttackMode.WEAPON);
+                    AttackMode.WEAPON);
 
     for(Pair<Reference<BaseFeat>, List<String>> feat : allFeats())
     {
@@ -1583,16 +1583,16 @@ public class Monster extends CampaignEntry
    * @return      the attack bonus for the first attack
    *
    */
-  public ModifiedNumber naturalAttack(BaseMonster.Ability inKeyAbility,
+  public ModifiedNumber naturalAttack(Ability inKeyAbility,
                                       long inBaseAttack, boolean inWithWeapon,
-                                      BaseMonster.AttackMode inAttackMode)
+                                      AttackMode inAttackMode)
   {
     ModifiedNumber modified = new ModifiedNumber(inBaseAttack);
 
     int strength = ability(inKeyAbility).getMaxValue();
 
     int abilityModifier;
-    if (inKeyAbility == BaseMonster.Ability.STRENGTH)
+    if (inKeyAbility == Ability.STRENGTH)
       abilityModifier = abilityModifier(strength);
     else
       abilityModifier = dexterityModifierForAC();
@@ -1630,9 +1630,11 @@ public class Monster extends CampaignEntry
     for(Reference<BaseFeat> feat : m_feats)
       feats.put(feat, getName());
 
+    /*
     for(BaseEntry base : getBaseEntries())
       if(base instanceof BaseMonster)
         ((BaseMonster)base).collectFeats(feats);
+    */
 
     // we have to convert to a real map manuall, as soy can't handle the
     // multimap to map conversion
@@ -1733,14 +1735,14 @@ public class Monster extends CampaignEntry
                           && params.getValue("level").isDefined()
                           ? params.getValue("level") : getLevel()))
                .put("class", "" + getSpellClass())
-               .put("str", "" + abilityModifier(BaseMonster.Ability.STRENGTH))
-               .put("dex", "" + abilityModifier(BaseMonster.Ability.DEXTERITY))
+               .put("str", "" + abilityModifier(Ability.STRENGTH))
+               .put("dex", "" + abilityModifier(Ability.DEXTERITY))
                .put("con",
-                    "" + abilityModifier(BaseMonster.Ability.CONSTITUTION))
+                    "" + abilityModifier(Ability.CONSTITUTION))
                .put("int",
-                    "" + abilityModifier(BaseMonster.Ability.INTELLIGENCE))
-               .put("wis", "" + abilityModifier(BaseMonster.Ability.WISDOM))
-               .put("cha", "" + abilityModifier(BaseMonster.Ability.CHARISMA))
+                    "" + abilityModifier(Ability.INTELLIGENCE))
+               .put("wis", "" + abilityModifier(Ability.WISDOM))
+               .put("cha", "" + abilityModifier(Ability.CHARISMA))
                .put("ability",
                     "" + getSpellAbilityModifier(params.getValue("class")))
                .build()))
@@ -1826,9 +1828,9 @@ public class Monster extends CampaignEntry
           modifier = new ModifiedNumber(0, true);
 
         // Ability modifiers
-        BaseMonster.Ability ability = skill.getAbility();
+        Ability ability = skill.getAbility();
         if(ability != null)
-          if(ability == BaseMonster.Ability.DEXTERITY)
+          if(ability == Ability.DEXTERITY)
             modifier.withModifier
               (new Modifier(dexterityModifierForAC()), "Dexterity");
           else
@@ -1874,7 +1876,9 @@ public class Monster extends CampaignEntry
       if(!(base instanceof BaseMonster))
         continue;
 
+      /*
       qualities.addAll(((BaseMonster)base).collectSpecialQualities());
+      */
     }
 
     return qualities;
@@ -1939,13 +1943,13 @@ public class Monster extends CampaignEntry
   {
     super.collect(inName, ioCombined);
 
-    BaseMonster.Ability saveAbility = null;
+    Ability saveAbility = null;
     if("fortitude save".equals(inName))
-      saveAbility = BaseMonster.Ability.CONSTITUTION;
+      saveAbility = Ability.CONSTITUTION;
     else if("reflex save".equals(inName))
-      saveAbility = BaseMonster.Ability.DEXTERITY;
+      saveAbility = Ability.DEXTERITY;
     else if("will save".equals(inName))
-      saveAbility = BaseMonster.Ability.WISDOM;
+      saveAbility = Ability.WISDOM;
 
     if(saveAbility != null)
     {
@@ -1993,7 +1997,7 @@ public class Monster extends CampaignEntry
     if("armor class".equals(inName))
     {
       // limit this with max dex of items
-      int dexterity = ability(BaseMonster.Ability.DEXTERITY).getMaxValue();
+      int dexterity = ability(Ability.DEXTERITY).getMaxValue();
       int modifier = dexterityModifierForAC();
 
       ioCombined.addModifier
@@ -2036,7 +2040,7 @@ public class Monster extends CampaignEntry
       return inDamage;
 
     int modifier =
-      abilityModifier(ability(BaseMonster.Ability.STRENGTH).getMaxValue());
+      abilityModifier(ability(Ability.STRENGTH).getMaxValue());
 
     if(inSecondary)
       modifier /= 2;
@@ -2188,7 +2192,7 @@ public class Monster extends CampaignEntry
   @SuppressWarnings("unchecked")
   public int getSpellAbilityModifier(@Nullable Value<?> inClassParam)
   {
-    BaseMonster.Ability ability;
+    Ability ability;
     SpellClass spellClass;
     if(inClassParam != null && inClassParam.isDefined())
       spellClass = ((EnumSelection<SpellClass>)inClassParam)
@@ -2199,20 +2203,20 @@ public class Monster extends CampaignEntry
     switch(spellClass)
     {
       case WIZARD:
-        ability = BaseMonster.Ability.INTELLIGENCE;
+        ability = Ability.INTELLIGENCE;
         break;
 
       case CLERIC:
       case PALADIN:
       case RANGER:
       case DRUID:
-        ability = BaseMonster.Ability.WISDOM;
+        ability = Ability.WISDOM;
         break;
 
       case SORCERER:
       case BARD:
       default:
-        ability = BaseMonster.Ability.CHARISMA;
+        ability = Ability.CHARISMA;
     }
 
     return abilityModifier(ability(ability).getMaxValue());
@@ -2231,10 +2235,12 @@ public class Monster extends CampaignEntry
    */
   public boolean hasQuality(String inName)
   {
+    /*
     for(BaseEntry base : getBaseEntries())
       if(base instanceof BaseMonster)
         if(((BaseMonster)base).hasQuality(inName))
           return true;
+    */
 
     return false;
   }
@@ -2255,10 +2261,12 @@ public class Monster extends CampaignEntry
       if(feat.toString().equalsIgnoreCase(inName))
         return true;
 
+    /*
     for(BaseEntry base : getBaseEntries())
       if(base instanceof BaseMonster)
         if(((BaseMonster)base).hasFeat(inName))
           return true;
+    */
 
     return false;
   }
@@ -3772,7 +3780,7 @@ public class Monster extends CampaignEntry
 
     if(proto.hasAlignment())
       m_alignment =
-        m_alignment.as(BaseMonster.Alignment.fromProto(proto.getAlignment()));
+        m_alignment.as(Alignment.fromProto(proto.getAlignment()));
 
     if(proto.hasFortitudeSave())
       m_fortitudeSave = m_fortitudeSave.as(proto.getFortitudeSave());
