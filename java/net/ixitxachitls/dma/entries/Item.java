@@ -41,6 +41,7 @@ import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.CountUnit;
 import net.ixitxachitls.dma.values.NewCritical;
 import net.ixitxachitls.dma.values.NewDamage;
+import net.ixitxachitls.dma.values.NewDice;
 import net.ixitxachitls.dma.values.NewDistance;
 import net.ixitxachitls.dma.values.NewDuration;
 import net.ixitxachitls.dma.values.NewModifier;
@@ -102,7 +103,7 @@ public class Item extends CampaignEntry
   protected Optional<NewMoney> m_value = Optional.absent();
 
   /** The appearance text for this entry. */
-  protected String m_appearance = null;
+  protected Optional<String> m_appearance = Optional.absent();
 
   /** The player notes of the item. */
   protected Optional<String> m_playerNotes = Optional.absent();
@@ -125,6 +126,9 @@ public class Item extends CampaignEntry
   /** The cached contents. */
   private Optional<List<Item>> m_contents = Optional.absent();
 
+  /** The possessor of the item, if any. */
+  private Optional<Monster> m_possessor = null;
+
   /**
    * Get the hit points of the base item.
    *
@@ -133,6 +137,15 @@ public class Item extends CampaignEntry
   public int getHP()
   {
     return m_hp;
+  }
+
+  public boolean hasFinesse()
+  {
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseItem)base).hasFinesse())
+        return true;
+
+    return false;
   }
 
   /**
@@ -812,9 +825,8 @@ public class Item extends CampaignEntry
    * Get the appearance of the item.
    *
    * @return      the requested appearance
-   *
    */
-  public String getAppearance()
+  public Optional<String> getAppearance()
   {
     return m_appearance;
   }
@@ -992,6 +1004,177 @@ public class Item extends CampaignEntry
   }
   */
 
+  public Optional<Monster> getPossessor()
+  {
+    if(m_possessor == null)
+    {
+      if(m_parentName.isPresent() && getCampaign().isPresent())
+      {
+        String []parts = m_parentName.get().split("/");
+        String id = parts[1];
+        AbstractType type = AbstractType.getTyped(parts[0]);
+        if(type == Item.TYPE)
+        {
+          Item container = (Item)DMADataFactory.get().getEntry
+            (new EntryKey(id, Item.TYPE,
+                          Optional.of(getCampaign().get().getKey())));
+          m_possessor = container.getPossessor();
+        }
+        else if(type == Monster.TYPE || type == NPC.TYPE
+                || type == Character.TYPE)
+        {
+          Monster possessor = (Monster)DMADataFactory.get().getEntry
+            (new EntryKey(id, type, Optional.of(getCampaign().get().getKey())));
+          m_possessor = Optional.fromNullable(possessor);
+        }
+        else
+          m_possessor = Optional.absent();
+      }
+      else
+        m_possessor = Optional.absent();
+
+    }
+
+    return m_possessor;
+  }
+
+  public int getAttackBonus()
+  {
+    int bonus = 0;
+    if(getPossessor().isPresent())
+    {
+      bonus = getPossessor().get().getCombinedBaseAttack().getValue();
+
+      if(isWeapon())
+      {
+        boolean finesse = getPossessor().get().hasFeat("weapon finesse")
+          && hasFinesse();
+
+        if(!finesse && getCombinedWeaponStyle().getValue().isMelee())
+          // Add the strength bonus of the wielder.
+          bonus += getPossessor().get().getStrengthModifier();
+        else
+          // Add the dexterity bonus of the wielder.
+          bonus += getPossessor().get().getDexterityModifier();
+
+        Optional<Feat> specialization =
+          getPossessor().get().getFeat("weapon specialization");
+        if(specialization.isPresent()
+           && specialization.get().getQualifier().isPresent()
+           && hasBaseName(specialization.get().getQualifier().get()))
+            bonus += 1;
+      }
+    }
+
+    return bonus;
+  }
+
+  public NewDamage getDamage()
+  {
+    NewDamage damage = null;
+    for(BaseEntry base : getBaseEntries())
+    {
+      NewDamage baseDamage = ((BaseItem)base).getCombinedDamage().getValue();
+      if(damage == null)
+        damage = baseDamage;
+      else
+        damage.add(baseDamage);
+    }
+
+    if(damage == null)
+      damage = new NewDamage(new NewDice(0, 0, 0));
+
+    // add strength modifier
+    int strengthModifier = getPossessor().get().getStrengthModifier();
+    if(getCombinedWeaponStyle().getValue().isMelee()
+       && getPossessor().isPresent())
+      damage = (NewDamage)
+        damage.add(new NewDamage(new NewDice(0, 0, strengthModifier)));
+
+    // + additional 1/2 strength bonus for two handed melee weapons
+    if(getCombinedWeaponStyle().getValue() == WeaponStyle.TWOHANDED_MELEE) {
+      damage = (NewDamage)
+        damage.add(new NewDamage(new NewDice(0, 0, strengthModifier / 2)));
+    }
+
+    // TODO: have to subtract strength penalty for non-composite bows
+    // TODO: deal with offhand and two-hand wielded weapons
+
+    return damage;
+  }
+
+  public NewCritical getCritical()
+  {
+    NewCritical result = null;
+    for(BaseEntry base : getBaseEntries())
+    {
+      NewCritical critical = ((BaseItem)base).getCombinedCritical().getValue();
+      if(result == null)
+        result = critical;
+      else
+        result = (NewCritical)result.add(critical);
+    }
+
+    return result;
+  }
+
+  public NewDistance getRange()
+  {
+    NewDistance result = null;
+    for(BaseEntry base : getBaseEntries())
+    {
+      NewDistance range = ((BaseItem)base).getCombinedRange().getValue();
+      if(result == null)
+        result = range;
+      else
+        result = (NewDistance)result.add(range);
+    }
+
+    return result;
+  }
+
+  public WeaponType getWeaponType()
+  {
+    WeaponType result = WeaponType.UNKNOWN;
+    for(BaseEntry base : getBaseEntries())
+    {
+      WeaponType type = ((BaseItem)base).getWeaponType();
+        if(type.ordinal() > result.ordinal())
+          result = type;
+    }
+
+    return result;
+  }
+
+  public ArmorType getArmorType()
+  {
+    ArmorType result = ArmorType.UNKNOWN;
+    for(BaseEntry base : getBaseEntries())
+    {
+      ArmorType type = ((BaseItem)base).getArmorType();
+        if(type.ordinal() > result.ordinal())
+          result = type;
+    }
+
+    return result;
+  }
+
+  public Optional<NewModifier> getArmorClass()
+  {
+    Optional<NewModifier> armor = Optional.absent();
+    for(BaseEntry base : getBaseEntries())
+    {
+      Optional<NewModifier> baseArmor = ((BaseItem)base).getArmorBonus();
+      if(baseArmor.isPresent())
+        if(armor.isPresent())
+          armor = Optional.of((NewModifier) armor.get().add(baseArmor.get()));
+        else
+          armor = baseArmor;
+    }
+
+    return armor;
+  }
+
   /**
    * Get a command to format the name of the item.
    *
@@ -1082,7 +1265,7 @@ public class Item extends CampaignEntry
           appearances.add(appearance);
       }
 
-      m_appearance = Strings.toString(appearances, " ", "");
+      m_appearance = Optional.of(Strings.toString(appearances, " ", ""));
       changed();
     }
 
@@ -1182,8 +1365,8 @@ public class Item extends CampaignEntry
     if(m_value.isPresent())
       builder.setValue(m_value.get().toProto());
 
-    if(m_appearance != null && !m_appearance.isEmpty())
-      builder.setAppearance(m_appearance);
+    if(m_appearance.isPresent() && !m_appearance.get().isEmpty())
+      builder.setAppearance(m_appearance.get());
 
     if(m_playerNotes.isPresent())
       builder.setPlayerNotes(m_playerNotes.get());
@@ -1225,7 +1408,7 @@ public class Item extends CampaignEntry
       m_value = Optional.of(NewMoney.fromProto(proto.getValue()));
 
     if(proto.hasAppearance())
-      m_appearance = proto.getAppearance();
+      m_appearance = Optional.of(proto.getAppearance());
 
     if(proto.hasPlayerNotes())
       m_playerNotes = Optional.of(proto.getPlayerNotes());
@@ -1358,10 +1541,6 @@ public class Item extends CampaignEntry
 // //       return Item.read(reader, campaign);
 //       return null;
 //     }
-
-    //......................................................................
-
-    //----- text -----------------------------------------------------------
 
     /** Test text for item. */
     // private static String s_text =
@@ -1520,49 +1699,6 @@ public class Item extends CampaignEntry
     //   + "  \"A thick, quilted, wool blanket.\".\n"
     //   + "\n";
 
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** Testing reading. */
-    // public void testRead()
-    // {
-    //   ParseReader reader =
-    //     new ParseReader(new java.io.StringReader(s_baseComplete), "test");
-
-    //   BaseEntry base = (BaseEntry)BaseItem.read(reader);
-
-    //   BaseCampaign.GLOBAL.add(base);
-
-    //   reader = new ParseReader(new java.io.StringReader(s_text), "test");
-
-    //   String result =
-    //     "#----- Winter Blanket\n"
-    //     + "\n"
-    //     + "item with wearable Winter Blanket [Winter Blanket] =\n"
-    //     + "\n"
-    //     + "  user size         Small;\n"
-    //     + "  hp                1;\n"
-    //     + "  max hp            ;\n"
-    //     + "  value             42 cp;\n"
-    //     + "  hardness          ;\n"
-    //     + "  appearance        \n"
-    //     + "  \"A ${user size} weapon.\".\n"
-    //     + "\n"
-    //     + "#.....\n";
-
-    //   Entry entry = (Entry)Item.read(reader);
-
-    //   entry.complete();
-
-    //   assertNotNull("item should have been read", entry);
-    //   assertEquals("item name does not match", "Winter Blanket",
-    //                 entry.getName());
-    //   assertEquals("item does not match", result, entry.toString());
-    // }
-
-    //......................................................................
-    //----- get/set --------------------------------------------------------
-
     /** Test setting and getting of values. */
     // public void testGetSet()
     // {
@@ -1647,9 +1783,6 @@ public class Item extends CampaignEntry
     //   //s_random = old;
     // }
 
-    //......................................................................
-    //----- print ----------------------------------------------------------
-
     /** Testing printing. */
     // public void testPrint()
     // {
@@ -1699,9 +1832,6 @@ public class Item extends CampaignEntry
     //   assertEquals("weight", "Weight:", extract(values, 5, 1, 1));
     //   assertEquals("weight", "2 lbs", extract(values, 6, 1, 2, 1, 1, 2, 3));
     // }
-
-    //......................................................................
-    //----- print DM -------------------------------------------------------
 
     /** Test printing an item for the dm. */
     // public void testPrintDM()
@@ -1765,9 +1895,6 @@ public class Item extends CampaignEntry
     //   assertEquals("weight", "Weight:", extract(values, 9, 1, 1));
     // ssertEquals("weight", "2 lbs", extract(values, 10, 1, 2, 1, 1, 1, 1, 2));
     // }
-
-    //......................................................................
-    //----- lookup ---------------------------------------------------------
 
     /** Testing lookup. */
     // public void testLookup()
@@ -1980,69 +2107,6 @@ public class Item extends CampaignEntry
     //   assertEquals("name", base3, base);
     // }
 
-    //......................................................................
-    //----- auto attachment ------------------------------------------------
-
-    /** Testing auto attachments. */
-    // public void testAutoAttachment()
-    // {
-    //   String text =
-    //     "base item with container Container = \n"
-    //     + "  hp 3.\n"
-    //     + "item Container = \n"
-    //     + "   hp 2;\n"
-    //     + "   contents item guru. item guru2 = hp 3..\n";
-
-    //   ParseReader reader =
-    //     new ParseReader(new java.io.StringReader(text), "container test");
-
-    //   BaseItem base = (BaseItem)BaseItem.read(reader);
-
-    //   BaseCampaign.GLOBAL.add(base);
-
-    //   Item item = (Item)Item.read(reader);
-
-    //   assertTrue("attachment",
-    //              item.hasAttachment(net.ixitxachitls.dma.entries.attachments
-    //                                 .Contents.class));
-
-    //   m_logger.addExpectedPattern("WARNING: base.not-found:.*"
-    //                               + "(base name 'guru').*");
-    //   m_logger.addExpectedPattern("WARNING: base.not-found:.*"
-    //                               + "(base name 'guru2').*");
-    // }
-
-    //......................................................................
-    //----- qualities ------------------------------------------------------
-
-    /** Testing qualities. */
-    // public void testQualities()
-    // {
-    //   BaseQuality q1 = new BaseQuality("Q1");
-    //   BaseQuality q2 = new BaseQuality("Q2");
-
-    //   q1.m_qualifier.set("q1");
-    //   q2.m_qualifier.set("q2");
-
-    //   BaseCampaign.GLOBAL.add(q1);
-    //   BaseCampaign.GLOBAL.add(q2);
-
-    //   Item item = new Item("item");
-
-    //   assertTrue("add", item.addQuality("Q1"));
-    //   assertTrue("add", item.addQuality("Q2"));
-    //   assertTrue("add", item.addQuality("Q3"));
-
-    //   // check the name of the item
-    //   // TODO: fix this test
-    //   //assertEquals("name", "q1 q2 item", item.getName());
-
-    //   m_logger.addExpected("WARNING: could not find base(s) for 'Q3'");
-    // }
-
-    //......................................................................
-    //----- list commands --------------------------------------------------
-
     /** Test printing list commands. */
     // public void testListCommands()
     // {
@@ -2070,9 +2134,6 @@ public class Item extends CampaignEntry
 
     //   m_logger.addExpected("WARNING: could not find base(s) for 'test'");
     // }
-
-    //......................................................................
-    //----- based ----------------------------------------------------------
 
     /** Test basing items on multiple base items. */
     // public void testBased()
@@ -2116,9 +2177,5 @@ public class Item extends CampaignEntry
     //   assertEquals("weight", "10 lbs [+20 lbs base3, /2 \"test\"]",
     //                item.m_weight.toString());
     // }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

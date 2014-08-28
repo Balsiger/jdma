@@ -963,3 +963,27 @@
     {/if}
   {/if}
 {/template}
+
+/**
+ * Format an annotated value.
+ * 
+ * @param value the value to annotate 
+ */
+{template .annotated}
+  <span class="annotated">
+    {if $value.get.present}
+      {if $value.show_sign}
+        {bonus($value.get.get)}
+      {else}
+        {$value.get.get}
+      {/if}
+    {/if}
+    <div class="annotations">
+      {foreach $source in $value.sources.sources}
+        <div class="annotation">
+          {$source.value} &ndash; {$source.source}
+        </div>
+      {/foreach}
+    </div>
+  </span>
+{/template}

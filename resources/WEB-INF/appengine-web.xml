@@ -22,7 +22,7 @@
     <property name="web.template.css.color_Event" value="#800080" />
     <property name="web.template.css.lightcolor_Event" value="#a000a0" />
     <property name="web.template.css.hilightcolor_Event" value="#ff00ff" />
-    <property name="web.template.css.color_Quality" value="#800080" />
+    <property name="web.te\mplate.css.color_Quality" value="#800080" />
     <property name="web.template.css.lightcolor_Quality" value="#a000a0" />
     <property name="web.template.css.hilightcolor_Quality" value="#ff00ff" />
     <property name="web.template.css.color_Feat" value="#008080" />

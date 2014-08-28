@@ -40,31 +40,17 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.server.ServerUtils;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * The filter to turn a given request into a DMA request (with additional
  * information).
  *
  * @file          DMAFilter.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class DMAFilter implements Filter
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------ DMAFilter -------------------------------
-
   /**
    * Default constructor.
    */
@@ -73,62 +59,35 @@ public class DMAFilter implements Filter
     // nothing to do here
   }
 
-  //........................................................................
-
-  //--------------------------------- init ---------------------------------
-
   /**
-    *
-    * Initialize the filter.
-    *
-    * @param       inConfig the filter configuration
-    *
-    */
+   * Initialize the filter.
+   *
+   * @param       inConfig the filter configuration
+   */
   @Override
   public void init(FilterConfig inConfig)
   {
     // nothing to do
   }
 
-  //........................................................................
-  //------------------------------- destroy --------------------------------
-
   /**
-    *
-    * Destroy the filter.
-    *
-    */
+   * Destroy the filter.
+   */
   @Override
   public void destroy()
   {
     // nothing to do
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------- doFilter -------------------------------
-
   /**
-    * Filter the given request.
-    *
-    * @param       inRequest  the request to check for
-    * @param       inResponse the response that will be sent back
-    * @param       inChain    the other filters in the chain
-    *
-    * @throws      IOException      writing to page failed
-    * @throws      ServletException general failure when creating response
-    *
-    */
+   * Filter the given request.
+   * @param       inRequest  the request to check for
+   * @param       inResponse the response that will be sent back
+   * @param       inChain    the other filters in the chain
+   *
+   * @throws      IOException      writing to page failed
+   * @throws      ServletException general failure when creating response
+   */
   @Override
   public void doFilter(ServletRequest inRequest,
                        ServletResponse inResponse,
@@ -154,25 +113,15 @@ public class DMAFilter implements Filter
       inChain.doFilter(inRequest, inResponse);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------------
 
   /** The tests. */
   public static class Test extends ServerUtils.Test
   {
-    //----- filter ---------------------------------------------------------
-
     /**
      * The filter Test.
      *
      * @throws Exception should not happen
-     *
      */
     @org.junit.Test
     public void filter() throws Exception
@@ -205,9 +154,5 @@ public class DMAFilter implements Filter
         EasyMock.verify(request, response, chain);
       }
     }
-
-    //......................................................................
   }
-
-  //...........................................................................
 }

@@ -83,6 +83,11 @@ public enum ArmorType implements EnumSelection.Named,
     return m_name;
   }
 
+  public boolean isShield()
+  {
+    return this == SHIELD || this == TOWER_SHIELD;
+  }
+
   @Override
   public String toString()
   {

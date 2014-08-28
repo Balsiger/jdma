@@ -359,6 +359,7 @@
  *
  * @param playing the information about the campains the user is playing in
  * @param dm the information about the campaings the user is dming
+ * @param campaigns the available base campaigns
  */
 {template .main}
   {call .title}
@@ -378,31 +379,57 @@
         {param class: 'main-campaign-title' /}
       {/call}
       {foreach $character in $playing.characters[$campaign.name]}
-        {call dma.entry.charactericon}
+        {call dma.entries.characters.icon}
           {param character: $character /}
         {/call}
       {/foreach}
     </div>
   {ifempty}
-    Not playing in any campaign.
+    {$ij.user.name}, you are not playing in any campaign.
   {/foreach}
-  {foreach $campaign in $dm.campaigns}
-    {if isFirst($campaign)}
-      <h2>Campaigns DMing</h2>
-    {/if}
-    <div class="main-campaign">
-      {call .link}
-        {param url: $campaign.path /}
-        {param text: $campaign.name /}
-        {param class: 'main-campaign-title' /}
-      {/call}
-      {foreach $character in $dm.characters[$campaign.name]}
-        {call dma.entry.charactericon}
-          {param character: $character /}
+  {if $ij.user.DM}
+    <h2>Campaigns DMing</h2>
+    {foreach $campaign in $dm.campaigns}
+      <div class="main-campaign">
+        {call .link}
+          {param url: $campaign.path /}
+          {param text: $campaign.name /}
+          {param class: 'main-campaign-title' /}
         {/call}
-      {/foreach}
-    </div>
-  {/foreach}
+        {foreach $character in $dm.characters[$campaign.name]}
+          {call dma.entries.characters.icon}
+            {param character: $character /}
+          {/call}
+        {/foreach}
+        <p>
+          <span class="action" 
+                onclick="edit.show('','{$campaign.path}/character/CREATE', 
+                                   'main-player-add', '', '')">
+            add new player
+          </span>
+        </p>
+      </div>
+    {ifempty}
+      You are not the DM of any campaign.
+    {/foreach}
+    <hr />
+    <p>
+      <select id="campaign">
+        {foreach $campaign in $campaigns}
+            <option value='{$campaign.path}'>{$campaign.name}</option>
+        {/foreach}
+      </select>
+      &nbsp; 
+      <span class="action" onclick="edit.show(
+                           '', 
+                           $('#campaign').val() + '/CREATE', 
+                           'main-campaign-add', 
+                           $('#campaign option:selected').text(),
+                           'DM:{$ij.user.name}')">
+      add new campaign
+      </span>
+    </p>
+  {/if}
 {/template}
 
 /**

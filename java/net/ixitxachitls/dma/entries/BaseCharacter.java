@@ -101,7 +101,7 @@ public class BaseCharacter extends BaseEntry
      */
     public boolean allows(Group inGroup)
     {
-      return this.ordinal() <= inGroup.ordinal();
+      return this.ordinal() >= inGroup.ordinal();
     }
 
     @Override
@@ -225,11 +225,6 @@ public class BaseCharacter extends BaseEntry
 
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
-
-  static
-  {
-    extractVariables(BaseCharacter.class);
-  }
 
   /**
    * Get the users email address.

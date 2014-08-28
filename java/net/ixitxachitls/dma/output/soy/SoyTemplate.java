@@ -72,47 +72,26 @@ import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 import net.ixitxachitls.util.resources.Resource;
 
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * Wrapper for rendering a soy template.
  *
- *
  * @file          SoyTemplate.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class SoyTemplate
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- SoyTemplate ------------------------------
-
   /**
    * Create the template.
    *
    * @param       inFiles the name of the template files to compile (without
    *                      path and .soy extensions)
-   *
    */
   public SoyTemplate(String ... inFiles)
   {
     m_files.addAll(Arrays.asList(inFiles));
   }
-
-  //........................................................................
-
-  //----- EntryFunction ----------------------------------------------------
 
   /** A plugin function to return an entry for a given key. */
   public static class EntryFunction extends SoyAbstractTofuFunction
@@ -153,9 +132,6 @@ public class SoyTemplate
     }
   }
 
-  //........................................................................
-  //----- IntegerFunction --------------------------------------------------
-
   /** A plugin function to convert the argument into an integer. */
   public static class IntegerFunction implements SoyTofuFunction
   {
@@ -177,9 +153,6 @@ public class SoyTemplate
       return IntegerData.forValue(Integer.valueOf(inArgs.get(0).toString()));
     }
   }
-
-  //........................................................................
-  //----- DefFunction ---------------------------------------------------
 
   /** A plugin function to convert the argument into an integer. */
   public static class DefFunction implements SoyTofuFunction
@@ -206,9 +179,6 @@ public class SoyTemplate
       return BooleanData.forValue(true);
     }
   }
-
-  //........................................................................
-  //----- LengthFunction ---------------------------------------------------
 
   /** A plugin function to convert the argument into an integer. */
   public static class LengthFunction implements SoyTofuFunction
@@ -240,9 +210,6 @@ public class SoyTemplate
     }
   }
 
-  //........................................................................
-  //----- CamelFunction ----------------------------------------------------
-
   /** A plugin function to format numbers or printing. */
   public static class CamelFunction implements SoyTofuFunction
   {
@@ -266,8 +233,27 @@ public class SoyTemplate
     }
   }
 
-  //........................................................................
-  //----- CommandsFunction -------------------------------------------------
+  /** A plugin function to format strings lowercase. */
+  public static class LowerFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "lower";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public SoyData computeForTofu(List<SoyData> inArgs)
+    {
+      return StringData.forValue(inArgs.get(0).toString().toLowerCase());
+    }
+  }
 
   /** A plugin function to format numbers or printing. */
   public static class CommandsFunction implements SoyTofuFunction
@@ -291,9 +277,6 @@ public class SoyTemplate
         (COMMAND_RENDERER.renderCommands(inArgs.get(0).toString()));
     }
   }
-
-  //........................................................................
-  //----- ReferenceFunction ------------------------------------------------
 
   /** A plugin function to format numbers or printing. */
   public static class ReferenceFunction implements SoyTofuFunction
@@ -337,9 +320,6 @@ public class SoyTemplate
     }
   }
 
-  //........................................................................
-  //----- FormatNumberFunction ---------------------------------------------
-
   /** A plugin function to format numbers or printing. */
   public static class FormatNumberFunction implements SoyTofuFunction
   {
@@ -367,8 +347,65 @@ public class SoyTemplate
     }
   }
 
-  //........................................................................
-  //----- IsListFunction ---------------------------------------------------
+  /** A plugin function to format numbers or printing. */
+  public static class BonusFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "bonus";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public SoyData computeForTofu(List<SoyData> inArgs)
+    {
+      if(inArgs.get(0) instanceof IntegerData)
+      {
+        IntegerData data = (IntegerData)inArgs.get(0);
+        if(data.getValue() >= 0)
+          return StringData.forValue("+" + data.getValue());
+      }
+
+      return inArgs.get(0);
+    }
+  }
+
+  /** A plugin function to format numbers or printing. */
+  public static class AnnotateFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "annotate";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public SoyData computeForTofu(List<SoyData> inArgs)
+    {
+      if(inArgs.get(0) instanceof SoyMapData)
+      {
+        SoyMapData data = (SoyMapData)inArgs.get(0);
+        return StringData.forValue(COMMAND_RENDERER.render
+                                   ("dma.value.annotated",
+                                    map("value", data),
+                                    (Map<String, Object>)null));
+      }
+
+      return inArgs.get(0);
+    }
+  }
 
   /** A plugin function to check if a value is a list. */
   public static class IsListFunction implements SoyTofuFunction
@@ -702,8 +739,11 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(EscapeFunction.class);
       soyFunctionsSetBinder.addBinding().to(JsEscapeFunction.class);
       soyFunctionsSetBinder.addBinding().to(FormatNumberFunction.class);
+      soyFunctionsSetBinder.addBinding().to(BonusFunction.class);
+      soyFunctionsSetBinder.addBinding().to(AnnotateFunction.class);
       soyFunctionsSetBinder.addBinding().to(IsListFunction.class);
       soyFunctionsSetBinder.addBinding().to(CamelFunction.class);
+      soyFunctionsSetBinder.addBinding().to(LowerFunction.class);
       soyFunctionsSetBinder.addBinding().to(CommandsFunction.class);
       soyFunctionsSetBinder.addBinding().to(ReferenceFunction.class);
 
@@ -766,7 +806,7 @@ public class SoyTemplate
    *
    */
   public String render(String inName,
-                       @Nullable Map<String, Object> inData,
+                       @Nullable Map<String, ? extends Object> inData,
                        @Nullable Map<String, Object> inInjected,
                        @Nullable Set<String> inDelegates)
   {

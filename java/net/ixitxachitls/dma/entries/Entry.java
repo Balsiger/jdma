@@ -26,7 +26,6 @@ package net.ixitxachitls.dma.entries;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -146,6 +145,14 @@ public abstract class Entry extends AbstractEntry
     return new Combination.Set<ProductReference>(combinations, this);
   }
 
+  public BaseEntry getBaseEntry()
+  {
+    List<BaseEntry> bases = getBaseEntries();
+    assert bases.size() == 1 : "Expected a single base entry";
+
+    return bases.get(0);
+  }
+
   /**
    * Set the id to a random value.
    */
@@ -169,7 +176,6 @@ public abstract class Entry extends AbstractEntry
   /**
    * Complete the entry and make sure that all values are filled.
    */
-  @OverridingMethodsMustInvokeSuper
   public void complete()
   {
     if(m_name.isEmpty())
@@ -181,9 +187,6 @@ public abstract class Entry extends AbstractEntry
         randomID();
       } while(DMADataFactory.get().getEntry(getKey()) != null);
     }
-
-    // will only save if anything was changed
-    save();
   }
 
   @Override

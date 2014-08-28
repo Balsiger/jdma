@@ -145,7 +145,14 @@
       {if $entry.qualifier.present}
         {call dma.entry.value}
           {param label: 'Qualifier' /}
-          {param value: $entry.qualifier.get /}
+          {param value: $entry.qualifier /}
+          {param color: '#808' /}
+        {/call}
+      {/if}
+      {if $entry.speed.present}
+        {call dma.entry.value}
+          {param label: 'Speed' /}
+          {param value: $entry.speed /}
           {param color: '#808' /}
         {/call}
       {/if}
@@ -201,14 +208,16 @@
 /**
  * Editiing the base item.
  * 
- * @param entry The item to edit. 
- * @param id    THe id to use for the editing dialog.
+ * @param entry   The item to edit. 
+ * @param id      The id to use for the editing dialog.
+ * @param create  Whether to create a new entry
  */
 {template .edit autoescape="true"}
   {call dma.edit.entry}
     {param entry: $entry /}
     {param type: 'base-level' /}
     {param id: $id /}
+    {param create: $create /}
     {param values}
       {call dma.edit.value}
         {param name: 'name' /}
@@ -353,7 +362,14 @@
       {call dma.edit.value}
         {param name: 'qualifier' /}
         {param label: 'Qualifier' /}
-        {param value: $entry.qualifier.present ? $entry.qualifier.get : '' /}
+        {param value: $entry.qualifier.present ? $entry.qualifier : '' /}
+        {param validate: 'any' /}
+        {param color: '#808' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'speed' /}
+        {param label: 'Speed' /}
+        {param value: $entry.speed.present ? $entry.speed : '' /}
         {param validate: 'any' /}
         {param color: '#808' /}
       {/call}    

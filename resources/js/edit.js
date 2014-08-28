@@ -19,18 +19,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------- header
-
 /**
  * Script code for editing values.
  *
  * @file          edit.js
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-
-//..........................................................................
 
 /** The object to store everything in. */
 
@@ -46,11 +41,13 @@ edit.all = [];
  * @param inPath   the path of the entry to edit
  * @param inID     the id of the element to create
  * @param inBases  the bases for the entry, if any
+ * @param inValues the values to preset (as key:value,key:value,...), if any
  */
-edit.show = function(inName, inPath, inID, inBases)
+edit.show = function(inName, inPath, inID, inBases, inValues)
 {
+  window.console.log(inName, inPath, inID, inBases, inValues);
   var contents = util.ajax(inPath + '.edit?body&id=' + inID 
-      + '&bases=' + inBases);
+      + '&bases=' + inBases + '&values=' + inValues);
   var dialog = $('<div id="dialog-' + inID.replace(/ /g, "_") + '"/>')
     .html(contents)
     .dialog({
@@ -133,10 +130,11 @@ edit.removeImage = function(inID)
 /**
  * Save the data for the entry given it's key and it's form values.
  *
- * @param inKey the key of the entry to save.
- * @param inID  the id of the elemement with all the input fields.
+ * @param inKey    the key of the entry to save.
+ * @param inID     the id of the elemement with all the input fields.
+ * @param inCreate whether to create a new entry
  */
-edit.save = function(inKey, inID)
+edit.save = function(inKey, inID, inCreate)
 {
   var values = { '_key_': inKey };
   $('#' + inID + " :input").each(function ()
@@ -160,13 +158,13 @@ edit.save = function(inKey, inID)
 
   // send the data to the server
   window.console.log('saving!', inID, values);
-  if(window.location.href.match(/\?create$/))
+  if(window.location.href.match(/\?create$/) || inCreate)
     values['_create_'] = '';
   var eval = util.ajax('/actions/save', values, null, true);
 
   // remove the move away code
   window.onbeforeunload = undefined;
-
+  
   // close the dialog
   if(eval)
   {

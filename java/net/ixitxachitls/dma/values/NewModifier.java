@@ -249,6 +249,12 @@ public class NewModifier extends NewValue.Arithmetic<ModifierProto>
     }
   };
 
+  public NewModifier()
+  {
+    this(0, Type.GENERAL, Optional.<String>absent(),
+         Optional.<NewModifier>absent());
+  }
+
   public NewModifier(int inModifier, Type inType, Optional<String> inCondition,
                      Optional<NewModifier> inNext)
   {

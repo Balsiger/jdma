@@ -110,10 +110,10 @@ public class PageServlet extends SoyServlet
     Map<String, Object> data = super.collectInjectedData(inRequest, inRenderer);
 
     if(inRequest.hasUser())
-      data.put("dm", false);
-    else
       data.put("dm",
                inRequest.getUser().get().hasAccess(BaseCharacter.Group.DM));
+    else
+      data.put("dm", false);
 
     tracer.done();
     return data;

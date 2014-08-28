@@ -472,6 +472,9 @@ message BaseQualityProto
   }
   repeated Effect effect = 3;
   optional string qualifier = 4;
+  
+  optional SpeedProto speed = 5; 
+  optional ExpressionProto speed_expression = 6;
 }
 
 message BaseFeatProto
@@ -686,6 +689,7 @@ message BaseWeaponProto
   optional DistanceProto range = 8;
   optional DistanceProto reach = 9;
   optional int32 max_attacks = 10;
+  optional bool finesse = 11;
 }
 
 message BaseWearableProto
@@ -915,33 +919,7 @@ message BaseMonsterProto
   repeated Subtype subtype = 5;
   optional DiceProto hit_dice = 6;
 
-  message Speed
-  {
-    enum Mode
-    {
-      UNKNONW_MODE = 0;
-      BURROW = 1;
-      CLIMB = 2;
-      FLY = 3;
-      SWIM = 4;
-      RUN = 5;
-    }
-    optional Mode mode = 1;
-    required DistanceProto distance = 2;
-
-    enum Maneuverability
-    {
-      UNKNOWN_MANEUVERABILITY = 0;
-      PERFECT = 1;
-      GOOD = 2;
-      AVERAGE = 3;
-      POOR = 4;
-      CLUMSY = 5;
-      NONE = 6;
-    }
-    optional Maneuverability maneuverability = 3;
-  }
-  repeated Speed speed = 7;
+  repeated SpeedProto speed = 7;
   optional ModifierProto natural_armor = 8;
   optional int32 base_attack = 9;
   optional int32 strength = 10;
@@ -1323,7 +1301,7 @@ message CampaignProto
 
 message CharacterProto
 {
-  required CampaignEntryProto base = 1;
+  required NPCProto base = 1;
 
   enum State
   {
@@ -1335,7 +1313,7 @@ message CharacterProto
   }
   optional State state = 2;
   repeated string item = 3;
-  optional int32 level = 4;
+  optional string player_name = 4;
 }
 
 message ItemProto
@@ -1395,25 +1373,46 @@ message MonsterProto
   optional int32 intelligence = 6;
   optional int32 wisdom = 7;
   optional int32 charisma = 8;
-  repeated BaseMonsterProto.Reference feat = 9;
+  repeated FeatProto feat = 9;
   optional int32 max_hit_points = 10;
   optional int32 hit_points = 11;
-
-  message Skill
-  {
-    required BaseMonsterProto.Reference skill = 1;
-    optional int32 ranks = 2;
-  }
-  repeated Skill skill = 12;
+  repeated SkillProto skill = 12;
   optional BaseMonsterProto.Alignment alignment = 13;
   optional int32 fortitude_save = 14;
   optional int32 will_save = 15;
   optional int32 reflex_save = 16;
+  repeated QualityProto quality = 17;
+}
+
+message SkillProto
+{
+  required string name = 1;
+  optional int32 ranks = 2;
 }
 
 message LevelProto
 {
-  required CampaignEntryProto base = 1;
+  required string name = 1;
+  optional int32 hp = 2;
+}
+
+message FeatProto
+{
+  required string name = 1;
+  optional string qualifier = 2;
+}
+
+message QualityProto
+{
+  required string name = 1;
+  optional string title = 2;
+
+  message Parameter
+  {
+    required string name = 1;
+    required string value = 2;
+  }
+  repeated Parameter parameter = 3;    
 }
 
 message NPCProto
@@ -1429,7 +1428,11 @@ message NPCProto
   }
   optional Gender gender = 2;
   optional string given_name = 3;
-  repeated string level = 4;
+  repeated LevelProto level = 4;
+  optional string religion = 5;
+  optional string height = 6;
+  optional string weight = 7;
+  optional string looks = 8;
 }
 
 message EntriesProto
@@ -1450,7 +1453,6 @@ message EntriesProto
   repeated CharacterProto character = 13;
   repeated ItemProto item = 14;
   repeated EncounterProto encounter = 15;
-  repeated LevelProto level = 16;
   repeated MonsterProto monster = 17;
   repeated NPCProto npc = 18;
 }

@@ -38,10 +38,14 @@ import com.google.common.base.Optional;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.Level;
+import net.ixitxachitls.dma.output.soy.SoyAbstract;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.output.soy.SoyValue;
+import net.ixitxachitls.dma.values.enums.Alignment;
+import net.ixitxachitls.dma.values.enums.Gender;
 import net.ixitxachitls.server.servlets.FileServlet;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
@@ -73,14 +77,13 @@ public class SoyServlet extends DMAServlet
   protected static final SoyTemplate TEMPLATE =
      new SoyTemplate("page", "errors", "about", "main", "navigation", "entry",
                      "commands", "value", "admin", "cards", "edit",
-                     "entries/basecharacters",
-                     //"character",
+                     "entries/basecharacters", "entries/characters",
                      "entries/baseproducts", "entries/products",
                      "entries/basecampaigns", "entries/campaigns",
                      "entries/baseitems", "entries/items",
-                     "entries/basequalities",
-                     "entries/baselevels",
-                     "entries/basefeats",
+                     "entries/basequalities", "entries/qualities",
+                     "entries/baselevels", "entries/levels",
+                     "entries/basefeats", "entries/feats",
                      "entries/baseskills",
                      "entries/baseencounters",
                      "entries/basespells",
@@ -215,7 +218,14 @@ public class SoyServlet extends DMAServlet
          ? inRequest.getRealUser().get().getName() : "",
        "isUser", user.isPresent(),
        "isAdmin", user.isPresent()
-                  && user.get().hasAccess(BaseCharacter.Group.ADMIN));
+                  && user.get().hasAccess(BaseCharacter.Group.ADMIN),
+
+       // classes with static access
+       "Level", new SoyAbstract.SoyWrapper("Level", Level.class, Level.class),
+       "Gender", new SoyAbstract.SoyWrapper("Gender", Gender.class,
+                                            Gender.class),
+       "Alignment", new SoyAbstract.SoyWrapper("Alignment", Alignment.class,
+                                               Alignment.class));
 
     tracer.done();
     return map;

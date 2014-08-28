@@ -166,11 +166,11 @@ public class ProductReference extends NewReference<BaseProduct>
     List<NewRange> pages = new ArrayList<>();
     for(String page : COMMA_SPLITTER.split(inPages))
     {
-      NewRange range = NewRange.parse(page);
-      if(range == null)
+      Optional<NewRange> range = NewRange.PARSER.parse(page);
+      if(!range.isPresent())
         return Optional.absent();
 
-      pages.add(range);
+      pages.add(range.get());
     }
 
     return Optional.of(new ProductReference(inName, pages));

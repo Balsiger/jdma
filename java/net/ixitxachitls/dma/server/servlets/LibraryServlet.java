@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.ArrayList;
@@ -42,60 +40,27 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.util.Files;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * The servlet for the library of base entries.
  *
  *
  * @file          LibraryServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @Immutable
 @ParametersAreNonnullByDefault
 public class LibraryServlet extends PageServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //---------------------------- LibraryServlet ----------------------------
-
   /**
    * Create the servlet.
-   *
    */
   public LibraryServlet()
   {
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //----------------------------- collectData ------------------------------
 
   /**
    * Collect the data that is to be printed.
@@ -105,7 +70,6 @@ public class LibraryServlet extends PageServlet
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
-   *
    */
   @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
@@ -165,8 +129,4 @@ public class LibraryServlet extends PageServlet
 
     return data;
   }
-
-  //........................................................................
-
-  //........................................................................
 }

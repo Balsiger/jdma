@@ -31,6 +31,7 @@
  * @param type   The type of entry edited
  * @param id     The id of the card.
  * @param values The editable value content
+ * @param create Whether to create a new entry.
  */
 {template .entry}
   <div class="edit {$type}" id="{escape($id)}">
@@ -50,6 +51,7 @@
     {call dma.edit.actions}
       {param id: escape($id) /}
       {param key: $entry.key /}
+      {param create: $create /}
     {/call}
     
   </div>  
@@ -210,15 +212,18 @@
  * @param? class   special classes to set 
  * @param? caption special label to set
  * @param? autocomplete the url for autocompleting this field
+ * @param? width        the width style of the field
  */
 {template .field_input}
-  <div class="input-wrapper field{if $class} {$class}{/if}">
-    <input value='{$value}' name='{$name}' validate='{$validate}' 
+  <div class="input-wrapper field{if $class} {$class}{/if}
+              {if $width} width{/if}"
+       {if $width} style="width: {$width} !important;"{/if}>
+    <input value="{$value}" name="{$name}" validate="{$validate}" 
            {if $autocomplete} dma-autocomplete="{$autocomplete}"{/if}
-           onkeyup='window.form.validate(this);
+           onkeyup="window.form.validate(this);
                {if $inList}edit.maybeInsertLine(event, 
                                                 this.parentNode.parentNode);
-               {/if}'>
+               {/if}">
     </input>
     {if $caption}
       <div class="input-label">{$caption}</div>
@@ -252,14 +257,16 @@
  * @param value    The value contents.
  * @param choices  The possible chocies to select from.
  * @param? class   The class to use for this field
+ * @param? width   the width of the field
  */
 {template .field_selection}
   {call .field}
     {param class: $class /}
+    {param width: $width /}
     {param markup}
-      <select name='{$name}' onkeyup='window.form.validate(this)'>
+      <select name="{$name}" onkeyup="window.form.validate(this)">
         {foreach $choice in $choices}
-          <option value='{$choice}'{if $choice == $value} selected{/if}>
+          <option value="{$choice}"{if $choice == $value} selected{/if}>
             {$choice}
           </option>
         {/foreach}
@@ -417,15 +424,19 @@
 /**
  * The actions when editing.
  * 
- * @param key the key of the entry to save
- * @param id  the id of the element with all the fields.
+ * @param id      the id of the element with all the fields.
+ * @param key     the key to the entry to save
+ * @param create  whether to create a new entry or not
  */
 {template .actions}
   <div class="actions">
     <div class="buttons">
       <div class="move">
         <div class="action sprite large save" title="Save"
-             onclick="edit.save('{$key}', '{$id}')">
+             onclick="edit.save
+                        ('{$key}'.replace(/\/[^\/]*$/, '/' + 
+                                          $('#{$id} input[name=name]').val()), 
+                         '{$id}', {$create})">
         </div>
         <div class="action sprite large revert" title="Revert"
              onclick="edit.cancel('{$id}')">

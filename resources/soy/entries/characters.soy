@@ -1,0 +1,1540 @@
+/* ****************************************************************************
+ * Copyright (c) 2002-2014 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/*
+ * Templates for characters.
+ */
+{namespace dma.entries.characters}
+
+/**
+ * Show the given entry in standard format.
+ * 
+ * @param entry The entry to show.
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ */
+{template .show autoescape="true"}
+  {call dma.entry.show}
+    {param entry: $entry /}
+    {param noprint: true /}
+    {param type: 'product' /}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param list: $list /}
+    {param next: $next /}
+    {param last: $last /}
+    {param color: '#39f' /}
+    {param title}
+      {call dma.entry._new_title}
+        {param title: $entry.name /}
+        {param color: '#39f' /}
+      {/call}      
+    {/param}
+    {param values}            
+      {call dma.entry.value}
+        {param label: 'Player' /}
+        {param value: $entry.base_character_name /}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Gender' /}
+        {param value: $entry.gender /}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Alignment' /}
+        {param value: $entry.alignment /}
+        {param color: '#39f' /}
+      {/call}
+      {if $entry.religion.present}
+        {call dma.entry.value}
+          {param label: 'Religion' /}
+          {param value: $entry.religion /}
+          {param color: '#39f' /}
+        {/call}
+      {/if}
+      {if $entry.height.present or $entry.weight.present 
+        or $entry.looks.present}
+        {call dma.entry.value}
+          {param label: 'Looks' /}
+          {param value}
+           {$entry.height.present ? $entry.height : '' }{sp}
+           {$entry.weight.present ? $entry.weight : '' }{sp}
+           {$entry.looks.present ? $entry.looks : '' }
+          {/param}           
+          {param color: '#39f' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'Race' /}
+        {param value}
+          {foreach $monster in $entry.base_entries}
+            {call dma.page.link}
+              {param text: $monster.name /}
+              {param url: '/monster/'  + $monster.name /}
+            {/call}
+            {if not isLast($monster)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'State' /}
+        {param value: $entry.state.string /}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Levels' /}
+        {param value}
+          {foreach $level in $entry.cumulated_levels}
+            {$level}
+            {if not isLast($level)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Feats' /}
+        {param value}
+          {foreach $feat in $entry.feats}
+            {call dma.entries.feats.tiny}
+              {param entry: $feat /}
+            {/call}
+            {if not isLast($feat)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Qualities' /}
+        {param value}
+          {foreach $quality in $entry.qualities}
+            {call dma.entries.qualities.tiny}
+              {param entry: $quality /}
+            {/call}
+            {if not isLast($quality)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Possessions' /}
+        {param value}
+          {foreach $item in $entry.possessions}
+            {call dma.entries.items.name}
+              {param entry: $item /}
+            {/call}
+            {if not isLast($item)}, {/if}
+          {/foreach}
+          {if $ij.user}
+            {sp}|{sp} 
+            <span class="action"
+                  onclick="edit.show('', '{$entry.campaign.path}/item/CREATE', 
+                                     'add-item', '', 
+                                     'parent:character/{$entry.name}')">
+              add item
+            </span>
+          {/if}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+    {/param}
+  {/call}
+  
+  {call .sheet}
+    {param entry: $entry /}
+  {/call}
+{/template}
+
+/**
+ * Print a character sheet.
+ * 
+ * @param entry the entry to print
+ */
+{template .sheet}
+  <div class="character-sheet">
+    <div class="title">
+      <div class="title-logo"></div>
+      <div class="title-text"></div>
+      <div class="subtitle">
+        Suitable for characters of any race or class 
+        (including multiclass characters)
+      </div>
+    </div>
+    
+    {call .sheet_value}
+      {param label: 'Character Name' /}
+      {param width: '50%' /}
+      {param value: $entry.name /}
+    {/call}
+    {call .sheet_value}
+      {param label: 'Player Name' /}
+      {param width: '50%' /}
+      {param value}
+       {$entry.base_character_name} ({$entry.player.real_name})
+      {/param}        
+    {/call}
+    
+    {call .sheet_value}
+      {param label: 'Class and Level' /}
+      {param width: '50%' /}
+      {param value}
+        {foreach $level in $entry.cumulated_levels}
+          {$level}
+          {if not isLast($level)}, {/if}
+        {/foreach}
+      {/param}        
+    {/call}
+    {call .sheet_value}
+      {param label: 'ECL' /}
+      {param width: '5%' /}
+      {param value: $entry.effective_character_level /}
+    {/call}
+    {call .sheet_value}
+      {param label: 'Race/Template' /}
+      {param width: '15%' /}
+      {param value}
+        {foreach $monster in $entry.base_entries}
+          {$monster.name}
+          {if not isLast($monster)}, {/if}
+        {/foreach}
+      {/param}
+    {/call}
+    {call .sheet_value}
+      {param label: 'Size' /}
+      {param width: '5%' /}
+      {param value: $entry.combined_size.value.short /}
+    {/call}
+    {call .sheet_value}
+      {param label: 'Gender' /}
+      {param width: '25%' /}
+      {param value: $entry.gender /}
+    {/call}
+
+    {call .sheet_value}
+      {param label: 'Alignment' /}
+      {param width: '10%' /}
+      {param value: $entry.alignment /}
+    {/call}
+    {call .sheet_value}
+      {param label: 'Religion/Patron Deity' /}
+      {param width: '40%' /}
+      {param value: $entry.religion.present ? $entry.religion : '' /}
+    {/call}
+    {call .sheet_value}
+      {param label: 'Height' /}
+      {param width: '10%' /}
+      {param value: $entry.height.present ? $entry.height : '' /}
+    {/call}
+    {call .sheet_value}
+      {param label: 'Weight' /}
+      {param width: '10%' /}
+      {param value: $entry.weight.present ? $entry.weight : '' /}
+    {/call}
+    {call .sheet_value}
+      {param label: 'Looks' /}
+      {param width: '30%' /}
+      {param value: $entry.looks.present ? $entry.looks : '' /}
+    {/call}
+    
+    <div class="groups">
+      <div class="group" style="width: 39%">
+  
+        {call .sheet_subtitle}
+          {param title: 'Ability Scores' /}
+        {/call}
+        
+        {call .ability}
+          {param name: 'Strength' /}
+          {param abbreviation: 'STR' /}
+          {param ability: $entry.combined_strength.value /}
+          {param modifier: bonus($entry.strength_modifier) /}
+        {/call}
+        
+        {call .ability}
+          {param name: 'Constitution' /}
+          {param abbreviation: 'CON' /}
+          {param ability: $entry.combined_constitution.value /}
+          {param modifier: bonus($entry.constitution_modifier) /}
+        {/call}
+        
+        {call .ability}
+          {param name: 'Dexterity' /}
+          {param abbreviation: 'DEX' /}
+          {param ability: $entry.combined_dexterity.value /}
+          {param modifier: bonus($entry.dexterity_modifier) /}
+        {/call}
+        
+        {call .ability}
+          {param name: 'Intelligence' /}
+          {param abbreviation: 'INT' /}
+          {param ability: $entry.combined_intelligence.value /}
+          {param modifier: bonus($entry.intelligence_modifier) /}
+        {/call}
+        
+        {call .ability}
+          {param name: 'Wisdom' /}
+          {param abbreviation: 'WIS' /}
+          {param ability: $entry.combined_wisdom.value /}
+          {param modifier: bonus($entry.wisdom_modifier) /}
+        {/call}
+        
+        {call .ability}
+          {param name: 'Charisma' /}
+          {param abbreviation: 'CHA' /}
+          {param ability: $entry.combined_charisma.value /}
+          {param modifier: bonus($entry.charisma_modifier) /}
+        {/call}
+        
+      </div>
+    
+      <div class="group ruler" style="height: 420px"></div>
+    
+      <div class="group" style="width: 38%">    
+    
+        {call .sheet_subtitle}
+          {param title: 'Combat Options' /}
+        {/call}
+        
+        {call .sheet_value}
+          {param label: 'Base Attack Bonus' /}
+          {param width: '100%' /}
+          {param size: '27px' /}
+          {param vSize: '30px' /}
+          {param value: bonus($entry.combined_base_attack.value) /}
+          {param prefix: true /}
+          {param center: true /}
+        {/call}
+      
+        {foreach $weapon in $entry.weapons}
+          {if index($weapon) < 4}
+            {call .sheet_weapon}
+              {param gray: index($weapon) == 0 or index($weapon) == 2 /}
+              {param weapon: $weapon /}
+            {/call}
+          {/if}
+        {/foreach}
+        
+        {for $i in range(length($entry.weapons), 4)}
+          {call .sheet_weapon}
+            {param gray: $i == 0 or $i == 2 /}
+          {/call}
+        {/for}  
+      
+      </div>          
+      
+      <div class="group" style="width: 19%; margin-left: 5px">
+      
+        {call .sheet_subtitle}
+          {param title: 'Hit Points' /}
+        {/call}
+    
+        <div class="values boxed" style="height: 450px">        
+          <div class="hps temporary">
+            Temporary<br/>
+            {for $i in range(20)}
+              <div class="count">{20 - $i}</div>
+            {/for}
+          </div>
+  
+          <div class="hps">
+            Hit Points<br/>
+            {for $i in range($entry.maxHP - $entry.HP)}
+              <div class="count crossed">{$entry.maxHP - $i}</div>
+              {if ($entry.maxHP - $i) % 10 == 0}
+                <br/>
+              {/if}
+            {/for}
+            {for $i in range($entry.HP + 1)}
+              <div class="count">{$entry.HP - $i}</div>
+              {if ($entry.HP - $i) % 10 == 0}
+                <br/>
+              {/if}
+            {/for}
+          </div> 
+
+          <div class="hps negative">
+            {for $i in range(1, 11)}
+              <div class="count">{-$i}</div>
+            {/for}
+          </div> 
+
+        </div>
+      
+      </div>
+ 
+      <div class="inline" style="width: 50%">
+        {call .sheet_value}
+          {param label: 'Speed' /}
+          {param width: '100%' /}
+          {param size: '27px' /}
+          {param vSize: '30px' /}
+          {param value}
+            {foreach $speed in $entry.speeds_annotated}
+              {annotate($speed)|noescape}
+              {if not isLast($speed)}, {/if}
+            {/foreach}
+          {/param}
+          {param prefix: true /}
+          {param center: true /}
+        {/call}
+      </div>
+      
+      <div class="inline" style="width: 50%">
+        {call .sheet_value}
+          {param label: 'Initiative Modifier' /}
+          {param width: '100%' /}
+          {param size: '27px' /}
+          {param vSize: '30px' /}
+          {param value: bonus($entry.initiative) /}
+          {param prefix: true /}
+          {param center: true /}
+        {/call}
+      </div>         
+    
+      <div class="value-container" style="width:100%">
+        <div class="value-label prefixed inline" 
+             style="font-size: 27px; vertical-align:top; padding-top: 3px">
+          Grapple Modifier
+        </div>
+    
+        {call .sheet_value}
+          {param label: 'Total<br/>&nbsp;' /}
+          {param width: '13.5%' /}
+          {param size: '9px' /}
+          {param center: true /}
+          {param value: bonus($entry.grapple_bonus) /}
+        {/call}
+        
+        <div class="operator" style="padding-top: 20px">=</div>
+        
+        {call .sheet_value}
+          {param label}
+            Base Attack <br/>
+            Bonus
+          {/param}
+          {param width: '13.5%' /}
+          {param size: '9px' /}
+          {param center: true /}
+          {param value: bonus($entry.combined_base_attack.value) /}
+        {/call}
+        
+        <div class="operator" style="padding-top: 20px">+</div>
+        
+        {call .sheet_value}
+          {param label}
+            Strength<br/>
+            Modifier
+          {/param}
+          {param width: '13.5%' /}
+          {param size: '9px' /}
+          {param center: true /}
+          {param value: bonus($entry.strength_modifier) /}
+        {/call}
+      
+        <div class="operator" style="padding-top: 20px">+</div>
+        
+        {call .sheet_value}
+          {param label}
+            Size<br/>
+            Modifier
+          {/param}
+          {param width: '13.5%' /}
+          {param size: '9px' /}
+          {param center: true /}
+          {param value: '+0' /}
+        {/call}
+      
+        <div class="operator" style="padding-top: 20px">+</div>
+        
+        {call .sheet_value}
+          {param label}
+            Misc<br/>
+            Modifier
+          {/param}
+          {param width: '13.5%' /}
+          {param size: '9px' /}
+          {param center: true /}
+          {param value: '' /}
+        {/call}
+    
+      </div>
+
+    </div>    
+    
+    <div class="groups">
+      {call .sheet_subtitle}
+        {param title: 'Saving Throws' /}
+      {/call}
+
+      <div>
+      <div class="inline saves">
+
+        <div>
+        
+          <div class="two-line-label" style="width: 15%; padding-top: 50px">
+            <div class="top">Fortitude</div>
+            <div class="bottom">(Constitution)</div>
+          </div>
+  
+          {call .sheet_value}
+            {param label: 'Total' /}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: annotate($entry.combined_fortitude_save) /}
+          {/call}
+          
+          <div class="operator" style="padding-top: 58px">=</div>
+        
+          {call .sheet_value}
+            {param label}
+              Base <br/>
+              Save
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: annotate($entry.combined_base_fortitude_save) /}
+          {/call}
+  
+          <div class="operator" style="padding-top: 58px">+</div>
+        
+          {call .sheet_value}
+            {param label}
+              Ability <br/>
+              Modifier
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: bonus($entry.constitution_modifier) /}
+          {/call}
+  
+          <div class="operator" style="padding-top: 58px">+</div>
+  
+          {call .sheet_value}
+            {param label}
+              Magic <br/>
+              Modifier
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: '&nbsp;' /}
+          {/call}
+  
+          <div class="operator" style="padding-top: 58px">+</div>
+  
+          {call .sheet_value}
+            {param label}
+              Misc. <br/>
+              Modifier
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: '&nbsp;' /}
+          {/call}
+  
+          <div class="operator" style="padding-top: 58px">+</div>
+  
+          {call .sheet_value}
+            {param label}
+              Temporary <br/>
+              Modifier
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: '&nbsp;' /}
+          {/call}
+  
+        </div>
+  
+        <div>
+        
+          <div class="two-line-label" style="width: 15%; padding-top: 50px">
+            <div class="top">Reflex</div>
+            <div class="bottom">(Dexterity)</div>
+          </div>
+  
+          {call .sheet_value}
+            {param label: 'Total' /}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: annotate($entry.combined_reflex_save) /}
+          {/call}
+          
+          <div class="operator" style="padding-top: 58px">=</div>
+        
+          {call .sheet_value}
+            {param label}
+              Base <br/>
+              Save
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: annotate($entry.combined_base_reflex_save) /}
+          {/call}
+  
+          <div class="operator" style="padding-top: 58px">+</div>
+        
+          {call .sheet_value}
+            {param label}
+              Ability <br/>
+              Modifier
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: $entry.dexterity_modifier /}
+          {/call}
+  
+          <div class="operator" style="padding-top: 58px">+</div>
+  
+          {call .sheet_value}
+            {param label}
+              Magic <br/>
+              Modifier
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: '&nbsp;' /}
+          {/call}
+  
+          <div class="operator" style="padding-top: 58px">+</div>
+  
+          {call .sheet_value}
+            {param label}
+              Misc. <br/>
+              Modifier
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: '&nbsp;' /}
+          {/call}
+  
+          <div class="operator" style="padding-top: 58px">+</div>
+  
+          {call .sheet_value}
+            {param label}
+              Temporary <br/>
+              Modifier
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: '&nbsp;' /}
+          {/call}
+  
+        </div>
+
+        <div>
+        
+          <div class="two-line-label" style="width: 15%; padding-top: 50px">
+            <div class="top">Will</div>
+            <div class="bottom">(Wisdom)</div>
+          </div>
+  
+          {call .sheet_value}
+            {param label: 'Total' /}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: annotate($entry.combined_will_save) /}
+          {/call}
+          
+          <div class="operator" style="padding-top: 58px">=</div>
+        
+          {call .sheet_value}
+            {param label}
+              Base <br/>
+              Save
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: annotate($entry.combined_base_will_save) /}
+          {/call}
+  
+          <div class="operator" style="padding-top: 58px">+</div>
+        
+          {call .sheet_value}
+            {param label}
+              Ability <br/>
+              Modifier
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: $entry.wisdom_modifier /}
+          {/call}
+  
+          <div class="operator" style="padding-top: 58px">+</div>
+  
+          {call .sheet_value}
+            {param label}
+              Magic <br/>
+              Modifier
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: '&nbsp;' /}
+          {/call}
+  
+          <div class="operator" style="padding-top: 58px">+</div>
+  
+          {call .sheet_value}
+            {param label}
+              Misc. <br/>
+              Modifier
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: '&nbsp;' /}
+          {/call}
+  
+          <div class="operator" style="padding-top: 58px">+</div>
+  
+          {call .sheet_value}
+            {param label}
+              Temporary <br/>
+              Modifier
+            {/param}
+            {param width: '13%' /}
+            {param size: '14px' /}
+            {param center: true /}
+            {param white: true /}
+            {param top: true /}
+            {param value: '&nbsp;' /}
+          {/call}
+  
+        </div>
+      </div>
+        
+      <div class="box inline">
+        Conditional Modifiers
+      </div>
+
+    </div>
+    </div>
+
+    <div class="groups">
+      {call .sheet_subtitle}
+        {param title: 'Armor Class' /}
+      {/call}
+
+      <div class="value-container" style="width:100%">
+        <div class="value-label prefixed inline" 
+             style="font-size: 27px; vertical-align:top; padding-top: 3px">
+          AC
+        </div>
+    
+        {call .sheet_value}
+          {param label: 'Total<br/>&nbsp;' /}
+          {param width: '11%' /}
+          {param size: '9px' /}
+          {param center: true /}
+          {param value: $entry.armor_class /}
+        {/call}
+        
+        <div class="operator" style="padding-top: 20px">= 10 +</div>
+        
+        {call .sheet_value}
+          {param label}
+            Armor <br/>
+            Bonus
+          {/param}
+          {param width: '11%' /}
+          {param size: '9px' /}
+          {param center: true /}
+          {param value: $entry.armor_bonus /}
+        {/call}
+        
+        <div class="operator" style="padding-top: 20px">+</div>
+        
+        {call .sheet_value}
+          {param label}
+            Shield<br/>
+            Bonus
+          {/param}
+          {param width: '11%' /}
+          {param size: '9px' /}
+          {param center: true /}
+          {param value: $entry.shield_bonus /}
+        {/call}
+      
+        <div class="operator" style="padding-top: 20px">+</div>
+        
+        {call .sheet_value}
+          {param label}
+            Dex<br/>
+            Modifier
+          {/param}
+          {param width: '11%' /}
+          {param size: '9px' /}
+          {param center: true /}
+          {param value: bonus($entry.dexterity_modifier) /}
+        {/call}
+      
+        <div class="operator" style="padding-top: 20px">+</div>
+        
+        {call .sheet_value}
+          {param label}
+            Size<br/>
+            Modifier
+          {/param}
+          {param width: '11%' /}
+          {param size: '9px' /}
+          {param center: true /}
+          {param value: '+0' /}
+        {/call}
+    
+        <div class="operator" style="padding-top: 20px">+</div>
+        
+        {call .sheet_value}
+          {param label}
+            Natural <br/>
+            Armor
+          {/param}
+          {param width: '11%' /}
+          {param size: '9px' /}
+          {param center: true /}
+          {param value: annotate($entry.combined_natural_armor) /}
+        {/call}
+    
+        <div class="operator" style="padding-top: 20px">+</div>
+        
+        {call .sheet_value}
+          {param label}
+            Deflection <br/>
+            Modifier
+          {/param}
+          {param width: '11%' /}
+          {param size: '9px' /}
+          {param center: true /}
+          {param value: '' /}
+        {/call}
+    
+        <div class="operator" style="padding-top: 20px">+</div>
+        
+        {call .sheet_value}
+          {param label}
+            Miscellaneous <br/>
+            Modifiers
+          {/param}
+          {param width: '11%' /}
+          {param size: '9px' /}
+          {param center: true /}
+          {param value: '' /}
+        {/call}
+    
+      </div>
+
+      <div class="inline" style="width: 50%">
+        {call .sheet_value}
+          {param label: 'Touch AC' /}
+          {param width: '100%' /}
+          {param size: '27px' /}
+          {param vSize: '30px' /}
+          {param value: $entry.touch_armor_class /}
+          {param prefix: true /}
+          {param center: true /}
+        {/call}
+      </div>
+      
+      <div class="inline" style="width: 50%">
+        {call .sheet_value}
+          {param label: 'Flat-Footed AC' /}
+          {param width: '100%' /}
+          {param size: '27px' /}
+          {param vSize: '30px' /}
+          {param value: $entry.flat_footed_armor_class /}
+          {param prefix: true /}
+          {param center: true /}
+        {/call}
+      </div>         
+
+      <div class="armors" style="margin-top: 10px">
+        <div class="armor">
+          {call .sheet_value}
+            {param label: 'Armor Worn' /}
+            {param width: '50%' /}
+            {param size: '9px' /}
+            {param white: true /}
+            {param top: true /}
+            {param inside: true /}
+            {param value}
+              {if $entry.armor_worn.present}
+                {call dma.entries.items.name}
+                  {param entry: $entry.armor_worn /}
+                {/call}
+              {/if}
+            {/param} 
+          {/call}          
+
+          {call .sheet_value}
+            {param label: 'Max Dex' /}
+            {param width: '20%' /}
+            {param size: '9px' /}
+            {param white: true /}
+            {param top: true /}
+            {param inside: true /}
+            {param value: $entry.armor_worn.present 
+              ? bonus($entry.armor_worn.combined_max_dex.value) : '' /}
+          {/call}          
+
+          {call .sheet_value}
+            {param label: 'Armor Check Penalty' /}
+            {param width: '20%' /}
+            {param size: '9px' /}
+            {param white: true /}
+            {param top: true /}
+            {param inside: true /}
+            {param value: $entry.armor_worn.present 
+              ? bonus($entry.armor_worn.combined_check_penalty.value) : '' /}
+          {/call}          
+
+          {call .sheet_value}
+            {param label: 'Weight' /}
+            {param width: '10%' /}
+            {param size: '9px' /}
+            {param white: true /}
+            {param top: true /}
+            {param inside: true /}
+            {param value: $entry.armor_worn.present 
+              ? $entry.armor_worn.combined_weight.value : '' /}
+          {/call}          
+        </div>
+
+        <div class="armor">
+          {call .sheet_value}
+            {param label: 'Shield Carried' /}
+            {param width: '50%' /}
+            {param size: '9px' /}
+            {param white: true /}
+            {param top: true /}
+            {param inside: true /}
+            {param value}
+              {if $entry.shield_worn.present}
+                {call dma.entries.items.name}
+                  {param entry: $entry.shield_worn /}
+                {/call}
+              {/if}
+            {/param} 
+          {/call}          
+
+          {call .sheet_value}
+            {param label: 'Max Dex' /}
+            {param width: '20%' /}
+            {param size: '9px' /}
+            {param white: true /}
+            {param top: true /}
+            {param inside: true /}
+            {param value: $entry.shield_worn.present 
+              ? bonus($entry.shield_worn.combined_max_dex.value) : '' /}
+          {/call}          
+
+          {call .sheet_value}
+            {param label: 'Armor Check Penalty' /}
+            {param width: '20%' /}
+            {param size: '9px' /}
+            {param white: true /}
+            {param top: true /}
+            {param inside: true /}
+            {param value: $entry.shield_worn.present 
+              ? bonus($entry.shield_worn.combined_check_penalty.value) : '' /}
+          {/call}          
+
+          {call .sheet_value}
+            {param label: 'Weight' /}
+            {param width: '10%' /}
+            {param size: '9px' /}
+            {param white: true /}
+            {param top: true /}
+            {param inside: true /}
+            {param value: $entry.shield_worn.present 
+              ? $entry.shield_worn.combined_weight.value : '' /}
+          {/call}          
+        </div>
+      </div>
+
+    </div>
+        
+  </div>   
+{/template}
+
+/**
+ * Print weapon information.
+ * 
+ * @param? gray whether to color the background
+ * @param? weapon the weapon to print stats for
+ */
+{template .sheet_weapon}
+  <div class="weapon {if $gray}gray{/if}">
+    <div>
+      {call .sheet_value}
+        {param label: 'Weapon' /}
+        {param width: '30%' /}
+        {param size: '12px' /}
+        {param vSize: '18px' /}
+        {param value}
+          {if $weapon}
+            {call dma.entries.items.name}
+              {param entry: $weapon /}
+            {/call}
+          {else}
+            &nbsp;
+          {/if}
+        {/param}
+      {/call}
+    
+      {call .sheet_value}
+        {param label: 'Attack Bonus' /}
+        {param width: '30%' /}
+        {param size: '12px' /}
+        {param vSize: '20px' /}
+        {param value: $weapon ? $weapon.damage : '&nbsp;' /}
+      {/call}
+  
+      {call .sheet_value}
+        {param label: 'Damage' /}
+        {param width: '20%' /}
+        {param size: '12px' /}
+        {param vSize: '20px' /}
+        {param value: $weapon ? $weapon.damage : '&nbsp;' /}
+      {/call}
+    
+      {call .sheet_value}
+        {param label: 'Critical' /}
+        {param width: '20%' /}
+        {param size: '12px' /}
+        {param vSize: '20px' /}
+        {param value: $weapon ? $weapon.critical : '&nbsp;' /}
+      {/call}
+    </div>
+    <div>
+      {call .sheet_value}
+        {param label: 'Range Increment' /}
+        {param width: '30%' /}
+        {param size: '12px' /}
+        {param vSize: '20px' /}
+        {param value: $weapon 
+          ? (def($weapon.range) ? $weapon.range : '&mdash;') 
+          : '&nbsp;' /}
+      {/call}
+      
+      {call .sheet_value}
+        {param label: 'Type' /}
+        {param width: '20%' /}
+        {param size: '12px' /}
+        {param vSize: '20px' /}
+        {param value: $weapon ? $weapon.weapon_type.short : '&nbsp;' /}
+      {/call}
+    
+      {call .sheet_value}
+        {param label: 'Notes/Ammunition' /}
+        {param width: '50%' /}
+        {param size: '12px' /}
+        {param vSize: '20px' /}
+        {param value: $weapon ? $weapon.player_notes : '&nbsp;' /}
+      {/call}
+    </div>
+  </div>  
+
+{/template}
+
+/**
+ * Format the ability with all modifiers.
+ * 
+ * @param name         the name of hte ability
+ * @param abbreviation the abbreviated name of the ability
+ * @param ability      the ability value
+ * @param modifier     the ability modifier
+ */
+{template .ability}
+  <div class="ability">
+    <div class="two-line-label">
+      <div class="top">{$abbreviation}</div>
+      <div class="bottom">{$name}</div>
+    </div>
+
+    {call .sheet_value}
+      {param label: 'Total<br/>&nbsp;' /}
+      {param width: '13.5%' /}
+      {param size: '9px' /}
+      {param center: true /}
+      {param value: $ability /}
+    {/call}
+    
+    <div class="operator">=</div>
+    
+    {call .sheet_value}
+      {param label}
+        Base Score +<br/>
+        Racial Mod.
+      {/param}
+      {param width: '13.5%' /}
+      {param size: '9px' /}
+      {param center: true /}
+      {param value: $ability /}
+    {/call}
+    
+    <div class="operator">+</div>
+    
+    {call .sheet_value}
+      {param label}
+        Enhancement<br/>
+        Bonuses
+      {/param}
+      {param width: '13.5%' /}
+      {param size: '9px' /}
+      {param center: true /}
+      {param value: '' /}
+    {/call}
+  
+    <div class="operator">+</div>
+    
+    {call .sheet_value}
+      {param label}
+        Misc<br/>
+        Bonuses
+      {/param}
+      {param width: '13.5%' /}
+      {param size: '9px' /}
+      {param center: true /}
+      {param value: '' /}
+    {/call}
+  
+    <div class="operator">-</div>
+    
+    {call .sheet_value}
+      {param label}
+        Misc<br/>
+        Penalties
+      {/param}
+      {param width: '13.5%' /}
+      {param size: '9px' /}
+      {param center: true /}
+      {param value: '' /}
+    {/call}
+
+    {call .sheet_value}
+      {param label}
+        {$name}<br/>
+        Modifier
+      {/param}
+      {param width: '13.5%' /}
+      {param size: '9px' /}
+      {param center: true /}
+      {param boxed: true /}
+      {param value: $modifier /}
+    {/call}
+  
+  </div>
+{/template}
+
+/**
+ * Print a character sheet value.
+ * 
+ * @param label    the value label
+ * @param width    the width of the value
+ * @param value    the value to print
+ * @param? center  whether to center the label and value
+ * @param? boxed   whether to draw a box around the value
+ * @param? size    font size of the label
+ * @param? vSize   the font size of the value
+ * @param? prefix  prefix the label instead of having it below
+ * @param? white   whether to format value in a white box
+ * @param? top     whether to show label on top
+ * @param? inside  whether to show the label inside the box
+ */
+{template .sheet_value}
+  <div class="value-container{if $prefix} prefixed{/if}" 
+       style="width: {$width}">
+    {if $prefix}
+      <div class="value-label prefixed"
+           {if $size} style="font-size: {$size}"{/if}>
+        {$label|noescape}
+      </div>
+    {/if}      
+    {if $top}
+      <div class="value-label top 
+                  {if $center} center{/if}{if $inside} inside{/if}"
+           {if $size} style="font-size: {$size}"{/if}>
+        {$label|noescape}
+      </div>
+    {/if}      
+    <div class="value{if $center} center{/if}
+                {if $boxed} boxed{/if}
+                {if $white} white{/if}
+                {if $prefix} prefixed{/if}"
+                {if $vSize} style="font-size: {$vSize}"{/if}>
+      {$value|noescape}
+    </div>
+    {if not $prefix and not $top}
+      <div class="value-label{if $center} center{/if}
+                  {if $boxed} boxed{/if}"
+           {if $size} style="font-size: {$size}"{/if}>
+         {$label|noescape}
+      </div>
+    {/if}
+  </div>
+{/template}
+
+/**
+ * Print a subtitle for the character sheet.
+ * 
+ * @param title  The subtitle text
+ * @param? width The width of the subtitle
+ */
+{template .sheet_subtitle}
+  <div class="subtitle" {if $width}style="width:{$width}"{/if}>
+    <div class="subtitle-logo"></div>
+    <div class="subtitle-text">{$title}</div>
+  </div>
+{/template}
+
+/**
+ * Formatting a list of entries.
+ *
+ * @param title The list title.
+ * @param start The start index
+ * @param pagesize The size of the page
+ * @param entries The entries printed
+ * @param label The navigation label for this page
+ * @param path The path to this page
+ *
+ */
+{template .list}
+  {call dma.entry.newlist}
+    {param title: $title /}
+    {param label: $label /}
+    {param path: $path /}
+    {param start: $start /}
+    {param pagesize: $pagesize /}
+    {param size: $entries ? length($entries) : 0 /}
+    {param titles: [ 'Name', 'Player'] /}
+    {param entries}
+      {foreach $entry in $entries}
+        <tr onclick="util.link(event, '{$entry.path}')">
+          {call dma.entry.newListEntry}
+            {param path: $entry.path /}
+            {param values: [
+              $entry.name, $entry.bases
+            ] /}
+          {/call}
+        </tr>
+      {/foreach}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Editiing the base character.
+ * 
+ * @param entry   The character to edit. 
+ * @param id      The id to use for the editing dialog.
+ * @param create  Whether to create a new entry
+ */
+{template .edit autoescape="true"}
+  {call dma.edit.entry}
+    {param entry: $entry /}
+    {param type: 'product' /}
+    {param id: $id /}
+    {param create: $create /}
+    {param values}
+      {call dma.edit.value}
+        {param name: 'name' /}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param validate: 'non-empty' /}
+        {param color: '#39f' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'player' /}
+        {param label: 'Player' /}
+        {param value: $entry.base_character_name /}
+        {param validate: 'non-empty' /}
+        {param color: '#39f' /}
+        {param autocomplete: 'base character/name' /}
+      {/call}    
+      {call dma.edit.value_selection}
+        {param name: 'gender' /}
+        {param label: 'Gender' /}
+        {param value: $entry.gender.string /}
+        {param choices: $ij.Gender.names /}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'hp' /}
+        {param label: 'Hit Points' /}
+        {param value: $entry.HP /}
+        {param validate: 'number' /}
+        {param color: '#39f' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param label: 'Abilites' /}
+        {param color: '#39f' /}
+        {param value}
+          {call dma.edit.field_input}
+            {param name: 'strength' /}
+            {param value: $entry.strength.present ? $entry.strength : '' /}
+            {param validate: 'number' /}
+            {param caption: 'Strength' /}
+            {param class: 'field6' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'dexterity' /}
+            {param value: $entry.dexterity.present ? $entry.dexterity : '' /}
+            {param validate: 'number' /}
+            {param caption: 'Dexterity' /}
+            {param class: 'field6' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'constitution' /}
+            {param value: $entry.constitution.present 
+              ? $entry.constitution : '' /}
+            {param validate: 'number' /}
+            {param caption: 'Constitution' /}
+            {param class: 'field6' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'intelligence' /}
+            {param value: $entry.intelligence.present 
+              ? $entry.intelligence : '' /}
+            {param validate: 'number' /}
+            {param caption: 'Intelligence' /}
+            {param class: 'field6' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'wisdom' /}
+            {param value: $entry.wisdom.present ? $entry.wisdom : '' /}
+            {param validate: 'number' /}
+            {param caption: 'Wisdom' /}
+            {param class: 'field6' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'charisma' /}
+            {param value: $entry.charisma.present ? $entry.charisma : '' /}
+            {param validate: 'number' /}
+            {param caption: 'Charisma' /}
+            {param class: 'field6' /}
+          {/call}
+        {/param}
+      {/call}    
+      {call dma.edit.value_selection}
+        {param name: 'alignment' /}
+        {param label: 'Alignment' /}
+        {param value: $entry.alignment.string /}
+        {param choices: $ij.Alignment.names /}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'religion' /}
+        {param label: 'Religion' /}
+        {param value: $entry.religion.present ? $entry.religion : '' /}
+        {param color: '#39f' /}
+        {param validate: 'non-empty' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param label: 'Looks' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {call dma.edit.field_input}              
+                {param name: 'height' /}
+                {param value: $entry.height.present ? $entry.height : '' /}
+                {param validate: 'non-empty' /}
+                {param caption: 'height' /}
+                {param width: '25%' /}
+              {/call}
+              {call dma.edit.field_input}              
+                {param name: 'weight' /}
+                {param value: $entry.weight.present ? $entry.weight : '' /}
+                {param validate: 'non-empty' /}
+                {param caption: 'weight' /}
+                {param width: '25%' /}
+              {/call}
+              {call dma.edit.field_input}              
+                {param name: 'looks' /}
+                {param value: $entry.looks.present ? $entry.looks : '' /}
+                {param validate: 'non-empty' /}
+                {param caption: 'looks' /}
+                {param width: '60%' /}
+              {/call}
+            {/param}
+          {/call}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'base' /}
+        {param label: 'Race' /}
+        {param values: $entry.base_names /}
+        {param validate: 'non-empty' /}
+        {param color: '#39f' /}
+        {param autocomplete: 'base monster/name' /}
+      {/call}    
+      {call dma.edit.value_selection}
+        {param name: 'state' /}
+        {param label: 'State' /}
+        {param value: $entry.state.string /}
+        {param choices: $entry.state.names /}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param label: 'Levels' /}
+        {param value}
+          {foreach $level in $entry.levels}
+            {call dma.edit.field_list_line}
+              {param field}
+                {call dma.entries.levels.edit}
+                  {param entry: $level /}
+                {/call}
+              {/param}
+            {/call}
+          {ifempty}
+            {call dma.edit.field_list_line}
+              {param field}
+                {call dma.entries.levels.edit /}
+              {/param}
+            {/call}
+          {/foreach}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param label: 'Feats' /}
+        {param value}
+          {foreach $feat in $entry.feats}
+            {call dma.edit.field_list_line}
+              {param field}
+                {call dma.entries.feats.edit}
+                  {param entry: $feat /}
+                {/call}
+              {/param}
+            {/call}
+          {ifempty}
+            {call dma.edit.field_list_line}
+              {param field}
+                {call dma.entries.feats.edit /}
+              {/param}
+            {/call}
+          {/foreach}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param label: 'Qualities' /}
+        {param value}
+          {foreach $quality in $entry.qualities}
+            {call dma.edit.field_list_line}
+              {param field}
+                {call dma.entries.qualities.edit}
+                  {param entry: $quality /}
+                {/call}
+              {/param}
+            {/call}
+          {ifempty}
+            {call dma.edit.field_list_line}
+              {param field}
+                {call dma.entries.qualities.edit /}
+              {/param}
+            {/call}
+          {/foreach}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Template for setting a character icon.
+ *
+ * @param character The character to set for.
+ */
+{template .icon}
+  <div class="caption-container">
+    {call dma.page.link}
+      {param url: $character.path /}
+      {param class: 'overlayicon-link' /}
+      {param text}
+        <div class="overlay">
+          <img src="/icons/{$character.icon}" alt="{$character.name}"
+              class="overlayicon">
+          <img src="/icons/character/{$character.state}.png"
+            class="overlay right-bottom">
+        </div>
+        <div class="caption">
+          {$character.name}
+        </div>
+      {/param}
+    {/call}
+  </div>
+{/template}
+
+

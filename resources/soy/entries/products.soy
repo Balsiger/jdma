@@ -153,12 +153,14 @@
  * 
  * @param entry The character to edit. 
  * @param id    THe id to use for the editing dialog.
+ * @param create  Whether to create a new entry
  */
 {template .edit autoescape="true"}
   {call dma.edit.entry}
     {param entry: $entry /}
     {param type: 'product' /}
     {param id: $id /}
+    {param create: $create /}
     {param values}
       {call dma.edit.value}
         {param name: 'name' /}

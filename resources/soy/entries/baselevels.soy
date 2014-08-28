@@ -128,70 +128,70 @@
       {if $entry.abbreviation.present}
         {call dma.entry.value}
           {param label: 'Abbreviation' /}
-          {param value: $entry.abbreviation.get /}
+          {param value: $entry.abbreviation /}
           {param color: '#aaf' /}
         {/call}
       {/if}
       {if $entry.adventures.present}
         {call dma.entry.value}
           {param label: 'Adventures' /}
-          {param value: $entry.adventures.get /}
+          {param value: $entry.adventures /}
           {param color: '#aaf' /}
         {/call}
       {/if}
       {if $entry.characteristics.present}
         {call dma.entry.value}
           {param label: 'Characteristics' /}
-          {param value: $entry.characteristics.get /}
+          {param value: $entry.characteristics /}
           {param color: '#aaf' /}
         {/call}
       {/if}
       {if $entry.alignment_options.present}
         {call dma.entry.value}
           {param label: 'Alignment' /}
-          {param value: $entry.alignment_options.get /}
+          {param value: $entry.alignment_options /}
           {param color: '#aaf' /}
         {/call}
       {/if}
       {if $entry.religion.present}
         {call dma.entry.value}
           {param label: 'Religion' /}
-          {param value: $entry.religion.get /}
+          {param value: $entry.religion /}
           {param color: '#aaf' /}
         {/call}
       {/if}
       {if $entry.background.present}
         {call dma.entry.value}
           {param label: 'Background' /}
-          {param value: $entry.background.get /}
+          {param value: $entry.background /}
           {param color: '#aaf' /}
         {/call}
       {/if}
       {if $entry.races.present}
         {call dma.entry.value}
           {param label: 'Races' /}
-          {param value: $entry.races.get /}
+          {param value: $entry.races /}
           {param color: '#aaf' /}
         {/call}
       {/if}
       {if $entry.other_classes.present}
         {call dma.entry.value}
           {param label: 'Classes' /}
-          {param value: $entry.other_classes.get /}
+          {param value: $entry.other_classes /}
           {param color: '#aaf' /}
         {/call}
       {/if}
       {if $entry.role.present}
         {call dma.entry.value}
           {param label: 'Role' /}
-          {param value: $entry.role.get /}
+          {param value: $entry.role /}
           {param color: '#aaf' /}
         {/call}
       {/if}
       {if $entry.important_abilities.present}
         {call dma.entry.value}
           {param label: 'Abilities' /}
-          {param value: $entry.important_abilities.get /}
+          {param value: $entry.important_abilities /}
           {param color: '#aaf' /}
         {/call}
       {/if}
@@ -210,14 +210,14 @@
       {if $entry.hit_die.present}
         {call dma.entry.value}
           {param label: 'Hide Die' /}
-          {param value: $entry.hit_die.get /}
+          {param value: $entry.hit_die /}
           {param color: '#aaf' /}
         {/call}
       {/if}
       {if $entry.skill_points.present}
         {call dma.entry.value}
           {param label: 'Skill Points' /}
-          {param value: $entry.skill_points.get /}
+          {param value: $entry.skill_points /}
           {param color: '#aaf' /}
         {/call}
       {/if}
@@ -381,14 +381,16 @@
 /**
  * Editiing the base item.
  * 
- * @param entry The item to edit. 
- * @param id    THe id to use for the editing dialog.
+ * @param entry   The item to edit. 
+ * @param id      The id to use for the editing dialog.
+ * @param create  Whether to create a new entry
  */
 {template .edit autoescape="true"}
   {call dma.edit.entry}
     {param entry: $entry /}
     {param type: 'base-level' /}
     {param id: $id /}
+    {param create: $create /}
     {param values}
       {call dma.edit.value}
         {param name: 'name' /}

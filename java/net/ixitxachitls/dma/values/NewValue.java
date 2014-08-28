@@ -59,6 +59,9 @@ public abstract class NewValue<T extends Message>
         return Optional.absent();
 
       if(m_arguments > 0 && inValues.length != m_arguments)
+        inValues = split(inValues);
+
+      if(m_arguments > 0 && inValues.length != m_arguments)
         return Optional.absent();
 
       switch(m_arguments)
@@ -82,6 +85,11 @@ public abstract class NewValue<T extends Message>
         default:
           return doParse(inValues);
       }
+    }
+
+    protected String []split(String []inValues)
+    {
+      return inValues;
     }
 
     protected Optional<P> doParse(String inValue)
@@ -139,6 +147,15 @@ public abstract class NewValue<T extends Message>
       {
         return Optional.absent();
       }
+    }
+  };
+
+  public static final Parser<Boolean> BOOLEAN_PARSER = new Parser<Boolean>(1)
+  {
+    @Override
+    public Optional<Boolean> doParse(String inValue)
+    {
+      return Optional.of(Boolean.parseBoolean(inValue));
     }
   };
 

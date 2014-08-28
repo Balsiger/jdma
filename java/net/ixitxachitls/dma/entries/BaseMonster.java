@@ -37,6 +37,9 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
+import net.ixitxachitls.dma.proto.Values.SpeedProto;
+import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.NewDamage;
 import net.ixitxachitls.dma.values.NewDice;
@@ -47,7 +50,9 @@ import net.ixitxachitls.dma.values.NewRational;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Size;
 import net.ixitxachitls.dma.values.SizeModifier;
+import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -61,67 +66,6 @@ import net.ixitxachitls.util.logging.Log;
 @ParametersAreNonnullByDefault
 public class BaseMonster extends BaseEntry
 {
-  public static class Speed
-  {
-    public Speed(MovementMode inMode, NewDistance inSpeed,
-                 Optional<Maneuverability> inManeuverability)
-    {
-      m_mode = inMode;
-      m_speed = inSpeed;
-      m_maneuverability = inManeuverability;
-    }
-
-    private MovementMode m_mode;
-    private NewDistance m_speed;
-    private Optional<Maneuverability> m_maneuverability;
-
-    /** The parser for armor types. */
-    public static final NewValue.Parser<Speed> PARSER =
-      new NewValue.Parser<Speed>(3)
-      {
-        @Override
-        public Optional<Speed> doParse(String inMode, String inSpeed,
-                                       String inManeuverability)
-        {
-          Optional<MovementMode> mode = MovementMode.fromString(inMode);
-          if(!mode.isPresent())
-            return Optional.absent();
-
-          Optional<NewDistance> speed =NewDistance.PARSER.parse(inSpeed);
-          if(!speed.isPresent())
-            return Optional.absent();
-
-          return Optional.of(new Speed
-                             (mode.get(), speed.get(),
-                              Maneuverability.PARSER.parse(inManeuverability)));
-        }
-      };
-
-    public MovementMode getMode()
-    {
-      return m_mode;
-    }
-
-    public NewDistance getSpeed()
-    {
-      return m_speed;
-    }
-
-    public Optional<Maneuverability> getManeuverability()
-    {
-      return m_maneuverability;
-    }
-
-    @Override
-    public String toString()
-    {
-      return (m_mode != MovementMode.RUN && m_mode != MovementMode.UNKNOWN
-        ? m_mode + " " : "")
-        + m_speed.toString()
-        + (m_maneuverability.isPresent() ? " (" + m_maneuverability + ")" : "");
-    }
-  }
-
   public static class Attack
   {
     public Attack(NewDice inNumber, AttackMode inMode, AttackStyle inStyle,
@@ -390,7 +334,7 @@ public class BaseMonster extends BaseEntry
   protected Optional<NewModifier> m_naturalArmor = Optional.absent();
 
   /** The base attack bonus. */
-  protected int m_attack = 0;
+  protected Optional<Integer> m_baseAttack = Optional.absent();
 
   /** The monster's Strength. */
   protected Optional<Integer> m_strength = Optional.absent();
@@ -411,13 +355,13 @@ public class BaseMonster extends BaseEntry
   protected Optional<Integer> m_charisma = Optional.absent();
 
   /** The monster's fortitude save. */
-  protected int m_fortitudeSave = 0;
+  protected Optional<Integer> m_fortitudeSave = Optional.absent();
 
   /** The monster's will save. */
-  protected int m_willSave = 0;
+  protected Optional<Integer> m_willSave = Optional.absent();
 
   /** The monster's reflex save. */
-  protected int m_reflexSave = 0;
+  protected Optional<Integer> m_reflexSave = Optional.absent();
 
   /** The monster's attacks. */
   protected List<Attack> m_primaryAttacks = new ArrayList<>();
@@ -502,6 +446,18 @@ public class BaseMonster extends BaseEntry
     return m_size;
   }
 
+  public Combination<Size> getCombinedSize()
+  {
+    if(m_size != Size.UNKNOWN)
+      return new Combination.Max<Size>(this, m_size);
+
+    List<Combination<Size>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedSize());
+
+    return new Combination.Max<Size>(this, combinations);
+  }
+
   public SizeModifier getSizeModifier()
   {
     return m_sizeModifier;
@@ -527,14 +483,78 @@ public class BaseMonster extends BaseEntry
     return Collections.unmodifiableList(m_speeds);
   }
 
+  public Optional<Annotated.Arithmetic<Speed>>
+    getSpeedAnnotated(MovementMode inMode)
+  {
+    for(Speed speed : m_speeds)
+      if(speed.getMode() == inMode)
+        return Optional.of(new Annotated.Arithmetic<Speed>
+          (speed, getName()));
+
+    Annotated.Arithmetic<Speed> speed = null;
+    for(BaseEntry base : getBaseEntries())
+    {
+      Optional<Annotated.Arithmetic<Speed>> baseSpeed =
+        ((BaseMonster)base).getSpeedAnnotated(inMode);
+      if(baseSpeed.isPresent())
+        if(speed == null || !speed.get().isPresent()
+           || speed.get().get().getSpeed().compareTo
+               (baseSpeed.get().get().get().getSpeed()) < 0)
+          speed = baseSpeed.get();
+    }
+
+    return Optional.fromNullable(speed);
+  }
+
+  public List<Annotated.Arithmetic<Speed>> getSpeedsAnnotated()
+  {
+    List<Annotated.Arithmetic<Speed>> speeds = new ArrayList<>();
+
+    for(MovementMode mode : MovementMode.values())
+    {
+      Optional<Annotated.Arithmetic<Speed>> speed =
+        getSpeedAnnotated(mode);
+      if(speed.isPresent())
+        speeds.add(speed.get());
+    }
+
+    return speeds;
+  }
+
   public Optional<NewModifier> getNaturalArmor()
   {
     return m_naturalArmor;
   }
 
-  public int getAttack()
+  public Annotated.Arithmetic<NewModifier> getCombinedNaturalArmor()
   {
-    return m_attack;
+    if(m_naturalArmor.isPresent())
+      return new Annotated.Arithmetic<NewModifier>(m_naturalArmor.get(),
+                                                   getName());
+
+    Annotated.Arithmetic<NewModifier> combined = new Annotated.Arithmetic<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedNaturalArmor());
+
+    return combined;
+  }
+
+  public Optional<Integer> getBaseAttack()
+  {
+    return m_baseAttack;
+  }
+
+  public Combination<Integer> getCombinedBaseAttack()
+  {
+    Optional<Integer> attack = getBaseAttack();
+    if(attack.isPresent())
+      return new Combination.Integer(this, attack.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedBaseAttack());
+
+    return new Combination.Integer(this, combinations);
   }
 
   public Optional<Integer> getStrength()
@@ -542,9 +562,35 @@ public class BaseMonster extends BaseEntry
     return m_strength;
   }
 
+  public Combination<Integer> getCombinedStrength()
+  {
+    Optional<Integer> strength = getStrength();
+    if(strength.isPresent())
+      return new Combination.Integer(this, strength.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedStrength());
+
+    return new Combination.Integer(this, combinations);
+  }
+
   public Optional<Integer> getDexterity()
   {
     return m_dexterity;
+  }
+
+  public Combination<Integer> getCombinedDexterity()
+  {
+    Optional<Integer> dexterity = getDexterity();
+    if(dexterity.isPresent())
+      return new Combination.Integer(this, dexterity.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedDexterity());
+
+    return new Combination.Integer(this, combinations);
   }
 
   public Optional<Integer> getConstitution()
@@ -552,9 +598,35 @@ public class BaseMonster extends BaseEntry
     return m_constitution;
   }
 
+  public Combination<Integer> getCombinedConstitution()
+  {
+    Optional<Integer> constitution = getConstitution();
+    if(constitution.isPresent())
+      return new Combination.Integer(this, constitution.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedConstitution());
+
+    return new Combination.Integer(this, combinations);
+  }
+
   public Optional<Integer> getIntelligence()
   {
     return m_intelligence;
+  }
+
+  public Combination<Integer> getCombinedIntelligence()
+  {
+    Optional<Integer> intelligence = getIntelligence();
+    if(intelligence.isPresent())
+      return new Combination.Integer(this, intelligence.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedIntelligence());
+
+    return new Combination.Integer(this, combinations);
   }
 
   public Optional<Integer> getWisdom()
@@ -562,24 +634,86 @@ public class BaseMonster extends BaseEntry
     return m_wisdom;
   }
 
+  public Combination<Integer> getCombinedWisdom()
+  {
+    Optional<Integer> wisdom = getWisdom();
+    if(wisdom.isPresent())
+      return new Combination.Integer(this, wisdom.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedWisdom());
+
+    return new Combination.Integer(this, combinations);
+  }
+
   public Optional<Integer> getCharisma()
   {
     return m_charisma;
   }
 
-  public int getFortitudeSave()
+  public Combination<Integer> getCombinedCharisma()
+  {
+    Optional<Integer> charisma = getCharisma();
+    if(charisma.isPresent())
+      return new Combination.Integer(this, charisma.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedCharisma());
+
+    return new Combination.Integer(this, combinations);
+  }
+
+  public Optional<Integer> getFortitudeSave()
   {
     return m_fortitudeSave;
   }
 
-  public int getWillSave()
+  public Annotated.Bonus getCombinedFortitutdeSave()
+  {
+    if(m_fortitudeSave.isPresent())
+      return new Annotated.Bonus(m_fortitudeSave.get(), getName());
+
+    Annotated.Bonus combined = new Annotated.Bonus();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedFortitutdeSave());
+
+    return combined;
+  }
+
+  public Optional<Integer> getWillSave()
   {
     return m_willSave;
   }
 
-  public int getReflexSave()
+  public Annotated.Bonus getCombinedWillSave()
+  {
+    if(m_willSave.isPresent())
+      return new Annotated.Bonus(m_willSave.get(), getName());
+
+    Annotated.Bonus combined = new Annotated.Bonus();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedWillSave());
+
+    return combined;
+  }
+
+  public Optional<Integer> getReflexSave()
   {
     return m_reflexSave;
+  }
+
+  public Annotated.Bonus getCombinedReflexSave()
+  {
+    if(m_reflexSave.isPresent())
+      return new Annotated.Bonus(m_reflexSave.get(), getName());
+
+    Annotated.Bonus combined = new Annotated.Bonus();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedReflexSave());
+
+    return combined;
   }
 
   public List<Attack> getPrimaryAttacks()
@@ -660,6 +794,19 @@ public class BaseMonster extends BaseEntry
   public Optional<Integer> getLevelAdjustment()
   {
     return m_levelAdjustment;
+  }
+
+  public Combination<Integer> getCombinedLevelAdjustment()
+  {
+    Optional<Integer> adjustment = getLevelAdjustment();
+    if(adjustment.isPresent())
+      return new Combination.Integer(this, adjustment.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedLevelAdjustment());
+
+    return new Combination.Integer(this, combinations);
   }
 
   public List<LanguageOption> getLanguages()
@@ -1161,7 +1308,6 @@ public class BaseMonster extends BaseEntry
    * @return      a multi map of values per index name
    */
   @Override
-  @SuppressWarnings("unchecked") // casting
   public Multimap<Index.Path, String> computeIndexValues()
   {
     Multimap<Index.Path, String> values = super.computeIndexValues();
@@ -1187,7 +1333,7 @@ public class BaseMonster extends BaseEntry
     }
 
     values.put(Index.Path.NATURAL_ARMORS, "" + m_naturalArmor);
-    values.put(Index.Path.BASE_ATTACKS, "" + m_attack);
+    values.put(Index.Path.BASE_ATTACKS, "" + m_baseAttack);
     if(m_strength.isPresent())
       values.put(Index.Path.STRENGTHS, m_strength.get().toString());
     if(m_dexterity.isPresent())
@@ -2403,7 +2549,7 @@ public class BaseMonster extends BaseEntry
                             "mode", "speed", "maneuverability");
     m_naturalArmor = inValues.use("natural_armor", m_naturalArmor,
                                   NewModifier.PARSER);
-    m_attack = inValues.use("attack", m_attack, NewValue.INTEGER_PARSER);
+    m_baseAttack = inValues.use("attack", m_baseAttack, NewValue.INTEGER_PARSER);
     m_strength = inValues.use("strength", m_strength, NewValue.INTEGER_PARSER);
     m_dexterity = inValues.use("dexterity", m_dexterity,
                                NewValue.INTEGER_PARSER);
@@ -2476,23 +2622,13 @@ public class BaseMonster extends BaseEntry
       builder.setHitDice(m_hitDice.get().toProto());
 
     for(Speed speed : m_speeds)
-    {
-      BaseMonsterProto.Speed.Builder speedBuilder =
-        BaseMonsterProto.Speed.newBuilder();
-
-      speedBuilder.setMode(speed.getMode().toProto());
-      speedBuilder.setDistance(speed.getSpeed().toProto());
-      if(speed.getManeuverability().isPresent())
-          speedBuilder.setManeuverability(speed.getManeuverability().get()
-                                          .toProto());
-
-      builder.addSpeed(speedBuilder.build());
-    }
+      builder.addSpeed(speed.toProto());
 
     if(m_naturalArmor.isPresent())
       builder.setNaturalArmor(m_naturalArmor.get().toProto());
 
-    builder.setBaseAttack(m_attack);
+    if(m_baseAttack.isPresent())
+    builder.setBaseAttack(m_baseAttack.get());
 
     if(m_strength.isPresent())
       builder.setStrength(m_strength.get());
@@ -2512,9 +2648,14 @@ public class BaseMonster extends BaseEntry
     if(m_charisma.isPresent())
       builder.setCharisma(m_charisma.get());
 
-    builder.setFortitudeSave(m_fortitudeSave);
-    builder.setWillSave(m_willSave);
-    builder.setReflexSave(m_reflexSave);
+    if(m_fortitudeSave.isPresent())
+      builder.setFortitudeSave(m_fortitudeSave.get());
+
+    if(m_willSave.isPresent())
+      builder.setWillSave(m_willSave.get());
+
+    if(m_reflexSave.isPresent())
+      builder.setReflexSave(m_reflexSave.get());
 
     for(Attack attack : m_primaryAttacks)
     {
@@ -2652,7 +2793,6 @@ public class BaseMonster extends BaseEntry
     return proto;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public void fromProto(Message inProto)
   {
@@ -2677,20 +2817,15 @@ public class BaseMonster extends BaseEntry
     if(proto.hasHitDice())
       m_hitDice = Optional.of(NewDice.fromProto(proto.getHitDice()));
 
-    for(BaseMonsterProto.Speed speed : proto.getSpeedList())
-      m_speeds.add(new Speed
-                   (MovementMode.fromProto(speed.getMode()),
-                    NewDistance.fromProto(speed.getDistance()),
-                    speed.hasManeuverability()
-                      ? Optional.of(Maneuverability.fromProto(speed.getManeuverability()))
-                      : Optional.<Maneuverability>absent()));
+    for(SpeedProto speed : proto.getSpeedList())
+      m_speeds.add(Speed.fromProto(speed));
 
     if(proto.hasNaturalArmor())
       m_naturalArmor =
         Optional.of(NewModifier.fromProto(proto.getNaturalArmor()));
 
     if(proto.hasBaseAttack())
-      m_attack = proto.getBaseAttack();
+      m_baseAttack = Optional.of(proto.getBaseAttack());
 
     if(proto.hasStrength())
       m_strength = Optional.of(proto.getStrength());
@@ -2711,13 +2846,13 @@ public class BaseMonster extends BaseEntry
       m_charisma = Optional.of(proto.getCharisma());
 
     if(proto.hasFortitudeSave())
-      m_fortitudeSave = proto.getFortitudeSave();
+      m_fortitudeSave = Optional.of(proto.getFortitudeSave());
 
     if(proto.hasWillSave())
-      m_willSave = proto.getWillSave();
+      m_willSave = Optional.of(proto.getWillSave());
 
     if(proto.hasReflexSave())
-      m_reflexSave = proto.getReflexSave();
+      m_reflexSave = Optional.of(proto.getReflexSave());
 
     for(BaseMonsterProto.Attack attack : proto.getPrimaryAttackList())
       m_primaryAttacks.add(new Attack(NewDice.fromProto(attack.getAttacks()),

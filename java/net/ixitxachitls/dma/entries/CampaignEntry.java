@@ -112,7 +112,8 @@ public abstract class CampaignEntry extends Entry
     Optional<Campaign> campaign = getCampaign();
 
     if(!campaign.isPresent())
-      throw new IllegalStateException("expected campaign '" + m_campaignName
+      throw new IllegalStateException("expected campaign '"
+                                      + m_campaignName.get()
                                       + "' not found");
 
     return new EntryKey(getName(), getType(),
@@ -268,7 +269,7 @@ public abstract class CampaignEntry extends Entry
     Multimap<Index.Path, String> values = super.computeIndexValues();
 
     if(m_parentName.isPresent())
-      values.put(Index.Path.PARENT, m_parentName.get());
+      values.put(Index.Path.PARENT, m_parentName.get().toLowerCase());
 
     return values;
   }
@@ -314,6 +315,8 @@ public abstract class CampaignEntry extends Entry
   @Override
   public void set(Values inValues)
   {
+    super.set(inValues);
+
     m_parentName = inValues.use("parent", m_parentName);
   }
 

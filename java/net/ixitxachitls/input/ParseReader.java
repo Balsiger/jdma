@@ -283,13 +283,11 @@ public class ParseReader implements AutoCloseable
   }
 
   //........................................................................
-  //------------------------------- isAtEnd --------------------------------
 
   /**
    * Check if the reader is at the end.
    *
    * @return      true if at the end, false else
-   *
    */
   public boolean isAtEnd()
   {
@@ -297,7 +295,6 @@ public class ParseReader implements AutoCloseable
     return peek() == -1;
   }
 
-  //........................................................................
   //------------------------------- hadError -------------------------------
 
   /**
@@ -327,16 +324,12 @@ public class ParseReader implements AutoCloseable
 
   //........................................................................
 
-  //------------------------------- readChar -------------------------------
-
   /**
    * Read a character from the reader. White spaces are not returned and are
    * over read.
    *
    * @return      the character read
-   *
    * @throws      ReadException raised when no character could be read
-   *
    */
   public char readChar() throws ReadException
   {

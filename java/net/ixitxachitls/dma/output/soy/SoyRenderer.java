@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.output.soy;
 
 import java.util.ArrayList;
@@ -39,47 +37,25 @@ import com.google.template.soy.data.SoyMapData;
 
 import net.ixitxachitls.util.configuration.Config;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * Renderer for soy templates.
  *
- *
  * @file          SoyRenderer.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class SoyRenderer
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- SoyRenderer ------------------------------
-
   /**
    * Create the renderer.
    *
    * @param   inTemplate the soy template that can be used for rendering.
-   *
    */
   public SoyRenderer(SoyTemplate inTemplate)
   {
     m_template = inTemplate;
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The soy template. */
   private SoyTemplate m_template;
@@ -153,17 +129,10 @@ public class SoyRenderer
     s_specialNames.put("^",  "Hat");
   }
 
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------- setData --------------------------------
-
   /**
    * Set the data to be used for rendering.
    *
    * @param       inData the data to use
-   *
    */
   public void setData(@Nullable Map<String, Object> inData)
   {
@@ -173,14 +142,10 @@ public class SoyRenderer
       m_data = new SoyMapData(inData);
   }
 
-  //........................................................................
-  //----------------------------- setInjected ------------------------------
-
   /**
    * Set the injected data to bse used for rendering.
    *
    * @param   inData the injected data
-   *
    */
   public void setInjected(@Nullable Map<String, Object> inData)
   {
@@ -189,14 +154,6 @@ public class SoyRenderer
     else
       m_injected = new SoyMapData(inData);
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //-------------------------------- render --------------------------------
 
   /**
    * Render the template named.
@@ -207,7 +164,6 @@ public class SoyRenderer
    * @param       inDelegates the delegates used for rendering, if any
    *
    * @return      the rendered template as a string
-   *
    */
   public String render(String inName,
                        @Nullable Map<String, Object> inData,
@@ -217,9 +173,6 @@ public class SoyRenderer
     return m_template.render(inName, inData, inInjected, inDelegates);
   }
 
-  //........................................................................
-  //-------------------------------- render --------------------------------
-
   /**
    * Render the template named.
    *
@@ -228,7 +181,6 @@ public class SoyRenderer
    * @param       inDelegates the delegates used for rendering, if any
    *
    * @return      the rendered template as a string
-   *
    */
   public String render(String inName,
                        @Nullable Map<String, Object> inData,
@@ -253,9 +205,6 @@ public class SoyRenderer
     }
   }
 
-  //........................................................................
-  //-------------------------------- render --------------------------------
-
   /**
    * Render the template named.
    *
@@ -263,15 +212,11 @@ public class SoyRenderer
    * @param       inDelegates the delegates used for rendering, if any
    *
    * @return      the rendered template as a string
-   *
    */
   public String render(String inName, @Nullable Set<String> inDelegates)
   {
     return m_template.render(inName, m_data, m_injected, inDelegates);
   }
-
-  //........................................................................
-  //-------------------------------- render --------------------------------
 
   /**
    * Render the template named.
@@ -286,9 +231,6 @@ public class SoyRenderer
     return m_template.render(inName, m_data, m_injected, null);
   }
 
-  //........................................................................
-  //-------------------------------- render --------------------------------
-
   /**
    * Render the template named.
    *
@@ -297,17 +239,13 @@ public class SoyRenderer
    * @param       inInjected  the injected data for the template.
    *
    * @return      the rendered template as a string
-   *
    */
   public String render(String inName,
-                       @Nullable Map<String, Object> inData,
+                       @Nullable Map<String, ? extends Object> inData,
                        @Nullable Map<String, Object> inInjected)
   {
     return m_template.render(inName, inData, inInjected, null);
   }
-
-  //........................................................................
-  //-------------------------------- render --------------------------------
 
   /**
    * Render the template named.
@@ -323,22 +261,13 @@ public class SoyRenderer
     return m_template.render(inName, new SoyMapData(inData), m_injected, null);
   }
 
-  //........................................................................
-
-  //------------------------------ recompile -------------------------------
-
   /**
    * Recompile the template this renderer is based on.
-   *
    */
   public void recompile()
   {
     m_template.recompile();
   }
-
-  //........................................................................
-
-  //---------------------------- renderCommands ----------------------------
 
   /**
    * Render the commands in the given text.
@@ -346,7 +275,6 @@ public class SoyRenderer
    * @param    inText the text containing commands
    *
    * @return   the rendered text
-   *
    */
   public String renderCommands(String inText)
   {
@@ -486,9 +414,6 @@ public class SoyRenderer
     return builder.toString();
   }
 
-  //........................................................................
-  //----------------------------- markBrackets -----------------------------
-
   /**
    * Mark (and remove) the brackets given as arguments in the given string.
    * Brackets are marked with a number denoting their nesting level, i.e.
@@ -500,20 +425,17 @@ public class SoyRenderer
    * @param       inStart       the start bracket character
    * @param       inEnd         the end bracket character
    * @param       inMarkerStart the character to use as marker start (will be
-   *                            followed by the nesting leven in pointy
+   *                            followed by the nesting level in pointy
    *                            brackets)
    * @param       inMarkerEnd   the character to use as marker end (will be
-   *                            followed by the nesting leven in pointy
+   *                            followed by the nesting level in pointy
    *                            brackets)
    *
    * @return      the text with all brackets replaced
-   *
    */
-  protected static String markBrackets(String inText,
-                                       char inEscape,
-                                       char inStart, char inEnd,
-                                       char inMarkerStart,
-                                       char inMarkerEnd)
+  public static String markBrackets(String inText, char inEscape,
+                                    char inStart, char inEnd,
+                                    char inMarkerStart, char inMarkerEnd)
   {
     assert inStart != '<' : "cannot replace '<' brackets";
     assert inEnd != '>' : "cannot replace '>' brackets";
@@ -561,9 +483,6 @@ public class SoyRenderer
     return inText;
   }
 
-  //........................................................................
-  //-------------------------------- clean ---------------------------------
-
   /**
    * Remove all the markers from the text and replace the brackets back.
    *
@@ -583,11 +502,7 @@ public class SoyRenderer
     return inText;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------------
 
   /** The tests. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
@@ -657,6 +572,4 @@ public class SoyRenderer
     //......................................................................
 
   }
-
-  //........................................................................
 }

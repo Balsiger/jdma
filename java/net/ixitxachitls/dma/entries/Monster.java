@@ -19,57 +19,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
+import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
+import net.ixitxachitls.dma.proto.Entries.FeatProto;
 import net.ixitxachitls.dma.proto.Entries.MonsterProto;
-import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Critical;
-import net.ixitxachitls.dma.values.Damage;
-import net.ixitxachitls.dma.values.Dice;
-import net.ixitxachitls.dma.values.EnumSelection;
-import net.ixitxachitls.dma.values.ModifiedNumber;
-import net.ixitxachitls.dma.values.Modifier;
+import net.ixitxachitls.dma.proto.Entries.QualityProto;
+import net.ixitxachitls.dma.proto.Entries.SkillProto;
+import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Money;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Number;
-import net.ixitxachitls.dma.values.Parameters;
-import net.ixitxachitls.dma.values.Reference;
+import net.ixitxachitls.dma.values.NewModifier;
+import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Size;
-import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.dma.values.WeaponStyle;
-import net.ixitxachitls.util.Pair;
-import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.dma.values.Speed;
+import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is a real monster.
@@ -78,17 +55,9 @@ import net.ixitxachitls.util.logging.Log;
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ParametersAreNonnullByDefault
 public class Monster extends CampaignEntry
 {
-  //----------------------------------------------------------------- nested
-
-  //----- Line -----------------------------------------------------------
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
@@ -128,9 +97,6 @@ public class Monster extends CampaignEntry
       return inRandom >= m_start && inRandom <= m_end;
     }
   }
-
-  //......................................................................
-  //----- Coins ----------------------------------------------------------
 
   /** This represents a line in the DMG treasure table for coins. */
   protected static class Coins extends Line
@@ -212,9 +178,6 @@ public class Monster extends CampaignEntry
         + m_multiplier + " " + m_type;
     }
   }
-
-  //........................................................................
-  //----- Goods ----------------------------------------------------------
 
   /** This class represents a single line of goods in the treasure table. */
   protected static class Goods extends Line
@@ -354,9 +317,6 @@ public class Monster extends CampaignEntry
         + m_category;
     }
   }
-
-  //........................................................................
-  //----- Items ----------------------------------------------------------
 
   /** This class represents a single line of items in the treasure table. */
   protected static class Items extends Line
@@ -505,9 +465,6 @@ public class Monster extends CampaignEntry
     }
   }
 
-  //........................................................................
-  //----- Treasure -------------------------------------------------------
-
   /** A class storing and computing treasure for a specific encounter level. */
   protected static class Treasure
   {
@@ -596,56 +553,23 @@ public class Monster extends CampaignEntry
     }
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------- Monster --------------------------------
-
   /**
    * This is the internal, default constructor.
-   *
    */
   protected Monster()
   {
     super(TYPE);
   }
 
-  //........................................................................
-  //------------------------------- Monster --------------------------------
-
   /**
    * This is the normal constructor.
    *
    * @param       inName the name of the base item
-   *
    */
   public Monster(Campaign inCampaign)
   {
     super(TYPE, inCampaign);
   }
-
-  //........................................................................
-  //------------------------------- Monster --------------------------------
-
-  /**
-   * This constructs the item with random values from the given
-   * base item.
-   *
-   * @param       inBase the base item to take values from
-   *
-   */
-  // public Monster(BaseMonster inBase)
-  // {
-  //   super(inBase.getName(), TYPE, BASE_TYPE, inBase);
-
-  //   // take over the base items values
-  //   complete();
-  // }
-
-  //........................................................................
 
   /**
    * Constructor with a derviced type.
@@ -668,10 +592,6 @@ public class Monster extends CampaignEntry
      super(inName, inType);
    }
 
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
    /** The type of this entry. */
    public static final Type<Monster> TYPE =
      new Type<Monster>(Monster.class, BaseMonster.TYPE);
@@ -679,180 +599,56 @@ public class Monster extends CampaignEntry
    /** The type of the base entry to this entry. */
    public static final BaseType<BaseMonster> BASE_TYPE = BaseMonster.TYPE;
 
-  //----- possessions ------------------------------------------------------
-
   /** The possessions value. */
-  @Key("possesions")
-  protected ValueList<Name> m_possessions =
-    new ValueList<Name>(new Name());
-
-  //........................................................................
-  //----- strength ---------------------------------------------------------
+  protected List<Item> m_possessions = null;
 
   /** The monster's Strength. */
-  @Key("strength")
-  protected Number m_strength = new Number(-1, 100, false);
-
-  //........................................................................
-  //----- dexterity --------------------------------------------------------
+  protected Optional<Integer> m_strength = Optional.absent();
 
   /** The monster's Dexterity. */
-  @Key("dexterity")
-  protected Number m_dexterity = new Number(-1, 100, false);
-
-  //........................................................................
-  //----- constitution -----------------------------------------------------
+  protected Optional<Integer> m_dexterity = Optional.absent();
 
   /** The monster's Constitution. */
-  @Key("constitution")
-  protected Number m_constitution = new Number(-1, 100, false);
-
-  //........................................................................
-  //----- intelligence -----------------------------------------------------
+  protected Optional<Integer> m_constitution = Optional.absent();
 
   /** The monster's Intelligence. */
-  @Key("intelligence")
-  protected Number m_intelligence = new Number(-1, 100, false);
-
-  //........................................................................
-  //----- wisdom -----------------------------------------------------------
+  protected Optional<Integer>m_intelligence = Optional.absent();;
 
   /** The monster's Wisdom. */
-  @Key("wisdom")
-  protected Number m_wisdom = new Number(-1, 100, false);
-
-  //........................................................................
-  //----- charisma ---------------------------------------------------------
+  protected Optional<Integer> m_wisdom = Optional.absent();
 
   /** The monster's Charisma. */
-  @Key("charisma")
-  protected Number m_charisma = new Number(-1, 100, false);
-
-  //........................................................................
-  //----- feats ------------------------------------------------------------
+  protected Optional<Integer> m_charisma = Optional.absent();
 
   /** The feats. */
-  @Key("feats")
-  protected ValueList<Reference<BaseFeat>> m_feats =
-    new ValueList<Reference<BaseFeat>>
-    (", ", new Reference<BaseFeat>(BaseFeat.TYPE)
-     .withParameter("Name", new Name(), Parameters.Type.UNIQUE));
-
-  //........................................................................
-
-  //----- max hp -----------------------------------------------------------
+  protected List<Feat> m_feats = new ArrayList<>();
 
   /** The actual maximal number of hit points the monster can have. */
-  @Key("max hp")
-  protected Number m_maxHP = new Number(0, 10000);
-
-  //........................................................................
-  //----- hp ---------------------------------------------------------------
+  protected int m_maxHP = 0;
 
   /** The actual number of hit points the monster currently has. */
-  @Key("hp")
-  protected Number m_hp = new Number(0, 10000);
-
-  //........................................................................
-  //----- skills -----------------------------------------------------------
+  protected int m_hp = 0;
 
   /** The skills, in addition to what we find in base. */
-  @Key("skills")
-  protected ValueList<Multiple> m_skills =
-    new ValueList<Multiple>(", ", new Multiple(new Multiple.Element []
-      {
-        new Multiple.Element
-        (new Reference<BaseSkill>(BaseSkill.TYPE)
-         .withParameter("Subtype", new EnumSelection<SkillType>
-                        (SkillType.class), Parameters.Type.UNIQUE),
-         false),
-        new Multiple.Element(new Number(0, 100, true)
-                             .withEditType("number[modifier]"),
-                             false, ": ", null),
-      }));
-
-  //........................................................................
-  //----- alignment --------------------------------------------------------
+  protected List<Skill> m_skills = new ArrayList<>();
 
   /** The monster's alignment. */
-  @Key("alignment")
-  protected EnumSelection<Alignment> m_alignment =
-    new EnumSelection<Alignment>(Alignment.class);
-
-  //........................................................................
-  //----- fortitude save ---------------------------------------------------
+  protected Alignment m_alignment = Alignment.UNKNOWN;
 
   /** The monster's fortitude save. */
-  @Key("fortitude save")
-  protected Number m_fortitudeSave = new Number(-1, 100, true);
-
-  static
-  {
-    addIndex(new Index(Index.Path.FORTITUDE_SAVES, "Fortitude Saves", TYPE));
-  }
-
-  //........................................................................
-  //----- will save --------------------------------------------------------
+  protected Optional<Integer> m_fortitudeSave = Optional.absent();
 
   /** The monster's will save. */
-  @Key("will save")
-  protected Number m_willSave = new Number(-1, 100, true);
-
-  static
-  {
-    addIndex(new Index(Index.Path.WILL_SAVES, "Will Saves", TYPE));
-  }
-
-  //........................................................................
-  //----- reflex save ------------------------------------------------------
+  protected Optional<Integer> m_willSave = Optional.absent();
 
   /** The monster's reflex. */
-  @Key("reflex save")
-  protected Number m_reflexSave = new Number(-1, 100, true);
+  protected Optional<Integer> m_reflexSave = Optional.absent();
 
-  static
-  {
-    addIndex(new Index(Index.Path.REFLEX_SAVES, "Reflex Saves", TYPE));
-  }
-
-  //........................................................................
-
-  /** The special attacks. */
-  // @Key("special attacks")
-  // protected ValueList<Multiple> m_specialAttacks =
-  //   new ValueList<Multiple>(", ", new Multiple(new Multiple.Element []
-  //     {
-  //       new Multiple.Element(new EntryValue<Quality>(new Quality()), false),
-  //       new Multiple.Element(new Duration(), true, "/", ""),
-  //     }));
-
-  /** The special qualities. */
-  // @Key("special qualities")
-  // protected ValueList<Multiple> m_specialQualities =
-  //   new ValueList<Multiple>(", ", new Multiple(new Multiple.Element []
-  //     {
-  //       new Multiple.Element(new EntryValue<Quality>(new Quality()), false),
-  //       new Multiple.Element(new Duration(), true, "/", ""),
-  //     }));
-
-  /** The feats. */
-  // @Key("feats")
-  // @SuppressWarnings("unchecked") // generic array creation
-  // protected ValueList<EntryValue<Feat>> m_feats =
-  //   new ValueList<EntryValue<Feat>>(", ", new EntryValue<Feat>(new Feat()));
+  /** The qualities. */
+  protected List<Quality> m_qualities = new ArrayList<>();
 
   /** The monetary treasure. */
-  // @Key("money")
   // protected Money m_money = new Money();
-
-  /** The fortitude save. */
-  //protected Composite m_saveFort = new Composite(0, true);
-
-  /** The reflex save. */
-  //protected Composite m_saveRef = new Composite(0, true);
-
-  /** The will save. */
-  //protected Composite m_saveWill = new Composite(0, true);
 
   /** The random generator. */
   // private static Random s_random = new Random();
@@ -863,8 +659,8 @@ public class Monster extends CampaignEntry
   //----- treasure definition ----------------------------------------------
 
   static
-  {
     // 0
+  {
     s_treasures.add
       (new Treasure(new Coins(Money.Coin.copper,    1,  14, 0, 0, 0),
                     new Coins(Money.Coin.copper,   15,  29, 1, 3, 100),
@@ -1128,26 +924,12 @@ public class Monster extends CampaignEntry
                     new Items(Items.Type.major,    66, 100, 1,  3)));
   }
 
-  //........................................................................
-
-  static
-  {
-    extractVariables(Monster.class);
-  }
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //--------------------------- abilityModifier ----------------------------
-
   /**
    * Compute the ability modifier for the given score.
    *
    * @param       inScore the ability score to compute for
    *
    * @return      the compute modifier
-   *
    */
   public int abilityModifier(long inScore)
   {
@@ -1157,64 +939,520 @@ public class Monster extends CampaignEntry
     return (int) (inScore / 2) - 5;
   }
 
-  //........................................................................
-  //--------------------------- abilityModifier ----------------------------
-
-  /**
-   * Compute the ability modifier for the given score.
-   *
-   * @param       inAbility the ability to compute for
-   *
-   * @return      the compute modifier
-   */
-  public int abilityModifier(Ability inAbility)
+  public List<Item> getWeapons()
   {
-    return abilityModifier(ability(inAbility).getMaxValue());
+    List<Item> weapons = new ArrayList<>();
+    for(Item item : getPossessions())
+      if(item != null && item.isWeapon())
+        weapons.add(item);
+
+    return weapons;
   }
 
-  //........................................................................
-  //--------------------------- getConstitution ----------------------------
+  public List<Item> getArmor()
+  {
+    List<Item> armor = new ArrayList<>();
+    for(Item item : getPossessions())
+      if(item != null && item.isArmor() && !item.getArmorType().isShield())
+        armor.add(item);
+
+    return armor;
+  }
+
+  public List<Item> getPossessions()
+  {
+    if(m_possessions == null)
+      m_possessions =
+        DMADataFactory.get().getEntries(Item.TYPE,
+                                         getCampaign().get().getKey(),
+                                         "index-parent",
+                                         "monster/" + getName().toLowerCase());
+
+    return Collections.unmodifiableList(m_possessions);
+  }
+
+  public List<Feat> getFeats()
+  {
+    return Collections.unmodifiableList(m_feats);
+  }
+
+  public List<Quality> getQualities()
+  {
+    return Collections.unmodifiableList(m_qualities);
+  }
+
+  public Optional<Integer> getStrength()
+  {
+    return m_strength;
+  }
+
+  /**
+   * Get the strength score of the monster.
+   *
+   * @return      the constitution score
+   */
+  public Combination<Integer> getCombinedStrength()
+  {
+    Optional<Integer> strength = getStrength();
+    if(strength.isPresent())
+      return new Combination.Integer(this, strength.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedStrength());
+
+    return new Combination.Integer(this, combinations);
+  }
+
+  public int getStrengthModifier()
+  {
+    return abilityModifier(getCombinedStrength().getValue());
+  }
+
+  public Optional<Integer> getConstitution()
+  {
+    return m_constitution;
+  }
 
   /**
    * Get the constitution score of the monster.
    *
    * @return      the constitution score
-   *
    */
-  public int getCombinedConstitution()
+  public Combination<Integer> getCombinedConstitution()
   {
-    Combined<Number> combinedCon = collect("constitution");
-    Number con = combinedCon.max();
-    if(con != null)
-      return (int)con.get();
+    Optional<Integer> constitution = getConstitution();
+    if(constitution.isPresent())
+      return new Combination.Integer(this, constitution.get());
 
-    return 0;
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedConstitution());
+
+    return new Combination.Integer(this, combinations);
   }
 
-  //........................................................................
-  //------------------------------- ability --------------------------------
+  public int getConstitutionModifier()
+  {
+    return abilityModifier(getCombinedConstitution().getValue());
+  }
+
+  public Optional<Integer> getDexterity()
+  {
+    return m_dexterity;
+  }
 
   /**
-   * Get an ability score of the monster.
+   * Get the constitution score of the monster.
    *
-   * @param       inAbility the ability score to get
-   *
-   * @return      the combined ability score
+   * @return      the constitution score
    */
-  public Combined<Number> ability(Ability inAbility)
+  public Combination<Integer> getCombinedDexterity()
   {
-   return collect(inAbility.toString().toLowerCase(Locale.US));
+    Optional<Integer> dexterity = getDexterity();
+    if(dexterity.isPresent())
+      return new Combination.Integer(this, dexterity.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedDexterity());
+
+    return new Combination.Integer(this, combinations);
   }
 
-  //........................................................................
-  //---------------------------- getInitiative -----------------------------
+  public int getDexterityModifier()
+  {
+    return abilityModifier(getCombinedDexterity().getValue());
+  }
+
+  public Optional<Integer> getIntelligence()
+  {
+    return m_intelligence;
+  }
+
+  /**
+   * Get the constitution score of the monster.
+   *
+   * @return      the constitution score
+   */
+  public Combination<Integer> getCombinedIntelligence()
+  {
+    Optional<Integer> intelligence = getIntelligence();
+    if(intelligence.isPresent())
+      return new Combination.Integer(this, intelligence.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedIntelligence());
+
+    return new Combination.Integer(this, combinations);
+  }
+
+  public int getIntelligenceModifier()
+  {
+    return abilityModifier(getCombinedIntelligence().getValue());
+  }
+
+  public Optional<Integer> getWisdom()
+  {
+    return m_wisdom;
+  }
+
+  /**
+   * Get the constitution score of the monster.
+   *
+   * @return      the constitution score
+   */
+  public Combination<Integer> getCombinedWisdom()
+  {
+    Optional<Integer> wisdom = getWisdom();
+    if(wisdom.isPresent())
+      return new Combination.Integer(this, wisdom.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedWisdom());
+
+    return new Combination.Integer(this, combinations);
+  }
+
+  public int getWisdomModifier()
+  {
+    return abilityModifier(getCombinedWisdom().getValue());
+  }
+
+  public Optional<Integer> getCharisma()
+  {
+    return m_charisma;
+  }
+
+  /**
+   * Get the constitution score of the monster.
+   *
+   * @return      the constitution score
+   */
+  public Combination<Integer> getCombinedCharisma()
+  {
+    Optional<Integer> charisma = getCharisma();
+    if(charisma.isPresent())
+      return new Combination.Integer(this, charisma.get());
+
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedCharisma());
+
+    return new Combination.Integer(this, combinations);
+  }
+
+  public int getCharismaModifier()
+  {
+    return abilityModifier(getCombinedCharisma().getValue());
+  }
+
+  public Combination<Integer> getCombinedLevelAdjustment()
+  {
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedLevelAdjustment());
+
+    return new Combination.Integer(this, combinations);
+  }
+
+  public Combination<Size> getCombinedSize()
+  {
+    List<Combination<Size>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedSize());
+
+    return new Combination.Max<Size>(this, combinations);
+  }
+
+  public Combination<Integer> getCombinedBaseAttack()
+  {
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    for(BaseEntry entry : getBaseEntries())
+      combinations.add(((BaseMonster)entry).getCombinedBaseAttack());
+
+    return new Combination.Max<Integer>(this, combinations);
+  }
+
+  public Alignment getAlignment()
+  {
+    return m_alignment;
+  }
+
+  public int getMaxHP()
+  {
+    return m_maxHP;
+  }
+
+  public int getHP()
+  {
+    return m_hp;
+  }
+
+  public Optional<Annotated.Arithmetic<Speed>>
+    getSpeedAnnotated(MovementMode inMode)
+  {
+    Annotated.Arithmetic<Speed> speed = null;
+    for(BaseEntry base : getBaseEntries())
+    {
+      Optional<Annotated.Arithmetic<Speed>> baseSpeed =
+        ((BaseMonster)base).getSpeedAnnotated(inMode);
+      if(baseSpeed.isPresent())
+        if(speed == null || !speed.get().isPresent()
+           || speed.get().get().getSpeed().compareTo
+               (baseSpeed.get().get().get().getSpeed()) < 0)
+          speed = baseSpeed.get();
+    }
+
+    for(Quality quality : m_qualities)
+    {
+      Optional<Speed> qualitySpeed = quality.getSpeed(inMode);
+      if(qualitySpeed.isPresent())
+        if(speed == null)
+          speed = new Annotated.Arithmetic<Speed>(qualitySpeed.get(),
+                                                  quality.getName());
+        else
+          speed.add(qualitySpeed.get(), quality.getName());
+    }
+
+    return Optional.fromNullable(speed);
+  }
+
+  public List<Annotated.Arithmetic<Speed>> getSpeedsAnnotated()
+  {
+    List<Annotated.Arithmetic<Speed>> speeds = new ArrayList<>();
+
+    for(MovementMode mode : MovementMode.values())
+    {
+      Optional<Annotated.Arithmetic<Speed>> speed = getSpeedAnnotated(mode);
+      if(speed.isPresent())
+        speeds.add(speed.get());
+    }
+
+    return speeds;
+
+  }
+
+  public int getInitiative()
+  {
+    return getDexterityModifier();
+  }
+
+  public int getGrappleBonus()
+  {
+    Integer base = getCombinedBaseAttack().getValue();
+    if(base == null)
+      return getStrengthModifier();
+
+    return base + getStrengthModifier();
+  }
+
+  public Optional<Integer> getFortitudeSave()
+  {
+    return m_fortitudeSave;
+  }
+
+  public Annotated.Bonus getCombinedBaseFortitudeSave()
+  {
+    if(m_fortitudeSave.isPresent())
+      return new Annotated.Bonus(m_fortitudeSave.get(), getName());
+
+    Annotated.Bonus combined = new Annotated.Bonus();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedFortitutdeSave());
+
+    return combined;
+  }
+
+  public Annotated.Bonus getCombinedFortitudeSave()
+  {
+    Annotated.Bonus save = getCombinedBaseFortitudeSave();
+    save.add(getConstitutionModifier(), "Constitution");
+
+    return save;
+  }
+
+  public Annotated.Bonus getCombinedBaseReflexSave()
+  {
+    if(m_reflexSave.isPresent())
+      return new Annotated.Bonus(m_reflexSave.get(), getName());
+
+    Annotated.Bonus combined = new Annotated.Bonus();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedReflexSave());
+
+    return combined;
+  }
+
+  public Annotated.Bonus getCombinedReflexSave()
+  {
+    Annotated.Bonus save = getCombinedBaseReflexSave();
+    save.add(getDexterityModifier(), "Dexterity");
+
+    return save;
+  }
+
+  public Annotated.Bonus getCombinedBaseWillSave()
+  {
+    if(m_willSave.isPresent())
+      return new Annotated.Bonus(m_willSave.get(), getName());
+
+    Annotated.Bonus combined = new Annotated.Bonus();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedWillSave());
+
+    return combined;
+  }
+
+  public Annotated.Bonus getCombinedWillSave()
+  {
+    Annotated.Bonus save = getCombinedBaseWillSave();
+    save.add(getWisdomModifier(), "Wisdom");
+
+    return save;
+  }
+
+  public Annotated.Arithmetic<NewModifier> getCombinedNaturalArmor()
+  {
+    Annotated.Arithmetic<NewModifier> combined = new Annotated.Arithmetic<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedNaturalArmor());
+
+    return combined;
+  }
+
+  public NewModifier getArmorBonus()
+  {
+    NewModifier bonus = null;
+    for(Item armor : getArmor())
+    {
+      if(armor.getArmorType().isShield())
+        continue;
+
+      Optional<NewModifier> modifier = armor.getArmorClass();
+      if(modifier.isPresent())
+        if(bonus == null)
+          bonus = modifier.get();
+        else
+          bonus = (NewModifier) bonus.add(modifier.get());
+    }
+
+    if(bonus == null)
+      return new NewModifier();
+
+    return bonus;
+  }
+
+  public NewModifier getShieldBonus()
+  {
+    NewModifier bonus = null;
+    for(Item armor : getArmor())
+    {
+      if(!armor.getArmorType().isShield())
+        continue;
+
+      Optional<NewModifier> modifier = armor.getArmorClass();
+      if(modifier.isPresent())
+        if(bonus == null)
+          bonus = modifier.get();
+        else
+          bonus = (NewModifier) bonus.add(modifier.get());
+    }
+
+    if(bonus == null)
+      return new NewModifier();
+
+    return bonus;
+  }
+
+  public int getArmorClass()
+  {
+    NewModifier armor = getArmorBonus();
+    NewModifier shield = getShieldBonus();
+    int dexterity = getDexterityModifier();
+
+    return 10 + armor.getModifier() + shield.getModifier() + dexterity;
+  }
+
+  public int getTouchArmorClass()
+  {
+    int dexterity = getDexterityModifier();
+
+    return 10 + dexterity;
+  }
+
+  public int getFlatFootedArmorClass()
+  {
+    NewModifier armor = getArmorBonus();
+    NewModifier shield = getShieldBonus();
+
+    return 10 + armor.getModifier() + shield.getModifier();
+  }
+
+  public Optional<Item> getArmorWorn()
+  {
+    List<Item> armor = getArmor();
+    for(Item item : armor)
+      if(item.isArmor() && !item.getArmorType().isShield())
+        return Optional.of(item);
+
+    return Optional.absent();
+  }
+
+  public Optional<Item> getShieldWorn()
+  {
+    List<Item> armor = getArmor();
+    for(Item item : armor)
+      if(item.isArmor() && item.getArmorType().isShield())
+        return Optional.of(item);
+
+    return Optional.absent();
+  }
+
+  @Override
+  public void set(Values inValues)
+  {
+    super.set(inValues);
+
+    m_alignment = inValues.use("alignment", m_alignment, Alignment.PARSER);
+    m_strength = inValues.use("strength", m_strength, NewValue.INTEGER_PARSER);
+    m_constitution = inValues.use("constitution", m_constitution,
+                                  NewValue.INTEGER_PARSER);
+    m_dexterity = inValues.use("dexterity", m_dexterity,
+                               NewValue.INTEGER_PARSER);
+    m_intelligence = inValues.use("intelligence", m_intelligence,
+                                  NewValue.INTEGER_PARSER);
+    m_wisdom = inValues.use("wisdom", m_wisdom, NewValue.INTEGER_PARSER);
+    m_charisma = inValues.use("charisma", m_charisma, NewValue.INTEGER_PARSER);
+    m_feats = inValues.useEntries("feat", m_feats,
+                                  new NestedEntry.Creator<Feat>()
+                                  {
+                                    @Override
+                                    public Feat create()
+                                    {
+                                      return new Feat();
+                                    }
+                                  });
+    m_hp = inValues.use("hp", m_hp, NewValue.INTEGER_PARSER);
+    m_qualities = inValues.useEntries("quality", m_qualities,
+                                      new NestedEntry.Creator<Quality>()
+                                      {
+                                        @Override
+                                        public Quality create()
+                                        {
+                                          return new Quality();
+                                        }
+                                      });
+  }
 
   /**
    * Get the initiative of the monster.
    *
    * @return      the initiative as a combination
-   *
    */
+  /*
   public ModifiedNumber getInitiative()
   {
     ModifiedNumber initiative = collect("initiative").modifier();
@@ -1226,16 +1464,14 @@ public class Monster extends CampaignEntry
 
     return initiative;
   }
-
-  //........................................................................
-  //--------------------------- armorClassTouch ----------------------------
+  */
 
   /**
    * Get the armor class for touch attacks of the monster.
    *
    * @return      the armor class
-   *
    */
+  /*
   public ModifiedNumber armorClassTouch()
   {
     return armorClass().modifier().ignore(Modifier.Type.ARMOR,
@@ -1243,16 +1479,14 @@ public class Monster extends CampaignEntry
                                           Modifier.Type.SHIELD,
                                           Modifier.Type.ENHANCEMENT);
   }
-
-  //........................................................................
-  //----------------------------- armorClass -------------------------------
+  */
 
   /**
    * Get the armor class of the monster.
    *
    * @return      the armor class
-   *
    */
+  /*
   public Combined<Modifier> armorClass()
   {
     Combined<Modifier> armor = collect("armor class");
@@ -1262,16 +1496,14 @@ public class Monster extends CampaignEntry
 
     return armor;
   }
-
-  //........................................................................
-  //------------------------ armorClassFlatFooted --------------------------
+  */
 
   /**
    * Get the armor class of the monster when its flat-footed.
    *
    * @return      the armor class when flat-footed
-   *
    */
+  /*
   public ModifiedNumber armorClassFlatFooted()
   {
     ModifiedNumber armor = armorClass().modifier();
@@ -1281,17 +1513,15 @@ public class Monster extends CampaignEntry
 
     return armor.ignore(Modifier.Type.ABILITY);
   }
-
-  //........................................................................
-  //------------------------ dexterityModifierForAC ------------------------
+  */
 
   /**
    * Get the current modifier from dexterity. This is capped by the armor's
    * maximum dexterity.
    *
    * @return      the current dexterity modifier
-   *
    */
+  /*
   public int dexterityModifierForAC()
   {
     int dex =
@@ -1313,17 +1543,15 @@ public class Monster extends CampaignEntry
 
     return dex;
   }
-
-  //........................................................................
-  //------------------------------- attacks --------------------------------
+  */
 
   /**
    * Compute the values to render for attacks.
    *
    * @return  a map with the following values:
    *   base attacks - a list with the base attack values
-   *
    */
+  /*
   public Map<String, Object> attacks()
   {
     Combined<Number> baseAttack = collect("base attack");
@@ -1392,10 +1620,7 @@ public class Monster extends CampaignEntry
       .put("grapple", grapple())
       .build();
   }
-
-
-  //........................................................................
-  //------------------------------- attacks --------------------------------
+  */
 
   /**
    * Compute the attacks the monster can do.
@@ -1405,8 +1630,8 @@ public class Monster extends CampaignEntry
    * @param       inBaseAttacks  the list of base attack modifiers
    *
    * @return      a list with maps containing the attack data
-   *
    */
+  /*
   @SuppressWarnings("unchecked") // casting
   private List<Map<String, Object>> attacks(String inName, boolean inSecondary,
                                             List<Long> inBaseAttacks)
@@ -1456,15 +1681,14 @@ public class Monster extends CampaignEntry
 
     return result;
   }
-
-  //........................................................................
-  //------------------------------- grapple --------------------------------
+  */
 
   /**
    * Compute the grapple check.
    *
    * @return      the modified number with the grapple check.
    */
+  /*
   @SuppressWarnings("unchecked")
   public ModifiedNumber grapple()
   {
@@ -1491,9 +1715,7 @@ public class Monster extends CampaignEntry
 
     return grapple;
   }
-
-  //........................................................................
-  //----------------------------- weaponAttack -----------------------------
+  */
 
   /**
    * Compute the attack bonus with the given weapon.
@@ -1503,8 +1725,8 @@ public class Monster extends CampaignEntry
    * @param       inBaseAttack the base attack bonus
    *
    * @return      the attack bonus for the first attack
-   *
    */
+  /*
   public ModifiedNumber weaponAttack(Item inItem, long inBaseAttack)
   {
     // Strength bonus (or dexterity)
@@ -1567,9 +1789,7 @@ public class Monster extends CampaignEntry
 
     return modified;
   }
-
-  //........................................................................
-  //----------------------------- naturalAttack ----------------------------
+  */
 
   /**
    * Compute the attack bonus with the given weapon.
@@ -1581,8 +1801,8 @@ public class Monster extends CampaignEntry
    * @param       inAttackMode  the mode of attack
    *
    * @return      the attack bonus for the first attack
-   *
    */
+  /*
   public ModifiedNumber naturalAttack(Ability inKeyAbility,
                                       long inBaseAttack, boolean inWithWeapon,
                                       AttackMode inAttackMode)
@@ -1613,16 +1833,14 @@ public class Monster extends CampaignEntry
 
     return modified;
   }
-
-  //........................................................................
-  //-------------------------------- feats ---------------------------------
+  */
 
   /**
    * Get all the feats the monster has.
    *
    * @return      a map of feats to the names they were found in
-   *
    */
+  /*
   public List<Pair<Reference<BaseFeat>, List<String>>> allFeats()
   {
     Multimap<Reference<BaseFeat>, String> feats = HashMultimap.create();
@@ -1630,11 +1848,11 @@ public class Monster extends CampaignEntry
     for(Reference<BaseFeat> feat : m_feats)
       feats.put(feat, getName());
 
-    /*
+    / *
     for(BaseEntry base : getBaseEntries())
       if(base instanceof BaseMonster)
         ((BaseMonster)base).collectFeats(feats);
-    */
+    * /
 
     // we have to convert to a real map manuall, as soy can't handle the
     // multimap to map conversion
@@ -1650,15 +1868,14 @@ public class Monster extends CampaignEntry
 
     return result;
   }
-
-  //........................................................................
-  //------------------------------ qualities -------------------------------
+  */
 
   /**
    * Collect all qualities used by this monster.
    *
    * @return  a list of references to all qualities
    */
+  /*
   @SuppressWarnings("unchecked")
   public List<Reference<BaseQuality>> qualities()
   {
@@ -1677,17 +1894,14 @@ public class Monster extends CampaignEntry
 
     return result;
   }
-
-  //........................................................................
-
-  //------------------------ specialAttackSummaries ------------------------
+  */
 
   /**
    * Get the summaries for special attacks.
    *
    * @return      a map with the value for the summary
-   *
    */
+  /*
   @SuppressWarnings("unchecked") // casting reference
   public List<Map<String, Object>> specialAttackSummaries()
   {
@@ -1751,16 +1965,14 @@ public class Monster extends CampaignEntry
 
     return summaries;
   }
-
-  //........................................................................
-  //------------------------ specialQualitySummaries ------------------------
+  */
 
   /**
    * Get the summaries for special qualities.
    *
    * @return      a map with the value for the summary
-   *
    */
+  /*
   @SuppressWarnings("unchecked") // casting reference
   public List<Map<String, Object>> specialQualitySummaries()
   {
@@ -1791,17 +2003,15 @@ public class Monster extends CampaignEntry
 
     return summaries;
   }
-
-  //........................................................................
-  //------------------------------- allSkills -------------------------------
+  */
 
   /**
    * Get information about the current skills of the monster. Skills that can
    * only be used trained for which the monster has no ranks are not returned.
    *
    * @return      the skills information
-   *
    */
+  /*
   public List<Map<String, Object>> allSkills()
   {
     List<Map<String, Object>> skills = Lists.newArrayList();
@@ -1857,16 +2067,14 @@ public class Monster extends CampaignEntry
 
     return skills;
   }
-
-  //........................................................................
-  //----------------------- collectSpecialQualities ------------------------
+  */
 
   /**
    * Get the special qualities for this and all base monsters.
    *
    * @return  a list of base qualities
-   *
    */
+  /*
   public List<Reference<BaseQuality>> collectSpecialQualities()
   {
     List<Reference<BaseQuality>> qualities = Lists.newArrayList();
@@ -1876,58 +2084,14 @@ public class Monster extends CampaignEntry
       if(!(base instanceof BaseMonster))
         continue;
 
-      /*
+      / *
       qualities.addAll(((BaseMonster)base).collectSpecialQualities());
-      */
+      * /
     }
 
     return qualities;
   }
-
-  //........................................................................
-  //--------------------------- getFortitudeSave ----------------------------
-
-  /**
-   * Get the current fortitude save.
-   *
-   * @return      the modifier for the save
-   *
-   */
-  // public ModifiedNumber getFortitudeSave()
-  // {
-  //   return new ModifiedNumber(collectContributions("fortitude save"));
-  // }
-
-  //........................................................................
-  //----------------------------- getReflexSave -----------------------------
-
-  /**
-   * Get the current reflex save.
-   *
-   * @return      the modifier for the save
-   *
-   */
-  // public ModifiedNumber getReflexSave()
-  // {
-  //   return new ModifiedNumber(collectContributions("reflex save"));
-  // }
-
-  //........................................................................
-  //------------------------------ getWillSave ------------------------------
-
-  /**
-   * Get the current will save.
-   *
-   * @return      the modifier for the save
-   *
-   */
-  // public ModifiedNumber getWillSave()
-  // {
-  //   return new ModifiedNumber(collectContributions("will save"));
-  // }
-
-  //........................................................................
-  //------------------------------- collect --------------------------------
+  */
 
   /**
    * Collect a combined value.
@@ -1936,6 +2100,7 @@ public class Monster extends CampaignEntry
    * @param       ioCombined   the combined to collect into
    * @param       <T>          the type of value collected
    */
+  /*
   @Override
   @SuppressWarnings("unchecked")
   protected <T extends Value<T>> void collect(String inName,
@@ -2020,9 +2185,7 @@ public class Monster extends CampaignEntry
       }
     }
   }
-
-  //........................................................................
-  //----------------------- adjustDamageForStrength ------------------------
+  */
 
   /**
    * Adjust the given damage value for streangth.
@@ -2033,6 +2196,7 @@ public class Monster extends CampaignEntry
    *
    * @return   the adjusted damage
    */
+  /*
   public Damage adjustDamageForStrength(Damage inDamage, boolean inMelee,
                                         boolean inSecondary)
   {
@@ -2047,9 +2211,7 @@ public class Monster extends CampaignEntry
 
     return inDamage.add(new Damage(new Dice(0, 1, modifier)));
   }
-
-  //........................................................................
-  //------------------------------- critical -------------------------------
+  */
 
   /**
    * Get the critical value for the given item.
@@ -2057,8 +2219,8 @@ public class Monster extends CampaignEntry
    * @param   inItem  the item to get the critical for
    *
    * @return  the critical for the item when the monster is using it
-   *
    */
+  /*
   public @Nullable Critical critical(@Nullable Item inItem)
   {
     boolean improvedCritical = hasFeat("improved critical");
@@ -2084,9 +2246,7 @@ public class Monster extends CampaignEntry
 
     return critical;
   }
-
-  //........................................................................
-  //---------------------------- containedItems ----------------------------
+  */
 
   /**
    * Get all the items contained in this contents.
@@ -2094,8 +2254,8 @@ public class Monster extends CampaignEntry
    * @param       inDeep true for returning all item, including nested ones,
    *                     false for only the top level items
    * @return      a list with all the items
-   *
    */
+  /*
   public Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
@@ -2112,16 +2272,14 @@ public class Monster extends CampaignEntry
 
     return items;
   }
-
-  //........................................................................
-  //------------------------- collectDependencies --------------------------
+  */
 
   /**
    * Collect the dependencies for this entry.
    *
    * @return      a list with all dependent entries
-   *
    */
+  /*
   @Override
   public Set<AbstractEntry> collectDependencies()
   {
@@ -2146,16 +2304,14 @@ public class Monster extends CampaignEntry
 
     return entries;
   }
-
-  //........................................................................
-
-  //------------------------------- getLevel -------------------------------
+  */
 
   /**
    * Get the level of the monster.
    *
    * @return      the monster's level
    */
+  /*
   public int getLevel()
   {
     // Don't use 'hit dice' here, as this will in turn use level (for con).
@@ -2163,23 +2319,19 @@ public class Monster extends CampaignEntry
 
     return (int) combinedLevel.modifier().getMaxValue();
   }
-
-  //........................................................................
-  //---------------------------- getSpellClass -----------------------------
+  */
 
   /**
    * Get the spellcasting class.
    *
    * @return      the spellcasting class
-   *
    */
+  /*
   public SpellClass getSpellClass()
   {
     return SpellClass.SORCERER;
   }
-
-  //........................................................................
-  //----------------------- getSpellAbilityModifier ------------------------
+  */
 
   /**
    * The level of the spell, which has to be added separately.
@@ -2187,8 +2339,8 @@ public class Monster extends CampaignEntry
    * @param       inClassParam   the parameter for the class value
    *
    * @return      the modifier
-   *
    */
+  /*
   @SuppressWarnings("unchecked")
   public int getSpellAbilityModifier(@Nullable Value<?> inClassParam)
   {
@@ -2221,10 +2373,7 @@ public class Monster extends CampaignEntry
 
     return abilityModifier(ability(ability).getMaxValue());
   }
-
-  //........................................................................
-
-  //------------------------------ hasQuality ------------------------------
+  */
 
   /**
    * Check if the monster has the name quality.
@@ -2233,20 +2382,19 @@ public class Monster extends CampaignEntry
    *
    * @return   true if the monster has the quality, false if not
    */
+  /*
   public boolean hasQuality(String inName)
   {
-    /*
+    / *
     for(BaseEntry base : getBaseEntries())
       if(base instanceof BaseMonster)
         if(((BaseMonster)base).hasQuality(inName))
           return true;
-    */
+    * /
 
     return false;
   }
-
-  //........................................................................
-  //------------------------------- hasFeat --------------------------------
+  */
 
   /**
    * Check whether the monster has the name feat.
@@ -2257,23 +2405,39 @@ public class Monster extends CampaignEntry
    */
   public boolean hasFeat(String inName)
   {
-    for(Reference<BaseFeat> feat : m_feats)
-      if(feat.toString().equalsIgnoreCase(inName))
+    for(Feat feat : m_feats)
+      if(feat.getName().equalsIgnoreCase(inName))
         return true;
-
-    /*
-    for(BaseEntry base : getBaseEntries())
-      if(base instanceof BaseMonster)
-        if(((BaseMonster)base).hasFeat(inName))
-          return true;
-    */
 
     return false;
   }
 
-  //........................................................................
+  public Optional<Feat> getFeat(String inName)
+  {
+    for(Feat feat : m_feats)
+      if(feat.getName().equalsIgnoreCase(inName))
+        return Optional.of(feat);
 
-  //------------------------------- badSave --------------------------------
+    return Optional.absent();
+  }
+
+  public boolean hasQuality(String inName)
+  {
+    for(Quality quality : m_qualities)
+      if(quality.getName().equalsIgnoreCase(inName))
+        return true;
+
+    return false;
+  }
+
+  public Optional<Quality> getQuality(String inName)
+  {
+    for(Quality quality : m_qualities)
+      if(quality.getName().equalsIgnoreCase(inName))
+        return Optional.of(quality);
+
+    return Optional.absent();
+  }
 
   /**
    * Compute the base saving throw for a bad save.
@@ -2281,39 +2445,30 @@ public class Monster extends CampaignEntry
    * @param       inLevel the level or hit dice to compute for
    *
    * @return      the base value for a save
-   *
    */
   public static int badSave(int inLevel)
   {
     return inLevel / 3;
   }
 
-  //........................................................................
-  //------------------------------- goodSave -------------------------------
-
   /**
-   *
    * Compute the base saving throw for a good save.
    *
    * @param       inLevel the level or hit dice to compute for
    *
    * @return      the base value for a save
-   *
    */
   public static int goodSave(int inLevel)
   {
     return inLevel / 2 + 2;
   }
 
-  //........................................................................
-  //----------------------------- skillRanks -------------------------------
-
   /**
    * Get the number of skill ranks for all skills with ranks.
    *
    * @return      the number of skill ranks per skill name
-   *
    */
+  /*
   @SuppressWarnings("unchecked")
   public Map<String, Map<Value<?>, ModifiedNumber>> skillRanks()
   {
@@ -2377,16 +2532,14 @@ public class Monster extends CampaignEntry
 
     return ranks;
   }
-
-  //........................................................................
-  //-------------------------------- getSize -------------------------------
+  */
 
   /**
    * Get the size of the monster.
    *
    * @return      the index in the size table.
-   *
    */
+  /*
   @SuppressWarnings("unchecked")
   public Size getSize()
   {
@@ -2397,15 +2550,14 @@ public class Monster extends CampaignEntry
 
     return ((EnumSelection<Size>)size.get(0)).getSelected();
   }
-
-  //........................................................................
-  //-------------------------------- dmName --------------------------------
+  */
 
   /**
    * Get the name a dm may see for this entry.
    *
    * @return      the name
    */
+  /*
   public String dmName()
   {
     List<String> parts = new ArrayList<String>();
@@ -2430,16 +2582,12 @@ public class Monster extends CampaignEntry
 
     return Strings.COMMA_JOINER.join(parts);
   }
-
-  //........................................................................
-
-  //------------------------- getArmorCheckPenalty -------------------------
+  */
 
   /**
    * Get the skill check penalty for armor this monster is wearing.
    *
    * @return      the penalty, or 0 for none
-   *
    */
   // public int getArmorCheckPenalty()
   // {
@@ -2460,10 +2608,6 @@ public class Monster extends CampaignEntry
   //   return penalty;
   // }
 
-  //........................................................................
-
-  //------------------------- getEntrySubEntries ---------------------------
-
   /**
    * Get the sub entries that are part of this entry only (without
    * attachments).
@@ -2480,39 +2624,6 @@ public class Monster extends CampaignEntry
 
   //   return list;
   // }
-
-  //........................................................................
-
-  //----------------------------- printCommand -----------------------------
-
-  /**
-   * Print the item to the document, in the general section.
-   *
-   * @param       inDM       true if set for DM, false for player
-   * @param       inEditable true if values are editable, false if not
-   *
-   * @return      the command representing this item in a list
-   *
-   */
-  // public PrintCommand printCommand(final boolean inDM, boolean inEditable)
-  // {
-  //   final PrintCommand commands = super.printCommand(inDM, inEditable);
-
-  //   commands.type = "monster";
-
-  //   commands.temp = new ArrayList<Object>();
-  //   commands.temp.add(PAGE_COMMAND.transform(new ValueTransformer(commands,
-  //                                                                 inDM)));
-  //   return commands;
-  // }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //-------------------------------- check ---------------------------------
 
   /**
    * Check the entry for possible problems.
@@ -3223,96 +3334,7 @@ public class Monster extends CampaignEntry
     //   //m_acFlatFooted.addModifier(bonus);
     // }
 
-    //......................................................................
   // }
-
-  //........................................................................
-  //----------------------------- modifyValue ------------------------------
-
-  /**
-   * Modify the given value with information from the current attachment.
-   *
-   * @param       inType    the type of value to modify
-   * @param       inValue   the value to modify, return in this object
-   * @param       inDynamic a flag denoting if dynamic values are requested
-   *
-   * @return      the newly computed value (or null if no value to use)
-   *
-   */
-//   public Modifier modifyValue(PropertyKey inType, Value inValue,
-//                               boolean inDynamic)
-//   {
-//     if(inValue == null || !inValue.isDefined())
-//       return null;
-
-//     // adjust speed for armor
-//     if(inType == BaseMonster.SPEED)
-//     {
-//       int speed30 = Integer.MAX_VALUE;
-//       int speed20 = Integer.MAX_VALUE;
-
-//       for(Iterator<Value> i = m_possessions.iterator(); i.hasNext(); )
-//       {
-//         AbstractEntry entry = ((EntryValue)i.next()).get();
-
-//         if(!entry.hasAttachment(Armor.class))
-//           continue;
-
-//         Item armor      = (Item)entry;
-//         Multiple speeds = (Multiple)armor.getValue("speed");
-
-//         if(!speeds.isDefined())
-//           continue;
-
-//         speed30 =
-//           Math.min(speed30, (int)((Distance)
-//                                 speeds.get(0).get()).getAsFeet().getValue());
-//         speed20 =
-//           Math.min(speed20, (int)((Distance)
-//                                 speeds.get(1).get()).getAsFeet().getValue());
-//       }
-
-//       if(speed30 != Integer.MAX_VALUE || speed20 != Integer.MAX_VALUE)
-//       {
-//         ValueList modified = (ValueList)inValue.clone();
-
-//         for(Iterator<Value> i = modified.mutableIterator(); i.hasNext(); )
-//         {
-//           Multiple mult = (Multiple)i.next();
-
-//           if(!mult.get(0).get().isDefined())
-//           {
-//             // we have the land speed
-//             Distance dist = (Distance)mult.get(1).get();
-
-//             int armorSpeed = 0;
-//             if(dist.getAsFeet().getLeader() == 30)
-//               armorSpeed = speed30;
-//             else
-//               if(dist.getAsFeet().getLeader() == 20)
-//                 armorSpeed = speed20;
-
-//             if(armorSpeed < dist.getAsFeet().getLeader())
-//             {
-//               // set the values back
-//               dist.setFeet(null, new Rational(armorSpeed), null);
-
-//               mult.set(mult.get(0).get(), dist, mult.get(2).get());
-
-//               return new Modifier(Modifier.Type.FIXED,
-//                                   (net.ixitxachitls.dma.values.Modifiable)
-//                                   modified);
-//             }
-//           }
-//         }
-//       }
-//     }
-
-//     return super.modifyValue(inType, inValue, inDynamic);
-//   }
-
-  //........................................................................
-  //--------------------------------- add ----------------------------------
 
   /**
    * Add the given entry to the campaign entry.
@@ -3320,8 +3342,8 @@ public class Monster extends CampaignEntry
    * @param       inEntry the entry to add
    *
    * @return      true if added, false if not
-   *
    */
+  /*
   @Override
   public boolean add(CampaignEntry inEntry)
   {
@@ -3339,158 +3361,7 @@ public class Monster extends CampaignEntry
     save();
     return true;
   }
-
-  //.......................................................................
-
-  //--------------------------- addFortModifier ----------------------------
-
-  /**
-   * Add a fortitude modifier to the monster.
-   *
-   * @param       inModifier the modifier to add
-   *
-   */
-// public void addFortModifier(net.ixitxachitls.dma.values.Modifier inModifier)
-//   {
-//     //m_saveFort.addModifier(inModifier);
-//   }
-
-  //........................................................................
-  //--------------------------- addRefModifier ----------------------------
-
-  /**
-   * Add a reflex modifier to the monster.
-   *
-   * @param       inModifier the modifier to add
-   *
-   */
-// public void addRefModifier(net.ixitxachitls.dma.values.Modifier inModifier)
-//   {
-//     //m_saveRef.addModifier(inModifier);
-//   }
-
-  //........................................................................
-  //--------------------------- addWillModifier ----------------------------
-
-  /**
-   * Add a will modifier to the monster.
-   *
-   * @param       inModifier the modifier to add
-   *
-   */
-  // public void addWillModifier(net.ixitxachitls.dma.values.Modifier
-  // inModifier)
-  // {
-  //   //m_saveWill.addModifier(inModifier);
-  // }
-
-  //........................................................................
-  //-------------------------- addGrappleModifier --------------------------
-
-  /**
-   * Add a grapple modifier to the monster.
-   *
-   * @param       inModifier the modifier to add
-   *
-   */
-// public void addGrappleModifier(net.ixitxachitls.dma.values.Modifier
-//                                inModifier)
-// {
-//     //m_grapple.addModifier(inModifier);
-//   }
-
-  //........................................................................
-  //-------------------------- addAttackModifier ---------------------------
-
-  /**
-   * Add an attack modifier to the monster.
-   *
-   * @param       inModifier the modifier to add
-   *
-   */
-  // public void addAttackModifier(net.ixitxachitls.dma.values.Modifier
-  //                               inModifier)
-  // {
-  //   //m_attackMelee.addModifier(inModifier);
-  //   //m_attackRanged.addModifier(inModifier);
-  // }
-
-  //........................................................................
-  //------------------------ addInitiativeModifier -------------------------
-
-  /**
-   * Add an initiative modifier to the monster.
-   *
-   * @param       inModifier the modifier to add
-   *
-   */
-  // public void addInitiativeModifier(net.ixitxachitls.dma.values.Modifier
-  //                               inModifier)
-  // {
-  //   //m_initiative.addModifier(inModifier);
-  // }
-
-  //........................................................................
-  //---------------------------- addHPModifier -----------------------------
-
-  /**
-   * Add a hit point modifier to the monster.
-   *
-   * @param       inModifier the modifier to add
-   *
-   */
-  // public void addHPModifier(net.ixitxachitls.dma.values.Modifier inModifier)
-  // {
-  //   //m_hpMod.addModifier(inModifier);
-  // }
-
-  //........................................................................
-  //---------------------------- addACModifier -----------------------------
-
-  /**
-   * Add a armor class modifier to the monster.
-   *
-   * @param       inModifier the modifier to add
-   *
-   */
-// public void addACModifier(net.ixitxachitls.dma.values.Modifier inModifier)
-//   {
-//     //m_ac.addModifier(inModifier);
-
-//     // add it to flatfooted or touch if necessary
-//     //if("dodge".equals(inModifier.getType()))
-//     //  m_acTouch.addModifier(inModifier);
-//   }
-
-  //........................................................................
-  //--------------------------- addSkillModifier ---------------------------
-
-  /**
-   * Add a will modifier to the monster.
-   *
-   * @param       inSkill    the name of the skill to modify
-   * @param       inModifier the modifier to add
-   *
-   */
-// public void addSkillModifier(String inSkill,
-//                             net.ixitxachitls.dma.values.Modifier inModifier)
-//   {
-    // look for the skill
-//     for(Iterator<Value> i = m_skills.iterator(); i.hasNext(); )
-//     {
-//       Skill skill = (Skill)((EntryValue)i.next()).get();
-
-//       if(skill.getName().equalsIgnoreCase(inSkill))
-//       {
-//         skill.addModifier(inModifier);
-
-//         return;
-//       }
-//     }
-  // }
-
-  //........................................................................
-  //----------------------------- addTreasure ------------------------------
+  */
 
   /**
    * Add a random treasure horde to this monster.
@@ -3606,12 +3477,6 @@ public class Monster extends CampaignEntry
 //     }
   // }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
   @Override
   public Message toProto()
   {
@@ -3619,79 +3484,47 @@ public class Monster extends CampaignEntry
 
     builder.setBase((CampaignEntryProto)super.toProto());
 
-    if(m_possessions.isDefined())
-      for(Name possession : m_possessions)
-        builder.addPossession(possession.get());
+    if(m_strength.isPresent())
+      builder.setStrength(m_strength.get());
 
-    if(m_strength.isDefined())
-      builder.setStrength((int)m_strength.get());
+    if(m_dexterity.isPresent())
+      builder.setDexterity(m_dexterity.get());
 
-    if(m_dexterity.isDefined())
-      builder.setDexterity((int)m_dexterity.get());
+    if(m_constitution.isPresent())
+      builder.setConstitution(m_constitution.get());
 
-    if(m_constitution.isDefined())
-      builder.setConstitution((int)m_constitution.get());
+    if(m_intelligence.isPresent())
+      builder.setIntelligence(m_intelligence.get());
 
-    if(m_intelligence.isDefined())
-      builder.setIntelligence((int)m_intelligence.get());
+    if(m_wisdom.isPresent())
+      builder.setWisdom(m_wisdom.get());
 
-    if(m_wisdom.isDefined())
-      builder.setWisdom((int)m_wisdom.get());
+    if(m_charisma.isPresent())
+      builder.setCharisma(m_charisma.get());
 
-    if(m_charisma.isDefined())
-      builder.setCharisma((int)m_charisma.get());
+    for(Feat feat : m_feats)
+      builder.addFeat(feat.toProto());
 
-    if(m_feats.isDefined())
-      for(Reference<BaseFeat> feat : m_feats)
-      {
-        BaseMonsterProto.Reference.Builder reference =
-          BaseMonsterProto.Reference.newBuilder();
+    for(Quality quality : m_qualities)
+      builder.addQuality(quality.toProto());
 
-        reference.setName(feat.getName());
-        if(feat.getParameters() != null)
-          reference.setParameters(feat.getParameters().toProto());
+    builder.setMaxHitPoints(m_maxHP);
+    builder.setHitPoints(m_hp);
 
-        builder.addFeat(reference);
-      }
+    for(Skill skill : m_skills)
+      builder.addSkill(skill.toProto());
 
-    if(m_maxHP.isDefined())
-      builder.setMaxHitPoints((int)m_maxHP.get());
+    if(m_alignment != Alignment.UNKNOWN)
+      builder.setAlignment(m_alignment.toProto());
 
-    if(m_hp.isDefined())
-      builder.setHitPoints((int)m_hp.get());
+    if(m_fortitudeSave.isPresent())
+      builder.setFortitudeSave(m_fortitudeSave.get());
 
-    if(m_skills.isDefined())
-      for(Multiple multiple : m_skills)
-      {
-        BaseMonsterProto.Reference.Builder reference =
-          BaseMonsterProto.Reference.newBuilder();
+    if(m_willSave.isPresent())
+      builder.setWillSave(m_willSave.get());
 
-        @SuppressWarnings("unchecked")
-        Reference<BaseSkill> ref = (Reference<BaseSkill>)multiple.get(0);
-        reference.setName(ref.getName());
-        if(ref.getParameters() != null)
-          reference.setParameters(ref.getParameters().toProto());
-
-        MonsterProto.Skill.Builder skill = MonsterProto.Skill.newBuilder();
-        skill.setSkill(reference.build());
-
-        if(multiple.get(1).isDefined())
-          skill.setRanks((int)((Number)multiple.get(1)).get());
-
-        builder.addSkill(skill.build());
-      }
-
-    if(m_alignment.isDefined())
-      builder.setAlignment(m_alignment.getSelected().toProto());
-
-    if(m_fortitudeSave.isDefined())
-      builder.setFortitudeSave((int)m_fortitudeSave.get());
-
-    if(m_willSave.isDefined())
-      builder.setWillSave((int)m_willSave.get());
-
-    if(m_reflexSave.isDefined())
-      builder.setReflexSave((int)m_reflexSave.get());
+    if(m_reflexSave.isPresent())
+      builder.setReflexSave(m_reflexSave.get());
 
     MonsterProto proto = builder.build();
     return proto;
@@ -3710,86 +3543,47 @@ public class Monster extends CampaignEntry
 
     super.fromProto(proto.getBase());
 
-    if(proto.getPossessionCount() > 0)
-    {
-      List<Name> possessions = new ArrayList<>();
-      for(String possession : proto.getPossessionList())
-        possessions.add(m_possessions.createElement().as(possession));
-
-      m_possessions = m_possessions.as(possessions);
-    }
-
     if(proto.hasStrength())
-      m_strength = m_strength.as(proto.getStrength());
+      m_strength = Optional.of(proto.getStrength());
 
     if(proto.hasDexterity())
-      m_dexterity = m_dexterity.as(proto.getDexterity());
+      m_dexterity = Optional.of(proto.getDexterity());
 
     if(proto.hasConstitution())
-      m_constitution = m_constitution.as(proto.getConstitution());
+      m_constitution = Optional.of(proto.getConstitution());
 
     if(proto.hasIntelligence())
-      m_intelligence = m_intelligence.as(proto.getIntelligence());
+      m_intelligence = Optional.of(proto.getIntelligence());
 
     if(proto.hasWisdom())
-      m_wisdom = m_wisdom.as(proto.getWisdom());
+      m_wisdom = Optional.of(proto.getWisdom());
 
     if(proto.hasCharisma())
-      m_charisma = m_charisma.as(proto.getCharisma());
+      m_charisma = Optional.of(proto.getCharisma());
 
-    if(proto.getFeatCount() > 0)
-    {
-      List<Reference<BaseFeat>> references = new ArrayList<>();
-      for(BaseMonsterProto.Reference feat : proto.getFeatList())
-      {
-        Reference<BaseFeat> ref = m_feats.createElement();
-        ref = ref.as(feat.getName())
-          .withParameters(ref.getParameters().fromProto(feat.getParameters()));
-        references.add(ref);
-      }
+    for(FeatProto feat : proto.getFeatList())
+      m_feats.add(Feat.fromProto(feat));
 
-      m_feats = m_feats.as(references);
-    }
+    for(QualityProto quality : proto.getQualityList())
+      m_qualities.add(Quality.fromProto(quality));
 
-    if(proto.hasMaxHitPoints())
-      m_maxHP = m_maxHP.as(proto.getMaxHitPoints());
+    m_maxHP = proto.getMaxHitPoints();
+    m_hp = proto.getHitPoints();
 
-    if(proto.hasHitPoints())
-      m_hp = m_hp.as(proto.getHitPoints());
-
-    if(proto.getSkillCount() > 0)
-    {
-      List<Multiple> skills = new ArrayList<>();
-      for(MonsterProto.Skill skill : proto.getSkillList())
-      {
-        Multiple multiple = m_skills.createElement();
-        @SuppressWarnings("unchecked")
-        Reference<BaseSkill> ref = (Reference<BaseSkill>)multiple.get(0);
-        multiple =
-          multiple.as(ref.as(skill.getSkill().getName())
-                      .withParameters(ref.getParameters()
-                                      .fromProto(skill.getSkill()
-                                                 .getParameters())),
-                      ((Number)multiple.get(1)).as(skill.getRanks()));
-
-        skills.add(multiple);
-      }
-
-      m_skills = m_skills.as(skills);
-    }
+    for(SkillProto skill : proto.getSkillList())
+      m_skills.add(Skill.fromProto(skill));
 
     if(proto.hasAlignment())
-      m_alignment =
-        m_alignment.as(Alignment.fromProto(proto.getAlignment()));
+      m_alignment = Alignment.fromProto(proto.getAlignment());
 
     if(proto.hasFortitudeSave())
-      m_fortitudeSave = m_fortitudeSave.as(proto.getFortitudeSave());
+      m_fortitudeSave = Optional.of(proto.getFortitudeSave());
 
     if(proto.hasWillSave())
-      m_willSave = m_willSave.as(proto.getWillSave());
+      m_willSave = Optional.of(proto.getWillSave());
 
     if(proto.hasReflexSave())
-      m_reflexSave = m_reflexSave.as(proto.getReflexSave());
+      m_reflexSave = Optional.of(proto.getReflexSave());
   }
 
   @Override
@@ -3804,144 +3598,4 @@ public class Monster extends CampaignEntry
       Log.warning("could not properly parse proto: " + e);
     }
   }
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
-
-  /** The test. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
-  {
-    //----- createMonster() ------------------------------------------------
-
-    /** Create a typical item for testing purposes.
-     *
-     * @return the newly created item
-     *
-     */
-    public static AbstractEntry createMonster()
-    {
-//       ParseReader reader =
-//         new ParseReader(new java.io.StringReader(s_text), "test");
-
-//       return Monster.read(reader, new BaseCampaign("Test"));
-      return null;
-    }
-
-    //......................................................................
-    //----- createBasedMonster() -------------------------------------------
-
-    /** Create a typical item for testing purposes.
-     *
-     * @return the newly created item
-     *
-     */
-    public static AbstractEntry createBasedMonster()
-    {
-//       // read the base entry
-//       ParseReader reader =
-//         new ParseReader(new java.io.StringReader(s_base), "test");
-
-//       BaseCampaign campaign = new BaseCampaign("Test");
-
-//       BaseEntry base = (BaseEntry)BaseMonster.read(reader, campaign);
-
-//       campaign.add(base);
-
-//       // and empty value
-//       reader =
-//         new ParseReader(new java.io.StringReader("skill test 1."),
-//                         "test");
-
-//       return Monster.read(reader, campaign);
-      return null;
-    }
-
-    //......................................................................
-
-    //----- text -----------------------------------------------------------
-
-    // /** Test text for item. */
-    // private static String s_text =
-    //   "monster Achaierai = \n"
-    //   + "\n"
-    //   + "  hp    45;\n"
-    //   + "  money 333 gp.\n";
-
-    // /** Test text for first base item. */
-    // private static String s_base =
-    //   "base monster Achaierai = \n"
-    //   + "\n"
-    //   + "  size              Large (Tall);\n"
-    //   + "  type              Outsider (Evil, Extraplanar, Lawful);\n"
-    //   + "  hit dice          6d8;\n"
-    //   + "  speed             50 ft;\n"
-    //   + "  natural armor     +10;\n"
-    //   + "  base attack       +6;\n"
-    //   + "  primary attacks   2 claw melee (2d6);\n"
-    //   + "  secondary attacks bite melee (4d6);\n"
-    //   + "  special attacks   Black cloud;\n"
-    // + "  special qualities Darkvision [Range 60 ft], No Soul, Does Not Eat, "
-    // + "Does Not Sleep, Affected As Evil, Weapons Evil, Affected as Lawful, "
-    //   + "Weapons Lawful;\n"
-    //   + "  strength          19;\n"
-    //   + "  dexterity         13;\n"
-    //   + "  constitution      14;\n"
-    //   + "  intelligence      11;\n"
-    //   + "  wisdom            14;\n"
-    //   + "  charisma          16;\n"
-    //   + "  class skills      Balance +9, Climb +9, Diplomacy, Hide +9, "
-    //   + "Jump +9, Listen +9, Move Silently +9, Sense Motive +9, Spot +9;\n"
-    //   + "  feats             Dodge, Mobility, Spring Attack;\n"
-    //   + "  environment       Infernal Battlefield of Acheron;\n"
-    //   + "  organization      Solitary, flock (1d4+4);\n"
-    //   + "  challenge rating  5;\n"
-    //   + "  treasure          Double standard;\n"
-    //   + "  alignment         Always lawful evil;\n"
-    //   + "  advancement       7-12 HD (Large), 13-18 HD (Huge);\n"
-    //   + "  level adjustment  -;\n"
-    //   + "  encounter         \"encounter\";\n"
-    //   + "  combat            \"combat\";\n"
-    //   + "  languages         Infernal;\n"
-    //   + "  tactics           \"tactics\";\n"
-    //   + "  character         \"character\";\n"
-    //   + "  reproduction      \"reproduction\";\n"
-    //   + "  short description \"short\";\n"
-    //   + "  world             generic;\n"
-    //   + "  references        \"WTC 17755\" 9-10;\n"
-    //   + "  description       \"description\".\n";
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** Testing reading. */
-    @org.junit.Test
-    public void read()
-    {
-      // TODO: fix tests
-//       ParseReader reader =
-//         new ParseReader(new java.io.StringReader(s_text), "test");
-
-//       String result = "monster Achaierai =\n"
-//         + "\n"
-//         + "  hp                45;\n"
-//         + "  money             333 gp.\n";
-
-//       Entry entry = (Entry)Monster.read(reader, new BaseCampaign("Test"));
-
-//       //System.out.println("read entry:\n'" + entry + "'");
-
-//       assertNotNull("item should have been read", entry);
-//       assertEquals("item name does not match", "Achaierai",
-//                    entry.getName());
-//       assertEquals("item does not match", result, entry.toString());
-
-//       m_logger.addExpectedPattern("WARNING: base.not-found:.*"
-//                                   + "(base name 'Achaierai').*");
-    }
-
-    //......................................................................
-  }
-
-  //........................................................................
 }

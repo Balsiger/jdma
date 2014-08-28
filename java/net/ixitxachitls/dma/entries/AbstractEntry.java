@@ -328,7 +328,6 @@ public abstract class AbstractEntry extends ValueGroup
    * @return      the requested base entries; note that an entry can be null
    *              if it is not found
    */
-  @SuppressWarnings("unchecked")
   @Override
   public List<BaseEntry> getBaseEntries()
   {
@@ -343,6 +342,15 @@ public abstract class AbstractEntry extends ValueGroup
     }
 
     return m_baseEntries;
+  }
+
+  public boolean hasBaseName(String inName)
+  {
+    for(BaseEntry base : getBaseEntries())
+      if(base.getName().equalsIgnoreCase(inName))
+        return true;
+
+    return false;
   }
 
   /**
@@ -1431,13 +1439,11 @@ public abstract class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-  //--------------------------------- save ---------------------------------
 
   /**
    * Save the entry if it has been changed.
    *
    * @return      true if saved, false if not
-   *
    */
   public boolean save()
   {
@@ -1446,8 +1452,6 @@ public abstract class AbstractEntry extends ValueGroup
 
     return DMADataFactory.get().update(this);
   }
-
-  //........................................................................
 
   //........................................................................
 

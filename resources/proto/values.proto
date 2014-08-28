@@ -329,3 +329,55 @@ message SharedProto
     ANY_ONE = 5;
   }
 }
+
+message ExpressionProto
+{
+  enum Operator
+  {
+    NONE = 0;
+    ADD = 1;
+    SUBTRACT = 2;
+    MULTIPLY = 3;
+    DIVIDE = 4;
+    MODULO = 5;
+    MIN = 6;
+    MAX = 7;
+  }
+  
+  message Literal
+  {
+    optional string variable = 1;
+    optional int32 integer = 2;
+  }
+  
+  optional Operator operator = 1;
+  repeated ExpressionProto operand = 2;
+  optional Literal literal = 3;  
+}
+
+message SpeedProto
+{
+  enum Mode
+  {
+    UNKNONW_MODE = 0;
+    BURROW = 1;
+    CLIMB = 2;
+    FLY = 3;
+    SWIM = 4;
+    RUN = 5;
+  }
+  optional Mode mode = 1;
+  required DistanceProto distance = 2;
+
+  enum Maneuverability
+  {
+    UNKNOWN_MANEUVERABILITY = 0;
+    PERFECT = 1;
+    GOOD = 2;
+    AVERAGE = 3;
+    POOR = 4;
+    CLUMSY = 5;
+    NONE = 6;
+  }
+  optional Maneuverability maneuverability = 3;
+}

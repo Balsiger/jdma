@@ -9,6 +9,11 @@
  font-family: symbola;
 }
 
+@font-face {
+  font-family: celestia;
+  src: url('/fonts/CelestiaAntiqua.ttf');
+}
+
 /******************************************************************************
  * general page layout
  *****************************************************************************/
@@ -2292,7 +2297,8 @@ SELECT.admin-button
   #header,
   DIV.footer,
   DIV.title-actions,
-  DIV.section-title
+  DIV.section-title,
+  .no-print
   {
     display: none;
   }
@@ -2645,9 +2651,14 @@ BODY.print
    display: table-cell;
    font-size: 15px;
    padding: 3px;
-   width: 100%;
    box-sizing: border-box;
    position: relative;
+   width: 100%;
+ }
+ 
+ .edit .field.width
+ {
+   display: inline-block;
  }
  
  .edit .field INPUT
@@ -2862,3 +2873,452 @@ BODY.print
   width: auto;
   display: inline-block;
 }
+
+.character-sheet
+{
+  font-family: celestia;
+}
+
+.character-sheet .title 
+{
+  background-color: black;
+  width: 100%;
+  color: white;
+  padding: 10px 10px 2px 10px;
+  margin-bottom: 20px;
+}
+
+.character-sheet .title .title-text
+{
+  background: url('/icons/character-sheet-title.png');
+  width: 650px;
+  height: 80px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.character-sheet .title .title-logo
+{
+  background: url('/icons/character-sheet-logo.png');
+  width: 415px;
+  height: 100px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: absolute;
+  right: 30px;
+}
+
+.character-sheet .title .subtitle 
+{
+  padding: 10px 0 0 0;
+  margin: 0;
+  font-variant: small-caps;
+}
+
+.character-sheet .subtitle 
+{
+  background-color: black;
+  width: 100%;
+  color: white;
+  padding: 10px 10px 2px 10px;
+  margin: 20px 0 20px 0;
+  box-sizing: border-box;
+}
+
+.character-sheet .subtitle .subtitle-text
+{
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 30px;
+  display: inline-block;
+  margin-left: 70px;
+}
+
+.character-sheet .subtitle .subtitle-logo
+{
+  background: url('/icons/character-sheet-logo2.png');
+  width: 54px;
+  height: 57px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: inline-block;
+  position: absolute;
+  margin-top: -19px;
+}
+
+.character-sheet .value-container 
+{ 
+  display: inline-block;
+  padding: 0 5px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.character-sheet .value-container .value 
+{
+  font-size: 20px;
+  padding: 0 10px;
+  width: auto;
+}
+
+.character-sheet .value-container .value-label
+{
+  margin-top: 5px;
+  border-top: 1px solid black;
+  text-transform: uppercase; 
+  font-size: 12px;
+}
+
+.character-sheet .value-container .center
+{
+  text-align: center;
+}
+
+.character-sheet .value-container .value.boxed
+{
+  border: 2px solid black;
+  padding: 15px;  
+}
+
+.character-sheet .value-container .value-label.boxed
+{
+  border: none;
+}
+
+.character-sheet .value-container .value.prefixed
+{
+  border-bottom: 1px solid black;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.character-sheet .value-container.prefixed 
+{
+  display: flex;
+}
+
+.character-sheet .value-container .value-label.top
+{
+  border: none;
+}
+
+.character-sheet .value-container .value-label.inside
+{
+  top: 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.character-sheet .value-container .value.white
+{
+  background-color: white;
+  padding: 10px;
+  min-height: 2ex;
+}
+
+.character-sheet .value-container .value-label.boxed
+{
+  margin-top: -2px;
+}
+
+.character-sheet .value-container .value-label.prefixed
+{
+  transform: uppercase;
+  border: none;
+}
+
+.character-sheet .value-container .value.prefixed
+{
+  display: inline-block;
+  flex: 1;
+}
+
+.character-sheet .ability
+{  
+  vertical-align: baseline;
+}
+
+.character-sheet .two-line-label 
+{
+  text-transform: uppercase;
+  display: inline-block;
+  margin-right: 15px;
+  vertical-align: top;
+  padding-top: 34px;
+  width: 10%;
+}
+
+.character-sheet .two-line-label .top 
+{
+  font-size: 27px;
+  font-weight: bold;
+}
+
+.character-sheet .two-line-label .bottom
+{
+  font-size: 9px;
+}
+
+.character-sheet .operator
+{
+  padding-top: 48px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.character-sheet .groups
+{
+  position: relative;
+}
+
+.character-sheet .group
+{
+  display: inline-block;
+  vertical-align: top;
+}
+
+.character-sheet .group.ruler
+{
+  margin: 80px 10px 20px 10px;
+  border-left: 2px solid black;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.character-sheet .weapon
+{ 
+  padding: 3px 0;
+}
+
+.character-sheet .gray
+{
+  background-color: #eee;
+}
+
+.character-sheet .values.boxed
+{
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  padding: 20px;
+  margin-top: -20px;
+}
+
+.character-sheet .hps
+{
+  margin-top: 5px;
+  text-align: right;
+}
+
+.character-sheet .hps .count
+{
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 3px;
+  display: inline-block;
+  margin: 2px;
+  min-width: 15px;
+  text-align:center;
+}
+
+.character-sheet .hps.temporary .count
+{
+  border-color: #ccc;
+  color: #ccc;
+}
+
+.character-sheet .hps.negative .count
+{
+  border-color: #800;
+  color: #800;
+}
+
+.character-sheet .hps.non-lethal .count
+{
+  border-color: #080;
+  color: #080;
+}
+
+.character-sheet .hps .count.crossed
+{
+  border-color: #aaa;
+  color: #aaa;
+}
+
+.character-sheet .saves
+{
+  background-color: #eee;
+  width: 75%;
+  vertical-align: top;
+  padding: 10px;
+  margin-right: 1%;
+}
+
+.character-sheet .box
+{
+  width: 21%;
+  height: 100%; 
+  border: 2px solid black;
+  padding: 5px;
+  text-align: center;
+  box-sizing: border-box;
+  min-height: 263px;
+}
+
+.character-sheet .armors 
+{
+  padding: 5px;
+  background-color: #eee;
+}
+
+.character-sheet .armors .armor .value-container .value.white
+{
+  padding: 20px 10px 10px 20px;
+}
+
+@media print
+{
+  .character-sheet .title-text 
+  {
+    width: 325px !important;
+    height: 40px !important;
+  }
+  
+  .character-sheet .title-logo 
+  {
+    width: 207px !important;
+    height: 50px !important;
+  }
+  
+  .character-sheet .subtitle .subtitle-text 
+  {
+    font-size: 10px !important;
+    margin-left: 44px !important;
+  }
+  
+  .character-sheet .subtitle .subtitle-logo
+  {
+    width: 33px !important;
+    height: 35px !important;
+    margin-top: -16px !important;
+  }    
+  
+  .character-sheet .ability .two-line-label
+  {
+    padding-top: 17px !important;
+  }
+  
+  .character-sheet .saves .two-line-label 
+  {
+    padding-top: 35px !important;
+  }
+   
+  .character-sheet .ability .top, 
+  .character-sheet .saves .top 
+  {
+    font-size: 13px !important;
+  }
+  
+  .character-sheet .operator 
+  {
+    padding-top: 23px;
+  }
+  
+  .character-sheet .value-label, 
+  .character-sheet .ability .bottom 
+  {
+    font-size: 4px !important;
+  }
+  
+  .character-sheet .value-label
+  {
+    margin-top: 2px !important;
+  }
+   
+  .character-sheet .value 
+  {
+    font-size: 10px !important;
+    padding: 2px 0 !important;
+  }
+   
+   .character-sheet .boxed 
+   {
+     padding: 4px !important;
+   }
+   
+   .character-sheet .two-line-label 
+   {
+     margin-right: 5px !important;
+   }
+   
+   .character-sheet .value-label.top.center 
+   {
+     font-size: 8px !important;
+   }
+   
+   .character-sheet .saves .operator 
+   {
+     padding-top: 34px !important;
+   }
+   
+   .character-sheet .saves .value.center.white 
+   {
+     padding: 5px 10px !important;
+   }
+   
+   .character-sheet .box.inline
+   {
+     min-height: 188px !important;
+   }
+   
+   .character-sheet .count
+   {
+     min-width: 10px !important;
+     font-size: 7px;
+   }
+   
+   .character-sheet .weapon
+   {
+     padding: 0 !important;
+   }
+   
+   .character-sheet .group.ruler
+   {
+     height: 250px !important;
+   }
+   
+   .character-sheet .group .values.boxed 
+   {
+     height: 280px !important;
+   }
+   
+   #footer-spacer {
+     display: none;
+   }
+}
+
+DIV.inline 
+{
+  display: inline-block;
+}
+
+.annotations
+{
+  border: 1px solid grey;
+  border-radius: 4px;
+  position: absolute;
+  text-align: left;
+  padding: 10px;
+  background-color: ghostwhite;
+  font-size: 16px;
+  display: none;  
+  left: 45%;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.annotated:hover .annotations
+{
+  display: block;
+}
+

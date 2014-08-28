@@ -1,0 +1,537 @@
+/* ****************************************************************************
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/*
+ * Templates for feats.
+ */
+{namespace dma.entries.feats}
+
+/**
+ * Editiing the base feat.
+ * 
+ * @param? entry The feat to edit. 
+ */
+{template .edit autoescape="true"}
+  {call dma.edit.field_input}
+    {param name: 'feat.name' /}
+    {param caption: 'Name' /}
+    {param value: $entry ? lower($entry.base.name) : '' /}
+    {param class: 'narrow' /}
+    {param validate: 'any' /}
+    {param autocomplete: 'base feat/name' /} 
+  {/call}    
+  {call dma.edit.field_input}
+    {param name: 'feat.qualifier' /}
+    {param caption: 'Qualifier' /}
+    {param value: $entry.qualifier.present ? $entry.qualifier : '' /}
+    {param validate: 'number' /}
+    {param width: '50%' /}
+  {/call}    
+{/template}
+
+/**
+ * The tiny feat card.
+ *
+ * @param entry      The entry rendered.
+ */
+{template .tiny}
+  <div class="entry feat tiny" onclick="details('{$entry.path}')">
+    {$entry.name}
+    {if $entry.qualifier.present}
+      {sp}({$entry.qualifier})
+    {/if}
+  </div>
+{/template}
+
+/**
+ * The small item card.
+ *
+ * @param entry The entry rendered.
+ */
+{template .small}
+  <div class="entry item card small">
+    <div class="header" style="background-color: #008">
+      <div class="actions">
+        <div class="sprite white delete" title="permanently delete this"></div>
+      </div>
+
+      <div class="title">
+        {if $ij.isDM}
+          {$entry.DM_name} 
+          {if $entry.player_name and $entry.DM_name != $entry.player_name}
+            {sp}[{$entry.player_name}]
+          {/if} 
+        {else}
+          {$entry.player_name}
+        {/if}
+        {sp}({$entry.name})
+        {if $ij.isDM and $entry.DM_name != $entry.player_name}
+          <br /><span class="subtitle">{$entry.player_name}&nbsp;</span>
+        {/if}
+      </div>
+    </div>
+
+    <div class="contents" style="background-color: #eef; border-color: #ccf">
+      <div class="image main">
+        {call dma.entry.simplemainfile}
+          {param entry: $entry /}
+          {param size: 50 /}
+        {/call}
+      </div>
+
+      {call .statistics}
+        {param entry: $entry /}
+      {/call}
+
+      <div class="appearance">
+        {$entry.appearance}
+      </div>
+
+     <div class="short-description">
+       {call dma.entry.added}
+         {param addable: $entry.combined_short_description /}
+       {/call}
+     </div>
+
+   </div>
+  </div>
+{/template}
+
+/**
+ * The item card.
+ *
+ * @param entry The entry rendered.
+ */
+{template .large}
+  <div class="entry item card">
+    <div class="header" style="background-color: #008">
+      <div class="actions">
+        <div class="sprite white delete" title="permanently delete this"></div>
+      </div>
+
+      <div class="title">
+        {if $ij.isDM}
+          {$entry.DM_name} 
+          {if $entry.player_name and $entry.DM_name != $entry.player_name}
+            {sp}[{$entry.player_name}]
+          {/if} 
+        {else}
+          {$entry.player_name}
+        {/if}
+        {sp}({$entry.name})
+        {if $ij.isDM and $entry.DM_name != $entry.player_name}
+          <br /><span class="subtitle">{$entry.player_name}&nbsp;</span>
+        {/if}
+      </div>
+    </div>
+
+    <div class="contents" style="background-color: #eef; border-color: #ccf">
+      <div class="top-block">
+        <div class="align-center size-tiny">
+          {$entry.base}
+        </div>
+
+        <div class="image main">
+          {call dma.entry.simplemainfile}
+            {param entry: $entry /}
+            {param size: 90 /}
+          {/call}
+        </div>
+
+        {call .statistics}
+          {param entry: $entry /}
+        {/call}
+      </div>
+
+      <div class="bottom-block">
+        <div class="appearance">
+          {$entry.appearance}
+        </div>
+
+        {if $entry.incomplete.present and $ij.isDM}
+          <div class="incomplete">
+            {call dma.value.extension}
+              {param value: 'incomplete' /}
+            {/call}
+            {sp}
+            {call dma.entry.added}
+              {param addable: $entry.combined_incomplete /}
+            {/call}
+          </div>
+        {/if}
+        
+        <div class="description">
+          {call dma.entry.concatenated}
+            {param concatenate: $entry.combined_description /}
+            {param lines: true /}
+          {/call}
+        </div>
+        {if $entry.DM_notes.present} 
+          <div class="dm-notes block">
+            {call dma.value.extension}
+              {param value: 'notes' /}
+            {/call}
+            {sp}
+            {$entry.dm_notes.get}
+          </div>
+        {/if}
+        {if $entry.player_notes.present}
+          <div class="player-notes block">
+            {call dma.value.extension}
+              {param value: 'notes' /}
+            {/call}
+            {sp}
+            {$entry.player_notes.get}
+          </div>
+        {/if}
+        {if $entry.container}
+          <div class="content">
+            {if $entry.campaign.present}
+              {foreach $item in $entry.contents}
+                {call .tiny}             
+                  {param entry: entry($entry.campaign.get.key + '/item/'
+                      + $item.name) /}
+                {/call}
+              {/foreach}
+            {/if}
+          </div>
+        {/if}
+        <div class="references">
+          {call dma.entry.concatenated_list}
+            {param values: [] /}
+            {param concatenate: $entry.combined_references /}
+          {/call}
+        </div>
+      </div>
+    </div>
+  </div>
+{/template}
+
+/**
+ * Statistics values in item the card.
+ *
+ * @param entry The entry shown.
+ */
+{template .statistics}
+  <div class="statistics">
+    <div class="statistics-lines">
+      <div class="value">
+        {call dma.value.extension}
+          {param value: 'value' /}
+        {/call}
+        {sp}
+        {call dma.entry.added} 
+          {param value: $entry.value /}
+          {param addable: $entry.combined_value /}           
+        {/call}
+      </div>
+
+      <div class="hp">
+        {call dma.value.extension}
+          {param value: 'hp' /}
+        {/call}
+        {sp}
+        {$entry.HP} (of{sp}
+        {call dma.entry.added} 
+          {param addable: $entry.combined_max_HP /}           
+        {/call})
+      </div>
+
+      <div class="weight">
+        {call dma.value.extension}
+          {param value: 'weight' /}
+        {/call}
+        {sp}
+        {call dma.entry.added}
+          {param addable: $entry.combined_weight /}
+        {/call}
+      </div>
+      <div class="size">
+        {call dma.value.extension}
+          {param value: 'size' /}
+        {/call}
+        {sp}
+        {call dma.entry.added}
+          {param addable: $entry.combined_size /}
+        {/call}
+      </div>
+
+      <div class="hardness">
+        {call dma.value.extension}
+          {param value: 'hardness' /}
+        {/call}
+        {call dma.entry.added}
+          {param addable: $entry.combined_hardness /}
+        {/call}
+        {sp}
+        {call dma.value.extension}
+          {param value: 'break' /}
+        {/call}
+        {call dma.entry.added}
+          {param addable: $entry.combined_break_DC /}
+        {/call}
+      </div>
+
+      <div class="substance">
+        {call dma.value.extension}
+          {param value: 'substance' /}
+        {/call}
+        {sp}
+        <span class="value">
+          {call dma.entry.added}
+            {param addable: $entry.combined_thickness /}
+          {/call}
+          {sp}
+          {call dma.entry.added}
+            {param addable: $entry.combined_substance /}
+          {/call}
+        </span>
+      </div>
+
+      {if $entry.multiple.present}
+        <div class="counted">
+          {call dma.value.extension}
+            {param value: 'multiple' /}
+          {/call}
+          {sp}
+          {$entry.multiple.get}
+          {sp}
+          {call dma.entry.added} 
+            {param addable: $entry.combined_count_unit /}
+          {/call}
+          {sp}
+        </div>
+      {/if}
+
+      {if $entry.multiuse.present}
+        <div class="counted">
+          {call dma.value.extension}
+            {param value: 'multiuse' /}
+          {/call}
+          {sp}
+          {$entry.multiuse.get}
+          {sp}
+        </div>
+      {/if}
+
+      {if $entry.wearable}
+        <div class="wearable">
+          {call dma.value.extension}
+            {param value: 'wearable' /}
+          {/call}
+          {sp}
+          {call dma.entry.added} 
+            {param addable: $entry.combined_slot /}
+          {/call}
+          {sp}
+          <div class="stack">
+            <div>
+              {call dma.entry.added} 
+                {param addable: $entry.combined_don /}
+                {param short: true /}
+              {/call}/ 
+              {call dma.entry.added} 
+                {param addable: $entry.combined_don_hastily /}
+                {param short: true /}
+              {/call}
+            </div>
+            <div>
+              {call dma.entry.added} 
+                {param addable: $entry.combined_remove /}
+                {param short: true /}
+              {/call}
+           </div>
+          </div>
+        </div>
+      {/if}
+
+      {if $entry.container}
+        <div class="container">
+          {call dma.value.extension}
+            {param value: 'container' /}
+          {/call}
+          {sp}
+          {call dma.entry.added}
+            {param addable: $entry.combined_capacity /}
+            {param short: true /}
+          {/call}
+          {sp}
+          {call dma.entry.added}
+            {param addable: $entry.combined_state /}
+            {param short: true /}
+          {/call}
+        </div>
+      {/if}
+
+      {if $entry.light}
+        <div class="light">
+          {call dma.value.extension}
+            {param value: 'light' /}
+          {/call}
+          {sp}
+          {call dma.entry.added}
+            {param short: true /}
+            {param addable: $entry.combined_light_shape /}
+          {/call}
+          
+          <div class="stack lead">
+            <div>
+              {call dma.entry.added}
+                {param short: true /}
+                {param addable: $entry.combined_bright_light /}
+              {/call}
+            </div>
+            <div>
+              {call dma.entry.added}
+                {param short: true /}
+                {param addable: $entry.combined_shadowy_light /}
+              {/call}
+            </div>
+          </div>
+        </div>
+      {/if}
+
+      {if $entry.timed}
+        <div class="timed">
+          {call dma.value.extension}
+            {param value: 'timed' /}
+          {/call}
+          {sp}
+          {$entry.time_left.get.to_short_string}
+        </div>
+      {/if}
+
+      {if $entry.commodity}
+        <div class="commodity">
+          {call dma.value.extension}
+            {param value: 'commodity' /}
+          {/call}
+          {sp}
+          {call dma.entry.added}
+            {param short: true /}
+            {param addable: $entry.combined_length /}
+          {/call}
+          {call dma.entry.added}
+            {param short: true /}
+            {param addable: $entry.combined_area /}
+          {/call}
+        </div>
+      {/if}
+    </div>
+
+    {if $entry.weapon}
+      <div class="statistics-line weapon">
+        {call dma.value.extension}
+          {param value: 'weapon' /}
+        {/call}
+        <div class="value">
+          {call dma.entry.added}
+            {param short: true /}
+            {param addable: $entry.combined_damage /}
+          {/call}
+          {if $entry.combined_secondary_damage.has_value}
+            {call dma.entry.added}
+              {param short: true /}
+              {param addable: $entry.combined_secondary_damage /}
+            {/call}
+            {sp}
+          {/if}
+          {if $entry.combined_splash.has_value}
+            ({call dma.entry.added}
+              {param short: true /}
+              {param addable: $entry.combined_splash /}
+            {/call})
+            {sp}
+          {/if}
+          {call dma.entry.added}
+            {param short: true /}
+            {param addable: $entry.combined_critical /}
+          {/call}
+          ,{sp}
+          {call dma.entry.added}
+            {param short: true /}
+            {param addable: $entry.combined_weapon_type /}
+          {/call}
+          ,{sp}
+          {call dma.entry.added}
+            {param addable: $entry.combined_proficiency /}
+            {param short: true /}
+          {/call}
+          ,{sp}
+          {call dma.entry.added}
+            {param addable: $entry.combined_weapon_style /}
+            {param short: true /}
+          {/call}
+          ,{sp}
+          {call dma.entry.added}
+            {param short: true /}
+            {param addable: $entry.combined_reach /}
+          {/call}
+          /
+          {call dma.entry.added}
+            {param short: true /}
+            {param addable: $entry.combined_range /}
+          {/call}
+        </div>
+      </div>
+    {/if}
+
+    {if $entry.armor}
+      <div class="statistics-line armor">
+        {call dma.value.extension}
+          {param value: 'armor' /}
+        {/call}
+        <div class="value">
+          AC{sp}
+          {call dma.entry.added}
+            {param addable: $entry.combined_armor_bonus /}
+          {/call}
+          {sp}
+          {call dma.entry.added}
+            {param addable: $entry.combined_armor_type /}
+          {/call}
+          , max dex{sp}
+          {call dma.entry.added}
+            {param addable: $entry.combined_max_dex /}
+          {/call}
+          , check{sp}
+          {call dma.entry.added}
+            {param addable: $entry.combined_check_penalty /}
+          {/call}
+          , arcane{sp}
+          {call dma.entry.added}
+            {param addable: $entry.combined_arcane_failure /}
+          {/call}
+          {if $entry.combined_slow_speed.has_value 
+              or $entry.combined_fast_speed.has_value}
+            , speed{sp}
+            {call dma.entry.added}
+              {param addable: $entry.combined_slow_speed /}
+            {/call}/
+            {call dma.entry.added}
+              {param addable: $entry.combined_fast_speed /}
+            {/call}
+          {/if}
+        </div>
+      </div>
+    {/if}
+  </div>
+{/template}

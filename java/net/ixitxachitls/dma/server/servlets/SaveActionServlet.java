@@ -104,7 +104,10 @@ public class SaveActionServlet extends ActionServlet
     AbstractEntry entry = DMADataFactory.get().getEntry(key.get());
     if(entry == null)
       if(inRequest.hasParam("_create_"))
+      {
         entry = key.get().getType().create(key.get().getID());
+        entry.updateKey(key.get());
+      }
       else
         return "gui.alert('Cannot find entry for " + key + "');";
 
@@ -123,7 +126,7 @@ public class SaveActionServlet extends ActionServlet
       return "gui.info('Entry " + entry.getName() + " has been saved.'); true";
     }
 
-    return "gui.info('No changes needed saving')";
+    return "gui.info('No changes needed saving'); true";
   }
 
   //------------------------------------------------------------------- test

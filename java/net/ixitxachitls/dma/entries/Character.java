@@ -19,39 +19,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CharacterProto;
-import net.ixitxachitls.dma.values.EnumSelection;
+import net.ixitxachitls.dma.proto.Entries.NPCProto;
 import net.ixitxachitls.dma.values.File;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.NewMoney;
-import net.ixitxachitls.dma.values.NewRational;
-import net.ixitxachitls.dma.values.NewWeight;
-import net.ixitxachitls.dma.values.Number;
-import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * The storage space for a character in the game.
@@ -61,155 +45,57 @@ import net.ixitxachitls.util.logging.Log;
  * values now, like items, thus this class is currently incomplete.
  *
  * @file          Character.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ParametersAreNonnullByDefault
-public class Character extends CampaignEntry
+public class Character extends NPC
+                       //extends CampaignEntry
                        //implements Storage<Item>
 {
-  //----------------------------------------------------------------- nested
-
-  //----- state -------------------------------------------------------------
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
-  /** The character state. */
-  public enum State implements EnumSelection.Named,
-    EnumSelection.Proto<CharacterProto.State>
-  {
-    /** A normal character going on adventures. */
-    ADVENTURING("adventuring", CharacterProto.State.ADVENTURING),
-    /** The character is currently incapable of adventuring. */
-    INCAPACITATED("incapacitated", CharacterProto.State.INCAPACITATED),
-    /** The character has been retired by the player or the DM. */
-    RETIRED("retired", CharacterProto.State.RETIRED),
-    /** The character died. */
-    DEAD("dead", CharacterProto.State.DEAD);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private CharacterProto.State m_proto;
-
-    /**
-     * Create the name.
-     *
-     * @param inName     the name of the value
-     * @param inProto    the proto enum value
-     */
-    private State(String inName, CharacterProto.State inProto)
-    {
-      m_name = inName;
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public CharacterProto.State toProto()
-    {
-      return m_proto;
-    }
-
-    public static State fromProto(CharacterProto.State inProto)
-    {
-      for(State state : values())
-        if(state.m_proto == inProto)
-          return state;
-
-      throw new IllegalArgumentException("cannot convert state: " + inProto);
-    }
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------ Character -------------------------------
-
   /**
    * Create the character.
-   *
    */
   protected Character()
   {
     super(TYPE);
   }
 
-  //........................................................................
-  //------------------------------ Character -------------------------------
-
   /**
    * Create the character with an name.
    *
    * @param    inName the name of the character to create
-   *
    */
   public Character(String inName)
   {
     super(inName, TYPE);
   }
 
-  //.......................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The type of this entry. */
   public static final Type<Character> TYPE =
-    new Type<Character>(Character.class, BaseCharacter.TYPE);
-
-  //----- state ------------------------------------------------------------
+    new Type<Character>(Character.class, BaseMonster.TYPE);
 
   /** The state value. */
-  @Key("state")
-  protected EnumSelection<State> m_state =
-    new EnumSelection<State>(State.class);
+  protected CharacterState m_state = CharacterState.UNKNOWN;
 
-  //........................................................................
-  //----- items ------------------------------------------------------------
+  protected Optional<String> m_monsterName = Optional.absent();
+  protected Optional<Optional<Monster>> m_monster = Optional.absent();
+
+  /** The name of the player for this character. */
+  protected Optional<String> m_playerName = Optional.absent();
+  protected Optional<Optional<BaseCharacter>> m_player = Optional.absent();
 
   /** The possessions value. */
-  @Key("items")
-  protected ValueList<Name> m_items = new ValueList<Name>(new Name());
+  protected List<String> m_items = new ArrayList<>();
 
-  //........................................................................
-  //----- level ------------------------------------------------------------
-
-  /** The character level. This is a big simplification and has to be replaced
-   * by a list of classes and their levels. */
-  @Key("level")
-  protected Number m_level = new Number(1, 1, 100);
-
-  //........................................................................
-
-  //----- wealth -----------------------------------------------------------
-
-  /** The standard wealth per level in gold pieces. */
-  private static final int []s_wealth =
-    Config.get("/game/wealth.per.level", new int []
+  /**
+   *  The standard wealth per level in gold pieces.
+   * There is no closed formula for this.
+   */
+  private static final int []s_wealth = new int []
       {
         0,
         900,
@@ -231,20 +117,9 @@ public class Character extends CampaignEntry
         440000,
         580000,
         760000,
-      });
+      };
 
-  //........................................................................
 
-  static
-  {
-    extractVariables(Character.class);
-  }
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //---------------------------- containedItems ----------------------------
 
   /**
    * Get all the items contained in this contents.
@@ -252,8 +127,8 @@ public class Character extends CampaignEntry
    * @param       inDeep true for returning all item, including nested ones,
    *                     false for only the top level items
    * @return      a list with all the items
-   *
    */
+  /*
   public Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
@@ -271,9 +146,7 @@ public class Character extends CampaignEntry
 
     return items;
   }
-
-  //........................................................................
-  //------------------------------ possesses -------------------------------
+  */
 
   /**
    * Checks if the character has the item in possession.
@@ -284,59 +157,54 @@ public class Character extends CampaignEntry
    * @param       inItem the name of the item to check
    *
    * @return      true if the character possesses the item, false if not
-   *
    */
+  /*
   public boolean possesses(String inItem)
   {
     return containedItems(true).containsKey(inItem);
   }
-
-  //........................................................................
-
-  //-------------------------- getCharacterLevel ---------------------------
+  */
 
   /**
-   * Get the character level.
+   * Simple getter for state.
    *
-   * @return      the level
-   *
+   * @return the state
    */
-  public int getCharacterLevel()
+  public CharacterState getState()
   {
-    return (int)m_level.get();
+    return m_state;
   }
 
-  //........................................................................
-  //---------------------------- getStorageName ----------------------------
-
   /**
-   * Get the name of the file.
+   * Simple getter for items.
    *
-   * @return      the name of the file (without 'unnecessary path' info)
-   *
+   * @return the items
    */
-  // public String getStorageName()
-  // {
-  //   return m_storage.getStorageName() + ":" + getName();
-  // }
+  public List<String> getItems()
+  {
+    return m_items;
+  }
 
-  //........................................................................
-  //----------------------------- getStorageID -----------------------------
+  public Optional<String> getBaseCharacterName()
+  {
+    return m_playerName;
+  }
 
-  /**
-   * Get the id of the storage or null if none (usually if not an value group).
-   *
-   * @return      the id of the storage or null
-   *
-   */
-  // public String getStorageID()
-  // {
-  //   return getID();
-  // }
+  public Optional<BaseCharacter> getPlayer()
+  {
+    if(!m_player.isPresent())
+    {
+      if(m_playerName.isPresent())
+        m_player = Optional.of(Optional.fromNullable
+                               ((BaseCharacter)DMADataFactory.get().getEntry
+                                (new EntryKey(m_playerName.get(),
+                                              BaseCharacter.TYPE))));
+      else
+        return Optional.absent();
+    }
 
-  //........................................................................
-
-  //---------------------------- wealthPerLevel ----------------------------
+    return m_player.get();
+  }
 
   /**
    * Get the wealth a character should approximately have for the given level.
@@ -344,7 +212,6 @@ public class Character extends CampaignEntry
    * @param       inLevel the level for which to compute the wealth
    *
    * @return      the wealth for the given level in gp
-   *
    */
   public static int wealthPerLevel(int inLevel)
   {
@@ -357,15 +224,12 @@ public class Character extends CampaignEntry
     return s_wealth[inLevel - 1];
   }
 
-  //........................................................................
-  //----------------------------- totalWealth ------------------------------
-
   /**
    * The total wealth in gp of the character.
    *
    * @return      the gp value of all items
-   *
    */
+  /*
   public NewMoney totalWealth()
   {
     NewMoney total = new NewMoney(0, 0, 0, 0, 0, 0);
@@ -384,16 +248,14 @@ public class Character extends CampaignEntry
 
     return total;
   }
-
-  //........................................................................
-  //----------------------------- totalWeight ------------------------------
+  */
 
   /**
    * The total weight in pounts of the character.
    *
    * @return      the lb value of all items
-   *
    */
+  /*
   public NewWeight totalWeight()
   {
     NewWeight total = new NewWeight(Optional.of(NewRational.ZERO),
@@ -413,10 +275,7 @@ public class Character extends CampaignEntry
 
     return total;
   }
-
-  //........................................................................
-
-  //------------------------------- compute --------------------------------
+  */
 
   /**
    * Compute a value for a given key, taking base entries into account if
@@ -425,20 +284,11 @@ public class Character extends CampaignEntry
    * @param    inKey the key of the value to compute
    *
    * @return   the compute value
-   *
    */
+  /*
   @Override
   public @Nullable Object compute(String inKey)
   {
-    if("icon".equals(inKey))
-    {
-      File main = getMainFile();
-      if(main == null)
-        return new Name("character/person.png");
-      else
-        return new Name(main.getIcon() + "=s100");
-    }
-
     if("wealth".equals(inKey))
       return new ImmutableMap.Builder<String, Object>()
         .put("total", (int)totalWealth().asGold())
@@ -452,14 +302,46 @@ public class Character extends CampaignEntry
 
     return super.compute(inKey);
   }
+  */
 
-  //........................................................................
+  public String getIcon()
+  {
+    File main = getMainFile();
+    if(main == null)
+      return "character/person.png";
+    else
+      return main.getIcon() + "=s100";
+  }
 
-  //........................................................................
+  public Optional<Monster> getMonster()
+  {
+    if(!m_monster.isPresent())
+    {
+      if(!m_monsterName.isPresent())
+        return Optional.absent();
 
-  //----------------------------------------------------------- manipulators
+      m_monster = Optional.of(
+        Optional.fromNullable((Monster)DMADataFactory.get()
+                              .getEntry(new EntryKey(m_monsterName.get(),
+                                                     Monster.TYPE))));
+    }
 
-  //--------------------------------- add ----------------------------------
+    return m_monster.get();
+  }
+
+  @Override
+  public List<Item> getPossessions()
+  {
+    if(m_possessions == null)
+      m_possessions =
+        DMADataFactory.get().getEntries(Item.TYPE,
+                                         getCampaign().get().getKey(),
+                                         "index-parent",
+                                         "character/"
+                                         + getName().toLowerCase());
+
+    return Collections.unmodifiableList(m_possessions);
+  }
 
   /**
    * Add the given entry to the character entry.
@@ -469,6 +351,7 @@ public class Character extends CampaignEntry
    * @return      true if added, false if not
    *
    */
+  /*
   @Override
   public boolean add(CampaignEntry inEntry)
   {
@@ -489,29 +372,32 @@ public class Character extends CampaignEntry
     save();
     return true;
   }
+  */
 
-  //........................................................................
+  @Override
+  public void set(Values inValues)
+  {
+    super.set(inValues);
 
-  //........................................................................
-
-  //------------------------------------------------- other member functions
+    m_state = inValues.use("state", m_state, CharacterState.PARSER);
+    m_playerName = inValues.use("player", m_playerName);
+  }
 
   @Override
   public Message toProto()
   {
     CharacterProto.Builder builder = CharacterProto.newBuilder();
 
-    builder.setBase((CampaignEntryProto)super.toProto());
+    builder.setBase((NPCProto)super.toProto());
 
-    if(m_state.isDefined())
-      builder.setState(m_state.getSelected().toProto());
+    if(m_state != CharacterState.UNKNOWN)
+      builder.setState(m_state.toProto());
 
-    if(m_items.isDefined())
-      for(Name item : m_items)
-        builder.addItem(item.get());
+    for(String item : m_items)
+        builder.addItem(item);
 
-    if(m_level.isDefined())
-      builder.setLevel((int)m_level.get());
+    if(m_playerName.isPresent())
+      builder.setPlayerName(m_playerName.get());
 
     CharacterProto proto = builder.build();
     return proto;
@@ -529,19 +415,13 @@ public class Character extends CampaignEntry
     CharacterProto proto = (CharacterProto)inProto;
 
     if(proto.hasState())
-      m_state = m_state.as(State.fromProto(proto.getState()));
+      m_state = CharacterState.fromProto(proto.getState());
 
-    if(proto.getItemCount() > 0)
-    {
-      List<Name> items = new ArrayList<>();
-      for(String item : proto.getItemList())
-        items.add(m_items.createElement().as(item));
+    for(String item : proto.getItemList())
+      m_items.add(item);
 
-      m_items = m_items.as(items);
-    }
-
-    if(proto.hasLevel())
-      m_level = m_level.as(proto.getLevel());
+    if(proto.hasPlayerName())
+      m_playerName = Optional.of(proto.getPlayerName());
 
     super.fromProto(proto.getBase());
   }
@@ -558,6 +438,4 @@ public class Character extends CampaignEntry
       Log.warning("could not properly parse proto: " + e);
     }
   }
-
-  //........................................................................
 }

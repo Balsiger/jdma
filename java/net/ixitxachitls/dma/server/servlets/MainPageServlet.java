@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * Copyright (c) 2002-2014 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.ArrayList;
@@ -39,6 +37,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.BaseCampaign;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.Campaign;
 import net.ixitxachitls.dma.entries.Character;
@@ -48,74 +47,36 @@ import net.ixitxachitls.dma.entries.Character;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * The servlet for displaying the overview page for a user.
  *
  * @file          MainPageServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class MainPageServlet extends PageServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //--------------------------- MainPageServlet ----------------------------
-
   /**
    * The standard constructor for the servlet.
-   *
    */
   public MainPageServlet()
   {
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //--------------------------- getLastModified ----------------------------
-
   /**
-    * Get the time of the last modification.
-    *
-    * @return      the time of the last modification in miliseconds or -1
-    *              if unknown
-    *
-    */
+   * Get the time of the last modification.
+   *
+   * @return      the time of the last modification in miliseconds or -1
+   *              if unknown
+   */
   public long getLastModified()
   {
     return -1;
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------------------------- other member functions
-
-  //----------------------------- collectData ------------------------------
 
   /**
    * Collect the data that is to be printed.
@@ -125,7 +86,6 @@ public class MainPageServlet extends PageServlet
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
-   *
    */
   @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
@@ -164,7 +124,7 @@ public class MainPageServlet extends PageServlet
       soyCampaigns.add(new SoyEntry(campaign));
 
     List<Campaign> dmCampaigns =
-      DMADataFactory.get().getEntries(Campaign.TYPE, null, "dm",
+      DMADataFactory.get().getEntries(Campaign.TYPE, null, "index-dm",
                                       user.get().getName());
     List<SoyEntry> soyDMCampaigns = new ArrayList<SoyEntry>();
     Map<String, List<SoyEntry>> dmCharacters =
@@ -182,6 +142,13 @@ public class MainPageServlet extends PageServlet
       dmCharacters.put(campaign.getName(), chars);
     }
 
+
+    List<BaseCampaign> baseCampaigns =
+      DMADataFactory.get().getEntries(BaseCampaign.TYPE, null, 0, 50);
+    List<SoyEntry> soyBaseCampaigns = new ArrayList<SoyEntry>();
+    for(BaseCampaign campaign : baseCampaigns)
+      soyBaseCampaigns.add(new SoyEntry(campaign));
+
     data.put("content",
              inRenderer.render
              ("dma.page.main",
@@ -190,12 +157,10 @@ public class MainPageServlet extends PageServlet
                       "characters", characters),
                   "dm",
                   map("campaigns", soyDMCampaigns,
-                      "characters", dmCharacters))));
+                      "characters", dmCharacters),
+                  "campaigns",
+                  soyBaseCampaigns)));
 
     return data;
   }
-
-  //........................................................................
-
-  //........................................................................
 }

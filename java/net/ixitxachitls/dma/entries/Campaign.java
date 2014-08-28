@@ -27,10 +27,12 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.CampaignProto;
 import net.ixitxachitls.util.logging.Log;
@@ -104,7 +106,10 @@ public class Campaign extends CampaignEntry
   @Override
   public String getDMName()
   {
-    return m_dm.get();
+    if(m_dm.isPresent())
+      return m_dm.get();
+
+    return "(none)";
   }
 
   /**
@@ -253,6 +258,17 @@ public class Campaign extends CampaignEntry
     return super.compute(inKey);
   }
 */
+
+  @Override
+  public Multimap<Index.Path, String> computeIndexValues()
+  {
+    Multimap<Index.Path, String> values = super.computeIndexValues();
+
+    if(m_dm.isPresent())
+      values.put(Index.Path.DM, m_dm.get());
+
+    return values;
+  }
 
   @Override
   public String getPath()

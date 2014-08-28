@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.output.soy;
 
 import java.util.Map;
@@ -29,6 +27,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyListData;
@@ -82,10 +81,11 @@ public class SoyAbstract extends SoyMapData
     @Override
     public SoyData getSingle(String inName)
     {
-      if("print".equals(inName)
-         || "raw".equals(inName))
-        return StringData.forValue(toString());
-
+      switch(inName)
+      {
+        case "present":
+          return BooleanData.FALSE;
+      }
       return new Undefined(m_name + "." + inName);
     }
 
@@ -115,9 +115,9 @@ public class SoyAbstract extends SoyMapData
      * @param inValue the object in which to call the method
      * @param inEntry the entry the value comes from
      */
-    public SoyWrapper(String inName, Object inValue, AbstractEntry inEntry)
+    public SoyWrapper(String inName, Object inValue, Object inObject)
     {
-      super(inName, inEntry);
+      super(inName, inObject);
 
       m_value = inValue;
     }
@@ -136,7 +136,19 @@ public class SoyAbstract extends SoyMapData
     @Override
     public SoyData getSingle(String inName)
     {
-      Object value = Classes.callMethod(inName, m_value);
+      Object value = m_value;
+      if(value instanceof Optional)
+      {
+        if("isPresent".equals(inName) || "present".equals(inName))
+          return BooleanData.forValue(((Optional)value).isPresent());
+
+        if(((Optional)value).isPresent())
+          value = ((Optional)m_value).get();
+        else
+          return new Undefined(m_name + "." + inName);
+      }
+
+      value = Classes.callMethod(inName, value);
       if(value != null)
         return convert(inName, value);
 
@@ -164,6 +176,12 @@ public class SoyAbstract extends SoyMapData
     @Override
     public String toString()
     {
+      if(m_value instanceof Optional)
+        if(((Optional)m_value).isPresent())
+          return ((Optional)m_value).get().toString();
+        else
+          return "(undefined)";
+
       return m_value.toString();
     }
   }
@@ -174,35 +192,17 @@ public class SoyAbstract extends SoyMapData
    * @param inName  the name of the soy value
    * @param inEntry the entry in which to evaluate the values
    */
-  public SoyAbstract(String inName, @Nullable AbstractEntry inEntry)
+  public SoyAbstract(String inName, @Nullable Object inEntry)
   {
     m_name = inName;
-    m_entry = inEntry;
+    m_object = inEntry;
   }
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The name of the value. */
   protected final String m_name;
 
   /** The entry with the data. */
-  protected final AbstractEntry m_entry;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //------------------------------- convert --------------------------------
+  protected final Object m_object;
 
   /**
    * Convert the given object into a soy value.
@@ -215,7 +215,7 @@ public class SoyAbstract extends SoyMapData
   protected SoyData convert(String inName, Object inObject)
   {
     if(inObject instanceof Value)
-      return new SoyValue(inName, (Value)inObject, m_entry);
+      return new SoyValue(inName, (Value)inObject, (AbstractEntry)m_object);
 
     if(inObject instanceof AbstractEntry)
       return new SoyEntry((AbstractEntry)inObject);
@@ -266,31 +266,6 @@ public class SoyAbstract extends SoyMapData
     if(inObject == null)
       return new Undefined(m_name + "." + inName);
 
-    return new SoyWrapper(m_name + "." + inName, inObject, m_entry);
-
-    // try
-    // {
-    //   return SoyData.createFromExistingData(inObject);
-    // }
-    // catch(SoyDataException e)
-    // {
-    //   Log.warning("could not convert " + inObject.getClass()
-    //     + ", defaulting to string");
-
-    //   return StringData.forValue(inObject.toString());
-    // }
+    return new SoyWrapper(m_name + "." + inName, inObject, m_object);
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
-
-  /** The tests. */
-  // public static class Test extends net.ixitxachitls.util.test.TestCase
-  // {
-  // }
-
-  //........................................................................
 }

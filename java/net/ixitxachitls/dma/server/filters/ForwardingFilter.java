@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.server.filters;
 
 import java.io.IOException;
@@ -48,29 +46,16 @@ import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.server.ServerUtils;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * The filter to forward paths of a given pattern to a new path.
  *
  * @file          ForwardFilter.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public class ForwardingFilter implements Filter
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //--------------------------- ForwardingFilter ---------------------------
-
   /**
    * Create the filter.
    *
@@ -80,15 +65,10 @@ public class ForwardingFilter implements Filter
     // nothing to do
   }
 
-  //........................................................................
-
-  //--------------------------------- init ---------------------------------
-
   /**
    * Initialize the filter.
    *
    * @param       inConfig the filter configuration
-   *
    */
   @Override
   public void init(FilterConfig inConfig)
@@ -102,12 +82,8 @@ public class ForwardingFilter implements Filter
       m_mappings.put(rewrites[i], rewrites[i + 1]);
   }
 
-  //........................................................................
-  //------------------------------- destroy --------------------------------
-
   /**
    * Destroy the filter.
-   *
    */
   @Override
   public void destroy()
@@ -115,27 +91,12 @@ public class ForwardingFilter implements Filter
     // nothing to do
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The filter configuration. */
   private @Nullable FilterConfig m_config;
 
   /** The filter mappings. */
   private Multimap<String, String> m_mappings =
     LinkedListMultimap.create();
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------- doFilter -------------------------------
 
   /**
     * Filter the given request.
@@ -146,7 +107,6 @@ public class ForwardingFilter implements Filter
     *
     * @throws      IOException      writing to page failed
     * @throws      ServletException general failure when creating response
-    *
     */
   @Override
   public void doFilter(ServletRequest inRequest, ServletResponse inResponse,
@@ -171,17 +131,12 @@ public class ForwardingFilter implements Filter
     }
   }
 
-  //........................................................................
-
-  //--------------------------- computeForward ----------------------------
-
   /**
    * Comute the path to forward to.
    *
    * @param    inRequest the request to be forwarded
    *
    * @return   the path to forward to
-   *
    */
   public @Nullable String computeForward(HttpServletRequest inRequest)
   {
@@ -226,15 +181,7 @@ public class ForwardingFilter implements Filter
     return null;
   }
 
-  //........................................................................
-
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------------
 
   /** The tests. */
   public static class Test extends ServerUtils.Test
@@ -296,6 +243,4 @@ public class ForwardingFilter implements Filter
 
     //......................................................................
   }
-
-  //...........................................................................
 }

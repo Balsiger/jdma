@@ -83,6 +83,8 @@ public class SoyValue extends SoyAbstract
   public SoyValue(String inName, Value<?> inValue, AbstractEntry inEntry)
   {
     this(inName, inValue, inEntry, true);
+
+    m_entry = inEntry;
   }
 
   //........................................................................
@@ -121,6 +123,8 @@ public class SoyValue extends SoyAbstract
 
   /** A flag if the value can be edited. */
   protected final boolean m_editable;
+
+  protected AbstractEntry m_entry;
 
   //........................................................................
 

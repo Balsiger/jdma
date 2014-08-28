@@ -140,19 +140,12 @@ public final class Strings
   /** The joiner to convert with escaped newlines. */
   public static final Joiner BR_JOINER = Joiner.on("<br />");
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //-------------------------------- spaces --------------------------------
-
   /**
     * Return the given number of spaces as a single String.
     *
     * @param       inLength the number of spaces to return
     *
     * @return      the request String consisting of spaces only
-    *
     */
   public static String spaces(int inLength)
   {
@@ -165,10 +158,6 @@ public final class Strings
     return s_spaces.substring(0, inLength);
   }
 
-  //........................................................................
-
-  //------------------------------- toString -------------------------------
-
   /**
     * Convert the given object into a String, using the default value if the
     * object is null.
@@ -177,7 +166,6 @@ public final class Strings
     * @param       inDefault the default value
     *
     * @return      the object converted to a String or the default value
-    *
     */
   public static String toString(@Nullable Object inValue, String inDefault)
   {
@@ -186,9 +174,6 @@ public final class Strings
 
     return inValue.toString();
   }
-
-  //........................................................................
-  //------------------------------- toString -------------------------------
 
   /**
     * Convert the given array into a String, using the default value if the
@@ -219,9 +204,6 @@ public final class Strings
     return result.toString();
   }
 
-  //........................................................................
-  //------------------------------- toString -------------------------------
-
   /**
     * Convert the given iterator into a String, using the given delimiter.
     *
@@ -230,7 +212,6 @@ public final class Strings
     * @param       inDefault   the default value
     *
     * @return      the object converted to a String or the default value
-    *
     */
   public static String toString(@Nullable Iterator<?> inIterator,
                                 String inDelimiter, String inDefault)
@@ -251,9 +232,6 @@ public final class Strings
     return result.toString();
   }
 
-  //........................................................................
-  //------------------------------- toString -------------------------------
-
   /**
     * Convert the given iterable into a String, using the given delimiter.
     *
@@ -262,7 +240,6 @@ public final class Strings
     * @param       inDefault   the default value
     *
     * @return      the object converted to a String or the default value
-    *
     */
   public static String toString(@Nullable Iterable<?> inIterable,
                                 String inDelimiter, String inDefault)
@@ -272,10 +249,6 @@ public final class Strings
 
     return toString(inIterable.iterator(), inDelimiter, inDefault);
   }
-
-  //........................................................................
-
-  //------------------------------ getPattern ------------------------------
 
   /**
     * Get the text that matches the given pattern.
@@ -304,9 +277,6 @@ public final class Strings
       return null;
   }
 
-  //........................................................................
-  //----------------------------- getPatterns ------------------------------
-
   /**
    * Get the texts that matches the given pattern.
    *
@@ -314,7 +284,6 @@ public final class Strings
    * @param       inPattern the pattern to match (with or without the (/))
    *
    * @return      the texts that matched
-   *
    */
   public static String []getPatterns(String inText, @Nullable String inPattern)
   {
@@ -375,10 +344,6 @@ public final class Strings
     return results;
   }
 
-
-  //........................................................................
-  //-------------------------- replaceTemplates ----------------------------
-
   /**
    * Replace templates in the given string.
    *
@@ -409,22 +374,17 @@ public final class Strings
     return result.toString();
   }
 
-  //........................................................................
-
-  //--------------------------------- pad ----------------------------------
-
   /**
-    * Pad the given string into a field of the given length (padding spaces
-    * if too short). If the boolean flag is true, pad to the left, otherwise
-    * to the right.
-    *
-    * @param       inText   the text to pad
-    * @param       inLength the length of the field to pad in
-    * @param       inLeft   if true, pad to the left, otherwise to the right
-    *
-    * @return      the padded String
-    *
-    */
+   * Pad the given string into a field of the given length (padding spaces
+   * if too short). If the boolean flag is true, pad to the left, otherwise
+   * to the right.
+   *
+   * @param       inText   the text to pad
+   * @param       inLength the length of the field to pad in
+   * @param       inLeft   if true, pad to the left, otherwise to the right
+   *
+   * @return      the padded String
+   */
   public static String pad(String inText, int inLength, boolean inLeft)
   {
     if(inText.length() >= inLength)
@@ -436,21 +396,17 @@ public final class Strings
       return inText + s_spaces.substring(0, inLength - inText.length());
   }
 
-  //........................................................................
-  //--------------------------------- pad ----------------------------------
-
   /**
-    * Pad the given number into a field of the given length (padding spaces or
-    * 0s if too short). If the boolean flag is true, pad to the left, otherwise
-    * to the right.
-    *
-    * @param       inNumber the number to pad
-    * @param       inLength the length of the field to pad in
-    * @param       inLeft   if true, pad to the left, otherwise to the right
-    *
-    * @return      the padded String
-    *
-    */
+   * Pad the given number into a field of the given length (padding spaces or
+   * 0s if too short). If the boolean flag is true, pad to the left, otherwise
+   * to the right.
+   *
+   * @param       inNumber the number to pad
+   * @param       inLength the length of the field to pad in
+   * @param       inLeft   if true, pad to the left, otherwise to the right
+   *
+   * @return      the padded String
+   */
   public static String pad(long inNumber, int inLength, boolean inLeft)
   {
     String text = Long.toString(inNumber);
@@ -464,9 +420,6 @@ public final class Strings
       return text + s_spaces.substring(0, inLength - text.length());
   }
 
-  //........................................................................
-  //-------------------------------- limit ---------------------------------
-
   /**
    * Limit the given string to at most the given number of characters or up to
    * the given string.
@@ -476,7 +429,6 @@ public final class Strings
    * @param       inDelimiter the delimiter to stop at
    *
    * @return      the limited string
-   *
    */
   public static String limit(String inText, int inLength, String inDelimiter)
   {
@@ -494,9 +446,6 @@ public final class Strings
     return inText.substring(0, length);
   }
 
-  //........................................................................
-  //-------------------------------- format --------------------------------
-
   /**
    * Format the given number to be easier readable.
    *
@@ -508,9 +457,6 @@ public final class Strings
   {
     return s_number.format(inNumber);
   }
-
-  //........................................................................
-  //-------------------------------- format --------------------------------
 
   /**
    * Format the given number to be easier readable.
@@ -524,9 +470,6 @@ public final class Strings
     return s_number.format(inNumber);
   }
 
-  //........................................................................
-  //--------------------------------- trim ---------------------------------
-
   /**
    * Remove surplus white spaces, concatenating all groups of white spaces
    * to a single space. This also completely removes white spaces at the
@@ -536,7 +479,6 @@ public final class Strings
    * @param       inText the text to trim
    *
    * @return      the trimmed text
-   *
    */
   public static String trim(@Nullable String inText)
   {
@@ -551,16 +493,12 @@ public final class Strings
     return result;
   }
 
-  //........................................................................
-  //----------------------------- signedNumber -----------------------------
-
   /**
    * Print the number with a plus sign if it is not negative.
    *
    * @param       inNumber the number to print
    *
    * @return      the signed string
-   *
    */
   public static String signedNumber(long inNumber)
   {
@@ -570,19 +508,13 @@ public final class Strings
     return "" + inNumber;
   }
 
-  //........................................................................
-
-
-  //-------------------------------- nameLF --------------------------------
-
   /**
-    * Switch the given Name to a name starting with the surename.
-    *
-    * @param       inName the name to switch
-    *
-    * @return      the switched name, in the form 'last, first'
-    *
-    */
+   * Switch the given Name to a name starting with the surename.
+   *
+   * @param       inName the name to switch
+   *
+   * @return      the switched name, in the form 'last, first'
+   */
   public static String nameLF(String inName)
   {
     String []parts = inName.split("\\s+");
@@ -598,18 +530,14 @@ public final class Strings
     return switched.toString();
   }
 
-  //........................................................................
-  //-------------------------------- nameFL --------------------------------
-
   /**
-    * Switch the given Name to a name starting with the firstname. I.e. from
-    * 'L, F' to 'F L'.
-    *
-    * @param       inName the name to switch
-    *
-    * @return      the switched name, in the form 'first last'
-    *
-    */
+   * Switch the given Name to a name starting with the firstname. I.e. from
+   * 'L, F' to 'F L'.
+   *
+   * @param       inName the name to switch
+   *
+   * @return      the switched name, in the form 'first last'
+   */
   public static String nameFL(String inName)
   {
     String []parts = inName.split(",");
@@ -625,16 +553,11 @@ public final class Strings
     return switched.toString();
   }
 
-  //........................................................................
-
-  //-------------------------------- today ---------------------------------
-
   /**
-    * Return a String giving the current date (and time).
-    *
-    * @return      A string with the current date
-    *
-    */
+   * Return a String giving the current date (and time).
+   *
+   * @return      A string with the current date
+   */
   public static String today()
   {
     SimpleDateFormat formatter = new SimpleDateFormat(DATE);
@@ -642,17 +565,13 @@ public final class Strings
     return formatter.format(new Date());
   }
 
-  //........................................................................
-  //---------------------------- extractNumber -----------------------------
-
   /**
-    * Extract a number from the given string.
-    *
-    * @param       inText the text to extract from
-    *
-    * @return      the number found in the text or 0 if none was found
-    *
-    */
+   * Extract a number from the given string.
+   *
+   * @param       inText the text to extract from
+   *
+   * @return      the number found in the text or 0 if none was found
+   */
   public static int extractNumber(@Nullable String inText)
   {
     if(inText == null || inText.length() == 0)
@@ -676,17 +595,13 @@ public final class Strings
     return 0;
   }
 
-  //........................................................................
-  //----------------------------- formatNumber -----------------------------
-
   /**
-    * Format the given number into a easy readable String.
-    *
-    * @param       inNumber the number to format
-    *
-    * @return      the formatted string
-    *
-    */
+   * Format the given number into a easy readable String.
+   *
+   * @param       inNumber the number to format
+   *
+   * @return      the formatted string
+   */
   public static String formatNumber(long inNumber)
   {
     StringBuffer result = new StringBuffer("" + inNumber);
@@ -698,17 +613,12 @@ public final class Strings
     return result.toString();
   }
 
-  //........................................................................
-
-  //------------------------------ handleNull ------------------------------
-
   /**
    * Return the same object, unless it is null, then return an empty string.
    *
    * @param       inObject the object to handle null for
    *
    * @return      the given object or the empty string if null is given
-   *
    */
   public static Object handleNull(@Nullable Object inObject)
   {
@@ -718,9 +628,6 @@ public final class Strings
     return inObject;
   }
 
-  //........................................................................
-  //--------------------------------- sort ---------------------------------
-
   /**
    * Sort the given List (in place) according to the given values first and
    * lexicographically second.
@@ -729,7 +636,6 @@ public final class Strings
    * @param       inOrder the strings for a special sort order
    *
    * @return      the sorted list
-   *
    */
   public static List<String> sort(List<String> inList, final String ... inOrder)
   {
@@ -763,9 +669,6 @@ public final class Strings
     return inList;
   }
 
-  //........................................................................
-  //------------------------------- sortable -------------------------------
-
   /**
    * Convert the string into one that can be sorted lexicographically.
    * This is mainly used to make sure that number are correctly sorted
@@ -774,7 +677,6 @@ public final class Strings
    * @param       inText the text to make sortable
    *
    * @return      the sortable text
-   *
    */
   public static String sortable(String inText)
   {
@@ -793,10 +695,6 @@ public final class Strings
     return result.toString();
   }
 
-  //........................................................................
-
-  //------------------------------ cssClasses ------------------------------
-
   /**
    * Create the text for a css attribute.
    *
@@ -804,7 +702,6 @@ public final class Strings
    *
    * @return      the string for the class attribute (if no valid classes are
    *              given, this can be empty)
-   *
    */
   public static String cssClasses(Object ... inClasses)
   {

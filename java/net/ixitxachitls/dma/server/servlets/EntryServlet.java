@@ -30,9 +30,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 
 import org.easymock.EasyMock;
 
@@ -44,6 +46,7 @@ import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.Item;
+import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.server.ServerUtils;
@@ -135,9 +138,9 @@ public class EntryServlet extends PageServlet
       String id = key.get().getID();
 
       if(inRequest.hasUser()
-        && (inRequest.hasParam("create") || "CREATE".equals(id)))
+         && (inRequest.hasParam("create") || "CREATE".equals(id)))
       {
-        action = "edit";
+        action = "create";
 
         // create a new entry for filling out
         Log.info("creating " + type + " '" + id + "'");
@@ -153,16 +156,35 @@ public class EntryServlet extends PageServlet
           entry = type.create(Entry.TEMPORARY + postfix);
           entry.updateKey(key.get());
 
+          if(inRequest.hasParam("values"))
+          {
+            Multimap<String, String> values = ArrayListMultimap.create();
+            for(String value : inRequest.getParam("values").split("\\s*,\\s*"))
+            {
+              String []parts = value.split(":");
+              if(parts.length != 2)
+                continue;
+
+              values.put(parts[0], parts[1]);
+            }
+
+            entry.set(new ValueGroup.Values(values));
+          }
+
+          // bases are overwritten by values if done before!
           if(inRequest.hasParam("bases"))
             for(String base : inRequest.getParam("bases").split("\\s*,\\s*"))
-              entry.addBase(base);
+              if(!base.isEmpty())
+                entry.addBase(base);
 
           if(inRequest.hasParam("identified") && entry instanceof Item)
             ((Item)entry).identify();
 
           if(entry instanceof Entry)
             ((Entry)entry).complete();
+
         }
+
         entry.setOwner(inRequest.getUser().get());
       }
 
@@ -209,6 +231,7 @@ public class EntryServlet extends PageServlet
           + entry.getType().getMultipleDir().toLowerCase() + ".large";
         break;
 
+      case "create":
       case "edit":
         extension = ".edit";
         template = "dma.entries."
@@ -233,7 +256,8 @@ public class EntryServlet extends PageServlet
             "next", current >= last ? "" : ids.get(current + 1) + extension,
             "last", current >= last ? "" : ids.get(last) + extension,
             "variant", type.getName().replace(" ", ""),
-            "id", inRequest.getParam("id")),
+            "id", inRequest.getParam("id"),
+            "create", "create".equals(action)),
         ImmutableSet.of(type.getName().replace(" ", ""))));
     data.put("title", entry.getName());
 

@@ -20,308 +20,30 @@
  *****************************************************************************/
 
 /*
- * Templates for products
+ * Templates for levels.
  */
 {namespace dma.entries.levels}
 
 /**
- * Show the given entry in standard format.
- * 
- * @param entry The entry to show.
- * @param first the first entry available, if any
- * @param previous the previous entry, if any
- * @param list the overview of all entries
- * @param next the next entry, if any
- * @param last the last entry, if any
- */
-{template .show autoescape="true"}
-  {call dma.entry.show}
-    {param entry: $entry /}
-    {param type: 'item' /}
-    {param first: $first /}
-    {param previous: $previous /}
-    {param list: $list /}
-    {param next: $next /}
-    {param last: $last /}
-    {param color: '#008' /}
-    {param title}
-      {call dma.entry._new_title}
-        {param title}
-          {if $ij.isDM}
-            {$entry.DM_name}
-            {if $entry.player_name and $entry.DM_name != $entry.player_name}
-              {sp}[{$entry.player_name}]
-            {/if} 
-          {else}
-            {$entry.player_name}
-          {/if}
-          {sp}({$entry.name})
-        {/param}
-        {param color: '#008' /}
-      {/call}      
-    {/param}
-    {param values}            
-      {if length($entry.baseNames)}
-        {call dma.entry.value}
-          {param label: 'Base' /}
-          {param value}
-            {foreach $base in $entry.baseNames}
-              {call dma.page.link}
-                {param text: $base /}
-                {param url: '/item/'  + $base /}
-              {/call}
-              {if not isLast($base)}; {/if}
-            {/foreach}
-          {/param}
-          {param color: '#008' /}
-        {/call} 
-      {/if}      
-      {if $entry.parent.present}
-        {call dma.entry.value}
-          {param label: 'Parent' /}
-          {param value: $entry.parent.get /}
-          {param color: '#008' /}
-        {/call}
-      {/if} 
-      {call dma.entry.value}
-        {param label: 'HP' /}
-        {param value}
-         {$entry.HP} (max{sp}
-           {call dma.entry.added} 
-             {param addable: $entry.combined_max_HP /}
-           {/call}
-         ) 
-        {/param}
-        {param color: '#008' /}
-      {/call}
-      {call dma.entry.value}
-        {param label: 'Value' /}
-        {param value}
-           {call dma.entry.added} 
-             {param value: $entry.value /}
-             {param addable: $entry.combined_value /}
-           {/call}
-        {/param}
-        {param color: '#008' /}
-      {/call}
-      {call dma.entry.value}
-        {param label: 'Appearance' /}
-        {param value: $entry.appearance /}
-        {param color: '#008' /}
-      {/call}
-      {if $entry.player_notes.present}
-        {call dma.entry.value}
-          {param label: 'Player Notes' /}
-          {param value: $entry.player_notes.get /}
-          {param color: '#008' /}
-        {/call}
-      {/if}
-      {if $entry.DM_notes.present}
-        {call dma.entry.value}
-          {param label: 'DM Notes' /}
-          {param value: $entry.DM_notes.get /}
-          {param color: '#008' /}
-        {/call}
-      {/if}
-      {if $entry.multiple.present}
-        {call dma.entry.value}
-          {param label: 'Multiple' /}
-          {param value}
-            {$entry.multiple.get}
-            {sp}
-             {call dma.entry.added} 
-               {param addable: $entry.combined_count_unit /}
-             {/call}
-          {/param}
-          {param color: '#008' /}
-        {/call}
-      {/if}
-      {if $entry.multiuse.present}
-        {call dma.entry.value}
-          {param label: 'Multiuse' /}
-          {param value: $entry.multiuse.get /}
-          {param color: '#008' /}
-        {/call}
-      {/if}
-      {if $entry.timed}
-        {call dma.entry.value}
-          {param label: 'Timed' /}
-          {param value}
-            {$entry.time_left.get} of{sp}
-            {call dma.entry.added}
-              {param addable: $entry.combined_timed /}
-            {/call}
-          {/param}
-          {param color: '#008' /}
-        {/call}
-      {/if}
-    {/param}
-  {/call}
-  
-  {call .tiny}
-    {param entry: $entry /}
-  {/call}
-
-  {call .small}
-    {param entry: $entry /}
-  {/call}
-
-  {call .large}
-    {param entry: $entry /}
-  {/call}
-{/template}
-
-/**
- * Formatting a list of entries.
- *
- * @param title The list title.
- * @param start The start index
- * @param pagesize The size of the page
- * @param entries The entries printed
- * @param label The navigation label for this page
- * @param path The path to this page
- *
- */
-{template .list}
-  {call dma.entry.newlist}
-    {param title: $title /}
-    {param label: $label /}
-    {param path: $path /}
-    {param start: $start /}
-    {param pagesize: $pagesize /}
-    {param size: $entries ? length($entries) : 0 /}
-    {param titles: [ 'Name', 'DM'] /}
-    {param entries}
-      {foreach $entry in $entries}
-        <tr onclick="util.link(event, '{$entry.path}')">
-          {call dma.entry.newListEntry}
-            {param path: $entry.path /}
-            {param values: [
-              $entry.name, $entry.DM.get
-            ] /}
-          {/call}
-        </tr>
-      {/foreach}
-    {/param}
-  {/call}
-{/template}
-
-/**
  * Editiing the base character.
  * 
- * @param entry The character to edit. 
- * @param id    THe id to use for the editing dialog.
+ * @param? entry The character to edit. 
  */
 {template .edit autoescape="true"}
-  {call dma.edit.entry}
-    {param entry: $entry /}
-    {param type: 'product' /}
-    {param id: $id /}
-    {param values}
-      {call dma.edit.value}
-        {param name: 'name' /}
-        {param label: 'Name' /}
-        {param value: $entry.name /}
-        {param validate: 'non-empty' /}
-        {param color: '#008' /}
-      {/call}    
-      {call dma.edit.value_list}
-        {param name: 'base' /}
-        {param label: 'Base' /}
-        {param values: $entry.base_names /}
-        {param validate: 'non-empty' /}
-        {param color: '#008' /}
-        {param autocomplete: 'base item/name' /}
-      {/call}    
-      {call dma.edit.value}
-        {param name: 'parent' /}
-        {param label: 'Parent' /}
-        {param value: $entry.parent.present ? $entry.parent.get : '' /}
-        {param validate: 'non-empty' /}
-        {param color: '#008' /}
-      {/call}    
-      {call dma.edit.value}
-        {param name: 'hp' /}
-        {param label: 'HP' /}
-        {param value: $entry.HP > -10 ? $entry.HP : '' /}
-        {param validate: 'number' /}
-        {param color: '#008' /}
-      {/call}    
-      {call dma.edit.value}
-        {param name: 'value' /}
-        {param label: 'Value' /}
-        {param value: $entry.value.present? $entry.value.get : '' /}
-        {param validate: 'money' /}
-        {param color: '#008' /}
-      {/call}    
-      {call dma.edit.value}
-        {param name: 'appearance' /}
-        {param label: 'Appearance' /}
-        {param value: $entry.appearance /}
-        {param validate: 'non-empty' /}
-        {param color: '#008' /}
-      {/call}    
-      {call dma.edit.value}
-        {param name: 'player_name' /}
-        {param label: 'Player Name' /}
-        {param value: $entry.player_name.present 
-          ? $entry.player_name.get : '' /}
-        {param validate: 'any' /}
-        {param color: '#008' /}
-      {/call}    
-      {call dma.edit.value}
-        {param name: 'player_notes' /}
-        {param label: 'Player Notes' /}
-        {param value: $entry.player_notes.present 
-          ? $entry.player_notes.get : '' /}
-        {param validate: 'any' /}
-        {param color: '#008' /}
-      {/call}    
-      {call dma.edit.value}
-        {param name: 'dm_notes' /}
-        {param label: 'DM Notes' /}
-        {param value: $entry.DM_notes.present 
-          ? $entry.DM_notes.get : '' /}
-        {param validate: 'non-empty' /}
-        {param color: '#008' /}
-      {/call}    
-      {call dma.edit.generic_value}
-        {param color: '#008' /}
-        {param label: 'Count' /}
-        {param value}
-          {if $entry.multiuse.isPresent}
-            {call dma.edit.field_input}
-              {param name: 'multiuse' /}
-              {param value: $entry.multiuse.get /}
-              {param validate: 'number' /}
-              {param caption: 'uses' /}            
-              {param class: 'narrow' /}
-            {/call}
-          {/if}
-          {if $entry.multiple.isPresent}
-            {call dma.edit.field_input}
-              {param name: 'multiple' /}
-              {param value: $entry.multiple.get /}
-              {param validate: 'number' /}
-              {param caption: 'copies' /}            
-              {param class: 'narrow' /}
-            {/call}
-          {/if}
-        {/param}
-      {/call}
-      {call dma.edit.generic_value}
-        {param color: '#008' /}
-        {param label: 'Time Left' /}
-        {param value}
-          {call dma.edit.field_input}
-            {param name: 'time_left' /}
-            {param value: $entry.time_left.get /}
-            {param validate: 'duration' /}
-          {/call}
-        {/param}
-      {/call}
-    {/param}
-  {/call}
+  {call dma.edit.field_selection}
+    {param name: 'level.name' /}
+    {param caption: 'Name' /}
+    {param value: $entry ? lower($entry.base_level.name) : '' /}
+    {param choices: $ij.Level.available_levels /}
+    {param class: 'narrow' /} 
+  {/call}    
+  {call dma.edit.field_input}
+    {param name: 'level.hp' /}
+    {param caption: 'HP' /}
+    {param value: $entry ? $entry.HP : '' /}
+    {param validate: 'number' /}
+    {param width: '25%' /}
+  {/call}    
 {/template}
 
 /**
@@ -330,32 +52,9 @@
  * @param entry      The entry rendered.
  */
 {template .tiny}
-  {if $entry.path}
-    <div class="entry item card tiny" onclick="details('{$entry.path}')">
-      <div class="contents" 
-           style="border-color: #ccf; background-color: #eef">
-        {call dma.entry.mainImage}
-          {param entry: $entry /}
-          {param size: 35 /}
-        {/call}
-
-        <div class="title">
-          {if $ij.isDM}
-            {$entry.DM_name}  
-            {if $entry.player_name and $entry.DM_name != $entry.player_name}
-              {sp}[{$entry.player_name}]
-            {/if} 
-          {else}
-            {$entry.player_name}
-          {/if}
-          <br />
-          {$entry.name}
-        </div>
-      </div>
-    </div>
-  {else}
-    {$entry}
-  {/if}
+  <div class="entry level tiny" onclick="details('{$entry.path}')">
+    {$entry.abbreviation}
+  </div>
 {/template}
 
 /**

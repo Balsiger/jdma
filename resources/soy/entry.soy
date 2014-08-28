@@ -41,9 +41,10 @@
  * @param last the last entry, if any
  * @param color the color for highlights
  * @param? title the special title, if any
+ * @param? noprint whether to print this or not
  */
 {template .show}
-  <div class="show entry {$type}">
+  <div class="show entry {$type}{if $noprint} no-print{/if}">
 
     {call dma.entry.toolbar}
       {param entry: $entry /}
@@ -1246,31 +1247,6 @@
   {else}
     <div class="error">No entries found!</div>
   {/if}
-{/template}
-
-/**
- * Template for setting a character icon.
- *
- * @param character The character to set for.
- */
-{template .charactericon}
-  <div class="caption-container">
-    {call dma.page.link}
-      {param url: $character.path /}
-      {param class: 'overlayicon-link' /}
-      {param text}
-        <div class="overlay">
-          <img src="/icons/{$character.icon.print}" alt="{$character.name}"
-              class="overlayicon">
-          <img src="/icons/character/{$character.state.print}.png"
-            class="overlay right-bottom">
-        </div>
-        <div class="caption">
-          {$character.name}
-        </div>
-      {/param}
-    {/call}
-  </div>
 {/template}
 
 /**

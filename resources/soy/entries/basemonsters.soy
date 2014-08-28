@@ -153,7 +153,7 @@
       {if $entry.hit_dice.present}
         {call dma.entry.value}
           {param label: 'Hit Dice' /}
-          {param value: $entry.hit_dice.get /}
+          {param value: $entry.hit_dice /}
           {param color: '#080' /}
         {/call}
       {/if}
@@ -170,7 +170,7 @@
       {call dma.entry.value}
         {param label: 'Natural Armor' /}
         {param value: $entry.natural_armor.preseent 
-          ? $entry.natural_armor.get : '' /}
+          ? $entry.natural_armor : '' /}
         {param color: '#080' /}
       {/call}
       {call dma.entry.value}
@@ -181,12 +181,12 @@
       {call dma.entry.value}
         {param label: 'Attributes' /}
         {param value}
-          Str {$entry.strength.present ? $entry.strength.get : '-'},
-          Dex {$entry.dexterity.present ? $entry.dexterity.get : '-'},
-          Con {$entry.constitution.present ? $entry.constitution.get : '-'},
-          Int {$entry.intelligence.present ? $entry.intelligence.get : '-'},
-          Wis {$entry.wisdom.present ? $entry.wisdom.get : '-'},
-          Cha {$entry.charisma.present ? $entry.charisma.get : '-'}
+          Str {$entry.strength.present ? $entry.strength : '-'},
+          Dex {$entry.dexterity.present ? $entry.dexterity : '-'},
+          Con {$entry.constitution.present ? $entry.constitution : '-'},
+          Int {$entry.intelligence.present ? $entry.intelligence : '-'},
+          Wis {$entry.wisdom.present ? $entry.wisdom : '-'},
+          Cha {$entry.charisma.present ? $entry.charisma : '-'}
         {/param}
         {param color: '#080' /}
       {/call}      
@@ -216,9 +216,9 @@
       {call dma.entry.value}
         {param label: 'Space/Reach' /}
         {param value}
-          {$entry.space.present ? $entry.space.get : ''}
+          {$entry.space.present ? $entry.space : ''}
           /
-          {$entry.reach.present ? $entry.reach.get : ''}
+          {$entry.reach.present ? $entry.reach : ''}
         {/param}
         {param color: '#080' /}
       {/call}
@@ -272,7 +272,7 @@
       {if $entry.cr.present }
         {call dma.entry.value}
           {param label: 'CR' /}
-          {param value: $entry.cr.get /}
+          {param value: $entry.cr /}
           {param color: '#080' /}
         {/call}
       {/if}
@@ -311,7 +311,7 @@
       {if $entry.level_adjustment.present }
         {call dma.entry.value}
           {param label: 'Level Adjustment' /}
-          {param value: $entry.level_adjustment.get /}
+          {param value: $entry.level_adjustment /}
           {param color: '#080' /}
         {/call}
       {/if}
@@ -348,35 +348,35 @@
       {if $entry.encounter.present }
         {call dma.entry.value}
           {param label: 'Encounter' /}
-          {param value: commands($entry.encounter.get) /}
+          {param value: commands($entry.encounter) /}
           {param color: '#080' /}
         {/call}
       {/if}
       {if $entry.combat.present }
         {call dma.entry.value}
           {param label: 'Combat' /}
-          {param value: commands($entry.combat.get) /}
+          {param value: commands($entry.combat) /}
           {param color: '#080' /}
         {/call}
       {/if}
       {if $entry.tactics.present }
         {call dma.entry.value}
           {param label: 'Tactics' /}
-          {param value: commands($entry.tactics.get) /}
+          {param value: commands($entry.tactics) /}
           {param color: '#080' /}
         {/call}
       {/if}
       {if $entry.character.present }
         {call dma.entry.value}
           {param label: 'Character' /}
-          {param value: commands($entry.character.get) /}
+          {param value: commands($entry.character) /}
           {param color: '#080' /}
         {/call}
       {/if}
       {if $entry.reproduction.present }
         {call dma.entry.value}
           {param label: 'Reproduction' /}
-          {param value: commands($entry.reproduction.get) /}
+          {param value: commands($entry.reproduction) /}
           {param color: '#080' /}
         {/call}
       {/if}
@@ -432,14 +432,16 @@
 /**
  * Editiing the base item.
  * 
- * @param entry The item to edit. 
- * @param id    THe id to use for the editing dialog.
+ * @param entry   The item to edit. 
+ * @param id      The id to use for the editing dialog.
+ * @param create  Whether to create a new entry
  */
 {template .edit autoescape="true"}
   {call dma.edit.entry}
     {param entry: $entry /}
     {param type: 'base-level' /}
     {param id: $id /}
+    {param create: $create /}
     {param values}
       {call dma.edit.value}
         {param name: 'name' /}
@@ -560,7 +562,7 @@
       {call dma.edit.value}
         {param name: 'hit_dice' /}
         {param label: 'Hit Dice' /}
-        {param value: $entry.hit_dice.present ? $entry.hit_dice.get : '' /}
+        {param value: $entry.hit_dice.present ? $entry.hit_dice : '' /}
         {param validate: 'dice' /}
         {param color: '#080' /}
       {/call}    
@@ -616,7 +618,7 @@
         {param name: 'natural_armor' /}
         {param label: 'Natural Armor' /}
         {param value: $entry.natural_armor.present 
-          ? $entry.natural_armor.get : '' /}
+          ? $entry.natural_armor : '' /}
         {param validate: 'modifier' /}
         {param color: '#080' /}
       {/call}    
@@ -633,14 +635,14 @@
         {param value}
           {call dma.edit.field_input}
             {param name: 'strength' /}
-            {param value: $entry.strength.present ? $entry.strength.get : '' /}
+            {param value: $entry.strength.present ? $entry.strength : '' /}
             {param validate: 'number' /}
             {param caption: 'Strength' /}
             {param class: 'field6' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'dexterity' /}
-            {param value: $entry.dexterity.present ? $entry.dexterity.get : '' /}
+            {param value: $entry.dexterity.present ? $entry.dexterity : '' /}
             {param validate: 'number' /}
             {param caption: 'Dexterity' /}
             {param class: 'field6' /}
@@ -648,7 +650,7 @@
           {call dma.edit.field_input}
             {param name: 'constitution' /}
             {param value: $entry.constitution.present 
-              ? $entry.constitution.get : '' /}
+              ? $entry.constitution : '' /}
             {param validate: 'number' /}
             {param caption: 'Constitution' /}
             {param class: 'field6' /}
@@ -656,21 +658,21 @@
           {call dma.edit.field_input}
             {param name: 'intelligence' /}
             {param value: $entry.intelligence.present 
-              ? $entry.intelligence.get : '' /}
+              ? $entry.intelligence : '' /}
             {param validate: 'number' /}
             {param caption: 'Intelligence' /}
             {param class: 'field6' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'wisdom' /}
-            {param value: $entry.wisdom.present ? $entry.wisdom.get : '' /}
+            {param value: $entry.wisdom.present ? $entry.wisdom : '' /}
             {param validate: 'number' /}
             {param caption: 'Wisdom' /}
             {param class: 'field6' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'charisma' /}
-            {param value: $entry.charisma.present ? $entry.charisma.get : '' /}
+            {param value: $entry.charisma.present ? $entry.charisma : '' /}
             {param validate: 'number' /}
             {param caption: 'Charisma' /}
             {param class: 'field6' /}
@@ -819,14 +821,14 @@
       {call dma.edit.value}
         {param name: 'space' /}
         {param label: 'Space' /}
-        {param value: $entry.space.present ? $entry.space.get : '' /}
+        {param value: $entry.space.present ? $entry.space : '' /}
         {param validate: 'distance' /}
         {param color: '#080' /}
       {/call}    
       {call dma.edit.value}
         {param name: 'reach' /}
         {param label: 'Reach' /}
-        {param value: $entry.reach.present ? $entry.reach.get : '' /}
+        {param value: $entry.reach.present ? $entry.reach : '' /}
         {param validate: 'distance' /}
         {param color: '#080' /}
       {/call}    
@@ -899,7 +901,7 @@
                     'validate': 'dice'
                   ], [
                     'name': 'organization.plus',
-                    'value': $group.plus.present ? $group.plus.get : '',
+                    'value': $group.plus.present ? $group.plus : '',
                     'validate': 'any'
                   ]] /}
                 {/call}
@@ -929,7 +931,7 @@
       {call dma.edit.value}
         {param name: 'cr' /}
         {param label: 'CR' /}
-        {param value: $entry.cr.present ? $entry.cr.get : '' /}
+        {param value: $entry.cr.present ? $entry.cr : '' /}
         {param validate: 'rational' /}
         {param color: '#080' /}
       {/call}    
@@ -1004,7 +1006,7 @@
         {param name: 'level_adjustment' /}
         {param label: 'Level Adjustment' /}
         {param value: $entry.level_adjustment.present 
-          ? $entry.level_adjustment.get : '' /}
+          ? $entry.level_adjustment : '' /}
         {param validate: 'number' /}
         {param color: '#080' /}
       {/call}    
@@ -1051,28 +1053,28 @@
       {call dma.edit.value_text}
         {param name: 'encounter' /}
         {param label: 'Encounter' /}
-        {param value: $entry.encounter.present ? $entry.combat.get : '' /}
+        {param value: $entry.encounter.present ? $entry.combat : '' /}
         {param validate: 'any' /}
         {param color: '#080' /}
       {/call}
       {call dma.edit.value_text}
         {param name: 'combat' /}
         {param label: 'Combat' /}
-        {param value: $entry.combat.present ? $entry.combat.get : '' /}
+        {param value: $entry.combat.present ? $entry.combat : '' /}
         {param validate: 'any' /}
         {param color: '#080' /}
       {/call}
       {call dma.edit.value_text}
         {param name: 'tacticts' /}
         {param label: 'Tactics' /}
-        {param value: $entry.tactics.present ? $entry.combat.get : '' /}
+        {param value: $entry.tactics.present ? $entry.combat : '' /}
         {param validate: 'any' /}
         {param color: '#080' /}
       {/call}
       {call dma.edit.value_text}
         {param name: 'character' /}
         {param label: 'Character' /}
-        {param value: $entry.character.present ? $entry.character.get : '' /}
+        {param value: $entry.character.present ? $entry.character : '' /}
         {param validate: 'any' /}
         {param color: '#080' /}
       {/call}
@@ -1080,7 +1082,7 @@
         {param name: 'reproduction' /}
         {param label: 'Reproduction' /}
         {param value: $entry.reproduction.present 
-          ? $entry.reproduction.get : '' /}
+          ? $entry.reproduction : '' /}
         {param validate: 'any' /}
         {param color: '#080' /}
       {/call}

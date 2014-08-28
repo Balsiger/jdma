@@ -148,28 +148,21 @@ public class DMARequest extends HttpServletRequestWrapper
 
   }
 
-  //------------------------------- hasUser --------------------------------
-
   /**
    * Check if the request has a user associated with it.
    *
    * @return      true if there is a user, false if not
-   *
    */
   public boolean hasUser()
   {
     extractUser();
-    return m_user != null;
+    return m_user.isPresent();
   }
-
-  //........................................................................
-  //--------------------------- hasUserOverride ----------------------------
 
   /**
    * Check if the request has a user override associated with it.
    *
    * @return      true if there is a user override, false if not
-   *
    */
   public boolean hasUserOverride()
   {
@@ -177,15 +170,11 @@ public class DMARequest extends HttpServletRequestWrapper
     return m_userOverride.isPresent();
   }
 
-  //........................................................................
-  //------------------------------ hasPlayer -------------------------------
-
   /**
    * Check if the request has a player associated with it.
    *
    * @return      true if there is a player, false if not
-   *
-   */
+ V  */
 //   public boolean hasPlayer()
 //   {
 //     return m_player != null;
@@ -684,8 +673,6 @@ public class DMARequest extends HttpServletRequestWrapper
       Log.warning("could not properly initialize encounter type");
     if(net.ixitxachitls.dma.entries.BaseLevel.TYPE == null)
       Log.warning("could not properly initialize base level type");
-    if(net.ixitxachitls.dma.entries.Level.TYPE == null)
-      Log.warning("could not properly initialize level type");
     if(net.ixitxachitls.dma.entries.NPC.TYPE == null)
       Log.warning("could not properly initialize npc type");
   }

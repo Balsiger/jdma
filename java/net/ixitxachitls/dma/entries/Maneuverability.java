@@ -28,41 +28,40 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
+import net.ixitxachitls.dma.proto.Values.SpeedProto;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
 
 /** The possible movement modes in the game. */
 @ParametersAreNonnullByDefault
 public enum Maneuverability implements EnumSelection.Named,
-  EnumSelection.Proto<BaseMonsterProto.Speed.Maneuverability>
+  EnumSelection.Proto<SpeedProto.Maneuverability>
 {
-  UNKNOWN("Unknown",
-          BaseMonsterProto.Speed.Maneuverability.UNKNOWN_MANEUVERABILITY),
+  UNKNOWN("Unknown", SpeedProto.Maneuverability.UNKNOWN_MANEUVERABILITY),
 
   /** Perfect maneuverability. */
-  PERFECT("Pefect", BaseMonsterProto.Speed.Maneuverability.PERFECT),
+  PERFECT("Perfect", SpeedProto.Maneuverability.PERFECT),
 
   /** Good maneuverability. */
-  GOOD("Good", BaseMonsterProto.Speed.Maneuverability.GOOD),
+  GOOD("Good", SpeedProto.Maneuverability.GOOD),
 
   /** Average maneuverability. */
-  AVERAGE("Average", BaseMonsterProto.Speed.Maneuverability.AVERAGE),
+  AVERAGE("Average", SpeedProto.Maneuverability.AVERAGE),
 
   /** Poor maneuverability. */
-  POOR("Poor", BaseMonsterProto.Speed.Maneuverability.POOR),
+  POOR("Poor", SpeedProto.Maneuverability.POOR),
 
   /** Clumsy maneuverability. */
-  CLUMSY("Clumsy", BaseMonsterProto.Speed.Maneuverability.CLUMSY),
+  CLUMSY("Clumsy", SpeedProto.Maneuverability.CLUMSY),
 
   /** Clumsy maneuverability. */
-  NONE("", BaseMonsterProto.Speed.Maneuverability.NONE);
+  NONE("", SpeedProto.Maneuverability.NONE);
 
   /** The value's name. */
   private String m_name;
 
   /** The proto enum value. */
-  private BaseMonsterProto.Speed.Maneuverability m_proto;
+  private SpeedProto.Maneuverability m_proto;
 
   /** The parser for armor types. */
   public static final NewValue.Parser<Maneuverability> PARSER =
@@ -81,8 +80,7 @@ public enum Maneuverability implements EnumSelection.Named,
    * @param inName the name of the value
    * @param inProto the proto value
    */
-  private Maneuverability(String inName,
-                          BaseMonsterProto.Speed.Maneuverability inProto)
+  private Maneuverability(String inName, SpeedProto.Maneuverability inProto)
   {
     m_name = BaseMonster.constant("maneuverability", inName);
     m_proto = inProto;
@@ -101,7 +99,7 @@ public enum Maneuverability implements EnumSelection.Named,
   }
 
   @Override
-  public BaseMonsterProto.Speed.Maneuverability toProto()
+  public SpeedProto.Maneuverability toProto()
   {
     return m_proto;
   }
@@ -112,8 +110,7 @@ public enum Maneuverability implements EnumSelection.Named,
    * @param inProto the proto value to convert
    * @return the corresponding enum value
    */
-  public static Maneuverability
-    fromProto(BaseMonsterProto.Speed.Maneuverability inProto)
+  public static Maneuverability fromProto(SpeedProto.Maneuverability inProto)
   {
     for(Maneuverability maneuverability : values())
       if(maneuverability.m_proto == inProto)

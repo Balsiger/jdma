@@ -43,6 +43,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
@@ -440,7 +441,7 @@ public abstract class ValueGroup implements Changeable
     public @Nullable Integer use(String inKey, Integer inDefault)
     {
       String value = getFirst(inKey);
-      if(value == null)
+      if(value == null || value.isEmpty())
         return inDefault;
 
       try
@@ -457,6 +458,41 @@ public abstract class ValueGroup implements Changeable
         m_messages.add("Cannot parse number for " + inKey);
         return null;
       }
+    }
+
+    public <E extends NestedEntry>
+    List<E> useEntries(String inKey, List<E> inDefault,
+                       NestedEntry.Creator<E> inCreator)
+    {
+      // create sub values list
+      String prefix = inKey + ".";
+      List<ListMultimap<String, String>> values = new ArrayList<>();
+      for (String key : m_values.keySet())
+        if (key.startsWith(prefix))
+        {
+          if (values.isEmpty())
+            for (@SuppressWarnings("unused") String value : m_values.get(key))
+              values.add(ArrayListMultimap.<String, String>create());
+
+          String subkey = key.substring(prefix.length());
+          int i = 0;
+          for (String value : m_values.get(key))
+            values.get(i++).put(subkey, value);
+        }
+
+      List<E> entries = new ArrayList<E>();
+      for (ListMultimap<String, String> submap : values)
+      {
+        E entry = inCreator.create();
+        entry.set(new Values(submap));
+        entries.add(entry);
+      }
+
+      if (inDefault.equals(entries))
+        return inDefault;
+
+      m_changed = true;
+      return entries;
     }
   }
 
@@ -1057,7 +1093,6 @@ public abstract class ValueGroup implements Changeable
    * @return    all the extracted variables
    *
    */
-  @SuppressWarnings("unchecked") // casting class for variable creation
   protected static List<Variable>extractClassVariables(Class<?> inClass)
   {
     List<Variable> variables = new ArrayList<Variable>();

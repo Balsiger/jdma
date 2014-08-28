@@ -115,14 +115,16 @@
 /**
  * Editiing the base character.
  * 
- * @param entry The character to edit. 
- * @param id    THe id to use for the editing dialog.
+ * @param entry   The character to edit. 
+ * @param id      The id to use for the editing dialog.
+ * @param create  Whether to create a new entry
  */
 {template .edit autoescape="true"}
   {call dma.edit.entry}
     {param entry: $entry /}
     {param type: 'product' /}
     {param id: $id /}
+    {param create: $create /}
     {param values}
       {call dma.edit.value}
         {param name: 'name' /}
@@ -140,7 +142,7 @@
         {param autocomplete: 'base product/name' /}
       {/call}    
       {call dma.edit.value}
-        {param name: 'dm' /}
+        {param name: 'DM' /}
         {param label: 'DM' /}
         {param value: $entry.DM.present ? $entry.DM.get : '' /}
         {param validate: 'non-empty' /}

@@ -35,7 +35,9 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
+import net.ixitxachitls.dma.values.ExpressionValue;
 import net.ixitxachitls.dma.values.NewModifier;
+import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -83,6 +85,9 @@ public class BaseQuality extends BaseEntry
   /** The name qualifier, if any. */
   private Optional<String> m_qualifier = Optional.absent();
 
+  /** The speed change the quality is responsible for. */
+  private Optional<ExpressionValue<Speed>> m_speed = Optional.absent();
+
   public EffectType getQualityType()
   {
     return m_qualityType;
@@ -103,6 +108,11 @@ public class BaseQuality extends BaseEntry
     return Affects.names();
   }
 
+  public Optional<ExpressionValue<Speed>> getSpeed()
+  {
+    return m_speed;
+  }
+
   @Override
   public void set(Values inValues)
   {
@@ -113,6 +123,8 @@ public class BaseQuality extends BaseEntry
     m_effects = inValues.use("effect", m_effects, Effect.PARSER,
                              "affects", "name", "modifier", "text");
     m_qualifier = inValues.use("qualifier", m_qualifier);
+    m_speed = inValues.use("speed", m_speed,
+                           ExpressionValue.parser(Speed.PARSER));
   }
 
  /**
@@ -326,6 +338,12 @@ public class BaseQuality extends BaseEntry
     if(m_qualifier.isPresent())
       builder.setQualifier(m_qualifier.get());
 
+    if(m_speed.isPresent())
+      if(m_speed.get().hasValue())
+        builder.setSpeed(m_speed.get().getValue().get().toProto());
+      else
+        builder.setSpeedExpression(m_speed.get().toProto());
+
     BaseQualityProto proto = builder.build();
     return proto;
   }
@@ -359,6 +377,13 @@ public class BaseQuality extends BaseEntry
                      effect.hasText()
                        ? Optional.of(effect.getText())
                        : Optional.<String>absent()));
+
+    if(proto.hasSpeed())
+      m_speed = Optional.of
+        (new ExpressionValue<Speed>(Speed.fromProto(proto.getSpeed())));
+    else if(proto.hasSpeedExpression())
+      m_speed = Optional.of
+        (ExpressionValue.<Speed>fromProto(proto.getSpeedExpression()));
 
     if(proto.hasQualifier())
       m_qualifier = Optional.of(proto.getQualifier());

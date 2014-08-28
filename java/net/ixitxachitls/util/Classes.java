@@ -176,14 +176,20 @@ public final class Classes
 
     String name = Encodings.toCamelCase(inName);
 
-    Method method = getMethod(inObject.getClass(), name, arguments);
+    Class objectClass;
+    if(inObject instanceof Class)
+      objectClass = (Class)inObject;
+    else
+      objectClass = inObject.getClass();
+
+    Method method = getMethod(objectClass, name, arguments);
     if(method == null)
     {
       String stem = Character.toUpperCase(name.charAt(0)) + name.substring(1);;
       for(String prefix : METHOD_PREFIXES)
       {
         name = prefix + stem;
-        method = getMethod(inObject.getClass(), name, arguments);
+        method = getMethod(objectClass, name, arguments);
         if(method != null)
           break;
       }

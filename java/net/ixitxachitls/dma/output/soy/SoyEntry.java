@@ -62,10 +62,13 @@ public class SoyEntry extends SoyAbstract
   public SoyEntry(AbstractEntry inEntry)
   {
     super(inEntry.getName(), inEntry);
+
+    m_entry = inEntry;
   }
 
   /** The cache for values obtained so far. */
   Map<String, SoyData> m_cache = new HashMap<>();
+  AbstractEntry m_entry;
 
   @Override
   public @Nullable SoyData getSingle(String inName)

@@ -41,6 +41,7 @@ import net.ixitxachitls.dma.values.NewDice;
 import net.ixitxachitls.dma.values.NewReference;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Proficiency;
+import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.util.logging.Log;
 
 /**

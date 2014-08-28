@@ -28,37 +28,37 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
+import net.ixitxachitls.dma.proto.Values.SpeedProto;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
 
 /** The possible movement modes in the game. */
 @ParametersAreNonnullByDefault
 public enum MovementMode implements EnumSelection.Named,
-  EnumSelection.Proto<BaseMonsterProto.Speed.Mode>
+  EnumSelection.Proto<SpeedProto.Mode>
 {
-  UNKNOWN("Unknown", BaseMonsterProto.Speed.Mode.UNKNONW_MODE),
+  UNKNOWN("Unknown", SpeedProto.Mode.UNKNONW_MODE),
 
   /** Burrowing movement. */
-  BURROW("Burrow", BaseMonsterProto.Speed.Mode.BURROW),
+  BURROW("Burrow", SpeedProto.Mode.BURROW),
 
   /** Climbing. */
-  CLIMB("Climb", BaseMonsterProto.Speed.Mode.CLIMB),
+  CLIMB("Climb", SpeedProto.Mode.CLIMB),
 
   /** Flying. */
-  FLY("Fly", BaseMonsterProto.Speed.Mode.FLY),
+  FLY("Fly", SpeedProto.Mode.FLY),
 
   /** Swimming. */
-  SWIM("Swim", BaseMonsterProto.Speed.Mode.SWIM),
+  SWIM("Swim", SpeedProto.Mode.SWIM),
 
   /** Running. */
-  RUN("", BaseMonsterProto.Speed.Mode.RUN);
+  RUN("", SpeedProto.Mode.RUN);
 
   /** The value's name. */
   private String m_name;
 
   /** The proto enum value. */
-  private BaseMonsterProto.Speed.Mode m_proto;
+  private SpeedProto.Mode m_proto;
 
   /** The parser for armor types. */
   public static final NewValue.Parser<MovementMode> PARSER =
@@ -77,7 +77,7 @@ public enum MovementMode implements EnumSelection.Named,
    * @param inName the name of the value
    * @param inProto the corresponding proto value
    */
-  private MovementMode(String inName, BaseMonsterProto.Speed.Mode inProto)
+  private MovementMode(String inName, SpeedProto.Mode inProto)
   {
     m_name = BaseMonster.constant("movement.mode", inName);
     m_proto = inProto;
@@ -96,7 +96,7 @@ public enum MovementMode implements EnumSelection.Named,
   }
 
   @Override
-  public BaseMonsterProto.Speed.Mode toProto()
+  public SpeedProto.Mode toProto()
   {
     return m_proto;
   }
@@ -107,7 +107,7 @@ public enum MovementMode implements EnumSelection.Named,
    * @param inProto the proto to convert
    * @return the corresponding enum value
    */
-  public static MovementMode fromProto(BaseMonsterProto.Speed.Mode inProto)
+  public static MovementMode fromProto(SpeedProto.Mode inProto)
   {
     for(MovementMode mode : values())
       if(mode.m_proto == inProto)

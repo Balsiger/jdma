@@ -206,6 +206,9 @@ public class BaseItem extends BaseEntry
   /** The maximal number of attacks per round. */
   protected Optional<Integer> m_maxAttacks = Optional.absent();
 
+  /** Whether the weapon can be used with finesse. */
+  protected boolean m_finesse = false;
+
   /** The bonus of the armor. */
   protected Optional<NewModifier> m_armorBonus = Optional.absent();
 
@@ -399,6 +402,18 @@ public class BaseItem extends BaseEntry
 
     for(BaseEntry base : getBaseEntries())
       if(((BaseItem)base).isWearable())
+        return true;
+
+    return false;
+  }
+
+  public boolean hasFinesse()
+  {
+    if(m_finesse)
+      return true;
+
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseItem)base).hasFinesse())
         return true;
 
     return false;
@@ -1917,6 +1932,8 @@ public class BaseItem extends BaseEntry
         weaponBuilder.setReach(m_reach.get().toProto());
       if(m_maxAttacks.isPresent())
         weaponBuilder.setMaxAttacks(m_maxAttacks.get());
+      if(m_finesse)
+        weaponBuilder.setFinesse(true);
 
       builder.setWeapon(weaponBuilder.build());
     }
@@ -2086,6 +2103,8 @@ public class BaseItem extends BaseEntry
     m_reach = inValues.use("weapon.reach", m_reach, NewDistance.PARSER);
     m_maxAttacks = inValues.use("weapon.max_attacks", m_maxAttacks,
                                 NewValue.INTEGER_PARSER);
+    m_finesse = inValues.use("weapon.finesse", m_finesse,
+                             NewValue.BOOLEAN_PARSER);
 
     m_armorBonus = inValues.use("armor.bonus", m_armorBonus,
                                 NewModifier.PARSER);
@@ -2207,6 +2226,8 @@ public class BaseItem extends BaseEntry
         m_reach = Optional.of(NewDistance.fromProto(weaponProto.getReach()));
       if(weaponProto.hasMaxAttacks())
         m_maxAttacks = Optional.of(weaponProto.getMaxAttacks());
+      if(weaponProto.hasFinesse())
+        m_finesse = weaponProto.getFinesse();
     }
 
     if(proto.hasWearable())

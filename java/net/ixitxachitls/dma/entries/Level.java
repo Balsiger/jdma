@@ -22,91 +22,102 @@
 
 package net.ixitxachitls.dma.entries;
 
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.Message;
+import java.util.List;
 
-import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
+import com.google.common.base.Optional;
+
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.LevelProto;
-import net.ixitxachitls.util.logging.Log;
 
 /**
  * An actual character level.
  *
  * @file   Level.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-public class Level extends Entry
+public class Level extends NestedEntry
 {
   /**
    * Create a default, unnamed level.
    */
   public Level()
   {
-    super(TYPE);
   }
 
-  /**
-   * Create a level with a given name.
-   *
-   * @param inName the name of the level
-   */
-  public Level(String inName)
+  /** The hit points rolled for this level. */
+  private int m_hp = 0;
+
+  private Optional<Optional<BaseLevel>> m_base = Optional.absent();
+
+  public int getHP()
   {
-    super(inName, TYPE);
+    return m_hp;
   }
 
-  /** The type of this entry. */
-  public static final Type<Level> TYPE =
-    new Type<Level>(Level.class, BaseLevel.TYPE);
-
-  /** The type of the base entry to this entry. */
-  public static final BaseType<BaseLevel> BASE_TYPE = BaseLevel.TYPE;
-
-  /** The serial version uid. */
-  private static final long serialVersionUID = 1L;
-
-  static
+  public Optional<BaseLevel> getBase()
   {
-    extractVariables(Level.class);
+    if(!m_base.isPresent())
+    {
+      if(m_name.isPresent())
+        m_base = Optional.of(Optional.fromNullable
+                             ((BaseLevel)DMADataFactory.get().getEntry
+                              (new EntryKey(m_name.get(), BaseLevel.TYPE))));
+      else
+        return Optional.absent();
+    }
+
+    return m_base.get();
   }
+
+  public String getAbbreviation()
+  {
+    if(getBase().isPresent())
+    {
+      if(getBase().get().getAbbreviation().isPresent())
+        return getBase().get().getAbbreviation().get();
+      else
+        return getBase().get().getName();
+    }
+
+    if(m_name.isPresent())
+      return "(" + m_name.get() + ")";
+
+    return "(unknown)";
+  }
+
+  public static List<String> getAvailableLevels()
+  {
+    return DMADataFactory.get().getIDs(BaseLevel.TYPE, null);
+  }
+
 
   @Override
-  public Message toProto()
+  public void set(ValueGroup.Values inValues)
+  {
+    m_name = inValues.use("name", m_name);
+    m_hp = inValues.use("hp", m_hp);
+  }
+
+  public LevelProto toProto()
   {
     LevelProto.Builder builder = LevelProto.newBuilder();
 
-    builder.setBase((CampaignEntryProto)super.toProto());
+    if(m_name.isPresent())
+      builder.setName(m_name.get());
+    else
+      builder.setName("unknown");
+    builder.setHp(m_hp);
 
     LevelProto proto = builder.build();
     return proto;
   }
 
-  @Override
-  public void fromProto(Message inProto)
+  public static Level fromProto(LevelProto inProto)
   {
-    if(!(inProto instanceof LevelProto))
-    {
-      Log.warning("cannot parse proto " + inProto);
-      return;
-    }
+    Level level = new Level();
+    level.m_name = Optional.of(inProto.getName());
+    level.m_hp = inProto.getHp();
 
-    LevelProto proto = (LevelProto)inProto;
-
-    super.fromProto(proto.getBase());
-
-  }
-
-  @Override
-  public void parseFrom(byte []inBytes)
-  {
-    try
-    {
-      fromProto(LevelProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return level;
   }
 }

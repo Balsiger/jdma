@@ -47,15 +47,9 @@
     {param title}
       {call dma.entry._new_title}
         {param title}
-          {if $ij.isDM}
-            {$entry.DM_name}
-            {if $entry.player_name and $entry.DM_name != $entry.player_name}
-              {sp}[{$entry.player_name}]
-            {/if} 
-          {else}
-            {$entry.player_name}
-          {/if}
-          {sp}({$entry.name})
+          {call .name}
+            {param entry: $entry /}
+          {/call}
         {/param}
         {param color: '#008' /}
       {/call}      
@@ -209,14 +203,16 @@
 /**
  * Editiing the base character.
  * 
- * @param entry The character to edit. 
- * @param id    THe id to use for the editing dialog.
+ * @param entry   The character to edit. 
+ * @param id      The id to use for the editing dialog.
+ * @param create  Whether to create a new entry
  */
 {template .edit autoescape="true"}
   {call dma.edit.entry}
     {param entry: $entry /}
     {param type: 'product' /}
     {param id: $id /}
+    {param create: $create /}
     {param values}
       {call dma.edit.value}
         {param name: 'name' /}
@@ -236,7 +232,7 @@
       {call dma.edit.value}
         {param name: 'parent' /}
         {param label: 'Parent' /}
-        {param value: $entry.parent.present ? $entry.parent.get : '' /}
+        {param value: $entry.parent.present ? $entry.parent : '' /}
         {param validate: 'non-empty' /}
         {param color: '#008' /}
       {/call}    
@@ -257,7 +253,7 @@
       {call dma.edit.value}
         {param name: 'appearance' /}
         {param label: 'Appearance' /}
-        {param value: $entry.appearance /}
+        {param value: $entry.appearance.present ? $entry.appearance : '' /}
         {param validate: 'non-empty' /}
         {param color: '#008' /}
       {/call}    
@@ -315,7 +311,7 @@
         {param value}
           {call dma.edit.field_input}
             {param name: 'time_left' /}
-            {param value: $entry.time_left.get /}
+            {param value: $entry.time_left.present ? $entry.time_left : '' /}
             {param validate: 'duration' /}
           {/call}
         {/param}
@@ -832,3 +828,21 @@
     {/if}
   </div>
 {/template}
+
+/**
+ * Format the item name.
+ * 
+ * @param entry the item to format for
+ */
+{template .name}
+  {if $ij.isDM}
+    {$entry.DM_name}
+    {if $entry.player_name and $entry.DM_name != $entry.player_name}
+      {sp}[{$entry.player_name}]
+    {/if} 
+  {else}
+    {$entry.player_name}
+  {/if}
+  {sp}({$entry.name})
+{/template}
+

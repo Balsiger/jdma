@@ -23,27 +23,24 @@
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
-import com.google.common.collect.HashMultiset;
+import com.google.common.base.Optional;
 import com.google.common.collect.Multiset;
+import com.google.common.collect.SortedMultiset;
+import com.google.common.collect.TreeMultiset;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.proto.Entries.LevelProto;
 import net.ixitxachitls.dma.proto.Entries.MonsterProto;
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
-import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.EnumSelection;
-import net.ixitxachitls.dma.values.Number;
-import net.ixitxachitls.dma.values.Reference;
-import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.values.Union;
-import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.enums.Gender;
 import net.ixitxachitls.util.logging.Log;
-
 
 /**
  * A non-player character.
@@ -54,72 +51,6 @@ import net.ixitxachitls.util.logging.Log;
  */
 public class NPC extends Monster
 {
-  //----- Gender ---------------------------------------------------------
-
-  /** The possible gender types in the game. */
-  public enum Gender implements EnumSelection.Named,
-    EnumSelection.Proto<NPCProto.Gender>
-  {
-    /** Male. */
-    MALE("Male", NPCProto.Gender.MALE),
-
-    /** Female. */
-    FEMALE("Female", NPCProto.Gender.FEMALE),
-
-    /** Not known. */
-    UNKNOWN("Unknown", NPCProto.Gender.UNKNOWN),
-
-    /** Other. */
-    OTHER("Other", NPCProto.Gender.OTHER);
-
-    /** The value's name. */
-    private String m_name;
-
-    /** The proto enum value. */
-    NPCProto.Gender m_proto;
-
-    /**
-     * Create the enum value.
-     *
-     * @param inName  the name of the value
-     * @param inProto the proto enum value
-     */
-    private Gender(String inName, NPCProto.Gender inProto)
-    {
-      m_name = constant("monster.gender", inName);
-      m_proto = inProto;
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    @Override
-    public NPCProto.Gender toProto()
-    {
-      return m_proto;
-    }
-
-    public static Gender fromProto(NPCProto.Gender inProto)
-    {
-      for(Gender gender : values())
-        if(gender.m_proto == inProto)
-          return gender;
-
-      throw new IllegalArgumentException("cannot convert gender: " + inProto);
-    }
-  }
-
-  //........................................................................
-
   /**
    * Create the NPC with no name.
    */
@@ -138,6 +69,16 @@ public class NPC extends Monster
     super(inName, TYPE);
   }
 
+  protected NPC(Type<? extends NPC> inType)
+  {
+    super(inType);
+  }
+
+  protected NPC(String inName, Type<? extends NPC> inType)
+  {
+    super(inName, inType);
+  }
+
   /** The type of this entry. */
   public static final Type<NPC> TYPE =
     new Type<NPC>(NPC.class, BaseMonster.TYPE);
@@ -149,62 +90,205 @@ public class NPC extends Monster
   private static final long serialVersionUID = 1L;
 
   /** The gender of the npc. */
-  @Key("gender")
-  protected EnumSelection<Gender> m_gender =
-    new EnumSelection<Gender>(Gender.class);
+  protected Gender m_gender = Gender.UNKNOWN;
 
   /** A special name for the npc, if any. */
-  @Key("given name")
-  protected Text m_givenName = new Text();
+  protected Optional<String> m_givenName = Optional.absent();
 
-  /** THe levels the npc has. */
-  @Key("levels")
-  protected ValueList<Reference<BaseLevel>> m_levels =
-    new ValueList<Reference<BaseLevel>>(", ",
-      new Reference<BaseLevel>(BaseLevel.TYPE));
+  /** The individual levels gained, in order. */
+  protected List<Level> m_levels = new ArrayList<>();
 
-  static
-  {
-    extractVariables(NPC.class);
-  }
+  /** The religion or patron deity of the npc. */
+  protected Optional<String> m_religion = Optional.absent();
 
+  protected Optional<String> m_height = Optional.absent();
+  protected Optional<String> m_weight = Optional.absent();
+  protected Optional<String> m_looks = Optional.absent();
+
+  /*
   @Override
   public String dmName()
   {
-    if(m_givenName.isDefined())
+    if(m_givenName.isPresent())
       return m_givenName.get() + " - " + super.dmName();
 
     return super.dmName();
   }
+  */
 
-  /**
-   * Get an overview of class levels.
-   *
-   * @return All the level abbreviation with the count attached
-   */
-  public SortedSet<String> levelsOverview()
+  public List<Level> getLevels()
   {
-    Multiset<String> abbreviations = HashMultiset.create();
-
-    for(Reference<BaseLevel> level : m_levels)
-    {
-      BaseLevel baseLevel = level.getEntry();
-      if (baseLevel == null)
-        abbreviations.add("invalid " + level);
-      else
-        if(baseLevel.getAbbreviation().isPresent())
-          abbreviations.add(baseLevel.getAbbreviation().get());
-        else
-          abbreviations.add(baseLevel.getName());
-    }
-
-    SortedSet<String> classes = new TreeSet<>();
-    for(String abbreviation : abbreviations)
-      classes.add(abbreviation + abbreviations.count(abbreviation));
-
-    return classes;
+    return Collections.unmodifiableList(m_levels);
   }
 
+  private SortedMultiset<String> cumulatedLevels()
+  {
+    SortedMultiset<String> levels = TreeMultiset.create();
+    for(Level level : m_levels)
+      if(level.getBase().isPresent())
+        levels.add(level.getBase().get().getName());
+      else
+        levels.add(level.getAbbreviation());
+
+    return levels;
+  }
+
+  public List<String> getCumulatedLevels()
+  {
+    SortedMultiset<String> levels = cumulatedLevels();
+
+    List<String> result = new ArrayList<>();
+    for(Multiset.Entry<String> entry : levels.entrySet())
+      result.add(entry.getElement() + " " + entry.getCount());
+
+    return result;
+  }
+
+  public int getEffectiveCharacterLevel()
+  {
+    int levels = m_levels.size();
+    levels += getCombinedLevelAdjustment().getValue();
+    return levels;
+  }
+
+  public Gender getGender()
+  {
+    return m_gender;
+  }
+
+  public Optional<String> getReligion()
+  {
+    return m_religion;
+  }
+
+  public Optional<String> getWeight()
+  {
+    return m_weight;
+  }
+
+  public Optional<String> getHeight()
+  {
+    return m_height;
+  }
+
+  public Optional<String> getLooks()
+  {
+    return m_looks;
+  }
+
+  @Override
+  public Combination<Integer> getCombinedBaseAttack()
+  {
+    List<Combination<Integer>> combinations = new ArrayList<>();
+    combinations.add(super.getCombinedBaseAttack());
+
+    for(Multiset.Entry<String> entry : cumulatedLevels().entrySet())
+    {
+      BaseLevel level = (BaseLevel)DMADataFactory.get().getEntry
+        (new EntryKey(entry.getElement(), BaseLevel.TYPE));
+
+      int bonus = 0;
+      if (level != null)
+      {
+        List<Integer> attacks = level.getBaseAttacks();
+        for (int i = 0; i < entry.getCount(); i++)
+          bonus += attacks.get(i);
+
+        combinations.add(new Combination.Integer(level, bonus));
+      }
+    }
+
+    return new Combination.Max<Integer>(this, combinations);
+  }
+
+  @Override
+  public Annotated.Bonus getCombinedBaseFortitudeSave()
+  {
+    Annotated.Bonus save = super.getCombinedBaseFortitudeSave();
+
+    for(Multiset.Entry<String> entry : cumulatedLevels().entrySet())
+    {
+      BaseLevel level = (BaseLevel)DMADataFactory.get().getEntry
+        (new EntryKey(entry.getElement(), BaseLevel.TYPE));
+
+      int bonus = 0;
+      if (level != null)
+      {
+        List<Integer> saves = level.getFortitudeSaves();
+        for (int i = 0; i < entry.getCount(); i++)
+          bonus += saves.get(i);
+
+        save.add(bonus, level.getName() + " " + entry.getCount());
+      }
+    }
+
+    return save;
+  }
+
+  @Override
+  public Annotated.Bonus getCombinedBaseReflexSave()
+  {
+    Annotated.Bonus save = super.getCombinedBaseReflexSave();
+
+    for(Multiset.Entry<String> entry : cumulatedLevels().entrySet())
+    {
+      BaseLevel level = (BaseLevel)DMADataFactory.get().getEntry
+        (new EntryKey(entry.getElement(), BaseLevel.TYPE));
+
+      int bonus = 0;
+      if (level != null)
+      {
+        List<Integer> saves = level.getReflexSaves();
+        for (int i = 0; i < entry.getCount(); i++)
+          bonus += saves.get(i);
+
+        save.add(bonus, level.getName() + " " + entry.getCount());
+      }
+    }
+
+    return save;
+  }
+
+  @Override
+  public Annotated.Bonus getCombinedBaseWillSave()
+  {
+    Annotated.Bonus save = super.getCombinedBaseWillSave();
+
+    for(Multiset.Entry<String> entry : cumulatedLevels().entrySet())
+    {
+      BaseLevel level = (BaseLevel)DMADataFactory.get().getEntry
+        (new EntryKey(entry.getElement(), BaseLevel.TYPE));
+
+      int bonus = 0;
+      if (level != null)
+      {
+        List<Integer> saves = level.getWillSaves();
+        for (int i = 0; i < entry.getCount(); i++)
+          bonus += saves.get(i);
+
+        save.add(bonus, level.getName() + " " + entry.getCount());
+      }
+    }
+
+    return save;
+  }
+
+  @Override
+  public int getMaxHP()
+  {
+    // Use the levels plus the max hp of the monster
+    int hp = super.getMaxHP();
+
+    for(Level level : m_levels)
+    {
+      hp += level.getHP();
+      hp += getConstitutionModifier();
+    }
+
+    return hp;
+  }
+
+  /*
   @SuppressWarnings("unchecked")
   @Override
   protected <T extends Value<T>> void collect(String inName,
@@ -215,20 +299,20 @@ public class NPC extends Monster
     Multiset<String> levels = HashMultiset.create();
     for(Reference<BaseLevel> level : m_levels)
     {
-      /*
+      / *
       levels.add(level.getName());
       if(level.hasEntry())
          level.getEntry().collect(levels.count(level.getName()), inName,
                                   ioCombined,
                                   level.getName() + " "
                                   + levels.count(level.getName()));
-                                  */
+                                  * /
     }
 
     switch(inName)
     {
       case "hit dice":
-        /*
+        / *
         for(Reference<BaseLevel> level : m_levels)
           if(level.hasEntry())
           {
@@ -236,7 +320,7 @@ public class NPC extends Monster
             ioCombined.addValue((T)baseLevel.getHitDie(), baseLevel,
                                 baseLevel.getAbbreviation());
           }
-          */
+          * /
 
         break;
 
@@ -244,7 +328,9 @@ public class NPC extends Monster
         break;
     }
   }
+  */
 
+  /*
   @Override
   public int getLevel()
   {
@@ -256,6 +342,28 @@ public class NPC extends Monster
 
     return m_levels.size() + totalAdjustment;
   }
+  */
+
+  @Override
+  public void set(Values inValues)
+  {
+    super.set(inValues);
+
+    m_gender = inValues.use("gender", m_gender, Gender.PARSER);
+    m_religion = inValues.use("religion", m_religion);
+    m_weight = inValues.use("weight", m_weight);
+    m_height = inValues.use("height", m_height);
+    m_looks = inValues.use("looks", m_looks);
+    m_levels = inValues.useEntries("level", m_levels,
+                                   new NestedEntry.Creator<Level>()
+    {
+      @Override
+      public Level create()
+      {
+        return new Level();
+      }
+    });
+  }
 
   @Override
   public Message toProto()
@@ -264,15 +372,26 @@ public class NPC extends Monster
 
     builder.setBase((MonsterProto)super.toProto());
 
-    if(m_gender.isDefined())
-      builder.setGender(m_gender.getSelected().toProto());
+    if(m_gender != Gender.UNKNOWN)
+      builder.setGender(m_gender.toProto());
 
-    if(m_givenName.isDefined())
+    if(m_givenName.isPresent())
       builder.setGivenName(m_givenName.get());
 
-    if(m_levels.isDefined())
-      for(Reference<BaseLevel> level : m_levels)
-        builder.addLevel(level.getName());
+    for(Level level : m_levels)
+      builder.addLevel(level.toProto());
+
+    if(m_religion.isPresent())
+      builder.setReligion(m_religion.get());
+
+    if(m_height.isPresent())
+      builder.setHeight(m_height.get());
+
+    if(m_weight.isPresent())
+      builder.setWeight(m_weight.get());
+
+    if(m_looks.isPresent())
+      builder.setLooks(m_looks.get());
 
     NPCProto proto = builder.build();
     return proto;
@@ -292,19 +411,25 @@ public class NPC extends Monster
     super.fromProto(proto.getBase());
 
     if(proto.hasGender())
-      m_gender = m_gender.as(Gender.fromProto(proto.getGender()));
+      m_gender = Gender.fromProto(proto.getGender());
 
     if(proto.hasGivenName())
-      m_givenName = m_givenName.as(proto.getGivenName());
+      m_givenName = Optional.of(proto.getGivenName());
 
-    if(proto.getLevelCount() > 0)
-    {
-      List<Reference<BaseLevel>> levels = new ArrayList<>();
-      for(String level : proto.getLevelList())
-        levels.add(m_levels.createElement().as(level));
+    for(LevelProto level : proto.getLevelList())
+        m_levels.add(Level.fromProto(level));
 
-      m_levels = m_levels.as(levels);
-    }
+    if(proto.hasReligion())
+      m_religion = Optional.of(proto.getReligion());
+
+    if(proto.hasHeight())
+      m_height = Optional.of(proto.getHeight());
+
+    if(proto.hasWeight())
+      m_weight = Optional.of(proto.getWeight());
+
+    if(proto.hasLooks())
+      m_looks = Optional.of(proto.getLooks());
   }
 
   @Override
