@@ -1524,8 +1524,13 @@
       {param class: 'overlayicon-link' /}
       {param text}
         <div class="overlay">
-          <img src="/icons/{$character.icon}" alt="{$character.name}"
-              class="overlayicon">
+          {if strContains($character.icon, 'http')}
+            <img src="{$character.icon}" alt="{$character.name}"
+                class="overlayicon">
+          {else}
+            <img src="/icons/{$character.icon}" alt="{$character.name}"
+                class="overlayicon">
+          {/if}
           <img src="/icons/character/{$character.state}.png"
             class="overlay right-bottom">
         </div>
