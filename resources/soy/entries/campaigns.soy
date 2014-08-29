@@ -69,7 +69,7 @@
       {if $entry.owner.present}
         {call dma.entry.value}
           {param label: 'DM' /}
-          {param value: $entry.DM.get /}
+          {param value: $entry.DM /}
           {param color: '#ccf' /}
         {/call}
       {/if}
@@ -144,7 +144,7 @@
       {call dma.edit.value}
         {param name: 'DM' /}
         {param label: 'DM' /}
-        {param value: $entry.DM.present ? $entry.DM.get : '' /}
+        {param value: $entry.DM.present ? $entry.DM : '' /}
         {param validate: 'non-empty' /}
         {param color: '#ccf' /}
         {param autocomplete: 'base character/name' /}

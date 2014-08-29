@@ -107,7 +107,7 @@
       {call dma.entry.value}
         {param label: 'Levels' /}
         {param value}
-          {foreach $level in $entry.cumulated_levels}
+          {foreach $level in $entry.get_cumulated_levels}
             {$level}
             {if not isLast($level)}, {/if}
           {/foreach}
@@ -200,7 +200,7 @@
       {param label: 'Class and Level' /}
       {param width: '50%' /}
       {param value}
-        {foreach $level in $entry.cumulated_levels}
+        {foreach $level in $entry.get_cumulated_levels}
           {$level}
           {if not isLast($level)}, {/if}
         {/foreach}

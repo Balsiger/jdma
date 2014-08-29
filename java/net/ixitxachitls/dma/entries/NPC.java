@@ -137,11 +137,11 @@ public class NPC extends Monster
   {
     SortedMultiset<String> levels = cumulatedLevels();
 
-    List<String> result = new ArrayList<>();
+    List<String> results = new ArrayList<>();
     for(Multiset.Entry<String> entry : levels.entrySet())
-      result.add(entry.getElement() + " " + entry.getCount());
+      results.add(entry.getElement() + " " + entry.getCount());
 
-    return result;
+    return results;
   }
 
   public int getEffectiveCharacterLevel()
