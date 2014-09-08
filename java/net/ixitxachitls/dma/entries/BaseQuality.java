@@ -35,9 +35,11 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
+import net.ixitxachitls.dma.values.AbilityModifier;
 import net.ixitxachitls.dma.values.ExpressionValue;
 import net.ixitxachitls.dma.values.NewModifier;
 import net.ixitxachitls.dma.values.Speed;
+import net.ixitxachitls.dma.values.enums.Immunity;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -80,13 +82,30 @@ public class BaseQuality extends BaseEntry
   private EffectType m_qualityType = EffectType.UNKNOWN;
 
   /** The effects of the feat. */
+  @Deprecated // ?
   private List<Effect> m_effects = new ArrayList<>();
 
   /** The name qualifier, if any. */
+  @Deprecated // ?
   private Optional<String> m_qualifier = Optional.absent();
 
   /** The speed change the quality is responsible for. */
   private Optional<ExpressionValue<Speed>> m_speed = Optional.absent();
+
+  /** The ability modifiers. */
+  private List<AbilityModifier> m_abilityModifiers = new ArrayList<>();
+
+  /** The immunities. */
+  private List<Immunity> m_immunities = new ArrayList<>();
+
+  /** Relfex modifier. */
+  private Optional<NewModifier> m_reflexModifier = Optional.absent();
+
+  /** Will modifier.*/
+  private Optional<NewModifier> m_willModifier = Optional.absent();
+
+  /** Fortitude modifier.*/
+  private Optional<NewModifier> m_fortitudeModifier = Optional.absent();
 
   public EffectType getQualityType()
   {
@@ -113,6 +132,31 @@ public class BaseQuality extends BaseEntry
     return m_speed;
   }
 
+  public List<AbilityModifier> getAbilityModifiers()
+  {
+    return Collections.unmodifiableList(m_abilityModifiers);
+  }
+
+  public List<Immunity> getImmunities()
+  {
+    return Collections.unmodifiableList(m_immunities);
+  }
+
+  public Optional<NewModifier> getReflexModifier()
+  {
+    return m_reflexModifier;
+  }
+
+  public Optional<NewModifier> getWillModifier()
+  {
+    return m_willModifier;
+  }
+
+  public Optional<NewModifier> getFortitudeModifier()
+  {
+    return m_fortitudeModifier;
+  }
+
   @Override
   public void set(Values inValues)
   {
@@ -125,6 +169,17 @@ public class BaseQuality extends BaseEntry
     m_qualifier = inValues.use("qualifier", m_qualifier);
     m_speed = inValues.use("speed", m_speed,
                            ExpressionValue.parser(Speed.PARSER));
+    m_abilityModifiers = inValues.use("ability_modifier", m_abilityModifiers,
+                                      AbilityModifier.PARSER,
+                                      "ability", "modifier");
+    m_immunities = inValues.use("immunity", m_immunities, Immunity.PARSER);
+    m_reflexModifier = inValues.use("reflex_modifier", m_reflexModifier,
+                                    NewModifier.PARSER);
+    m_willModifier = inValues.use("will_modifier", m_willModifier,
+                                  NewModifier.PARSER);
+    m_fortitudeModifier = inValues.use("fortitude_modifier",
+                                       m_fortitudeModifier,
+                                       NewModifier.PARSER);
   }
 
  /**
@@ -344,6 +399,21 @@ public class BaseQuality extends BaseEntry
       else
         builder.setSpeedExpression(m_speed.get().toProto());
 
+    for(AbilityModifier modifier : m_abilityModifiers)
+      builder.addAbilityModifier(modifier.toProto());
+
+    for(Immunity immunity : m_immunities)
+      builder.addImmunity(immunity.toProto());
+
+    if(m_reflexModifier.isPresent())
+      builder.setReflexModifier(m_reflexModifier.get().toProto());
+
+    if(m_willModifier.isPresent())
+      builder.setWillModifier(m_willModifier.get().toProto());
+
+    if(m_fortitudeModifier.isPresent())
+      builder.setFortitudeModifier(m_fortitudeModifier.get().toProto());
+
     BaseQualityProto proto = builder.build();
     return proto;
   }
@@ -387,6 +457,25 @@ public class BaseQuality extends BaseEntry
 
     if(proto.hasQualifier())
       m_qualifier = Optional.of(proto.getQualifier());
+
+    for(BaseQualityProto.AbilityModifier modifier
+        : proto.getAbilityModifierList())
+      m_abilityModifiers.add(AbilityModifier.fromProto(modifier));
+
+    for(BaseQualityProto.Immunity immunity : proto.getImmunityList())
+      m_immunities.add(Immunity.fromProto(immunity));
+
+    if(proto.hasReflexModifier())
+      m_reflexModifier =
+        Optional.of(NewModifier.fromProto(proto.getReflexModifier()));
+
+    if(proto.hasWillModifier())
+      m_willModifier =
+        Optional.of(NewModifier.fromProto(proto.getWillModifier()));
+
+    if(proto.hasFortitudeModifier())
+      m_fortitudeModifier =
+        Optional.of(NewModifier.fromProto(proto.getFortitudeModifier()));
   }
 
   @Override

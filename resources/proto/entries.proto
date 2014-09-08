@@ -470,11 +470,29 @@ message BaseQualityProto
     optional ModifierProto modifier = 3;
     optional string text = 4;
   }
-  repeated Effect effect = 3;
-  optional string qualifier = 4;
+  repeated Effect effect = 3 [deprecated=true];
+  optional string qualifier = 4 [deprecated=true];
   
   optional SpeedProto speed = 5; 
   optional ExpressionProto speed_expression = 6;
+  
+  message AbilityModifier
+  {
+    required BaseMonsterProto.Ability ability = 1;
+    required ModifierProto modifier = 2;
+  }
+  repeated AbilityModifier ability_modifier = 7;
+  
+  enum Immunity
+  {
+    UNKNOWN_IMMUNITY = 0;
+    SLEEP_SPELLS = 1;
+    SLEEP_EFFECTS = 2;
+  }
+  repeated Immunity immunity = 8;
+  optional ModifierProto reflex_modifier = 9;
+  optional ModifierProto will_modifier = 10;
+  optional ModifierProto fortitude_modifier = 11;
 }
 
 message BaseFeatProto
@@ -1052,6 +1070,7 @@ message BaseMonsterProto
       SWARM = 19;
       TANGLE = 20;
       TROUPE = 21;
+      COMPANY = 22;
     }
     optional Type type = 1;
     optional DiceProto number = 2;
@@ -1190,6 +1209,8 @@ message BaseMonsterProto
     CHARISMA = 6;
     NONE = 7;
   }
+  
+  repeated string proficiency = 44;
 }
 
 message BaseEncounterProto

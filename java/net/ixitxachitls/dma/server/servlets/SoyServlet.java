@@ -44,8 +44,10 @@ import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.output.soy.SoyValue;
+import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.dma.values.enums.Gender;
+import net.ixitxachitls.dma.values.enums.Immunity;
 import net.ixitxachitls.server.servlets.FileServlet;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
@@ -225,7 +227,11 @@ public class SoyServlet extends DMAServlet
        "Gender", new SoyAbstract.SoyWrapper("Gender", Gender.class,
                                             Gender.class),
        "Alignment", new SoyAbstract.SoyWrapper("Alignment", Alignment.class,
-                                               Alignment.class));
+                                               Alignment.class),
+       "Ability", new SoyAbstract.SoyWrapper("Ability", Ability.class,
+                                               Ability.class),
+       "Immunity", new SoyAbstract.SoyWrapper("Immunity", Immunity.class,
+                                               Immunity.class));
 
     tracer.done();
     return map;

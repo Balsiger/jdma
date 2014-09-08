@@ -156,6 +156,52 @@
           {param color: '#808' /}
         {/call}
       {/if}
+      {if $entry.ability_modifiers}
+        {call dma.entry.value}
+          {param label: 'Ability Modifiers' /}
+          {param value}
+            {foreach $modifier in $entry.ability_modifiers}
+              {$modifier}
+              {if not isLast($modifier)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#808' /}
+        {/call}
+      {/if}
+      {if $entry.ability_modifiers}
+        {call dma.entry.value}
+          {param label: 'Immunities' /}
+          {param value}
+            {foreach $immunity in $entry.immunities}
+              {$immunity}
+              {if not isLast($immunity)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#808' /}
+        {/call}
+      {/if}
+      {if $entry.reflex_modifier.present 
+          or $entry.will_modifier.present
+          or $entry.fortitude_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Saves' /}
+          {param value}
+            {if $entry.reflex_modifier.present}
+              Reflex {$entry.reflex_modifier}
+            {/if}
+            {if $entry.will_modifier.present}
+              {if $entry.reflex_modifier.present}, {/if}
+              Will {$entry.will_modifier}
+            {/if}
+            {if $entry.fortitude_modifier.present}
+              {if $entry.reflex_modifier.present 
+                  or $entry.will_modifier.present},{/if}
+              Fortitude {$entry.fortitude_modifier}
+            {/if}                
+          {/param}
+          {param color: '#808' /}
+        {/call}
+      {/if}
       {call dma.entry.value}
         {param label: 'References' /}
         {param value}
@@ -372,6 +418,123 @@
         {param value: $entry.speed.present ? $entry.speed : '' /}
         {param validate: 'any' /}
         {param color: '#808' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'ability_modifier' /}
+        {param color: '#808' /}
+        {param label: 'Ability Modifiers' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $modifier in $entry.ability_modifiers}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'ability_modifier.ability',
+                      'value': $modifier.ability.string,
+                      'type': 'selection',
+                      'choices': $ij.Ability.names,  
+                      'caption': 'ability'                 
+                    ],
+                    [
+                      'name': 'ability_modifier.modifier',
+                      'value': $modifier.modifier,
+                      'validate': 'modifier',
+                      'caption': 'name'
+                    ],
+                  ] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'ability_modifier.ability',
+                      'value': '',
+                      'type': 'selection',
+                      'choices': $ij.Ability.names,  
+                      'caption': 'ability'                 
+                    ],
+                    [
+                      'name': 'ability_modifier.modifier',
+                      'value': '',
+                      'validate': 'modifier',
+                      'caption': 'modifier'
+                    ],
+                  ] /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+        {param validate: 'non-empty' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'immunity' /}
+        {param color: '#808' /}
+        {param label: 'Immunities' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $immunity in $entry.immunities}
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'immunity',
+                      'value': $immunity.string,
+                      'type': 'selection',
+                      'choices': $ij.Immunity.names
+                    ]
+                  ] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [
+                    [
+                      'name': 'immunity',
+                      'value': '',
+                      'type': 'selection',
+                      'choices': $ij.Immunity.names
+                    ]
+                  ] /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+        {param validate: 'non-empty' /}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'save_modifier' /}
+        {param color: '#808' /}
+        {param label: 'Saves' /}
+        {param value}
+          {call dma.edit.field_input}
+            {param name: 'reflex_modifier' /}
+            {param value: $entry.reflex_modifier.present 
+              ? $entry.reflex_modifier : '' /}
+            {param validate: 'modifier' /}
+            {param caption: 'reflex' /}
+            {param class: 'field3' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'will_modifier' /}
+            {param value: $entry.will_modifier.present 
+              ? $entry.will_modifier : '' /}
+            {param validate: 'modifier' /}
+            {param caption: 'will' /}
+            {param class: 'field3' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'fortitude_modifier' /}
+            {param value: $entry.fortitude_modifier.present 
+              ? $entry.fortitude_modifier : '' /}
+            {param validate: 'modifier' /}
+            {param caption: 'fortitude' /}
+            {param class: 'field3' /}
+          {/call}
+        {/param}
       {/call}    
       {call dma.edit.generic_value}
         {param name: 'references' /}

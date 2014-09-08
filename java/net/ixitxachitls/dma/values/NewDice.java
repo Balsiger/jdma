@@ -48,6 +48,9 @@ public class NewDice extends NewValue<DiceProto>
     @Override
     public Optional<NewDice> doParse(String inValue)
     {
+      if(inValue.matches("^\\s*\\d+\\s*$"))
+        return Optional.of(new NewDice(0, 0, Integer.parseInt(inValue)));
+
       String []parts =
         Strings.getPatterns(inValue,
                             "^\\s*(?:(\\d)+d(\\d+))?\\s*([+-]\\s*\\d+)?\\s*$");

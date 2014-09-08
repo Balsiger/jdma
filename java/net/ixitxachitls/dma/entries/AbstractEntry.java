@@ -236,7 +236,6 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @return   the key for the entry
    */
-  @SuppressWarnings("unchecked")
   @Override
   public EntryKey getKey()
   {
@@ -337,8 +336,12 @@ public abstract class AbstractEntry extends ValueGroup
 
       // TODO: make this in a single datastore request
       for(String base : m_base)
-        m_baseEntries.add((BaseEntry)DMADataFactory.get()
-                          .getEntry(createKey(base, getType().getBaseType())));
+      {
+        BaseEntry entry = (BaseEntry)DMADataFactory.get()
+          .getEntry(createKey(base, getType().getBaseType()));
+        if(entry != null)
+          m_baseEntries.add(entry);
+      }
     }
 
     return m_baseEntries;
@@ -404,7 +407,6 @@ public abstract class AbstractEntry extends ValueGroup
    * @return      the requested name
    */
   @Override
-  @SuppressWarnings("unchecked") // cast
   public AbstractType<?> getType()
   {
     return m_type;

@@ -51,6 +51,9 @@ public enum Organization implements EnumSelection.Named,
   /** Colony organization. */
   COLONY("Colony", BaseMonsterProto.Organization.Type.COLONY),
 
+  /** Company organization. */
+  COMPANY("Company", BaseMonsterProto.Organization.Type.COMPANY),
+
   /** Covey organization. */
   COVEY("Covey", BaseMonsterProto.Organization.Type.COVEY),
 
@@ -89,7 +92,7 @@ public enum Organization implements EnumSelection.Named,
   SOLITARY("Solitary", BaseMonsterProto.Organization.Type.SOLITARY),
 
   /** Squad organization. */
-  SQUAD("Qquad", BaseMonsterProto.Organization.Type.SQUAD),
+  SQUAD("Squad", BaseMonsterProto.Organization.Type.SQUAD),
 
   /** Storm organization. */
   STORM("Storm", BaseMonsterProto.Organization.Type.STORM),
@@ -129,7 +132,7 @@ public enum Organization implements EnumSelection.Named,
   private Organization(String inName,
                        BaseMonsterProto.Organization.Type inProto)
   {
-    m_name = BaseMonster.constant("organization", inName);
+    m_name = inName;
     m_proto = inProto;
   }
 

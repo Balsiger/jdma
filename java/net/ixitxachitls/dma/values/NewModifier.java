@@ -220,7 +220,7 @@ public class NewModifier extends NewValue.Arithmetic<ModifierProto>
       {
         String []parts =
           Strings.getPatterns(value,
-                              "^([+-]\\d+)\\s+(" + types + ")?\\s*"
+                              "^([+-]\\d+)\\s*(" + types + ")?\\s*"
                               + "(?: if\\s+(.*))?$");
         if(parts == null || parts.length == 0)
           return Optional.absent();

@@ -169,13 +169,14 @@
       {/call}
       {call dma.entry.value}
         {param label: 'Natural Armor' /}
-        {param value: $entry.natural_armor.preseent 
+        {param value: $entry.natural_armor.present 
           ? $entry.natural_armor : '' /}
         {param color: '#080' /}
       {/call}
       {call dma.entry.value}
         {param label: 'Base Attack' /}
-        {param value: $entry.attack /}
+        {param value: $entry.base_attack.present 
+          ? '+' + $entry.base_attack : '' /}
         {param color: '#080' /}
       {/call}
       {call dma.entry.value}
@@ -193,9 +194,15 @@
       {call dma.entry.value}
         {param label: 'Saves' /}
         {param value}
-          Ref {$entry.reflex_save},
-          Will {$entry.will_save},
-          For {$entry.fortitude_save}
+          {if $entry.reflex_save.present}
+            Ref {$entry.reflex_save}{sp}
+          {/if}
+          {if $entry.will_save.present}
+            Will {$entry.will_save}{sp}
+          {/if}
+          {if $entry.fortitude_save.present}
+            For {$entry.fortitude_save}
+          {/if}
         {/param}
         {param color: '#080' /}
       {/call}
@@ -316,11 +323,21 @@
         {/call}
       {/if}
       {call dma.entry.value}
-        {param label: 'Language' /}
+        {param label: 'Languages' /}
         {param value}
           {foreach $language in $entry.languages}
             {$language}
             {if not isLast($language)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Proficiencies' /}
+        {param value}
+          {foreach $proficiency in $entry.proficiencies}
+            {$proficiency}
+            {if not isLast($proficiency)}, {/if}
           {/foreach}
         {/param}
         {param color: '#080' /}
@@ -458,7 +475,7 @@
         {param color: '#080' /}
       {/call}
       {call dma.edit.value}
-        {param name: 'short-description' /}
+        {param name: 'short_description' /}
         {param label: 'Short Description' /}
         {param value: $entry.short_description /}
         {param validate: 'any' /}
@@ -523,14 +540,14 @@
         {/param}
       {/call}    
       {call dma.edit.value_selection}
-        {param name: 'type' /}
+        {param name: 'monster_type' /}
         {param label: 'Type' /}
         {param value: $entry.monster_type.string /}
         {param choices: $entry.monster_type.names /}
         {param color: '#080' /}
       {/call}    
       {call dma.edit.generic_value}
-        {param name: 'subtype' /}
+        {param name: 'monster_subtype' /}
         {param label: 'Subtype' /}
         {param value}
           {call dma.edit.field}
@@ -576,7 +593,7 @@
                 {call dma.edit.field_list_multiple}
                   {param values: [[
                     'name': 'speed.mode',
-                    'value': $speed.mode,
+                    'value': $speed.mode.string,
                     'type': 'selection',
                     'choices': $entry.movement_mode_names
                   ], [
@@ -585,7 +602,7 @@
                     'validate': 'distance' 
                   ], [
                     'name': 'speed.maneuverability',
-                    'value': $speed.maneuverability,
+                    'value': $speed.maneuverability.string,
                     'type': 'selection',
                     'choices': $entry.maneuverability_names
                   ]] /}
@@ -625,7 +642,7 @@
       {call dma.edit.value}
         {param name: 'attack' /}
         {param label: 'Base Attack Bonus' /}
-        {param value: $entry.attack /}
+        {param value: $entry.base_attack.present ? $entry.base_attack : '' /}
         {param validate: 'number' /}
         {param color: '#080' /}
       {/call}    
@@ -685,21 +702,23 @@
         {param value}
           {call dma.edit.field_input}
             {param name: 'reflex_save' /}
-            {param value: $entry.reflex_save /}
+            {param value: $entry.reflex_save.present 
+              ? $entry.reflex_save : '' /}
             {param validate: 'number' /}
             {param caption: 'Reflex' /}
             {param class: 'field3' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'will_save' /}
-            {param value: $entry.will_save /}
+            {param value: $entry.will_save.present ? $entry.will_save : '' /}
             {param validate: 'number' /}
             {param caption: 'Will' /}
             {param class: 'field3' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'fortitude_save' /}
-            {param value: $entry.fortitude_save /}
+            {param value: $entry.fortitude_save.present 
+              ? $entry.fortitude_save : '' /}
             {param validate: 'number' /}
             {param caption: 'Fortitude' /}
             {param class: 'field3' /}
@@ -720,12 +739,12 @@
                     'validate': 'dice'
                   ], [
                     'name': 'primary_attack.mode',
-                    'value': $attack.mode,
+                    'value': $attack.mode.string,
                     'type': 'selection',
                     'choices': $entry.attack_mode_names 
                   ], [
                     'name': 'primary_attack.style',
-                    'value': $attack.style,
+                    'value': $attack.style.string,
                     'type': 'selection',
                     'choices': $entry.attack_style_names 
                   ], [
@@ -776,12 +795,12 @@
                     'validate': 'dice'
                   ], [
                     'name': 'secondary_attack.mode',
-                    'value': $attack.mode,
+                    'value': $attack.mode.string,
                     'type': 'selection',
                     'choices': $entry.attack_mode_names 
                   ], [
                     'name': 'secondary_attack.style',
-                    'value': $attack.style,
+                    'value': $attack.style.string,
                     'type': 'selection',
                     'choices': $entry.attack_style_names 
                   ], [
@@ -833,21 +852,23 @@
         {param color: '#080' /}
       {/call}    
       {call dma.edit.value_list}
-        {param name: 'special_attacks' /}
+        {param name: 'special_attack' /}
         {param label: 'Special Attacks' /}
         {param values: $entry.special_attacks /}
         {param validate: 'non-empty' /}
         {param color: '#080' /}
+        {param autocomplete: 'base quality/name' /}
       {/call}    
       {call dma.edit.value_list}
-        {param name: 'special_qualities' /}
+        {param name: 'special_quality' /}
         {param label: 'Special Qualities' /}
         {param values: $entry.special_qualities /}
         {param validate: 'non-empty' /}
         {param color: '#080' /}
+        {param autocomplete: 'base quality/name' /}
       {/call}    
       {call dma.edit.value_list}
-        {param name: 'class_skills' /}
+        {param name: 'class_skill' /}
         {param label: 'Class Skills' /}
         {param values: $entry.class_skills /}
         {param validate: 'non-empty' /}
@@ -892,17 +913,19 @@
                 {call dma.edit.field_list_multiple}
                   {param values: [[
                     'name': 'organization.organization',
-                    'value': $group.organization,
+                    'value': $group.organization.string,
                     'type': 'selection',
                     'choices': $entry.organization_names
                   ], [
                     'name': 'organization.number',
                     'value': $group.number,
-                    'validate': 'dice'
+                    'validate': 'dice',
+                    'caption': 'number'
                   ], [
                     'name': 'organization.plus',
                     'value': $group.plus.present ? $group.plus : '',
-                    'validate': 'any'
+                    'validate': 'any',
+                    'caption': 'plus'
                   ]] /}
                 {/call}
               {ifempty}
@@ -915,11 +938,13 @@
                   ], [
                     'name': 'organization.number',
                     'value': '',
-                    'validate': 'dice'
+                    'validate': 'dice',
+                    'caption': 'number'
                   ], [
                     'name': 'organization.plus',
                     'value': '',
-                    'validate': 'any'
+                    'validate': 'any',
+                    'caption': 'plus'
                   ]] /}
                 {/call}
               {/foreach}          
@@ -1020,12 +1045,12 @@
                 {call dma.edit.field_list_multiple}
                   {param values: [[
                     'name': 'language.language',
-                    'value': $language.language,
+                    'value': $language.language.string,
                     'type': 'selection',
                     'choices': $entry.language_names
                   ], [
                     'name': 'language.modifier',
-                    'value': $language.modifier, 
+                    'value': $language.modifier.string, 
                     'type': 'selection',
                     'choices': $entry.language_modifier_names
                   ]] /}
@@ -1048,6 +1073,13 @@
             {/param}
           {/call}
         {/param}
+        {param color: '#080' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'proficiency' /}
+        {param label: 'Proficiencies' /}
+        {param values: $entry.proficiencies /}
+        {param validate: 'non-empty' /}
         {param color: '#080' /}
       {/call}    
       {call dma.edit.value_text}

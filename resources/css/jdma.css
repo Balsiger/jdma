@@ -2465,20 +2465,17 @@ BODY.print
 
 .entry .image-link
 {
-  border: 1px solid transparent;
   padding: 5px;
   width: 112px;
   line-height: 112px;
   display: inline-block;
   margin-bottom: 5px;
   text-align: center;
-  box-shadow: 1px 1px 3px #777;
 }
 
 .entry .image-link:hover
 {
-  border: 1px solid #aaa;
-  box-shadow: 0 0 3px #777;
+  box-shadow: 0 0 3px #eee;
 }
 
 .entry ._new_._new_main._new_image,

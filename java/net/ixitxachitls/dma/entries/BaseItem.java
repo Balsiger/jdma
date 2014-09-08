@@ -73,6 +73,7 @@ import net.ixitxachitls.dma.values.Substance;
 import net.ixitxachitls.dma.values.Volume;
 import net.ixitxachitls.dma.values.WeaponStyle;
 import net.ixitxachitls.dma.values.WeaponType;
+import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;

@@ -9,58 +9,6 @@
     <!-- jdma logging -->
     <property name="logging.level" value="TRACE" />
     <property name="logging.loggers" value="ANSILogger" />
-    <!-- jdma web template values -->
-    <property name="web.template.css.color_Class" value="#ff80ff" />
-    <property name="web.template.css.lightcolor_Class" value="#ffa0ff" />
-    <property name="web.template.css.hilightcolor_Class" value="#ffc0ff" />
-    <property name="web.template.css.color_Campaign" value="#ccccff" />
-    <property name="web.template.css.lightcolor_Campaign" value="#ddddff" />
-    <property name="web.template.css.hilightcolor_Campaign" value="#aaaaff" />
-    <property name="web.template.css.color_Character" value="#3399ff" />
-    <property name="web.template.css.lightcolor_Character" value="#33ffff" />
-    <property name="web.template.css.hilightcolor_Character" value="#33ccff" />
-    <property name="web.template.css.color_Event" value="#800080" />
-    <property name="web.template.css.lightcolor_Event" value="#a000a0" />
-    <property name="web.template.css.hilightcolor_Event" value="#ff00ff" />
-    <property name="web.te\mplate.css.color_Quality" value="#800080" />
-    <property name="web.template.css.lightcolor_Quality" value="#a000a0" />
-    <property name="web.template.css.hilightcolor_Quality" value="#ff00ff" />
-    <property name="web.template.css.color_Feat" value="#008080" />
-    <property name="web.template.css.lightcolor_Feat" value="#00a0a0" />
-    <property name="web.template.css.hilightcolor_Feat" value="#00ffff" />
-    <property name="web.template.css.color_God" value="#ff8080" />
-    <property name="web.template.css.lightcolor_God" value="#ffa0a0" />
-    <property name="web.template.css.hilightcolor_God" value="#ffff00" />
-    <property name="web.template.css.color_Group" value="#ff8080" />
-    <property name="web.template.css.lightcolor_Group" value="#0000a0" />
-    <property name="web.template.css.hilightcolor_Group" value="#ffc0c0" />
-    <property name="web.template.css.color_Item" value="#000080" />
-    <property name="web.template.css.lightcolor_Item" value="#0000a0" />
-    <property name="web.template.css.hilightcolor_Item" value="#0000ff" />
-    <property name="web.template.css.color_Monster" value="#008000" />
-    <property name="web.template.css.lightcolor_Monster" value="#00a000" />
-    <property name="web.template.css.hilightcolor_Monster" value="#00ff00" />
-    <property name="web.template.css.color_NPC" value="#800000" />
-    <property name="web.template.css.lightcolor_NPC" value="#a00000" />
-    <property name="web.template.css.hilightcolor_NPC" value="#ff0000" />
-    <property name="web.template.css.color_Place" value="#804000" />
-    <property name="web.template.css.lightcolor_Place" value="#a08000" />
-    <property name="web.template.css.hilightcolor_Place" value="#ffa000" />
-    <property name="web.template.css.color_Product" value="#404040" />
-    <property name="web.template.css.lightcolor_Product" value="#808080" />
-    <property name="web.template.css.hilightcolor_Product" value="#a0a0a0" />
-    <property name="web.template.css.color_Skill" value="#00a0a0" />
-    <property name="web.template.css.lightcolor_Skill" value="#00ffff" />
-    <property name="web.template.css.hilightcolor_Skill" value="#ff8080" />
-    <property name="web.template.css.color_Spell" value="#8080ff" />
-    <property name="web.template.css.lightcolor_Spell" value="#a0a0ff" />
-    <property name="web.template.css.hilightcolor_Spell" value="#c0c0fff" />
-    <property name="web.template.css.color_Encounter" value="#ccccff" />
-    <property name="web.template.css.lightcolor_Encounter" value="#ddddff" />
-    <property name="web.template.css.hilightcolor_Encounter" value="#aaaaff" />
-    <property name="web.template.css.color_Level" value="#ccccff" />
-    <property name="web.template.css.lightcolor_Level" value="#ddddff" />
-    <property name="web.template.css.hilightcolor_Level" value="#aaaaff" />
   </system-properties>
 
   <static-error-handlers>
@@ -70,4 +18,13 @@
   <admin-console>
     <page name="DMA" url="/admin" />
   </admin-console>
+
+  <class-loader-config>
+    <priority-specifier filename="guava-16.0.1.jar"/>
+  </class-loader-config>
+
+  <precompilation-enabled>
+    false
+  </precompilation-enabled>
+
 </appengine-web-app>

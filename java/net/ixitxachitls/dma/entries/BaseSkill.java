@@ -35,6 +35,7 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.logging.Log;
 

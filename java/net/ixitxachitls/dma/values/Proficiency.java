@@ -36,6 +36,7 @@ public enum Proficiency implements EnumSelection.Named,
 {
   /** An unknown proficiency. */
   UNKNOWN("Unknown", BaseWeaponProto.Proficiency.UNKNOWN_PROFICIENCY),
+
   /** Proficiency for simple weapons. */
   SIMPLE("Simple", BaseWeaponProto.Proficiency.SIMPLE),
 

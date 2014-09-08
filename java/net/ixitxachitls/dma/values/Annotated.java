@@ -21,6 +21,8 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.util.ArrayList;
+
 import com.google.appengine.repackaged.com.google.common.base.Optional;
 
 
@@ -146,8 +148,8 @@ public class Annotated
         if(!m_value.get().canAdd(inValue))
           throw new IllegalArgumentException("cannot add " + inValue + " to "
             + m_value);
-        m_value = Optional.of((V)m_value.get().add(inValue));
 
+        m_value = Optional.of((V)m_value.get().add(inValue));
       }
     }
 
@@ -171,6 +173,54 @@ public class Annotated
       return m_value;
     }
   }
+
+  public static class List<V> extends Annotated
+  {
+    public List()
+    {
+      // nothing to do
+    }
+
+    public List(V inValue)
+    {
+      m_values.add(inValue);
+    }
+
+    public List(java.util.List<V> inValue)
+    {
+      m_values.addAll(inValue);
+    }
+
+    private java.util.List<V> m_values = new ArrayList<>();
+
+    private void add(V inValue)
+    {
+      if(!m_values.contains(inValue))
+        m_values.add(inValue);
+    }
+
+    public void add(V inValue, String inSource)
+    {
+      add(inValue);
+
+      super.add(inValue.toString(), inSource);
+    }
+
+    public void add(java.util.List<V> inValues, String inSource)
+    {
+      for(V value : inValues)
+      {
+        add(value);
+
+        super.add(value.toString(), inSource);
+      }
+    }
+
+    public java.util.List<V> get()
+    {
+      return m_values;
+    }
+}
 
   public Annotated()
   {

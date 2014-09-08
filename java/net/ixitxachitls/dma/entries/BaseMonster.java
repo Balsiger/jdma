@@ -175,10 +175,12 @@ public class BaseMonster extends BaseEntry
     {
       return m_organization;
     }
+
     public NewDice getNumber()
     {
       return m_number;
     }
+
     public Optional<String> getPlus()
     {
       return m_plus;
@@ -440,6 +442,9 @@ public class BaseMonster extends BaseEntry
 
   /** The feats entries. */
   protected Set<BaseFeat> m_featEntries = new HashSet<BaseFeat>();
+
+  /** The monsters proficiencies. */
+  protected List<String> m_proficiencies = new ArrayList<>();
 
   public Size getSize()
   {
@@ -912,6 +917,23 @@ public class BaseMonster extends BaseEntry
   public List<String> getSaveNames()
   {
     return Save.names();
+  }
+
+  public List<String> getProficiencies()
+  {
+    return m_proficiencies;
+  }
+
+  public Annotated.List<String> getCombinedProficiencies()
+  {
+    if(!m_proficiencies.isEmpty())
+      return new Annotated.List<>(m_proficiencies);
+
+    Annotated.List<String> combined = new Annotated.List<>();
+    for (BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedProficiencies());
+
+    return combined;
   }
 
   /**
@@ -2549,7 +2571,8 @@ public class BaseMonster extends BaseEntry
                             "mode", "speed", "maneuverability");
     m_naturalArmor = inValues.use("natural_armor", m_naturalArmor,
                                   NewModifier.PARSER);
-    m_baseAttack = inValues.use("attack", m_baseAttack, NewValue.INTEGER_PARSER);
+    m_baseAttack = inValues.use("attack", m_baseAttack,
+                                NewValue.INTEGER_PARSER);
     m_strength = inValues.use("strength", m_strength, NewValue.INTEGER_PARSER);
     m_dexterity = inValues.use("dexterity", m_dexterity,
                                NewValue.INTEGER_PARSER);
@@ -2599,6 +2622,7 @@ public class BaseMonster extends BaseEntry
     m_reproduction = inValues.use("reproduction", m_reproduction);
     m_possessions = inValues.use("possessions", m_possessions);
     m_goodSaves = inValues.use("good_saves", m_goodSaves, Save.PARSER);
+    m_proficiencies = inValues.use("proficiency", m_proficiencies);
   }
 
   @Override
@@ -2789,6 +2813,9 @@ public class BaseMonster extends BaseEntry
     for(Save save : m_goodSaves)
       builder.addGoodSave(save.toProto());
 
+    for(String proficiency : m_proficiencies)
+      builder.addProficiency(proficiency);
+
     BaseMonsterProto proto = builder.build();
     return proto;
   }
@@ -2953,6 +2980,9 @@ public class BaseMonster extends BaseEntry
 
     for(BaseMonsterProto.Save save : proto.getGoodSaveList())
       m_goodSaves.add(Save.fromProto(save));
+
+    for(String proficiency : proto.getProficiencyList())
+      m_proficiencies.add(proficiency);
 
     super.fromProto(proto.getBase());
   }
