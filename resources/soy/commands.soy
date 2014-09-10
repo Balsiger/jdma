@@ -445,3 +445,28 @@
 {template .color}
   <span class="color {$arg.0}">{$arg.1}</span>
 {/template}
+
+/**
+ * Setting param.
+ *
+ * @param arg The arguments to the command.
+ * @param opt The optional arguments, if any
+ */
+{template .table}  
+  <table>
+    {foreach $cell in $arg}
+      {if index($cell) % length($opt) == 0}
+        {if index($cell) > 0}
+          </tr>
+        {/if}
+        <tr>
+      {/if}
+      <td class="{if $opt[index($cell) % length($opt)] == 'r'}right
+                 {elseif $opt[index($cell) % length($opt)] == 'c'}center
+                 {else}left
+                 {/if}">
+        {$cell}
+      </td>
+    {/foreach}
+  </table>
+{/template}
