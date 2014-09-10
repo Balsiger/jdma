@@ -563,7 +563,6 @@ public class DMADatastore
 
   /**
    * Convert the given entry key into a corresponding entity key.
-   * @param <T>
    *
    * @param       inKey the key to convert
    * @param       <T>   the type of entry to convert
@@ -581,8 +580,12 @@ public class DMADatastore
                                   escapeType(inKey.getType().toString()),
                                   inKey.getID().toLowerCase(Locale.US));
     else
+    {
+      if(inKey.getID().isEmpty())
+        throw new IllegalArgumentException("name empty for " + inKey);
       return KeyFactory.createKey(escapeType(inKey.getType().toString()),
                                   inKey.getID().toLowerCase(Locale.US));
+    }
   }
 
   /**

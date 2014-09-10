@@ -541,6 +541,8 @@ public class BaseLevel extends BaseEntry
       inValues.use("allowed_alignment", m_allowedAlignments,
                    Alignment.PARSER);
     m_hitDie = inValues.use("hit_die", m_hitDie, NewDice.PARSER);
+    m_skillPoints = inValues.use("skill_points", m_skillPoints,
+                                 NewValue.INTEGER_PARSER);
     m_classSkills =
       inValues.use("class_skill", m_classSkills,
                    new NewReference.ReferenceParser<>(BaseSkill.TYPE));
@@ -562,7 +564,7 @@ public class BaseLevel extends BaseEntry
     m_fortitudeSaves =
       inValues.use("fortitude_save", m_fortitudeSaves, NewValue.INTEGER_PARSER);
     m_reflexSaves =
-      inValues.use("relfex_save", m_reflexSaves, NewValue.INTEGER_PARSER);
+      inValues.use("reflex_save", m_reflexSaves, NewValue.INTEGER_PARSER);
     m_willSaves =
       inValues.use("will_save", m_willSaves, NewValue.INTEGER_PARSER);
   }

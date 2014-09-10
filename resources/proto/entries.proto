@@ -493,6 +493,13 @@ message BaseQualityProto
   optional ModifierProto reflex_modifier = 9;
   optional ModifierProto will_modifier = 10;
   optional ModifierProto fortitude_modifier = 11;
+  
+  message KeyedModifier
+  {
+    required string key = 1;
+    required ModifierProto modifier = 2;
+  }
+  repeated KeyedModifier skill_modifier = 12; 
 }
 
 message BaseFeatProto

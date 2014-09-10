@@ -168,7 +168,7 @@
           {param color: '#808' /}
         {/call}
       {/if}
-      {if $entry.ability_modifiers}
+      {if $entry.immunities}
         {call dma.entry.value}
           {param label: 'Immunities' /}
           {param value}
@@ -198,6 +198,18 @@
                   or $entry.will_modifier.present},{/if}
               Fortitude {$entry.fortitude_modifier}
             {/if}                
+          {/param}
+          {param color: '#808' /}
+        {/call}
+      {/if}
+      {if $entry.skill_modifiers}
+        {call dma.entry.value}
+          {param label: 'Skill Modifiers' /}
+          {param value}
+            {foreach $modifier in $entry.skill_modifiers}
+              {$modifier}
+              {if not isLast($modifier)}, {/if}
+            {/foreach}
           {/param}
           {param color: '#808' /}
         {/call}
@@ -535,6 +547,57 @@
             {param class: 'field3' /}
           {/call}
         {/param}
+      {/call}    
+      {call dma.edit.generic_value}
+        {param name: 'skill_modifier' /}
+        {param color: '#808' /}
+        {param label: 'Skill Modifiers' /}
+        {param value}
+          {call dma.edit.field}
+            {param markup}
+              {foreach $modifier in $entry.skill_modifiers}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'skill_modifier.skill',
+                      'value': $modifier.key,
+                      'validate': 'any',
+                      'caption': 'skill',   
+                      'autocomplete': 'base skill/name'                                    
+                    ],
+                    [
+                      'name': 'skill_modifier.modifier',
+                      'value': $modifier.modifier,
+                      'validate': 'modifier',
+                      'caption': 'name'
+                    ],
+                  ] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'skill_modifier.skill',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'skill',                 
+                      'autocomplete': 'base skill/name'                                    
+                    ],
+                    [
+                      'name': 'skill_modifier.modifier',
+                      'value': '',
+                      'validate': 'modifier',
+                      'caption': 'modifier'
+                    ],
+                  ] /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+        {param validate: 'non-empty' /}
       {/call}    
       {call dma.edit.generic_value}
         {param name: 'references' /}

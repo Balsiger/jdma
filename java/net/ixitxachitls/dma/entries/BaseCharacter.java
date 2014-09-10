@@ -352,7 +352,7 @@ public class BaseCharacter extends BaseEntry
   {
     super.set(inValues);
 
-    m_realName = inValues.use("real name", m_realName);
+    m_realName = inValues.use("real_name", m_realName);
     m_email = inValues.use("email", m_email);
     m_group = inValues.use("group", m_group, new NewValue.Parser<Group>(1) {
       @Override

@@ -37,6 +37,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
 import net.ixitxachitls.dma.values.AbilityModifier;
 import net.ixitxachitls.dma.values.ExpressionValue;
+import net.ixitxachitls.dma.values.KeyedModifier;
 import net.ixitxachitls.dma.values.NewModifier;
 import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.enums.Immunity;
@@ -107,6 +108,9 @@ public class BaseQuality extends BaseEntry
   /** Fortitude modifier.*/
   private Optional<NewModifier> m_fortitudeModifier = Optional.absent();
 
+  /** The skill modifiers. */
+  private List<KeyedModifier> m_skillModifiers = new ArrayList<>();
+
   public EffectType getQualityType()
   {
     return m_qualityType;
@@ -157,6 +161,11 @@ public class BaseQuality extends BaseEntry
     return m_fortitudeModifier;
   }
 
+  public List<KeyedModifier> getSkillModifiers()
+  {
+    return Collections.unmodifiableList(m_skillModifiers);
+  }
+
   @Override
   public void set(Values inValues)
   {
@@ -180,6 +189,9 @@ public class BaseQuality extends BaseEntry
     m_fortitudeModifier = inValues.use("fortitude_modifier",
                                        m_fortitudeModifier,
                                        NewModifier.PARSER);
+    m_skillModifiers = inValues.use("skill_modifier", m_skillModifiers,
+                                      KeyedModifier.PARSER,
+                                      "skill", "modifier");
   }
 
  /**
@@ -414,6 +426,9 @@ public class BaseQuality extends BaseEntry
     if(m_fortitudeModifier.isPresent())
       builder.setFortitudeModifier(m_fortitudeModifier.get().toProto());
 
+    for(KeyedModifier skillModifier : m_skillModifiers)
+      builder.addSkillModifier(skillModifier.toProto());
+
     BaseQualityProto proto = builder.build();
     return proto;
   }
@@ -476,6 +491,10 @@ public class BaseQuality extends BaseEntry
     if(proto.hasFortitudeModifier())
       m_fortitudeModifier =
         Optional.of(NewModifier.fromProto(proto.getFortitudeModifier()));
+
+    for(BaseQualityProto.KeyedModifier skillModifeir
+          : proto.getSkillModifierList())
+      m_skillModifiers.add(KeyedModifier.fromProto(skillModifeir));
   }
 
   @Override

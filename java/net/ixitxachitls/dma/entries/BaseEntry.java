@@ -327,7 +327,7 @@ public class BaseEntry extends AbstractEntry
     for(BaseEntry entry : getBaseEntries())
       combinations.add(entry.getCombinedReferences());
 
-    if(m_categories.isEmpty())
+    if(m_references.isEmpty())
       return new Combination.Set<ProductReference>(combinations, this);
 
     return new Combination.Set<ProductReference>(this, m_references,

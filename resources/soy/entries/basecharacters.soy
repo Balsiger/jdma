@@ -122,7 +122,7 @@
         {param color: '#39f' /}
       {/call}
       {call dma.edit.value}
-        {param name: 'real-name' /}
+        {param name: 'real_name' /}
         {param label: 'Real Name' /}
         {param value: $entry.real_name /}
         {param validate: 'non-empty' /}
@@ -138,7 +138,7 @@
       {call dma.edit.value_selection}
         {param name: 'group' /}
         {param label: 'Group' /}
-        {param value: $entry.group /}
+        {param value: $entry.group.string /}
         {param choices: $entry.group.names /}
         {param color: '#39f' /}
       {/call}

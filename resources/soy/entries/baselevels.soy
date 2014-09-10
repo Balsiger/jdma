@@ -407,7 +407,7 @@
         {param color: '#aaf' /}
       {/call}
       {call dma.edit.value}
-        {param name: 'short-description' /}
+        {param name: 'short_description' /}
         {param label: 'Short Description' /}
         {param value: $entry.short_description /}
         {param validate: 'any' /}
@@ -453,7 +453,7 @@
         {param name: 'abbreviation' /}
         {param label: 'Abbreviation' /}
         {param value: $entry.abbreviation.present 
-          ? $entry.abbreviation.get : '' /}
+          ? $entry.abbreviation: '' /}
         {param validate: 'non-empty' /}
         {param color: '#aaf' /}
       {/call}    
@@ -461,7 +461,7 @@
         {param name: 'adventures' /}
         {param label: 'Adventures' /}
         {param value: $entry.adventures.present 
-          ? $entry.adventures.get : '' /}
+          ? $entry.adventures : '' /}
         {param validate: 'non-empty' /}
         {param color: '#aaf' /}
       {/call}    
@@ -469,7 +469,7 @@
         {param name: 'characteristics' /}
         {param label: 'Characteristics' /}
         {param value: $entry.characteristics.present 
-          ? $entry.characteristics.get : '' /}
+          ? $entry.characteristics : '' /}
         {param validate: 'non-empty' /}
         {param color: '#aaf' /}
       {/call}    
@@ -477,7 +477,7 @@
         {param name: 'alignment_options' /}
         {param label: 'Alignment' /}
         {param value: $entry.alignment_options.present 
-          ? $entry.alignment_options.get : '' /}
+          ? $entry.alignment_options : '' /}
         {param validate: 'non-empty' /}
         {param color: '#aaf' /}
       {/call}    
@@ -485,7 +485,7 @@
         {param name: 'religion' /}
         {param label: 'Religion' /}
         {param value: $entry.religion.present 
-          ? $entry.religion.get : '' /}
+          ? $entry.religion : '' /}
         {param validate: 'non-empty' /}
         {param color: '#aaf' /}
       {/call}    
@@ -493,7 +493,7 @@
         {param name: 'background' /}
         {param label: 'Background' /}
         {param value: $entry.background.present 
-          ? $entry.background.get: '' /}
+          ? $entry.background: '' /}
         {param validate: 'non-empty' /}
         {param color: '#aaf' /}
       {/call}    
@@ -501,7 +501,7 @@
         {param name: 'races' /}
         {param label: 'Races' /}
         {param value: $entry.races.present 
-          ? $entry.races.get : '' /}
+          ? $entry.races : '' /}
         {param validate: 'non-empty' /}
         {param color: '#aaf' /}
       {/call}    
@@ -509,7 +509,7 @@
         {param name: 'other_classes' /}
         {param label: 'Classes' /}
         {param value: $entry.other_classes.present 
-          ? $entry.other_classes.get : '' /}
+          ? $entry.other_classes : '' /}
         {param validate: 'non-empty' /}
         {param color: '#aaf' /}
       {/call}    
@@ -517,7 +517,7 @@
         {param name: 'role' /}
         {param label: 'Role' /}
         {param value: $entry.role.present 
-          ? $entry.role.get : '' /}
+          ? $entry.role : '' /}
         {param validate: 'non-empty' /}
         {param color: '#aaf' /}
       {/call}    
@@ -525,7 +525,7 @@
         {param name: 'important_abilities' /}
         {param label: 'Abilities' /}
         {param value: $entry.important_abilities.present 
-          ? $entry.important_abilities.get : '' /}
+          ? $entry.important_abilities : '' /}
         {param validate: 'non-empty' /}
         {param color: '#aaf' /}
       {/call}    
@@ -568,15 +568,14 @@
         {param name: 'hit_die' /}
         {param label: 'Hit Die' /}
         {param value: $entry.hit_die.present 
-          ? $entry.hit_die.get.string : '' /}
+          ? $entry.hit_die : '' /}
         {param validate: 'dice' /}
         {param color: '#aaf' /}
       {/call}    
       {call dma.edit.value}
         {param name: 'skill_points' /}
         {param label: 'Skill Points' /}
-        {param value: $entry.skill_points.present 
-          ? $entry.skill_points.get : '' /}
+        {param value: $entry.skill_points.present ? $entry.skill_points : '' /}
         {param validate: 'number' /}
         {param color: '#aaf' /}
       {/call}    
@@ -599,7 +598,7 @@
                 {call dma.edit.field_list_multiple}
                   {param values: [
                     [
-                      'name': 'weapon_proficiency.name',
+                      'name': 'weapon_proficiency',
                       'value': $proficiency.string,
                       'type': 'selection',
                       'choices': $proficiency.names                    
@@ -610,7 +609,7 @@
                 {call dma.edit.field_list_multiple}
                   {param values: [
                     [
-                      'name': 'weapon_proficiency.name',
+                      'name': 'weapon_proficiency',
                       'value': '',
                       'type': 'selection',
                       'choices': $entry.weapon_proficiency_names                    
@@ -634,7 +633,7 @@
                 {call dma.edit.field_list_multiple}
                   {param values: [
                     [
-                      'name': 'armor_proficiency.name',
+                      'name': 'armor_proficiency',
                       'value': $proficiency.string,
                       'type': 'selection',
                       'choices': $proficiency.names                    
@@ -645,7 +644,7 @@
                 {call dma.edit.field_list_multiple}
                   {param values: [
                     [
-                      'name': 'armor.proficiency.name',
+                      'name': 'armor_proficiency',
                       'value': '',
                       'type': 'selection',
                       'choices': $entry.armor_proficiency_names                    
@@ -690,7 +689,7 @@
                     [
                       'name': 'special_attack.condition',
                       'value': $attack.condition.present 
-                        ? $attack.condition.get : '',
+                        ? $attack.condition : '',
                       'validate': 'any',
                       'caption': 'condition'
                     ]
@@ -764,7 +763,7 @@
                     [
                       'name': 'special_quality.condition',
                       'value': $quality.condition.present 
-                        ? $quality.condition.get : '',
+                        ? $quality.condition : '',
                       'validate': 'any',
                       'caption': 'condition'
                     ]

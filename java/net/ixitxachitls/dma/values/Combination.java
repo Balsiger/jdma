@@ -208,6 +208,9 @@ public abstract class Combination<T>
           value += combination.getValue();
       }
 
+      if(value == null)
+        return 0;
+
       return value;
     }
   }
