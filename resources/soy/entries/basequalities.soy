@@ -228,6 +228,18 @@
           {param color: '#808' /}
         {/call}
       {/if}
+      {if $entry.bonus_feats}
+        {call dma.entry.value}
+          {param label: 'Bonus Feats' /}
+          {param value}
+            {foreach $feat in $entry.bonus_feats}
+              {$feat}
+              {if not isLast($feat)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#808' /}
+        {/call}
+      {/if}
       {call dma.entry.value}
         {param label: 'References' /}
         {param value}
@@ -627,6 +639,14 @@
         {param value: $entry.damage_modifier.present 
           ? $entry.damage_modifier : '' /}
         {param validate: 'modifier' /}
+        {param color: '#808' /}
+      {/call}    
+      {call dma.edit.value_list}
+        {param name: 'bonus_feat' /}
+        {param label: 'Bonus Feats' /}
+        {param values: $entry.bonus_feats /}
+        {param validate: 'non-empty' /}
+        {param autocomplete: 'base feat/name' /}
         {param color: '#808' /}
       {/call}    
       {call dma.edit.generic_value}

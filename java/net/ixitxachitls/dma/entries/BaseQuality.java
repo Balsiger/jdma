@@ -117,6 +117,9 @@ public class BaseQuality extends BaseEntry
   /** The modifier for damage. */
   private Optional<NewModifier> m_damageModifier = Optional.absent();
 
+  /** The bonus feats (or-ed). */
+  private List<String> m_bonusFeats = new ArrayList<>();
+
   public EffectType getQualityType()
   {
     return m_qualityType;
@@ -182,6 +185,16 @@ public class BaseQuality extends BaseEntry
     return m_damageModifier;
   }
 
+  /**
+   * Simple getter for bonus feats
+   *
+   * @return the bonusFeats
+   */
+  public List<String> getBonusFeats()
+  {
+    return Collections.unmodifiableList(m_bonusFeats);
+  }
+
   @Override
   public void set(Values inValues)
   {
@@ -212,6 +225,7 @@ public class BaseQuality extends BaseEntry
                                     NewModifier.PARSER);
     m_damageModifier = inValues.use("damage_modifier", m_damageModifier,
                                     NewModifier.PARSER);
+    m_bonusFeats = inValues.use("bonus_feat", m_bonusFeats);
   }
 
  /**
@@ -455,6 +469,9 @@ public class BaseQuality extends BaseEntry
     if(m_damageModifier.isPresent())
       builder.setDamageModifier(m_damageModifier.get().toProto());
 
+    for(String feat : m_bonusFeats)
+      builder.addBonusFeat(feat);
+
     BaseQualityProto proto = builder.build();
     return proto;
   }
@@ -529,6 +546,9 @@ public class BaseQuality extends BaseEntry
     for(BaseQualityProto.KeyedModifier skillModifeir
           : proto.getSkillModifierList())
       m_skillModifiers.add(KeyedModifier.fromProto(skillModifeir));
+
+    for(String feat : proto.getBonusFeatList())
+      m_bonusFeats.add(feat);
   }
 
   @Override

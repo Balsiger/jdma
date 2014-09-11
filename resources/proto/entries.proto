@@ -502,6 +502,7 @@ message BaseQualityProto
   repeated KeyedModifier skill_modifier = 12;
   optional ModifierProto attack_modifier = 13;
   optional ModifierProto damage_modifier = 14; 
+  repeated string bonus_feat = 15;
 }
 
 message BaseFeatProto
