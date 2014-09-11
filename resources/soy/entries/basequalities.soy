@@ -214,6 +214,20 @@
           {param color: '#808' /}
         {/call}
       {/if}
+      {if $entry.attack_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Attack' /}
+          {param value: $entry.attack_modifier /}
+          {param color: '#808' /}
+        {/call}
+      {/if}
+      {if $entry.damage_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Damage' /}
+          {param value: $entry.damage_modifier /}
+          {param color: '#808' /}
+        {/call}
+      {/if}
       {call dma.entry.value}
         {param label: 'References' /}
         {param value}
@@ -598,6 +612,22 @@
           {/call}
         {/param}
         {param validate: 'non-empty' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'attack_modifier' /}
+        {param label: 'Attack' /}
+        {param value: $entry.attack_modifier.present 
+          ? $entry.attack_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#808' /}
+      {/call}    
+      {call dma.edit.value}
+        {param name: 'damage_modifier' /}
+        {param label: 'Damage' /}
+        {param value: $entry.damage_modifier.present 
+          ? $entry.damage_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#808' /}
       {/call}    
       {call dma.edit.generic_value}
         {param name: 'references' /}

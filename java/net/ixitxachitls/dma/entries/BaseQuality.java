@@ -111,6 +111,12 @@ public class BaseQuality extends BaseEntry
   /** The skill modifiers. */
   private List<KeyedModifier> m_skillModifiers = new ArrayList<>();
 
+  /** The modifier for attacks. */
+  private Optional<NewModifier> m_attackModifier = Optional.absent();
+
+  /** The modifier for damage. */
+  private Optional<NewModifier> m_damageModifier = Optional.absent();
+
   public EffectType getQualityType()
   {
     return m_qualityType;
@@ -166,6 +172,16 @@ public class BaseQuality extends BaseEntry
     return Collections.unmodifiableList(m_skillModifiers);
   }
 
+  public Optional<NewModifier> getAttackModifier()
+  {
+    return m_attackModifier;
+  }
+
+  public Optional<NewModifier> getDamageModifier()
+  {
+    return m_damageModifier;
+  }
+
   @Override
   public void set(Values inValues)
   {
@@ -192,6 +208,10 @@ public class BaseQuality extends BaseEntry
     m_skillModifiers = inValues.use("skill_modifier", m_skillModifiers,
                                       KeyedModifier.PARSER,
                                       "skill", "modifier");
+    m_attackModifier = inValues.use("attack_modifier", m_attackModifier,
+                                    NewModifier.PARSER);
+    m_damageModifier = inValues.use("damage_modifier", m_damageModifier,
+                                    NewModifier.PARSER);
   }
 
  /**
@@ -429,6 +449,12 @@ public class BaseQuality extends BaseEntry
     for(KeyedModifier skillModifier : m_skillModifiers)
       builder.addSkillModifier(skillModifier.toProto());
 
+    if(m_attackModifier.isPresent())
+      builder.setAttackModifier(m_attackModifier.get().toProto());
+
+    if(m_damageModifier.isPresent())
+      builder.setDamageModifier(m_damageModifier.get().toProto());
+
     BaseQualityProto proto = builder.build();
     return proto;
   }
@@ -491,6 +517,14 @@ public class BaseQuality extends BaseEntry
     if(proto.hasFortitudeModifier())
       m_fortitudeModifier =
         Optional.of(NewModifier.fromProto(proto.getFortitudeModifier()));
+
+    if(proto.hasAttackModifier())
+      m_attackModifier =
+        Optional.of(NewModifier.fromProto(proto.getAttackModifier()));
+
+    if(proto.hasDamageModifier())
+      m_damageModifier =
+        Optional.of(NewModifier.fromProto(proto.getDamageModifier()));
 
     for(BaseQualityProto.KeyedModifier skillModifeir
           : proto.getSkillModifierList())

@@ -499,7 +499,9 @@ message BaseQualityProto
     required string key = 1;
     required ModifierProto modifier = 2;
   }
-  repeated KeyedModifier skill_modifier = 12; 
+  repeated KeyedModifier skill_modifier = 12;
+  optional ModifierProto attack_modifier = 13;
+  optional ModifierProto damage_modifier = 14; 
 }
 
 message BaseFeatProto
