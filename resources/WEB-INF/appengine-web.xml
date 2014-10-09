@@ -9,6 +9,8 @@
     <!-- jdma logging -->
     <property name="logging.level" value="TRACE" />
     <property name="logging.loggers" value="ANSILogger" />
+    <property name="file.encoding" value="UTF-8" />
+    <property name="DEFAULT_ENCODING" value="UTF-8" />
   </system-properties>
 
   <static-error-handlers>

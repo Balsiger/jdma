@@ -1182,6 +1182,8 @@ message BaseMonsterProto
       TERRAN = 22;
       UNDERCOMMON = 23;
       NONE = 24;
+      CHONDATHAN = 25;
+      ILLUSKAN = 26;
     }
     required Name name = 2;
   }

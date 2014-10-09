@@ -133,6 +133,7 @@ public class SoyAbstract extends SoyMapData
      * @return the value returned by the name method call or undefined if not
      *         found
      */
+    @SuppressWarnings("unchecked")
     @Override
     public SoyData getSingle(String inName)
     {
@@ -147,6 +148,14 @@ public class SoyAbstract extends SoyMapData
         else
           return new Undefined(m_name + "." + inName);
       }
+
+      if("integer".equals(inName) && m_value instanceof Integer)
+        return IntegerData.forValue((Integer)m_value);
+
+      if("integer".equals(inName) && m_value instanceof Optional
+        && ((Optional<?>)m_value).isPresent()
+        && ((Optional<?>)m_value).get() instanceof Integer)
+        return IntegerData.forValue(((Optional<Integer>)m_value).get());
 
       value = Classes.callMethod(inName, value);
       if(value != null)

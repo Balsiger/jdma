@@ -30,10 +30,13 @@
  * @param? entry The character to edit. 
  */
 {template .edit autoescape="true"}
+  level: {$entry.base.string}
+  level: {$entry.base.name}
+  level: {$entry.base}
   {call dma.edit.field_selection}
     {param name: 'level.name' /}
     {param caption: 'Name' /}
-    {param value: $entry ? lower($entry.base_level.name) : '' /}
+    {param value: $entry ? $entry.base.string : '' /}
     {param choices: $ij.Level.available_levels /}
     {param class: 'narrow' /} 
   {/call}    

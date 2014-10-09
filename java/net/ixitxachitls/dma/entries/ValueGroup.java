@@ -394,7 +394,15 @@ public abstract class ValueGroup implements Changeable
       if(values == null)
         m_messages.add("Tried to use unknown value " + inKey);
 
-      return values;
+      List<String> cleanedValues = new ArrayList<>(values);
+      for (int i = cleanedValues.size() - 1; i >= 0; i--) {
+        if (cleanedValues.get(i) == null || cleanedValues.get(i).isEmpty())
+          cleanedValues.remove(i);
+        else
+          break;
+      }
+
+      return cleanedValues;
     }
 
     private @Nullable String getFirst(String inKey)
@@ -417,13 +425,15 @@ public abstract class ValueGroup implements Changeable
         for(String value : get(inKey))
           values.add(new String [] { value });
       else
+        // Convert from a -> [], b -> [] ...
+        // to [a1, b1, ...], [a2, b2, ...]
         for(int i = 0; i < inParts.length; i++)
         {
           int j = 0;
           for(String value : get(inKey + "." + inParts[i]))
           {
             String []single;
-            if(i == 0)
+            if (values.size() <= j)
             {
               single = new String[inParts.length];
               values.add(single);

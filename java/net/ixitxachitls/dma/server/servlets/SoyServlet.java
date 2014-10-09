@@ -22,7 +22,9 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -148,7 +150,7 @@ public class SoyServlet extends DMAServlet
     }
 
     // Set the output header.
-    inResponse.setHeader("Content-Type", "text/html");
+    inResponse.setContentType("text/html; charset=UTF-8");
     inResponse.setHeader("Cache-Control", "max-age=0");
 
     Tracer tracer = new Tracer("creating renderer");
@@ -167,7 +169,10 @@ public class SoyServlet extends DMAServlet
     tracer.done();
 
     tracer = new Tracer("rendering soy template");
-    try (PrintWriter print = new PrintWriter(inResponse.getOutputStream()))
+    try (PrintWriter print =
+           new PrintWriter(new OutputStreamWriter
+                           (inResponse.getOutputStream(),
+                            Charset.forName("UTF-8"))))
     {
       print.println(renderer.render(getTemplateName(inRequest)));
     }

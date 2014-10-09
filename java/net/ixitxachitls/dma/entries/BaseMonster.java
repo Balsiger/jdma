@@ -451,16 +451,16 @@ public class BaseMonster extends BaseEntry
     return m_size;
   }
 
-  public Combination<Size> getCombinedSize()
+  public Annotated<Optional<Size>> getCombinedSize()
   {
     if(m_size != Size.UNKNOWN)
-      return new Combination.Max<Size>(this, m_size);
+      return new Annotated.Max<Size>(m_size, getName());
 
-    List<Combination<Size>> combinations = new ArrayList<>();
+    Annotated<Optional<Size>> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedSize());
+      combined.add(((BaseMonster)entry).getCombinedSize());
 
-    return new Combination.Max<Size>(this, combinations);
+    return combined;
   }
 
   public SizeModifier getSizeModifier()
@@ -468,14 +468,51 @@ public class BaseMonster extends BaseEntry
     return m_sizeModifier;
   }
 
+  public Annotated<Optional<SizeModifier>> getCombinedSizeModifier()
+  {
+    if(m_sizeModifier != SizeModifier.UNKNOWN)
+      return new Annotated.Max<SizeModifier>(m_sizeModifier, getName());
+
+    Annotated<Optional<SizeModifier>> combined = new Annotated.Max<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseMonster)entry).getCombinedSizeModifier());
+
+    return combined;
+  }
+
   public MonsterType getMonsterType()
   {
     return m_monsterType;
   }
 
+  public Annotated<Optional<MonsterType>> getCombinedMonsterType()
+  {
+    if(m_monsterType != MonsterType.UNKNOWN)
+      return new Annotated.Max<MonsterType>(m_monsterType, getName());
+
+    Annotated.Max<MonsterType> combined = new Annotated.Max<MonsterType>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseMonster)entry).getCombinedMonsterType());
+
+    return combined;
+  }
+
   public List<MonsterSubtype> getMonsterSubtypes()
   {
     return Collections.unmodifiableList(m_monsterSubtypes);
+  }
+
+  public Annotated<List<MonsterSubtype>> getCombinedMonsterSubtypes()
+  {
+    if(!m_monsterSubtypes.isEmpty())
+      return new Annotated.List<MonsterSubtype>(m_monsterSubtypes, getName());
+
+    Annotated.List<MonsterSubtype> combined =
+      new Annotated.List<MonsterSubtype>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseMonster)entry).getCombinedMonsterSubtypes());
+
+    return combined;
   }
 
   public Optional<NewDice> getHitDice()
@@ -511,7 +548,7 @@ public class BaseMonster extends BaseEntry
     return Optional.fromNullable(speed);
   }
 
-  public List<Annotated.Arithmetic<Speed>> getSpeedsAnnotated()
+  public List<Annotated.Arithmetic<Speed>> getCombinedSpeeds()
   {
     List<Annotated.Arithmetic<Speed>> speeds = new ArrayList<>();
 
@@ -549,17 +586,17 @@ public class BaseMonster extends BaseEntry
     return m_baseAttack;
   }
 
-  public Combination<Integer> getCombinedBaseAttack()
+  public Annotated<Optional<Integer>> getCombinedBaseAttack()
   {
     Optional<Integer> attack = getBaseAttack();
     if(attack.isPresent())
-      return new Combination.Integer(this, attack.get());
+      return new Annotated.Bonus(attack.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated.Bonus combined = new Annotated.Bonus();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedBaseAttack());
+      combined.add(((BaseMonster)entry).getCombinedBaseAttack());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public Optional<Integer> getStrength()
@@ -567,17 +604,17 @@ public class BaseMonster extends BaseEntry
     return m_strength;
   }
 
-  public Combination<Integer> getCombinedStrength()
+  public Annotated<Optional<Integer>> getCombinedStrength()
   {
     Optional<Integer> strength = getStrength();
     if(strength.isPresent())
-      return new Combination.Integer(this, strength.get());
+      return new Annotated.Integer(strength.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedStrength());
+      combined.add(((BaseMonster)entry).getCombinedStrength());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public Optional<Integer> getDexterity()
@@ -585,17 +622,17 @@ public class BaseMonster extends BaseEntry
     return m_dexterity;
   }
 
-  public Combination<Integer> getCombinedDexterity()
+  public Annotated<Optional<Integer>> getCombinedDexterity()
   {
     Optional<Integer> dexterity = getDexterity();
     if(dexterity.isPresent())
-      return new Combination.Integer(this, dexterity.get());
+      return new Annotated.Integer(dexterity.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedDexterity());
+      combined.add(((BaseMonster)entry).getCombinedDexterity());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public Optional<Integer> getConstitution()
@@ -603,17 +640,17 @@ public class BaseMonster extends BaseEntry
     return m_constitution;
   }
 
-  public Combination<Integer> getCombinedConstitution()
+  public Annotated<Optional<Integer>> getCombinedConstitution()
   {
     Optional<Integer> constitution = getConstitution();
     if(constitution.isPresent())
-      return new Combination.Integer(this, constitution.get());
+      return new Annotated.Integer(constitution.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedConstitution());
+      combined.add(((BaseMonster)entry).getCombinedConstitution());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public Optional<Integer> getIntelligence()
@@ -621,17 +658,17 @@ public class BaseMonster extends BaseEntry
     return m_intelligence;
   }
 
-  public Combination<Integer> getCombinedIntelligence()
+  public Annotated<Optional<Integer>> getCombinedIntelligence()
   {
     Optional<Integer> intelligence = getIntelligence();
     if(intelligence.isPresent())
-      return new Combination.Integer(this, intelligence.get());
+      return new Annotated.Integer(intelligence.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedIntelligence());
+      combined.add(((BaseMonster)entry).getCombinedIntelligence());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public Optional<Integer> getWisdom()
@@ -639,17 +676,17 @@ public class BaseMonster extends BaseEntry
     return m_wisdom;
   }
 
-  public Combination<Integer> getCombinedWisdom()
+  public Annotated<Optional<Integer>> getCombinedWisdom()
   {
     Optional<Integer> wisdom = getWisdom();
     if(wisdom.isPresent())
-      return new Combination.Integer(this, wisdom.get());
+      return new Annotated.Integer(wisdom.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedWisdom());
+      combined.add(((BaseMonster)entry).getCombinedWisdom());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public Optional<Integer> getCharisma()
@@ -657,17 +694,17 @@ public class BaseMonster extends BaseEntry
     return m_charisma;
   }
 
-  public Combination<Integer> getCombinedCharisma()
+  public Annotated<Optional<Integer>> getCombinedCharisma()
   {
     Optional<Integer> charisma = getCharisma();
     if(charisma.isPresent())
-      return new Combination.Integer(this, charisma.get());
+      return new Annotated.Integer(charisma.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedCharisma());
+      combined.add(((BaseMonster)entry).getCombinedCharisma());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public Optional<Integer> getFortitudeSave()
@@ -675,14 +712,14 @@ public class BaseMonster extends BaseEntry
     return m_fortitudeSave;
   }
 
-  public Annotated.Bonus getCombinedFortitutdeSave()
+  public Annotated.Bonus getCombinedFortitudeSave()
   {
     if(m_fortitudeSave.isPresent())
       return new Annotated.Bonus(m_fortitudeSave.get(), getName());
 
     Annotated.Bonus combined = new Annotated.Bonus();
     for(BaseEntry base : getBaseEntries())
-      combined.add(((BaseMonster)base).getCombinedFortitutdeSave());
+      combined.add(((BaseMonster)base).getCombinedFortitudeSave());
 
     return combined;
   }
@@ -726,9 +763,33 @@ public class BaseMonster extends BaseEntry
     return Collections.unmodifiableList(m_primaryAttacks);
   }
 
+  public Annotated<List<Attack>> getCombinedPrimaryAttacks()
+  {
+    if(!m_primaryAttacks.isEmpty())
+      return new Annotated.List<Attack>(m_primaryAttacks, getName());
+
+    Annotated<List<Attack>> combined = new Annotated.List<Attack>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedPrimaryAttacks());
+
+    return combined;
+  }
+
   public List<Attack> getSecondaryAttacks()
   {
     return Collections.unmodifiableList(m_secondaryAttacks);
+  }
+
+  public Annotated<List<Attack>> getCombinedSecondaryAttacks()
+  {
+    if(!m_primaryAttacks.isEmpty())
+      return new Annotated.List<Attack>(m_secondaryAttacks, getName());
+
+    Annotated<List<Attack>> combined = new Annotated.List<Attack>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedSecondaryAttacks());
+
+    return combined;
   }
 
   public Optional<NewDistance> getSpace()
@@ -736,9 +797,34 @@ public class BaseMonster extends BaseEntry
     return m_space;
   }
 
+  public Annotated<Optional<NewDistance>> getCombinedSpace()
+  {
+    if(m_space.isPresent())
+      return new Annotated.Max<NewDistance>(m_space.get(), getName());
+
+    Annotated<Optional<NewDistance>> combined =
+      new Annotated.Max<NewDistance>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedSpace());
+
+    return combined;
+  }
+
   public List<String> getSpecialAttacks()
   {
     return Collections.unmodifiableList(m_specialAttacks);
+  }
+
+  public Annotated<List<String>> getCombinedSpecialAttacks()
+  {
+    if(!m_specialAttacks.isEmpty())
+      return new Annotated.List<String>(m_specialAttacks, getName());
+
+    Annotated<List<String>> combined = new Annotated.List<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedSpecialAttacks());
+
+    return combined;
   }
 
   public List<String> getSpecialQualities()
@@ -746,9 +832,33 @@ public class BaseMonster extends BaseEntry
     return Collections.unmodifiableList(m_specialQualities);
   }
 
+  public Annotated<List<String>> getCombinedSpecialQualities()
+  {
+    if(!m_specialQualities.isEmpty())
+      return new Annotated.List<String>(m_specialQualities, getName());
+
+    Annotated<List<String>> combined = new Annotated.List<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedSpecialQualities());
+
+    return combined;
+  }
+
   public List<String> getClassSkills()
   {
     return Collections.unmodifiableList(m_classSkills);
+  }
+
+  public Annotated<List<String>> getCombinedClassSkills()
+  {
+    if(!m_classSkills.isEmpty())
+      return new Annotated.List<String>(m_classSkills, getName());
+
+    Annotated<List<String>> combined = new Annotated.List<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedClassSkills());
+
+    return combined;
   }
 
   public List<String> getFeats()
@@ -756,9 +866,33 @@ public class BaseMonster extends BaseEntry
     return Collections.unmodifiableList(m_feats);
   }
 
+  public Annotated<List<String>> getCombinedFeats()
+  {
+    if(!m_feats.isEmpty())
+      return new Annotated.List<String>(m_feats, getName());
+
+    Annotated<List<String>> combined = new Annotated.List<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedFeats());
+
+    return combined;
+  }
+
   public Terrain getTerrain()
   {
     return m_terrain;
+  }
+
+  public Annotated<Optional<Terrain>> getCombinedTerrain()
+  {
+    if(m_terrain != Terrain.UNKNOWN)
+      return new Annotated.Max<>(m_terrain, getName());
+
+    Annotated<Optional<Terrain>> combined = new Annotated.Max<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedTerrain());
+
+    return combined;
   }
 
   public Climate getClimate()
@@ -766,9 +900,33 @@ public class BaseMonster extends BaseEntry
     return m_climate;
   }
 
+  public Annotated<Optional<Climate>> getCombinedClimate()
+  {
+    if(m_climate != Climate.UNKNOWN)
+      return new Annotated.Max<>(m_climate, getName());
+
+    Annotated<Optional<Climate>> combined = new Annotated.Max<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedClimate());
+
+    return combined;
+  }
+
   public List<Group> getOrganizations()
   {
     return Collections.unmodifiableList(m_organizations);
+  }
+
+  public Annotated<List<Group>> getCombinedOrganizations()
+  {
+    if(!m_organizations.isEmpty())
+      return new Annotated.List<>(m_organizations, getName());
+
+    Annotated<List<Group>> combined = new Annotated.List<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedOrganizations());
+
+    return combined;
   }
 
   public Optional<NewRational> getCr()
@@ -776,9 +934,33 @@ public class BaseMonster extends BaseEntry
     return m_cr;
   }
 
+  public Annotated<Optional<NewRational>> getCombinedCr()
+  {
+    if(m_cr.isPresent())
+      return new Annotated.Arithmetic<NewRational>(m_cr.get(), getName());
+
+    Annotated<Optional<NewRational>> combined = new Annotated.Arithmetic<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedCr());
+
+    return combined;
+  }
+
   public Treasure getTreasure()
   {
     return m_treasure;
+  }
+
+  public Annotated<Optional<Treasure>> getCombinedTreasure()
+  {
+    if(m_treasure != Treasure.UNKNOWN)
+      return new Annotated.Max<>(m_treasure, getName());
+
+    Annotated<Optional<Treasure>> combined = new Annotated.Max<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedTreasure());
+
+    return combined;
   }
 
   public Alignment getAlignment()
@@ -786,14 +968,50 @@ public class BaseMonster extends BaseEntry
     return m_alignment;
   }
 
+  public Annotated<Optional<Alignment>> getCombinedAlignment()
+  {
+    if(m_alignment != Alignment.UNKNOWN)
+      return new Annotated.Max<>(m_alignment, getName());
+
+    Annotated<Optional<Alignment>> combined = new Annotated.Max<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedAlignment());
+
+    return combined;
+  }
+
   public AlignmentStatus getAlignmentStatus()
   {
     return m_alignmentStatus;
   }
 
+  public Annotated<Optional<AlignmentStatus>> getCombinedAlignmentStatus()
+  {
+    if(m_alignmentStatus != AlignmentStatus.UNKNOWN)
+      return new Annotated.Max<>(m_alignmentStatus, getName());
+
+    Annotated<Optional<AlignmentStatus>> combined = new Annotated.Max<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedAlignmentStatus());
+
+    return combined;
+  }
+
   public List<Advancement> getAdvancements()
   {
     return m_advancements;
+  }
+
+  public Annotated<List<Advancement>> getCombinedAdvancements()
+  {
+    if(!m_advancements.isEmpty())
+      return new Annotated.List<>(m_advancements, getName());
+
+    Annotated<List<Advancement>> combined = new Annotated.List<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedAdvancements());
+
+    return combined;
   }
 
   public Optional<Integer> getLevelAdjustment()
@@ -819,9 +1037,33 @@ public class BaseMonster extends BaseEntry
     return m_languages;
   }
 
+  public Annotated<List<LanguageOption>> getCombinedLanguages()
+  {
+    if(!m_languages.isEmpty())
+      return new Annotated.List<>(m_languages, getName());
+
+    Annotated<List<LanguageOption>> combined = new Annotated.List<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedLanguages());
+
+    return combined;
+  }
+
   public Optional<String> getEncounter()
   {
     return m_encounter;
+  }
+
+  public Annotated<Optional<String>> getCombinedEncounter()
+  {
+    if(m_encounter.isPresent() && !m_encounter.get().isEmpty())
+      return new Annotated.String(m_encounter.get(), getName());
+
+    Annotated<Optional<java.lang.String>> combined = new Annotated.String();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedEncounter());
+
+    return combined;
   }
 
   public Optional<String> getCombat()
@@ -829,9 +1071,33 @@ public class BaseMonster extends BaseEntry
     return m_combat;
   }
 
+  public Annotated<Optional<String>> getCombinedCombat()
+  {
+    if(m_combat.isPresent() && !m_combat.get().isEmpty())
+      return new Annotated.String(m_combat.get(), getName());
+
+    Annotated<Optional<java.lang.String>> combined = new Annotated.String();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedCombat());
+
+    return combined;
+  }
+
   public Optional<String> getTactics()
   {
     return m_tactics;
+  }
+
+  public Annotated<Optional<String>> getCombinedTactics()
+  {
+    if(m_tactics.isPresent() && !m_tactics.get().isEmpty())
+      return new Annotated.String(m_tactics.get(), getName());
+
+    Annotated<Optional<java.lang.String>> combined = new Annotated.String();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedTactics());
+
+    return combined;
   }
 
   public Optional<String> getCharacter()
@@ -839,14 +1105,50 @@ public class BaseMonster extends BaseEntry
     return m_character;
   }
 
+  public Annotated<Optional<String>> getCombinedCharacter()
+  {
+    if(m_character.isPresent() && !m_character.get().isEmpty())
+      return new Annotated.String(m_character.get(), getName());
+
+    Annotated<Optional<java.lang.String>> combined = new Annotated.String();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedCharacter());
+
+    return combined;
+  }
+
   public Optional<String> getReproduction()
   {
     return m_reproduction;
   }
 
+  public Annotated<Optional<String>> getCombinedReproduction()
+  {
+    if(m_reproduction.isPresent() && !m_reproduction.get().isEmpty())
+      return new Annotated.String(m_reproduction.get(), getName());
+
+    Annotated<Optional<java.lang.String>> combined = new Annotated.String();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedReproduction());
+
+    return combined;
+  }
+
   public List<String> getPossessions()
   {
     return m_possessions;
+  }
+
+  public Annotated<List<String>> getCombinedPossessions()
+  {
+    if(!m_possessions.isEmpty())
+      return new Annotated.List<>(m_possessions, getName());
+
+    Annotated<List<String>> combined = new Annotated.List<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedPossessions());
+
+    return combined;
   }
 
   public List<Save> getGoodSaves()
@@ -867,6 +1169,19 @@ public class BaseMonster extends BaseEntry
   public Optional<NewDistance> getReach()
   {
     return m_reach;
+  }
+
+  public Annotated<Optional<NewDistance>> getCombinedReach()
+  {
+    if(m_reach.isPresent())
+      return new Annotated.Max<NewDistance>(m_reach.get(), getName());
+
+    Annotated<Optional<NewDistance>> combined =
+      new Annotated.Max<NewDistance>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedReach());
+
+    return combined;
   }
 
   public List<String> getMonsterSubtypeNames()
@@ -927,7 +1242,7 @@ public class BaseMonster extends BaseEntry
   public Annotated.List<String> getCombinedProficiencies()
   {
     if(!m_proficiencies.isEmpty())
-      return new Annotated.List<>(m_proficiencies);
+      return new Annotated.List<String>(m_proficiencies, getName());
 
     Annotated.List<String> combined = new Annotated.List<>();
     for (BaseEntry base : getBaseEntries())

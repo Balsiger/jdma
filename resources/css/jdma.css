@@ -3299,6 +3299,11 @@ DIV.inline
   display: inline-block;
 }
 
+.annotated
+{
+  position: relative;
+}
+
 .annotations
 {
   border: 1px solid grey;
@@ -3312,6 +3317,20 @@ DIV.inline
   left: 45%;
   white-space: nowrap;
   z-index: 1;
+}
+
+.annotation-value
+{
+  max-width: 500px;
+  overflow: hidden;
+  display: inline-block;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
+.annotation-source
+{
+  display: inline-block;
 }
 
 .annotated:hover .annotations

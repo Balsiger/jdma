@@ -46,13 +46,19 @@ public class ValueSources
     private final String m_source;
 
    public String getValue()
-    {
+   {
       return m_value;
     }
 
     public String getSource()
     {
       return m_source;
+    }
+
+    @Override
+    public String toString()
+    {
+      return m_value + ": " + m_source;
     }
   }
 
@@ -86,5 +92,11 @@ public class ValueSources
   public List<ValueSource> getSources()
   {
     return Collections.unmodifiableList(m_sources);
+  }
+
+  @Override
+  public String toString()
+  {
+    return m_sources.toString();
   }
 }

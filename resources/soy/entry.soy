@@ -92,20 +92,13 @@
        
       {if def($entry.description)}
         <div class="_new_value _new_description">
-          {call .concatenated}
-            {param value: $entry.description /}
-            {param concatenate: $entry.combined_description /}
-            {param lines: true /}
-          {/call}
+          {annotate($entry.combined_description)}
         </div>
       {/if}
         
       {if def($entry.short_description)}
         <div class="_new_value _new_short-description">
-          {call .concatenated}
-            {param value: $entry.short_description /}
-            {param concatenate: $entry.combined_short_description /}
-          {/call}
+          {annotate($entry.combined_short_description)}
         </div>
       {/if}
 

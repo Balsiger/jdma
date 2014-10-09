@@ -110,7 +110,11 @@ public enum Language implements EnumSelection.Named,
   UNDERCOMMON("Undercommon", BaseMonsterProto.Language.Name.UNDERCOMMON),
 
   /** None. */
-  NONE("-", BaseMonsterProto.Language.Name.NONE);
+  NONE("-", BaseMonsterProto.Language.Name.NONE),
+
+  // Forgotten Realms language.
+  CHONDATHAN("Chondathan", BaseMonsterProto.Language.Name.CHONDATHAN),
+  ILLUSKAN("Illuskan", BaseMonsterProto.Language.Name.ILLUSKAN);
 
   /** The value's name. */
   private String m_name;

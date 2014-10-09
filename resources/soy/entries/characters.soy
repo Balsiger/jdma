@@ -273,17 +273,17 @@
         {/call}
         
         {call .ability}
-          {param name: 'Constitution' /}
-          {param abbreviation: 'CON' /}
-          {param ability: $entry.combined_constitution.value /}
-          {param modifier: bonus($entry.constitution_modifier) /}
-        {/call}
-        
-        {call .ability}
           {param name: 'Dexterity' /}
           {param abbreviation: 'DEX' /}
           {param ability: $entry.combined_dexterity.value /}
           {param modifier: bonus($entry.dexterity_modifier) /}
+        {/call}
+        
+        {call .ability}
+          {param name: 'Constitution' /}
+          {param abbreviation: 'CON' /}
+          {param ability: $entry.combined_constitution.value /}
+          {param modifier: bonus($entry.constitution_modifier) /}
         {/call}
         
         {call .ability}
@@ -391,10 +391,12 @@
           {param size: '27px' /}
           {param vSize: '30px' /}
           {param value}
-            {foreach $speed in $entry.speeds_annotated}
-              {annotate($speed)|noescape}
-              {if not isLast($speed)}, {/if}
-            {/foreach}
+            {if isList($entry.speeds_annotated)}
+              {foreach $speed in $entry.speeds_annotated}
+                {annotate($speed)|noescape}
+                {if not isLast($speed)}, {/if}
+              {/foreach}
+            {/if}
           {/param}
           {param prefix: true /}
           {param center: true /}
@@ -1445,6 +1447,7 @@
         {param choices: $entry.state.names /}
         {param color: '#39f' /}
       {/call}
+      levels: {$entry.levels}
       {call dma.edit.generic_value}
         {param label: 'Levels' /}
         {param value}

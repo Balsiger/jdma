@@ -1043,7 +1043,9 @@ public class Item extends CampaignEntry
     int bonus = 0;
     if(getPossessor().isPresent())
     {
-      bonus = getPossessor().get().getCombinedBaseAttack().getValue();
+      Optional<Integer> attack = 
+        getPossessor().get().getCombinedBaseAttack().get(); 
+      bonus = attack.isPresent() ? attack.get() : 0; 
 
       if(isWeapon())
       {

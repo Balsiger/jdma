@@ -27,6 +27,7 @@ import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -35,6 +36,7 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.ProductReference;
 import net.ixitxachitls.util.Strings;
@@ -180,17 +182,17 @@ public class BaseEntry extends AbstractEntry
    *
    * @return a combined description with the sum and their sources.
    */
-  public Combination<String> getCombinedDescription()
+  public Annotated<Optional<java.lang.String>> getCombinedDescription()
   {
     String description = getDescription();
     if(!description.isEmpty())
-      return new Combination.String(this, description);
+      return new Annotated.String(description, getName());
 
-    List<Combination<String>> combinations = new ArrayList<>();
+    Annotated<Optional<java.lang.String>> combined = new Annotated.String();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(entry.getCombinedDescription());
+      combined.add(entry.getCombinedDescription());
 
-    return new Combination.String(this, combinations);
+    return combined;
   }
 
   /**
@@ -209,18 +211,18 @@ public class BaseEntry extends AbstractEntry
    *
    * @return a combined description with the sum and their sources.
    */
-  public Combination<String> getCombinedShortDescription()
+  public Annotated<Optional<java.lang.String>> getCombinedShortDescription()
   {
     String description = getShortDescription();
     if(!description.isEmpty())
-      return new Combination.String(this, description);
+      return new Annotated.String(description, getName());
 
-    List<Combination<String>> combinations = new ArrayList<>();
+    Annotated.String combined = new Annotated.String();
     for(BaseEntry entry : getBaseEntries())
       if(entry instanceof BaseEntry)
-      combinations.add(entry.getCombinedShortDescription());
+      combined.add(entry.getCombinedShortDescription());
 
-    return new Combination.String(this, combinations);
+    return combined;
   }
 
   /**
@@ -273,16 +275,16 @@ public class BaseEntry extends AbstractEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<List<String>> getCombinedWorlds()
+  public Annotated<List<String>> getCombinedWorlds()
   {
     if(!m_worlds.isEmpty())
-      return new Combination.List<String>(this, m_worlds);
+      return new Annotated.List<String>(m_worlds, getName());
 
-    List<Combination<List<String>>> combinations = new ArrayList<>();
+    Annotated.List<String> combined = new Annotated.List<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(entry.getCombinedWorlds());
+      combined.add(entry.getCombinedWorlds());
 
-    return new Combination.List<String>(combinations, this);
+    return combined;
   }
 
   /**

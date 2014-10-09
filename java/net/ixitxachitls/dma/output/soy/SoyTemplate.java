@@ -46,9 +46,11 @@ import com.google.inject.Module;
 import com.google.inject.multibindings.Multibinder;
 import com.google.template.soy.SoyFileSet;
 import com.google.template.soy.SoyModule;
+import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
+import com.google.template.soy.data.UnsafeSanitizedContentOrdainer;
 import com.google.template.soy.data.restricted.BooleanData;
 import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
@@ -388,7 +390,7 @@ public class SoyTemplate
     @Override
     public Set<Integer> getValidArgsSizes()
     {
-      return ImmutableSet.of(1);
+      return ImmutableSet.of(1, 2);
     }
 
     @Override
@@ -397,10 +399,13 @@ public class SoyTemplate
       if(inArgs.get(0) instanceof SoyMapData)
       {
         SoyMapData data = (SoyMapData)inArgs.get(0);
-        return StringData.forValue(COMMAND_RENDERER.render
-                                   ("dma.value.annotated",
-                                    map("value", data),
-                                    (Map<String, Object>)null));
+        return UnsafeSanitizedContentOrdainer.ordainAsSafe
+          (COMMAND_RENDERER.render
+           ("dma.value.annotated",
+            map("value", data,
+                "link", inArgs.size() > 1 ? inArgs.get(1) : ""),
+                (Map<String, Object>)null),
+           SanitizedContent.ContentKind.HTML);
       }
 
       return inArgs.get(0);

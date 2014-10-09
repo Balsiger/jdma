@@ -28,12 +28,14 @@ import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.EntryProto;
+import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.ID;
 import net.ixitxachitls.dma.values.ProductReference;
@@ -91,13 +93,13 @@ public abstract class Entry extends AbstractEntry
    *
    * @return a combined description with the sum and their sources.
    */
-  public Combination<String> getCombinedDescription()
+  public Annotated<Optional<String>> getCombinedDescription()
   {
-    List<Combination<String>> combinations = new ArrayList<>();
+    Annotated<Optional<String>> combined = new Annotated.String();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(entry.getCombinedDescription());
+      combined.add(entry.getCombinedDescription());
 
-    return new Combination.String(this, combinations);
+    return combined;
   }
 
   /**
@@ -106,14 +108,14 @@ public abstract class Entry extends AbstractEntry
    *
    * @return a combined description with the sum and their sources.
    */
-  public Combination<String> getCombinedShortDescription()
+  public Annotated<Optional<String>> getCombinedShortDescription()
   {
-    List<Combination<String>> combinations = new ArrayList<>();
+    Annotated<Optional<String>> combined = new Annotated.String();
     for(BaseEntry entry : getBaseEntries())
       if(entry instanceof BaseEntry)
-      combinations.add(entry.getCombinedShortDescription());
+      combined.add(entry.getCombinedShortDescription());
 
-    return new Combination.String(this, combinations);
+    return combined;
   }
 
   /**

@@ -1167,13 +1167,13 @@ public class Monster extends CampaignEntry
     return new Combination.Max<Size>(this, combinations);
   }
 
-  public Combination<Integer> getCombinedBaseAttack()
+  public Annotated.Bonus getCombinedBaseAttack()
   {
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated.Bonus combined = new Annotated.Bonus();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedBaseAttack());
+      combined.add(((BaseMonster)entry).getCombinedBaseAttack());
 
-    return new Combination.Max<Integer>(this, combinations);
+    return combined;
   }
 
   public Alignment getAlignment()
@@ -1242,11 +1242,11 @@ public class Monster extends CampaignEntry
 
   public int getGrappleBonus()
   {
-    Integer base = getCombinedBaseAttack().getValue();
-    if(base == null)
+    Optional<Integer> base = getCombinedBaseAttack().get();
+    if(!base.isPresent())
       return getStrengthModifier();
 
-    return base + getStrengthModifier();
+    return base.get() + getStrengthModifier();
   }
 
   public Optional<Integer> getFortitudeSave()

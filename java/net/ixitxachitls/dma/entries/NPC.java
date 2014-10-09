@@ -38,7 +38,6 @@ import net.ixitxachitls.dma.proto.Entries.LevelProto;
 import net.ixitxachitls.dma.proto.Entries.MonsterProto;
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
 import net.ixitxachitls.dma.values.Annotated;
-import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.enums.Gender;
 import net.ixitxachitls.util.logging.Log;
 
@@ -177,10 +176,9 @@ public class NPC extends Monster
   }
 
   @Override
-  public Combination<Integer> getCombinedBaseAttack()
+  public Annotated.Bonus getCombinedBaseAttack()
   {
-    List<Combination<Integer>> combinations = new ArrayList<>();
-    combinations.add(super.getCombinedBaseAttack());
+    Annotated.Bonus combined = super.getCombinedBaseAttack();
 
     for(Multiset.Entry<String> entry : cumulatedLevels().entrySet())
     {
@@ -194,11 +192,11 @@ public class NPC extends Monster
         for (int i = 0; i < entry.getCount(); i++)
           bonus += attacks.get(i);
 
-        combinations.add(new Combination.Integer(level, bonus));
+        combined.add(bonus, level.getName());
       }
     }
 
-    return new Combination.Max<Integer>(this, combinations);
+    return combined;
   }
 
   @Override
@@ -263,7 +261,7 @@ public class NPC extends Monster
       if (level != null)
       {
         List<Integer> saves = level.getWillSaves();
-        for (int i = 0; i < entry.getCount(); i++)
+        for (int i = 0; i < entry.getCount() && i < saves.size(); i++)
           bonus += saves.get(i);
 
         save.add(bonus, level.getName() + " " + entry.getCount());
