@@ -1122,12 +1122,12 @@ DIV.item-summary DIV.item-summary-title
 
 DIV.ability DIV.ability-title
 {
-  background-color: $color_Quality;
+  background-color: #808;
 }
 
 DIV.ability DIV.ability-title.spell
 {
-  background-color: $color_Spell;
+  background-color: #88f;
 }
 
 DIV.ability DIV.ability-numbers, DIV.quality.card DIV.numbers
@@ -1147,12 +1147,12 @@ DIV.ability DIV.ability-number, DIV.quality.card DIV.numbers DIV.number
 
 DIV.feat DIV.feat-title
 {
-  background-color: $color_Feat;
+  background-color: #088;
 }
 
 DIV.item-summary DIV.item-summary-title
 {
-  background-color: $color_Item;
+  background-color: #008;
 }
 
 DIV.ability DIV.ability-text,
@@ -1363,42 +1363,42 @@ A.library-title.type-image
 .value.character .value-label-container
 {
   color:            white;
-  background-color: $color_Character;
+  background-color: #39f;
 }
 
 .value.base-product .value-label-container,
 .value.product .value-label-container
 {
   color:            white;
-  background-color: $color_Product;
+  background-color: #444;
 }
 
 .value.base-campaign .value-label-container,
 .value.campaign .value-label-container
 {
   color:            black;
-  background-color: $color_Campaign;
+  background-color: #ccf;
 }
 
 .value.base-item .value-label-container,
 .value.item .value-label-container
 {
   color:            white;
-  background-color: $color_Item;
+  background-color: #008;
 }
 
 .value.base-monster .value-label-container,
 .value.monster .value-label-container
 {
   color:            white;
-  background-color: $color_Monster;
+  background-color: #080;
 }
 
 .value.base-npc .value-label-container,
 .value.npc .value-label-container
 {
   color:            white;
-  background-color: $color_NPC;
+  background-color: #800;
 }
 
 .value.base-npc:hover .value-label-container,
@@ -1411,42 +1411,42 @@ A.library-title.type-image
 .value.quality .value-label-container
 {
   color:            white;
-  background-color: $color_Quality;
+  background-color: #808;
 }
 
 .value.base-feat .value-label-container,
 .value.feat .value-label-container
 {
   color:            white;
-  background-color: $color_Feat;
+  background-color: #088;
 }
 
 .value.base-skill .value-label-container,
 .value.skill .value-label-container
 {
   color:            white;
-  background-color: $color_Skill;
+  background-color: #0aa;
 }
 
 .value.base-spell .value-label-container,
 .value.spell .value-label-container
 {
   color:            white;
-  background-color: $color_Spell;
+  background-color: #88f;
 }
 
 .value.base-encounter .value-label-container,
 .value.encounter .value-label-container
 {
   color:            white;
-  background-color: $color_Encounter;
+  background-color: #ccf;
 }
 
 .value.base-level .value-label-container,
 .value.level .value-label-container
 {
   color:            white;
-  background-color: $color_Level;
+  background-color: #ccf;
 }
 
 /******************************************************************************
@@ -1826,65 +1826,65 @@ A.bold:hover { font-weight: bold; }
  *****************************************************************************/
 
 /* now the colors for each specific link */
-A.Product         { color: $color_Product }
-A.Product:visited { color: $lightcolor_Product }
-A.Product:hover   { color: $hilightcolor_Product }
+A.Product         { color: #444 }
+A.Product:visited { color: #888 }
+A.Product:hover   { color: #aaa }
 
-A.Campaign         { color: $color_Campaign }
-A.Campaign:visited { color: $lightcolor_Campaign }
-A.Campaign:hover   { color: $hilightcolor_Campaign }
+A.Campaign         { color: #ccf }
+A.Campaign:visited { color: #ddf }
+A.Campaign:hover   { color: #aaf }
 
-A.Place           { color: $color_Place }
-A.Place:visited   { color: $lightcolor_Place }
-A.Place:hover     { color: $hilightcolor_Place }
+A.Place           { color: #840 }
+A.Place:visited   { color: #a80 }
+A.Place:hover     { color: #fa0 }
 
-A.NPC             { color: $color_NPC }
-A.NPC:visited     { color: $lightcolor_NPC }
-A.NPC:hover       { color: $hilightcolor_NPC }
+A.NPC             { color: #800 }
+A.NPC:visited     { color: #a00 }
+A.NPC:hover       { color: #f00 }
 
-A.Group           { color: $color_Group }
-A.Group:visited   { color: $lightcolor_Group }
-A.Group:hover     { color: $hilightcolor_Group }
+A.Group           { color: #f88 }
+A.Group:visited   { color: #00a }
+A.Group:hover     { color: #fcc }
 
-A.Monster         { color: $color_Monster }
-A.Monster:visited { color: $lightcolor_Monster }
-A.Monster:hover   { color: $hilightcolor_Monster }
+A.Monster         { color: #080 }
+A.Monster:visited { color: #0a0 }
+A.Monster:hover   { color: #0f0 }
 
-A.God             { color: $color_God }
-A.God:visited     { color: $lightcolor_God }
-A.God:hover       { color: $hilightcolor_God }
+A.God             { color: #f88 }
+A.God:visited     { color: #faa }
+A.God:hover       { color: #ff0 }
 
-A.Item            { color: $color_Item }
-A.Item:visited    { color: $lightcolor_Item }
-A.Item:hover      { color: $hilightcolor_Item }
+A.Item            { color: #008 }
+A.Item:visited    { color: #00a }
+A.Item:hover      { color: #00f }
 
-A.Spell           { color: $color_Spell }
-A.Spell:visited   { color: $lightcolor_Spell }
-A.Spell:hover     { color: $hilightcolor_Spell }
+A.Spell           { color: #88f }
+A.Spell:visited   { color: #aaf }
+A.Spell:hover     { color: #ccf }
 
-A.Encounter           { color: $color_Encounter }
-A.Encounter:visited   { color: $lightcolor_Encounter }
-A.Encounter:hover     { color: $hilightcolor_Encounter }
+A.Encounter           { color: #ccf }
+A.Encounter:visited   { color: #ddf }
+A.Encounter:hover     { color: #aaf }
 
-A.Event           { color: $color_Event }
-A.Event:visited   { color: $lightcolor_Event }
-A.Event:hover     { color: $hilightcolor_Event }
+A.Event           { color: #808 }
+A.Event:visited   { color: #a0a }
+A.Event:hover     { color: #f0f }
 
-A.Class           { color: $color_Class }
-A.Class:visited   { color: $lightcolor_Class }
-A.Class:hover     { color: $hilightcolor_Class }
+A.Class           { color: #f8f }
+A.Class:visited   { color: #faf }
+A.Class:hover     { color: #fcf }
 
-A.Feat            { color: $color_Feat }
-A.Feat:visited    { color: $lightcolor_Feat }
-A.Feat:hover      { color: $hilightcolor_Feat }
+A.Feat            { color: #088 }
+A.Feat:visited    { color: #0aa }
+A.Feat:hover      { color: #0ff }
 
-A.Quality            { color: $color_Quality }
-A.Quality:visited    { color: $lightcolor_Quality }
-A.Quality:hover      { color: $hilightcolor_Quality }
+A.Quality            { color: #808 }
+A.Quality:visited    { color: #a0a }
+A.Quality:hover      { color: #f0f }
 
-A.Skill           { color: $color_Skill }
-A.Skill:visited   { color: $lightcolor_Skill }
-A.Skill:hover     { color: $hilightcolor_Skill }
+A.Skill           { color: #0aa }
+A.Skill:visited   { color: #0ff }
+A.Skill:hover     { color: #f88 }
 
 /******************************************************************************
  * Index
