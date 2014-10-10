@@ -92,13 +92,13 @@
        
       {if def($entry.description)}
         <div class="_new_value _new_description">
-          {annotate($entry.combined_description)}
+          {commands(annotate($entry.combined_description))}
         </div>
       {/if}
         
       {if def($entry.short_description)}
         <div class="_new_value _new_short-description">
-          {annotate($entry.combined_short_description)}
+          {commands(annotate($entry.combined_short_description))}
         </div>
       {/if}
 

@@ -439,9 +439,10 @@ public abstract class ValueGroup implements Changeable
               values.add(single);
             }
             else
-              single = values.get(j++);
+              single = values.get(j);
 
             single[i] = value;
+            j++;
           }
         }
 

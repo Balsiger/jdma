@@ -58,6 +58,10 @@ public abstract class NewValue<T extends Message>
       if(inValues == null || inValues.length == 0)
         return Optional.absent();
 
+      for(int i = 0; i < inValues.length; i++)
+        if(inValues[i] == null)
+          inValues[i] = "";
+
       if(m_arguments > 0 && inValues.length != m_arguments)
         inValues = split(inValues);
 
