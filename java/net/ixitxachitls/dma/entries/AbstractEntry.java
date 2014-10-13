@@ -430,7 +430,10 @@ public abstract class AbstractEntry extends ValueGroup
    */
   public List<File> getFiles()
   {
-    return m_files;
+    List<File> files = new ArrayList<File>(m_files);
+    files.add(new File("dummy file", "dummy type", "dummy path", "dummy icon"));
+
+    return files;
   }
 
   /**
