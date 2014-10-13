@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
   <application>jdmaixit-hrd</application>
-  <version>astraldeva</version>
+  <version>animatedobject</version>
   <threadsafe>true</threadsafe>
   <system-properties>
     <property name="java.util.logging.config.file"
@@ -22,7 +22,7 @@
   </admin-console>
 
   <class-loader-config>
-    <priority-specifier filename="guava-16.0.1.jar"/>
+    <priority-specifier filename="guava-18.0.jar"/>
   </class-loader-config>
 
   <precompilation-enabled>

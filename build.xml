@@ -18,10 +18,10 @@
   <!-- local valules -->
   <property file="build.properties.${os.name}" />
   <property file="build.properties" />
-  <property name="version" value="astraldeva" />
+  <property name="version" value="animatedobject" />
 
   <!-- Google App Engine -->
-  <property name="gae.version" value="1.9.11" />
+  <property name="gae.version" value="1.9.12" />
   <property name="gae.dir" location="../../appengine-java-sdk-${gae.version}" />
   <import file="${gae.dir}/config/user/ant-macros.xml" />
 
@@ -101,7 +101,7 @@
     <pathelement location="${classes.dir}" />
     <pathelement location="${resources.dir}" />
     <!-- guava -->
-    <pathelement location="${lib.dir}/guava-16.0.1.jar" />
+    <pathelement location="${lib.dir}/guava-18.0.jar" />
     <!-- for testing -->
     <pathelement location="${lib.test.dir}/junit-4.8.2.jar" />
     <pathelement location="${lib.test.dir}/cglib-nodep-2.2.jar" />
@@ -128,6 +128,8 @@
     </fileset>
     <pathelement location="${gae.dir}/lib/appengine-remote-api.jar" />
     <pathelement location="${gae.dir}/lib/user/appengine-api-1.0-sdk-${gae.version}.jar" />
+    <!-- Cloud Storage -->
+    <pathelement location="${lib.dir}/appengine-gcs-client-0.4.1.jar" />
   </path>
 
   <!-- define also as property for printing -->
@@ -216,6 +218,8 @@
     <symlink link="${classes.dir}/icons" resource="${resources.dir}/icons"
              overwrite="Yes" />
     <symlink link="${war.dir}/js" resource="${resources.dir}/js"
+             overwrite="Yes" />
+    <symlink link="${war.dir}/css" resource="${resources.dir}/css"
              overwrite="Yes" />
     <symlink link="${war.dir}/soy" resource="${resources.dir}/soy"
              overwrite="Yes" />

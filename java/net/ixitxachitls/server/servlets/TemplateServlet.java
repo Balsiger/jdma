@@ -67,6 +67,7 @@ public class TemplateServlet extends FileServlet
   public TemplateServlet()
   {
     m_prefix = "web.templates.default";
+    throw new UnsupportedOperationException("guru");
   }
 
   //........................................................................
@@ -88,6 +89,7 @@ public class TemplateServlet extends FileServlet
     super(inRoot, inType, false);
 
     m_prefix = inPrefix;
+    throw new UnsupportedOperationException("guru");
   }
 
   //........................................................................
@@ -119,6 +121,7 @@ public class TemplateServlet extends FileServlet
   @Override
   protected Resource getResource(String inPath)
   {
+    if (true) throw new UnsupportedOperationException("guru");
     return TemplateResource.get(inPath, m_prefix);
   }
 
