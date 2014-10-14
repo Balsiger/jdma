@@ -445,7 +445,7 @@ public abstract class AbstractEntry extends ValueGroup
   {
     if(m_allFiles == null)
     {
-      m_allFiles = new ArrayList<>(m_files);
+      m_allFiles = new ArrayList<>(getFiles());
       for(AbstractEntry entry : getBaseEntries())
         if(entry != null)
           m_allFiles.addAll(entry.getAllFiles());

@@ -910,9 +910,9 @@ public class SoyTemplate
   private @Nullable Map<Key<?>, Object> removeScope()
   {
     BaseTofu baseTofu = (BaseTofu)m_compiled;
-    Map<Key<?>, Object> scope = baseTofu.apiCallScope.scopedValuesTl.get();
+    Map<Key<?>, Object> scope = null; //baseTofu.apiCallScope.scopedValuesTl.get();
     if(scope != null)
-      baseTofu.apiCallScope.scopedValuesTl.remove();
+      ;//baseTofu.apiCallScope.scopedValuesTl.remove();
 
     return scope;
   }
@@ -929,7 +929,7 @@ public class SoyTemplate
   private void addScope(@Nullable Map<Key<?>, Object> inScope)
   {
     if(inScope != null)
-      ((BaseTofu)m_compiled).apiCallScope.scopedValuesTl.set(inScope);
+      ;//((BaseTofu)m_compiled).apiCallScope.scopedValuesTl.set(inScope);
   }
 
   //........................................................................

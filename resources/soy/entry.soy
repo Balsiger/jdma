@@ -23,7 +23,7 @@
  * The basic templates for rendering entries.
  */
 
-{namespace dma.entry autoescape="false"}
+{namespace dma.entry autoescape="deprecated-noautoescape"}
 
 // @function def 1 0
 // @function entry 1 0
@@ -72,7 +72,7 @@
         {param entry: $entry /}
       {/call}
         
-      {foreach $file in $entry.files.other}
+      {foreach $file in $entry.all_files}
         {call dma.entry.file}
           {param file: $file /}
         {/call}
@@ -181,7 +181,7 @@
  * @param title The text of the title
  */
 {template ._new_subtitle}
-  <div class="subtitle"">
+  <div class="subtitle">
     {$title}
   </div>
 {/template}
@@ -193,13 +193,13 @@
  * @param? size The size of the image
  */
 {template .mainImage}
-  {if def($entry.files.main)}
+  {if def($entry.main_file)}
     {call dma.page.link}
-      {param url: $entry.files.main.path /}
+      {param url: $entry.main_file.path /}
       {param tooltip: 'Main' /}
       {param class: 'image-link' /}
       {param text}
-        <img src="{$entry.files.main.icon}=s{if $size}{$size}{else}100{/if}"
+        <img src="{$entry.main_file.icon}=s{if $size}{$size}{else}100{/if}"
           alt="Main" class="_new_ _new_image _new_main" />
       {/param}
     {/call}

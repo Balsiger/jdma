@@ -22,7 +22,7 @@
  /*
  * Templates for base products.
  */
-{namespace dma.entries.baseencounters}
+{namespace dma.entries.baseencounters autoescape="deprecated-contextual"}
 
 /**
  * Show the given entry in standard format.
@@ -34,7 +34,7 @@
  * @param next the next entry, if any
  * @param last the last entry, if any
  */
-{template .show autoescape="true"}
+{template .show}
   {call dma.entry.show}
     {param entry: $entry /}
     {param type: 'base-level' /}
@@ -275,7 +275,7 @@
  * @param id      The id to use for the editing dialog.
  * @param create  Whether to create a new entry
  */
-{template .edit autoescape="true"}
+{template .edit}
   {call dma.edit.entry}
     {param entry: $entry /}
     {param type: 'base-level' /}

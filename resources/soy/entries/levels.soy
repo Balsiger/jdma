@@ -22,14 +22,14 @@
 /*
  * Templates for levels.
  */
-{namespace dma.entries.levels}
+{namespace dma.entries.levels autoescape="deprecated-contextual"}
 
 /**
  * Editiing the base character.
  * 
  * @param? entry The character to edit. 
  */
-{template .edit autoescape="true"}
+{template .edit}
   level: {$entry.base.string}
   level: {$entry.base.name}
   level: {$entry.base}

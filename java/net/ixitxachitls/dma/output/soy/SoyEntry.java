@@ -24,7 +24,6 @@
 package net.ixitxachitls.dma.output.soy;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -32,14 +31,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.template.soy.data.SoyData;
-import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
 import com.google.template.soy.data.restricted.BooleanData;
 import com.google.template.soy.data.restricted.StringData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
-import net.ixitxachitls.dma.values.File;
 import net.ixitxachitls.util.Classes;
 
 /**
@@ -104,6 +101,7 @@ public class SoyEntry extends SoyAbstract
                             "css",
                             m_entry.getType().getName().replace(" ", "-"));
 
+    /*
     if("files".equals(inName))
     {
       File main = m_entry.getMainFile();
@@ -125,6 +123,7 @@ public class SoyEntry extends SoyAbstract
                                              "type", main.getType()),
                             "other", data);
     }
+    */
 
     String name = inName.replace("__", "").replace("_", " ");
 

@@ -991,22 +991,26 @@ public class Monster extends CampaignEntry
    *
    * @return      the constitution score
    */
-  public Combination<Integer> getCombinedStrength()
+  public Annotated<Optional<Integer>> getCombinedStrength()
   {
     Optional<Integer> strength = getStrength();
     if(strength.isPresent())
-      return new Combination.Integer(this, strength.get());
+      return new Annotated.Integer(strength.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedStrength());
+      combined.add(((BaseMonster)entry).getCombinedStrength());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public int getStrengthModifier()
   {
-    return abilityModifier(getCombinedStrength().getValue());
+    Optional<Integer> strength = getCombinedStrength().get();
+    if(!strength.isPresent())
+      return 0;
+
+    return abilityModifier(strength.get());
   }
 
   public Optional<Integer> getConstitution()
@@ -1014,27 +1018,27 @@ public class Monster extends CampaignEntry
     return m_constitution;
   }
 
-  /**
-   * Get the constitution score of the monster.
-   *
-   * @return      the constitution score
-   */
-  public Combination<Integer> getCombinedConstitution()
+  public Annotated<Optional<Integer>> getCombinedConstitution()
   {
     Optional<Integer> constitution = getConstitution();
     if(constitution.isPresent())
-      return new Combination.Integer(this, constitution.get());
+      return new Annotated.Integer(constitution.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedConstitution());
+      combined.add(((BaseMonster)entry).getCombinedConstitution());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
+
 
   public int getConstitutionModifier()
   {
-    return abilityModifier(getCombinedConstitution().getValue());
+    Optional<Integer> constitution = getCombinedCharisma().get();
+    if(!constitution.isPresent())
+      return 0;
+
+    return abilityModifier(constitution.get());
   }
 
   public Optional<Integer> getDexterity()
@@ -1042,27 +1046,26 @@ public class Monster extends CampaignEntry
     return m_dexterity;
   }
 
-  /**
-   * Get the constitution score of the monster.
-   *
-   * @return      the constitution score
-   */
-  public Combination<Integer> getCombinedDexterity()
+  public Annotated<Optional<Integer>> getCombinedDexterity()
   {
     Optional<Integer> dexterity = getDexterity();
     if(dexterity.isPresent())
-      return new Combination.Integer(this, dexterity.get());
+      return new Annotated.Integer(dexterity.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedDexterity());
+      combined.add(((BaseMonster)entry).getCombinedDexterity());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public int getDexterityModifier()
   {
-    return abilityModifier(getCombinedDexterity().getValue());
+    Optional<Integer> dexterity = getCombinedDexterity().get();
+    if(!dexterity.isPresent())
+      return 0;
+
+    return abilityModifier(dexterity.get());
   }
 
   public Optional<Integer> getIntelligence()
@@ -1070,27 +1073,26 @@ public class Monster extends CampaignEntry
     return m_intelligence;
   }
 
-  /**
-   * Get the constitution score of the monster.
-   *
-   * @return      the constitution score
-   */
-  public Combination<Integer> getCombinedIntelligence()
+  public Annotated<Optional<Integer>> getCombinedIntelligence()
   {
     Optional<Integer> intelligence = getIntelligence();
     if(intelligence.isPresent())
-      return new Combination.Integer(this, intelligence.get());
+      return new Annotated.Integer(intelligence.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedIntelligence());
+      combined.add(((BaseMonster)entry).getCombinedIntelligence());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public int getIntelligenceModifier()
   {
-    return abilityModifier(getCombinedIntelligence().getValue());
+    Optional<Integer> intelligence = getCombinedBaseAttack().get();
+    if(!intelligence.isPresent())
+      return 0;
+
+    return abilityModifier(intelligence.get());
   }
 
   public Optional<Integer> getWisdom()
@@ -1098,27 +1100,26 @@ public class Monster extends CampaignEntry
     return m_wisdom;
   }
 
-  /**
-   * Get the constitution score of the monster.
-   *
-   * @return      the constitution score
-   */
-  public Combination<Integer> getCombinedWisdom()
+  public Annotated<Optional<Integer>> getCombinedWisdom()
   {
     Optional<Integer> wisdom = getWisdom();
     if(wisdom.isPresent())
-      return new Combination.Integer(this, wisdom.get());
+      return new Annotated.Integer(wisdom.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedWisdom());
+      combined.add(((BaseMonster)entry).getCombinedWisdom());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public int getWisdomModifier()
   {
-    return abilityModifier(getCombinedWisdom().getValue());
+    Optional<Integer> wisdom = getCombinedWisdom().get();
+    if(!wisdom.isPresent())
+      return 0;
+
+    return abilityModifier(wisdom.get());
   }
 
   public Optional<Integer> getCharisma()
@@ -1126,27 +1127,26 @@ public class Monster extends CampaignEntry
     return m_charisma;
   }
 
-  /**
-   * Get the constitution score of the monster.
-   *
-   * @return      the constitution score
-   */
-  public Combination<Integer> getCombinedCharisma()
+  public Annotated<Optional<Integer>> getCombinedCharisma()
   {
     Optional<Integer> charisma = getCharisma();
     if(charisma.isPresent())
-      return new Combination.Integer(this, charisma.get());
+      return new Annotated.Integer(charisma.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedCharisma());
+      combined.add(((BaseMonster)entry).getCombinedCharisma());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public int getCharismaModifier()
   {
-    return abilityModifier(getCombinedCharisma().getValue());
+    Optional<Integer> charisma = getCombinedCharisma().get();
+    if(!charisma.isPresent())
+      return 0;
+
+    return abilityModifier(charisma.get());
   }
 
   public Combination<Integer> getCombinedLevelAdjustment()
@@ -1158,13 +1158,13 @@ public class Monster extends CampaignEntry
     return new Combination.Integer(this, combinations);
   }
 
-  public Combination<Size> getCombinedSize()
+  public Annotated<Optional<Size>> getCombinedSize()
   {
-    List<Combination<Size>> combinations = new ArrayList<>();
+    Annotated<Optional<Size>> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedSize());
+      combined.add(((BaseMonster)entry).getCombinedSize());
 
-    return new Combination.Max<Size>(this, combinations);
+    return combined;
   }
 
   public Annotated.Bonus getCombinedBaseAttack()
@@ -1261,7 +1261,7 @@ public class Monster extends CampaignEntry
 
     Annotated.Bonus combined = new Annotated.Bonus();
     for(BaseEntry base : getBaseEntries())
-      combined.add(((BaseMonster)base).getCombinedFortitutdeSave());
+      combined.add(((BaseMonster)base).getCombinedFortitudeSave());
 
     return combined;
   }

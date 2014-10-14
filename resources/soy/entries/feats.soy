@@ -22,14 +22,14 @@
 /*
  * Templates for feats.
  */
-{namespace dma.entries.feats}
+{namespace dma.entries.feats autoescape="deprecated-contextual"}
 
 /**
  * Editiing the base feat.
  * 
  * @param? entry The feat to edit. 
  */
-{template .edit autoescape="true"}
+{template .edit}
   {call dma.edit.field_input}
     {param name: 'feat.name' /}
     {param caption: 'Name' /}

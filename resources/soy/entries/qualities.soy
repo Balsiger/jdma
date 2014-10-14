@@ -22,14 +22,14 @@
 /*
  * Templates for qualities.
  */
-{namespace dma.entries.qualities}
+{namespace dma.entries.qualities autoescape="deprecated-contextual"}
 
 /**
  * Editiing the base character.
  * 
  * @param? entry The character to edit. 
  */
-{template .edit autoescape="true"}
+{template .edit}
   {call dma.edit.field_input}
     {param name: 'quality.name' /}
     {param caption: 'Name' /}
