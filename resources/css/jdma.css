@@ -2482,6 +2482,7 @@ BODY.print
 .entry ._new_.other._new_image
 {
   vertical-align: middle;
+  max-width: 100px;
 }
 
 .entry ._new_value._new_description,

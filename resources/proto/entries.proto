@@ -16,7 +16,7 @@ message AbstractEntryProto
     required string type = 3;
     required string icon = 4;
   }
-  repeated File files = 5;
+  repeated File files = 5 [deprecated=true];
 }
 
 message BaseEntryProto

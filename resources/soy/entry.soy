@@ -73,9 +73,11 @@
       {/call}
         
       {foreach $file in $entry.all_files}
-        {call dma.entry.file}
-          {param file: $file /}
-        {/call}
+        {if not matches($file.name, 'main($|\\..*)') }
+          {call dma.entry.file}
+            {param file: $file /}
+          {/call}
+        {/if}
       {/foreach}
     </div>
 
@@ -199,8 +201,8 @@
       {param tooltip: 'Main' /}
       {param class: 'image-link' /}
       {param text}
-        <img src="{$entry.main_file.icon}=s{if $size}{$size}{else}100{/if}"
-          alt="Main" class="_new_ _new_image _new_main" />
+        <img src="{$entry.main_file.icon}" alt="Main" 
+          class="_new_ _new_image _new_main" />
       {/param}
     {/call}
   {else}
@@ -225,7 +227,6 @@
  * An image for the entry.
  * 
  * @param file The image shown
- * @param? size The size of the image
  */
 {template .file}
   {call dma.page.link}
@@ -233,7 +234,7 @@
     {param tooltip: $file.name /}
     {param class: 'image-link' /}
     {param text}
-      <img src="{$file.icon}=s{if $size}{$size}{else}100{/if}"
+      <img src="{$file.icon}"
         alt="{$file.name}" class="_new_ _new_image other" id="file=-other" />
     {/param}
   {/call}

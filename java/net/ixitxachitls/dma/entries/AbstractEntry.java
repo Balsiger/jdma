@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,9 +40,15 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.images.ImagesService;
-import com.google.appengine.api.images.ServingUrlOptions;
+import com.google.appengine.api.appidentity.AppIdentityService;
+import com.google.appengine.api.appidentity.AppIdentityServiceFactory;
+import com.google.appengine.tools.cloudstorage.GcsFileMetadata;
+import com.google.appengine.tools.cloudstorage.GcsFilename;
+import com.google.appengine.tools.cloudstorage.GcsService;
+import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
+import com.google.appengine.tools.cloudstorage.ListItem;
+import com.google.appengine.tools.cloudstorage.ListOptions;
+import com.google.appengine.tools.cloudstorage.RetryParams;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -228,6 +235,18 @@ public abstract class AbstractEntry extends ValueGroup
 
   /** The base entries for this one. */
   public List<String> m_base = new ArrayList<>();
+
+  /** Google Cloud Storage service for accessing files. */
+  private final GcsService gcs =
+    GcsServiceFactory.createGcsService(new RetryParams.Builder()
+      .initialRetryDelayMillis(500)
+      .retryMaxAttempts(3)
+      .totalRetryPeriodMillis(15_000)
+      .build());
+
+  /** The application identity to get the default bucket. */
+  private final AppIdentityService appIdentity =
+    AppIdentityServiceFactory.getAppIdentityService();
 
   /**
    * Get the key uniquely identifying this entry.
@@ -430,10 +449,39 @@ public abstract class AbstractEntry extends ValueGroup
    */
   public List<File> getFiles()
   {
-    List<File> files = new ArrayList<File>(m_files);
-    files.add(new File("dummy file", "dummy type", "dummy path", "dummy icon"));
+    if(m_files.isEmpty())
+      try
+      {
+        String bucket = appIdentity.getDefaultGcsBucketName();
+        ListOptions options = new ListOptions.Builder()
+          .setRecursive(false)
+          .setPrefix(getType().getName() + "/" + getName().toLowerCase() + "/")
+          .build();
+        for(Iterator<ListItem> i = gcs.list(bucket, options); i.hasNext(); )
+        {
+          ListItem item = i.next();
+          if(item.isDirectory())
+            continue;
 
-    return files;
+          String name = item.getName().replaceAll(".*/", "");
+          String path =
+            "https://storage.cloud.google.com/" + bucket + "/" + item.getName();
+
+          GcsFileMetadata meta =
+            gcs.getMetadata(new GcsFilename(bucket, item.getName()));
+          String mime = meta.getOptions().getMimeType();
+          String icon = icon(mime);
+          if(icon.isEmpty())
+            icon = path; // TODO: should be a smaller file.
+          m_files.add(new File(name, mime, path, icon));
+        }
+      }
+      catch(IOException e)
+      {
+        Log.warning("Exception when listing files for " + getName() + ": " + e);
+      }
+
+    return m_files;
   }
 
   /**
@@ -873,59 +921,15 @@ public abstract class AbstractEntry extends ValueGroup
     return summary;
   }
 
-  public void addFile(String inName, String inType, String inPath,
-                      String inIcon)
+  private String icon(String inMimeType)
   {
-    m_files.add(new File(inName, inType, inPath, inIcon));
-    m_changed = true;
-  }
-
-  public void addFile(ImagesService inImageService, String inName,
-                      @Nullable String inType, BlobKey inBlobKey)
-  {
-    if (inType == null)
-      inType = "image/png";
-
-    String icon = "";
-    if(inType.startsWith("image/"))
+    switch(inMimeType)
     {
-      try
-      {
-        icon = inImageService.getServingUrl(ServingUrlOptions.Builder
-                                            .withBlobKey(inBlobKey));
-      }
-      catch(IllegalArgumentException e)
-      {
-        Log.error("Cannot obtain serving url for '" + inBlobKey + "': " + e);
-      }
+      case "application/pdf":
+        return "/icons/pdf.png";
     }
-    else if("application/pdf".equals(inType))
-      icon = "/icons/pdf.png";
-    else
-      Log.warning("unknown file type " + inType + " ignored for " + inName);
 
-    addFile(inName, inType, "//file/" + inBlobKey.getKeyString(), icon);
-  }
-
-
-  /**
-   * Remove the name file from the entry.
-   *
-   * @param inName the name of the file to remove
-   *
-   * @return true file was removed, false if not.
-   */
-  public boolean removeFile(String inName)
-  {
-    for(Iterator<File> i = m_files.iterator(); i.hasNext(); )
-      if(i.next().getName().equals(inName))
-      {
-        i.remove();
-        m_changed = true;
-        return true;
-      }
-
-    return false;
+    return "";
   }
 
   @Override
@@ -1746,13 +1750,10 @@ public abstract class AbstractEntry extends ValueGroup
     builder.setName(m_name);
     builder.setType(m_type.toString());
     builder.addAllBase(m_base);
-    for(File file : m_files)
-      builder.addFiles(file.toProto());
 
     return builder.build();
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public void fromProto(Message inProto)
   {
@@ -1767,9 +1768,6 @@ public abstract class AbstractEntry extends ValueGroup
     m_name = proto.getName();
     m_type = AbstractType.getTyped(proto.getType());
     m_base = proto.getBaseList();
-
-    for (AbstractEntryProto.File file : proto.getFilesList())
-      m_files.add(File.fromProto(file));
   }
 
   /**

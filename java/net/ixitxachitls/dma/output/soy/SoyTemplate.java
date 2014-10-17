@@ -41,7 +41,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.multibindings.Multibinder;
 import com.google.template.soy.SoyFileSet;
@@ -57,7 +56,6 @@ import com.google.template.soy.data.restricted.StringData;
 import com.google.template.soy.shared.restricted.SoyFunction;
 import com.google.template.soy.shared.restricted.SoyPrintDirective;
 import com.google.template.soy.tofu.SoyTofu;
-import com.google.template.soy.tofu.internal.BaseTofu;
 import com.google.template.soy.tofu.restricted.SoyAbstractTofuFunction;
 import com.google.template.soy.tofu.restricted.SoyAbstractTofuPrintDirective;
 import com.google.template.soy.tofu.restricted.SoyTofuFunction;
@@ -257,6 +255,29 @@ public class SoyTemplate
     }
   }
 
+    /** A plugin function to format strings lowercase. */
+  public static class MatchesFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "matches";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(2);
+    }
+
+    @Override
+    public SoyData computeForTofu(List<SoyData> inArgs)
+    {
+      return BooleanData.forValue
+        (inArgs.get(0).toString().matches(inArgs.get(1).toString()));
+    }
+  }
+
   /** A plugin function to format numbers or printing. */
   public static class CommandsFunction implements SoyTofuFunction
   {
@@ -434,8 +455,6 @@ public class SoyTemplate
     }
   }
 
-  //........................................................................
-
   /** A plugin function to check if a value is a list. */
   public static class EscapeFunction implements SoyTofuFunction
   {
@@ -484,8 +503,6 @@ public class SoyTemplate
     }
   }
 
-  //----- NumberDirective --------------------------------------------------
-
   /** A directive to nicely format a number. */
   public static class NumberDirective extends SoyAbstractTofuPrintDirective
   {
@@ -525,9 +542,6 @@ public class SoyTemplate
     }
   }
 
-  //........................................................................
-  //----- PrintDirective ---------------------------------------------------
-
   /** A directive to nicely print a vlue. */
   public static class PrintDirective extends SoyAbstractTofuPrintDirective
   {
@@ -565,9 +579,6 @@ public class SoyTemplate
     }
   }
 
-  //........................................................................
-  //----- RawDirective -----------------------------------------------------
-
   /** A directive to print a value raw. */
   public static class RawDirective extends SoyAbstractTofuPrintDirective
   {
@@ -601,9 +612,6 @@ public class SoyTemplate
       return inValue;
     }
   }
-
-  //........................................................................
-  //----- CommandsDirective ------------------------------------------------
 
   /** A directive to parse and render comands embedded in a string. */
   public static class CommandsDirective extends SoyAbstractTofuPrintDirective
@@ -639,9 +647,6 @@ public class SoyTemplate
       return inValue;
     }
   }
-
-  //........................................................................
-  //----- FirstLineDirective ------------------------------------------------
 
   /** A directive to parse and render comands embedded in a string. */
   public static class FirstLineDirective extends SoyAbstractTofuPrintDirective
@@ -693,9 +698,6 @@ public class SoyTemplate
     }
   }
 
-  //........................................................................
-  //----- CSSDirective -----------------------------------------------------
-
   /** A direactive to format a string as a css id. */
   public static class CSSDirective extends SoyAbstractTofuPrintDirective
   {
@@ -726,8 +728,6 @@ public class SoyTemplate
     }
   }
 
-  //........................................................................
-
   /** The Guice module with our own plugins. */
   public static class DMAModule extends AbstractModule
   {
@@ -749,6 +749,7 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(IsListFunction.class);
       soyFunctionsSetBinder.addBinding().to(CamelFunction.class);
       soyFunctionsSetBinder.addBinding().to(LowerFunction.class);
+      soyFunctionsSetBinder.addBinding().to(MatchesFunction.class);
       soyFunctionsSetBinder.addBinding().to(CommandsFunction.class);
       soyFunctionsSetBinder.addBinding().to(ReferenceFunction.class);
 
@@ -763,10 +764,6 @@ public class SoyTemplate
       soyDirectivesSetBinder.addBinding().to(FirstLineDirective.class);
     }
   }
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The soy files for the template. */
   private List<String> m_files = new ArrayList<String>();
@@ -793,12 +790,6 @@ public class SoyTemplate
     new SoyRenderer(new SoyTemplate("commands", "value", "page"));
 
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //-------------------------------- render --------------------------------
-
   /**
    * Render the template named.
    *
@@ -808,7 +799,6 @@ public class SoyTemplate
    * @param       inDelegates the delegates used for rendering, if any
    *
    * @return      the rendered template as a string
-   *
    */
   public String render(String inName,
                        @Nullable Map<String, ? extends Object> inData,
@@ -826,9 +816,6 @@ public class SoyTemplate
     return render(inName, data, injected, inDelegates);
   }
 
-  //........................................................................
-  //-------------------------------- render --------------------------------
-
   /**
    * Render the template named.
    *
@@ -838,7 +825,6 @@ public class SoyTemplate
    * @param       inDelegates the delegates used for rendering, if any
    *
    * @return      the rendered template as a string
-   *
    */
   public String render(String inName,
                        @Nullable SoyMapData inData,
@@ -847,38 +833,27 @@ public class SoyTemplate
   {
     compile();
 
-    Map<Key<?>, Object> scope = removeScope();
-    try
-    {
+    //try
+    //{
       return m_compiled.newRenderer(inName)
         .setData(inData)
         .setIjData(inInjected)
         .setActiveDelegatePackageNames(inDelegates)
         .render();
-    }
+    //}
     // catch(Exception e)
     // {
     //   System.out.println("Exception when rendering template:");
     //   e.printStackTrace(System.out);
     // }
-    finally
-    {
-      if(scope != null)
-        addScope(scope);
-    }
 
     // return "(error)";
   }
-
-  //........................................................................
-
-  //------------------------------- toString -------------------------------
 
   /**
    * Convert to a string for debugging.
    *
    * @return      a string representation
-   *
    */
   @Override
   public String toString()
@@ -886,76 +861,16 @@ public class SoyTemplate
     return "files: " + m_files;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //----------------------------- removeScope ------------------------------
-
-  /**
-   * Remove the current scope from the tofu call stack. This is used to allow
-   * nested rendering (i.e. render a new template for inclusing in the one
-   * currently rendered).
-   *
-   * Note, this requires to make
-   * com.google.template.soy.shared.internal.GuiceSimpleScope.scopedValuesTl
-   * and com.google.template.soy.tofu.internal.BaseTofu.apiCallScope to be made
-   * public in the original soy source.
-   *
-   * @return      the scope removed, if any
-   *
-   */
-  private @Nullable Map<Key<?>, Object> removeScope()
-  {
-    BaseTofu baseTofu = (BaseTofu)m_compiled;
-    Map<Key<?>, Object> scope = null; //baseTofu.apiCallScope.scopedValuesTl.get();
-    if(scope != null)
-      ;//baseTofu.apiCallScope.scopedValuesTl.remove();
-
-    return scope;
-  }
-
-  //........................................................................
-  //------------------------------- addScope -------------------------------
-
-  /**
-   * Add the given scope back to the tofu call stack.
-   *
-   * @param     inScope the scope to add back, if any
-   *
-   */
-  private void addScope(@Nullable Map<Key<?>, Object> inScope)
-  {
-    if(inScope != null)
-      ;//((BaseTofu)m_compiled).apiCallScope.scopedValuesTl.set(inScope);
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //------------------------------ recompile -------------------------------
-
   /**
    * Force recompilation when rendering next.
-   *
    */
   public void recompile()
   {
     m_compiled = null;
   }
 
-  //........................................................................
-
-  //------------------------------- compile --------------------------------
-
   /**
    * Compile the templates for rendering.
-   *
    */
   public void compile()
   {
@@ -989,9 +904,6 @@ public class SoyTemplate
     m_compiled = files.build().compileToTofu();
   }
 
-  //........................................................................
-  //--------------------------------- map ----------------------------------
-
   /**
    * Convert the given data into a map, using odd params as keys and even as
    * values.
@@ -999,7 +911,6 @@ public class SoyTemplate
    * @param    inData the data to convert to a map
    *
    * @return   the converted map
-   *
    */
   public static Map<String, Object> map(Object ... inData)
   {
@@ -1012,15 +923,11 @@ public class SoyTemplate
     return map;
   }
 
-  //........................................................................
-  //---------------------------- createInjector ----------------------------
-
   /**
    * Create an injector for compiling templates that includes our own
    * plugins.
    *
    * @return   the injector to use for creating compiled templates
-   *
    */
   public Injector createInjector()
   {
@@ -1031,18 +938,11 @@ public class SoyTemplate
     return Guice.createInjector(modules);
   }
 
-  //........................................................................
-
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The tests. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- map ------------------------------------------------------------
-
     /** The map Test. */
     @org.junit.Test
     public void map()
@@ -1055,9 +955,6 @@ public class SoyTemplate
                                    SoyTemplate.map("n1", "2", "n2", "3"))
                    .toString());
     }
-
-    //......................................................................
-    //----- render ---------------------------------------------------------
 
     /** The render Test. */
     @org.junit.Test
@@ -1078,6 +975,4 @@ public class SoyTemplate
                     null));
     }
   }
-
-  //........................................................................
 }

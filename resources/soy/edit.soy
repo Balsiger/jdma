@@ -40,11 +40,6 @@
         {$values |noescape}
       </div>
     
-      {call dma.edit.images}
-        {param entry: $entry /}
-        {param id: escape($id) + '-image' /}
-      {/call}
-      
       <div class="actions-spacer"></div>
     </div> // scroll
     
@@ -373,52 +368,6 @@
       {/foreach}
     {/param}
   {/call}
-{/template}
-
-/**
- * Editing and displaying an image. If you change this template, you also have
- * to appropriately adjust the js code to generate the dynamic image in 
- * edit.addImage().
- * 
- * @param id    the id of the images container
- * @param image The image as a file structure. 
- */
-{template .image}
-  <div class="image" id="{$id}-{$image.name}">
-    <img src="{$image.icon}=s100" alt="{$image.name}"/>
-    <div class="caption">
-      {$image.name}
-    </div>
-    <div class="delete-horizontal"></div>
-    <div class="delete-vertical"></div>
-  </div>
-{/template}
-
-/**
- * Editing all the images of an entry.
- * 
- * @param entry the entry for which to edit entries
- * @param id    the id for the elements to create
- */
-{template .images}
-  <div class="images" id="{$id}" 
-       onclick="edit.deleteImage('{$entry.key}', event.target.alt, '{$id}');">
-    {if def($entry.files.main)}
-      {call dma.edit.image}
-        {param id: $id /}
-        {param image: $entry.files.main /}
-      {/call}
-    {/if}
-    {foreach $image in $entry.files.other}
-      {call dma.edit.image}
-        {param id: $id /}
-        {param image: $image /}
-      {/call}
-    {/foreach}
-  </div>
-  <iframe src="/fileupload?key={$entry.key}&amp;name=main&amp;form&amp;id={$id}"
-          class="upload" id="upload-main">
-  </iframe>
 {/template}
 
 /**
