@@ -455,8 +455,9 @@ public abstract class AbstractEntry extends ValueGroup
         String bucket = appIdentity.getDefaultGcsBucketName();
         ListOptions options = new ListOptions.Builder()
           .setRecursive(false)
-          .setPrefix(getType().getName() + "/" + getName().toLowerCase() + "/")
+          .setPrefix(getFilePath())
           .build();
+        Log.warning("prefix: " + getFilePath());
         for(Iterator<ListItem> i = gcs.list(bucket, options); i.hasNext(); )
         {
           ListItem item = i.next();
@@ -805,6 +806,11 @@ public abstract class AbstractEntry extends ValueGroup
   public String getPath()
   {
     return "/" + getType().getLink() + "/" + getName();
+  }
+
+  public String getFilePath()
+  {
+    return getType().getName() + "/" + getName().toLowerCase() + "/";
   }
 
   /**

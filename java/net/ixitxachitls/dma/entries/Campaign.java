@@ -281,6 +281,17 @@ public class Campaign extends CampaignEntry
   }
 
   @Override
+  public String getFilePath()
+  {
+    if(!m_base.isEmpty())
+      return Campaign.TYPE.getName() + "/" + m_base.get(0).toLowerCase()
+        + "/" + getName().toLowerCase() + "/";
+
+    return Campaign.TYPE.getName() + "/$undefined$/" + getName().toLowerCase()
+      + "/";
+  }
+
+  @Override
   public String getEditType()
   {
     return "/" + BaseCampaign.TYPE + "/" + m_base.get(0)

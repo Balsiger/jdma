@@ -129,6 +129,15 @@ public abstract class CampaignEntry extends Entry
     return getCampaign().get().getPath() + super.getPath();
   }
 
+  @Override
+  public String getFilePath()
+  {
+    if(!getCampaign().isPresent())
+      return super.getFilePath();
+
+    return getCampaign().get().getFilePath() + super.getFilePath();
+  }
+
   /**
    * Get the campaign this character is in.
    *

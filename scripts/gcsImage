@@ -1,0 +1,11 @@
+#!/bin/sh
+
+file=$1
+name=`echo $file | sed 's/.* - \(.*\)$/\1/'`
+type=`echo $file | sed 's/.*\/\(.*\)\/.* -.*/\1/'`
+type="base $type"
+id=`echo $file | sed 's/.*\/.*\/\(.*\) -.*/\1/'`
+id=`echo $id | sed 's/_/ /g'`
+id=`echo $id | tr '[:upper:]' '[:lower:]'`
+
+~/Downloads/gsutil/gsutil cp "$file" "gs://jdmaixit-hrd.appspot.com/$type/$id/$name"
