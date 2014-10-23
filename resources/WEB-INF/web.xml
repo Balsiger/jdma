@@ -84,6 +84,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>recompile</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.RecompileActionServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>admin</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.AdminServlet</servlet-class>
   </servlet>
@@ -136,6 +141,11 @@
   <servlet-mapping>
     <servlet-name>remove</servlet-name>
     <url-pattern>/actions/remove</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>recompile</servlet-name>
+    <url-pattern>/actions/recompile</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

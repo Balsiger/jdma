@@ -67,6 +67,15 @@ public class Feat extends NestedEntry
   }
 
   @Override
+  public String toString()
+  {
+    return (m_name.isPresent() ? m_name.get() : "*undefined*")
+      + (m_qualifier.isPresent() ? " (" + m_qualifier + ")" : "")
+      + (m_base.isPresent() && m_base.get().isPresent()
+         ? " [" + m_base.get().get().getName() : "");
+  }
+
+  @Override
   public void set(ValueGroup.Values inValues)
   {
     m_name = inValues.use("name", m_name);

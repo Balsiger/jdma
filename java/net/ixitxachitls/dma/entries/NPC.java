@@ -190,7 +190,11 @@ public class NPC extends Monster
       {
         List<Integer> attacks = level.getBaseAttacks();
         for (int i = 0; i < entry.getCount(); i++)
-          bonus += attacks.get(i);
+          if (i < attacks.size())
+            bonus += attacks.get(i);
+          else
+            Log.warning("No base attack information for level " + i + " in "
+                        + level.getName());
 
         combined.add(bonus, level.getName());
       }
@@ -210,11 +214,15 @@ public class NPC extends Monster
         (new EntryKey(entry.getElement(), BaseLevel.TYPE));
 
       int bonus = 0;
-      if (level != null)
+      if(level != null)
       {
         List<Integer> saves = level.getFortitudeSaves();
-        for (int i = 0; i < entry.getCount(); i++)
-          bonus += saves.get(i);
+        for(int i = 0; i < entry.getCount(); i++)
+          if(i < saves.size())
+            bonus += saves.get(i);
+          else
+            Log.warning("Cannot find fortitude save for level " + i
+                        + " in " + level.getName());
 
         save.add(bonus, level.getName() + " " + entry.getCount());
       }
@@ -234,11 +242,15 @@ public class NPC extends Monster
         (new EntryKey(entry.getElement(), BaseLevel.TYPE));
 
       int bonus = 0;
-      if (level != null)
+      if(level != null)
       {
         List<Integer> saves = level.getReflexSaves();
-        for (int i = 0; i < entry.getCount(); i++)
-          bonus += saves.get(i);
+        for(int i = 0; i < entry.getCount(); i++)
+          if(i < saves.size())
+            bonus += saves.get(i);
+          else
+            Log.warning("Cannot find reflex save for level " + i + " in "
+                        + level.getName());
 
         save.add(bonus, level.getName() + " " + entry.getCount());
       }
@@ -258,11 +270,15 @@ public class NPC extends Monster
         (new EntryKey(entry.getElement(), BaseLevel.TYPE));
 
       int bonus = 0;
-      if (level != null)
+      if(level != null)
       {
         List<Integer> saves = level.getWillSaves();
-        for (int i = 0; i < entry.getCount() && i < saves.size(); i++)
-          bonus += saves.get(i);
+        for(int i = 0; i < entry.getCount() && i < saves.size(); i++)
+          if(i < saves.size())
+            bonus += saves.get(i);
+          else
+            Log.warning("Cannot find will save for level " + i + " in "
+                        + level.getName());
 
         save.add(bonus, level.getName() + " " + entry.getCount());
       }

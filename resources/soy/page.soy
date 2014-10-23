@@ -233,6 +233,11 @@
     <div class="version">
       {dma.project} version {dma.version}
     </div>
+    {if $ij.isDev}
+      <div class="recompile sprite large" title="Recompile template"
+           onclick="gui.info('Recompilation initiated'); util.recompile();">
+      </div>
+    {/if}
 {/template}
 
 /**

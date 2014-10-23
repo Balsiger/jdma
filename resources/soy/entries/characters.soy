@@ -223,12 +223,12 @@
     {/call}
     {call .sheet_value}
       {param label: 'Size' /}
-      {param width: '5%' /}
-      {param value: $entry.combined_size.value.short /}
+      {param width: '15%' /}
+      {param value: annotate($entry.combined_size) /}
     {/call}
     {call .sheet_value}
       {param label: 'Gender' /}
-      {param width: '25%' /}
+      {param width: '15%' /}
       {param value: $entry.gender /}
     {/call}
 
@@ -268,42 +268,42 @@
         {call .ability}
           {param name: 'Strength' /}
           {param abbreviation: 'STR' /}
-          {param ability: $entry.combined_strength.value /}
+          {param ability: annotate($entry.combined_strength) /}
           {param modifier: bonus($entry.strength_modifier) /}
         {/call}
         
         {call .ability}
           {param name: 'Dexterity' /}
           {param abbreviation: 'DEX' /}
-          {param ability: $entry.combined_dexterity.value /}
+          {param ability: annotate($entry.combined_dexterity) /}
           {param modifier: bonus($entry.dexterity_modifier) /}
         {/call}
         
         {call .ability}
           {param name: 'Constitution' /}
           {param abbreviation: 'CON' /}
-          {param ability: $entry.combined_constitution.value /}
+          {param ability: annotate($entry.combined_constitution) /}
           {param modifier: bonus($entry.constitution_modifier) /}
         {/call}
         
         {call .ability}
           {param name: 'Intelligence' /}
           {param abbreviation: 'INT' /}
-          {param ability: $entry.combined_intelligence.value /}
+          {param ability: annotate($entry.combined_intelligence) /}
           {param modifier: bonus($entry.intelligence_modifier) /}
         {/call}
         
         {call .ability}
           {param name: 'Wisdom' /}
           {param abbreviation: 'WIS' /}
-          {param ability: $entry.combined_wisdom.value /}
+          {param ability: annotate($entry.combined_wisdom) /}
           {param modifier: bonus($entry.wisdom_modifier) /}
         {/call}
         
         {call .ability}
           {param name: 'Charisma' /}
           {param abbreviation: 'CHA' /}
-          {param ability: $entry.combined_charisma.value /}
+          {param ability: annotate($entry.combined_charisma) /}
           {param modifier: bonus($entry.charisma_modifier) /}
         {/call}
         
@@ -322,7 +322,7 @@
           {param width: '100%' /}
           {param size: '27px' /}
           {param vSize: '30px' /}
-          {param value: bonus($entry.combined_base_attack.value) /}
+          {param value: annotate($entry.combined_base_attack) /}
           {param prefix: true /}
           {param center: true /}
         {/call}
@@ -1447,7 +1447,6 @@
         {param choices: $entry.state.names /}
         {param color: '#39f' /}
       {/call}
-      levels: {$entry.levels}
       {call dma.edit.generic_value}
         {param label: 'Levels' /}
         {param value}
@@ -1473,6 +1472,7 @@
         {param label: 'Feats' /}
         {param value}
           {foreach $feat in $entry.feats}
+            feat: {$feat}
             {call dma.edit.field_list_line}
               {param field}
                 {call dma.entries.feats.edit}

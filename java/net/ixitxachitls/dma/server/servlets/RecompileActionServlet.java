@@ -26,12 +26,9 @@ package net.ixitxachitls.dma.server.servlets;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.base.Optional;
-
-import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.dma.entries.EntryKey;
+import net.ixitxachitls.dma.output.soy.SoyTemplate;
+import net.ixitxachitls.dma.output.soy.SoyValue;
+import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -43,12 +40,12 @@ import net.ixitxachitls.util.logging.Log;
  */
 
 @ParametersAreNonnullByDefault
-public class RemoveActionServlet extends ActionServlet
+public class RecompileActionServlet extends ActionServlet
 {
   /**
    * Create the entry action servlet.
    */
-  public RemoveActionServlet()
+  public RecompileActionServlet()
   {
     // nothing to do
   }
@@ -69,30 +66,16 @@ public class RemoveActionServlet extends ActionServlet
   protected String doAction(DMARequest inRequest,
                             HttpServletResponse inResponse)
   {
-    Optional<BaseCharacter> user = inRequest.getUser();
+    if(!isDev())
+      return "gui.alert('Can only recompile on dev!');";
 
-    if(!user.isPresent())
-      return "gui.alert('Must be logged in to delete!');";
+    Tracer tracer = new Tracer("compiling soy templates");
+    Log.important("recompiling soy templates on dev");
+    SoyServlet.TEMPLATE.recompile();
+    SoyValue.COMMAND_RENDERER.recompile();
+    SoyTemplate.COMMAND_RENDERER.recompile();
+    tracer.done();
 
-    String keyParam = inRequest.getParam("key");
-    Optional<EntryKey> key = EntryKey.fromString(keyParam);
-
-    if(!key.isPresent())
-      return "gui.alert('Invalid key " + keyParam + "');";
-
-    AbstractEntry entry = DMADataFactory.get().getEntry(key.get());
-    if(entry == null)
-      return "gui.alert('Could not find " + key + " to delete');";
-
-    if(!entry.isDM(user))
-      return "gui.alert('Not allow to delete " + key + "!');";
-
-    if(DMADataFactory.get().remove(entry))
-    {
-      Log.important("Deleted entry " + keyParam);
-      return "gui.info('Entry " + key + " deleted!');";
-    }
-
-    return "gui.alert('Could not delete " + key + "');";
+    return "gui.info('Template recompliation started. Page reloading.');";
   }
 }

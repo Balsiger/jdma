@@ -45,14 +45,11 @@ import net.ixitxachitls.dma.output.soy.SoyAbstract;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
-import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.dma.values.enums.Gender;
 import net.ixitxachitls.dma.values.enums.Immunity;
-import net.ixitxachitls.server.servlets.FileServlet;
 import net.ixitxachitls.util.Tracer;
-import net.ixitxachitls.util.logging.Log;
 
 /**
  * The base servlet for all soy rendered pages.
@@ -138,17 +135,6 @@ public class SoyServlet extends DMAServlet
                                            HttpServletResponse inResponse)
     throws ServletException, IOException
   {
-
-    if(FileServlet.wasReloaded() && isDev())
-    {
-      Tracer tracer = new Tracer("compiling soy templates");
-      Log.important("recompiling soy templates on dev");
-      TEMPLATE.recompile();
-      SoyValue.COMMAND_RENDERER.recompile();
-      SoyTemplate.COMMAND_RENDERER.recompile();
-      tracer.done();
-    }
-
     // Set the output header.
     inResponse.setContentType("text/html; charset=UTF-8");
     inResponse.setHeader("Cache-Control", "max-age=0");

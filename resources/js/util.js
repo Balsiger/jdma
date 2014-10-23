@@ -139,6 +139,12 @@ util.reload = function(inPage)
   document.location.href = destination;
 };
 
+util.recompile = function()
+{
+  util.ajax('/actions/recompile', null, null, true);
+  util.reload();
+};
+
 //..........................................................................
 //---------------------------------- link ----------------------------------
 

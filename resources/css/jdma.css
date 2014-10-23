@@ -3350,3 +3350,11 @@ DIV.inline
 .center { 
   text-align: center;
 }
+
+.recompile {
+  position: fixed;
+  right: 5px;
+  bottom: 5px;
+  width: 25px !important;
+  background-position: -224px;
+}

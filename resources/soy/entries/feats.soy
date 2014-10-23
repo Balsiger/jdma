@@ -33,7 +33,8 @@
   {call dma.edit.field_input}
     {param name: 'feat.name' /}
     {param caption: 'Name' /}
-    {param value: $entry ? lower($entry.base.name) : '' /}
+    {param value: $entry and $entry.base.pesent 
+      ? lower($entry.base.name) : '' /}
     {param class: 'narrow' /}
     {param validate: 'any' /}
     {param autocomplete: 'base feat/name' /} 

@@ -90,6 +90,14 @@ public class Level extends NestedEntry
     return DMADataFactory.get().getIDs(BaseLevel.TYPE, null);
   }
 
+  @Override
+  public String toString()
+  {
+    return (m_name.isPresent() ? m_name.get() : "*undefined*")
+      + " (" + m_hp + ")"
+      + (m_base.isPresent() && m_base.get().isPresent()
+         ? " [" + m_base.get().get().getName() : "");
+  }
 
   @Override
   public void set(ValueGroup.Values inValues)
