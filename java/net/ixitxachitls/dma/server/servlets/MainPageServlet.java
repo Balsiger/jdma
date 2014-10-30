@@ -70,7 +70,7 @@ public class MainPageServlet extends PageServlet
   /**
    * Get the time of the last modification.
    *
-   * @return      the time of the last modification in miliseconds or -1
+   * @return      the time of the last modification in milliseconds or -1
    *              if unknown
    */
   public long getLastModified()

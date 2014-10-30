@@ -106,7 +106,7 @@ public class DMADatastore
    */
   public @Nullable AbstractEntry getEntry(EntryKey inKey)
   {
-    AbstractEntry entry = (AbstractEntry)s_entryCache.get(inKey.toString());
+    AbstractEntry entry = null; //(AbstractEntry)s_entryCache.get(inKey.toString());
     if(entry == null)
     {
       Log.debug("gae: getting entry for " + inKey);
@@ -605,14 +605,12 @@ public class DMADatastore
       Optional<EntryKey> parentKey =
         Optional.of(convert(parent));
       return new EntryKey(inKey.getName(),
-                          AbstractType
-                          .getTyped(escapeType(inKey.getKind()))
-                          , parentKey);
+                          AbstractType.getTyped(unescapeType(inKey.getKind())),
+                          parentKey);
     }
 
     return new EntryKey(inKey.getName(),
-                        AbstractType
-                          .getTyped(escapeType(inKey.getKind())));
+                        AbstractType.getTyped(unescapeType(inKey.getKind())));
   }
 
   /**
@@ -634,7 +632,7 @@ public class DMADatastore
 
     Tracer tracer = new Tracer("converting " + inID);
 
-    T entry = (T)s_entryCache.get(convert(inEntity.getKey()).toString());
+    T entry = null; //(T)s_entryCache.get(convert(inEntity.getKey()).toString());
     if (entry != null)
     {
       tracer.done("cached");

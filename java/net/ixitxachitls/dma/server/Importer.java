@@ -49,6 +49,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.utils.SystemProperty;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.google.common.base.Charsets;
@@ -613,6 +614,8 @@ public final class Importer
                             ("password for " + clp.getString("username")
                              + ": "));
 
+    SystemProperty.environment.set
+        (SystemProperty.Environment.Value.Development);
     Importer importer =
       new Importer(clp.getString("host"), clp.getString("webhost"),
                    clp.getInteger("port"), clp.getInteger("webport"),
@@ -627,8 +630,9 @@ public final class Importer
 
       importer.read();
     }
-    catch(Exception e) // $codepro.audit.disable caughtExceptions
+    catch(Error e) // $codepro.audit.disable caughtExceptions
     {
+      System.out.println(Arrays.toString(e.getSuppressed()));
       Log.error("Random error: " + e.toString());
       e.printStackTrace();
     }

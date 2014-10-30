@@ -1,1 +1,1 @@
-setenv CLASSPATH ${classpath}
+export CLASSPATH=${classpath}

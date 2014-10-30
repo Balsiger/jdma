@@ -43,6 +43,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
+import com.google.appengine.api.utils.SystemProperty;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.google.common.base.Charsets;
@@ -57,10 +58,6 @@ import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.logging.ANSILogger;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * A utility to export dma entries into the app engine data store.
  *
@@ -73,35 +70,18 @@ import net.ixitxachitls.util.logging.Log;
  * (leave out host and port for local storage).
  *
  * @file          Exporter.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
 public final class Exporter
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------- Exporter -------------------------------
-
   /**
    * Prevent instantiation.
-   *
    */
   private Exporter()
   {
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The datastore service. */
   DatastoreService m_store = DatastoreServiceFactory.getDatastoreService();
@@ -117,16 +97,6 @@ public final class Exporter
   {
     net.ixitxachitls.dma.server.servlets.DMARequest.ensureTypes();
   }
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
 
   /**
    * Export all entries of the given type.
@@ -292,12 +262,6 @@ public final class Exporter
     Log.important("Wrote blob " + path);
   }
 
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
-
-  //--------------------------------- main ---------------------------------
-
   /**
    * Main routine for the exporter utility.
    *
@@ -351,6 +315,8 @@ public final class Exporter
 
     try
     {
+      SystemProperty.environment.set
+          (SystemProperty.Environment.Value.Development);
       Exporter exporter = new Exporter();
       exporter.export(clp.getString("type"), clp.getString("id"), dirs.get(0),
                       clp.hasValue("blobs"));
@@ -360,8 +326,4 @@ public final class Exporter
       installer.uninstall();
     }
   }
-
-  //........................................................................
-
-  //........................................................................
 }

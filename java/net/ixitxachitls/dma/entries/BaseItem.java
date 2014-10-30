@@ -84,7 +84,6 @@ import net.ixitxachitls.util.logging.Log;
  * @file          BaseItem.java
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
-
 @ParametersAreNonnullByDefault
 public class BaseItem extends BaseEntry
 {
@@ -2053,7 +2052,6 @@ public class BaseItem extends BaseEntry
     }
 
     BaseItemProto proto = builder.build();
-    System.out.println(proto);
     return proto;
   }
 

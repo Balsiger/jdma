@@ -21,8 +21,8 @@
   <property name="version" value="animatedobject" />
 
   <!-- Google App Engine -->
-  <property name="gae.version" value="1.9.12" />
-  <property name="gae.dir" location="../../appengine-java-sdk-${gae.version}" />
+  <property name="gae.version" value="1.9.14" />
+  <property name="gae.dir" location="../../Software/appengine-java-sdk-${gae.version}" />
   <import file="${gae.dir}/config/user/ant-macros.xml" />
 
   <!-- constants for the directory structure -->
@@ -123,13 +123,20 @@
     <!-- build.sysclasspath... -->
     <pathelement location="${lib.build.dir}/checkstyle-5.6-all.jar"  />
     <!-- Google App Engine -->
-    <fileset dir="${gae.dir}/lib">
-      <include name="shared/**/*.jar" />
-    </fileset>
+      <fileset dir="${gae.dir}/lib">
+          <include name="shared/**/*.jar" />
+      </fileset>
     <pathelement location="${gae.dir}/lib/appengine-remote-api.jar" />
     <pathelement location="${gae.dir}/lib/user/appengine-api-1.0-sdk-${gae.version}.jar" />
     <!-- Cloud Storage -->
     <pathelement location="${lib.dir}/appengine-gcs-client-0.4.1.jar" />
+    <pathelement location="${lib.dir}/google-http-client-1.19.0.jar" />
+    <pathelement location="${lib.dir}/google-http-client-appengine-1.18.0-rc.jar" />
+    <pathelement location="${lib.dir}/google-http-client-jackson2-1.19.0.jar" />
+    <pathelement location="${lib.dir}/google-api-client-appengine-1.19.0.jar" />
+    <pathelement location="${lib.dir}/google-api-services-storage-v1beta2-rev60-1.19.0.jar" />
+    <pathelement location="${lib.dir}/google-api-client-1.19.0.jar" />
+    <pathelement location="${lib.dir}/jackson-core-2.1.3.jar" />
   </path>
 
   <!-- define also as property for printing -->
@@ -345,7 +352,7 @@
   </target>
 
   <target name="proto" depends="prepare">
-    <apply executable="protoc" verbose="true">
+    <apply executable="/Users/balsiger/Software/protobuf-2.6.1/src/protoc" verbose="true">
       <arg value="--proto_path=${proto.dir}"/>
       <arg value="--java_out=${gen.dir}"/>
       <regexpmapper from="(.*)\.proto"
@@ -737,23 +744,23 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
 
   <target name="icons" depends="prepare,iconchanges"
           description="created colored icons" unless="noiconchanges">
-    <exec executable="/opt/local/bin/convert">
+    <exec executable="convert">
       <arg line="( resources/icons/icons.png -alpha extract ) -background white -alpha shape build/war/icons/icons-white.png" />
     </exec>
-    <exec executable="/opt/local/bin/convert">
+    <exec executable="convert">
       <arg line="( resources/icons/icons.png -alpha extract ) -background #00006a -alpha shape build/war/icons/icons.png" />
     </exec>
-    <exec executable="/opt/local/bin/convert">
+    <exec executable="convert">
       <arg line="( resources/icons/icons.png -alpha extract ) -background #d66a00 -alpha shape build/war/icons/icons-hover.png" />
     </exec>
 
-    <exec executable="/opt/local/bin/convert">
+    <exec executable="convert">
       <arg line="( resources/icons/icons-large.png -alpha extract ) -background white -alpha shape build/war/icons/icons-large-white.png" />
     </exec>
-    <exec executable="/opt/local/bin/convert">
+    <exec executable="convert">
       <arg line="( resources/icons/icons-large.png -alpha extract ) -background #00006a -alpha shape build/war/icons/icons-large.png" />
     </exec>
-    <exec executable="/opt/local/bin/convert">
+    <exec executable="convert">
       <arg line="( resources/icons/icons-large.png -alpha extract ) -background #d66a00 -alpha shape build/war/icons/icons-large-hover.png" />
     </exec>
   </target>

@@ -39,26 +39,14 @@ import com.google.common.collect.ImmutableSet;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * The type abstract base of the entriy types.
  * TODO: change to abstract entry when that is available.
  *
- *
  * @file          AbstractType.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  * @param         <T> the type represented by this type spec
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 @Immutable
 @ParametersAreNonnullByDefault

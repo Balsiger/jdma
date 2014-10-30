@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.data;
 
 import java.util.ArrayList;
@@ -44,34 +42,22 @@ import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.collect.ImmutableSortedSet;
 
+import net.ixitxachitls.dma.server.servlets.DMARequest;
+import net.ixitxachitls.dma.server.servlets.DMAServlet;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * The app engine datastore access.
  *
- *
  * @file          DataStore.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ParametersAreNonnullByDefault
 public class DataStore
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------ DataStore -------------------------------
-
   /**
    * Create the data store.
    *
@@ -80,12 +66,6 @@ public class DataStore
   {
     m_store = DatastoreServiceFactory.getDatastoreService();
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The access to the datastore. */
   private DatastoreService m_store;
@@ -134,12 +114,6 @@ public class DataStore
   /** The key for the value containing the last change of an entity. */
   private static final String CHANGE = "change";
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------- getEntity ------------------------------
-
   /**
    * Get an entity denoted with a key.
    *
@@ -151,7 +125,8 @@ public class DataStore
   public @Nullable Entity getEntity(Key inKey)
   {
     Tracer tracer = new Tracer("getting entity " + inKey);
-    Entity entity = (Entity)s_cacheEntity.get(inKey);
+    Entity entity = DMAServlet.isDev()
+        ? null : (Entity)s_cacheEntity.get(inKey);
 
     if(entity == null)
     {
@@ -159,7 +134,8 @@ public class DataStore
       {
         Log.debug("gae: getting entity for " + inKey);
         entity = m_store.get(inKey);
-        s_cacheEntity.put(inKey, entity, s_expiration);
+        if(!DMAServlet.isDev())
+          s_cacheEntity.put(inKey, entity, s_expiration);
         tracer.done("uncached");
       }
       catch(com.google.appengine.api.datastore.EntityNotFoundException e)
@@ -175,9 +151,6 @@ public class DataStore
     return entity;
   }
 
-  //........................................................................
-  //------------------------------- getEntity ------------------------------
-
   /**
    * Get a single entity denoted with a type and a key value pair.
    *
@@ -186,7 +159,6 @@ public class DataStore
    * @param       inValue the value to look for
    *
    * @return      the entity found, if any
-   *
    */
   public @Nullable Entity getEntity(String inType, String inKey, String inValue)
   {
@@ -221,9 +193,6 @@ public class DataStore
 
     return entity;
   }
-
-  //........................................................................
-  //----------------------------- getEntities ------------------------------
 
   /**
    * Get all entities for the given type.
@@ -265,9 +234,6 @@ public class DataStore
     return m_store.prepare(query).asIterable(options);
   }
 
-  //........................................................................
-  //----------------------------- getEntities ------------------------------
-
   /**
    * Get all entities for the given type.
    *
@@ -305,9 +271,6 @@ public class DataStore
 
     return m_store.prepare(query).asList(options);
   }
-
-  //........................................................................
-  //----------------------------- getEntities ------------------------------
 
   /**
    * Get all the entities matching the given key/value pair(s).
@@ -369,9 +332,6 @@ public class DataStore
 
     return entities;
   }
-
-  //........................................................................
-  //-------------------------------- getIDs --------------------------------
 
   /**
    * Get all the ids of all entities with the given type and key value.
@@ -452,9 +412,6 @@ public class DataStore
     return ids;
   }
 
-  //........................................................................
-  //-------------------------- getRecentEntities ---------------------------
-
   /**
    * Get the most recent entries for the given type.
    *
@@ -493,9 +450,6 @@ public class DataStore
 
     return entities;
   }
-
-  //........................................................................
-  //------------------------------ getValues -------------------------------
 
   /**
    * Get the values for the given fields.
@@ -546,9 +500,6 @@ public class DataStore
     return records;
   }
 
-  //........................................................................
-  //------------------------------ getValues -------------------------------
-
   /**
    * Get the values for the given field.
    *
@@ -592,14 +543,6 @@ public class DataStore
     return values;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //-------------------------------- remove --------------------------------
-
   /**
    * Remove the entity from the store.
    *
@@ -632,9 +575,6 @@ public class DataStore
       return false;
     }
   }
-
-  //........................................................................
-  //-------------------------------- update --------------------------------
 
   /**
    * Update the datastore with the given entity.
@@ -669,14 +609,6 @@ public class DataStore
     return true;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //---------------------------- toPropertyName ----------------------------
-
   /**
    * Convert the given name into a name that can be used as a property in the
    * datastore.
@@ -684,15 +616,11 @@ public class DataStore
    * @param    inName the name to convert
    *
    * @return   the converted name
-   *
    */
   protected String toPropertyName(String inName)
   {
     return inName.replaceAll(" ", "_");
   }
-
-  //........................................................................
-  //--------------------------- fromPropertyName ---------------------------
 
   /**
    * Convert the given name into a name that can be used as a property in the
@@ -707,8 +635,4 @@ public class DataStore
   {
     return inName.replaceAll("_", " ");
   }
-
-  //........................................................................
-
-  //........................................................................
 }
