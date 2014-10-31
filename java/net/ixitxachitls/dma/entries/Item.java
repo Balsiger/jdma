@@ -33,28 +33,7 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.ItemProto;
-import net.ixitxachitls.dma.values.AggregationState;
-import net.ixitxachitls.dma.values.Area;
-import net.ixitxachitls.dma.values.AreaShape;
-import net.ixitxachitls.dma.values.ArmorType;
-import net.ixitxachitls.dma.values.Combination;
-import net.ixitxachitls.dma.values.CountUnit;
-import net.ixitxachitls.dma.values.NewCritical;
-import net.ixitxachitls.dma.values.NewDamage;
-import net.ixitxachitls.dma.values.NewDice;
-import net.ixitxachitls.dma.values.NewDistance;
-import net.ixitxachitls.dma.values.NewDuration;
-import net.ixitxachitls.dma.values.NewModifier;
-import net.ixitxachitls.dma.values.NewMoney;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.NewWeight;
-import net.ixitxachitls.dma.values.Proficiency;
-import net.ixitxachitls.dma.values.Size;
-import net.ixitxachitls.dma.values.Slot;
-import net.ixitxachitls.dma.values.Substance;
-import net.ixitxachitls.dma.values.Volume;
-import net.ixitxachitls.dma.values.WeaponStyle;
-import net.ixitxachitls.dma.values.WeaponType;
+import net.ixitxachitls.dma.values.*;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -153,13 +132,13 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Integer> getCombinedMaxHP()
+  public Annotated<Optional<Integer>> getCombinedMaxHP()
   {
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedHP());
+      combined.add(((BaseItem)entry).getCombinedHP());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   /**
@@ -167,22 +146,21 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewWeight> getCombinedWeight()
+  public Annotated.Arithmetic<NewWeight> getCombinedWeight()
   {
-    List<Combination<NewWeight>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewWeight> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedWeight());
+      combined.add(((BaseItem)entry).getCombinedWeight());
 
     if(isContainer())
       for(Item item : getContents())
-        combinations.add(item.getCombinedWeight());
+        combined.add(item.getCombinedWeight());
 
     if(m_multiple.isPresent())
-      combinations.add(new Combination.Arithmetic<NewWeight>
-        (this, m_multiple.get() + " " + getCombinedCountUnit().getValueString(),
-          m_multiple.get()));
+      combined.multiply(m_multiple.get(),
+                        getCombinedCountUnit().getValueString());
 
-    return new Combination.Arithmetic<NewWeight>(this, combinations);
+    return combined;
   }
 
   /**
@@ -221,11 +199,11 @@ public class Item extends CampaignEntry
    */
   public double getGoldValue()
   {
-    NewMoney value = getCombinedValue().getValue();
-    if (value == null)
+    Optional<NewMoney> value = getCombinedValue().get();
+    if (!value.isPresent())
       return 0;
 
-    return value.asGold();
+    return value.get().asGold();
   }
 
   /**
@@ -243,29 +221,28 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewMoney> getCombinedValue()
+  public Annotated<Optional<NewMoney>> getCombinedValue()
   {
     if(m_value.isPresent())
-      return new Combination.Arithmetic<NewMoney>(this, m_value.get());
+      return new Annotated.Arithmetic<NewMoney>(m_value.get(), getName());
 
-    List<Combination<NewMoney>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewMoney> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedValue());
+      combined.add(((BaseItem)entry).getCombinedValue());
 
     if(isContainer())
       for(Item item : getContents())
-        combinations.add(item.getCombinedValue());
+        combined.add(item.getCombinedValue());
 
+    // We have to multiply at the end to be sure to include the previous values.
     if(m_multiple.isPresent())
-      combinations.add(new Combination.Arithmetic<NewMoney>
-        (this, m_multiple.get() + " " + getCombinedCountUnit().getValueString(),
-          m_multiple.get()));
+      combined.multiply(m_multiple.get(),
+                        getCombinedCountUnit().getValueString());
 
     if(m_multiuse.isPresent())
-      combinations.add(new Combination.Arithmetic<NewMoney>
-        (this, m_multiuse.get() + " uses",m_multiple.get()));
+      combined.multiply(m_multiuse.get(), "uses");
 
-    return new Combination.Arithmetic<NewMoney>(this, combinations);
+    return combined;
   }
 
   public List<Item> getContents()
@@ -1161,6 +1138,11 @@ public class Item extends CampaignEntry
     return result;
   }
 
+  public int getAmmunition()
+  {
+    return 42;
+  }
+
   public Optional<NewModifier> getArmorClass()
   {
     Optional<NewModifier> armor = Optional.absent();
@@ -1216,9 +1198,9 @@ public class Item extends CampaignEntry
   {
     if(m_hp == Integer.MIN_VALUE)
     {
-      Integer hp = getCombinedMaxHP().getValue();
-      if(hp != null)
-        m_hp = hp;
+      Optional<Integer> hp = getCombinedMaxHP().get();
+      if(hp.isPresent())
+        m_hp = hp.get();
       else
         m_hp = 1;
 
@@ -1251,10 +1233,10 @@ public class Item extends CampaignEntry
       // correct the random value with the computation from the value in
       // relation to the base value
       double itemValue = getGoldValue();
-      NewMoney baseMoneyValue = getCombinedValue().getValue();
+      Optional<NewMoney> baseMoneyValue = getCombinedValue().get();
       double baseValue = 0;
-      if (baseMoneyValue != null)
-        baseValue = baseMoneyValue.asGold();
+      if (baseMoneyValue.isPresent())
+        baseValue = baseMoneyValue.get().asGold();
 
       // We have to try to get the value from our bases.
       List<String> appearances = new ArrayList<String>();

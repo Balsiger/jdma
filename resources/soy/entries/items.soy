@@ -106,14 +106,14 @@
       {if $entry.player_notes.present}
         {call dma.entry.value}
           {param label: 'Player Notes' /}
-          {param value: $entry.player_notes.get /}
+          {param value: $entry.player_notes /}
           {param color: '#008' /}
         {/call}
       {/if}
       {if $entry.DM_notes.present}
         {call dma.entry.value}
           {param label: 'DM Notes' /}
-          {param value: $entry.DM_notes.get /}
+          {param value: $entry.DM_notes /}
           {param color: '#008' /}
         {/call}
       {/if}
@@ -121,7 +121,7 @@
         {call dma.entry.value}
           {param label: 'Multiple' /}
           {param value}
-            {$entry.multiple.get}
+            {$entry.multiple}
             {sp}
              {call dma.entry.added} 
                {param addable: $entry.combined_count_unit /}
@@ -133,7 +133,7 @@
       {if $entry.multiuse.present}
         {call dma.entry.value}
           {param label: 'Multiuse' /}
-          {param value: $entry.multiuse.get /}
+          {param value: $entry.multiuse /}
           {param color: '#008' /}
         {/call}
       {/if}
@@ -141,7 +141,7 @@
         {call dma.entry.value}
           {param label: 'Timed' /}
           {param value}
-            {$entry.time_left.get} of{sp}
+            {$entry.time_left} of{sp}
             {call dma.entry.added}
               {param addable: $entry.combined_timed /}
             {/call}
@@ -288,7 +288,7 @@
           {if $entry.multiuse.isPresent}
             {call dma.edit.field_input}
               {param name: 'multiuse' /}
-              {param value: $entry.multiuse.get /}
+              {param value: $entry.multiuse /}
               {param validate: 'number' /}
               {param caption: 'uses' /}            
               {param class: 'narrow' /}
@@ -297,7 +297,7 @@
           {if $entry.multiple.isPresent}
             {call dma.edit.field_input}
               {param name: 'multiple' /}
-              {param value: $entry.multiple.get /}
+              {param value: $entry.multiple /}
               {param validate: 'number' /}
               {param caption: 'copies' /}            
               {param class: 'narrow' /}

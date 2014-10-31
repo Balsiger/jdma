@@ -310,7 +310,7 @@ public class Character extends NPC
     if(main == null)
       return "character/person.png";
     else
-      return main.getIcon() + "=s100";
+      return main.getIcon();
   }
 
   public Optional<Monster> getMonster()

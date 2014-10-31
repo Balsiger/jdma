@@ -47,32 +47,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseTimedProto;
 import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.proto.Entries.BaseWearableProto;
 import net.ixitxachitls.dma.proto.Values.RandomDurationProto;
-import net.ixitxachitls.dma.values.AggregationState;
-import net.ixitxachitls.dma.values.Appearance;
-import net.ixitxachitls.dma.values.Area;
-import net.ixitxachitls.dma.values.AreaShape;
-import net.ixitxachitls.dma.values.ArmorType;
-import net.ixitxachitls.dma.values.Combination;
-import net.ixitxachitls.dma.values.CountUnit;
-import net.ixitxachitls.dma.values.ModifierType;
-import net.ixitxachitls.dma.values.NamedModifier;
-import net.ixitxachitls.dma.values.NewCritical;
-import net.ixitxachitls.dma.values.NewDamage;
-import net.ixitxachitls.dma.values.NewDistance;
-import net.ixitxachitls.dma.values.NewDuration;
-import net.ixitxachitls.dma.values.NewModifier;
-import net.ixitxachitls.dma.values.NewMoney;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.NewWeight;
-import net.ixitxachitls.dma.values.Probability;
-import net.ixitxachitls.dma.values.Proficiency;
-import net.ixitxachitls.dma.values.Size;
-import net.ixitxachitls.dma.values.SizeModifier;
-import net.ixitxachitls.dma.values.Slot;
-import net.ixitxachitls.dma.values.Substance;
-import net.ixitxachitls.dma.values.Volume;
-import net.ixitxachitls.dma.values.WeaponStyle;
-import net.ixitxachitls.dma.values.WeaponType;
+import net.ixitxachitls.dma.values.*;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
@@ -208,6 +183,9 @@ public class BaseItem extends BaseEntry
 
   /** Whether the weapon can be used with finesse. */
   protected boolean m_finesse = false;
+
+  /** The names of the ammunition that can be used. */
+  protected List<String> m_ammunition = new ArrayList<>();
 
   /** The bonus of the armor. */
   protected Optional<NewModifier> m_armorBonus = Optional.absent();
@@ -441,17 +419,17 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Integer> getCombinedHP()
+  public Annotated<Optional<Integer>> getCombinedHP()
   {
     Optional<Integer>hp = getHP();
     if(hp.isPresent())
-      return new Combination.Integer(this, hp.get());
+      return new Annotated.Integer(hp.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedHP());
+      combined.add(((BaseItem)entry).getCombinedHP());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   /**
@@ -529,16 +507,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewWeight> getCombinedWeight()
+  public Annotated<Optional<NewWeight>> getCombinedWeight()
   {
     if(m_weight.isPresent())
-      return new Combination.Arithmetic<NewWeight>(this, m_weight.get());
+      return new Annotated.Arithmetic<NewWeight>(m_weight.get(), getName());
 
-    List<Combination<NewWeight>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewWeight> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedWeight());
+      combined.add(((BaseItem)entry).getCombinedWeight());
 
-    return new Combination.Arithmetic<NewWeight>(this, combinations);
+    return combined;
   }
 
   /**
@@ -556,16 +534,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewMoney> getCombinedValue()
+  public Annotated<Optional<NewMoney>> getCombinedValue()
   {
     if(m_value.isPresent())
-      return new Combination.Arithmetic<NewMoney>(this, m_value.get());
+      return new Annotated.Arithmetic<NewMoney>(m_value.get(), getName());
 
-    List<Combination<NewMoney>> combinations = new ArrayList<>();
+    Annotated<Optional<NewMoney>> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedValue());
+      combined.add(((BaseItem)entry).getCombinedValue());
 
-    return new Combination.Arithmetic<NewMoney>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1251,6 +1229,35 @@ public class BaseItem extends BaseEntry
     return new Combination.Min<Integer>(this, combinations);
   }
 
+  public List<String> getAmmunition()
+  {
+    return m_ammunition;
+  }
+
+  public boolean hasAmmunition()
+  {
+    if(!m_ammunition.isEmpty())
+      return true;
+
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseItem)base).hasAmmunition())
+        return true;
+
+    return false;
+  }
+
+  public Annotated<List<String>> getCombinedAmmunition()
+  {
+    if(!m_ammunition.isEmpty())
+      return new Annotated.List<String>(m_ammunition, getName());
+
+    Annotated.List<String> combined = new Annotated.List<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseItem)base).getCombinedAmmunition());
+
+    return combined;
+  }
+
   /**
    * Get the critical value.
    *
@@ -1934,6 +1941,8 @@ public class BaseItem extends BaseEntry
         weaponBuilder.setMaxAttacks(m_maxAttacks.get());
       if(m_finesse)
         weaponBuilder.setFinesse(true);
+      for(String ammunition : m_ammunition)
+        weaponBuilder.addAmmunition(ammunition);
 
       builder.setWeapon(weaponBuilder.build());
     }
@@ -2104,6 +2113,7 @@ public class BaseItem extends BaseEntry
                                 NewValue.INTEGER_PARSER);
     m_finesse = inValues.use("weapon.finesse", m_finesse,
                              NewValue.BOOLEAN_PARSER);
+    m_ammunition = inValues.use("weapon.ammunition", m_ammunition);
 
     m_armorBonus = inValues.use("armor.bonus", m_armorBonus,
                                 NewModifier.PARSER);
@@ -2227,6 +2237,8 @@ public class BaseItem extends BaseEntry
         m_maxAttacks = Optional.of(weaponProto.getMaxAttacks());
       if(weaponProto.hasFinesse())
         m_finesse = weaponProto.getFinesse();
+      for(String ammunition : weaponProto.getAmmunitionList())
+        m_ammunition.add(ammunition);
     }
 
     if(proto.hasWearable())

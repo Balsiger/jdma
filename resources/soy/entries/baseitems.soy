@@ -71,7 +71,7 @@
           {param label: 'Player Name' /}
           {param value}
             {call dma.entry.concatenated}
-              {param value: $entry.player_name.get /}
+              {param value: $entry.player_name /}
               {param concatenate: $entry.combined_player_name /}
             {/call}
           {/param}
@@ -139,32 +139,17 @@
       {/if}
       {call dma.entry.value}
         {param label: 'Value' /}
-        {param value}
-          {call dma.entry.added}
-            {param value: $entry.value /}
-            {param addable: $entry.combined_value /}
-          {/call}
-        {/param}
+        {param value: annotate($entry.combined_value) /}
         {param color: '#008' /}
       {/call}
       {call dma.entry.value}
         {param label: 'Weight' /}
-        {param value}
-          {call dma.entry.added}
-            {param value: $entry.weight /}
-            {param addable: $entry.combined_weight /}
-          {/call}
-        {/param}
+        {param value: annotate($entry.combined_weight) /}
         {param color: '#008' /}
       {/call}
       {call dma.entry.value}
         {param label: 'HP' /}
-        {param value}
-          {call dma.entry.added}
-            {param value: $entry.HP /}
-            {param addable: $entry.combined_HP /}
-          {/call}
-        {/param}
+        {param value: annotate($entry.combined_HP) /}
         {param color: '#008' /}
       {/call}
       {call dma.entry.value}
@@ -314,6 +299,9 @@
               {param value: $entry.max_attacks /}
               {param combination: $entry.combined_max_attacks /}
             {/call}
+            {if $entry.has_ammunition}
+              , ammunition {annotate($entry.combined_ammunition, '/item/')}
+            {/if}
           {/param}
           {param color: '#008' /}
         {/call}
@@ -544,7 +532,7 @@
         {param name: 'player_name' /}
         {param label: 'Player Name' /}
         {param value: $entry.player_name.present ? 
-          $entry.player_name.get : '' /}
+          $entry.player_name : '' /}
         {param validate: 'any' /}
         {param color: '#008' /}
       {/call}
@@ -579,15 +567,14 @@
       {call dma.edit.value}
         {param name: 'value' /}
         {param label: 'Value' /}
-        {param value: $entry.value.present 
-          ? $entry.value.get.string : '' /}
+        {param value: $entry.value.present ? $entry.value : '' /}
         {param validate: 'money' /}
         {param color: '#008' /}
       {/call}    
       {call dma.edit.value}
         {param name: 'weight' /}
         {param label: 'Weight' /}
-        {param value: $entry.weight.present ? $entry.weight.get : '' /}
+        {param value: $entry.weight.present ? $entry.weight : '' /}
         {param validate: 'weight' /}
         {param color: '#008' /}
       {/call}    
@@ -622,7 +609,7 @@
           {call dma.edit.field_input}
             {param name: 'thickness' /}
             {param value: 
-              $entry.thickness.present ? $entry.thickness.get.string : '' /}
+              $entry.thickness.present ? $entry.thickness : '' /}
             {param validate: 'distance' /}
             {param caption: 'thickness' /}
             {param class: 'narrow' /}
@@ -785,9 +772,9 @@
         {param label: 'Damage' /}
         {param value}
           {call dma.edit.field_input}
-            {param name: 'weapo.damage.first' /}
+            {param name: 'weapon.damage.first' /}
             {param value: $entry.damage.isPresent 
-              ? $entry.damage.get : '' /}
+              ? $entry.damage : '' /}
             {param validate: 'damage' /}
             {param class: 'narrow' /}            
           {/call}
@@ -795,7 +782,7 @@
           {call dma.edit.field_input}
             {param name: 'weapon.damage.second' /}
             {param value: $entry.secondary_damage.isPresent 
-              ? $entry.secondary_damage.get : '' /}
+              ? $entry.secondary_damage : '' /}
             {param validate: 'damage' /}
             {param class: 'narrow' /}            
           {/call}
@@ -803,7 +790,7 @@
           {call dma.edit.field_input}
             {param name: 'weapon.damage.splash' /}
             {param value: $entry.splash.isPresent
-              ? $entry.splash.get : '' /}
+              ? $entry.splash : '' /}
             {param validate: 'damage' /}
             {param class: 'narrow' /}
             {param caption: 'splash' /}            
@@ -812,7 +799,7 @@
           {call dma.edit.field_input}
             {param name: 'weapon.damage.critical' /}
             {param value: $entry.critical.isPresent
-              ? $entry.critical.get : '' /}
+              ? $entry.critical : '' /}
             {param validate: 'any' /}
             {param class: 'narrow' /}
             {param caption: 'critical' /}            
@@ -845,7 +832,7 @@
             {param name: 'weapon.range' /}
             {param caption: 'range' /}
             {param value: $entry.range.present 
-              ? $entry.range.get : '' /}
+              ? $entry.range : '' /}
             {param validate: 'distance' /}
             {param class: 'narrow' /}
           {/call}    
@@ -853,7 +840,7 @@
             {param name: 'weapon.reach' /}
             {param caption: 'reach' /}
             {param value: $entry.reach.present 
-              ? $entry.reach.get : '' /}
+              ? $entry.reach : '' /}
             {param validate: 'distance' /}
             {param class: 'narrow' /}
           {/call}    
@@ -861,12 +848,20 @@
             {param name: 'weapon.max_attacks' /}
             {param caption: 'max attacks' /}
             {param value: $entry.max_attacks.present 
-              ? $entry.max_attacks.get : '' /}
+              ? $entry.max_attacks : '' /}
             {param validate: 'number' /}
             {param class: 'narrow' /}
           {/call}
         {/param}
       {/call}    
+      {call dma.edit.value_list}
+        {param name: 'weapon.ammunition' /}
+        {param label: 'Ammunition' /}
+        {param values: $entry.ammunition /}
+        {param validate: 'non-empty' /}
+        {param color: '#008' /}
+        {param autocomplete: 'base item/name' /}
+      {/call}
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Commodity' /}

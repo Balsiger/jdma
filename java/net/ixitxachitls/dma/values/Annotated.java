@@ -286,6 +286,18 @@ public abstract class Annotated<V>
       super.add(inValue.toString(), inSource);
     }
 
+    public void multiply(int inValue, java.lang.String inSource)
+    {
+      if(inValue > 1)
+      {
+        Optional<V> value = get();
+        if(value.isPresent())
+          add(Optional.of((V)value.get().multiply(inValue - 1)));
+      }
+
+      super.add("x" + inValue, inSource);
+    }
+
     @Override
     public Optional<V> get()
     {

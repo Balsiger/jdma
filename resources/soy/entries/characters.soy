@@ -1058,7 +1058,7 @@
         {param width: '30%' /}
         {param size: '12px' /}
         {param vSize: '20px' /}
-        {param value: $weapon ? $weapon.attack_bonus : '&nbsp;' /}
+        {param value: $weapon ? bonus($weapon.attack_bonus) : '&nbsp;' /}
       {/call}
   
       {call .sheet_value}
@@ -1095,14 +1095,24 @@
         {param vSize: '20px' /}
         {param value: $weapon ? $weapon.weapon_type.short : '&nbsp;' /}
       {/call}
-    
-      {call .sheet_value}
-        {param label: 'Notes/Ammunition' /}
-        {param width: '50%' /}
-        {param size: '12px' /}
-        {param vSize: '20px' /}
-        {param value: $weapon ? $weapon.player_notes : '&nbsp;' /}
-      {/call}
+
+      {if $weapon.ammunition}
+        {call .sheet_value}
+          {param label: 'Ammunition' /}
+          {param width: '50%' /}
+          {param size: '12px' /}
+          {param vSize: '20px' /}
+          {param value: $weapon ? $weapon.ammunition : '&nbsp;' /}
+        {/call}
+      {else}
+        {call .sheet_value}
+          {param label: 'Notes' /}
+          {param width: '50%' /}
+          {param size: '12px' /}
+          {param vSize: '20px' /}
+          {param value: $weapon ? $weapon.player_notes : '&nbsp;' /}
+        {/call}
+      {/if}
     </div>
   </div>  
 
@@ -1529,7 +1539,7 @@
         <div class="overlay">
           {if strContains($character.icon, 'http')}
             <img src="{$character.icon}" alt="{$character.name}"
-                class="overlayicon">
+                class="overlayicon" style="width:100px">
           {else}
             <img src="/icons/{$character.icon}" alt="{$character.name}"
                 class="overlayicon">
