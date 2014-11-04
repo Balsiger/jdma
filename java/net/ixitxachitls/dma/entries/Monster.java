@@ -943,7 +943,7 @@ public class Monster extends CampaignEntry
   {
     List<Item> weapons = new ArrayList<>();
     for(Item item : getPossessions())
-      if(item != null && item.isWeapon())
+      if(item != null && item.isWeapon() && !item.isAmmunition())
         weapons.add(item);
 
     return weapons;

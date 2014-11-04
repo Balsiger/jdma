@@ -21,8 +21,7 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -40,14 +39,16 @@ import net.ixitxachitls.util.logging.Log;
 /**
  * This is a real item.
  *
- * @file          Item.java
- * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
+ * @author balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
+ * @file Item.java
  */
 
 @ParametersAreNonnullByDefault
 public class Item extends CampaignEntry
 {
-  /** The serial version id. */
+  /**
+   * The serial version id.
+   */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -68,50 +69,76 @@ public class Item extends CampaignEntry
     super(inName, TYPE);
   }
 
-  /** The type of this entry. */
+  /**
+   * The type of this entry.
+   */
   public static final Type<Item> TYPE =
-    new Type<Item>(Item.class, BaseItem.TYPE);
+      new Type<Item>(Item.class, BaseItem.TYPE);
 
-  /** The type of the base entry to this entry. */
+  /**
+   * The type of the base entry to this entry.
+   */
   public static final BaseType<BaseItem> BASE_TYPE = BaseItem.TYPE;
 
-  /** The actual number of hit points the item currently has. */
+  /**
+   * The actual number of hit points the item currently has.
+   */
   protected int m_hp = Integer.MIN_VALUE;
 
-  /** The total value of the item. */
+  /**
+   * The total value of the item.
+   */
   protected Optional<NewMoney> m_value = Optional.absent();
 
-  /** The appearance text for this entry. */
+  /**
+   * The appearance text for this entry.
+   */
   protected Optional<String> m_appearance = Optional.absent();
 
-  /** The player notes of the item. */
+  /**
+   * The player notes of the item.
+   */
   protected Optional<String> m_playerNotes = Optional.absent();
 
-  /** The name from the player for the item. */
+  /**
+   * The name from the player for the item.
+   */
   protected Optional<String> m_playerName = Optional.absent();
 
-  /** The DM notes of the item. */
+  /**
+   * The DM notes of the item.
+   */
   protected Optional<String> m_dmNotes = Optional.absent();
 
-  /** The count for multiple, similar items. */
+  /**
+   * The count for multiple, similar items.
+   */
   protected Optional<Integer> m_multiple = Optional.absent();
 
-  /** The count for a multiuse item. */
+  /**
+   * The count for a multiuse item.
+   */
   protected Optional<Integer> m_multiuse = Optional.absent();
 
-  /** The time remaining for a timed item. */
+  /**
+   * The time remaining for a timed item.
+   */
   protected Optional<NewDuration> m_timeLeft = Optional.absent();
 
-  /** The cached contents. */
+  /**
+   * The cached contents.
+   */
   private Optional<List<Item>> m_contents = Optional.absent();
 
-  /** The possessor of the item, if any. */
+  /**
+   * The possessor of the item, if any.
+   */
   private Optional<Monster> m_possessor = null;
 
   /**
    * Get the hit points of the base item.
    *
-   * @return      the hit points
+   * @return the hit points
    */
   public int getHP()
   {
@@ -121,7 +148,7 @@ public class Item extends CampaignEntry
   public boolean hasFinesse()
   {
     for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).hasFinesse())
+      if(((BaseItem) base).hasFinesse())
         return true;
 
     return false;
@@ -136,7 +163,7 @@ public class Item extends CampaignEntry
   {
     Annotated<Optional<Integer>> combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combined.add(((BaseItem)entry).getCombinedHP());
+      combined.add(((BaseItem) entry).getCombinedHP());
 
     return combined;
   }
@@ -150,7 +177,7 @@ public class Item extends CampaignEntry
   {
     Annotated.Arithmetic<NewWeight> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combined.add(((BaseItem)entry).getCombinedWeight());
+      combined.add(((BaseItem) entry).getCombinedWeight());
 
     if(isContainer())
       for(Item item : getContents())
@@ -172,7 +199,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Size>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedSize());
+      combinations.add(((BaseItem) entry).getCombinedSize());
 
     return new Combination.Max<Size>(this, combinations);
   }
@@ -186,7 +213,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Integer>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedHardness());
+      combinations.add(((BaseItem) entry).getCombinedHardness());
 
     return new Combination.Max<Integer>(this, combinations);
   }
@@ -195,12 +222,12 @@ public class Item extends CampaignEntry
    * Get the value of the item in gold piece and their fraction (e.g. silver is
    * 0.1).
    *
-   * @return      the value
+   * @return the value
    */
   public double getGoldValue()
   {
     Optional<NewMoney> value = getCombinedValue().get();
-    if (!value.isPresent())
+    if(!value.isPresent())
       return 0;
 
     return value.get().asGold();
@@ -209,7 +236,7 @@ public class Item extends CampaignEntry
   /**
    * Get the value of the item.
    *
-   * @return      the value
+   * @return the value
    */
   public Optional<NewMoney> getValue()
   {
@@ -228,7 +255,7 @@ public class Item extends CampaignEntry
 
     Annotated.Arithmetic<NewMoney> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combined.add(((BaseItem)entry).getCombinedValue());
+      combined.add(((BaseItem) entry).getCombinedValue());
 
     if(isContainer())
       for(Item item : getContents())
@@ -249,10 +276,10 @@ public class Item extends CampaignEntry
   {
     if(!m_contents.isPresent())
       m_contents = Optional.of
-        (DMADataFactory.get().getEntries(Item.TYPE,
-                                         getCampaign().get().getKey(),
-                                         "index-parent",
-                                         "item/" + getName().toLowerCase()));
+          (DMADataFactory.get().getEntries(Item.TYPE,
+                                           getCampaign().get().getKey(),
+                                           "index-parent",
+                                           "item/" + getName().toLowerCase()));
 
     return m_contents.get();
   }
@@ -266,7 +293,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Integer>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedBreakDC());
+      combinations.add(((BaseItem) entry).getCombinedBreakDC());
 
     return new Combination.Max<Integer>(this, combinations);
   }
@@ -280,7 +307,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Substance>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedSubstance());
+      combinations.add(((BaseItem) entry).getCombinedSubstance());
 
     return new Combination.First<Substance>(this, combinations);
   }
@@ -294,7 +321,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDistance>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedThickness());
+      combinations.add(((BaseItem) entry).getCombinedThickness());
 
     return new Combination.Max<NewDistance>(this, combinations);
   }
@@ -308,7 +335,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Integer>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedMultiple());
+      combinations.add(((BaseItem) entry).getCombinedMultiple());
 
     return new Combination.Integer(this, combinations);
   }
@@ -322,7 +349,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<CountUnit>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedCountUnit());
+      combinations.add(((BaseItem) entry).getCombinedCountUnit());
 
     return new Combination.Max<CountUnit>(this, combinations);
   }
@@ -336,7 +363,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Volume>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedCapacity());
+      combinations.add(((BaseItem) entry).getCombinedCapacity());
 
     return new Combination.Arithmetic<Volume>(this, combinations);
   }
@@ -350,7 +377,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<AggregationState>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedState());
+      combinations.add(((BaseItem) entry).getCombinedState());
 
     return new Combination.Max<AggregationState>(this, combinations);
   }
@@ -364,7 +391,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Slot>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedSlot());
+      combinations.add(((BaseItem) entry).getCombinedSlot());
 
     return new Combination.Max<Slot>(this, combinations);
   }
@@ -378,7 +405,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Integer>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedMultiuse());
+      combinations.add(((BaseItem) entry).getCombinedMultiuse());
 
     return new Combination.Integer(this, combinations);
   }
@@ -393,7 +420,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDuration>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedDon());
+      combinations.add(((BaseItem) entry).getCombinedDon());
 
     return new Combination.Arithmetic<NewDuration>(this, combinations);
   }
@@ -408,12 +435,12 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDuration>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedDonHastily());
+      combinations.add(((BaseItem) entry).getCombinedDonHastily());
 
     return new Combination.Arithmetic<NewDuration>(this, combinations);
   }
 
- /**
+  /**
    * Get the combined duration for rewmoving of the item, including values of
    * base wearable.
    *
@@ -423,7 +450,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDuration>> combinations = new ArrayList<>();
     for(BaseEntry entry : this.getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedRemove());
+      combinations.add(((BaseItem) entry).getCombinedRemove());
 
     return new Combination.Arithmetic<NewDuration>(this, combinations);
   }
@@ -437,7 +464,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<AreaShape>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedLightShape());
+      combinations.add(((BaseItem) entry).getCombinedLightShape());
 
     return new Combination.Max<AreaShape>(this, combinations);
   }
@@ -452,12 +479,12 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDistance>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedBrightLight());
+      combinations.add(((BaseItem) entry).getCombinedBrightLight());
 
     return new Combination.Max<NewDistance>(this, combinations);
   }
 
-    /**
+  /**
    * Get the combined shadowylight radius of the item, including values of
    * base items.
    *
@@ -467,7 +494,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDistance>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedShadowyLight());
+      combinations.add(((BaseItem) entry).getCombinedShadowyLight());
 
     return new Combination.Max<NewDistance>(this, combinations);
   }
@@ -475,7 +502,7 @@ public class Item extends CampaignEntry
   /**
    * Get the duration this still item operates.
    *
-   * @return      the time
+   * @return the time
    */
   public Optional<NewDuration> getTimeLeft()
   {
@@ -492,7 +519,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDuration>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedTimed());
+      combinations.add(((BaseItem) entry).getCombinedTimed());
 
     return new Combination.Min<NewDuration>(this, combinations);
   }
@@ -506,7 +533,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDistance>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedLength());
+      combinations.add(((BaseItem) entry).getCombinedLength());
 
     return new Combination.Arithmetic<NewDistance>(this, combinations);
   }
@@ -520,7 +547,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Area>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedArea());
+      combinations.add(((BaseItem) entry).getCombinedArea());
 
     return new Combination.Arithmetic<Area>(this, combinations);
   }
@@ -534,7 +561,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDamage>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedDamage());
+      combinations.add(((BaseItem) entry).getCombinedDamage());
 
     return new Combination.Arithmetic<NewDamage>(this, combinations);
   }
@@ -549,7 +576,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDamage>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedSecondaryDamage());
+      combinations.add(((BaseItem) entry).getCombinedSecondaryDamage());
 
     return new Combination.Arithmetic<NewDamage>(this, combinations);
   }
@@ -564,7 +591,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDamage>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedSplash());
+      combinations.add(((BaseItem) entry).getCombinedSplash());
 
     return new Combination.Arithmetic<NewDamage>(this, combinations);
   }
@@ -578,7 +605,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<WeaponType>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedWeaponType());
+      combinations.add(((BaseItem) entry).getCombinedWeaponType());
 
     return new Combination.Max<WeaponType>(this, combinations);
   }
@@ -592,7 +619,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<WeaponStyle>> combinations = new ArrayList<>();
     for(BaseEntry entry : this.getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedWeaponStyle());
+      combinations.add(((BaseItem) entry).getCombinedWeaponStyle());
 
     return new Combination.Max<WeaponStyle>(this, combinations);
   }
@@ -606,7 +633,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Proficiency>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedProficiency());
+      combinations.add(((BaseItem) entry).getCombinedProficiency());
 
     return new Combination.Max<Proficiency>(this, combinations);
   }
@@ -621,7 +648,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDistance>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedRange());
+      combinations.add(((BaseItem) entry).getCombinedRange());
 
     return new Combination.Min<NewDistance>(this, combinations);
   }
@@ -636,7 +663,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDistance>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-        combinations.add(((BaseItem)entry).getCombinedReach());
+      combinations.add(((BaseItem) entry).getCombinedReach());
 
     return new Combination.Min<NewDistance>(this, combinations);
   }
@@ -651,7 +678,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Integer>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedMaxAttacks());
+      combinations.add(((BaseItem) entry).getCombinedMaxAttacks());
 
     return new Combination.Min<Integer>(this, combinations);
   }
@@ -666,7 +693,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewCritical>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedCritical());
+      combinations.add(((BaseItem) entry).getCombinedCritical());
 
     return new Combination.Arithmetic<NewCritical>(this, combinations);
   }
@@ -680,7 +707,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewModifier>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedArmorBonus());
+      combinations.add(((BaseItem) entry).getCombinedArmorBonus());
 
     return new Combination.Arithmetic<NewModifier>(this, combinations);
   }
@@ -694,7 +721,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<ArmorType>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedArmorType());
+      combinations.add(((BaseItem) entry).getCombinedArmorType());
 
     return new Combination.Max<ArmorType>(this, combinations);
   }
@@ -708,7 +735,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Integer>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedMaxDex());
+      combinations.add(((BaseItem) entry).getCombinedMaxDex());
 
     return new Combination.Min<Integer>(this, combinations);
   }
@@ -722,7 +749,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Integer>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedCheckPenalty());
+      combinations.add(((BaseItem) entry).getCombinedCheckPenalty());
 
     return new Combination.Integer(this, combinations);
   }
@@ -736,7 +763,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<Integer>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedArcaneFailure());
+      combinations.add(((BaseItem) entry).getCombinedArcaneFailure());
 
     return new Combination.Integer(this, combinations);
   }
@@ -750,7 +777,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDistance>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedSlowSpeed());
+      combinations.add(((BaseItem) entry).getCombinedSlowSpeed());
 
     return new Combination.Arithmetic<NewDistance>(this, combinations);
   }
@@ -764,7 +791,7 @@ public class Item extends CampaignEntry
   {
     List<Combination<NewDistance>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedFastSpeed());
+      combinations.add(((BaseItem) entry).getCombinedFastSpeed());
 
     return new Combination.Arithmetic<NewDistance>(this, combinations);
   }
@@ -773,7 +800,7 @@ public class Item extends CampaignEntry
    * Get the name of the entry. This time, also check for special quality
    * modifiers.
    *
-   * @return      the requested name
+   * @return the requested name
    */
   // public String getName()
   // {
@@ -801,7 +828,7 @@ public class Item extends CampaignEntry
   /**
    * Get the appearance of the item.
    *
-   * @return      the requested appearance
+   * @return the requested appearance
    */
   public Optional<String> getAppearance()
   {
@@ -811,7 +838,7 @@ public class Item extends CampaignEntry
   /**
    * Get the player notes of the item.
    *
-   * @return      the requested notes
+   * @return the requested notes
    */
   public Optional<String> getPlayerNotes()
   {
@@ -821,7 +848,7 @@ public class Item extends CampaignEntry
   /**
    * Get the dm notes of the item.
    *
-   * @return      the requested notes
+   * @return the requested notes
    */
   public Optional<String> getDMNotes()
   {
@@ -850,7 +877,7 @@ public class Item extends CampaignEntry
 
     List<Combination<String>> combinations = new ArrayList<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedPlayerName());
+      combinations.add(((BaseItem) entry).getCombinedPlayerName());
 
     return new Combination.String(this, combinations);
   }
@@ -887,7 +914,7 @@ public class Item extends CampaignEntry
   public boolean isContainer()
   {
     for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isContainer())
+      if(((BaseItem) base).isContainer())
         return true;
 
     return false;
@@ -896,7 +923,7 @@ public class Item extends CampaignEntry
   public boolean isLight()
   {
     for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isLight())
+      if(((BaseItem) base).isLight())
         return true;
 
     return false;
@@ -910,7 +937,16 @@ public class Item extends CampaignEntry
   public boolean isWearable()
   {
     for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isWearable())
+      if(((BaseItem) base).isWearable())
+        return true;
+
+    return false;
+  }
+
+  public boolean isAmmunition()
+  {
+    for(BaseEntry entry : getBaseEntries())
+      if(((BaseItem) entry).isAmmunition())
         return true;
 
     return false;
@@ -919,7 +955,7 @@ public class Item extends CampaignEntry
   public boolean isArmor()
   {
     for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isArmor())
+      if(((BaseItem) base).isArmor())
         return true;
 
     return false;
@@ -928,7 +964,16 @@ public class Item extends CampaignEntry
   public boolean isWeapon()
   {
     for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).isWeapon())
+      if(((BaseItem) base).isWeapon())
+        return true;
+
+    return false;
+  }
+
+  public boolean isCounted()
+  {
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseItem) base).isCounted())
         return true;
 
     return false;
@@ -1136,11 +1181,6 @@ public class Item extends CampaignEntry
     }
 
     return result;
-  }
-
-  public int getAmmunition()
-  {
-    return 42;
   }
 
   public Optional<NewModifier> getArmorClass()

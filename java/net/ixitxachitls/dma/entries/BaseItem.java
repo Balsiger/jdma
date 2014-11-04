@@ -185,7 +185,7 @@ public class BaseItem extends BaseEntry
   protected boolean m_finesse = false;
 
   /** The names of the ammunition that can be used. */
-  protected List<String> m_ammunition = new ArrayList<>();
+  protected boolean m_ammunition = false;
 
   /** The bonus of the armor. */
   protected Optional<NewModifier> m_armorBonus = Optional.absent();
@@ -1229,35 +1229,6 @@ public class BaseItem extends BaseEntry
     return new Combination.Min<Integer>(this, combinations);
   }
 
-  public List<String> getAmmunition()
-  {
-    return m_ammunition;
-  }
-
-  public boolean hasAmmunition()
-  {
-    if(!m_ammunition.isEmpty())
-      return true;
-
-    for(BaseEntry base : getBaseEntries())
-      if(((BaseItem)base).hasAmmunition())
-        return true;
-
-    return false;
-  }
-
-  public Annotated<List<String>> getCombinedAmmunition()
-  {
-    if(!m_ammunition.isEmpty())
-      return new Annotated.List<String>(m_ammunition, getName());
-
-    Annotated.List<String> combined = new Annotated.List<>();
-    for(BaseEntry base : getBaseEntries())
-      combined.add(((BaseItem)base).getCombinedAmmunition());
-
-    return combined;
-  }
-
   /**
    * Get the critical value.
    *
@@ -1284,6 +1255,17 @@ public class BaseItem extends BaseEntry
       combinations.add(((BaseItem)entry).getCombinedCritical());
 
     return new Combination.Arithmetic<NewCritical>(this, combinations);
+  }
+
+  public boolean isAmmunition() {
+    if (m_ammunition)
+      return true;
+
+    for(BaseEntry entry : getBaseEntries())
+      if(((BaseItem)entry).isAmmunition())
+        return true;
+
+    return false;
   }
 
   /**
@@ -1941,8 +1923,7 @@ public class BaseItem extends BaseEntry
         weaponBuilder.setMaxAttacks(m_maxAttacks.get());
       if(m_finesse)
         weaponBuilder.setFinesse(true);
-      for(String ammunition : m_ammunition)
-        weaponBuilder.addAmmunition(ammunition);
+      weaponBuilder.setAmmunition(m_ammunition);
 
       builder.setWeapon(weaponBuilder.build());
     }
@@ -2113,7 +2094,8 @@ public class BaseItem extends BaseEntry
                                 NewValue.INTEGER_PARSER);
     m_finesse = inValues.use("weapon.finesse", m_finesse,
                              NewValue.BOOLEAN_PARSER);
-    m_ammunition = inValues.use("weapon.ammunition", m_ammunition);
+    m_ammunition = inValues.use("weapon.ammunition", m_ammunition,
+                                NewValue.BOOLEAN_PARSER);
 
     m_armorBonus = inValues.use("armor.bonus", m_armorBonus,
                                 NewModifier.PARSER);
@@ -2237,8 +2219,7 @@ public class BaseItem extends BaseEntry
         m_maxAttacks = Optional.of(weaponProto.getMaxAttacks());
       if(weaponProto.hasFinesse())
         m_finesse = weaponProto.getFinesse();
-      for(String ammunition : weaponProto.getAmmunitionList())
-        m_ammunition.add(ammunition);
+      m_ammunition = weaponProto.getAmmunition();
     }
 
     if(proto.hasWearable())

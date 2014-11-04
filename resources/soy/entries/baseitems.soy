@@ -299,8 +299,8 @@
               {param value: $entry.max_attacks /}
               {param combination: $entry.combined_max_attacks /}
             {/call}
-            {if $entry.has_ammunition}
-              , ammunition {annotate($entry.combined_ammunition, '/item/')}
+            {if $entry.ammunition}
+              , ammunition
             {/if}
           {/param}
           {param color: '#008' /}
@@ -854,11 +854,10 @@
           {/call}
         {/param}
       {/call}    
-      {call dma.edit.value_list}
+      {call dma.edit.value_flag}
         {param name: 'weapon.ammunition' /}
         {param label: 'Ammunition' /}
-        {param values: $entry.ammunition /}
-        {param validate: 'non-empty' /}
+        {param value: $entry.ammunition /}
         {param color: '#008' /}
         {param autocomplete: 'base item/name' /}
       {/call}
@@ -868,7 +867,7 @@
         {param value}
           {call dma.edit.field_input}
             {param name: 'commodity.area' /}
-            {param value: $entry.area.isPresent 
+            {param value: $entry.area.isPresent
               ? $entry.area.get : '' /}
             {param validate: 'area' /}
             {param caption: 'area' /}            

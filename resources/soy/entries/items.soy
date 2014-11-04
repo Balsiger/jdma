@@ -80,22 +80,13 @@
       {call dma.entry.value}
         {param label: 'HP' /}
         {param value}
-         {$entry.HP} (max{sp}
-           {call dma.entry.added} 
-             {param addable: $entry.combined_max_HP /}
-           {/call}
-         ) 
+         {$entry.HP} (max {annotate($entry.combined_max_HP)}
         {/param}
         {param color: '#008' /}
       {/call}
       {call dma.entry.value}
         {param label: 'Value' /}
-        {param value}
-           {call dma.entry.added} 
-             {param value: $entry.value /}
-             {param addable: $entry.combined_value /}
-           {/call}
-        {/param}
+        {param value: annotate($entry.combined_value) /}
         {param color: '#008' /}
       {/call}
       {call dma.entry.value}
@@ -121,11 +112,7 @@
         {call dma.entry.value}
           {param label: 'Multiple' /}
           {param value}
-            {$entry.multiple}
-            {sp}
-             {call dma.entry.added} 
-               {param addable: $entry.combined_count_unit /}
-             {/call}
+            {$entry.multiple} {annotate($entry.combined_count_unit)}
           {/param}
           {param color: '#008' /}
         {/call}
@@ -141,10 +128,7 @@
         {call dma.entry.value}
           {param label: 'Timed' /}
           {param value}
-            {$entry.time_left} of{sp}
-            {call dma.entry.added}
-              {param addable: $entry.combined_timed /}
-            {/call}
+            {$entry.time_left} of {annotate($entry.combined_timed)}
           {/param}
           {param color: '#008' /}
         {/call}
@@ -384,7 +368,7 @@
 
     <div class="contents" style="background-color: #eef; border-color: #ccf">
       <div class="image main">
-        {call dma.entry.simplemainfile}
+        {call dma.entry.mainImage}
           {param entry: $entry /}
           {param size: 50 /}
         {/call}
@@ -399,9 +383,7 @@
       </div>
 
      <div class="short-description">
-       {call dma.entry.added}
-         {param addable: $entry.combined_short_description /}
-       {/call}
+       {annotate($entry.combined_short_description)}
      </div>
 
    </div>
@@ -443,7 +425,7 @@
         </div>
 
         <div class="image main">
-          {call dma.entry.simplemainfile}
+          {call dma.entry.mainImage}
             {param entry: $entry /}
             {param size: 90 /}
           {/call}
@@ -464,18 +446,12 @@
             {call dma.value.extension}
               {param value: 'incomplete' /}
             {/call}
-            {sp}
-            {call dma.entry.added}
-              {param addable: $entry.combined_incomplete /}
-            {/call}
+            {sp}{annotate($entry.combined_incomplete)}
           </div>
         {/if}
         
         <div class="description">
-          {call dma.entry.concatenated}
-            {param concatenate: $entry.combined_description /}
-            {param lines: true /}
-          {/call}
+          {annotate($entry.combined_description)}
         </div>
         {if $entry.DM_notes.present} 
           <div class="dm-notes block">
@@ -508,10 +484,7 @@
           </div>
         {/if}
         <div class="references">
-          {call dma.entry.concatenated_list}
-            {param values: [] /}
-            {param concatenate: $entry.combined_references /}
-          {/call}
+          {annotate($entry.combined_references)}
         </div>
       </div>
     </div>
@@ -531,10 +504,7 @@
           {param value: 'value' /}
         {/call}
         {sp}
-        {call dma.entry.added} 
-          {param value: $entry.value /}
-          {param addable: $entry.combined_value /}           
-        {/call}
+        {annotate($entry.combined_value)}
       </div>
 
       <div class="hp">
@@ -542,10 +512,7 @@
           {param value: 'hp' /}
         {/call}
         {sp}
-        {$entry.HP} (of{sp}
-        {call dma.entry.added} 
-          {param addable: $entry.combined_max_HP /}           
-        {/call})
+        {$entry.HP} (of {annotate($entry.combined_max_HP)}
       </div>
 
       <div class="weight">
@@ -553,34 +520,26 @@
           {param value: 'weight' /}
         {/call}
         {sp}
-        {call dma.entry.added}
-          {param addable: $entry.combined_weight /}
-        {/call}
+        {annotate($entry.combined_weight)}
       </div>
       <div class="size">
         {call dma.value.extension}
           {param value: 'size' /}
         {/call}
         {sp}
-        {call dma.entry.added}
-          {param addable: $entry.combined_size /}
-        {/call}
+        {annotate($entry.combined_size)}
       </div>
 
       <div class="hardness">
         {call dma.value.extension}
           {param value: 'hardness' /}
         {/call}
-        {call dma.entry.added}
-          {param addable: $entry.combined_hardness /}
-        {/call}
+        {annotate($entry.combined_hardness)}
         {sp}
         {call dma.value.extension}
           {param value: 'break' /}
         {/call}
-        {call dma.entry.added}
-          {param addable: $entry.combined_break_DC /}
-        {/call}
+        {annotate($entry.combined_break_DC)}
       </div>
 
       <div class="substance">
@@ -589,13 +548,9 @@
         {/call}
         {sp}
         <span class="value">
-          {call dma.entry.added}
-            {param addable: $entry.combined_thickness /}
-          {/call}
+          {annotate($entry.combined_thickness)}
           {sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_substance /}
-          {/call}
+          {annotate($entry.combined_substance)}
         </span>
       </div>
 
@@ -607,9 +562,7 @@
           {sp}
           {$entry.multiple.get}
           {sp}
-          {call dma.entry.added} 
-            {param addable: $entry.combined_count_unit /}
-          {/call}
+          {annotate($entry.combined_count_unit)}
           {sp}
         </div>
       {/if}
@@ -631,26 +584,14 @@
             {param value: 'wearable' /}
           {/call}
           {sp}
-          {call dma.entry.added} 
-            {param addable: $entry.combined_slot /}
-          {/call}
+          {annotate($entry.combined_slot)}
           {sp}
           <div class="stack">
             <div>
-              {call dma.entry.added} 
-                {param addable: $entry.combined_don /}
-                {param short: true /}
-              {/call}/ 
-              {call dma.entry.added} 
-                {param addable: $entry.combined_don_hastily /}
-                {param short: true /}
-              {/call}
+              {annotate($entry.combined_don)}/{annotate($entry.don_hastily)}
             </div>
             <div>
-              {call dma.entry.added} 
-                {param addable: $entry.combined_remove /}
-                {param short: true /}
-              {/call}
+              {annotate($entry.combined_remove)}
            </div>
           </div>
         </div>
@@ -662,15 +603,7 @@
             {param value: 'container' /}
           {/call}
           {sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_capacity /}
-            {param short: true /}
-          {/call}
-          {sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_state /}
-            {param short: true /}
-          {/call}
+          {annotate($entry.combined_capacity)} {annotate($entry.combined_state)}
         </div>
       {/if}
 
@@ -680,23 +613,14 @@
             {param value: 'light' /}
           {/call}
           {sp}
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_light_shape /}
-          {/call}
-          
+          {annotate($entry.combined_light_shape)}
+
           <div class="stack lead">
             <div>
-              {call dma.entry.added}
-                {param short: true /}
-                {param addable: $entry.combined_bright_light /}
-              {/call}
+              {annotate($entry.combined_bright_light)}
             </div>
             <div>
-              {call dma.entry.added}
-                {param short: true /}
-                {param addable: $entry.combined_shadowy_light /}
-              {/call}
+              {annotate($entry.combined_shadowy_light)}
             </div>
           </div>
         </div>
@@ -718,14 +642,8 @@
             {param value: 'commodity' /}
           {/call}
           {sp}
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_length /}
-          {/call}
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_area /}
-          {/call}
+          {annotate($entry.combined_length)}
+          {annotate($entry.combined_area)}
         </div>
       {/if}
     </div>
@@ -736,53 +654,24 @@
           {param value: 'weapon' /}
         {/call}
         <div class="value">
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_damage /}
-          {/call}
+          {annotate($entry.combined_damage)}
           {if $entry.combined_secondary_damage.has_value}
-            {call dma.entry.added}
-              {param short: true /}
-              {param addable: $entry.combined_secondary_damage /}
-            {/call}
-            {sp}
+            /{annotate($entry.combined_secondary_damage)}
           {/if}
+          {sp}
           {if $entry.combined_splash.has_value}
-            ({call dma.entry.added}
-              {param short: true /}
-              {param addable: $entry.combined_splash /}
-            {/call})
+            ({annotate($entry.combined_splash)})
             {sp}
           {/if}
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_critical /}
-          {/call}
+          {annotate($entry.combined_critical)}
           ,{sp}
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_weapon_type /}
-          {/call}
+          {annotate($entry.combined_weapon_type)}
           ,{sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_proficiency /}
-            {param short: true /}
-          {/call}
+          {annotate($entry.combined_proficiency)}
           ,{sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_weapon_style /}
-            {param short: true /}
-          {/call}
+          {annotate($entry.combined_weapon_style)}
           ,{sp}
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_reach /}
-          {/call}
-          /
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_range /}
-          {/call}
+          {annotate($entry.combined_reach)}/{annotate($entry.combined_range)}
         </div>
       </div>
     {/if}
@@ -793,35 +682,16 @@
           {param value: 'armor' /}
         {/call}
         <div class="value">
-          AC{sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_armor_bonus /}
-          {/call}
+          AC {annotate($entry.combined_armor_bonus)}
           {sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_armor_type /}
-          {/call}
-          , max dex{sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_max_dex /}
-          {/call}
-          , check{sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_check_penalty /}
-          {/call}
-          , arcane{sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_arcane_failure /}
-          {/call}
-          {if $entry.combined_slow_speed.has_value 
+          {annotate($entry.combined_armor_type)}
+          , max dex {annotate($entry.combined_max_dex)}
+          , check {annotate($entry.combined_check_penalty)}
+          , arcane {annotate($entry.combined_arcane_failure)}
+          {if $entry.combined_slow_speed.has_value
               or $entry.combined_fast_speed.has_value}
-            , speed{sp}
-            {call dma.entry.added}
-              {param addable: $entry.combined_slow_speed /}
-            {/call}/
-            {call dma.entry.added}
-              {param addable: $entry.combined_fast_speed /}
-            {/call}
+            , speed {annotate($entry.combined_slow_speed)}
+            /{annotate($entry.combined_fast_speed)}
           {/if}
         </div>
       </div>

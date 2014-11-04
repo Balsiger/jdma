@@ -847,7 +847,7 @@
  * @param entry The entry formatted.
  * @param? size The size of the image
  */
-{deltemplate dma.entry.files.main}
+{deltemplate dma.entry.files.main_deprecated}
   {call dma.value.editable}
     {param canEdit: $ij.isDM or $ij.isOwner /}
     {param name: 'image'/}
@@ -860,8 +860,9 @@
           {param url: $entry.files.main.path /}
           {param tooltip: 'Main' /}
           {param text}
-            <img src="{$entry.files.main.icon}=s{if $size}{$size}{else}300{/if}"
-              alt="Main" class="image main" id="file=-main" />
+            <img src="{$entry.files.main.icon}"
+              alt="Main" class="image main" id="file=-main"
+              style="width:{if $size}{$size}{else}300{/if}px/>
           {/param}
         {/call}
       {else}
@@ -887,7 +888,7 @@
  * @param entry The entry to use.
  * @param? size The size of the image
  */
-{template .simplemainfile}
+{template .simplemainfile_deprecated}
   {if def($entry.files.main)}
     <img src="{$entry.files.main.icon}=s{if $size}{$size}{else}300{/if}"
       alt="Main" class="image main" id="file=-main" />

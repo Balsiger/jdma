@@ -439,7 +439,7 @@
           {param width: '13.5%' /}
           {param size: '9px' /}
           {param center: true /}
-          {param value: bonus($entry.combined_base_attack.value) /}
+          {param value: annotate($entry.combined_base_attack) /}
         {/call}
         
         <div class="operator" style="padding-top: 20px">+</div>
@@ -1096,13 +1096,13 @@
         {param value: $weapon ? $weapon.weapon_type.short : '&nbsp;' /}
       {/call}
 
-      {if $weapon.ammunition}
+      {if $weapon.player_notes.present}
         {call .sheet_value}
-          {param label: 'Ammunition' /}
+          {param label: 'Notes' /}
           {param width: '50%' /}
           {param size: '12px' /}
           {param vSize: '20px' /}
-          {param value: $weapon ? $weapon.ammunition : '&nbsp;' /}
+          {param value: $weapon.player_notes /}
         {/call}
       {else}
         {call .sheet_value}
@@ -1110,7 +1110,7 @@
           {param width: '50%' /}
           {param size: '12px' /}
           {param vSize: '20px' /}
-          {param value: $weapon ? $weapon.player_notes : '&nbsp;' /}
+          {param value: '' /}
         {/call}
       {/if}
     </div>

@@ -718,7 +718,7 @@ message BaseWeaponProto
   optional DistanceProto reach = 9;
   optional int32 max_attacks = 10;
   optional bool finesse = 11;
-  repeated string ammunition = 12;
+  optional bool ammunition = 12;
 }
 
 message BaseWearableProto

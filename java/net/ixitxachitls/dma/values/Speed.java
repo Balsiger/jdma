@@ -98,8 +98,11 @@ public class Speed extends NewValue.Arithmetic<SpeedProto>
     return (m_mode != MovementMode.RUN && m_mode != MovementMode.UNKNOWN
       ? m_mode + " " : "")
       + m_speed.toString()
-      + (m_maneuverability.isPresent() ? " (" + m_maneuverability.get() + ")"
-          : "");
+      + (m_maneuverability.isPresent()
+        && m_maneuverability.get() != Maneuverability.UNKNOWN
+        && m_maneuverability.get() != Maneuverability.NONE
+        ? " (" + m_maneuverability.get() + ")"
+        : "");
   }
 
   @Override

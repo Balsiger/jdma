@@ -121,7 +121,7 @@
 
 /**
  * An editable selection value.
- * 
+ *
  * @param name     The name of the value.
  * @param label    The label text.
  * @param value    The value contents.
@@ -136,7 +136,28 @@
       {call .field_selection}
         {param name: $name /}
         {param value: $value /}
-        {param choices: $choices /}      
+        {param choices: $choices /}
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * An editable flag value.
+ *
+ * @param name     The name of the value.
+ * @param label    The label text.
+ * @param value    The value contents.
+ * @param color    The decoration color.
+ */
+{template .value_flag}
+  {call .generic_value}
+    {param label: $label /}
+    {param color: $color /}
+    {param value}
+      {call .field_flag}
+        {param name: $name /}
+        {param value: $value /}
       {/call}
     {/param}
   {/call}
@@ -247,7 +268,7 @@
 
 /**
  * The field for editing a selection value.
- * 
+ *
  * @param name     The name of the value.
  * @param value    The value contents.
  * @param choices  The possible chocies to select from.
@@ -266,6 +287,26 @@
           </option>
         {/foreach}
       </select>
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * The field for editing a flag value.
+ *
+ * @param name     The name of the value.
+ * @param value    The value contents.
+ * @param? class   The class to use for this field
+ * @param? width   the width of the field
+ */
+{template .field_flag}
+  {call .field}
+    {param class: $class /}
+    {param width: $width /}
+    {param markup}
+      <input name="{$name}"
+        onclick="this.checked ? this.value='true' : this.value='false'"
+        type="checkbox" {if $value}checked{/if}/>
     {/param}
   {/call}
 {/template}
