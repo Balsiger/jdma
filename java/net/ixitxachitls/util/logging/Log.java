@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.util.logging;
 
 import java.util.ArrayList;
@@ -37,28 +35,19 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.ixitxachitls.dma.server.servlets.DMAServlet;
 import net.ixitxachitls.util.configuration.Config;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is the logging class to log all messages.
  *
  * @file          Log.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
 
 @ParametersAreNonnullByDefault
 public final class Log
 {
-  //----------------------------------------------------------------- nested
-
   /** A simple class for representing a message to be logged. */
   public static class Message
   {
@@ -67,7 +56,6 @@ public final class Log
      *
      * @param inText the log message
      * @param inType the log type
-     *
      */
     public Message(String inText, Log.Type inType)
     {
@@ -88,7 +76,6 @@ public final class Log
      * Get the log message.
      *
      * @return the log message
-     *
      */
     public String getText()
     {
@@ -99,7 +86,6 @@ public final class Log
      * Get the log type.
      *
      * @return the log type
-     *
      */
     public Log.Type getType()
     {
@@ -110,7 +96,6 @@ public final class Log
      * Get the date of the log message in seconds from now.
      *
      * @return the date of the log message as seconds from now
-     *
      */
     public long getDate()
     {
@@ -118,7 +103,7 @@ public final class Log
     }
 
     /**
-     * Convert to stringh.
+     * Convert to string.
      *
      * @return string representation of the message.
      */
@@ -129,35 +114,19 @@ public final class Log
     }
   }
 
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //--------------------------------- Log ----------------------------------
-
   /**
-    *
-    * Prevent instantiation.
-    *
-    * @undefined   never
-    *
-    */
+   * Prevent instantiation.
+   */
   private Log()
   {
     // nothing done here
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** All the currently registered loggers. */
   private static Map<String, Logger> s_loggers =
     new HashMap<String, Logger>();
 
-  /** The possible loggging levels. */
+  /** The possible logging levels. */
   public enum Type
   {
     /** A fatal error, will usually terminate the program. */
@@ -234,17 +203,22 @@ public final class Log
 
     Log.setLevel(Type.valueOf(level));
     for(String logger : loggers)
+    {
+      // Don't use java logger on dev.
+      if("JavaLogger".equals(logger))
+      {
+        if(DMAServlet.isDev())
+          continue;
+      }
+      else if(!DMAServlet.isDev())
+        continue;
+
       Log.add("default (" + logger + ")", logger);
+    }
 
     Log.important("setup initial debug configuration to level " + level
                   + " and logger " + Arrays.toString(loggers));
   }
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //--------------------------------- get ----------------------------------
 
   /**
     * Get a currently installed logger.
@@ -252,7 +226,6 @@ public final class Log
     * @param       inName the name of the logger to get
     *
     * @return      the logger (i.e. a reference to it!)
-    *
     */
   public static @Nullable Logger get(@Nullable String inName)
   {
@@ -262,27 +235,15 @@ public final class Log
     return s_loggers.get(inName);
   }
 
-  //........................................................................
-  //------------------------------- getLast --------------------------------
-
   /**
    * Get the last log messages that were registered.
    *
    * @return      an iterator over all log messages
-   *
    */
   public static Iterator<Message> getLast()
   {
     return s_last.iterator();
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //--------------------------------- add ----------------------------------
 
   /**
     * Add a logger to be logged to.
@@ -291,7 +252,6 @@ public final class Log
     * @param       inLogger the logger to add
     *
     * @return      true if newly added, false if another logger was replaced
-    *
     */
   public static boolean add(@Nullable String inName, @Nullable Logger inLogger)
   {
@@ -301,9 +261,6 @@ public final class Log
     return s_loggers.put(inName, inLogger) == null;
   }
 
-  //........................................................................
-  //--------------------------------- add ----------------------------------
-
   /**
     * Add a logger to be logged to.
     *
@@ -311,7 +268,6 @@ public final class Log
     * @param       inLogger the logger to add
     *
     * @return      true if newly added, false if another logger was replaced
-    *
     */
   public static boolean add(String inName, String inLogger)
   {
@@ -347,15 +303,11 @@ public final class Log
     return false;
   }
 
-  //........................................................................
-  //----------------------------- addMessage -------------------------------
-
   /**
    * Add the given message to the messages created so far. If more messages are
    * stored than required, the oldest message will be deleted.
    *
    * @param       inMessage the message to add
-   *
    */
   public static synchronized void addMessage(Message inMessage)
   {
@@ -365,61 +317,40 @@ public final class Log
       s_last.removeLast();
   }
 
-  //........................................................................
-  //-------------------------------- remove --------------------------------
-
   /**
     * Remove a registered logger.
     *
     * @param       inName the name of the logger to remove
     *
     * @return      true if removed, false if not
-    *
     */
   public static boolean remove(@Nullable String inName)
   {
     return s_loggers.remove(inName) != null;
   }
 
-  //........................................................................
-
-  //------------------------------- setLevel -------------------------------
-
   /**
     * Set the logging level to print up to.
     *
     * @param       inLevel the level to print (more severe levels are
     *                      printed as well)
-    *
     */
   public static void setLevel(Type inLevel)
   {
     s_level = inLevel;
   }
 
-  //........................................................................
-  //------------------------------- setLevel -------------------------------
-
   /**
     * Set the logging level to print up to.
     *
     * @param       inLevel the level to print (more severe levels are
     *                      printed as well)
-    *
     */
   public static void setLevel(String inLevel)
   {
     s_level = Type.valueOf(inLevel);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //--------------------------------- fatal --------------------------------
-
   /**
     * Print a fatal message.
     *
@@ -434,16 +365,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void fatal(@Nullable String inMessage)
   {
     print(inMessage, Type.FATAL);
   }
 
-  //........................................................................
-  //--------------------------------- fatal --------------------------------
-
   /**
     * Print a fatal message.
     *
@@ -458,15 +385,11 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void fatal(@Nullable Object inMessage)
   {
     print(inMessage, Type.FATAL);
   }
-
-  //........................................................................
-  //--------------------------------- event --------------------------------
 
   /**
     * Print an event message.
@@ -474,7 +397,6 @@ public final class Log
     * @param       inUser    the user responsible for the event, if any
     * @param       inType    the type of the event
     * @param       inMessage the message to print
-    *
     */
   public static void event(String inUser, String inType,
                            @Nullable String inMessage)
@@ -482,9 +404,6 @@ public final class Log
     print(inUser + " - " + inType + " - " + inMessage, Type.EVENT);
   }
 
-  //........................................................................
-  //--------------------------------- error --------------------------------
-
   /**
     * Print an error message.
     *
@@ -499,16 +418,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void error(@Nullable String inMessage)
   {
     print(inMessage, Type.ERROR);
   }
 
-  //........................................................................
-  //--------------------------------- error --------------------------------
-
   /**
     * Print an error message.
     *
@@ -523,16 +438,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void error(@Nullable Object inMessage)
   {
     print(inMessage, Type.ERROR);
   }
 
-  //........................................................................
-  //-------------------------------- warning -------------------------------
-
   /**
     * Print a warning message.
     *
@@ -547,16 +458,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void warning(@Nullable String inMessage)
   {
     print(inMessage, Type.WARNING);
   }
 
-  //........................................................................
-  //-------------------------------- warning -------------------------------
-
   /**
     * Print a warning message.
     *
@@ -570,17 +477,13 @@ public final class Log
     * @see         #useful
     * @see         #info
     * @see         #complete
-    * @see         #print
-    *
+    * @see         #print*
     */
   public static void warning(@Nullable Object inMessage)
   {
     print(inMessage, Type.WARNING);
   }
 
-  //........................................................................
-  //------------------------------- necessary ------------------------------
-
   /**
     * Print a necessary logging message.
     *
@@ -595,16 +498,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void necessary(@Nullable String inMessage)
   {
     print(inMessage, Type.NECESSARY);
   }
 
-  //........................................................................
-  //------------------------------- necessary ------------------------------
-
   /**
     * Print a necessary logging message.
     *
@@ -619,16 +518,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void necessary(@Nullable Object inMessage)
   {
     print(inMessage, Type.NECESSARY);
   }
 
-  //........................................................................
-  //------------------------------- important ------------------------------
-
   /**
     * Print an important logging message.
     *
@@ -643,16 +538,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void important(@Nullable String inMessage)
   {
     print(inMessage, Type.IMPORTANT);
   }
 
-  //........................................................................
-  //------------------------------- important ------------------------------
-
   /**
     * Print an important logging message.
     *
@@ -667,16 +558,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void important(@Nullable Object inMessage)
   {
     print(inMessage, Type.IMPORTANT);
   }
 
-  //........................................................................
-  //--------------------------------- useful -------------------------------
-
   /**
     * Print a useful logging message.
     *
@@ -691,16 +578,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void useful(@Nullable String inMessage)
   {
     print(inMessage, Type.USEFUL);
   }
 
-  //........................................................................
-  //--------------------------------- useful -------------------------------
-
   /**
     * Print a useful logging message.
     *
@@ -715,16 +598,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void useful(@Nullable Object inMessage)
   {
     print(inMessage, Type.USEFUL);
   }
 
-  //........................................................................
-  //--------------------------------- info ---------------------------------
-
   /**
     * Print an information message.
     *
@@ -739,16 +618,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void info(@Nullable String inMessage)
   {
     print(inMessage, Type.INFO);
   }
 
-  //........................................................................
-  //--------------------------------- info ---------------------------------
-
   /**
     * Print an information message.
     *
@@ -763,16 +638,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void info(@Nullable Object inMessage)
   {
     print(inMessage, Type.INFO);
   }
 
-  //........................................................................
-  //-------------------------------- status --------------------------------
-
   /**
     * Print an information message.
     *
@@ -787,16 +658,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void status(@Nullable String inMessage)
   {
     print(inMessage, Type.STATUS);
   }
 
-  //........................................................................
-  //-------------------------------- status --------------------------------
-
   /**
     * Print an information message.
     *
@@ -811,16 +678,12 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   public static void status(@Nullable Object inMessage)
   {
     print(inMessage, Type.STATUS);
   }
 
-  //........................................................................
-  //-------------------------------- complete ------------------------------
-
   /**
     * Print a logging message for complete logging message.
     *
@@ -835,16 +698,12 @@ public final class Log
     * @see         #info
     * @see         #error
     * @see         #print
-    *
     */
   public static void complete(@Nullable String inMessage)
   {
     print(inMessage, Type.COMPLETE);
   }
 
-  //........................................................................
-  //-------------------------------- complete ------------------------------
-
   /**
     * Print a logging message for complete logging message.
     *
@@ -859,15 +718,11 @@ public final class Log
     * @see         #info
     * @see         #error
     * @see         #print
-    *
     */
   public static void complete(@Nullable Object inMessage)
   {
     print(inMessage, Type.COMPLETE);
   }
-
-  //........................................................................
-  //--------------------------------- debug --------------------------------
 
   /**
     * Print a debug message.
@@ -884,14 +739,11 @@ public final class Log
     * @see         #error
     * @see         #complete
     * @see         #print
-    *
     */
   public static void debug(@Nullable String inMessage)
   {
     print(inMessage, Type.DEBUG);
   }
-
-  //........................................................................
 
   /**
    * Add a tracing message.
@@ -904,8 +756,6 @@ public final class Log
   }
 
 
-  //--------------------------------- debug --------------------------------
-
   /**
     * Print a debug message.
     *
@@ -921,16 +771,11 @@ public final class Log
     * @see         #error
     * @see         #complete
     * @see         #print
-    *
     */
   public static void debug(@Nullable Object inMessage)
   {
     print(inMessage, Type.DEBUG);
   }
-
-  //........................................................................
-
-  //-------------------------------- print ---------------------------------
 
   /**
     * Print a message to all the registered loggers using the given type.
@@ -947,7 +792,6 @@ public final class Log
     * @see         #info
     * @see         #complete
     * @see         #print
-    *
     */
   private static void print(@Nullable Object inMessage, Type inType)
   {
@@ -960,11 +804,7 @@ public final class Log
       i.next().print(inMessage, inType);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The Test class for the logging stuff. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
@@ -1435,8 +1275,6 @@ public final class Log
 
     //......................................................................
   }
-
-  //........................................................................
 }
 
 

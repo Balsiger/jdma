@@ -8,7 +8,7 @@
               value="WEB-INF/logging.properties" />
     <!-- jdma logging -->
     <property name="logging.level" value="TRACE" />
-    <property name="logging.loggers" value="ANSILogger" />
+    <property name="logging.loggers" value="ANSILogger,JavaLogger" />
     <property name="file.encoding" value="UTF-8" />
     <property name="DEFAULT_ENCODING" value="UTF-8" />
   </system-properties>

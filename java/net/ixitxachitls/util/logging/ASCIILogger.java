@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.util.logging;
 
 import java.io.IOException;
@@ -38,10 +36,6 @@ import net.ixitxachitls.output.WrapBuffer;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * This is the logger to print ASCII messages.
  *
@@ -49,43 +43,27 @@ import net.ixitxachitls.util.configuration.Config;
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @ThreadSafe
 @ParametersAreNonnullByDefault
 public class ASCIILogger implements Logger
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- ASCIILogger ------------------------------
-
   /**
    * Create the logger.
-   *
    */
   public ASCIILogger()
   {
     this(System.out, def_format, def_width);
   }
 
-  //........................................................................
-  //----------------------------- ASCIILogger ------------------------------
-
   /**
    * Create the logger.
    *
    * @param       inStream the stream to print to
-   *
    */
   public ASCIILogger(OutputStream inStream)
   {
     this(inStream, def_format, def_width);
   }
-
-  //........................................................................
-  //----------------------------- ASCIILogger ------------------------------
 
   /**
    * Create the logger.
@@ -97,9 +75,6 @@ public class ASCIILogger implements Logger
   {
     this(System.out, inFormat, def_width);
   }
-
-  //........................................................................
-  //----------------------------- ASCIILogger ------------------------------
 
   /**
    * Create the logger.
@@ -118,12 +93,6 @@ public class ASCIILogger implements Logger
     if(inWidth > 0)
       m_width  = inWidth;
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** Where to print to, defaults to System.out. */
   protected OutputStream m_out;
@@ -158,12 +127,6 @@ public class ASCIILogger implements Logger
   /** The number of digits to use for a year. */
   private static final int s_yearDigits = 4;
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //---------------------------- getWrapBuffer -----------------------------
-
   /**
    * Get a wrap buffer for the given width. This method is mainly used
    * to allow a derivation to add characters to be ignored for wrapping.
@@ -171,18 +134,11 @@ public class ASCIILogger implements Logger
    * @param       inWidth the width of the buffer to create
    *
    * @return      the wrap buffer created
-   *
    */
   protected WrapBuffer getWrapBuffer(int inWidth)
   {
     return new WrapBuffer(inWidth);
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
 
   @Override
   public void close()
@@ -197,18 +153,11 @@ public class ASCIILogger implements Logger
     }
   }
 
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //-------------------------------- print ---------------------------------
-
   /**
    * Print the given message.
    *
    * @param       inText the text to print
    * @param       inType the level of detail to print for
-   *
    */
   @Override
   public void print(String inText, Log.Type inType)
@@ -227,25 +176,17 @@ public class ASCIILogger implements Logger
     }
   }
 
-  //........................................................................
-  //-------------------------------- print ---------------------------------
-
   /**
    * Print the given object.
    *
    * @param       inObject the object to print
    * @param       inType   the type of object printed (logging level)
-   *
    */
   @Override
 public void print(Object inObject, Log.Type inType)
   {
     print(inObject.toString(), inType);
   }
-
-  //........................................................................
-
-  //-------------------------------- format --------------------------------
 
   /**
    * Format the message for printing.
@@ -255,7 +196,6 @@ public void print(Object inObject, Log.Type inType)
    * @param       inFormat  the format of the message to write
    *
    * @return      the formatted string
-   *
    */
   protected String format(@Nullable String inMessage, @Nullable Log.Type inType,
                           String inFormat)
@@ -276,7 +216,6 @@ public void print(Object inObject, Log.Type inType)
    *                        mainly for testing)
    *
    * @return      the formatted string
-   *
    */
   private String format(@Nullable String inMessage, @Nullable Log.Type inType,
                         String inFormat, Calendar inCurrent)
@@ -357,11 +296,7 @@ public void print(Object inObject, Log.Type inType)
     return wrapped.toString();
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //-------------------------------------------------------------------
 
   /** The Test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
