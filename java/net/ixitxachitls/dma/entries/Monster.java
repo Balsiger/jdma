@@ -993,11 +993,9 @@ public class Monster extends CampaignEntry
    */
   public Annotated<Optional<Integer>> getCombinedStrength()
   {
-    Optional<Integer> strength = getStrength();
-    if(strength.isPresent())
-      return new Annotated.Integer(strength.get(), getName());
-
-    Annotated<Optional<Integer>> combined = new Annotated.Integer();
+    Annotated.Integer combined = new Annotated.Integer();
+    if(m_strength.isPresent())
+      combined.add(m_strength.get(), getName());
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedStrength());
 
@@ -1020,17 +1018,14 @@ public class Monster extends CampaignEntry
 
   public Annotated<Optional<Integer>> getCombinedConstitution()
   {
-    Optional<Integer> constitution = getConstitution();
-    if(constitution.isPresent())
-      return new Annotated.Integer(constitution.get(), getName());
-
-    Annotated<Optional<Integer>> combined = new Annotated.Integer();
+    Annotated.Integer combined = new Annotated.Integer();
+    if(m_constitution.isPresent())
+      combined.add(m_constitution.get(), getName());
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedConstitution());
 
     return combined;
   }
-
 
   public int getConstitutionModifier()
   {
@@ -1048,11 +1043,9 @@ public class Monster extends CampaignEntry
 
   public Annotated<Optional<Integer>> getCombinedDexterity()
   {
-    Optional<Integer> dexterity = getDexterity();
-    if(dexterity.isPresent())
-      return new Annotated.Integer(dexterity.get(), getName());
-
-    Annotated<Optional<Integer>> combined = new Annotated.Integer();
+    Annotated.Integer combined = new Annotated.Integer();
+    if(m_dexterity.isPresent())
+      combined.add(m_dexterity.get(), getName());
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedDexterity());
 
@@ -1075,11 +1068,9 @@ public class Monster extends CampaignEntry
 
   public Annotated<Optional<Integer>> getCombinedIntelligence()
   {
-    Optional<Integer> intelligence = getIntelligence();
-    if(intelligence.isPresent())
-      return new Annotated.Integer(intelligence.get(), getName());
-
-    Annotated<Optional<Integer>> combined = new Annotated.Integer();
+    Annotated.Integer combined = new Annotated.Integer();
+    if(m_intelligence.isPresent())
+      combined.add(m_intelligence.get(), getName());
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedIntelligence());
 
@@ -1102,11 +1093,9 @@ public class Monster extends CampaignEntry
 
   public Annotated<Optional<Integer>> getCombinedWisdom()
   {
-    Optional<Integer> wisdom = getWisdom();
-    if(wisdom.isPresent())
-      return new Annotated.Integer(wisdom.get(), getName());
-
-    Annotated<Optional<Integer>> combined = new Annotated.Integer();
+    Annotated.Integer combined = new Annotated.Integer();
+    if(m_wisdom.isPresent())
+      combined.add(m_wisdom.get(), getName());
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedWisdom());
 
@@ -1129,11 +1118,9 @@ public class Monster extends CampaignEntry
 
   public Annotated<Optional<Integer>> getCombinedCharisma()
   {
-    Optional<Integer> charisma = getCharisma();
-    if(charisma.isPresent())
-      return new Annotated.Integer(charisma.get(), getName());
-
-    Annotated<Optional<Integer>> combined = new Annotated.Integer();
+    Annotated.Integer combined = new Annotated.Integer();
+    if(m_charisma.isPresent())
+      combined.add(m_charisma.get(), getName());
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedCharisma());
 

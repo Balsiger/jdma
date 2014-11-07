@@ -201,7 +201,7 @@ util.link = function(inEvent, inTarget, inFunction)
 
   // inform google analytics about this page change
   if(location.hostname != 'localhost')
-    _gaq.push(['_trackPageview', inTarget]);
+    ga('send', 'pageview');
 
   var target = inTarget;
   if(!target.match(/\?/))

@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.List;
@@ -40,17 +38,11 @@ import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.util.Encodings;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * The servlet to save given entries.
  *
  * @file          SaveActionServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
 //..........................................................................
@@ -129,7 +121,7 @@ public class SaveActionServlet extends ActionServlet
     return "gui.info('No changes needed saving'); true";
   }
 
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
     /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
@@ -352,6 +344,4 @@ public class SaveActionServlet extends ActionServlet
 
     //......................................................................
   }
-
-  //........................................................................
 }

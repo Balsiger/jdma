@@ -264,29 +264,25 @@
           ? $entry.DM_notes.get : '' /}
         {param validate: 'non-empty' /}
         {param color: '#008' /}
-      {/call}    
+      {/call}
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Count' /}
         {param value}
-          {if $entry.multiuse.isPresent}
-            {call dma.edit.field_input}
-              {param name: 'multiuse' /}
-              {param value: $entry.multiuse /}
-              {param validate: 'number' /}
-              {param caption: 'uses' /}            
-              {param class: 'narrow' /}
-            {/call}
-          {/if}
-          {if $entry.multiple.isPresent}
-            {call dma.edit.field_input}
-              {param name: 'multiple' /}
-              {param value: $entry.multiple /}
-              {param validate: 'number' /}
-              {param caption: 'copies' /}            
-              {param class: 'narrow' /}
-            {/call}
-          {/if}
+          {call dma.edit.field_input}
+            {param name: 'multiuse' /}
+            {param value: $entry.counted ? $entry.multiuse : '' /}
+            {param validate: 'number' /}
+            {param caption: 'uses' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'multiple' /}
+            {param value: $entry.counted ? $entry.multiple : '' /}
+            {param validate: 'number' /}
+            {param caption: 'copies' /}
+            {param class: 'narrow' /}
+          {/call}
         {/param}
       {/call}
       {call dma.edit.generic_value}
