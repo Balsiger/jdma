@@ -21,6 +21,8 @@
 
 package net.ixitxachitls.dma.entries;
 
+import com.sun.tools.corba.se.idl.toJavaPortable.NameModifier;
+import com.sun.tools.javac.comp.Annotate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,7 +49,32 @@ import net.ixitxachitls.dma.proto.Entries.BaseTimedProto;
 import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.proto.Entries.BaseWearableProto;
 import net.ixitxachitls.dma.proto.Values.RandomDurationProto;
-import net.ixitxachitls.dma.values.*;
+import net.ixitxachitls.dma.values.AggregationState;
+import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.Appearance;
+import net.ixitxachitls.dma.values.Area;
+import net.ixitxachitls.dma.values.AreaShape;
+import net.ixitxachitls.dma.values.ArmorType;
+import net.ixitxachitls.dma.values.CountUnit;
+import net.ixitxachitls.dma.values.ModifierType;
+import net.ixitxachitls.dma.values.NamedModifier;
+import net.ixitxachitls.dma.values.NewCritical;
+import net.ixitxachitls.dma.values.NewDamage;
+import net.ixitxachitls.dma.values.NewDistance;
+import net.ixitxachitls.dma.values.NewDuration;
+import net.ixitxachitls.dma.values.NewModifier;
+import net.ixitxachitls.dma.values.NewMoney;
+import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.NewWeight;
+import net.ixitxachitls.dma.values.Probability;
+import net.ixitxachitls.dma.values.Proficiency;
+import net.ixitxachitls.dma.values.Size;
+import net.ixitxachitls.dma.values.SizeModifier;
+import net.ixitxachitls.dma.values.Slot;
+import net.ixitxachitls.dma.values.Substance;
+import net.ixitxachitls.dma.values.Volume;
+import net.ixitxachitls.dma.values.WeaponStyle;
+import net.ixitxachitls.dma.values.WeaponType;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
@@ -453,16 +480,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Integer> getCombinedHardness()
+  public Annotated<Optional<Integer>> getCombinedHardness()
   {
     if(m_hardness.isPresent())
-      return new Combination.Max<Integer>(this, m_hardness.get());
+      return new Annotated.Max<Integer>(m_hardness.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated.Max<Integer> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedHardness());
+      combined.add(((BaseItem)entry).getCombinedHardness());
 
-    return new Combination.Max<Integer>(this, combinations);
+    return combined;
   }
 
   /**
@@ -480,16 +507,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Integer> getCombinedBreakDC()
+  public Annotated<Optional<Integer>> getCombinedBreakDC()
   {
     if(m_break.isPresent())
-      return new Combination.Max<Integer>(this, m_break.get());
+      return new Annotated.Max<Integer>(m_break.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated.Max<Integer> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedBreakDC());
+      combined.add(((BaseItem)entry).getCombinedBreakDC());
 
-    return new Combination.Max<Integer>(this, combinations);
+    return combined;
   }
 
   /**
@@ -561,16 +588,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Size> getCombinedSize()
+  public Annotated<Optional<Size>> getCombinedSize()
   {
     if(m_size != Size.UNKNOWN)
-      return new Combination.Max<Size>(this, m_size);
+      return new Annotated.Max<Size>(m_size, getName());
 
-    List<Combination<Size>> combinations = new ArrayList<>();
+    Annotated.Max<Size> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedSize());
+      combined.add(((BaseItem)entry).getCombinedSize());
 
-    return new Combination.Max<Size>(this, combinations);
+    return combined;
   }
 
  /**
@@ -588,16 +615,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<SizeModifier> getCombinedSizeModifier()
+  public Annotated<Optional<SizeModifier>> getCombinedSizeModifier()
   {
-    if(m_size != Size.UNKNOWN)
-      return new Combination.Max<SizeModifier>(this, m_sizeModifier);
+    if(m_sizeModifier != SizeModifier.UNKNOWN)
+      return new Annotated.Max<SizeModifier>(m_sizeModifier, getName());
 
-    List<Combination<SizeModifier>> combinations = new ArrayList<>();
+    Annotated.Max<SizeModifier> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedSizeModifier());
+      combined.add(((BaseItem)entry).getCombinedSizeModifier());
 
-    return new Combination.Max<SizeModifier>(this, combinations);
+    return combined;
   }
 
   /**
@@ -615,16 +642,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Substance> getCombinedSubstance()
+  public Annotated<Optional<Substance>> getCombinedSubstance()
   {
     if(m_substance != Substance.UNKNOWN)
-      return new Combination.First<Substance>(this, m_substance);
+      return new Annotated.Max<Substance>(m_substance, getName());
 
-    List<Combination<Substance>> combinations = new ArrayList<>();
+    Annotated.Max<Substance> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedSubstance());
+      combined.add(((BaseItem)entry).getCombinedSubstance());
 
-    return new Combination.First<Substance>(this, combinations);
+    return combined;
   }
 
   /**
@@ -642,16 +669,17 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDistance> getCombinedThickness()
+  public Annotated<Optional<NewDistance>> getCombinedThickness()
   {
     if(m_thickness.isPresent())
-      return new Combination.Max<NewDistance>(this, m_thickness.get());
+      return
+          new Annotated.Arithmetic<NewDistance>(m_thickness.get(), getName());
 
-    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewDistance> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedThickness());
+      combined.add(((BaseItem)entry).getCombinedThickness());
 
-    return new Combination.Max<NewDistance>(this, combinations);
+    return combined;
   }
 
   /**
@@ -669,16 +697,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Probability> getCombinedProbability()
+  public Annotated<Optional<Probability>> getCombinedProbability()
   {
     if(m_probability != Probability.UNKNOWN)
-      return new Combination.Max<Probability>(this, m_probability);
+      return new Annotated.Max<>(m_probability, getName());
 
-    List<Combination<Probability>> combinations = new ArrayList<>();
+    Annotated.Max<Probability> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedProbability());
+      combined.add(((BaseItem) entry).getCombinedProbability());
 
-    return new Combination.Max<Probability>(this, combinations);
+    return combined;
   }
 
   /**
@@ -696,17 +724,17 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<String> getCombinedPlayerName()
+  public Annotated<Optional<String>> getCombinedPlayerName()
   {
     if(m_playerName.isPresent())
-      return new Combination.String(this, m_playerName.get());
+      return new Annotated.String(m_playerName.get(), getName());
 
-    List<Combination<String>> combinations = new ArrayList<>();
-    combinations.add(new Combination.String(this, getName()));
+    Annotated.String combined = new Annotated.String();
+    combined.add(getName(), getName());
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedPlayerName());
+      combined.add(((BaseItem)entry).getCombinedPlayerName());
 
-    return new Combination.String(this, combinations);
+    return combined;
   }
 
   public List<Appearance> getAppearances()
@@ -719,16 +747,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<List<Appearance>> getCombinedAppearances()
+  public Annotated<List<Appearance>> getCombinedAppearances()
   {
     if(!m_appearances.isEmpty())
-      return new Combination.Set<Appearance>(this, m_appearances);
+      return new Annotated.List<Appearance>(m_appearances, getName());
 
-    List<Combination<List<Appearance>>> combinations = new ArrayList<>();
+    Annotated.List<Appearance> combined = new Annotated.List<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedAppearances());
+      combined.add(((BaseItem)entry).getCombinedAppearances());
 
-    return new Combination.Set<Appearance>(combinations, this);
+    return combined;
   }
 
   /**
@@ -776,16 +804,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<CountUnit> getCombinedCountUnit()
+  public Annotated<Optional<CountUnit>> getCombinedCountUnit()
   {
     if(m_countUnit != CountUnit.UNKNOWN)
-      return new Combination.Max<CountUnit>(this, m_countUnit);
+      return new Annotated.Max<>(m_countUnit, getName());
 
-    List<Combination<CountUnit>> combinations = new ArrayList<>();
+    Annotated.Max<CountUnit> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedCountUnit());
+      combined.add(((BaseItem)entry).getCombinedCountUnit());
 
-    return new Combination.Max<CountUnit>(this, combinations);
+    return combined;
   }
 
   /**
@@ -813,16 +841,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination.Integer getCombinedMultiple()
+  public Annotated<Optional<Integer>> getCombinedMultiple()
   {
     if(m_multiple.isPresent())
-      return new Combination.Integer(this, m_multiple.get());
+      return new Annotated.Integer(m_multiple.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated.Integer combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedMultiple());
+      combined.add(((BaseItem)entry).getCombinedMultiple());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   /**
@@ -830,16 +858,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination.Integer getCombinedMultiuse()
+  public Annotated<Optional<Integer>> getCombinedMultiuse()
   {
     if(m_multiuse.isPresent())
-      return new Combination.Integer(this, m_multiuse.get());
+      return new Annotated.Integer(m_multiuse.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated.Integer combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedMultiuse());
+      combined.add(((BaseItem)entry).getCombinedMultiuse());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   /**
@@ -857,16 +885,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<AreaShape> getCombinedLightShape()
+  public Annotated<Optional<AreaShape>> getCombinedLightShape()
   {
     if(m_lightShape != AreaShape.UNKNOWN)
-      return new Combination.Max<AreaShape>(this, m_lightShape);
+      return new Annotated.Max<AreaShape>(m_lightShape, getName());
 
-    List<Combination<AreaShape>> combinations = new ArrayList<>();
+    Annotated.Max<AreaShape> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedLightShape());
+      combined.add(((BaseItem)entry).getCombinedLightShape());
 
-    return new Combination.Max<AreaShape>(this, combinations);
+    return combined;
   }
 
   /**
@@ -885,16 +913,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDistance> getCombinedBrightLight()
+  public Annotated<Optional<NewDistance>> getCombinedBrightLight()
   {
     if(m_brightLight.isPresent())
-      return new Combination.Max<NewDistance>(this, m_brightLight.get());
+      return new Annotated.Max<NewDistance>(m_brightLight.get(), getName());
 
-    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    Annotated.Max<NewDistance> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedBrightLight());
+      combined.add(((BaseItem)entry).getCombinedBrightLight());
 
-    return new Combination.Max<NewDistance>(this, combinations);
+    return combined;
   }
 
   /**
@@ -913,16 +941,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDistance> getCombinedShadowyLight()
+  public Annotated<Optional<NewDistance>> getCombinedShadowyLight()
   {
     if(m_shadowyLight.isPresent())
-      return new Combination.Max<NewDistance>(this, m_shadowyLight.get());
+      return new Annotated.Max<NewDistance>(m_shadowyLight.get(), getName());
 
-    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    Annotated.Max<NewDistance> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedShadowyLight());
+      combined.add(((BaseItem)entry).getCombinedShadowyLight());
 
-    return new Combination.Max<NewDistance>(this, combinations);
+    return combined;
   }
 
   /**
@@ -940,17 +968,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<List<NamedModifier>> getCombinedMagicalModifiers()
+  public Annotated<List<NamedModifier>> getCombinedMagicalModifiers()
   {
-    List<Combination<List<NamedModifier>>> combinations = new ArrayList<>();
+    Annotated.List<NamedModifier> combined = new Annotated.List<>();
     if(!m_magicalModifiers.isEmpty())
-      combinations.add
-      (new Combination.List<NamedModifier>(this, m_magicalModifiers));
+      combined.add(m_magicalModifiers, getName());
 
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedMagicalModifiers());
+      combined.add(((BaseItem)entry).getCombinedMagicalModifiers());
 
-    return new Combination.List<NamedModifier>(combinations, this);
+    return combined;
   }
 
   /**
@@ -969,16 +996,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDuration> getCombinedTimed()
+  public Annotated<Optional<NewDuration>> getCombinedTimed()
   {
     if(m_timed.isPresent())
-      return new Combination.Min<NewDuration>(this, m_timed.get());
+      return new Annotated.Min<NewDuration>(m_timed.get(), getName());
 
-    List<Combination<NewDuration>> combinations = new ArrayList<>();
+    Annotated.Min<NewDuration> combined = new Annotated.Min<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedTimed());
+      combined.add(((BaseItem)entry).getCombinedTimed());
 
-    return new Combination.Min<NewDuration>(this, combinations);
+    return combined;
   }
 
   /**
@@ -996,16 +1023,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDamage> getCombinedDamage()
+  public Annotated<Optional<NewDamage>> getCombinedDamage()
   {
     if(m_damage.isPresent())
-      return new Combination.Arithmetic<NewDamage>(this, m_damage.get());
+      return new Annotated.Arithmetic<NewDamage>(m_damage.get(), getName());
 
-    List<Combination<NewDamage>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewDamage> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedDamage());
+      combined.add(((BaseItem)entry).getCombinedDamage());
 
-    return new Combination.Arithmetic<NewDamage>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1024,16 +1051,17 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDamage> getCombinedSecondaryDamage()
+  public Annotated<Optional<NewDamage>> getCombinedSecondaryDamage()
   {
     if(m_secondaryDamage.isPresent())
-      return new Combination.Arithmetic<NewDamage>(this, m_secondaryDamage.get());
+      return new Annotated.Arithmetic<NewDamage>(m_secondaryDamage.get(),
+                                                 getName());
 
-    List<Combination<NewDamage>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewDamage> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedSecondaryDamage());
+      combined.add(((BaseItem)entry).getCombinedSecondaryDamage());
 
-    return new Combination.Arithmetic<NewDamage>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1052,16 +1080,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDamage> getCombinedSplash()
+  public Annotated<Optional<NewDamage>> getCombinedSplash()
   {
     if(m_splash.isPresent())
-      return new Combination.Arithmetic<NewDamage>(this, m_splash.get());
+      return new Annotated.Arithmetic<NewDamage>(m_splash.get(), getName());
 
-    List<Combination<NewDamage>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewDamage> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedSplash());
+      combined.add(((BaseItem)entry).getCombinedSplash());
 
-    return new Combination.Arithmetic<NewDamage>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1079,16 +1107,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the maximal weapon type
    */
-  public Combination<WeaponType> getCombinedWeaponType()
+  public Annotated<Optional<WeaponType>> getCombinedWeaponType()
   {
     if(m_weaponType != WeaponType.UNKNOWN)
-      return new Combination.Max<WeaponType>(this, m_weaponType);
+      return new Annotated.Max<WeaponType>(m_weaponType, getName());
 
-    List<Combination<WeaponType>> combinations = new ArrayList<>();
+    Annotated.Max<WeaponType> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedWeaponType());
+      combined.add(((BaseItem)entry).getCombinedWeaponType());
 
-    return new Combination.Max<WeaponType>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1106,16 +1134,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the maximal weapon style
    */
-  public Combination<WeaponStyle> getCombinedWeaponStyle()
+  public Annotated<Optional<WeaponStyle>> getCombinedWeaponStyle()
   {
     if(m_style!= WeaponStyle.UNKNOWN)
-      return new Combination.Max<WeaponStyle>(this, m_style);
+      return new Annotated.Max<WeaponStyle>(m_style, getName());
 
-    List<Combination<WeaponStyle>> combinations = new ArrayList<>();
+    Annotated.Max<WeaponStyle> combined = new Annotated.Max<>();
     for(BaseEntry entry : this.getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedWeaponStyle());
+      combined.add(((BaseItem)entry).getCombinedWeaponStyle());
 
-    return new Combination.Max<WeaponStyle>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1133,16 +1161,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the maximal weapon style
    */
-  public Combination<Proficiency> getCombinedProficiency()
+  public Annotated<Optional<Proficiency>> getCombinedProficiency()
   {
     if(m_proficiency != Proficiency.UNKNOWN)
-      return new Combination.Max<Proficiency>(this, m_proficiency);
+      return new Annotated.Max<Proficiency>(m_proficiency, getName());
 
-    List<Combination<Proficiency>> combinations = new ArrayList<>();
+    Annotated.Max<Proficiency> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedProficiency());
+      combined.add(((BaseItem)entry).getCombinedProficiency());
 
-    return new Combination.Max<Proficiency>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1161,16 +1189,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDistance> getCombinedRange()
+  public Annotated<Optional<NewDistance>> getCombinedRange()
   {
     if(m_range.isPresent())
-      return new Combination.Min<NewDistance>(this, m_range.get());
+      return new Annotated.Min<NewDistance>(m_range.get(), getName());
 
-    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    Annotated.Min<NewDistance> combined = new Annotated.Min<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedRange());
+      combined.add(((BaseItem)entry).getCombinedRange());
 
-    return new Combination.Min<NewDistance>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1189,16 +1217,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDistance> getCombinedReach()
+  public Annotated<Optional<NewDistance>> getCombinedReach()
   {
     if(m_reach.isPresent())
-      return new Combination.Min<NewDistance>(this, m_reach.get());
+      return new Annotated.Min<NewDistance>(m_reach.get(), getName());
 
-    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    Annotated.Min<NewDistance> combined = new Annotated.Min<>();
     for(BaseEntry entry : getBaseEntries())
-        combinations.add(((BaseItem)entry).getCombinedReach());
+      combined.add(((BaseItem) entry).getCombinedReach());
 
-    return new Combination.Min<NewDistance>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1217,16 +1245,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Integer> getCombinedMaxAttacks()
+  public Annotated<Optional<Integer>> getCombinedMaxAttacks()
   {
     if(m_maxAttacks.isPresent())
-      return new Combination.Min<Integer>(this, m_maxAttacks.get());
+      return new Annotated.Min<Integer>(m_maxAttacks.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated.Min<Integer> combined = new Annotated.Min<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedMaxAttacks());
+      combined.add(((BaseItem) entry).getCombinedMaxAttacks());
 
-    return new Combination.Min<Integer>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1245,16 +1273,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewCritical> getCombinedCritical()
+  public Annotated<Optional<NewCritical>> getCombinedCritical()
   {
     if(m_critical.isPresent())
-      return new Combination.Arithmetic<NewCritical>(this, m_critical.get());
+      return new Annotated.Arithmetic<NewCritical>(m_critical.get(), getName());
 
-    List<Combination<NewCritical>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewCritical> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedCritical());
+      combined.add(((BaseItem)entry).getCombinedCritical());
 
-    return new Combination.Arithmetic<NewCritical>(this, combinations);
+    return combined;
   }
 
   public boolean isAmmunition() {
@@ -1283,16 +1311,17 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewModifier> getCombinedArmorBonus()
+  public Annotated<Optional<NewModifier>> getCombinedArmorBonus()
   {
     if(m_armorBonus.isPresent())
-      return new Combination.Arithmetic<NewModifier>(this, m_armorBonus.get());
+      return new Annotated.Arithmetic<NewModifier>(m_armorBonus.get(),
+                                                   getName());
 
-    List<Combination<NewModifier>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewModifier> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedArmorBonus());
+      combined.add(((BaseItem)entry).getCombinedArmorBonus());
 
-    return new Combination.Arithmetic<NewModifier>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1310,16 +1339,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<ArmorType> getCombinedArmorType()
+  public Annotated<Optional<ArmorType>> getCombinedArmorType()
   {
     if(m_armorType != ArmorType.UNKNOWN)
-      return new Combination.Max<ArmorType>(this, m_armorType);
+      return new Annotated.Max<ArmorType>(m_armorType, getName());
 
-    List<Combination<ArmorType>> combinations = new ArrayList<>();
+    Annotated.Max<ArmorType> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedArmorType());
+      combined.add(((BaseItem)entry).getCombinedArmorType());
 
-    return new Combination.Max<ArmorType>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1337,16 +1366,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Integer> getCombinedMaxDex()
+  public Annotated<Optional<Integer>> getCombinedMaxDex()
   {
     if(m_maxDex.isPresent())
-      return new Combination.Min<Integer>(this, m_maxDex.get());
+      return new Annotated.Min<Integer>(m_maxDex.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated<Optional<Integer>> combined = new Annotated.MinBonus<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedMaxDex());
+      combined.add(((BaseItem)entry).getCombinedMaxDex());
 
-    return new Combination.Min<Integer>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1364,16 +1393,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Integer> getCombinedCheckPenalty()
+  public Annotated<Optional<Integer>> getCombinedCheckPenalty()
   {
     if(m_checkPenalty.isPresent())
-      return new Combination.Integer(this, m_checkPenalty.get());
+      return new Annotated.MaxBonus<Integer>(m_checkPenalty.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated.MaxBonus<Integer> combined = new Annotated.MaxBonus<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedCheckPenalty());
+      combined.add(((BaseItem)entry).getCombinedCheckPenalty());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   /**
@@ -1391,16 +1420,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Integer> getCombinedArcaneFailure()
+  public Annotated<Optional<Integer>> getCombinedArcaneFailure()
   {
     if(m_arcane.isPresent())
-      return new Combination.Integer(this, m_arcane.get());
+      return new Annotated.Integer(m_arcane.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated.Integer combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedArcaneFailure());
+      combined.add(((BaseItem)entry).getCombinedArcaneFailure());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   /**
@@ -1418,16 +1447,17 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDistance> getCombinedSlowSpeed()
+  public Annotated<Optional<NewDistance>> getCombinedSlowSpeed()
   {
     if(m_speedSlow.isPresent())
-      return new Combination.Arithmetic<NewDistance>(this, m_speedSlow.get());
+      return new Annotated.Arithmetic<NewDistance>(m_speedSlow.get(),
+                                                   getName());
 
-    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewDistance> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedSlowSpeed());
+      combined.add(((BaseItem)entry).getCombinedSlowSpeed());
 
-    return new Combination.Arithmetic<NewDistance>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1445,16 +1475,17 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDistance> getCombinedFastSpeed()
+  public Annotated<Optional<NewDistance>> getCombinedFastSpeed()
   {
     if(m_speedFast.isPresent())
-      return new Combination.Arithmetic<NewDistance>(this, m_speedFast.get());
+      return new Annotated.Arithmetic<NewDistance>(m_speedFast.get(),
+                                                   getName());
 
-    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewDistance> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedFastSpeed());
+      combined.add(((BaseItem)entry).getCombinedFastSpeed());
 
-    return new Combination.Arithmetic<NewDistance>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1472,16 +1503,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Area> getCombinedArea()
+  public Annotated<Optional<Area>> getCombinedArea()
   {
     if(m_area.isPresent())
-      return new Combination.Arithmetic<Area>(this, m_area.get());
+      return new Annotated.Arithmetic<Area>(m_area.get(), getName());
 
-    List<Combination<Area>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<Area> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedArea());
+      combined.add(((BaseItem)entry).getCombinedArea());
 
-    return new Combination.Arithmetic<Area>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1499,16 +1530,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDistance> getCombinedLength()
+  public Annotated<Optional<NewDistance>> getCombinedLength()
   {
     if(m_length.isPresent())
-      return new Combination.Arithmetic<NewDistance>(this, m_length.get());
+      return new Annotated.Arithmetic<NewDistance>(m_length.get(), getName());
 
-    List<Combination<NewDistance>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewDistance> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedLength());
+      combined.add(((BaseItem)entry).getCombinedLength());
 
-    return new Combination.Arithmetic<NewDistance>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1526,16 +1557,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Volume> getCombinedCapacity()
+  public Annotated<Optional<Volume>> getCombinedCapacity()
   {
     if(m_capacity.isPresent())
-      return new Combination.Arithmetic<Volume>(this, m_capacity.get());
+      return new Annotated.Arithmetic<Volume>(m_capacity.get(), getName());
 
-    List<Combination<Volume>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<Volume> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedCapacity());
+      combined.add(((BaseItem)entry).getCombinedCapacity());
 
-    return new Combination.Arithmetic<Volume>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1553,16 +1584,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<AggregationState> getCombinedState()
+  public Annotated<Optional<AggregationState>> getCombinedState()
   {
     if(m_state != AggregationState.UNKNOWN)
-      return new Combination.Max<AggregationState>(this, m_state);
+      return new Annotated.Max<AggregationState>(m_state, getName());
 
-    List<Combination<AggregationState>> combinations = new ArrayList<>();
+    Annotated.Max<AggregationState> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedState());
+      combined.add(((BaseItem)entry).getCombinedState());
 
-    return new Combination.Max<AggregationState>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1580,16 +1611,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<Slot> getCombinedSlot()
+  public Annotated<Optional<Slot>> getCombinedSlot()
   {
     if(m_slot != Slot.UNKNOWN)
-      return new Combination.Max<Slot>(this, m_slot);
+      return new Annotated.Max<Slot>(m_slot, getName());
 
-    List<Combination<Slot>> combinations = new ArrayList<>();
+    Annotated.Max<Slot> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedSlot());
+      combined.add(((BaseItem)entry).getCombinedSlot());
 
-    return new Combination.Max<Slot>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1608,16 +1639,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDuration> getCombinedDon()
+  public Annotated<Optional<NewDuration>> getCombinedDon()
   {
     if(m_don.isPresent())
-      return new Combination.Arithmetic<NewDuration>(this, m_don.get());
+      return new Annotated.Arithmetic<NewDuration>(m_don.get(), getName());
 
-    List<Combination<NewDuration>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewDuration> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedDon());
+      combined.add(((BaseItem)entry).getCombinedDon());
 
-    return new Combination.Arithmetic<NewDuration>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1636,16 +1667,17 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDuration> getCombinedDonHastily()
+  public Annotated<Optional<NewDuration>> getCombinedDonHastily()
   {
     if(m_donHastily.isPresent())
-      return new Combination.Arithmetic<NewDuration>(this, m_donHastily.get());
+      return new Annotated.Arithmetic<NewDuration>(m_donHastily.get(),
+                                                   getName());
 
-    List<Combination<NewDuration>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewDuration> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedDonHastily());
+      combined.add(((BaseItem)entry).getCombinedDonHastily());
 
-    return new Combination.Arithmetic<NewDuration>(this, combinations);
+    return combined;
   }
 
   /**
@@ -1664,16 +1696,16 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<NewDuration> getCombinedRemove()
+  public Annotated<Optional<NewDuration>> getCombinedRemove()
   {
     if(m_remove.isPresent())
-      return new Combination.Arithmetic<NewDuration>(this, m_remove.get());
+      return new Annotated.Arithmetic<NewDuration>(m_remove.get(), getName());
 
-    List<Combination<NewDuration>> combinations = new ArrayList<>();
+    Annotated.Arithmetic<NewDuration> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : this.getBaseEntries())
-      combinations.add(((BaseItem)entry).getCombinedRemove());
+      combined.add(((BaseItem)entry).getCombinedRemove());
 
-    return new Combination.Arithmetic<NewDuration>(this, combinations);
+    return combined;
   }
 
  /**

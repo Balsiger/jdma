@@ -73,6 +73,24 @@ public abstract class Annotated<V>
     }
   }
 
+  public static class MinBonus<V extends Comparable<V>> extends Min<V>
+  {
+    public MinBonus()
+    {
+    }
+
+    public MinBonus(V inValue, java.lang.String inSource)
+    {
+      super(inValue, inSource);
+    }
+
+    @Override
+    public boolean showSign()
+    {
+      return true;
+    }
+  }
+
   public static class Max<V extends Comparable<V>>
     extends Annotated<Optional<V>>
   {
@@ -113,6 +131,24 @@ public abstract class Annotated<V>
     }
   }
 
+  public static class MaxBonus<V extends Comparable<V>> extends Max<V>
+  {
+    public MaxBonus()
+    {
+    }
+
+    public MaxBonus(V inValue, java.lang.String inSource)
+    {
+      super(inValue, inSource);
+    }
+
+    @Override
+    public boolean showSign()
+    {
+      return true;
+    }
+  }
+
   public static class String extends Annotated<Optional<java.lang.String>>
   {
     public String()
@@ -137,8 +173,8 @@ public abstract class Annotated<V>
 
       if(!m_value.isPresent())
         m_value = inValue;
-
-      m_value = Optional.of(m_value.get() + " " + inValue.get());
+      else
+        m_value = Optional.of(m_value.get() + " " + inValue.get());
     }
 
     @Override

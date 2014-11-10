@@ -47,8 +47,6 @@ public enum AggregationState implements EnumSelection.Named,
 
   /** Made of glass. */
   GASEOUS("gaseous", "gas", BaseContainerProto.State.GASEOUS);
-
-  /** The value's name. */
   private final String m_name;
 
   /** The short name. */
