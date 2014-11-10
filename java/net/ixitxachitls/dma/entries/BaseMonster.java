@@ -39,7 +39,6 @@ import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Values.SpeedProto;
 import net.ixitxachitls.dma.values.Annotated;
-import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.NewDamage;
 import net.ixitxachitls.dma.values.NewDice;
@@ -1019,17 +1018,17 @@ public class BaseMonster extends BaseEntry
     return m_levelAdjustment;
   }
 
-  public Combination<Integer> getCombinedLevelAdjustment()
+  public Annotated<Optional<Integer>> getCombinedLevelAdjustment()
   {
     Optional<Integer> adjustment = getLevelAdjustment();
     if(adjustment.isPresent())
-      return new Combination.Integer(this, adjustment.get());
+      return new Annotated.Integer(adjustment.get(), getName());
 
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated.Integer combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedLevelAdjustment());
+      combined.add(((BaseMonster)entry).getCombinedLevelAdjustment());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public List<LanguageOption> getLanguages()

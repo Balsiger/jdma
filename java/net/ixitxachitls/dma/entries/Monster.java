@@ -39,7 +39,6 @@ import net.ixitxachitls.dma.proto.Entries.MonsterProto;
 import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
 import net.ixitxachitls.dma.values.Annotated;
-import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.NewModifier;
 import net.ixitxachitls.dma.values.NewValue;
@@ -1136,13 +1135,13 @@ public class Monster extends CampaignEntry
     return abilityModifier(charisma.get());
   }
 
-  public Combination<Integer> getCombinedLevelAdjustment()
+  public Annotated<Optional<Integer>> getCombinedLevelAdjustment()
   {
-    List<Combination<Integer>> combinations = new ArrayList<>();
+    Annotated.Integer combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(((BaseMonster)entry).getCombinedLevelAdjustment());
+      combined.add(((BaseMonster)entry).getCombinedLevelAdjustment());
 
-    return new Combination.Integer(this, combinations);
+    return combined;
   }
 
   public Annotated<Optional<Size>> getCombinedSize()

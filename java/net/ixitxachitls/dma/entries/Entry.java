@@ -23,7 +23,6 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -36,7 +35,6 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.EntryProto;
 import net.ixitxachitls.dma.values.Annotated;
-import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.ID;
 import net.ixitxachitls.dma.values.ProductReference;
 import net.ixitxachitls.util.logging.Log;
@@ -46,7 +44,6 @@ import net.ixitxachitls.util.logging.Log;
  *
  * @file          Entry.java
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- * @param         <B> the type of base entry associated with this entry
  */
 
 @ParametersAreNonnullByDefault
@@ -123,13 +120,13 @@ public abstract class Entry extends AbstractEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<String> getCombinedIncomplete()
+  public Annotated<Optional<String>> getCombinedIncomplete()
   {
-    List<Combination<String>> combinations = new ArrayList<>();
+    Annotated.String combined = new Annotated.String();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(entry.getCombinedIncomplete());
+      combined.add(entry.getCombinedIncomplete());
 
-    return new Combination.String(this, combinations);
+    return combined;
   }
 
   /**
@@ -138,13 +135,13 @@ public abstract class Entry extends AbstractEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<List<ProductReference>> getCombinedReferences()
+  public Annotated<List<ProductReference>> getCombinedReferences()
   {
-    List<Combination<List<ProductReference>>> combinations = new ArrayList<>();
+    Annotated.List<ProductReference> combined = new Annotated.List<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(entry.getCombinedReferences());
+      combined.add(entry.getCombinedReferences());
 
-    return new Combination.Set<ProductReference>(combinations, this);
+    return combined;
   }
 
   public BaseEntry getBaseEntry()

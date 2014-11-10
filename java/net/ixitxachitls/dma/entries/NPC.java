@@ -146,7 +146,11 @@ public class NPC extends Monster
   public int getEffectiveCharacterLevel()
   {
     int levels = m_levels.size();
-    levels += getCombinedLevelAdjustment().getValue();
+
+    Optional<Integer> levelAdjustment = getCombinedLevelAdjustment().get();
+    if(levelAdjustment.isPresent())
+      levels += levelAdjustment.get();
+
     return levels;
   }
 

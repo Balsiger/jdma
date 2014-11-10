@@ -37,7 +37,6 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.values.Annotated;
-import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.ProductReference;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -323,17 +322,16 @@ public class BaseEntry extends AbstractEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<List<ProductReference>> getCombinedReferences()
+  public Annotated<List<ProductReference>> getCombinedReferences()
   {
-    List<Combination<List<ProductReference>>> combinations = new ArrayList<>();
+    Annotated.List<ProductReference> combined = new Annotated.List<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(entry.getCombinedReferences());
+      combined.add(entry.getCombinedReferences());
 
-    if(m_references.isEmpty())
-      return new Combination.Set<ProductReference>(combinations, this);
+    if(!m_references.isEmpty())
+      combined.add(m_references, getName());
 
-    return new Combination.Set<ProductReference>(this, m_references,
-                                                 combinations);
+    return combined;
   }
 
   /**
@@ -352,16 +350,16 @@ public class BaseEntry extends AbstractEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<List<String>> getCombinedCategories()
+  public Annotated<List<String>> getCombinedCategories()
   {
-    List<Combination<List<String>>> combinations = new ArrayList<>();
+    Annotated.List<String> combined = new Annotated.List<>();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(entry.getCombinedCategories());
+      combined.add(entry.getCombinedCategories());
 
-    if(m_categories.isEmpty())
-      return new Combination.Set<String>(combinations, this);
+    if(!m_categories.isEmpty())
+      combined.add(m_categories, getName());
 
-    return new Combination.Set<String>(this, m_categories, combinations);
+    return combined;
   }
 
   /**
@@ -379,16 +377,16 @@ public class BaseEntry extends AbstractEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Combination<String> getCombinedIncomplete()
+  public Annotated<Optional<String>> getCombinedIncomplete()
   {
-    List<Combination<String>> combinations = new ArrayList<>();
+    Annotated.String combined = new Annotated.String();
     for(BaseEntry entry : getBaseEntries())
-      combinations.add(entry.getCombinedIncomplete());
+      combined.add(entry.getCombinedIncomplete());
 
-    if(m_incomplete.isEmpty())
-      return new Combination.String(this, combinations);
+    if(!m_incomplete.isEmpty())
+      combined.add(m_incomplete, getName());
 
-    return new Combination.String(this, m_incomplete, combinations);
+    return combined;
   }
 
   @Override
