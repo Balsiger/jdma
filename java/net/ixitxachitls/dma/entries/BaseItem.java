@@ -21,8 +21,6 @@
 
 package net.ixitxachitls.dma.entries;
 
-import com.sun.tools.corba.se.idl.toJavaPortable.NameModifier;
-import com.sun.tools.javac.comp.Annotate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

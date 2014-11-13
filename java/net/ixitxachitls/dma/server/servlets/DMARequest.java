@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.Collection;
@@ -49,38 +47,22 @@ import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * A wrapper around an http request for DMA purposes, with enhanced data.
  *
  * @file          DMARequest.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
 
 // from base class
 @ParametersAreNonnullByDefault
 public class DMARequest extends HttpServletRequestWrapper
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------ DMARequest ------------------------------
-
   /**
    * A request wrapper for dma requests.
    *
    * @param       inRequest the request to be wrapped
    * @param       inParams  the parameters to the request (URL & post)
-   *
    */
   public DMARequest(HttpServletRequest inRequest,
                     Multimap<String, String> inParams)
@@ -93,12 +75,6 @@ public class DMARequest extends HttpServletRequestWrapper
 //     extractDM(inRequest);
 //     extractPlayer(inRequest);
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   static
   {
@@ -132,10 +108,6 @@ public class DMARequest extends HttpServletRequestWrapper
 
   /** The attribute to use for the original path. */
   public static final String ORIGINAL_PATH = "originalPath";
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
 
   @Override
   public String toString()
@@ -174,42 +146,31 @@ public class DMARequest extends HttpServletRequestWrapper
    * Check if the request has a player associated with it.
    *
    * @return      true if there is a player, false if not
- V  */
+   */
 //   public boolean hasPlayer()
 //   {
 //     return m_player != null;
 //   }
 
-  //........................................................................
-  //-------------------------------- hasDM ---------------------------------
-
   /**
    * Check if the request has a DM associated with it.
    *
    * @return      true if there is a DM, false if not
-   *
    */
 //   public boolean hasDM()
 //   {
 //     return m_dm != null;
 //   }
 
-  //........................................................................
-  //----------------------------- hasCampaign ------------------------------
-
   /**
    * Check if the request has a campaign associated with it.
    *
    * @return      true if there is a campaign, false if not
-   *
    */
 //   public boolean hasCampaign()
 //   {
 //     return m_campaign != null;
 //   }
-
-  //........................................................................
-  //------------------------------- hasParam -------------------------------
 
   /**
    * Check if the request has a given parameter.
@@ -217,58 +178,31 @@ public class DMARequest extends HttpServletRequestWrapper
    * @param       inName the name of the parameter to check for
    *
    * @return      true if the parameter is there, false if not
-   *
    */
   public boolean hasParam(String inName)
   {
     return getParam(inName) != null;
   }
 
-  //........................................................................
-  //--------------------------- hasCreateParam -----------------------------
-
-  /**
-   * Check if the request has a given create parameter.
-   *
-   * @return      true if the parameter is there, false if not
-   *
-   */
-//   public boolean hasCreateParam()
-//   {
-//     return m_params.get("create") != null;
-//   }
-
-  //........................................................................
-  //---------------------------- hasAdminParam -----------------------------
-
   /**
    * Check if the request has an admin parameter.
    *
    * @return      true if the admin parameter is there, false if not
-   *
    */
 //   public boolean hasAdminParam()
 //   {
 //     return m_params.get("admin") != null;
 //   }
 
-  //........................................................................
-  //------------------------------ isBodyOnly ------------------------------
-
   /**
    * Check if the request should only return the body of a page.
    *
    * @return      true for the body, false for full page
-   *
    */
   public boolean isBodyOnly()
   {
     return hasParam("body");
   }
-
-  //........................................................................
-
-  //------------------------------ getParam --------------------------------
 
   /**
    * Get the first value given for a key.
@@ -276,7 +210,6 @@ public class DMARequest extends HttpServletRequestWrapper
    * @param       inName the name of the parameter to get
    *
    * @return      the value of the parameter or null if not found
-   *
    */
   public @Nullable String getParam(String inName)
   {
@@ -288,9 +221,6 @@ public class DMARequest extends HttpServletRequestWrapper
     return values.iterator().next();
   }
 
-  //........................................................................
-  //------------------------------ getParam --------------------------------
-
   /**
    * Get the first value given for a key as an integer.
    *
@@ -298,7 +228,6 @@ public class DMARequest extends HttpServletRequestWrapper
    * @param       inDefault the value to return if it is not present
    *
    * @return      the value of the parameter or null if not found
-   *
    */
   public @Nullable int getParam(String inName, int inDefault)
   {
@@ -317,22 +246,15 @@ public class DMARequest extends HttpServletRequestWrapper
     return inDefault;
   }
 
-  //........................................................................
-  //------------------------------ getParams -------------------------------
-
   /**
    * Get all the paramaters.
    *
    * @return      all the parameters
-   *
    */
   public Multimap<String, String> getParams()
   {
     return m_params;
   }
-
-  //........................................................................
-  //------------------------------ getStart --------------------------------
 
   /**
    * Get the start and end indexes for the page.
@@ -345,22 +267,15 @@ public class DMARequest extends HttpServletRequestWrapper
     return getParam("start", 0);
   }
 
-  //........................................................................
-  //--------------------------- getURLParamNames ---------------------------
-
   /**
    * Get all the keys of all the URL paramters.
    *
    * @return      a set of all URL parameter names
-   *
    */
 //   public Set<String> getURLParamNames()
 //   {
 //     return m_params.keySet();
 //   }
-
-  //........................................................................
-  //----------------------------- getPageSize ------------------------------
 
   /**
    * Gets the page size.
@@ -373,21 +288,14 @@ public class DMARequest extends HttpServletRequestWrapper
     return getParam("size", def_pageSize);
   }
 
-  //........................................................................
-  //----------------------------- getCampaign ------------------------------
-
   /**
    * Get the campaign for the request.
-   *
    */
 //   @MayReturnNull
 //   public Campaign getCampaign()
 //   {
 //     return m_campaign;
 //   }
-
-  //........................................................................
-  //------------------------------- getUser --------------------------------
 
   /**
    * Get the user for the request.
@@ -400,7 +308,7 @@ public class DMARequest extends HttpServletRequestWrapper
     Tracer tracer = new Tracer("getting user");
     extractUser();
 
-    // only admin are allows to do that
+    // only admins are allows to override users
     if(m_userOverride.isPresent() && hasUser()
        && m_user.get().hasAccess(BaseCharacter.Group.ADMIN))
       return m_userOverride;
@@ -409,23 +317,16 @@ public class DMARequest extends HttpServletRequestWrapper
     return m_user;
   }
 
-  //........................................................................
-  //------------------------------- getUser --------------------------------
-
   /**
    * Get the real user for the request.
    *
    * @return the currently logged in user
-   *
    */
   public Optional<BaseCharacter> getRealUser()
   {
     extractUser();
     return m_user;
   }
-
-  //........................................................................
-  //------------------------------ getPlayer -------------------------------
 
   /**
    * Get the player for the request.
@@ -437,12 +338,8 @@ public class DMARequest extends HttpServletRequestWrapper
 //     return m_player;
 //   }
 
-  //........................................................................
-  //-------------------------------- getDM ---------------------------------
-
   /**
    * Get the dm for the request.
-   *
    */
 //   @MayReturnNull
 //   public BaseCharacter getDM()
@@ -450,14 +347,10 @@ public class DMARequest extends HttpServletRequestWrapper
 //     return m_dm;
 //   }
 
-  //........................................................................
-  //--------------------------- getOriginalPath ----------------------------
-
   /**
    * Get the original path of the request.
    *
    * @return  the original path
-   *
    */
   public String getOriginalPath()
   {
@@ -468,9 +361,6 @@ public class DMARequest extends HttpServletRequestWrapper
     return getRequestURI();
   }
 
-  //........................................................................
-  //------------------------------- getEntry -------------------------------
-
   /**
    * Get a cached entry from the request.
    *
@@ -478,7 +368,6 @@ public class DMARequest extends HttpServletRequestWrapper
    * @param       <T>   the type of entry to get
    *
    * @return      the entry found or null if none stored
-   *
    */
   @SuppressWarnings("unchecked") // need to cast result
   public @Nullable <T extends AbstractEntry> T getEntry(EntryKey inKey)
@@ -489,15 +378,11 @@ public class DMARequest extends HttpServletRequestWrapper
     return (T)m_entries.get(inKey);
   }
 
-  //........................................................................
-  //--------------------------- timeIsRunningOUt ---------------------------
-
   /**
    * Check if the time for the request is running out. There is a time limit
-   * of 60s on an appengine request.
+   * of 60s on an app engine request.
    *
    * @return true if time is running out, false if not
-   *
    */
   public boolean timeIsRunningOut()
   {
@@ -507,21 +392,9 @@ public class DMARequest extends HttpServletRequestWrapper
     return ApiProxy.getCurrentEnvironment().getRemainingMillis() < 10000;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //----------------------------- extractUser ------------------------------
-
   /**
    * Get the email address from the AppEngine UserService and
    * lookup a matching BaseCharacter in the DMAData.
-   *
    */
   public void extractUser()
   {
@@ -531,10 +404,6 @@ public class DMARequest extends HttpServletRequestWrapper
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn())
     {
-      // TODO: this is the old email format!
-      m_user = Optional.fromNullable(DMADataFactory.get()
-          .getEntry(BaseCharacter.TYPE, "email", new Text(userService
-              .getCurrentUser().getEmail()).toString()));
       if (!m_user.isPresent())
         m_user = Optional.fromNullable(DMADataFactory.get()
           .getEntry(BaseCharacter.TYPE, "email",
@@ -551,14 +420,10 @@ public class DMARequest extends HttpServletRequestWrapper
     m_extractedUser = true;
   }
 
-  //........................................................................
-  //--------------------------- extractCampaign ----------------------------
-
   /**
    * Extract the campaign from the request, if any.
    *
    * @param       inRequest the request to process
-   *
    */
 //   public void extractCampaign(HttpServletRequest inRequest)
 //   {
@@ -574,14 +439,10 @@ public class DMARequest extends HttpServletRequestWrapper
 //     m_campaign = m_campaigns.getEntry(id, Campaign.TYPE);
 //   }
 
-  //........................................................................
-  //------------------------------ extractDM -------------------------------
-
   /**
    * Extract the DM from the request, if any.
    *
    * @param       inRequest the request to process
-   *
    */
 //   public void extractDM(HttpServletRequest inRequest)
 //   {
@@ -592,14 +453,10 @@ public class DMARequest extends HttpServletRequestWrapper
 //       m_dm = m_user;
 //   }
 
-  //........................................................................
-  //---------------------------- extractPlayer -----------------------------
-
   /**
    * Extract the player from the request, if any.
    *
    * @param       inRequest the request to process
-   *
    */
 //   public void extractPlayer(HttpServletRequest inRequest)
 //   {
@@ -627,13 +484,8 @@ public class DMARequest extends HttpServletRequestWrapper
 //       m_player = null;
 //   }
 
-  //........................................................................
-
-  //----------------------------- ensureTypes ------------------------------
-
   /**
    * Make sure all the types are properly loaded.
-   *
    */
   public static void ensureTypes()
   {
@@ -677,18 +529,11 @@ public class DMARequest extends HttpServletRequestWrapper
       Log.warning("could not properly initialize npc type");
   }
 
-  //........................................................................
-
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
-    //----- init -----------------------------------------------------------
-
     /** The init Test. */
     @org.junit.Test
     public void init()
@@ -707,9 +552,6 @@ public class DMARequest extends HttpServletRequestWrapper
 
       EasyMock.verify(mockRequest);
     }
-
-    //......................................................................
-    //----- user -----------------------------------------------------------
 
     /** The user Test. */
     @org.junit.Test
@@ -734,9 +576,6 @@ public class DMARequest extends HttpServletRequestWrapper
 
       EasyMock.verify(mockRequest);
     }
-
-    //.....................................................................
-    //----- user override --------------------------------------------------
 
     /** The user Test. */
     @org.junit.Test
@@ -764,9 +603,6 @@ public class DMARequest extends HttpServletRequestWrapper
       EasyMock.verify(mockRequest);
     }
 
-    //......................................................................
-    //----- user override no admin -----------------------------------------
-
     /** The user Test. */
     @org.junit.Test
     public void userOverrideNonAdmin()
@@ -791,9 +627,5 @@ public class DMARequest extends HttpServletRequestWrapper
 
       EasyMock.verify(mockRequest);
     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

@@ -41,7 +41,7 @@ public class EntryKey
    */
   public EntryKey(String inID, AbstractType<?> inType)
   {
-    m_id = inID;
+    m_id = inID.toLowerCase();
     m_type = inType;
     m_parent = Optional.absent();
   }
@@ -133,7 +133,6 @@ public class EntryKey
    *
    * @param    inPaths the paths pieces
    * @param    inIndex the index to start from with computation (descending)
-   * @param    <T>     the type of entry to create the key for
    *
    * @return   the key for the path part or null if not found
    *

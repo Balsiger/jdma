@@ -70,6 +70,7 @@ import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -251,8 +252,6 @@ public abstract class AbstractEntry extends ValueGroup
   /**
    * Get the key uniquely identifying this entry.
    *
-   * @param    <T> the type of entry to get the key for
-   *
    * @return   the key for the entry
    */
   @Override
@@ -421,8 +420,6 @@ public abstract class AbstractEntry extends ValueGroup
   /**
    * Get the type of the entry.
    *
-   * @param       <T>  the type of entry to get the type for
-   *
    * @return      the requested name
    */
   @Override
@@ -457,7 +454,6 @@ public abstract class AbstractEntry extends ValueGroup
           .setRecursive(false)
           .setPrefix(getFilePath())
           .build();
-        Log.warning("prefix: " + getFilePath());
         for(Iterator<ListItem> i = gcs.list(bucket, options); i.hasNext(); )
         {
           ListItem item = i.next();
@@ -869,10 +865,7 @@ public abstract class AbstractEntry extends ValueGroup
    * @param       inID   the id of the entry to create the key for
    * @param       inType the type of the id
    *
-   * @param       <T> the type of entries to create for
-   *
    * @return      the created key
-   *
    */
   public static EntryKey createKey(String inID, AbstractType<?> inType)
   {
@@ -887,7 +880,6 @@ public abstract class AbstractEntry extends ValueGroup
    * @param       inType       the type of the id
    * @param       inParentID   the id of parent entry, if any
    * @param       inParentType the type of the parent entry, if any
-   * @param       <T>          the type of entries to create for
    *
    * @return      the created key
    */

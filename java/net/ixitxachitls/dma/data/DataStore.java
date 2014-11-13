@@ -132,7 +132,7 @@ public class DataStore
     {
       try
       {
-        Log.debug("gae: getting entity for " + inKey);
+        Log.important("gae: getting entity for " + inKey);
         entity = m_store.get(inKey);
         if(!DMAServlet.isDev())
           s_cacheEntity.put(inKey, entity, s_expiration);
@@ -169,7 +169,7 @@ public class DataStore
 
     if(entity == null)
     {
-      Log.debug("gae: getting " + inType + " entity for " + inKey + "="
+      Log.important("gae: getting " + inType + " entity for " + inKey + "="
                 + inValue);
       Query query = new Query(inType);
       query.setFilter(new Query.FilterPredicate(toPropertyName(inKey),
@@ -225,10 +225,10 @@ public class DataStore
     FetchOptions options =
       FetchOptions.Builder.withOffset(inStart).limit(inSize);
 
-    Log.debug("gae: getting entities for " + inType
-              + (inParent != null ? " (" + inParent + ")" : "")
-              + (inSortField != null ? " sorted by " + inSortField : "")
-              + " from " + inStart + " size " + inSize);
+    Log.important("gae: getting entities for " + inType
+                  + (inParent != null ? " (" + inParent + ")" : "")
+                  + (inSortField != null ? " sorted by " + inSortField : "")
+                  + " from " + inStart + " size " + inSize);
 
     tracer.done();
     return m_store.prepare(query).asIterable(options);
@@ -264,10 +264,10 @@ public class DataStore
     FetchOptions options =
       FetchOptions.Builder.withOffset(inStart).limit(inSize);
 
-    Log.debug("gae: getting entities for " + inType
-              + (inParent != null ? " (" + inParent + ")" : "")
-              + (inSortField != null ? " sorted by " + inSortField : "")
-              + " from " + inStart + " size " + inSize);
+    Log.important("gae: getting entities for " + inType
+                  + (inParent != null ? " (" + inParent + ")" : "")
+                  + (inSortField != null ? " sorted by " + inSortField : "")
+                  + " from " + inStart + " size " + inSize);
 
     return m_store.prepare(query).asList(options);
   }
@@ -293,8 +293,8 @@ public class DataStore
 
     if(entities == null)
     {
-      Log.debug("getting multiple " + inType + " with "
-                + Arrays.toString(inFilters) + " (uncached)");
+      Log.important("gae: getting multiple " + inType + " with "
+                    + Arrays.toString(inFilters) + " (uncached)");
 
       Query query;
       if(inParent == null)
@@ -327,7 +327,7 @@ public class DataStore
 
       s_cacheListByValue.put(key, entities, s_expiration);
     } else
-      Log.debug("getting multiple " + inType + " with "
+      Log.debug("gae: getting multiple " + inType + " with "
                 + Arrays.toString(inFilters) + " (cached)");
 
     return entities;
@@ -351,8 +351,8 @@ public class DataStore
 
     if(ids == null)
     {
-      Log.debug("getting ids for " + inType + " with " + inKey + " = "
-                + inValue);
+      Log.important("gae: getting ids for " + inType + " with " + inKey + " = "
+                    + inValue);
 
       Query query = new Query(inType);
       query.setFilter(new Query.FilterPredicate(toPropertyName(inKey),
@@ -388,8 +388,8 @@ public class DataStore
 
     if(ids == null)
     {
-      Log.debug("getting ids for " + inType
-                + (inParent != null ? " parent " + inParent : ""));
+      Log.important("gae: getting ids for " + inType
+                    + (inParent != null ? " parent " + inParent : ""));
 
       Query query;
       if(inParent == null)
@@ -431,8 +431,8 @@ public class DataStore
 
     if(entities == null)
     {
-      Log.debug("getting recent " + inType + " entities"
-                + (inParent != null ? " with parent " + inParent : ""));
+      Log.important("gae: getting recent " + inType + " entities"
+                    + (inParent != null ? " with parent " + inParent : ""));
 
       Query query;
       if(inParent == null)
@@ -472,6 +472,8 @@ public class DataStore
 
     if (records == null)
     {
+      Log.important("gae: get multi values for " + inType + " ("
+                    + inParent + ") " + Arrays.toString(inFields));
       Query query;
       if(inParent == null)
         query = new Query(inType);
@@ -519,6 +521,8 @@ public class DataStore
 
     if (values == null)
     {
+      Log.important("gae: getting values for " + inType + " (" + inParent
+                    + ") " + " for field " + inField);
       Query query;
       if(inParent == null)
         query = new Query(inType);
@@ -557,6 +561,7 @@ public class DataStore
 
     try
     {
+      Log.important("gae: removing entity " + inKey);
       s_cacheEntity.delete(inKey);
       m_store.delete(inKey);
       // TODO: we should clear some of these caches too, but just clearing all
@@ -586,7 +591,7 @@ public class DataStore
    */
   public boolean update(Entity inEntity)
   {
-    Log.debug("Storing data for " + inEntity.getKey());
+    Log.important("gae: storing data for " + inEntity.getKey());
 
     // Only clear the cache for new entities; this does only check the cache,
     // but should usually be enough.

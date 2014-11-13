@@ -768,7 +768,7 @@ public class SoyTemplate
   /** The soy files for the template. */
   private List<String> m_files = new ArrayList<String>();
 
-  /** The compile template file set. */
+  /** The compiled template file set. */
   private @Nullable SoyTofu m_compiled = null;
 
   /** The project name. */

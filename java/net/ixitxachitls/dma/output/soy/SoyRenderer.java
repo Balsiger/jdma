@@ -261,6 +261,12 @@ public class SoyRenderer
     return m_template.render(inName, new SoyMapData(inData), m_injected, null);
   }
 
+  public void compile()
+  {
+    m_template.compile();
+  }
+
+
   /**
    * Recompile the template this renderer is based on.
    */

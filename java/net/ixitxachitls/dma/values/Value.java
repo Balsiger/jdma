@@ -60,6 +60,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 @Immutable
 @ParametersAreNonnullByDefault
+@Deprecated
 public abstract class Value<T extends Value<T>>
   implements Comparable<Object>, Serializable
 {

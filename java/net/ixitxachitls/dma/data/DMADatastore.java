@@ -23,6 +23,7 @@ package net.ixitxachitls.dma.data;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -88,31 +89,51 @@ public class DMADatastore
   /** The blob store service. */
   private BlobstoreService m_blobs;
 
+  private static ThreadLocal<Map<EntryKey, AbstractEntry>> m_cache =
+      new ThreadLocal<Map<EntryKey, AbstractEntry>>()
+      {
+        @Override
+        protected Map<EntryKey, AbstractEntry> initialValue()
+        {
+          return new HashMap<>();
+        }
+      };
+
   /** The id for serialization. */
   @SuppressWarnings("unused")
   private static final long serialVersionUID = 1L;
 
-  /** The cache for entries. */
-  private static MemcacheService s_entryCache =
-    MemcacheServiceFactory.getMemcacheService("entry");
+  private static void cache(EntryKey inKey, AbstractEntry inEntry)
+  {
+    m_cache.get().put(inKey, inEntry);
+  }
+
+  private static @Nullable AbstractEntry cached(EntryKey inKey)
+  {
+    return m_cache.get().get(inKey);
+  }
+
+  public static void clearCache()
+  {
+    m_cache.get().clear();
+  }
 
   /**
    * Get an entry denoted by type and id and their respective parents.
    *
    * @param      inKey  the key to the entry to get
-   * @param      <T>    the type of the entry to get
    *
    * @return     the entry found, if any
    */
   public @Nullable AbstractEntry getEntry(EntryKey inKey)
   {
-    AbstractEntry entry = null; //(AbstractEntry)s_entryCache.get(inKey.toString());
+    AbstractEntry entry = cached(inKey);
     if(entry == null)
     {
-      Log.debug("gae: getting entry for " + inKey);
+      Log.debug("getting entry for " + inKey);
       entry = convert(inKey.getID(), inKey.getType(),
                       m_data.getEntity(convert(inKey)));
-      //s_entryCache.put(inKey.toString(), entry);
+      cache(inKey, entry);
     }
 
     return entry;
@@ -241,7 +262,6 @@ public class DMADatastore
   /**
    * Get the entries for the given index.
    *
-   * @param    <T>      The type of the entries to get
    * @param    inIndex  the name of the index to get
    * @param    inType   the type of entries to return for the index (app engine
    *                    can only do filter on queries with kind)
@@ -344,36 +364,6 @@ public class DMADatastore
   }
 
   /**
-   * Caches the given entry (or updates what is in the cache).
-   * Does _NOT_ change what is stored in the data store.
-   *
-   * @param       inEntry the entry to cache
-   */
-  public void cacheEntry(AbstractEntry inEntry)
-  {
-    //s_entryCache.put(inEntry.getKey().toString(), inEntry);
-  }
-
-  /**
-   * Remove the entry with the given key from the cache.
-   *
-   * @param      inKey the key of the entry to remove
-   * @param      <T>   the type of entry to uncache
-   */
-  public void uncacheEntry(EntryKey inKey)
-  {
-    s_entryCache.delete(inKey.toString());
-  }
-
-  /**
-   * Clear the cache of entries.
-   */
-  public void clearCache()
-  {
-    s_entryCache.clearAll();
-  }
-
-  /**
    * Check if any of the data has been changed and needs saving.
    *
    * @return      true if data is changed from store, false if not
@@ -419,7 +409,6 @@ public class DMADatastore
       ((Entry)inEntry).complete();
     }
 
-    //s_entryCache.put(inEntry.getKey().toString(), inEntry);
     return m_data.update(convert(inEntry));
   }
 
@@ -565,7 +554,6 @@ public class DMADatastore
    * Convert the given entry key into a corresponding entity key.
    *
    * @param       inKey the key to convert
-   * @param       <T>   the type of entry to convert
    *
    * @return      the converted key
    */
@@ -592,7 +580,6 @@ public class DMADatastore
    * Convert the given entry key into a corresponding entity key.
    *
    * @param       inKey the key to convert
-   * @param       <T>   the type of entry to convert
    *
    * @return      the converted key
    */
@@ -632,16 +619,9 @@ public class DMADatastore
 
     Tracer tracer = new Tracer("converting " + inID);
 
-    T entry = null; //(T)s_entryCache.get(convert(inEntity.getKey()).toString());
-    if (entry != null)
-    {
-      tracer.done("cached");
-      return entry;
-    }
-
     Log.debug("converting entity " + inID + " to " + inType);
 
-    entry = inType.create(inID);
+    T entry = inType.create(inID);
     if(entry == null)
     {
       Log.warning("cannot create conversion " + inType + " entity with id "
@@ -650,211 +630,17 @@ public class DMADatastore
       return null;
     }
 
+    Tracer parsing = new Tracer("parsing " + inID);
     Blob blob = (Blob)inEntity.getProperty("proto");
+    parsing.done("blob property reading");
     if (blob != null)
       entry.parseFrom(blob.getBytes());
-
-    /*
-    if(entry instanceof BaseSpell)
-    {
-      BaseSpell e = (BaseSpell)entry;
-      for(Map.Entry<String, Object> property
-        : inEntity.getProperties().entrySet())
-      {
-        String name = m_data.fromPropertyName(property.getKey());
-        if(name.startsWith(Index.PREFIX) || "change".equals(name)
-          || "extensions".equals(name) || "proto".equals(name))
-          continue;
-
-        Object value = property.getValue();
-        if(value == null)
-          continue;
-
-        switch(name)
-        {
-          case "name":
-            e.m_name = value.toString();
-            break;
-
-          case "base":
-            for(String base : (List<String>)value)
-              e.m_base.add(base);
-            break;
-
-          case "categories":
-            for(String category : (List<String>)value)
-              e.m_categories.add(category);
-            break;
-
-          case "incomplete":
-            e.m_incomplete = ((Text)value).getValue().replace("\"", "");
-            break;
-
-         case "references":
-            for(String reference : (List<String>)value)
-              if(ProductReference.PARSER.parse(reference.split(":")).isPresent())
-                e.m_references.add
-                (ProductReference.PARSER.parse(reference.split(":")).get());
-
-            break;
-
-          case "short_description":
-            e.m_short = value.toString().replace("\"", "");
-            break;
-
-          case "synonyms":
-            for(String synonym : (List<String>)value)
-              e.m_synonyms.add(synonym.replace("\"", ""));
-            break;
-
-          case "worlds":
-            for(String world : (List<String>)value)
-              e.m_worlds.add(world);
-            break;
-
-          case "description":
-            e.m_description = ((Text)value).getValue().replace("\"", "");
-            break;
-
-
-          case "area":
-            if(!value.toString().startsWith("$"))
-              e.m_area = Optional.of(value.toString().replace("\"", ""));
-            break;
-
-          case "casting_time":
-            e.m_castingTime = NewDuration.PARSER.parse(value.toString());
-            break;
-
-          case "components":
-            for(String component: (List<String>)value)
-              e.m_components.add(SpellComponent.fromString(component).get());
-            break;
-
-          case "descriptor":
-            for(String descriptor: (List<String>)value)
-              e.m_descriptors.add(SpellDescriptor.fromString(descriptor).get());
-            break;
-
-          case "duration":
-            if(!"$undefined$".equals(value.toString()))
-            {
-              String []parts = Strings.getPatterns
-                (value.toString(),
-                 "^(.*?)(?:/(.*?))?(?:\\s*\\+(.*?))?(\\s*\\(D\\))?(?:\"(.*)\")?$");
-
-              String first = parts[0]
-                + (parts[1] != null ? "/" + parts[1] : "")
-                + (parts[2] != null ? " + " + parts[2] : "");
-              if(Arrays.asList(BaseSpell.SPELL_DURATIONS).contains(first)
-                || !NewDuration.PARSER.parse(parts[0]).isPresent()
-                || (parts[2] != null && !NewDuration.PARSER.parse(parts[2]).isPresent()))
-                e.m_duration = Optional.of(
-                  new BaseSpell.Duration(first, parts[3] != null,
-                                         Optional.fromNullable(parts[4])));
-              else
-                e.m_duration = Optional.of(
-                new BaseSpell.Duration(NewDuration.PARSER.parse(parts[0]).get(),
-                                       Optional.fromNullable(parts[1]),
-                                       parts[2] != null
-                                       ? NewDuration.PARSER.parse(parts[2])
-                                       : Optional.<NewDuration>absent(),
-                                       parts[3] != null,
-                                       Optional.fromNullable(parts[4])));
-            }
-            break;
-
-          case "effect":
-            if(!"$undefined$".equals(value.toString()))
-            {
-              String []parts = Strings.getPatterns
-                (value.toString(),
-                 "^([^\"]*?)?\\s*(Ray|Spread)?\\s*(?:\"(.*)\")$");
-
-              e.m_effect = Optional.of(new BaseSpell.Effect
-                (NewDistance.PARSER.parse(parts[0]),
-                 SpellEffect.PARSER.parse(parts[1]),
-                 parts[2]));
-            }
-            break;
-
-          case "focus":
-            if(!"$undefined$".equals(value.toString()))
-            {
-              String []parts = Strings.getPatterns
-                (value.toString(), "^(.*):\\s*(.*)$");
-
-              e.m_focus = Optional.of(new BaseSpell.Material
-                (parts[0],
-                 Strings.COMMA_SPLITTER.splitToList(parts[1].replace("\"",  ""))));
-            }
-            break;
-
-          case "level":
-            for(String level: (List<String>)value)
-              e.m_levels.add(new BaseSpell.Level(SpellClass.fromString(level.split(" ")[0]).get(),
-                                                 Integer.parseInt(level.split(" ")[1])));
-            break;
-
-          case "material":
-            for(String material: (List<String>)value)
-            {
-              String []parts = Strings.getPatterns
-                (material, "^(.*):\\s*(.*)$");
-
-              e.m_materials.add(new BaseSpell.Material
-                (parts[0],
-                 Strings.COMMA_SPLITTER.splitToList(parts[1].replace("\"",  ""))));
-            }
-            break;
-
-          case "range":
-            if(SpellRange.fromString(value.toString()).isPresent())
-              e.m_range = SpellRange.fromString(value.toString()).get();
-            break;
-
-          case "saving_throw":
-            if(!value.toString().startsWith("$"))
-              e.m_savingThrow = Optional.of(((Text)value).getValue().replace("\"", ""));
-            break;
-
-          case "school":
-            if(!"$undefined$".equals(value.toString()))
-            {
-              String []parts = Strings.getPatterns
-                (value.toString(), "^(.*?)\\s*(?:\\((.*)\\))?$");
-
-              e.m_school = School.fromString(parts[0]).get();
-              if(parts[1] != null)
-                for(String sub : parts[1].split(",\\s*"))
-                  e.m_subschools.add(Subschool.fromString(sub).get());
-            }
-            break;
-
-          case "spell_resistance":
-            if(!value.toString().startsWith("$"))
-              e.m_resistance = Optional.of(((Text)value).getValue().replace("\"", ""));
-            break;
-
-          case "summary":
-            if(!value.toString().startsWith("$"))
-              e.m_summary = Optional.of(((Text)value).getValue().replace("\"", ""));
-            break;
-
-          case "target":
-            if(!value.toString().startsWith("$"))
-              e.m_target = Optional.of(value.toString().replace("\"", ""));
-            break;
-        }
-      }
-    }
-    */
+    parsing.done("parsing");
 
     // update any key related value
     EntryKey key = convert(inEntity.getKey());
     entry.updateKey(key);
 
-    //s_entryCache.put(entry.getKey().toString(), entry);
     tracer.done("uncached");
     return entry;
   }

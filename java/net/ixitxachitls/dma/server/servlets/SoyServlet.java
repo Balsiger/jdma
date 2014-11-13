@@ -167,6 +167,12 @@ public class SoyServlet extends DMAServlet
     return null;
   }
 
+  @Override
+  public void init()
+  {
+    TEMPLATE.compile();;
+  }
+
   /**
    * Collect the data that is to be printed.
    *

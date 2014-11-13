@@ -56,6 +56,7 @@
   <servlet>
     <servlet-name>entry</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.EntryServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
   </servlet>
 
   <servlet>

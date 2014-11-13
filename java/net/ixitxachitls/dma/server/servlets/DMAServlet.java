@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.data.DMADatastore;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -237,6 +238,7 @@ public abstract class DMAServlet extends BaseServlet
     {
       DMARequest request = (DMARequest)inRequest;
 
+      DMADatastore.clearCache();
       if(allows(request))
         return handle(request, inResponse);
 
