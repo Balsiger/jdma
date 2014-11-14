@@ -38,7 +38,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.NewDice;
-import net.ixitxachitls.dma.values.NewReference;
+import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.enums.Alignment;
@@ -58,13 +58,13 @@ public class BaseLevel extends BaseEntry
     public QualityReference(String inName, int inLevel, int inUsesPerDay,
                             Optional<String> inCondition)
     {
-      m_reference = new NewReference<BaseQuality>(BaseQuality.TYPE, inName);
+      m_reference = new Reference<BaseQuality>(BaseQuality.TYPE, inName);
       m_level = inLevel;
       m_usesPerDay = inUsesPerDay;
       m_condition = inCondition;
     }
 
-    private final NewReference<BaseQuality> m_reference;
+    private final Reference<BaseQuality> m_reference;
     private final int m_level;
     private final int m_usesPerDay;
     private final Optional<String> m_condition;
@@ -92,7 +92,7 @@ public class BaseLevel extends BaseEntry
       return m_reference.getName();
     }
 
-    public NewReference<BaseQuality> getReference()
+    public Reference<BaseQuality> getReference()
     {
       return m_reference;
     }
@@ -187,7 +187,7 @@ public class BaseLevel extends BaseEntry
   protected Optional<Integer> m_skillPoints = Optional.absent();
 
   /** The class skills. */
-  protected List<NewReference<BaseSkill>> m_classSkills = new ArrayList<>();
+  protected List<Reference<BaseSkill>> m_classSkills = new ArrayList<>();
 
   /** The weapon proficiencies. */
   protected List<Proficiency> m_weaponProficiencies = new ArrayList<>();
@@ -354,7 +354,7 @@ public class BaseLevel extends BaseEntry
     return m_skillPoints;
   }
 
-  public List<NewReference<BaseSkill>> getClassSkills()
+  public List<Reference<BaseSkill>> getClassSkills()
   {
     return Collections.unmodifiableList(m_classSkills);
   }
@@ -545,7 +545,7 @@ public class BaseLevel extends BaseEntry
                                  NewValue.INTEGER_PARSER);
     m_classSkills =
       inValues.use("class_skill", m_classSkills,
-                   new NewReference.ReferenceParser<>(BaseSkill.TYPE));
+                   new Reference.ReferenceParser<>(BaseSkill.TYPE));
     m_weaponProficiencies =
       inValues.use("weapon_proficiency", m_weaponProficiencies,
                    Proficiency.PARSER);
@@ -615,7 +615,7 @@ public class BaseLevel extends BaseEntry
     if(m_skillPoints.isPresent())
       builder.setSkillPoints(m_skillPoints.get());
 
-    for(NewReference<BaseSkill> reference : m_classSkills)
+    for(Reference<BaseSkill> reference : m_classSkills)
       builder.addClassSkill(reference.getName());
 
     for(Proficiency proficiency : m_weaponProficiencies)
@@ -629,7 +629,7 @@ public class BaseLevel extends BaseEntry
       BaseMonsterProto.QualityReference.Builder reference =
         BaseMonsterProto.QualityReference.newBuilder();
 
-      NewReference<BaseQuality> ref = special.getReference();
+      Reference<BaseQuality> ref = special.getReference();
       reference.setReference(BaseMonsterProto.Reference.newBuilder()
                              .setName(ref.getName())
                              .build());
@@ -651,7 +651,7 @@ public class BaseLevel extends BaseEntry
       BaseMonsterProto.QualityReference.Builder reference =
         BaseMonsterProto.QualityReference.newBuilder();
 
-      NewReference<BaseQuality> ref = special.getReference();
+      Reference<BaseQuality> ref = special.getReference();
       reference.setReference(BaseMonsterProto.Reference.newBuilder()
                              .setName(ref.getName())
                              .build());
@@ -737,7 +737,7 @@ public class BaseLevel extends BaseEntry
       m_skillPoints = Optional.of(proto.getSkillPoints());
 
     for(String ref : proto.getClassSkillList())
-      m_classSkills.add(new NewReference<BaseSkill>(BaseSkill.TYPE, ref));
+      m_classSkills.add(new Reference<BaseSkill>(BaseSkill.TYPE, ref));
 
     for(BaseWeaponProto.Proficiency proficiency
       : proto.getWeaponProficiencyList())

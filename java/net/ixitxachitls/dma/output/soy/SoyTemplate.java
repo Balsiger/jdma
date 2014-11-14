@@ -62,10 +62,7 @@ import com.google.template.soy.tofu.restricted.SoyTofuFunction;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.EntryKey;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
@@ -302,6 +299,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to format numbers or printing. */
+  /*
   public static class ReferenceFunction implements SoyTofuFunction
   {
     @Override
@@ -342,6 +340,7 @@ public class SoyTemplate
       return StringData.forValue(entry.getSummary(parameters));
     }
   }
+  */
 
   /** A plugin function to format numbers or printing. */
   public static class FormatNumberFunction implements SoyTofuFunction
@@ -751,7 +750,6 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(LowerFunction.class);
       soyFunctionsSetBinder.addBinding().to(MatchesFunction.class);
       soyFunctionsSetBinder.addBinding().to(CommandsFunction.class);
-      soyFunctionsSetBinder.addBinding().to(ReferenceFunction.class);
 
       Multibinder<SoyPrintDirective> soyDirectivesSetBinder =
         Multibinder.newSetBinder(binder(), SoyPrintDirective.class);

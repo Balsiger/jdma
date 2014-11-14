@@ -34,7 +34,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
@@ -51,8 +50,6 @@ import com.google.appengine.tools.cloudstorage.ListOptions;
 import com.google.appengine.tools.cloudstorage.RetryParams;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
@@ -62,15 +59,9 @@ import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.File;
 import net.ixitxachitls.dma.values.FormattedText;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Parameters;
-import net.ixitxachitls.dma.values.Reference;
-import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
-import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -873,6 +864,7 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @return      the string with the summary
    */
+  /*
   public String getSummary(@Nullable Parameters inParameters)
   {
     Combined<Text> combined = collect("short description");
@@ -881,7 +873,7 @@ public abstract class AbstractEntry extends ValueGroup
     if(inParameters == null || !inParameters.isDefined())
       return summary;
 
-    summary = computeExpressions(summary, inParameters);
+    //summary = computeExpressions(summary, inParameters);
 
     Value<?> notes = inParameters.getValue("Notes");
     if(notes != null)
@@ -889,6 +881,7 @@ public abstract class AbstractEntry extends ValueGroup
 
     return summary;
   }
+  */
 
   private String icon(String inMimeType)
   {
@@ -1446,7 +1439,6 @@ public abstract class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-  //-------------------------- computeExpressions --------------------------
 
   /**
    * Compute the expressions embedded in the given string and replace all
@@ -1457,6 +1449,7 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @return      the computed string
    */
+  /*
   public String computeExpressions(String inText,
                                    @Nullable Parameters inParameters)
   {
@@ -1494,6 +1487,7 @@ public abstract class AbstractEntry extends ValueGroup
 
     return result.toString();
   }
+  */
 
   /**
    * Evaluate the given expression.

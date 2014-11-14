@@ -31,14 +31,7 @@ import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.EncounterProto;
-import net.ixitxachitls.dma.values.Annotated;
-import net.ixitxachitls.dma.values.Distance;
-import net.ixitxachitls.dma.values.LongFormattedText;
-import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.NewDistance;
-import net.ixitxachitls.dma.values.Number;
-import net.ixitxachitls.dma.values.Reference;
-import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.util.logging.Log;
 
 /**

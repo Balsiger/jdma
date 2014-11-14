@@ -38,7 +38,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Values.RangeProto;
 
 @ParametersAreNonnullByDefault
-public class ProductReference extends NewReference<BaseProduct>
+public class ProductReference extends Reference<BaseProduct>
 {
   public static class ProductReferenceParser
     extends ReferenceParser<BaseProduct, ProductReference>
@@ -200,7 +200,7 @@ public class ProductReference extends NewReference<BaseProduct>
   }
 
   @Override
-  public int compareTo(NewReference inOther)
+  public int compareTo(Reference inOther)
   {
     if(inOther == this)
       return 0;

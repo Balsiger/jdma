@@ -171,47 +171,6 @@ public class BaseFeat extends BaseEntry
                              "affects", "name", "modifier", "text");
   }
 
-  /**
-   * Add contributions for this entry to the given list.
-   *
-   * @param       inName          the name of the value to collect
-   * @param       ioCombined      the combined value to collect into
-   * @param       inParameters    parameters to adjust values
-   */
-  /*
-  public void collect(String inName, Combined<?> ioCombined,
-                      Parameters inParameters)
-  {
-    super.collect(inName, ioCombined);
-
-    for(Multiple multiple : m_effects)
-    {
-      if(inName.equalsIgnoreCase(multiple.get(1).toString())
-         || inName.equalsIgnoreCase(multiple.get(0).toString()))
-      {
-        Modifier modifier = (Modifier)multiple.get(2);
-        if(modifier.getExpression() instanceof Expression.Expr)
-        {
-          String expression =
-            computeExpressions(((Expression.Expr)modifier.getExpression())
-                               .getText(), inParameters);
-
-          Modifier computed = modifier.read(expression);
-          if (computed != null)
-            ioCombined.addModifier(computed, this, null);
-          else
-            ioCombined.addModifier
-              (modifier.as(Integer.valueOf(expression.replace('+', '0')),
-                           modifier.getType(), modifier.getCondition(), null),
-               this, null);
-        }
-        else
-          ioCombined.addModifier(modifier, this, null);
-      }
-    }
-  }
-  */
-
   @Override
   public Message toProto()
   {

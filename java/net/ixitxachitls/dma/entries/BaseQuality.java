@@ -276,44 +276,6 @@ public class BaseQuality extends BaseEntry
   */
 
   /**
-   * Compute the modifier base on an expression.
-   *
-   * @param   inModifier    the modifier to compute from
-   * @param   inParameters  parameters to adjust computation
-   *
-   * @return  the modifier with evaluated expressions
-   */
-  /*
-  private @Nullable Modifier computeModifierExpression
-    (Modifier inModifier, Parameters inParameters)
-  {
-    if(inModifier == null)
-      return null;
-
-    Modifier next =
-      computeModifierExpression(inModifier.getNext(), inParameters);
-
-    if(inModifier.getExpression() instanceof Expression.Expr)
-    {
-      String computed =
-        computeExpressions(((Expression.Expr)inModifier.getExpression())
-                           .getText(), inParameters);
-
-      Modifier modifier = inModifier.read(computed);
-      if (modifier != null)
-        return modifier.as(next);
-
-      return inModifier.as(Integer.valueOf
-                           (computed.replace('+', '0')),
-                           inModifier.getType(), inModifier.getCondition(),
-                           next);
-    }
-
-    return inModifier.as(next);
-  }
-  */
-
-  /**
    * Collect a name value.
    *
    * @param       inName          the name of the value to collect
