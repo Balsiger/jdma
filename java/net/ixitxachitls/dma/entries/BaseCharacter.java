@@ -32,17 +32,12 @@ import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.proto.Entries.BaseCharacterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.values.EnumSelection;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.util.Strings;
-import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -302,33 +297,6 @@ public class BaseCharacter extends BaseEntry
     searchables.put("email", m_email);
 
     return searchables;
-  }
-
-  @Override
-  public @Nullable Object compute(String inKey)
-  {
-    if("products".equals(inKey))
-    {
-      List<Product> products = DMADataFactory.get()
-        .getRecentEntries(Product.TYPE, getKey());
-
-      List<Multiple> values = new ArrayList<Multiple>();
-      for(Product product : products)
-      {
-        values.add(new Multiple(new Name(product.getFullTitle()),
-                                new Name(product.getPath())));
-
-        if(values.size() > MAX_PRODUCTS)
-          break;
-      }
-
-      if(values.isEmpty())
-        return new ValueList<Multiple>(new Multiple(new Name(), new Name()));
-
-      return new ValueList<Multiple>(values);
-    }
-
-    return super.compute(inKey);
   }
 
   @Override

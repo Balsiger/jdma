@@ -39,7 +39,6 @@ import com.google.template.soy.data.restricted.StringData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.values.BaseNumber;
-import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Remark;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
@@ -263,15 +262,6 @@ public class SoyValue extends SoyAbstract
           values.add(new SoyValue(m_name, (Value)value, m_entry));
 
          return new SoyListData(values);
-      }
-
-      if("multi".equals(inName) && m_value instanceof Multiple)
-      {
-        List<SoyValue> values = new ArrayList<SoyValue>();
-        for (Multiple.Element element : (Multiple)m_value)
-          values.add(new SoyValue(m_name, element.get(), m_entry));
-
-        return new SoyListData(values);
       }
 
       if("number".equals(inName) && m_value instanceof BaseNumber)

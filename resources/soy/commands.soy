@@ -186,24 +186,6 @@
 {/template}
 
 /**
- * A reference.
- *
- * @param arg The arguments to the command.
- * @param opt The optional arguments.
- */
-{template .Reference}
-  {call dma.page.link}
-    {param url: '/' + $arg.0 + '/' + $arg.1 /}
-    {param text: $arg.1 /}
-    {param class: camel($arg.0) /}
-  {/call}
-  <A class="{camel($arg.0)}" onclick="details('/{$arg.0}/{$arg.1}')">
-    {$arg.1}
-  </A>
-  :{sp}{reference('base ' + $arg.0 + '/' + $arg.1, $opt)}
-{/template}
-
-/**
  * A popup/tooltip window.
  *
  * @param arg The arguments to the command.

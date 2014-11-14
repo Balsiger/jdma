@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -44,10 +43,6 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.entries.BaseProduct;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.output.html.JsonWriter;
 
 /**
@@ -188,17 +183,6 @@ public class Autocomplete extends JSONServlet
       return;
 
     values = DMADataFactory.get().getValues(inType, inField);
-
-    if(inType == BaseProduct.TYPE)
-      if("author".equals(inField)
-         || "editor".equals(inField)
-         || "cover".equals(inField)
-         || "cartography".equals(inField)
-         || "illustrations".equals(inField)
-         || "typography".equals(inField)
-         || "management".equals(inField))
-        values = extractPersonsAndJobs(values, inType.toString(), inField);
-
     cache(values, inType.toString(), inField);
   }
 
@@ -225,55 +209,6 @@ public class Autocomplete extends JSONServlet
   public @Nullable SortedSet<String> cached(String ... inKeys)
   {
     return s_cache.get(s_keyJoiner.join(inKeys));
-  }
-
-  /**
-   * Extract person and job information from the obtained values.
-   *
-   * @param    inTexts the texts read from the datastore
-   * @param    inType  the type of values read
-   * @param    inField the name of the field the values came from
-   *
-   * @return   a sorted set with the person names
-   *
-   */
-  private SortedSet<String> extractPersonsAndJobs(SortedSet<String> inTexts,
-                                                  String inType, String inField)
-  {
-    SortedSet<String> persons = new TreeSet<String>();
-    SortedSet<String> globalJobs = new TreeSet<String>();
-    cache(globalJobs, inType, inField, "jobs");
-    Map<String, SortedSet<String>> jobs = Maps.newHashMap();
-
-    Multiple value = new Multiple(new Multiple.Element(new Text(), false),
-                                  new Multiple.Element(new Name(), true));
-    for(String text : inTexts)
-    {
-      Multiple parsed = value.read(text);
-      if (parsed != null)
-      {
-        String person = ((Text)parsed.get(0)).get();
-        persons.add(person);
-        if(parsed.get(1).isDefined())
-        {
-          String job = ((Name)parsed.get(1)).get();
-          globalJobs.add(job);
-          SortedSet<String> personJobs = jobs.get(person);
-          if(personJobs == null)
-          {
-            personJobs = new TreeSet<String>();
-            jobs.put(person, personJobs);
-          }
-
-          personJobs.add(job);
-        }
-      }
-    }
-
-    for(Map.Entry<String, SortedSet<String>> entry : jobs.entrySet())
-      cache(entry.getValue(), inType, inField, "jobs", "name", entry.getKey());
-
-    return persons;
   }
 
   //----------------------------------------------------------------------------

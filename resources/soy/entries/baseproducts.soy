@@ -55,7 +55,7 @@
       
       {if $entry.subtitle.present}
         {call dma.entry._new_subtitle}
-          {param title: $entry.subtitle.get /}
+          {param title: $entry.subtitle /}
         {/call}
       {/if}
     {/param}
@@ -417,7 +417,7 @@
       {call dma.edit.value}
         {param name: 'leader' /}
         {param label: 'Leader' /}
-        {param value: $entry.leader/}
+        {param value: $entry.leader.present ? $entry.leader : '' /}
         {param validate: 'any' /}
         {param color: '#444' /}
       {/call}    
