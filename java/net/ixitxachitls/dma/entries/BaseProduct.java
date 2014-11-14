@@ -1015,16 +1015,16 @@ public class BaseProduct extends BaseEntry
     new BaseType<BaseProduct>(BaseProduct.class).withSort("title");
 
   /** The title of the product. */
-  protected String m_title = UNDEFINED_STRING;
+  protected Optional<String> m_title = Optional.absent();
 
   /** The leader of the product, any 'a', 'the' and the like. */
-  protected String m_leader = UNDEFINED_STRING;
+  protected Optional<String> m_leader = Optional.absent();
 
   /** The sub title of the product. */
-  protected String m_subtitle = UNDEFINED_STRING;
+  protected Optional<String> m_subtitle = Optional.absent();
 
   /** Notes about the product. */
-  protected String m_notes = UNDEFINED_STRING;
+  protected Optional<String> m_notes = Optional.absent();
 
   /** All the authors of the product. */
   protected List<Person> m_authors = new ArrayList<>();
@@ -1048,30 +1048,31 @@ public class BaseProduct extends BaseEntry
   protected List<Person> m_managers = new ArrayList<>();
 
   /** The date (month and year) the product was released. */
-  protected @Nullable Date m_date = null;
+  protected Optional<Date> m_date = Optional.absent();
 
   /** The product's ISBN number, if it has one. */
-  protected @Nullable ISBN m_isbn = null;
+  protected Optional<ISBN> m_isbn = Optional.absent();
 
   /** The product's ISBN 13 number, if it has one. */
-  protected @Nullable ISBN13 m_isbn13 = null;
-
-  /** The grouping for the pages. */
-  protected static final Group<Integer, Integer, String> s_pageGroup =
-    new Group<Integer, Integer, String>(new Group.Extractor<Integer, Integer>()
-      {
-        @Override
-        public Integer extract(Integer inValue)
-        {
-          return inValue;
-        }
-      }, new Integer [] { 5, 10, 20, 25, 50, 100, 200, 250, 300, 400, 500, },
-      new String []
-      { "5", "10", "20", "25", "50", "100", "200", "250", "300", "400", "500",
-        "500+", }, "$undefined");
+  protected Optional<ISBN13> m_isbn13 = Optional.absent();
 
   /** The total number of pages of the product. */
-  protected @Nullable Integer m_pages = null;
+  protected Optional<Integer> m_pages = Optional.absent();
+
+  protected static final Group<Integer, Integer, String> s_pageGroup =
+      new Group<Integer, Integer, String>(new Group.Extractor<Integer, Integer>()
+      {
+        @Override
+          public Integer extract(Integer inValue)
+          {
+            return inValue;
+          }
+      }, new Integer [] { 5, 10, 20, 25, 50, 100, 200, 250, 300, 400, 500, },
+      new String []
+          {
+            "5", "10", "20", "25", "50", "100", "200", "250", "300", "400", "500",
+            "500+",
+          }, "$undefined");
 
   /** The game system of the product. */
   protected System m_system = System.UNKNOWN;
@@ -1086,27 +1087,23 @@ public class BaseProduct extends BaseEntry
   protected Style m_style = Style.UNKNOWN;
 
   /** The name of the company that produced the product. */
-  protected String m_producer = UNDEFINED_STRING;
+  protected Optional<String> m_producer = Optional.absent();
 
   /** The volume of the product for multi volume products. */
-  protected String m_volume = UNDEFINED_STRING;
+  protected Optional<String> m_volume = Optional.absent();
 
   /** The number of the series. */
-  protected String m_number = UNDEFINED_STRING;
+  protected Optional<String> m_number = Optional.absent();
 
-  /**
-   * The name of the series, even multiple if necessary, this product belongs
-   *  to.
-   */
+  /** The name of one or multiple series this product belongs to. */
   protected List<String> m_series = new ArrayList<>();
 
-  /** The grouping for the prices. */
+  /** This is the price of the series. */
+  protected Optional<Price> m_price = Optional.absent();
+
   protected static final Group<Price, Double, String> s_priceGrouping =
-    new Group<Price, Double, String>(new Group.Extractor<Price, Double>()
+      new Group<Price, Double, String>(new Group.Extractor<Price, Double>()
       {
-        /**
-         *
-         */
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -1115,15 +1112,12 @@ public class BaseProduct extends BaseEntry
           return inValue.getPrice();
         }
       }, new Double [] { 1.00, 5.00, 10.00, 25.00, 50.00, 100.00, },
-                                   new String []
-        { "1", "5", "10", "25", "50", "100", "a fortune", }, "$undefined$");
-
-  /** This is the price of the series. */
-  protected @Nullable Price m_price = null;
+      new String []
+            { "1", "5", "10", "25", "50", "100", "a fortune", },
+      "$undefined$");
 
   /** The contents of the product, what kind of individual components it has,
    *  if any. */
-  @Key("contents")
   protected List<Content> m_contents = new ArrayList<>();
 
   /** The mandatory requirements for this product. */
@@ -1160,7 +1154,7 @@ public class BaseProduct extends BaseEntry
    *
    * @return the notes
    */
-  public String getNotes()
+  public Optional<String> getNotes()
   {
     return m_notes;
   }
@@ -1240,12 +1234,9 @@ public class BaseProduct extends BaseEntry
    *
    * @return      the date
    */
-  public String getDate()
+  public Optional<Date> getDate()
   {
-    if(m_date == null)
-      return "";
-
-    return m_date.toString();
+    return m_date;
   }
 
   /**
@@ -1301,7 +1292,7 @@ public class BaseProduct extends BaseEntry
    *
    * @return      the requested leader
    */
-  public String getLeader()
+  public Optional<String> getLeader()
   {
     return m_leader;
   }
@@ -1311,7 +1302,7 @@ public class BaseProduct extends BaseEntry
    *
    * @return      the series number
    */
-  public String getNumber()
+  public Optional<String> getNumber()
   {
     return m_number;
   }
@@ -1324,10 +1315,10 @@ public class BaseProduct extends BaseEntry
    */
   public int getNumberValue()
   {
-    if(m_number.isEmpty())
+    if(m_number.isPresent())
       return 0;
 
-    return Strings.extractNumber(m_number);
+    return Strings.extractNumber(m_number.get());
   }
 
 
@@ -1338,10 +1329,10 @@ public class BaseProduct extends BaseEntry
    */
   public int getPages()
   {
-    if(m_pages == null)
+    if(!m_pages.isPresent())
       return -1;
 
-    return m_pages;
+    return m_pages.get();
   }
 
 
@@ -1382,7 +1373,7 @@ public class BaseProduct extends BaseEntry
    *
    * @return      the producer
    */
-  public String getProducer()
+  public Optional<String> getProducer()
   {
     return m_producer;
   }
@@ -1412,7 +1403,7 @@ public class BaseProduct extends BaseEntry
    *
    * @return      the requested title
    */
-  public String getTitle()
+  public Optional<String> getTitle()
   {
     return m_title;
   }
@@ -1422,7 +1413,7 @@ public class BaseProduct extends BaseEntry
    *
    * @return the subtitle
    */
-  public String getSubtitle()
+  public Optional<String> getSubtitle()
   {
     return m_subtitle;
   }
@@ -1434,10 +1425,13 @@ public class BaseProduct extends BaseEntry
    */
   public String getFullTitle()
   {
-    if(m_leader.isEmpty())
-      return m_title;
+    if(m_leader.isPresent())
+      if(m_title.isPresent())
+        return m_title.get();
+      else
+        return "";
 
-    return m_leader + " " + m_title;
+    return m_leader.get() + " " + m_title.get();
   }
 
 
@@ -1456,7 +1450,7 @@ public class BaseProduct extends BaseEntry
    *
    * @return      the volume
    */
-  public String getVolume()
+  public Optional<String> getVolume()
   {
     return m_volume;
   }
@@ -1471,13 +1465,13 @@ public class BaseProduct extends BaseEntry
   @Override
   public String getRefName()
   {
-    if(m_title.isEmpty())
+    if(!m_title.isPresent())
       return super.getRefName();
 
-    if(!m_leader.isEmpty())
+    if(!m_leader.isPresent())
       return getTitle() + ", " + getLeader();
 
-    return getTitle();
+    return m_title.get();
   }
 
   /**
@@ -1505,18 +1499,15 @@ public class BaseProduct extends BaseEntry
    *
    * @return the original selling price
    */
-  public String getPrice()
+  public Optional<Price> getPrice()
   {
-    if(m_price == null)
-      return "";
-
-    return m_price.toString();
+    return m_price;
   }
 
   /**
    * Get the contents of the product.
    *
-   * @param a list of contents
+   * @return list of contents
    */
   public List<Content> getContents()
   {
@@ -1534,12 +1525,9 @@ public class BaseProduct extends BaseEntry
    *
    * @return  the isbn value
    */
-  public String getISBN()
+  public Optional<ISBN> getISBN()
   {
-    if(m_isbn == null)
-      return "";
-
-    return m_isbn.toString();
+    return m_isbn;
   }
 
   /**
@@ -1547,12 +1535,9 @@ public class BaseProduct extends BaseEntry
    *
    * @return the isbn 13 value
    */
-  public String getISBN13()
+  public Optional<ISBN13> getISBN13()
   {
-    if(m_isbn13 == null)
-      return "";
-
-    return m_isbn13.toString();
+    return m_isbn13;
   }
 
  /**
@@ -1638,7 +1623,7 @@ public class BaseProduct extends BaseEntry
 
   @Override
   public Multimap<Index.Path, String> computeIndexValues()
-  {
+    {
     Multimap<Index.Path, String> values = super.computeIndexValues();
 
     // persons
@@ -1656,15 +1641,15 @@ public class BaseProduct extends BaseEntry
       values.put(Index.Path.JOBS, job);
 
     // date
-    if(m_date != null)
+    if(m_date.isPresent())
     {
-      String month = m_date.getMonthAsString();
+      String month = m_date.get().getMonthAsString();
       if(month.isEmpty())
         values.put(Index.Path.DATES,
-                   Index.groupsToString("" + m_date.getYear()));
+                   Index.groupsToString("" + m_date.get().getYear()));
       else
         values.put(Index.Path.DATES,
-                   Index.groupsToString("" + m_date.getYear(), month));
+                   Index.groupsToString("" + m_date.get().getYear(), month));
     }
     else
       values.put(Index.Path.DATES, Value.UNDEFINED);
@@ -1692,10 +1677,12 @@ public class BaseProduct extends BaseEntry
       values.put(Index.Path.SERIES, series);
 
     // page
-    values.put(Index.Path.PAGES, s_pageGroup.group(m_pages));
+    if(m_pages.isPresent())
+      values.put(Index.Path.PAGES, s_pageGroup.group(m_pages.get()));
 
     // price
-    values.put(Index.Path.PRICES, s_priceGrouping.group(m_price));
+    if(m_price.isPresent())
+    values.put(Index.Path.PRICES, s_priceGrouping.group(m_price.get()));
 
     // parts
     for(Content content : m_contents)
@@ -1734,7 +1721,7 @@ public class BaseProduct extends BaseEntry
     m_date = inValues.use("date", m_date, Date.PARSER);
     m_isbn = inValues.use("isbn.10", m_isbn, ISBN.PARSER);
     m_isbn13 = inValues.use("isbn.13", m_isbn13, ISBN13.PARSER);
-    m_pages = inValues.use("pages", m_pages);
+    m_pages = inValues.use("pages", m_pages, NewValue.INTEGER_PARSER);
     m_producer = inValues.use("producer", m_producer);
     m_system= inValues.use("system", m_system, new NewValue.Parser<System>(1) {
       @Override
@@ -1807,14 +1794,14 @@ public class BaseProduct extends BaseEntry
 
     builder.setBase((BaseEntryProto)super.toProto());
 
-    if(!m_title.isEmpty())
-      builder.setTitle(m_title);
-    if(!m_leader.isEmpty())
-      builder.setLeader(m_leader);
-    if(!m_subtitle.isEmpty())
-      builder.setSubtitle(m_subtitle);
-    if(!m_notes.isEmpty())
-      builder.setNotes(m_notes);
+    if(m_title.isPresent())
+      builder.setTitle(m_title.get());
+    if(m_leader.isPresent())
+      builder.setLeader(m_leader.get());
+    if(m_subtitle.isPresent())
+      builder.setSubtitle(m_subtitle.get());
+    if(m_notes.isPresent())
+      builder.setNotes(m_notes.get());
     for(Person person : m_authors)
       builder.addAuthor(person.toProto());
     for(Person person : m_editors)
@@ -1829,28 +1816,28 @@ public class BaseProduct extends BaseEntry
       builder.addTypographer(person.toProto());
     for(Person person : m_managers)
       builder.addManager(person.toProto());
-    if(m_date != null)
-      builder.setDate(m_date.toProto());
-    if(m_isbn != null)
-      builder.setIsbn(m_isbn.toProto());
-    if(m_isbn13 != null)
-      builder.setIsbn13(m_isbn13.toProto());
-    if(m_pages != null)
-      builder.setPages(m_pages);
+    if(m_date.isPresent())
+      builder.setDate(m_date.get().toProto());
+    if(m_isbn.isPresent())
+      builder.setIsbn(m_isbn.get().toProto());
+    if(m_isbn13.isPresent())
+      builder.setIsbn13(m_isbn13.get().toProto());
+    if(m_pages.isPresent())
+      builder.setPages(m_pages.get());
     builder.setSystem(m_system.toProto());
     builder.setAudience(m_audience.toProto());
     builder.setType(m_productType.toProto());
     builder.setStyle(m_style.toProto());
-    if(!m_producer.isEmpty())
-      builder.setProducer(m_producer);
-    if(!m_volume.isEmpty())
-      builder.setVolume(m_volume);
-    if(!m_number.isEmpty())
-      builder.setNumber(m_number);
+    if(m_producer.isPresent())
+      builder.setProducer(m_producer.get());
+    if(m_volume.isPresent())
+      builder.setVolume(m_volume.get());
+    if(m_number.isPresent())
+      builder.setNumber(m_number.get());
     for(String series : m_series)
         builder.addSeries(series);
-    if(m_price != null)
-      builder.setPrice(m_price.toProto());
+    if(m_price.isPresent())
+      builder.setPrice(m_price.get().toProto());
     for(Content content : m_contents)
         builder.addContent(content.toProto());
     for(ProductReference requirement : m_mandatoryRequirements)
@@ -1878,13 +1865,13 @@ public class BaseProduct extends BaseEntry
     super.fromProto(proto.getBase());
 
     if(proto.hasTitle())
-      m_title = proto.getTitle();
+      m_title = Optional.of(proto.getTitle());
     if(proto.hasLeader())
-      m_leader = proto.getLeader();
+      m_leader = Optional.of(proto.getLeader());
     if(proto.hasSubtitle())
-      m_subtitle = proto.getSubtitle();
+      m_subtitle = Optional.of(proto.getSubtitle());
     if(proto.hasNotes())
-      m_notes = proto.getNotes();
+      m_notes = Optional.of(proto.getNotes());
 
     for(BaseProductProto.Person author : proto.getAuthorList())
       m_authors.add(Person.fromProto(author));
@@ -1896,28 +1883,28 @@ public class BaseProduct extends BaseEntry
       m_cover.add(Person.fromProto(cover));
 
     for(BaseProductProto.Person cartographer : proto.getCartographerList())
-      m_cartographers.add(Person.fromProto(cartographer));
+    m_cartographers.add(Person.fromProto(cartographer));
 
-    for(BaseProductProto.Person illustrator : proto.getIllustratorList())
+    for(BaseProductProto.Person illustrator:proto.getIllustratorList())
       m_illustrators.add(Person.fromProto(illustrator));
 
     for(BaseProductProto.Person typographer : proto.getTypographerList())
-      m_typographers.add(Person.fromProto(typographer));
+    m_typographers.add(Person.fromProto(typographer));
 
     for(BaseProductProto.Person manager : proto.getManagerList())
       m_managers.add(Person.fromProto(manager));
 
     if(proto.hasDate())
-      m_date = Date.fromProto(proto.getDate());
+      m_date = Optional.of(Date.fromProto(proto.getDate()));
 
     if(proto.hasIsbn())
-      m_isbn = ISBN.fromProto(proto.getIsbn());
+      m_isbn = Optional.of(ISBN.fromProto(proto.getIsbn()));
 
     if(proto.hasIsbn13())
-      m_isbn13 = ISBN13.fromProto(proto.getIsbn13());
+      m_isbn13 = Optional.of(ISBN13.fromProto(proto.getIsbn13()));
 
     if(proto.hasPages())
-      m_pages = proto.getPages();
+      m_pages = Optional.of(proto.getPages());
 
     if(proto.hasSystem())
       m_system = System.fromProto(proto.getSystem());
@@ -1926,25 +1913,25 @@ public class BaseProduct extends BaseEntry
       m_audience = Audience.fromProto(proto.getAudience());
 
     if(proto.hasType())
-      m_productType = ProductType.fromProto(proto.getType());
+      m_productType=ProductType.fromProto(proto.getType());
 
     if(proto.hasStyle())
       m_style = Style.fromProto(proto.getStyle());
 
     if(proto.hasProducer())
-      m_producer = proto.getProducer();
+      m_producer = Optional.of(proto.getProducer());
 
     if(proto.hasVolume())
-      m_volume = proto.getVolume();
+      m_volume = Optional.of(proto.getVolume());
 
     if(proto.hasNumber())
-      m_number = proto.getNumber();
+      m_number = Optional.of(proto.getNumber());
 
     if(proto.getSeriesCount() > 0)
       m_series = proto.getSeriesList();
 
     if(proto.hasPrice())
-      m_price = Price.fromProto(proto.getPrice());
+      m_price = Optional.of(Price.fromProto(proto.getPrice()));
 
     for(BaseProductProto.Content contentProto : proto.getContentList())
       m_contents.add(Content.fromProto(contentProto));
@@ -1971,10 +1958,6 @@ public class BaseProduct extends BaseEntry
       Log.warning("could not properly parse proto: " + e);
     }
   }
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
 
   /** This is the test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
@@ -2551,6 +2534,4 @@ public class BaseProduct extends BaseEntry
 
     //......................................................................
  }
-
-  //........................................................................
 }

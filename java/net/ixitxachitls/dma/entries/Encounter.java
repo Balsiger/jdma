@@ -22,6 +22,7 @@
 
 package net.ixitxachitls.dma.entries;
 
+import com.google.common.base.Optional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +31,11 @@ import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.EncounterProto;
+import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.NewDistance;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.ValueList;
@@ -43,7 +46,6 @@ import net.ixitxachitls.util.logging.Log;
  *
  * @file   Encounter.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 public class Encounter extends CampaignEntry
 {
@@ -282,115 +284,73 @@ public class Encounter extends CampaignEntry
   };
 
   /** The encounter number (for sorting). */
-  @Key("number")
-  protected Name m_number = new Name();
+  protected Optional<String> m_number = Optional.absent();
 
   /** The monster that can potentially be encountered. */
-  @Key("monsters")
-  protected ValueList<Reference<Monster>> m_monsters =
-    new ValueList<Reference<Monster>>(new Reference<Monster>(Monster.TYPE));
+  protected Optional<List<Monster>> m_monsters = Optional.absent();
 
-  /** The monster that can potentially be encountered. */
-  @Key("items")
-  protected ValueList<Reference<Item>> m_items =
-    new ValueList<Reference<Item>>(new Reference<Item>(Item.TYPE));
+  /** The items that can potentially be encountered. */
+  protected Optional<List<Item>> m_items = Optional.absent();
 
   /** The traps in the encounter. */
-  @Key("traps")
-  protected ValueList<LongFormattedText> m_traps =
-    new ValueList<LongFormattedText>(new LongFormattedText());
+  protected List<String> m_traps = new ArrayList<>();
 
   /** The hazards in the encounter. */
-  @Key("hazards")
-  protected ValueList<LongFormattedText> m_hazards =
-    new ValueList<LongFormattedText>(new LongFormattedText());
+  protected List<String> m_hazards = new ArrayList<>();
 
   /** The obstacles in the encounter. */
-  @Key("obstacles")
-  protected ValueList<LongFormattedText> m_obstacles =
-    new ValueList<LongFormattedText>(new LongFormattedText());
+  protected List<String> m_obstacles = new ArrayList<>();
 
   /** The secrets in the encounter. */
-  @Key("secrets")
-  protected ValueList<LongFormattedText> m_secrets =
-    new ValueList<LongFormattedText>(new LongFormattedText());
+  protected List<String> m_secrets = new ArrayList<>();
 
   /** The events in the encounter. */
-  @Key("events")
-  protected ValueList<LongFormattedText> m_events =
-    new ValueList<LongFormattedText>(new LongFormattedText());
+  protected List<String> m_events = new ArrayList<>();
 
   /** Any special rules for the encounter. */
-  @Key("rules")
-  protected ValueList<LongFormattedText> m_rules =
-    new ValueList<LongFormattedText>(new LongFormattedText());
+  protected List<String> m_rules = new ArrayList<>();
 
   /** Spells relevant to this encounter. */
-  @Key("spells")
-  protected ValueList<Reference<BaseSpell>> m_spells =
-    new ValueList<Reference<BaseSpell>>
-      (new Reference<BaseSpell>(BaseSpell.TYPE));
+  protected List<String> m_spells = new ArrayList<>();
 
   /** The encounter level. */
-  @Key("EL")
-  protected ValueList<Number> m_els = new ValueList<Number>(new Number(0, 250));
+  protected List<Integer> m_els = new ArrayList<>();
 
   /** The location where this encounter takes place. */
-  // TODO: long term, this should be a link to a location object
-  @Key("location")
-  protected ValueList<Name> m_location =
-    new ValueList<Name>(new Name());
+  protected List<String> m_locations = new ArrayList<>();
 
   /** A description of the doors. */
-  @Key("doors")
-  protected LongFormattedText m_doors = new LongFormattedText();
+  protected Optional<String> m_doors = Optional.absent();
 
   /** A description of the floor. */
-  @Key("floor")
-  protected LongFormattedText m_floor = new LongFormattedText();
+  protected Optional<String> m_floor = Optional.absent();
 
   /** A description of the ceiling. */
-  @Key("ceiling")
-  protected LongFormattedText m_ceiling = new LongFormattedText();
+  protected Optional<String> m_ceiling = Optional.absent();
 
   /** A description of the walls. */
-  @Key("walls")
-  protected LongFormattedText m_walls = new LongFormattedText();
+  protected Optional<String> m_walls = Optional.absent();
 
   /** A description of the temperature. */
-  @Key("feel")
-  protected LongFormattedText m_feel = new LongFormattedText();
+  protected Optional<String> m_feel = Optional.absent();
 
   /** A description of the sounds. */
-  @Key("sound")
-  protected LongFormattedText m_sound = new LongFormattedText();
+  protected Optional<String> m_sound = Optional.absent();
 
   /** A description of the odors. */
-  @Key("smell")
-  protected LongFormattedText m_smell = new LongFormattedText();
+  protected Optional<String> m_smell = Optional.absent();
 
   /** A description of the odors. */
-  @Key("taste")
-  protected LongFormattedText m_taste = new LongFormattedText();
+  protected Optional<String> m_taste = Optional.absent();
 
   /** A description of the light. */
-  @Key("light")
-  protected LongFormattedText m_light = new LongFormattedText();
+  protected Optional<String> m_light = Optional.absent();
 
   /** The base skills relevant for this encounter. */
-  @Key("skills")
-  protected ValueList<Reference<BaseSkill>> m_skills =
-    new ValueList<Reference<BaseSkill>>
-      (new Reference<BaseSkill>(BaseSkill.TYPE));
+  protected List<String> m_skills = new ArrayList<>();
 
   /** The initial encounter distance. */
-  @Key("distance")
-  protected Distance m_distance = new Distance();
-
-  static
-  {
-    extractVariables(Encounter.class);
-  }
+  protected Optional<NewDistance> m_distance = Optional.absent();
 
   @Override
   public Message toProto()
@@ -399,86 +359,40 @@ public class Encounter extends CampaignEntry
 
     builder.setBase((CampaignEntryProto)super.toProto());
 
-    if(m_number.isDefined())
+    if(m_number.isPresent())
       builder.setNumber(m_number.get());
 
-    if(m_monsters.isDefined())
-      for(Reference<Monster> monster : m_monsters)
-        builder.addMonster(monster.getName());
+    builder.addAllTrap(m_traps);
+    builder.addAllHazard(m_hazards);
+    builder.addAllObstacle(m_obstacles);
+    builder.addAllSecret(m_secrets);
+    builder.addAllEvent(m_events);
+    builder.addAllRule(m_rules);
+    builder.addAllSpell(m_spells);
+    builder.addAllEncounterLevel(m_els);
+    builder.addAllLocation(m_locations);
+    builder.addAllSkill(m_skills);
 
-    if(m_items.isDefined())
-      for(Reference<Item> item : m_items)
-        builder.addItem(item.getName());
-
-    if(m_traps.isDefined())
-      for(LongFormattedText trap : m_traps)
-        builder.addTrap(trap.get());
-
-    if(m_hazards.isDefined())
-      for(LongFormattedText hazard : m_hazards)
-        builder.addHazard(hazard.get());
-
-    if(m_obstacles.isDefined())
-      for(LongFormattedText obstacle : m_obstacles)
-        builder.addObstacle(obstacle.get());
-
-    if(m_secrets.isDefined())
-      for(LongFormattedText secret : m_secrets)
-        builder.addSecret(secret.get());
-
-    if(m_events.isDefined())
-      for(LongFormattedText event : m_events)
-        builder.addEvent(event.get());
-
-    if(m_rules.isDefined())
-      for(LongFormattedText rule : m_rules)
-        builder.addRule(rule.get());
-
-    if(m_spells.isDefined())
-      for(Reference<BaseSpell> spell : m_spells)
-        builder.addSpell(spell.getName());
-
-    if(m_els.isDefined())
-      for(Number el : m_els)
-        builder.addEncounterLevel((int)el.get());
-
-    if(m_location.isDefined())
-      for(Name location : m_location)
-        builder.addLocation(location.get());
-
-    if(m_doors.isDefined())
+    if(m_doors.isPresent())
       builder.setDoors(m_doors.get());
-
-    if(m_floor.isDefined())
+    if(m_floor.isPresent())
       builder.setFloor(m_floor.get());
-
-    if(m_ceiling.isDefined())
+    if(m_ceiling.isPresent())
       builder.setCeiling(m_ceiling.get());
-
-    if(m_walls.isDefined())
+    if(m_walls.isPresent())
       builder.setWalls(m_walls.get());
-
-    if(m_feel.isDefined())
+    if(m_feel.isPresent())
       builder.setFeel(m_feel.get());
-
-    if(m_sound.isDefined())
+    if(m_sound.isPresent())
       builder.setSound(m_sound.get());
-
-    if(m_smell.isDefined())
+    if(m_smell.isPresent())
       builder.setSmell(m_smell.get());
-
-    if(m_taste.isDefined())
+    if(m_taste.isPresent())
       builder.setDoors(m_taste.get());
-
-    if(m_light.isDefined())
+    if(m_light.isPresent())
       builder.setDoors(m_light.get());
-
-    if(m_skills.isDefined())
-      for(Reference<BaseSkill> skill : m_skills)
-        builder.addSkill(skill.getName());
-
-    if(m_distance.isDefined())
-      builder.setDistance(m_distance.toProto());
+    if(m_distance.isPresent())
+      builder.setDistance(m_distance.get().toProto());
 
     EncounterProto proto = builder.build();
     return proto;
@@ -498,135 +412,48 @@ public class Encounter extends CampaignEntry
     super.fromProto(proto.getBase());
 
     if(proto.hasNumber())
-      m_number = m_number.as(proto.getNumber());
+      m_number = Optional.of(proto.getNumber());
 
-    if(proto.getMonsterCount() > 0)
-    {
-      List<Reference<Monster>> monsters = new ArrayList<>();
-      for(String monster : proto.getMonsterList())
-        monsters.add(m_monsters.createElement().as(monster));
-      m_monsters = m_monsters.as(monsters);
-    }
-
-    if(proto.getItemCount() > 0)
-    {
-      List<Reference<Item>> items = new ArrayList<>();
-      for(String item : proto.getItemList())
-        items.add(m_items.createElement().as(item));
-      m_items = m_items.as(items);
-    }
-
-    if(proto.getTrapCount() > 0)
-    {
-      List<LongFormattedText> traps = new ArrayList<>();
-      for(String trap : proto.getTrapList())
-        traps.add(m_traps.createElement().as(trap));
-      m_traps = m_traps.as(traps);
-    }
-
-    if(proto.getHazardCount() > 0)
-    {
-      List<LongFormattedText> hazards = new ArrayList<>();
-      for(String hazard : proto.getHazardList())
-        hazards.add(m_traps.createElement().as(hazard));
-      m_hazards = m_hazards.as(hazards);
-    }
-
-    if(proto.getObstacleCount() > 0)
-    {
-      List<LongFormattedText> obstacles = new ArrayList<>();
-      for(String obstacle : proto.getObstacleList())
-        obstacles.add(m_traps.createElement().as(obstacle));
-      m_obstacles = m_obstacles.as(obstacles);
-    }
-
-    if(proto.getSecretCount() > 0)
-    {
-      List<LongFormattedText> secrets = new ArrayList<>();
-      for(String secret : proto.getSecretList())
-        secrets.add(m_secrets.createElement().as(secret));
-      m_secrets = m_secrets.as(secrets);
-    }
-
-    if(proto.getEventCount() > 0)
-    {
-      List<LongFormattedText> events = new ArrayList<>();
-      for(String event : proto.getEventList())
-        events.add(m_events.createElement().as(event));
-      m_events = m_events.as(events);
-    }
-
-    if(proto.getSpellCount() > 0)
-    {
-      List<Reference<BaseSpell>> spells = new ArrayList<>();
-      for(String spell : proto.getSpellList())
-        spells.add(m_spells.createElement().as(spell));
-      m_spells = m_spells.as(spells);
-    }
-
-    if(proto.getEncounterLevelCount() > 0)
-    {
-      List<Number> els = new ArrayList<>();
-      for(int el : proto.getEncounterLevelList())
-        els.add(m_els.createElement().as(el));
-      m_els = m_els.as(els);
-    }
-
-    if(proto.getRuleCount() > 0)
-    {
-      List<LongFormattedText> rules = new ArrayList<>();
-      for(String rule : proto.getRuleList())
-        rules.add(m_rules.createElement().as(rule));
-      m_rules = m_rules.as(rules);
-    }
-
-    if(proto.getLocationCount() > 0)
-    {
-      List<Name> locations = new ArrayList<>();
-      for(String location : proto.getLocationList())
-        locations.add(m_location.createElement().as(location));
-
-      m_location = m_location.as(locations);
-    }
+    m_traps = proto.getTrapList();
+    m_hazards = proto.getHazardList();
+    m_obstacles = proto.getObstacleList();
+    m_secrets = proto.getSecretList();
+    m_events = proto.getEventList();
+    m_rules = proto.getRuleList();
+    m_spells = proto.getSpellList();
+    m_els = proto.getEncounterLevelList();
+    m_locations = proto.getLocationList();
+    m_skills = proto.getSkillList();
 
     if(proto.hasDoors())
-      m_doors = m_doors.as(proto.getDoors());
+      m_doors = Optional.of(proto.getDoors());
 
     if(proto.hasFloor())
-      m_floor = m_floor.as(proto.getFloor());
+      m_floor = Optional.of(proto.getFloor());
 
     if(proto.hasCeiling())
-      m_ceiling = m_ceiling.as(proto.getCeiling());
+      m_ceiling = Optional.of(proto.getCeiling());
 
     if(proto.hasWalls())
-      m_walls = m_walls.as(proto.getWalls());
+      m_walls = Optional.of(proto.getWalls());
 
     if(proto.hasFeel())
-      m_feel = m_feel.as(proto.getFeel());
+      m_feel = Optional.of(proto.getFeel());
 
     if(proto.hasSound())
-      m_sound = m_sound.as(proto.getSound());
+      m_sound = Optional.of(proto.getSound());
 
     if(proto.hasSmell())
-      m_smell = m_smell.as(proto.getSmell());
+      m_smell = Optional.of(proto.getSmell());
 
     if(proto.hasTaste())
-      m_taste = m_taste.as(proto.getTaste());
+      m_taste = Optional.of(proto.getTaste());
 
     if(proto.hasLight())
-      m_light = m_light.as(proto.getLight());
-
-    if(proto.getSkillCount() > 0)
-    {
-      List<Reference<BaseSkill>> skills = new ArrayList<>();
-      for(String skill : proto.getSkillList())
-        skills.add(m_skills.createElement().as(skill));
-
-      m_skills = m_skills.as(skills);
-    }
+      m_light = Optional.of(proto.getLight());
 
     if(proto.hasDistance())
-      m_distance = m_distance.fromProto(proto.getDistance());
+      m_distance = Optional.of(NewDistance.fromProto(proto.getDistance()));
   }
 
   @Override

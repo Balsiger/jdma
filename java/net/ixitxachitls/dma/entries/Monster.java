@@ -963,9 +963,9 @@ public class Monster extends CampaignEntry
     if(m_possessions == null)
       m_possessions =
         DMADataFactory.get().getEntries(Item.TYPE,
-                                         getCampaign().get().getKey(),
-                                         "index-parent",
-                                         "monster/" + getName().toLowerCase());
+                                        getCampaign().get().getKey(),
+                                        "index-parent",
+                                        "monster/" + getName().toLowerCase());
 
     return Collections.unmodifiableList(m_possessions);
   }

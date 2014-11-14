@@ -564,35 +564,6 @@ public abstract class AbstractEntry extends ValueGroup
   }
 
   /**
-   * Get the references of this entry with full information for printing.
-   *
-   * @return      a list with the references and all values
-   */
-  @SuppressWarnings("unchecked")
-  public List<Map<String, Object>> fullReferences()
-  {
-    List<Map<String, Object>> references = Lists.newArrayList();
-
-    Combined<ValueList<Multiple>> combinedRefs = collect("references");
-    for(Multiple ref : combinedRefs.total())
-    {
-      Map<String, Object> values = Maps.newHashMap();
-      Reference<BaseProduct> reference = (Reference<BaseProduct>)ref.get(0);
-      BaseProduct product = reference.getEntry();
-      Object pages = ref.get(1);
-
-      if(product != null)
-        values.put("title", product.getFullTitle());
-
-      values.put("id", reference);
-      values.put("pages", pages);
-      references.add(values);
-    }
-
-    return references;
-  }
-
-  /**
    * Collect the name value.
    *
    * @param   inName the name of the value to collect

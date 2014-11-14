@@ -32,9 +32,7 @@ import com.google.protobuf.Message;
  *
  * @file   NewValue.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-@ParametersAreNonnullByDefault
 public abstract class NewValue<T extends Message>
 {
   /** Simple interface for parsing values. */

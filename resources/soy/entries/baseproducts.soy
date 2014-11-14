@@ -47,15 +47,15 @@
     {param title}
       {call dma.entry._new_title}
         {param title}
-          {if $entry.leader}{$entry.leader} {/if}
+          {if $entry.leader.present}{$entry.leader} {/if}
           {$entry.title}
         {/param}
         {param color: '#444' /}
       {/call}
       
-      {if def($entry.subtitle)}
+      {if $entry.subtitle.present}
         {call dma.entry._new_subtitle}
-          {param title: $entry.subtitle /}
+          {param title: $entry.subtitle.get /}
         {/call}
       {/if}
     {/param}
@@ -76,7 +76,7 @@
           {/param}
           {param color: '#444' /}
         {/call}
-      {/if}      
+      {/if}
       {if length($entry.categories)}
         {call dma.entry.value}
           {param label: 'Categories' /}
@@ -98,13 +98,11 @@
         {/param}
         {param color: '#444' /}
       {/call}
-      {if def($entry.system)}
-        {call dma.entry.value}
-          {param label: 'System' /}
-          {param value: $entry.system.getName /}
-          {param color: '#444' /}
-        {/call}
-      {/if}
+      {call dma.entry.value}
+        {param label: 'System' /}
+        {param value: $entry.system.getName /}
+        {param color: '#444' /}
+      {/call}
       {call dma.entry.value}
         {param label: 'Producer' /}
         {param value: $entry.producer /}
@@ -120,63 +118,64 @@
         {/param}
         {param color: '#444' /}
       {/call}
-      {if def($entry.style) or def($entry.layout)}
+      {if $entry.style or def($entry.layout)}
         {call dma.entry.value}
           {param label: 'Style' /}
           {param value}
-            {$entry.style.getName}
-            {if def($entry.layout)}
-              , {$entry.layout.getName}
-            {/if}
-          {/param}  
+            {$entry.style.getName}, {$entry.layout.getName}
+          {/param}
           {param color: '#444' /}
         {/call}
       {/if}
-      {if $entry.date}
+      {if $entry.date.present}
         {call dma.entry.value}
           {param label: 'Date' /}
           {param value: $entry.date /}
           {param color: '#444' /}
         {/call}
       {/if}
-      {if $entry.pages > 0}
+      {if $entry.pages >= 0}
         {call dma.entry.value}
           {param label: 'Pages' /}
           {param value: $entry.pages /}
           {param color: '#444' /}
         {/call}
       {/if}
-      {if $entry.price}
+      {if $entry.price.present}
         {call dma.entry.value}
           {param label: 'Price' /}
           {param value: $entry.price /}
           {param color: '#444' /}
         {/call}
       {/if}
-      {if length($entry.series) or $entry.number}
+      {if length($entry.series) or $entry.number.present}
         {call dma.entry.value}
           {param label: 'Series' /}
           {param value}
             {foreach $series in $entry.series}            
               {$series}{if not isLast($series)}, {/if}
-            {/foreach} 
-            {if $entry.number}
+            {/foreach}
+            {if $entry.number.present}
             ; {$entry.number}
             {/if}
-            {if $entry.volume}
+            {if $entry.volume.present}
             ; {$entry.volume}
             {/if}
           {/param}
           {param color: '#444' /}
         {/call}
       {/if}
-      {if $entry.ISBN or $entry.ISBN13}
+      {if $entry.ISBN.present or $entry.ISBN13.present}
         {call dma.entry.value}
           {param label: 'ISBN' /}
           {param value}
-            {$entry.ISBN}
-            {if $entry.ISBN and $entry.ISBN13}, {/if} 
-            {$entry.ISBN13}
+            {if $entry.ISBN.present}
+              {$entry.ISBN}
+            {/if}
+            {if $entry.ISBN.present and $entry.ISBN13.present}, {/if}
+            {if $entry.ISBN13.present}
+              {$entry.ISBN13}
+            {/if}
           {/param}  
           {param color: '#444' /}
         {/call}
@@ -263,7 +262,7 @@
           {param color: '#444' /}
         {/call}
       {/if}
-      {if $entry.notes}
+      {if $entry.notes.present}
         {call dma.entry.value}
           {param label: 'Notes' /}
           {param value: $entry.notes /}
@@ -353,7 +352,7 @@
           {/param}
           {param color: '#444' /}
         {/call}
-      {/if}      
+      {/if}
     {/param}
   {/call}
 {/template}
