@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2013 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -19,46 +19,96 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.annotation.concurrent.Immutable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import net.ixitxachitls.dma.entries.ValueGroup;
+import com.google.common.base.Optional;
+
 import net.ixitxachitls.dma.proto.Values.DamageProto;
-import net.ixitxachitls.input.ParseReader;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
+import net.ixitxachitls.util.Strings;
 
 /**
- * This class stores a damage and is capable of reading such damages
- * from a reader (and write it to a writer of course).
+ * A damage value.
  *
- * @file          Damage.java
- *
- * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
+ * @file   NewDamage.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
-@Immutable
-@ParametersAreNonnullByDefault
-public class Damage extends Value<Damage>
+public class Damage extends NewValue.Arithmetic<DamageProto>
 {
-  //----------------------------------------------------------------- nested
+  public static class DamageParser extends Parser<Damage>
+  {
+    public DamageParser()
+    {
+      super(0);
+    }
 
-  //----- type -------------------------------------------------------------
+    @Override
+    public Optional<Damage> doParse(String... inValues)
+    {
+      return parse(Strings.COMMA_SPLITTER.splitToList
+                   (Strings.COMMA_JOINER.join(inValues)));
+    }
 
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
+    private Optional<Damage> parse(List<String> inValues)
+    {
+      List<String> values = new ArrayList<>(inValues);
+      Collections.reverse(values);
+      Optional<Damage> result = Optional.absent();
+      for(String value : values)
+      {
+        String []parts =
+          Strings.getPatterns(value, "^([0-9\\-+\\sd]+)\\s*("
+                              + Strings.PIPE_JOINER.join(Type.names()) + ")?"
+                              + "(?:\\s+plus\\s+(.*))?$");
+        if(parts == null || parts.length != 3)
+          return Optional.absent();
+
+        if(parts[0] == null)
+          return Optional.absent();
+
+        Optional<NewDice> dice = NewDice.PARSER.parse(parts[0]);
+        if(dice == null)
+          return Optional.absent();
+
+        Optional<Type> type;
+        if(parts[1] != null)
+          type = Type.fromString(parts[1]);
+        else
+          type = Optional.absent();
+
+        Optional<String> effect = Optional.fromNullable(parts[2]);
+
+        result = Optional.of(new Damage(dice.get(), type, result, effect));
+      }
+
+      return result;
+    }
+  }
+
+  public Damage(NewDice inDice, Optional<Type> inType,
+                Optional<Damage> inOther, Optional<String> inEffect)
+  {
+    m_dice = inDice;
+    m_type = inType;
+    m_other = inOther;
+    m_effect = inEffect;
+  }
+
+  public Damage(NewDice inDice, Type inType)
+  {
+    this(inDice, Optional.of(inType), Optional.<Damage>absent(),
+         Optional.<String>absent());
+  }
+
+  public Damage(NewDice inDice)
+  {
+    this(inDice, Optional.<Type>absent(), Optional.<Damage>absent(),
+         Optional.<String>absent());
+  }
 
   /** The possible damage types. */
   public enum Type
@@ -122,7 +172,7 @@ public class Damage extends Value<Damage>
      */
     private Type(String inName, DamageProto.Damage.Type inProto)
     {
-      m_name = ValueGroup.constant("damage.types", inName);
+      m_name = inName;
       m_proto = inProto;
     }
 
@@ -159,445 +209,109 @@ public class Damage extends Value<Damage>
       throw new IllegalStateException("cannot convert damage type enum: "
         + inProto);
     }
+
+    public static List<String> names()
+    {
+      List<String> names = new ArrayList<>();
+
+      for(Type type : values())
+        names.add(type.getName());
+
+      return names;
+    }
+
+    public static Optional<Type> fromString(String inValue)
+    {
+      for(Type type : values())
+        if(type.getName().equalsIgnoreCase(inValue))
+          return Optional.of(type);
+
+      return Optional.absent();
+    }
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //-------------------------------- Damage --------------------------------
-
-  /**
-   * Construct the damage object as undefined.
-   */
-  public Damage()
-  {
-    withEditType("name");
-    withTemplate("damage");
-  }
-
-  //........................................................................
-  //-------------------------------- Damage --------------------------------
-
-  /**
-   * Create a damage from the given dice.
-   *
-   * @param       inDice the dice for the base damage
-   */
-  public Damage(Dice inDice)
-  {
-    m_base = inDice;
-  }
-
-
-  //........................................................................
-
-
-  //-------------------------------- create --------------------------------
-
-  /**
-   * Create a new list with the same type information as this one, but one
-   * that is still undefined.
-   *
-   * @return      a similar list, but without any contents
-   */
-  @Override
-  public Damage create()
-  {
-    return super.create(new Damage());
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The base damage. */
-  protected Dice m_base = new Dice();
+  protected final NewDice m_dice;
 
   /** The kind of base damage, if any. */
-  protected EnumSelection<Type> m_type =
-    new EnumSelection<Type>(Type.class);
+  protected final Optional<Type> m_type;
 
   /** Additional damages, if any. */
-  protected @Nullable Damage m_other = null;
+  protected final Optional<Damage> m_other;
 
   /** Additional effects together with the damage, if any. */
-  protected @Nullable String m_effect = null;
+  protected final Optional<String> m_effect;
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //---------------------------- getBaseNumber -----------------------------
+  /** The parser for parsing damages. */
+  public static Parser<Damage> PARSER = new DamageParser();
 
   /**
    * Get the number of base dices of damage.
    *
    * @return      an integer with the number of dice
-   *
    */
   public int getBaseNumber()
   {
-    return m_base.getNumber();
+    return m_dice.getNumber();
   }
-
-  //........................................................................
-  //---------------------------- getBaseDice -------------------------------
 
   /**
    * Get the type of base dices of damage.
    *
    * @return      an integer with the type of dice
-   *
    */
   public int getBaseDice()
   {
-    return m_base.getDice();
+    return m_dice.getDice();
   }
-
-  //........................................................................
-  //-------------------------- getBaseModifier -----------------------------
 
   /**
    * Get the type of base dices of damage.
    *
    * @return      an integer with the type of dice
-   *
    */
   public int getBaseModifier()
   {
-    return m_base.getModifier();
+    return m_dice.getModifier();
   }
-
-  //........................................................................
-  //------------------------------ getType ---------------------------------
 
   /**
    * Get the type of damage.
    *
    * @return      the damage type (or null if none)
-   *
    */
-  public @Nullable Type getType()
+  public Optional<Type> getType()
   {
-    if(m_type.isDefined())
-      return m_type.getSelected();
-
-    return null;
+    return m_type;
   }
-
-  //........................................................................
-  //------------------------------ getEffect -------------------------------
 
   /**
    * Get the effect that applies with the damage, if any.
    *
    * @return      the applied effect
-   *
    */
-  public @Nullable String getEffect()
+  public Optional<String> getEffect()
   {
     return m_effect;
   }
-
-  //........................................................................
-
-  //--------------------------------- next ---------------------------------
 
   /**
    * Get the next damage in the chain, if any.
    *
    * @return      the next damage or null if none any more
-   *
    */
-  public @Nullable Damage next()
+  public Optional<Damage> next()
   {
     return m_other;
   }
 
-  //........................................................................
-  //------------------------------ addDamages ------------------------------
-
-  /**
-   * Add all the damage stored in this damage to the list.
-   *
-   * @param       ioTypes the list to add the damages to
-   *
-   */
-  // public void addDamages(Set<String> ioTypes)
-  // {
-  //   if(m_other != null)
-  //     m_other.addDamages(ioTypes);
-
-  //   ioTypes.add(m_base.toString());
-  // }
-
-  //........................................................................
-  //---------------------------- addDamageTypes ----------------------------
-
-  /**
-   * Add all the damage types stored in this damage to the list.
-   *
-   * @param       ioTypes the list to add the types to
-   *
-   */
-  // public void addDamageTypes(Set<String> ioTypes)
-  // {
-  //   if(m_other != null)
-  //     m_other.addDamageTypes(ioTypes);
-
-  //   if(m_type.isDefined())
-  //     ioTypes.add(m_type.toString());
-  // }
-
-  //........................................................................
-
-  //----------------------------- doToString ------------------------------
-
-  /**
-   * Convert the value to a string.
-   *
-   * @return      a String representation, depending on the kind given
-   *
-   */
   @Override
-  public String doToString()
+  public String toString()
   {
-    return
-      m_base.toString()
-      + (m_type.isDefined() ? " " + m_type : "")
-      + (m_effect != null ? " plus " + m_effect : "")
-      + (m_other != null ? ", " + m_other : "");
-  }
-
-  //........................................................................
-
-  //------------------------------ isDefined -------------------------------
-
-  /**
-   * Check if the value is defined or not.
-   *
-   * @return      true if the value is defined, false if not
-   *
-   */
-  @Override
-  public boolean isDefined()
-  {
-    return m_base.isDefined();
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------- doRead ---------------------------------
-
-  /**
-   * Read the value from the reader and replace the current one.
-   *
-   * @param       inReader the reader to read from
-   *
-   * @return      true if read, false if not
-   *
-   */
-  @Override
-  protected boolean doRead(ParseReader inReader)
-  {
-    // read the base damage
-    if(!m_base.doRead(inReader))
-      return false;
-
-    // try to read the type
-    m_type.doRead(inReader);
-
-    // try to read an effect, if any
-    ParseReader.Position pos = inReader.getPosition();
-    if(inReader.expect("plus"))
-    {
-      m_effect = inReader.read("),").trim().replaceAll("\\s+", " ");
-
-      if(m_effect.length() == 0)
-      {
-        m_effect = null;
-
-        inReader.seek(pos);
-
-        return true;
-      }
-    }
-
-    // now there might be some other damage types, thus we try to read them
-    // as well
-    pos = inReader.getPosition();
-
-    if(inReader.expect(","))
-    {
-      m_other = read(inReader);
-      if(m_other == null)
-      {
-        inReader.seek(pos);
-
-        return true;
-      }
-    }
-
-    return true;
-  }
-
-  //........................................................................
-  //--------------------------------- add ----------------------------------
-
-  /**
-   * Add the current and given value and return it. The current value is not
-   * changed.
-   *
-   * @param       inValue the value to add to this one
-   *
-   * @return      the added values
-   *
-   */
-  @Override
-  public Damage add(Damage inValue)
-  {
-    String effect = m_effect;
-    if(inValue.m_effect != null)
-      if(effect != null)
-        effect += " " + inValue.m_effect;
-      else
-        effect = inValue.m_effect;
-
-    if(inValue.m_type.getSelected() == m_type.getSelected()
-       && (inValue.m_base.getDice() == m_base.getDice()
-           || inValue.m_base.getNumber() == 0 || m_base.getNumber() == 0
-           || inValue.m_base.getDice() <= 1 || m_base.getDice() <= 1))
-      if(m_other == null)
-        return as(m_base.add(inValue.m_base), m_type, inValue.m_other, effect);
-      else if(inValue.m_other == null)
-        return as(m_base.add(inValue.m_base), m_type, m_other, effect);
-      else
-        return as(m_base.add(inValue.m_base), m_type,
-                  m_other.add(inValue.m_other), effect);
-
-    if(m_other == null)
-      return as(m_base, m_type, inValue, effect);
-
-    return as(m_base, m_type, m_other.add(inValue), effect);
-  }
-
-  //........................................................................
-  //---------------------------------- as ----------------------------------
-
-  /**
-   * Create a new damage value with the new data.
-   *
-   * @param     inDice the damage dice
-   * @param     inType the type of the damage
-   *
-   * @return    the newly created value
-   *
-   */
-  public Damage as(Dice inDice, EnumSelection<Type> inType)
-  {
-    return as(inDice, inType, null);
-  }
-
-  //........................................................................
-  //---------------------------------- as ----------------------------------
-
-  /**
-   * Create a new damage value with the new data.
-   *
-   * @param     inDice   the damage dice
-   * @param     inType   the type of the damage
-   * @param     inOther  other additional damage, if any
-   *
-   * @return    the newly created value
-   *
-   */
-  public Damage as(Dice inDice, EnumSelection<Type> inType,
-                   @Nullable Damage inOther)
-  {
-    Damage damage = create();
-
-    damage.m_base = inDice;
-    damage.m_type = inType;
-    damage.m_other = inOther;
-
-    return damage;
-  }
-
-  //........................................................................
-  //---------------------------------- as ----------------------------------
-
-  /**
-   * Create a new damage value with the new data.
-   *
-   * @param     inDice   the damage dice
-   * @param     inType   the type of the damage
-   * @param     inOther  other additional damage, if any
-   * @param     inEffect the effects, if any
-   *
-   * @return    the newly created value
-   *
-   */
-  public Damage as(Dice inDice, EnumSelection<Type> inType,
-                   @Nullable Damage inOther, @Nullable String inEffect)
-  {
-    Damage damage = create();
-
-    damage.m_base = inDice;
-    damage.m_type = inType;
-    damage.m_other = inOther;
-    damage.m_effect = inEffect;
-
-    return damage;
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  /**
-   * Create a new damage value from the given proto.
-   *
-   * @param inProto  the proto to take values from
-   * @return a newly create damage
-   */
-  public Damage fromProto(DamageProto inProto)
-  {
-    Damage result = null;
-    Damage next = null;
-    for(DamageProto.Damage damage : inProto.getDamageList())
-    {
-      if(result == null)
-      {
-        result = create();
-        next = result;
-      }
-      else
-      {
-        next.m_other = create();
-        next = next.m_other;
-      }
-
-      next.m_base = m_base.fromProto(damage.getBase());
-
-      if(damage.hasType())
-        next.m_type = m_type.as(Type.fromProto(damage.getType()));
-
-      if(damage.hasEffect())
-        next.m_effect = damage.getEffect();
-    }
-
-    return result;
+    return m_dice
+      + (m_type.isPresent() ? " " + m_type.get() : "")
+      + (m_effect.isPresent() ? " plus " + m_effect.get() : "")
+      + (m_other.isPresent() ? ", " + m_other.get() : "");
   }
 
   /**
@@ -605,6 +319,7 @@ public class Damage extends Value<Damage>
    *
    * @return  the proto created
    */
+  @Override
   public DamageProto toProto()
   {
     DamageProto.Builder builder = DamageProto.newBuilder();
@@ -622,103 +337,142 @@ public class Damage extends Value<Damage>
   private void addToProto(DamageProto.Builder inBuilder)
   {
     DamageProto.Damage.Builder damage = DamageProto.Damage.newBuilder();
-    damage.setBase(m_base.toProto());
-    if(m_type.isDefined())
-      damage.setType(m_type.getSelected().toProto());
-    if(m_effect != null)
-      damage.setEffect(m_effect);
+    damage.setBase(m_dice.toProto());
+    if(m_type.isPresent())
+      damage.setType(m_type.get().toProto());
+    if(m_effect.isPresent())
+      damage.setEffect(m_effect.get());
 
     inBuilder.addDamage(damage.build());
 
-    if(m_other != null)
-      m_other.addToProto(inBuilder);
+    if(m_other.isPresent())
+      m_other.get().addToProto(inBuilder);
   }
 
-  //........................................................................
+    /**
+   * Create a new damage value from the given proto.
+   *
+   * @param inProto  the proto to take values from
+   * @return a newly create damage
+   */
+  public static Damage fromProto(DamageProto inProto)
+  {
+    List<DamageProto.Damage> protos = new ArrayList<>(inProto.getDamageList());
+    Collections.reverse(protos);
 
-  //------------------------------------------------------------------- test
+    Damage result = null;
+    for(DamageProto.Damage proto : protos)
+      result = fromProto(proto, Optional.fromNullable(result));
+
+    return result;
+  }
+
+  private static Damage fromProto(DamageProto.Damage inProto,
+                                     Optional<Damage> inNext)
+  {
+    NewDice dice = NewDice.fromProto(inProto.getBase());
+
+    Optional<Type> type;
+    if(inProto.hasType())
+      type = Optional.of(Type.fromProto(inProto.getType()));
+    else
+      type = Optional.absent();
+
+    Optional<String> effect;
+    if(inProto.hasEffect())
+      effect = Optional.of(inProto.getEffect());
+    else
+      effect = Optional.absent();
+
+    return new Damage(dice, type, inNext, effect);
+  }
+
+  @Override
+  public NewValue.Arithmetic<DamageProto>
+    add(NewValue.Arithmetic<DamageProto> inValue)
+  {
+    if(inValue == null)
+      return this;
+
+    if(!(inValue instanceof Damage))
+      throw new IllegalArgumentException("can only add another damage value");
+
+    Damage value = (Damage)inValue;
+    if(value.m_type.equals(m_type)
+       && (value.m_dice.getDice() == m_dice.getDice()
+           || value.m_dice.getNumber() == 0 || m_dice.getNumber() == 0
+           || value.m_dice.getDice() <= 1 || m_dice.getDice() <= 1))
+      if(!m_other.isPresent())
+        return new Damage(m_dice.add(value.m_dice), m_type, value.m_other,
+                             Strings.concatenate(m_effect, value.m_effect,
+                                                 " "));
+      else if(!value.m_other.isPresent())
+        return new Damage(m_dice.add(value.m_dice), m_type, m_other,
+                             Strings.concatenate(m_effect, value.m_effect,
+                                                 " "));
+      else
+        return new Damage(m_dice.add(value.m_dice), m_type,
+                             Optional.of((Damage)m_other.get()
+                                         .add(value.m_other.get())),
+                             Strings.concatenate(m_effect, value.m_effect,
+                                                 " "));
+    if(!m_other.isPresent())
+      return new Damage(m_dice, m_type, Optional.of(value), m_effect);
+
+    return new Damage(m_dice, m_type,
+                         Optional.of((Damage)m_other.get().add(value)),
+                         m_effect);
+  }
+
+  @Override
+  public boolean canAdd(NewValue.Arithmetic<DamageProto> inValue)
+  {
+    return inValue instanceof Damage;
+  }
+
+  @Override
+  public NewValue.Arithmetic<DamageProto> multiply(int inFactor)
+  {
+    return new Damage(m_dice.multiply(inFactor),
+                         m_type,
+                         m_other.isPresent()
+                           ? Optional.of((Damage)
+                                         m_other.get().multiply(inFactor))
+                           : m_other,
+                         m_effect);
+  }
+
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- init -----------------------------------------------------------
-
-    /** Test of init. */
+    /** Parsing tests. */
     @org.junit.Test
-    public void init()
+    public void parse()
     {
-      Damage damage = new Damage();
-
-      // undefined value
-      assertFalse("not undefined at start", damage.isDefined());
-      assertEquals("undefined value not correct", "$undefined$",
-                   damage.toString());
-
-      // define the value, otherwise the following test will fail
-      damage.m_base = new Dice(2, 10, +0);
-
-      assertEquals("base", 2, damage.getBaseNumber());
-      assertEquals("dice", 10, damage.getBaseDice());
-      assertEquals("modifier", 0, damage.getBaseModifier());
-      assertNull("type", damage.getType());
-      assertNull("next", damage.next());
-
-      // Set<String> damages = new java.util.TreeSet<String>();
-      // damage.addDamages(damages);
-
-      // java.util.Iterator<String> i = damages.iterator();
-      // assertEquals("size", 1, damages.size());
-      // assertEquals("element", "2d10", i.next());
-      // assertFalse("last", i.hasNext());
-
-      // damages.clear();
-      // damage.addDamageTypes(damages);
-      // assertEquals("size", 0, damages.size());
-
-      // assertEquals("format", "\\link[/index/damages/2d10]{2d10}",
-      //              damage.format(false).toString());
-
-      Value.Test.createTest(damage);
+      assertEquals("parsing", "1d4", PARSER.parse("1d4").toString());
+      assertEquals("parsing", "1d4 +2",
+                   PARSER.parse(" 1d4   \n+ 2").toString());
+      assertEquals("parsing", "1d4 -3", PARSER.parse("  1d4  -  3").toString());
+      assertEquals("parsing", "5d12", PARSER.parse("5d12").toString());
+      assertEquals("parsing", "+3", PARSER.parse("  +3  ").toString());
+      assertEquals("parsing", "+3 fire plus poison",
+                   PARSER.parse("  +3  fire plus poison").toString());
+      assertEquals("parsing", "1d4, 1d6, 1d8",
+                   PARSER.parse("1d4,  1d6,  1d8").toString());
+      assertEquals("parsing", "1d4 fire, 1d6 electrical, 1d8 plus poison",
+                   PARSER.parse("1d4 fire,  1d6 electrical,  1d8 plus poison")
+                   .toString());
+      assertNull("parsing", PARSER.parse("1d"));
+      assertNull("parsing", PARSER.parse("d5"));
+      assertNull("parsing", PARSER.parse("1 d 5 + 2"));
+      assertNull("parsing", PARSER.parse("1d4 ++3"));
+      assertNull("parsing", PARSER.parse("1d2 +"));
+      assertNull("parsing", PARSER.parse("2 - 3"));
+      assertNull("parsing", PARSER.parse("1d4,"));
+      assertNull("parsing", PARSER.parse("fire,"));
+      assertNull("parsing", PARSER.parse("1 plus poison,"));
     }
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** Testing reading. */
-    @org.junit.Test
-    public void read()
-    {
-      String []tests =
-        {
-          "simple", "1d6", "1d6", null,
-          "modifier", "1d6 +3", "1d6 +3", null,
-          "whites", "\n   1   \nd  3    \n+2 ", "1d3 +2", " ",
-          "modifier only", "-13", "-13", null,
-          "positive only", "+13", "13", null,
-          "type", "1d6 +2 fire", "1d6 +2 fire", null,
-          "other", "1d6, 1d3", "1d6, 1d3", null,
-          "other types", "1d6, 1d3 fire", "1d6, 1d3 fire", null,
-
-          "others", "1d5 fire, 1d2 cold, 1d12, 1d20",
-          "1d5 fire, 1d2 cold, 1d12, 1d20", null,
-
-          "effect", "1d5 fire plus slime", "1d5 fire plus slime", null,
-          "effect 2", "1d4 +2 plus slime", "1d4 +2 plus slime", null,
-          "effect 3", "1d10 plus slime it", "1d10 plus slime it", null,
-
-          "effect and others", "1d5 fire plus slime, 1d3 plus guru, 1d4",
-          "1d5 fire plus slime, 1d3 plus guru, 1d4", null,
-
-          "invalid", "a", null, "a",
-          "empty", "", null, null,
-          "other", "42a", "42", "a",
-        };
-
-      Value.Test.readTest(tests, new Damage());
-    }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

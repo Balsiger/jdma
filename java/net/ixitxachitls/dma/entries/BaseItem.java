@@ -54,10 +54,10 @@ import net.ixitxachitls.dma.values.Area;
 import net.ixitxachitls.dma.values.AreaShape;
 import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.CountUnit;
+import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.ModifierType;
 import net.ixitxachitls.dma.values.NamedModifier;
 import net.ixitxachitls.dma.values.NewCritical;
-import net.ixitxachitls.dma.values.NewDamage;
 import net.ixitxachitls.dma.values.NewDistance;
 import net.ixitxachitls.dma.values.NewDuration;
 import net.ixitxachitls.dma.values.NewModifier;
@@ -177,13 +177,13 @@ public class BaseItem extends BaseEntry
   protected List<NamedModifier> m_magicalModifiers = new ArrayList<>();
 
   /** The damage the weapon inflicts. */
-  protected Optional<NewDamage> m_damage = Optional.absent();
+  protected Optional<Damage> m_damage = Optional.absent();
 
   /** The secondary damage the weapon inflicts. */
-  protected Optional<NewDamage> m_secondaryDamage = Optional.absent();
+  protected Optional<Damage> m_secondaryDamage = Optional.absent();
 
   /** The splash damage the weapon inflicts (if any). */
-  protected Optional<NewDamage> m_splash = Optional.absent();
+  protected Optional<Damage> m_splash = Optional.absent();
 
   /** The type of the weapon damage. */
   protected WeaponType m_weaponType = WeaponType.UNKNOWN;
@@ -1011,7 +1011,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the damage value
    */
-  public Optional<NewDamage> getDamage()
+  public Optional<Damage> getDamage()
   {
     return m_damage;
   }
@@ -1021,12 +1021,12 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDamage>> getCombinedDamage()
+  public Annotated<Optional<Damage>> getCombinedDamage()
   {
     if(m_damage.isPresent())
-      return new Annotated.Arithmetic<NewDamage>(m_damage.get(), getName());
+      return new Annotated.Arithmetic<Damage>(m_damage.get(), getName());
 
-    Annotated.Arithmetic<NewDamage> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Damage> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedDamage());
 
@@ -1038,7 +1038,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the secondary damage value
    */
-  public Optional<NewDamage> getSecondaryDamage()
+  public Optional<Damage> getSecondaryDamage()
   {
     return m_secondaryDamage;
   }
@@ -1049,13 +1049,13 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDamage>> getCombinedSecondaryDamage()
+  public Annotated<Optional<Damage>> getCombinedSecondaryDamage()
   {
     if(m_secondaryDamage.isPresent())
-      return new Annotated.Arithmetic<NewDamage>(m_secondaryDamage.get(),
+      return new Annotated.Arithmetic<Damage>(m_secondaryDamage.get(),
                                                  getName());
 
-    Annotated.Arithmetic<NewDamage> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Damage> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedSecondaryDamage());
 
@@ -1067,7 +1067,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the splash damage value
    */
-  public Optional<NewDamage> getSplash()
+  public Optional<Damage> getSplash()
   {
     return m_splash;
   }
@@ -1078,12 +1078,12 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDamage>> getCombinedSplash()
+  public Annotated<Optional<Damage>> getCombinedSplash()
   {
     if(m_splash.isPresent())
-      return new Annotated.Arithmetic<NewDamage>(m_splash.get(), getName());
+      return new Annotated.Arithmetic<Damage>(m_splash.get(), getName());
 
-    Annotated.Arithmetic<NewDamage> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Damage> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedSplash());
 
@@ -1794,35 +1794,35 @@ public class BaseItem extends BaseEntry
       values.put(Index.Path.DURATIONS, m_timed.toString());
 
     // damages
-    for(Optional<NewDamage> damage = m_damage; damage.isPresent();
+    for(Optional<Damage> damage = m_damage; damage.isPresent();
         damage = damage.get().next())
     {
       values.put(Index.Path.DAMAGES, damage.get().getBaseNumber() + "d"
         + damage.get().getBaseDice());
 
-      Optional<NewDamage.Type> type = damage.get().getType();
+      Optional<Damage.Type> type = damage.get().getType();
       if(type.isPresent())
         values.put(Index.Path.DAMAGE_TYPES, type.toString());
     }
 
-    for(Optional<NewDamage> damage = m_secondaryDamage; damage.isPresent();
+    for(Optional<Damage> damage = m_secondaryDamage; damage.isPresent();
           damage = damage.get().next())
       {
         values.put(Index.Path.DAMAGES, damage.get().getBaseNumber() + "d"
                    + damage.get().getBaseDice());
 
-        Optional<NewDamage.Type> type = damage.get().getType();
+        Optional<Damage.Type> type = damage.get().getType();
         if(type.isPresent())
           values.put(Index.Path.DAMAGE_TYPES, type.toString());
       }
 
-    for(Optional<NewDamage> damage = m_splash; damage.isPresent();
+    for(Optional<Damage> damage = m_splash; damage.isPresent();
           damage = damage.get().next())
     {
       values.put(Index.Path.DAMAGES, damage.get().getBaseNumber() + "d"
                  + damage.get().getBaseDice());
 
-      Optional<NewDamage.Type> type = damage.get().getType();
+      Optional<Damage.Type> type = damage.get().getType();
       if(type.isPresent())
         values.put(Index.Path.DAMAGE_TYPES, type.toString());
     }
@@ -2108,10 +2108,10 @@ public class BaseItem extends BaseEntry
                                       NamedModifier.PARSER,
                                       "type", "modifier");
 
-    m_damage = inValues.use("weapon.damage.first", m_damage, NewDamage.PARSER);
+    m_damage = inValues.use("weapon.damage.first", m_damage, Damage.PARSER);
     m_secondaryDamage = inValues.use("weapon.damage.second",
-                                     m_secondaryDamage, NewDamage.PARSER);
-    m_splash = inValues.use("weapon.damage.splash", m_splash, NewDamage.PARSER);
+                                     m_secondaryDamage, Damage.PARSER);
+    m_splash = inValues.use("weapon.damage.splash", m_splash, Damage.PARSER);
     m_critical = inValues.use("weapon.damage.critical", m_critical,
                               NewCritical.PARSER);
     m_weaponType = inValues.use("weapon.type", m_weaponType, WeaponType.PARSER);
@@ -2226,12 +2226,12 @@ public class BaseItem extends BaseEntry
       BaseWeaponProto weaponProto = proto.getWeapon();
 
       if(weaponProto.hasDamage())
-        m_damage = Optional.of(NewDamage.fromProto(weaponProto.getDamage()));
+        m_damage = Optional.of(Damage.fromProto(weaponProto.getDamage()));
       if(weaponProto.hasSecondaryDamage())
         m_secondaryDamage =
-          Optional.of(NewDamage.fromProto(weaponProto.getSecondaryDamage()));
+          Optional.of(Damage.fromProto(weaponProto.getSecondaryDamage()));
       if(weaponProto.hasSplash())
-        m_splash = Optional.of(NewDamage.fromProto(weaponProto.getSplash()));
+        m_splash = Optional.of(Damage.fromProto(weaponProto.getSplash()));
       if(weaponProto.hasType())
         m_weaponType = WeaponType.fromProto(weaponProto.getType());
       if(weaponProto.hasCritical())

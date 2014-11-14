@@ -40,7 +40,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Values.SpeedProto;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.NewDamage;
+import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.NewDice;
 import net.ixitxachitls.dma.values.NewDistance;
 import net.ixitxachitls.dma.values.NewModifier;
@@ -68,7 +68,7 @@ public class BaseMonster extends BaseEntry
   public static class Attack
   {
     public Attack(NewDice inNumber, AttackMode inMode, AttackStyle inStyle,
-                  NewDamage inDamage)
+                  Damage inDamage)
     {
       m_number = inNumber;
       m_mode = inMode;
@@ -79,7 +79,7 @@ public class BaseMonster extends BaseEntry
     private NewDice m_number;
     private AttackMode m_mode;
     private AttackStyle m_style;
-    private NewDamage m_damage;
+    private Damage m_damage;
 
     public static final NewValue.Parser<Attack> PARSER =
       new NewValue.Parser<Attack>(4)
@@ -100,7 +100,7 @@ public class BaseMonster extends BaseEntry
           if(!style.isPresent())
             return Optional.absent();
 
-          Optional<NewDamage> damage = NewDamage.PARSER.parse(inDamage);
+          Optional<Damage> damage = Damage.PARSER.parse(inDamage);
           if(!damage.isPresent())
             return Optional.absent();
 
@@ -121,7 +121,7 @@ public class BaseMonster extends BaseEntry
     {
       return m_style;
     }
-    public NewDamage getDamage()
+    public Damage getDamage()
     {
       return m_damage;
     }
@@ -3199,14 +3199,14 @@ public class BaseMonster extends BaseEntry
       m_primaryAttacks.add(new Attack(NewDice.fromProto(attack.getAttacks()),
                                       AttackMode.fromProto(attack.getMode()),
                                       AttackStyle.fromProto(attack.getStyle()),
-                                      NewDamage.fromProto(attack.getDamage())));
+                                      Damage.fromProto(attack.getDamage())));
 
     for(BaseMonsterProto.Attack attack : proto.getSecondaryAttackList())
       m_secondaryAttacks.add
       (new Attack(NewDice.fromProto(attack.getAttacks()),
                   AttackMode.fromProto(attack.getMode()),
                   AttackStyle.fromProto(attack.getStyle()),
-                  NewDamage.fromProto(attack.getDamage())));
+                  Damage.fromProto(attack.getDamage())));
 
     if(proto.hasSpace())
       m_space = Optional.of(NewDistance.fromProto(proto.getSpace()));

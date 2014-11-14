@@ -33,7 +33,6 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.ItemProto;
 import net.ixitxachitls.dma.values.*;
-import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -558,9 +557,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDamage>> getCombinedDamage()
+  public Annotated<Optional<Damage>> getCombinedDamage()
   {
-    Annotated.Arithmetic<NewDamage> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Damage> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedDamage());
 
@@ -573,9 +572,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDamage>> getCombinedSecondaryDamage()
+  public Annotated<Optional<Damage>> getCombinedSecondaryDamage()
   {
-    Annotated.Arithmetic<NewDamage> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Damage> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedSecondaryDamage());
 
@@ -588,9 +587,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDamage>> getCombinedSplash()
+  public Annotated<Optional<Damage>> getCombinedSplash()
   {
-    Annotated.Arithmetic<NewDamage> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Damage> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedSplash());
 
@@ -1099,12 +1098,12 @@ public class Item extends CampaignEntry
     return bonus;
   }
 
-  public NewDamage getDamage()
+  public Damage getDamage()
   {
-    NewDamage damage = null;
+    Damage damage = null;
     for(BaseEntry base : getBaseEntries())
     {
-      Optional<NewDamage> baseDamage =
+      Optional<Damage> baseDamage =
           ((BaseItem)base).getCombinedDamage().get();
       if (baseDamage.isPresent())
         if(damage == null)
@@ -1114,20 +1113,20 @@ public class Item extends CampaignEntry
     }
 
     if(damage == null)
-      damage = new NewDamage(new NewDice(0, 0, 0));
+      damage = new Damage(new NewDice(0, 0, 0));
 
     // add strength modifier
     int strengthModifier = getPossessor().get().getStrengthModifier();
     Optional<WeaponStyle> style = getCombinedWeaponStyle().get();
     if(style.isPresent() && style.get().isMelee()
        && getPossessor().isPresent())
-      damage = (NewDamage)
-        damage.add(new NewDamage(new NewDice(0, 0, strengthModifier)));
+      damage = (Damage)
+        damage.add(new Damage(new NewDice(0, 0, strengthModifier)));
 
     // + additional 1/2 strength bonus for two handed melee weapons
     if(style.isPresent() && style.get() == WeaponStyle.TWOHANDED_MELEE) {
-      damage = (NewDamage)
-        damage.add(new NewDamage(new NewDice(0, 0, strengthModifier / 2)));
+      damage = (Damage)
+        damage.add(new Damage(new NewDice(0, 0, strengthModifier / 2)));
     }
 
     // TODO: have to subtract strength penalty for non-composite bows
