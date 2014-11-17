@@ -173,9 +173,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated.Arithmetic<NewWeight> getCombinedWeight()
+  public Annotated.Arithmetic<Weight> getCombinedWeight()
   {
-    Annotated.Arithmetic<NewWeight> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Weight> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedWeight());
 

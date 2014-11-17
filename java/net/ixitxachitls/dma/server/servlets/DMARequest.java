@@ -42,7 +42,6 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.EntryKey;
-import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;

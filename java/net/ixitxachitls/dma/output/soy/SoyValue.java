@@ -344,47 +344,6 @@ public class SoyValue extends SoyAbstract
   {
     //----- single ---------------------------------------------------------
 
-    /** The single Test. */
-    @org.junit.Test
-    public void single()
-    {
-      SoyValue soyValue =
-        new SoyValue("test",
-                     new net.ixitxachitls.dma.values.Text("just a name"),
-                     new net.ixitxachitls.dma.entries.BaseEntry("test entry"));
-
-      assertEquals("edit", "&#34;just a name&#34;",
-                   soyValue.getSingle("edit").toString());
-      assertEquals("raw", "\"just a name\"",
-                   soyValue.getSingle("raw").toString());
-      assertEquals("print", "just a name",
-                   soyValue.getSingle("print").toString());
-      assertEquals("combined",
-                   "combined test (test entry): test entry = null [], "
-                   + "modifiers [], values [], expressions []",
-                   soyValue.getSingle("combined").toString());
-      assertEquals("name", "test",
-                   soyValue.getSingle("name").toString());
-      assertEquals("type", "string",
-                   soyValue.getSingle("type").toString());
-      assertEquals("related", "",
-                   soyValue.getSingle("related").toString());
-      assertEquals("choices", "",
-                   soyValue.getSingle("choices").toString());
-      assertEquals("group", "just a name",
-                   soyValue.getSingle("group").toString());
-      assertEquals("isArithmetic", "false",
-                   soyValue.getSingle("isArithmetic").toString());
-      assertEquals("isDefined", "true",
-                   soyValue.getSingle("isDefined").toString());
-      assertEquals("expression", "",
-                   soyValue.getSingle("expression").toString());
-      assertEquals("list", "(undefined test.list)",
-                   soyValue.getSingle("list").toString());
-      assertEquals("multi", "(undefined test.multi)",
-                   soyValue.getSingle("multi").toString());
-    }
-
     //......................................................................
   }
 
