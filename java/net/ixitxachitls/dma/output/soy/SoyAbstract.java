@@ -37,7 +37,6 @@ import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.Pair;
@@ -228,9 +227,6 @@ public class SoyAbstract extends SoyMapData
 
     if(inObject instanceof AbstractEntry)
       return new SoyEntry((AbstractEntry)inObject);
-
-    if(inObject instanceof Combined)
-      return new SoyCombined((Combined)inObject);
 
     if(inObject instanceof Iterable)
     {

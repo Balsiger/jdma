@@ -205,9 +205,6 @@ public class SoyValue extends SoyAbstract
     if("isEditable".equals(inName))
       return BooleanData.forValue(m_value != null && m_editable);
 
-    if("combined".equals(inName))
-      return new SoyCombined(m_entry.collect(m_name));
-
     if("isDefined".equals(inName))
       return BooleanData.forValue(m_value != null && m_value.isDefined());
 
@@ -249,12 +246,6 @@ public class SoyValue extends SoyAbstract
       if("isArithmetic".equals(inName))
         return BooleanData.forValue(m_value.isArithmetic());
 
-      if("expression".equals(inName))
-        if(m_value.hasExpression())
-          return StringData.forValue(m_value.getExpression().toString());
-        else
-          return StringData.EMPTY_STRING;
-
       if("list".equals(inName) && m_value instanceof ValueList)
       {
         List<SoyValue> values = new ArrayList<SoyValue>();
@@ -263,9 +254,6 @@ public class SoyValue extends SoyAbstract
 
          return new SoyListData(values);
       }
-
-      if("number".equals(inName) && m_value instanceof BaseNumber)
-        return IntegerData.forValue((int)((BaseNumber)m_value).get());
 
       if("remark".equals(inName))
       {

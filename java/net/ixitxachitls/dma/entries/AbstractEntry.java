@@ -56,7 +56,6 @@ import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
-import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.File;
 import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Value;
@@ -505,16 +504,6 @@ public abstract class AbstractEntry extends ValueGroup
   }
 
   /**
-   * Compute and return the dma representation of the entry.
-   *
-   * @return  the entry dma formatted
-   */
-  public FormattedText dmaValues()
-  {
-    return new FormattedText(formatValues() + ".");
-  }
-
-  /**
    * Collect the dependencies for this entry.
    *
    * @return      a list with all dependent entries
@@ -552,33 +541,6 @@ public abstract class AbstractEntry extends ValueGroup
                     new ArrayList<>(Strings.toLowerCase(getBaseNames())));
 
     return searchables;
-  }
-
-  /**
-   * Collect the name value.
-   *
-   * @param   inName the name of the value to collect
-   * @param   <T>    the type of value to collect
-   *
-   * @return  the combined value collected.
-   */
-  public <T extends Value<T>> Combined<T> collect(String inName)
-  {
-    Combined<T> combined = new Combined<T>(inName, this);
-    collect(inName, combined);
-
-    return combined;
-  }
-
-  @Override
-  protected <T extends Value<T>> void collect(String inName,
-                                              Combined<T> ioCombined)
-  {
-    super.collect(inName, ioCombined);
-
-    for(AbstractEntry base : getBaseEntries())
-      if(base != null)
-        base.collect(inName, ioCombined);
   }
 
   /**
@@ -692,40 +654,7 @@ public abstract class AbstractEntry extends ValueGroup
   @Override
   public String toString()
   {
-    StringBuilder result = new StringBuilder();
-
-    result.append(m_type);
-    result.append(' ');
-
-    result.append(m_name);
-    result.append(' ');
-
-    result.append(INTRODUCER);
-    result.append("\n\n");
-    result.append(formatValues());
-    result.append(s_delimiter);
-    result.append('\n');
-
-    return result.toString();
-  }
-
-  /**
-   * Format all the values contained in the entry for printing.
-   *
-   * @return      a String with a representation of all values
-   */
-  @Deprecated
-  protected String formatValues()
-  {
-    StringBuilder result = new StringBuilder();
-
-    boolean first = true;
-
-    int width = getKeyWidth();
-
-    formatValues(result, first, width);
-
-    return result.toString();
+    return m_type + " " + m_name;
   }
 
   /**
@@ -1246,48 +1175,6 @@ public abstract class AbstractEntry extends ValueGroup
   */
 
   //........................................................................
-  //------------------------------ readValues ------------------------------
-
-  /**
-   * Read the values, and only the values, from the reader into the object.
-   *
-   * @param       inReader   the reader to read from
-   *
-   */
-  protected void readValues(ParseReader inReader)
-  {
-    Variables variables = getVariables();
-    while(!inReader.isAtEnd() && !inReader.expect(s_delimiter))
-    {
-      String key = inReader.expect(variables.getKeywords());
-      if(key == null)
-      {
-        inReader.logWarning(inReader.getPosition(), "entry.key.unknown",
-                            "ignoring to next delimiter");
-
-        if(inReader.ignore("" + s_keyDelimiter + s_delimiter) == s_delimiter)
-          break;
-        else
-          continue;
-      }
-      else
-        readVariable(inReader, variables.getVariable(key));
-
-      if(inReader.expect(s_delimiter))
-        break;
-
-      if(!inReader.expect(s_keyDelimiter))
-      {
-        inReader.logWarning(inReader.getPosition(),
-                            "entry.delimiter.expected",
-                            "delimiter is " + s_delimiter + " or "
-                            + s_keyDelimiter);
-      }
-    }
-  }
-
-  //........................................................................
-
   //------------------------------- addBase --------------------------------
 
   /**

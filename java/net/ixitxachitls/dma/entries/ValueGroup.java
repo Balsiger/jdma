@@ -26,7 +26,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -48,7 +47,6 @@ import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
@@ -942,86 +940,7 @@ public abstract class ValueGroup implements Changeable
   //........................................................................
   //------------------------------- collect --------------------------------
 
-  /**
-   * Collect the named value from all possible sources.
-   *
-   * @param   inName     the name of the value to collect
-   * @param   ioCombined the combined value to collect into (can be changed)
-   * @param   <T>        the type of value being collected
-   */
-  protected <T extends Value<T>> void collect(String inName,
-                                              Combined<T> ioCombined)
-  {
-    // nothing to do here
-  }
-
   //........................................................................
-
-  //----------------------------- formatValues -----------------------------
-
-  /**
-   * Format all the values contained in the entry for storing.
-   *
-   * @param       inAppend   the buffer to append the values to
-   * @param       inFirst    flag if the printed values will be the first or
-   *                         not
-   * @param       inKeyWidth the width of the keys to use
-   *
-   * @return      true if at least one value was printed, false else
-   *
-   */
-  protected boolean formatValues(StringBuilder inAppend, boolean inFirst,
-                                 int inKeyWidth)
-  {
-    Variables variables = getVariables();
-
-    boolean first = inFirst;
-    for(Variable var : variables)
-    {
-      // if the variable is not stored, skip it
-      if(!var.isStored())
-        continue;
-
-      if(!var.hasVariable(this))
-        continue;
-
-      Value<?> value = var.get(this);
-
-      // We don't store this if we don't have a value.
-      if(value == null || (!value.isDefined() && !value.hasExpression()))
-        continue;
-
-      // add the delimiter
-      if(first)
-        first = false;
-      else
-      {
-        inAppend.append(s_keyDelimiter);
-        inAppend.append('\n');
-      }
-
-      inAppend.append(Strings.spaces(s_keyIndent));
-      inAppend.append(variables.getPrefix());
-      inAppend.append(var.getKey());
-      inAppend.append(Strings.spaces
-                      (Math.max(1, inKeyWidth - var.getKey().length()
-                                - variables.getPrefix().length())));
-
-      // now append the value of the variable
-      // TODO: readd this handling when Text is in
-//       if(value instanceof Text && ((Text)value).keepsFormatting())
-//       {
-//         inAppend.append("\n  ");
-//         inAppend.append(value.toString());
-//       }
-//       else
-        inAppend.append(value.toString().replaceAll
-                        ("\\s*\n\\s*",
-                         "\n" + Strings.spaces(inKeyWidth + s_keyIndent)));
-    }
-
-    return !first;
-  }
 
   /**
    * Get all the values for all the indexes.
@@ -1073,23 +992,6 @@ public abstract class ValueGroup implements Changeable
   public void set(Values inValues)
   {
     // no values here
-  }
-
-  //........................................................................
-  //----------------------------- readVariable -----------------------------
-
-  /**
-   * Read a value, and only one value, from the reader into the object.
-   *
-   * @param       inReader   the reader to read from
-   * @param       inVariable the variable to read into
-   *
-   * @return      true if read, faluse if not
-   *
-   */
-  protected boolean readVariable(ParseReader inReader, Variable inVariable)
-  {
-    return inVariable.read(this, inReader);
   }
 
   //........................................................................
@@ -1271,42 +1173,6 @@ public abstract class ValueGroup implements Changeable
     return Config.get("resource:" + CURRENT + "/" + inGroup + "."
                       + inName, inDefault);
   }
-
-  //........................................................................
-
-  //--------------------------------- sum ----------------------------------
-
-  /**
-   * Sum up all the values with the given key from all the given entries.
-   *
-   * @param   inKey     the key of the value to sum
-   * @param   inEntries the entries to sum over
-   * @param   <T>       the type of value being summed
-   *
-   * @return  the sum of all the value or null if no values found
-   *
-   */
-  public @Nullable <T extends Value<T>>
-  T sum(String inKey, List<? extends ValueGroup> inEntries)
-  {
-    T total = null;
-    for(ValueGroup entry : inEntries)
-    {
-      Combined<T> combined = ((AbstractEntry)entry).collect(inKey);
-      T value = combined.total();
-      if(value == null || !value.isDefined())
-        continue;
-
-      if(total == null)
-        total = value;
-      else
-        total = total.add(value);
-    }
-
-    return total;
-  }
-
-  //........................................................................
 
   //........................................................................
 }

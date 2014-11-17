@@ -662,20 +662,6 @@ public abstract class Value<T extends Value<T>>
   }
 
   //........................................................................
-  //---------------------------- getExpression -----------------------------
-
-  /**
-   * Get the expression for this value.
-   *
-   * @return      the expression
-   *
-   */
-  public @Nullable Expression getExpression()
-  {
-    return m_expression;
-  }
-
-  //........................................................................
   //------------------------------ getRemark -------------------------------
 
   /**

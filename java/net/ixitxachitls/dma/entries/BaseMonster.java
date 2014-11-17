@@ -39,7 +39,6 @@ import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Values.SpeedProto;
 import net.ixitxachitls.dma.values.Annotated;
-import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.NewDice;
 import net.ixitxachitls.dma.values.NewDistance;
@@ -50,7 +49,6 @@ import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Size;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.Speed;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
@@ -1340,65 +1338,6 @@ public class BaseMonster extends BaseEntry
     return qualities;
   }
   */
-
-  /**
-   * Collect the feats by entry.
-   *
-   * @param       ioFeats the feats store
-   */
-  /*
-  public void collectFeats(Multimap<Reference<BaseFeat>, String> ioFeats)
-  {
-    for(Reference<BaseFeat> feat : m_feats)
-      ioFeats.put(feat, getName());
-
-    for(BaseEntry base : getBaseEntries())
-      if(base instanceof BaseMonster)
-        ((BaseMonster)base).collectFeats(ioFeats);
-  }
-  */
-
-  @Override
-  @SuppressWarnings("unchecked")
-  protected <T extends Value<T>> void collect(String inName,
-                                              Combined<T> ioCombined)
-  {
-    super.collect(inName, ioCombined);
-
-//    for(Multiple multiple : m_specialQualities)
-//    {
-//      // TODO: also use base values? See collectedSpecialQualities?
-//      Reference<BaseQuality> reference =
-//        (Reference<BaseQuality>)multiple.get(0);
-//      BaseQuality quality = reference.getEntry();
-//
-//      if(quality == null)
-//        continue;
-//
-//      /*
-//      Condition<?> condition = (Condition<?>)multiple.get(1);
-//      quality.collect(inName, ioCombined, null, reference.getParameters(),
-//                      condition.isDefined() ? condition : null);
-//                      */
-//    }
-//
-//    for(Reference<BaseFeat> reference : m_feats)
-//    {
-//      BaseFeat feat = reference.getEntry();
-//      if(feat == null)
-//        continue;
-//
-//      feat.collect(inName, ioCombined, reference.getParameters());
-//    }
-
-    /*
-    if("level".equals(inName))
-    {
-      if(m_hitDice.isDefined())
-        ioCombined.addModifier(new Modifier(m_hitDice.getNumber()), this, null);
-    }
-    */
-  }
 
   /**
    * Get the level of the monster.
