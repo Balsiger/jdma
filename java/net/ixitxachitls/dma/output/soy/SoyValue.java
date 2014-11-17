@@ -116,10 +116,6 @@ public class SoyValue extends SoyAbstract
   /** The real value. */
   protected final Value<?> m_value;
 
-  /** The command renderer for rendering values. */
-  public static final SoyRenderer COMMAND_RENDERER =
-    new SoyRenderer(new SoyTemplate("commands", "value", "page"));
-
   /** A flag if the value can be edited. */
   protected final boolean m_editable;
 
@@ -136,41 +132,6 @@ public class SoyValue extends SoyAbstract
    *
    * @return  the converted string
    */
-  @Override
-  public String toString()
-  {
-    return print();
-  }
-
-  //........................................................................
-  //-------------------------------- print ---------------------------------
-
-  /**
-   * Print the value to soy.
-   *
-   * @return  a string representation for html rendering
-   *
-   */
-  public String print()
-  {
-    if(m_value == null)
-      return "(no value)";
-
-    if(m_entry == null)
-      return "(no entry)";
-
-    String template = m_value.getTemplate();
-    if (template == null)
-      return m_value.print(m_entry);
-
-    return COMMAND_RENDERER.render
-      ("dma.value." + template,
-       SoyTemplate.map("name", template,
-                       "args", m_value.getTemplateArguments(),
-                       "value", this,
-                       "entry", new SoyEntry(m_entry),
-                       "naked", m_value.print(m_entry)));
-  }
 
   //........................................................................
 

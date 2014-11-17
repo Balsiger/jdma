@@ -1313,16 +1313,16 @@
     <div class="item-summary-text">
       {if def($item) and $item.name}
         <div class="item-summary-desc">
-          {$item.appearance |print}
+          {$item.appearance}
         </div>
         {if $ij.isDM and def($item.short_description.combine.total)}
           <div class="item-overview-value-dm">
-            {$item.short_description.combine.total |print}
+            {$item.short_description.combine.total}
           </div>
         {/if}
         {if def($item.player_notes)}
           <div class="item-summary-notes">
-            {$item.player_notes |print}
+            {$item.player_notes}
           </div>
         {/if}
         {call .overviewValue}
@@ -1462,12 +1462,12 @@
         {if $item.extension_incomplete and $ij.isDM}
           <div class="item-overview-value-dm">
             <literal>&#x2639;</literal>{sp}
-            {$item.incomplete.combine.total |print}
+            {$item.incomplete.combine.total}
           </div>
         {/if}
         {if $item.dm_notes.isDefined and $ij.isDM}
           <div class="item-overview-value-dm">
-            {$item.dm_notes |print}
+            {$item.dm_notes}
           </div>
         {/if}
       {else}
@@ -1514,11 +1514,11 @@
         {sp}({$item.name})
       </div>
       <div class="item-overview-desc">
-        {$item.appearance |print}
+        {$item.appearance}
       </div>
       {if def($item.playernotes)}
         <div class="item-overview-notes">
-          {$item.playernotes |print}
+          {$item.playernotes}
         </div>
       {/if}
     </div>
@@ -1647,17 +1647,17 @@
       {if $item.extension_incomplete and $ij.isDM}
         <div class="item-overview-value-dm">
           <literal>&#x2639;</literal>{sp}
-          {$item.incomplete.combine.total |print}
+          {$item.incomplete.combine.total}
         </div>
       {/if}
       {if $item.dm_notes.isDefined and $ij.isDM}
         <div class="item-overview-value-dm">
-          {$item.dm_notes |print}
+          {$item.dm_notes}
         </div>
       {/if}
       {if $ij.isDM and def($item.short_description.combine.total)}
         <div class="item-overview-value-dm">
-          {$item.short_description.combine.total |print}
+          {$item.short_description.combine.total}
         </div>
       {/if}
     </div>
@@ -1725,7 +1725,7 @@
     {if def($value)}
       {if $value.isDefined and not def($value.isCombined)}
         {if $prefix}{$prefix}{sp}{/if}
-        {$value |print}
+        {$value}
         {if $postfix}{$postfix}{sp}{/if}
       {else}
         {call dma.value.withbase}

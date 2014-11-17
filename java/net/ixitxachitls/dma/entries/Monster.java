@@ -40,7 +40,6 @@ import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Modifier;
-import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Size;
 import net.ixitxachitls.dma.values.Speed;
@@ -102,7 +101,7 @@ public class Monster extends CampaignEntry
   {
     /** Create a complete coin line for the treasure.
      *
-     * @param inType       the type of coins for the line
+     * @ param inType       the type of coins for the line
      * @param inStart      the range of the random values this line is valid
      * @param inEnd        the end of the range for this line
      * @param inNumber     the number of dice to use for generating the value
@@ -110,7 +109,7 @@ public class Monster extends CampaignEntry
      * @param inMultiplier the multiplier for the total value
      *
      */
-    protected Coins(Money.Coin inType, int inStart, int inEnd,
+    protected Coins(/*Money.Coin inType*,*/ int inStart, int inEnd,
                     int inNumber, int inDice, int inMultiplier)
     {
       super(inStart, inEnd);
@@ -119,14 +118,14 @@ public class Monster extends CampaignEntry
       assert inDice >= 0 : "must have a positive dice here";
       assert inMultiplier >= 0 : "must have a positive multiplier here";
 
-      m_type       = inType;
+      //m_type       = inType;
       m_number     = inNumber;
       m_dice       = inDice;
       m_multiplier = inMultiplier;
     }
 
     /** The type of coins to generate. */
-    private Money.Coin m_type;
+    //private Money.Coin m_type;
 
     /** The number of dice to use to generate the value. */
     private int m_number;
@@ -143,7 +142,8 @@ public class Monster extends CampaignEntry
      * @param ioMoney the money value to adjust
      *
      */
-    protected void roll(Money ioMoney)
+    /*
+    protected void roll(NewMoney ioMoney)
     {
       if(m_dice == 0 || m_number == 0 || m_multiplier == 0)
       {
@@ -164,6 +164,7 @@ public class Monster extends CampaignEntry
 
       ioMoney.add(m_type, value);
     }
+    */
 
     /** Convert the money line to a human readable string.
      *
@@ -174,7 +175,7 @@ public class Monster extends CampaignEntry
     public String toString()
     {
       return m_start + "-" + m_end + ": " + m_number + "d" + m_dice + "x"
-        + m_multiplier + " " + m_type;
+        + m_multiplier /*+ " " + m_type*/;
     }
   }
 
@@ -563,7 +564,7 @@ public class Monster extends CampaignEntry
   /**
    * This is the normal constructor.
    *
-   * @param       inName the name of the base item
+   * @ param       inName the name of the base item
    */
   public Monster(Campaign inCampaign)
   {
@@ -653,10 +654,11 @@ public class Monster extends CampaignEntry
   // private static Random s_random = new Random();
 
   /** The treasures per level. */
-  private static List<Treasure> s_treasures = new ArrayList<Treasure>();
+  //private static List<Treasure> s_treasures = new ArrayList<Treasure>();
 
   //----- treasure definition ----------------------------------------------
 
+  /*
   static
     // 0
   {
@@ -922,6 +924,7 @@ public class Monster extends CampaignEntry
                     new Items(Items.Type.medium,   26,  65, 1,  4),
                     new Items(Items.Type.major,    66, 100, 1,  3)));
   }
+  */
 
   /**
    * Compute the ability modifier for the given score.
@@ -3352,8 +3355,8 @@ public class Monster extends CampaignEntry
   /**
    * Add a random treasure horde to this monster.
    *
-   * @param       inType     the type of treasure to generate
-   * @param       inCampaign the campaign to add the treasure from
+   * @ param       inType     the type of treasure to generate
+   * @ param       inCampaign the campaign to add the treasure from
    *
    */
   // protected void addTreasure(Treasure inType, CampaignData inCampaign)

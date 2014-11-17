@@ -79,7 +79,7 @@
       </div>
 
       <div class="extensions">
-        {$entry.extensions |print}
+        {$entry.extensions}
       </div>
     </div>
 
@@ -148,7 +148,7 @@
       </div>
 
       <div class="extensions">
-        {$entry.extensions |print}
+        {$entry.extensions}
       </div>
     </div>
 
@@ -237,12 +237,12 @@
         <div class="references">
           {foreach $reference in $entry.full_references}
             {if $reference.title}
-              {$reference.title} ({$reference.id |print})
+              {$reference.title} ({$reference.id})
             {else}
-              {$reference.id |print}
+              {$reference.id}
             {/if}
             {sp}
-            p. {$reference.pages |print}
+            p. {$reference.pages}
             {if not isLast($reference)}
               ,{sp}
             {/if}
@@ -290,7 +290,7 @@
           {param content: $entry.hp.print /}
         {/call}
         {sp}/{sp}
-        {$entry.hp.combined.base |print}
+        {$entry.hp.combined.base}
       </div>
 
       <div class="weight">
@@ -316,7 +316,7 @@
           {param value: 'hardness' /}
         {/call}
         {if def($entry.hardness.combined.max)}
-          {$entry.hardness.combined.max |print}
+          {$entry.hardness.combined.max}
           {sp}
         {/if}
         {sp}
@@ -325,7 +325,7 @@
         {/call}
         {if def($entry.break_DC.combined.max)}
           {sp}
-          {$entry.break_DC.combined.max |print}
+          {$entry.break_DC.combined.max}
         {/if}
       </div>
 
@@ -356,7 +356,7 @@
             {param canEdit: $ij.isDM or $ij.isPlayer /}
           {/call}
           {sp}
-          {$entry.unit.combined.total |print}
+          {$entry.unit.combined.total}
         </div>
       {/if}
 
@@ -584,7 +584,7 @@
       </div>
 
       <div class="extensions">
-        {$entry.extensions |print}
+        {$entry.extensions}
       </div>
     </div>
 
@@ -630,7 +630,7 @@
         </div>
 
         <div class="extensions">
-          {$entry.extensions |print}
+          {$entry.extensions}
         </div>
       </div>
 
@@ -671,7 +671,7 @@
       </div>
 
       <div class="extensions">
-        {$entry.extensions |print}
+        {$entry.extensions}
       </div>
     </div>
 
@@ -716,12 +716,12 @@
         <div class="references">
           {foreach $reference in $entry.full_references}
             {if $reference.title}
-              {$reference.title} ({$reference.id |print})
+              {$reference.title} ({$reference.id})
             {else}
-              {$reference.id |print}
+              {$reference.id}
             {/if}
             {sp}
-            p. {$reference.pages |print}
+            p. {$reference.pages}
             {if not isLast($reference)}
               ,{sp}
             {/if}

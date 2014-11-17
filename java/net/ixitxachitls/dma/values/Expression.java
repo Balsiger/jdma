@@ -158,39 +158,6 @@ public abstract class Expression implements Comparable<Expression>, Serializable
 
     //------------------------------ compute -------------------------------
 
-    /**
-     * Compute the value for the expression.  We compute the value here in
-     * relation to previously computed magic armor values and only adding the
-     * difference.
-     *
-     * @param       inEntry   the entry to compute for
-     * @param       inValue   the value to compute from
-     * @param       ioShared  shared data for all expressions
-     * @param       <T>       the type of value computed
-     *
-     * @return      the computed, adjusted value, if any
-     *
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public @Nullable <T extends Value<T>> Value<T> compute
-                        (ValueGroup inEntry, @Nullable Value<T> inValue,
-                         Shared ioShared)
-    {
-      // (m + p)^2 - m^2 = 2mp + p^2
-      int factor = 2 * ioShared.m_magicArmor * m_plus + m_plus * m_plus;
-      ioShared.m_magicArmor += m_plus;
-
-      Money value = new Money(0, 0, factor * 1000, 0);
-      if(inValue == null)
-        return (T)value;
-
-      if(!(inValue instanceof Money))
-        return inValue;
-
-      return inValue.add((T)value);
-    }
-
     //......................................................................
   }
 
@@ -261,28 +228,6 @@ public abstract class Expression implements Comparable<Expression>, Serializable
 
     //------------------------------ compute -------------------------------
 
-    /**
-     * Compute the value for the expression.
-     *
-     * @param       inEntry   the entry to compute for
-     * @param       inValue   the value to compute from
-     * @param       ioShared  shared data for all expressions
-     * @param       <T>       the type of value computed
-     *
-     * @return      the compute, adjusted value
-     *
-     */
-    @Override
-    public @Nullable <T extends Value<T>> Value<T> compute
-                        (ValueGroup inEntry, @Nullable Value<T> inValue,
-                         Shared ioShared)
-    {
-      if(inValue == null)
-        return null;
-
-      return inValue.multiply(m_multiply).divide(m_divide);
-    }
-
     //......................................................................
   }
 
@@ -346,38 +291,6 @@ public abstract class Expression implements Comparable<Expression>, Serializable
 
     //------------------------------ compute -------------------------------
 
-    /**
-     * Compute the value for the expression.
-     *
-     * @param       inEntry   the entry to compute for
-     * @param       inValue   the value to compute from
-     * @param       ioShared  shared data for all expressions
-     * @param       <T>       the type of value computed
-     *
-     * @return      the compute, adjusted value
-     *
-     */
-    @Override
-    public @Nullable <T extends Value<T>> Value<T> compute
-                        (ValueGroup inEntry, @Nullable Value<T> inValue,
-                         Shared ioShared)
-    {
-      if(inValue == null)
-        return null;
-
-      T addition = inValue.read(m_addition);
-      if(addition == null)
-      {
-        Log.warning("cannot parse value " + m_addition + " for addition");
-        return inValue;
-      }
-      else
-        if(m_subtract)
-          return inValue.subtract(addition);
-        else
-          return inValue.add(addition);
-    }
-
     //......................................................................
   }
 
@@ -434,27 +347,6 @@ public abstract class Expression implements Comparable<Expression>, Serializable
       return null;
     }
 
-    /**
-     * Compute the value for the expression.
-     *
-     * @param       inEntry   the entry to compute for
-     * @param       inValue   the value to compute from
-     * @param       ioShared  shared data for all expressions
-     * @param       <T>       the type of value computed
-     *
-     * @return      the compute, adjusted value
-     *
-     */
-    @Override
-    public @Nullable <T extends Value<T>> Value<T> compute
-                        (ValueGroup inEntry, @Nullable Value<T> inValue,
-                         Shared ioShared)
-    {
-      if(inValue == null)
-        return null;
-
-      return inValue.read(m_value);
-    }
   }
 
   //........................................................................
@@ -512,35 +404,6 @@ public abstract class Expression implements Comparable<Expression>, Serializable
       return null;
     }
 
-    /**
-     * Compute the value for the expression.
-     * Note: expression are computed after values, which means we can just cearl
-     * the value if this is the first expression.
-     *
-     * @param       inEntry   the entry to compute for
-     * @param       inValue   the value to compute from
-     * @param       ioShared  shared data for all expressions
-     * @param       <T>       the type of value computed
-     *
-     * @return      the compute, adjusted value
-     *
-     */
-    @Override
-    public @Nullable <T extends Value<T>> Value<T> compute
-                        (ValueGroup inEntry, @Nullable Value<T> inValue,
-                         Shared ioShared)
-    {
-      if(inValue == null)
-        return null;
-
-      T value = inValue.read(m_value);
-
-      if(ioShared.m_class)
-        return inValue.add(value);
-
-      ioShared.m_class = true;
-      return value;
-    }
   }
 
   //........................................................................
@@ -625,43 +488,6 @@ public abstract class Expression implements Comparable<Expression>, Serializable
         return new Switch(matcher.group(1));
 
       return null;
-    }
-
-    /**
-     * Compute the value for the expression.
-     *
-     * @param       inEntry   the entry to compute for
-     * @param       inValue   the value to compute from
-     * @param       ioShared  shared data for all expressions
-     * @param       <T>       the type of value computed
-     *
-     * @return      the compute, adjusted value
-     *
-     */
-    @Override
-    public @Nullable <T extends Value<T>> Value<T> compute
-                        (ValueGroup inEntry, @Nullable Value<T> inValue,
-                         Shared ioShared)
-    {
-      if(inValue == null)
-        return null;
-
-      for(Pair<String, String> statement : m_statements)
-      {
-        String condition = statement.first();
-        String value = statement.second();
-
-        if(isTrue(inEntry, condition))
-        {
-          try (ParseReader reader =
-            new ParseReader(new StringReader(value), "switch"))
-          {
-            return inValue.add(inValue.read(reader));
-          }
-        }
-      }
-
-      return inValue;
     }
 
     /**
@@ -811,40 +637,6 @@ public abstract class Expression implements Comparable<Expression>, Serializable
       return item;
     }
 
-    /**
-     * Compute the value for the expression.
-     *
-     * @param       inEntry   the entry to compute for
-     * @param       inValue   the value to compute from
-     * @param       ioShared  shared data for all expressions
-     * @param       <T>       the type of value computed
-     *
-     * @return      the compute, adjusted value
-     *
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public @Nullable <T extends Value<T>> Value<T> compute
-                        (ValueGroup inEntry, @Nullable Value<T> inValue,
-                         Shared ioShared)
-    {
-      int gold = m_material + 5 * m_xp;
-      int silver = 0;
-
-      if(m_spellLevel == 0)
-        if((m_basePrice * m_casterLevel) % 2 == 0)
-          gold = (m_basePrice * m_casterLevel) / 2;
-        else
-          silver = (m_basePrice * m_casterLevel * 10) / 2;
-      else
-        gold = m_basePrice * m_spellLevel * m_casterLevel;
-
-      Money value = new Money(0, silver, gold, 0);
-      if(inValue == null)
-        return (T)value;
-
-      return inValue.add((T)value);
-    }
   }
 
   //........................................................................
@@ -909,24 +701,6 @@ public abstract class Expression implements Comparable<Expression>, Serializable
       return null;
     }
 
-    /**
-     * Compute the value for the expression.
-     *
-     * @param       inEntry   the entry to compute for
-     * @param       inValue   the value to compute from
-     * @param       ioShared  shared data for all expressions
-     * @param       <T>       the value type to compute
-     *
-     * @return      the compute, adjusted value
-     *
-     */
-    @Override
-    public @Nullable <T extends Value<T>> Value<T> compute
-                        (ValueGroup inEntry, @Nullable Value<T> inValue,
-                         Shared ioShared)
-    {
-      return null;
-    }
   }
 
   //........................................................................
@@ -982,39 +756,6 @@ public abstract class Expression implements Comparable<Expression>, Serializable
       return null;
     }
 
-    /**
-     * Compute the value for the expression.  We compute the value here in
-     * relation to previously computed magic armor values and only adding the
-     * difference.
-     *
-     * @param       inEntry   the entry to compute for
-     * @param       inValue   the value to compute from
-     * @param       ioShared  shared data for all expressions
-     * @param       <T>       the value type to compute
-     *
-     * @return      the compute, adjusted value
-     *
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public @Nullable <T extends Value<T>> Value<T> compute
-                        (ValueGroup inEntry, @Nullable Value<T> inValue,
-                         Shared ioShared)
-    {
-      // 2 * (m + p)^2 - m^2 = 4mp + 2 * p^2
-      int factor = 4 * ioShared.m_magicArmor * m_plus + 2 * m_plus * m_plus;
-      ioShared.m_magicWeapon += m_plus;
-
-      Money value = new Money(0, 0, factor * 1000, 0);
-
-      if(inValue == null)
-        return (T)value;
-
-      if(!(inValue instanceof Money))
-        return inValue;
-
-      return inValue.add((T)value);
-    }
   }
 
   //........................................................................
@@ -1072,39 +813,6 @@ public abstract class Expression implements Comparable<Expression>, Serializable
       return null;
     }
 
-    /**
-     * Compute the value for the expression.  We compute the value here in
-     * relation to previously computed magic armor values and only adding the
-     * difference.
-     *
-     * @param       inEntry   the entry to compute for
-     * @param       inValue   the value to compute from
-     * @param       ioShared  shared data for all expressions
-     * @param       <T>       the value type to compute
-     *
-     * @return      the compute, adjusted value
-     *
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public @Nullable <T extends Value<T>> Value<T> compute
-                        (ValueGroup inEntry, @Nullable Value<T> inValue,
-                         Shared ioShared)
-    {
-      // 2 * (m + p)^2 - m^2 = 4mp + 2 * p^2
-      int factor = 4 * ioShared.m_magicArmor * m_plus + 2 * m_plus * m_plus;
-      ioShared.m_magicAmmunition += m_plus;
-
-      Money value = new Money(0, 0, factor * 20, 0);
-
-      if(inValue == null)
-        return (T)value;
-
-      if(!(inValue instanceof Money))
-        return inValue;
-
-      return inValue.add((T)value);
-    }
   }
 
   //........................................................................
@@ -1324,20 +1032,6 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   //------------------------------------------------- other member functions
 
   //------------------------------- compute --------------------------------
-
-  /**
-   * Compute the value for the expression.
-   *
-   * @param       inEntry   the entry to compute for
-   * @param       inValue   the value to compute from
-   * @param       ioShared  shared data for all expressions
-   * @param       <T>       the value type to compute
-   *
-   * @return      the compute, adjusted value
-   *
-   */
-  public abstract @Nullable <T extends Value<T>> Value<T> compute
-    (ValueGroup inEntry, @Nullable Value<T> inValue, Shared ioShared);
 
   //........................................................................
 

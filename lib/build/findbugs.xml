@@ -123,11 +123,6 @@
   </Match>
 
   <Match>
-    <Class name="~net.ixitxachitls.dma.entries.TaggedVariables.*" />
-    <Bug pattern="UR_UNINIT_READ_CALLED_FROM_SUPER_CONSTRUCTOR" />
-  </Match>
-
-  <Match>
     <Class name="~net.ixitxachitls.output.actions.itext.Table.*" />
     <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
   </Match>

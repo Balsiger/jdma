@@ -705,12 +705,6 @@ public class DMADatastore
   {
     Entity entity = new Entity(convert(inEntry.getKey()));
 
-    // TODO: remove this once all searchable values are gone.
-    for(Variable variable : inEntry.getVariables())
-      if(variable.isSearchable())
-        entity.setProperty(variable.getKey(),
-                           variable.get(inEntry).toString().toLowerCase());
-
     // Save searchable values as distinct properties to be able to search
     // for them in the datastore.
     for(Map.Entry<String, Object> entry :

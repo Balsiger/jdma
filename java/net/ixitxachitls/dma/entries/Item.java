@@ -88,7 +88,7 @@ public class Item extends CampaignEntry
   /**
    * The total value of the item.
    */
-  protected Optional<NewMoney> m_value = Optional.absent();
+  protected Optional<Money> m_value = Optional.absent();
 
   /**
    * The appearance text for this entry.
@@ -226,7 +226,7 @@ public class Item extends CampaignEntry
    */
   public double getGoldValue()
   {
-    Optional<NewMoney> value = getCombinedValue().get();
+    Optional<Money> value = getCombinedValue().get();
     if(!value.isPresent())
       return 0;
 
@@ -238,7 +238,7 @@ public class Item extends CampaignEntry
    *
    * @return the value
    */
-  public Optional<NewMoney> getValue()
+  public Optional<Money> getValue()
   {
     return m_value;
   }
@@ -248,12 +248,12 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewMoney>> getCombinedValue()
+  public Annotated<Optional<Money>> getCombinedValue()
   {
     if(m_value.isPresent())
-      return new Annotated.Arithmetic<NewMoney>(m_value.get(), getName());
+      return new Annotated.Arithmetic<Money>(m_value.get(), getName());
 
-    Annotated.Arithmetic<NewMoney> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Money> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedValue());
 
@@ -1232,7 +1232,7 @@ public class Item extends CampaignEntry
     super.set(inValues);
 
     m_hp = inValues.use("hp", m_hp);
-    m_value = inValues.use("value", m_value, NewMoney.PARSER);
+    m_value = inValues.use("value", m_value, Money.PARSER);
     m_appearance = inValues.use("appearance", m_appearance);
     m_playerNotes = inValues.use("player_notes", m_playerNotes);
     m_playerName = inValues.use("player_name", m_playerName);
@@ -1285,7 +1285,7 @@ public class Item extends CampaignEntry
       // correct the random value with the computation from the value in
       // relation to the base value
       double itemValue = getGoldValue();
-      Optional<NewMoney> baseMoneyValue = getCombinedValue().get();
+      Optional<Money> baseMoneyValue = getCombinedValue().get();
       double baseValue = 0;
       if (baseMoneyValue.isPresent())
         baseValue = baseMoneyValue.get().asGold();
@@ -1441,7 +1441,7 @@ public class Item extends CampaignEntry
       m_hp = proto.getHitPoints();
 
     if(proto.hasValue())
-      m_value = Optional.of(NewMoney.fromProto(proto.getValue()));
+      m_value = Optional.of(Money.fromProto(proto.getValue()));
 
     if(proto.hasAppearance())
       m_appearance = Optional.of(proto.getAppearance());

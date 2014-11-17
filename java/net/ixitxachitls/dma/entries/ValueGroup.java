@@ -906,24 +906,6 @@ public abstract class ValueGroup implements Changeable
 
   //........................................................................
 
-  //------------------------------- compute --------------------------------
-
-  /**
-   * Compute a value for a given key, taking base entries into account if
-   * available.
-   *
-   * @param    inKey the key of the value to compute
-   *
-   * @return   the computed value
-   *
-   */
-  public @Nullable Object compute(String inKey)
-  {
-    return getValue(inKey);
-  }
-
-  //........................................................................
-
   //---------------------------- getBaseEntries ----------------------------
 
   /**

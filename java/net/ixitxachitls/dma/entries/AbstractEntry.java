@@ -251,28 +251,6 @@ public abstract class AbstractEntry extends ValueGroup
   }
 
   /**
-   * Get the maximal width of the keys, including attachments.
-   *
-   * @return      the maximal key width
-   */
-  protected int getKeyWidth()
-  {
-    int width = 0;
-
-    // the width of the normal values
-    Variables variables = getVariables();
-
-    if(variables != null)
-      width = variables.getKeyWidth();
-
-    // now for the width of the attachments
-//     for(AbstractAttachment attachment : m_attachments.values())
-//       width = Math.max(width, attachment.getValues().getKeyWidth());
-
-    return width;
-  }
-
-  /**
    * Get the name of the entry.
    *
    * @return      the requested name
@@ -655,34 +633,6 @@ public abstract class AbstractEntry extends ValueGroup
   public String toString()
   {
     return m_type + " " + m_name;
-  }
-
-  /**
-   * Get all the values in this entry, including attachments.
-   *
-   * @return      a map with all values by key
-   */
-  public Map<String, Value<?>> getAllValues()
-  {
-    Map<String, Value<?>> values = new HashMap<String, Value<?>>();
-
-    Variables vars = getVariables();
-
-    for(Variable var : vars)
-    {
-      if(!var.isStored())
-        continue;
-
-      Value<?> value = var.get(this);
-
-      // We don't store this if we don't have a value.
-      if(value == null) // || (!value.isDefined() && !value.hasExpression()))
-        continue;
-
-      values.put(var.getKey(), value);
-    }
-
-    return values;
   }
 
   /**

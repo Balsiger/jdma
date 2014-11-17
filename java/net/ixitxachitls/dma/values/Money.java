@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2013 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -19,594 +19,344 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.annotation.concurrent.Immutable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Values.MoneyProto;
-import net.ixitxachitls.util.configuration.Config;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
+import net.ixitxachitls.util.Strings;
 
 /**
- * This class stores a monetary value (in game currency).
+ * A representation of a monetary value.
  *
- * @file          Money.java
- *
- * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
+ * @file   NewMoney.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
-@Immutable
-@ParametersAreNonnullByDefault
-public class Money extends Units<Money>
+public class Money extends NewValue.Arithmetic<MoneyProto>
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------- Money --------------------------------
-
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
-
-
-  /**
-   * Construct the money object with an undefined value.
-   *
-   */
-  public Money()
+  public static class MoneyParser extends Parser<Money>
   {
-    super(s_sets, 1);
-    m_template = "money";
-  }
-
-  //........................................................................
-  //------------------------------- Money --------------------------------
-
-  /**
-   * Construct the money object with real money values. This is just a
-   * convenience method.
-   *
-   * @param       inCopper   the amount of copper pieces
-   * @param       inSilver   the amount of silver pieces
-   * @param       inGold     the amount of gold pieces
-   * @param       inPlatinum the amount of platinum pieces
-   *
-    */
-  public Money(int inCopper, int inSilver, int inGold, int inPlatinum)
-  {
-    super(new Rational [] { new Rational(inPlatinum), new Rational(inGold),
-                            new Rational(inSilver), new Rational(inCopper), },
-          s_sets, s_sets[0], 1);
-
-    if(inCopper < 0)
-      throw new IllegalArgumentException("can only set positive values");
-
-    if(inSilver < 0)
-      throw new IllegalArgumentException("can only set positive values");
-
-    if(inGold < 0)
-      throw new IllegalArgumentException("can only set positive values");
-
-    if(inPlatinum < 0)
-      throw new IllegalArgumentException("can only set positive values");
-
-    m_template = "money";
-  }
-
-  //........................................................................
-
-  //------------------------------ createNew -------------------------------
-
-  /**
-   * Create a new list with the same type information as this one, but one
-   * that is still undefined.
-   *
-   * @return      a similar list, but without any contents
-   *
-   */
-  @Override
-  public Money create()
-  {
-    return super.create(new Money());
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  /** The unit definition. */
-  private static String s_definition =
-    Config.get("/rules/money.units",
-               "1/1 : D&D = 10/1   : pp : "
-               + "platinum|platinums|platinum piece|platinum pieces,"
-               + "             1/1   : gp : gold|golds|gold piece|gold pieces,"
-               + "             1/10  : sp : "
-               + "silver|silvers|silver piece|silver pieces,"
-               + "             1/100 : cp : "
-               + "copper|coppers|copper piece|copper pieces.");
-
-  /** The set definition. */
-  private static Set []s_sets = parseDefinition(s_definition);
-
-  /** The type for the standard coins. */
-  public enum Coin
-  {
-    /** Copper pieces. */
-    copper(3),
-
-    /** Silver pieces. */
-    silver(2),
-
-    /** Gold pieces. */
-    gold(1),
-
-    /** Platinum pieces. */
-    platinum(0);
-
-    /** Create the coin object.
-     *
-     * @param inIndex the index in the value array that is used
-     *
-     */
-    private Coin(int inIndex)
+    public MoneyParser()
     {
-      m_index = inIndex;
+      super(1);
     }
 
-    /** The index for this coin in the values array. */
-    private int m_index;
-
-    /** Get the index into the value array for this type of coin.
-     *
-     * @return the index
-     *
-     */
-    public int index()
+    @Override
+    public Optional<Money> doParse(String inValue)
     {
-      return m_index;
-    }
-  }
+      int platinum = 0;
+      int gold = 0;
+      int silver = 0;
+      int copper = 0;
+      int armor = 0;
+      int weapon = 0;
 
-  /** The grouping. */
-  protected static final Group<Money, Long, String> s_grouping =
-    new Group<Money, Long, String>(new Group.Extractor<Money, Long>()
+      List<String []> parts =
+        Strings.getAllPatterns(inValue,
+                               "(?:\\s*(\\d+)\\s*(pp|gp|sp|cp|armor|weapon))");
+      for(String []part : parts)
       {
-        /**
-         *
-         */
-        private static final long serialVersionUID = 1L;
+        if(part.length != 2)
+          return Optional.absent();
 
-        @Override
-        public Long extract(Money inValue)
+        try
         {
-          if(inValue == null)
-            throw new IllegalArgumentException("must have a value here");
+          int number = Integer.parseInt(part[0]);
 
-          return (long)(inValue.getAsGold().getValue() * 100);
+          switch(part[1].toLowerCase())
+          {
+            case PP:
+              platinum += number;
+              break;
+
+            case GP:
+              gold += number;
+              break;
+
+            case SP:
+              silver += number;
+              break;
+
+            case CP:
+              copper += number;
+              break;
+
+            case "armor":
+              armor += number;
+              break;
+
+            case "weapon":
+              weapon += number;
+              break;
+          }
         }
-      }, new Long [] { 1L, 1 * 10L, 1 * 100L, 10 * 100L, 100 * 100L,
-                       1000 * 100L, 2000 * 100L, 4000 * 100L,
-                       1000000 * 100L, },
-                                   new String []
-        { "1 cp", "1 sp", "1 gp", "10 gp", "100 gp", "1000 gp", "2000 gp",
-          "4000 gp", "100000 gp", "Infinite", }, "$undefined$");
+        catch(NumberFormatException e)
+        {
+          return Optional.absent();
+        }
+      }
 
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------- getCopper ------------------------------
-
-  /**
-   * Get the amount of coppers.
-   *
-   * @return      the amount of coppers
-   *
-   */
-  public int getCopper()
-  {
-    if(!isDefined())
-      return 0;
-
-    if(m_set == m_sets[0])
-      if(m_values[3] == null)
-        return 0;
-      else
-        return (int)m_values[3].getValue();
-
-    return (toSet(0, true)).getCopper();
+      return Optional.of(new Money(platinum, gold, silver, copper,
+                                      armor, weapon));
+    }
   }
 
-  //........................................................................
-  //------------------------------- getSilver ------------------------------
-
-  /**
-   * Get the amount of silvers.
-   *
-   * @return      the amount of silver
-   *
-   */
-  public int getSilver()
+  public Money(int inPlatinum, int inGold, int inSilver, int inCopper,
+               int inArmor, int inWeapon)
   {
-    if(!isDefined())
-      return 0;
-
-    if(m_set == m_sets[0])
-      if(m_values[2] == null)
-        return 0;
-      else
-        return (int)m_values[2].getValue();
-
-    return (toSet(0, true)).getSilver();
+    m_platinum = inPlatinum;
+    m_gold = inGold;
+    m_silver = inSilver;
+    m_copper = inCopper;
+    m_armor = inArmor;
+    m_weapon = inWeapon;
   }
 
-  //........................................................................
-  //-------------------------------- getGold -------------------------------
+  public static final String PP = "pp";
+  public static final String GP = "gp";
+  public static final String SP = "sp";
+  public static final String CP = "cp";
 
-  /**
-   * Get the amount of golds.
-   *
-   * @return      the amount of golds
-   *
-   */
-  public int getGold()
-  {
-    if(!isDefined())
-      return 0;
+  public static Parser<Money> PARSER = new MoneyParser();
 
-    if(m_set == m_sets[0])
-      if(m_values[1] == null)
-        return 0;
-      else
-        return (int)m_values[1].getValue();
+  private final int m_platinum;
+  private final int m_gold;
+  private final int m_silver;
+  private final int m_copper;
+  private final int m_armor;
+  private final int m_weapon;
 
-    return (toSet(0, true)).getSilver();
-  }
-
-  //........................................................................
-  //------------------------------ getPlatinum -----------------------------
-
-  /**
-   * Get the amount of platinums.
-   *
-   * @return      the amount of platinums
-   *
-   */
   public int getPlatinum()
   {
-    if(!isDefined())
-      return 0;
-
-    if(m_set == m_sets[0])
-      if(m_values[0] == null)
-        return 0;
-      else
-        return (int)m_values[0].getValue();
-
-    return (toSet(0, true)).getSilver();
+    return m_platinum;
   }
 
-  //........................................................................
-
-  //------------------------------ getAsGold -------------------------------
-
-  /**
-   * Get the whole value but as if it was converted to all copper pieces.
-   *
-   * @return      the total value in copper pieces
-   *
-   */
-  public Rational getAsGold()
+  public int getGold()
   {
-    if(!isDefined())
-      return new Rational(0);
-
-    if(m_set == m_sets[0])
-      return getAsBase();
-
-    return toSet(0, false).getAsBase();
+    return m_gold;
   }
 
-  //........................................................................
-  //----------------------------- collectData ------------------------------
+  public int getSilver()
+  {
+    return m_silver;
+  }
 
-  /**
-   * Collect the data available for printing the value.
-   *
-   * @param       inEntry    the entry this value is in
-   * @param       inRenderer the renderer to render sub values
-   *
-   * @return      the data as a map
-   *
-   */
-  // @Override
-  // public Map<String, Object> collectData(AbstractEntry inEntry,
-  //                                        SoyRenderer inRenderer)
-  // {
-  //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
+  public int getCopper()
+  {
+    return m_copper;
+  }
 
-  //   Rational gold = getAsGold();
-  //   if(gold.compare(getGold()) != 0)
-  //     data.put("gold", new SoyValue("as gold", gold, inEntry, inRenderer));
+  public int getArmor()
+  {
+    return m_armor;
+  }
 
-  //   return data;
-  // }
+  public int getWeapon()
+  {
+    return m_weapon;
+  }
 
-  //........................................................................
+  public double asGold()
+  {
+    return m_platinum * 10 + m_gold + m_silver / 10.0 + m_copper / 100.0
+      + m_armor * m_armor * 1000 + m_weapon + m_weapon * m_weapon * 2000;
+  }
 
-  //------------------------------- doGroup --------------------------------
-
-  /**
-   * Return the group this value belongs to.
-   *
-   * @return      a string denoting the group this value is in
-   *
-   */
   @Override
-  protected String doGroup()
+  public String toString()
   {
-    return s_grouping.group(this);
+    List<String> parts = new ArrayList<>();
+
+    if(m_platinum > 0)
+      parts.add(m_platinum + " " + CP);
+    if(m_gold > 0)
+      parts.add(m_gold + " " + GP);
+    if(m_silver > 0)
+      parts.add(m_silver + " " + SP);
+    if(m_copper > 0)
+      parts.add(m_copper + " " + CP);
+    if(m_armor > 0)
+      parts.add("+" + m_armor + " armor");
+    if(m_weapon > 0)
+      parts.add("+" + m_weapon + " weapon");
+
+    if(parts.isEmpty())
+      return "0 " + GP;
+
+    return Strings.SPACE_JOINER.join(parts);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------ asStandard ------------------------------
-
-  /**
-   * Set the standard money value.
-   *
-   * @param       inPlatinum the number of platinum coins
-   * @param       inGold     the number of gold coins
-   * @param       inSilver   the number of silver coins
-   * @param       inCopper   the number of copper coins
-   *
-   * @return      a new money value
-   *
-   */
-  public Money asStandard(@Nullable Rational inPlatinum,
-                          @Nullable Rational inGold,
-                          @Nullable Rational inSilver,
-                          @Nullable Rational inCopper)
+  public String toPureString()
   {
-    return as(new Rational [] { inPlatinum, inGold, inSilver, inCopper }, 0);
+    List<String> parts = new ArrayList<>();
+
+    if(m_platinum > 0)
+      parts.add(m_platinum + " " + CP);
+    if(m_gold > 0 || m_armor > 0 || m_weapon > 0)
+      parts.add((m_gold + m_weapon * m_weapon * 2000 + m_armor * m_armor * 1000)
+                + " " + GP);
+    if(m_silver > 0)
+      parts.add(m_silver + " " + SP);
+    if(m_copper > 0)
+      parts.add(m_copper + " " + CP);
+
+    if(parts.isEmpty())
+      return "0 " + GP;
+
+    return Strings.SPACE_JOINER.join(parts);
   }
 
-  //........................................................................
-  //--------------------------------- add ----------------------------------
-
-  /**
-   * Add the given amount of coins to this value. You can subtract values by
-   * giving a negative value.
-   *
-   * @param       inCoin  the type of coin to add
-   * @param       inValue the value to add (use a negative value to subtract)
-   *
-   * @return      true if the coins were added, false if it was not possible.
-   *
-   */
-  public Money add(Coin inCoin, int inValue)
+  @Override
+  public String group()
   {
-    // nothing defined yet, thus cannot subtract values
-    if((m_values == null || m_values[inCoin.index()] == null) && inValue < 0)
-      throw new IllegalArgumentException("invalid values given");
+    double gold = asGold();
+    if(gold < 0.1)
+      return "1 " + CP;
 
-    Money result = asStandard(null, null, null, null);
+    if(gold < 1)
+      return "1 " + SP;
 
-    if(m_values != null)
-      result.m_values = m_values;
+    if(gold < 2)
+      return "1 " + GP;
 
-    assert m_values != null : "values should not be null";
+    if(gold < 3)
+      return "2 " + GP;
 
-    // can we subtract the given amount of coins
-    if(m_values[inCoin.index()] != null
-       && m_values[inCoin.index()].compare(-1L * inValue) < 0)
-      throw new IllegalArgumentException("too much money to subtract");
+    if(gold < 4)
+      return "3 " + GP;
 
-    if(m_values[inCoin.index()] == null)
-      result.m_values[inCoin.index()] = new Rational(inValue);
-    else
-      result.m_values[inCoin.index()] = m_values[inCoin.index()].add(inValue);
+    if(gold < 5)
+      return "4 " + GP;
 
-    return result;
+    if(gold < 6)
+      return "5 " + GP;
+
+    if(gold < 11)
+      return "10 " + GP;
+
+    if(gold < 26)
+      return "25 " + GP;
+
+    if(gold <= 51)
+      return "50 " + GP;
+
+    if(gold < 101)
+      return "100 " + GP;
+
+    if(gold < 251)
+      return "200 " + GP;
+
+    if(gold < 251)
+      return "250 " + GP;
+
+    if(gold < 501)
+      return "500 " + GP;
+
+    if(gold < 1001)
+      return "1'000 " + GP;
+
+    if(gold < 5001)
+      return "5'000 " + GP;
+
+    if(gold < 10001)
+      return "100'00 " + GP;
+
+    return "a lot";
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  /**
-   * Create a proto for the value.
-   *
-   * @return the proto representation
-   */
+  @Override
   public MoneyProto toProto()
   {
     MoneyProto.Builder builder = MoneyProto.newBuilder();
-
-    if(m_set == m_sets[0])
-      if(m_values != null && m_values.length == 4)
-      {
-        if(m_values[0] != null)
-          builder.setPlatinum(getPlatinum());
-        if(m_values[1] != null)
-          builder.setGold(getGold());
-        if(m_values[2] != null)
-          builder.setSilver(getSilver());
-        if(m_values[3] != null)
-          builder.setCopper(getCopper());
-      }
+    if(m_platinum > 0)
+      builder.setPlatinum(m_platinum);
+    if(m_gold > 0)
+      builder.setGold(m_gold);
+    if(m_silver > 0)
+      builder.setSilver(m_silver);
+    if(m_copper > 0)
+      builder.setCopper(m_copper);
+    if(m_armor > 0)
+      builder.setMagicArmor(m_armor);
+    if(m_weapon > 0)
+      builder.setMagicWeapon(m_weapon);
 
     return builder.build();
   }
 
-  /**
-   * Create a new money similar to the current but with data from the
-   * given proto.
-   *
-   *
-   * @param inProto  the proto with the data
-   * @return the newly created money
-   */
-  public Money fromProto(MoneyProto inProto)
+  public static Money fromProto(MoneyProto inProto)
   {
-    Money result = create();
-
-    result.m_values = new Rational[4];
-    if(inProto.hasCopper())
-      result.m_values[0] = new Rational(inProto.getCopper());
-    if(inProto.hasSilver())
-      result.m_values[1] = new Rational(inProto.getSilver());
-    if(inProto.hasGold())
-      result.m_values[2] = new Rational(inProto.getGold());
-    if(inProto.hasPlatinum())
-      result.m_values[3] = new Rational(inProto.getPlatinum());
-    result.m_set = m_sets[0];
-
-    return result;
+    return new Money(inProto.getPlatinum(), inProto.getGold(),
+                        inProto.getSilver(), inProto.getCopper(),
+                        inProto.getMagicArmor(), inProto.getMagicWeapon());
   }
 
-  //........................................................................
+  @Override
+  public NewValue.Arithmetic<MoneyProto> add(NewValue.Arithmetic<MoneyProto> inValue)
+  {
+    if(inValue == null)
+      return this;
 
-  //------------------------------------------------------------------- test
+    if(!(inValue instanceof Money))
+      throw new IllegalArgumentException("can only add another money value, "
+                                         + "not a " + inValue.getClass());
+
+    Money value = (Money)inValue;
+    return new Money(m_platinum + value.m_platinum,
+                        m_gold + value.m_gold,
+                        m_silver + value.m_silver,
+                        m_copper + value.m_copper,
+                        m_armor + value.m_armor,
+                        m_weapon + value.m_weapon);
+  }
+
+  @Override
+  public boolean canAdd(NewValue.Arithmetic<MoneyProto> inValue)
+  {
+    return inValue instanceof Money;
+  }
+
+  @Override
+  public NewValue.Arithmetic<MoneyProto> multiply(int inFactor)
+  {
+    return new Money(m_platinum * inFactor,
+                        m_gold * inFactor,
+                        m_silver * inFactor,
+                        m_copper * inFactor,
+                        m_armor,
+                        m_weapon);
+  }
+
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- init -----------------------------------------------------------
-
-    /** Testing init. */
+    /** Parsing tests. */
     @org.junit.Test
-    public void init()
+    public void parse()
     {
-      Money value = new Money();
-
-      // undefined value
-      assertEquals("not undefined at start", false, value.isDefined());
-      assertEquals("undefined value not correct", "$undefined$",
-                   value.toString());
-      assertEquals("undefined value not correct", 0.0,
-                   value.getAsGold().getValue(), 0.001);
-
-      // now with some value
-      value = new Money(1, 2, 3, 4);
-
-      assertEquals("not defined after setting", true, value.isDefined());
-      assertEquals("copper",   1, value.getCopper());
-      assertEquals("silver",   2, value.getSilver());
-      assertEquals("gold",     3, value.getGold());
-      assertEquals("platinum", 4, value.getPlatinum());
-      assertEquals("total",    43.21, value.getAsGold().getValue(), 0.001);
-      assertEquals("output", "4 pp 3 gp 2 sp 1 cp",
-                   value.toString());
-
-      value =
-        value.asStandard(new Rational(1, 2, 3), null, new Rational(5), null);
-
-      assertEquals("output", "1 2/3 pp 5 sp", value.toString());
-
-      Value.Test.createTest(value);
+      assertEquals("parsing", "[42, gp]",
+                   Arrays.toString(Strings.getAllPatterns
+                                   ("42 gp 23   sp     17   cp 5sp",
+                                    "\\s*(\\d+)\\s*(pp|gp|sp|cp)").get(0)));
+      assertEquals("parsting", "[23, sp]",
+                   Arrays.toString(Strings.getAllPatterns
+                                   ("42 gp 23 sp 17 cp 5sp",
+                                    "\\s*(\\d+)\\s*(pp|gp|sp|cp)").get(1)));
+      assertEquals("parsing", "[17, cp]",
+                   Arrays.toString(Strings.getAllPatterns
+                                   ("42 gp 23 sp 17 cp 5sp",
+                                    "\\s*(\\d+)\\s*(pp|gp|sp|cp)").get(2)));
+      assertEquals("parsing", "[5, sp]",
+                   Arrays.toString(Strings.getAllPatterns
+                                   ("42 gp 23 sp 17 cp 5sp",
+                                    "\\s*(\\d+)\\s*(pp|gp|sp|cp)").get(3)));
     }
-
-    //......................................................................
-    //----- add ------------------------------------------------------------
-
-    /** Add some values. */
-    @org.junit.Test
-    public void add()
-    {
-      Money value = new Money(1, 2, 3, 4);
-
-      value = value.add(Coin.platinum, 10);
-      assertEquals("add", "14 pp 3 gp 2 sp 1 cp", value.toString());
-
-      value = value.add(Coin.silver, 5);
-      assertEquals("add", "14 pp 3 gp 7 sp 1 cp", value.toString());
-
-      value = value.add(Coin.copper, -1);
-      assertEquals("add", "14 pp 3 gp 7 sp", value.toString());
-
-      try
-      {
-        value = value.add(Coin.copper, -5);
-        assertNull("should not have been read", value);
-        fail("expected an illegal argument exception");
-      }
-      catch(IllegalArgumentException e)
-      {
-        // expected
-      }
-    }
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** Testing reading. */
-    @org.junit.Test
-    public void read()
-    {
-      String []tests =
-        {
-          "simple", "5 sp", "5 sp", null,
-          "multi", "3 gp 1 sp 5 cp", "3 gp 1 sp 5 cp", null,
-          "double", "3 gp 5 gp", "8 gp", null,
-
-          "whites",
-          "3 gp 5sp 1 \n      pp 4 \ncp  2    gp\n",
-          "1 pp 5 gp 5 sp 4 cp", null,
-
-          "other", "5 sp hello", "5 sp", " hello",
-          "zero", "1 pp 0 sp", "1 pp", null,
-          "other 2", "3 gp 4 cp a 9pp", "3 gp 4 cp", " a 9pp",
-          "none", "hello", null, "hello",
-          "empty", "", null, null,
-          "invalid", "a5 gp", null, "a5 gp",
-          "invalid 2", "2 tons", null, "2 tons",
-          "number only", "42 ", null, "42 ",
-          "negative", "-5 gp", null, "-5 gp",
-          "negative multi", "3 sp -5 gp", "3 sp", " -5 gp",
-        };
-
-      Value.Test.readTest(tests, new Money());
-    }
-
-    //......................................................................
-    //----- coin ----------------------------------------------------------
-
-    /** Check coins. */
-    @org.junit.Test
-    public void coin()
-    {
-      assertEquals("coin", 0, Coin.platinum.index());
-      assertEquals("coin", "platinum", Coin.platinum.toString());
-      assertEquals("coin", 1, Coin.gold.index());
-      assertEquals("coin", "gold", Coin.gold.toString());
-      assertEquals("coin", 2, Coin.silver.index());
-      assertEquals("coin", "silver", Coin.silver.toString());
-      assertEquals("coin", 3, Coin.copper.index());
-      assertEquals("coin", "copper", Coin.copper.toString());
-    }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

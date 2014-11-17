@@ -59,9 +59,9 @@ import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Duration;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.ModifierType;
+import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.NamedModifier;
 import net.ixitxachitls.dma.values.NewCritical;
-import net.ixitxachitls.dma.values.NewMoney;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.Probability;
@@ -116,7 +116,7 @@ public class BaseItem extends BaseEntry
   protected Optional<String> m_playerName = Optional.absent();
 
   /** The total standard value of the base item. */
-  protected Optional<NewMoney> m_value = Optional.absent();
+  protected Optional<Money> m_value = Optional.absent();
 
   /** The standard weight of the item. */
   protected Optional<Weight> m_weight = Optional.absent();
@@ -549,7 +549,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the value
    */
-  public Optional<NewMoney> getValue()
+  public Optional<Money> getValue()
   {
     return m_value;
   }
@@ -559,12 +559,12 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewMoney>> getCombinedValue()
+  public Annotated<Optional<Money>> getCombinedValue()
   {
     if(m_value.isPresent())
-      return new Annotated.Arithmetic<NewMoney>(m_value.get(), getName());
+      return new Annotated.Arithmetic<Money>(m_value.get(), getName());
 
-    Annotated<Optional<NewMoney>> combined = new Annotated.Arithmetic<>();
+    Annotated<Optional<Money>> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedValue());
 
@@ -2081,7 +2081,7 @@ public class BaseItem extends BaseEntry
     super.set(inValues);
 
     m_playerName = inValues.use("player_name", m_playerName);
-    m_value = inValues.use("value", m_value, NewMoney.PARSER);
+    m_value = inValues.use("value", m_value, Money.PARSER);
     m_weight = inValues.use("weight", m_weight, Weight.PARSER);
     m_hp = inValues.use("hp", m_hp, NewValue.INTEGER_PARSER);
     m_size = inValues.use("size", m_size, Size.PARSER);
@@ -2168,7 +2168,7 @@ public class BaseItem extends BaseEntry
     super.fromProto(proto.getBase());
 
     if(proto.hasValue())
-      m_value = Optional.of(NewMoney.fromProto(proto.getValue()));
+      m_value = Optional.of(Money.fromProto(proto.getValue()));
 
     if(proto.hasWeight())
       m_weight = Optional.of(Weight.fromProto(proto.getWeight()));

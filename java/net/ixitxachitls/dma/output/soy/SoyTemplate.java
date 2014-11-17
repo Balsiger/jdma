@@ -541,43 +541,6 @@ public class SoyTemplate
     }
   }
 
-  /** A directive to nicely print a vlue. */
-  public static class PrintDirective extends SoyAbstractTofuPrintDirective
-  {
-    @Override
-    public String getName()
-    {
-      return "|print";
-    }
-
-
-    @Override
-    public Set<Integer> getValidArgsSizes()
-    {
-      return ImmutableSet.of(0);
-    }
-
-
-    @Override
-    public boolean shouldCancelAutoescape()
-    {
-      return false;
-    }
-
-
-    @Override
-    public SoyData apply(SoyData inValue, List<SoyData> inArgs)
-    {
-      if(inValue instanceof SoyValue)
-        return StringData.forValue(((SoyValue)inValue).print());
-
-      if(inValue == null)
-        return StringData.forValue("(null)");
-
-      return inValue;
-    }
-  }
-
   /** A directive to print a value raw. */
   public static class RawDirective extends SoyAbstractTofuPrintDirective
   {
@@ -755,7 +718,6 @@ public class SoyTemplate
         Multibinder.newSetBinder(binder(), SoyPrintDirective.class);
 
       soyDirectivesSetBinder.addBinding().to(NumberDirective.class);
-      soyDirectivesSetBinder.addBinding().to(PrintDirective.class);
       soyDirectivesSetBinder.addBinding().to(CSSDirective.class);
       soyDirectivesSetBinder.addBinding().to(RawDirective.class);
       soyDirectivesSetBinder.addBinding().to(CommandsDirective.class);

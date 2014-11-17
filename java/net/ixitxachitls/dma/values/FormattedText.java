@@ -239,37 +239,6 @@ public class FormattedText extends BaseFormattedText<FormattedText>
     }
 
     //......................................................................
-    //----- fail -----------------------------------------------------------
-
-    /** Testing failed reading. */
-    @org.junit.Test
-    public void failTest()
-    {
-      try (java.io.StringReader sReader = new java.io.StringReader("guru "
-        + "\"just \\\" a \\\" test"))
-      {
-        ParseReader reader = new ParseReader(sReader, "test");
-
-        FormattedText text = new FormattedText().read(reader);
-
-        assertNull("text should not have been read", text);
-
-        reader.read(' ');
-
-        text = new FormattedText().read(reader);
-        assertTrue("text should have been read", text != null);
-        assertEquals("text does not match", "just \" a \" test", text.get());
-        assertEquals("converted text does not match",
-                     "\"just \\\" a \\\" test\"", text.toString());
-
-        m_logger.addExpectedPattern("WARNING:.*\\(read till end of text\\) "
-          + "on line 1 in document 'test'."
-          + "\\.\\.\\.guru \">>>just \\\\\" a \\\\\" "
-          + "test\\.\\.\\.");
-      }
-    }
-
-    //......................................................................
   }
 
   //........................................................................

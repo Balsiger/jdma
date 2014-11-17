@@ -101,30 +101,6 @@ public class SoyEntry extends SoyAbstract
                             "css",
                             m_entry.getType().getName().replace(" ", "-"));
 
-    /*
-    if("files".equals(inName))
-    {
-      File main = m_entry.getMainFile();
-      List<File> files = m_entry.getAllFiles();
-
-      SoyListData data = new SoyListData();
-      for(File file : files)
-        if(main == null || !file.getPath().equals(main.getPath()))
-          data.add(new SoyMapData("path", file.getPath(),
-                                  "icon", file.getIcon(),
-                                  "name", file.getName(),
-                                  "type", file.getType()));
-
-      return new SoyMapData("main",
-                            main == null ? new SoyAbstract.Undefined("main")
-                            : new SoyMapData("path", main.getPath(),
-                                             "icon", main.getIcon(),
-                                             "name", main.getName(),
-                                             "type", main.getType()),
-                            "other", data);
-    }
-    */
-
     String name = inName.replace("__", "").replace("_", " ");
 
     Object value;
@@ -135,18 +111,6 @@ public class SoyEntry extends SoyAbstract
       if(value != null)
         return convert(name, value);
     }
-
-    value = m_entry.compute(name);
-    if(value != null)
-      return convert(name, value);
-
-    for(BaseEntry base : m_entry.getBaseEntries())
-      if(base != null)
-      {
-        value = base.compute(name);
-        if(value != null)
-          return convert(name, value);
-      }
 
     return new Undefined(m_name + "." + name);
   }

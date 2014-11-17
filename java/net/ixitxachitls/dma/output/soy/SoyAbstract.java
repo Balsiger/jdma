@@ -222,9 +222,6 @@ public class SoyAbstract extends SoyMapData
    */
   protected SoyData convert(String inName, Object inObject)
   {
-    if(inObject instanceof Value)
-      return new SoyValue(inName, (Value)inObject, (AbstractEntry)m_object);
-
     if(inObject instanceof AbstractEntry)
       return new SoyEntry((AbstractEntry)inObject);
 

@@ -86,7 +86,7 @@
                 {param remarkComment: $value.remark.comment /}
               {/call}
             {else}
-              {$value |print}
+              {$value}
             {/if}
             {if $postfix}{$postfix}{/if}
           {elseif $value.hasExpression}
@@ -156,13 +156,13 @@
 {template .remark}
   {if $remarkType}
     <span class="remark {$remarkType |css}">
-      {$value |print}
+      {$value}
       <div class="remark-window">
         {$remarkComment}
       </div>
     </span>
   {else}
-    {$value |print}
+    {$value}
   {/if}
 {/template}
 
@@ -415,9 +415,9 @@
   <table>
     {foreach $appearance in $value.list}
       <tr>
-        <td>{$appearance.multi.0 |print}</td>
+        <td>{$appearance.multi.0}</td>
         <td>-{sp}</td>
-        <td>{$appearance.multi.1 |print}</td>
+        <td>{$appearance.multi.1}</td>
       </tr>
     {/foreach}
   </table>
@@ -803,7 +803,7 @@
       {else}
         {sp}
       {/if}
-      {$element |print}
+      {$element}
       {if $args[index($element) * 2 + 1]}
         {$args[index($element) * 2 + 1]}
       {/if}
@@ -849,9 +849,9 @@
 {template .modifiednumber}
   <span class="windowed">
     <span class="window base">
-      {if $value.modifier}Modifier: {$value.modifier |print}<br /><br />{/if}
+      {if $value.modifier}Modifier: {$value.modifier}<br /><br />{/if}
       {foreach $name in keys($value.modifiers)}
-        <span class="base-value">{$value.modifiers[$name] |print}</span>
+        <span class="base-value">{$value.modifiers[$name]}</span>
         {sp} from {$name}
         <br />
       {/foreach}
@@ -868,9 +868,9 @@
  */
 {template .dailyreferences}
   {foreach $ref in $value.list}
-    {$ref.multi.0 |print}
+    {$ref.multi.0}
     {if $ref.multi.1.isDefined and $ref.multi.1.print != '1'}
-      {sp}{$ref.multi.1 |print} times per day
+      {sp}{$ref.multi.1} times per day
     {/if}
     : {entry($ref.multi.0.print)}
   {if not isLast($ref)}<br/>{/if}
@@ -938,13 +938,13 @@
                 {if $short}
                   {$val.first.short}
                 {else}
-                  {$val.first |print}
+                  {$val.first}
                 {/if}
                 {if not isLast($val)}{sp}{/if}
               </span>
             {/foreach}
             {if $value.hasModifiers}
-              {$value.modifier |print}
+              {$value.modifier}
             {/if}
           {/if}
           {if $postfix}{$postfix}{/if}
