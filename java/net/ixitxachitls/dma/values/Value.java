@@ -283,9 +283,6 @@ public abstract class Value<T extends Value<T>>
   /** The hint for this value. */
   protected @Nullable Remark m_remark = null;
 
-  /** The expression for value computation, if any. */
-  protected @Nullable Expression m_expression = null;
-
   /** A grouping of the values, if any. */
   protected @Nullable Grouping<T, String> m_grouping = null;
 
@@ -340,44 +337,6 @@ public abstract class Value<T extends Value<T>>
 
   //........................................................................
 
-  //------------------------------- toString -------------------------------
-
-  /**
-   * Convert the value into a String that can be shown to a user.
-   *
-   * @return      a String representation for human reading
-   *
-   */
-  @Override
-  public String toString()
-  {
-    return toString(true);
-  }
-
-  //........................................................................
-  //------------------------------- toString -------------------------------
-
-  /**
-   * Convert the value into a String that can be shown to a user.
-   *
-   * @param       inAll true if printing all values, false just for humans
-   *
-   * @return      a String representation for human reading
-   *
-   */
-  public String toString(boolean inAll)
-  {
-    if(!isDefined())
-      if(hasExpression())
-        return m_expression.toString();
-      else
-        return UNDEFINED;
-
-    return (!inAll || m_remark == null ? "" : m_remark.toString())
-      + (m_expression == null ? "" : m_expression + " ") + doToString();
-  }
-
-  //........................................................................
   //------------------------------ doToString ------------------------------
 
   /**
@@ -485,55 +444,6 @@ public abstract class Value<T extends Value<T>>
 
   //........................................................................
 
-  //-------------------------------- print ---------------------------------
-
-  /**
-   * Generate a string representation of the value for printing.
-   *
-   * @param       inEntry    the entry this value is in
-   *
-   * @return  the printed value as a string.
-   *
-   */
-  public String print(AbstractEntry inEntry)
-  {
-    return doPrint(inEntry);
-  }
-
-  //........................................................................
-  //------------------------------- doPrint --------------------------------
-
-  /**
-   * Do the standard printing after handling templates.
-   *
-   * @param       inEntry    the entry this value is in
-   *
-   * @return      the string to be printed
-   *
-   */
-  protected String doPrint(AbstractEntry inEntry)
-  {
-    return toString(false);
-  }
-
-  //........................................................................
-
-  //------------------------------- doGroup --------------------------------
-
-  /**
-   * Really do grouping for this object. This method can be derived to have
-   * special grouping in derivations.
-   *
-   * @return      a string denoting the group this value is in
-   *
-   */
-  protected String doGroup()
-  {
-    return this.toString(false);
-  }
-
-  //........................................................................
-
   //----------------------------- getEditType ------------------------------
 
   /**
@@ -606,20 +516,6 @@ public abstract class Value<T extends Value<T>>
   public boolean isArithmetic()
   {
     return true;
-  }
-
-  //........................................................................
-  //---------------------------- hasExpression -----------------------------
-
-  /**
-   * Check if the value has an expression.
-   *
-   * @return      true if there is an expression, false if not
-   *
-   */
-  public boolean hasExpression()
-  {
-    return m_expression != null;
   }
 
   //........................................................................

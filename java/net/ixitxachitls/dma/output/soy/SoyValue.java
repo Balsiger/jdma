@@ -34,11 +34,9 @@ import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
 import com.google.template.soy.data.restricted.BooleanData;
-import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.values.BaseNumber;
 import net.ixitxachitls.dma.values.Remark;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
@@ -132,21 +130,6 @@ public class SoyValue extends SoyAbstract
    *
    * @return  the converted string
    */
-
-  //........................................................................
-
-  //--------------------------------- raw ----------------------------------
-
-  /**
-   * Convert the value to a raw string (no template processing for the value).
-   *
-   * @return   the raw string representation
-   *
-   */
-  public String raw()
-  {
-    return m_value.print(m_entry);
-  }
 
   //........................................................................
 

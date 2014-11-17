@@ -536,13 +536,6 @@ public abstract class ValueGroup implements Changeable
   /** The random generator. */
   protected static final Random s_random = new Random();
 
-  /** All the variables for each individual derived class. */
-  protected static final Map<Class<?>, Variables> s_variables =
-    new HashMap<Class<?>, Variables>();
-
-  /** An empty set of values for all unknown classes. */
-  private static final Variables s_emptyVariables = new Variables();
-
   /** All the indexes. */
   protected static final Multimap<String, Index> s_indexes =
     ArrayListMultimap.create();
@@ -557,79 +550,6 @@ public abstract class ValueGroup implements Changeable
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getVariables ------------------------------
-
-
-  /**
-   * Get the variables possible for this group.
-   *
-   * @return      all the variables
-   *
-   */
-  public Variables getVariables()
-  {
-    Variables result = getVariables(this.getClass());
-
-    if(result == null)
-      return s_emptyVariables;
-
-    return result;
-  }
-
-  //........................................................................
-  //----------------------------- getVariables ------------------------------
-
-  /**
-   * Get the variables possible for the given class group.
-   *
-   * @param       inClass the class go get the variables for
-   *
-   * @return      all the variables
-   *
-   */
-  public static @Nullable Variables getVariables(Class<?> inClass)
-  {
-    return s_variables.get(inClass);
-  }
-
-  //........................................................................
-  //----------------------------- getVariable -----------------------------
-
-  /**
-   * Get the variable for the given key.
-   *
-   * @param       inKey the name of the key to get the value for
-   *
-   * @return      the value for the key
-   *
-   */
-  public @Nullable Variable getVariable(String inKey)
-  {
-    return getVariables().getVariable(inKey);
-  }
-
-  //........................................................................
-  //------------------------------ getValue --------------------------------
-
-  /**
-   * Get the value for the given key.
-   *
-   * @param       inKey the name of the key to get the value for
-   *
-   * @return      the value for the key
-   *
-   */
-  public @Nullable Value<?> getValue(String inKey)
-  {
-    Variable var = getVariable(inKey);
-
-    if(var == null)
-      return null;
-
-    return var.get(this);
-  }
-
-  //........................................................................
   //------------------------------- getType --------------------------------
 
   /**
@@ -742,83 +662,6 @@ public abstract class ValueGroup implements Changeable
 
     // Admins are owners of everything
     return inUser.hasAccess(BaseCharacter.Group.ADMIN);
-  }
-
-  //........................................................................
-  //------------------------------- matches --------------------------------
-
-  /**
-   * Check whether the entry matches the given key and value.
-   *
-   * @param       inKey   the key of the value to match
-   * @param       inValue the value to match with
-   *
-   * @return      true if the group matches the given key and value, false if
-   *              not
-   *
-   */
-  public boolean matches(String inKey, String inValue)
-  {
-    Value<?> value = getValue(inKey);
-    if(value == null)
-      return false;
-
-    return inValue.equalsIgnoreCase(value.toString());
-  }
-
-  //........................................................................
-  //------------------------------ isValueIn -------------------------------
-
-  /**
-   * Check if the given value is in the group value with the given key.
-   *
-   * @param       inValue the value to look for
-   * @param       inKey   the key of the value to check in
-   *
-   * @return      true if it is in, false if it is not
-   *
-   */
-  @SuppressWarnings({ "rawtypes" })
-  public boolean isValueIn(String inValue, String inKey)
-  {
-    Value<?> value = getValue(inKey);
-    if(value == null)
-      return false;
-
-    if(!(value instanceof ValueList))
-    {
-      Log.warning("must have a value list for in conditions for " + inValue
-                  + " in " + inKey + ", not a " + value.getClass());
-      return false;
-    }
-
-    for(Object v : (ValueList)value)
-      if(inValue.equalsIgnoreCase(v.toString()))
-        return true;
-
-    return false;
-  }
-
-  //........................................................................
-  //------------------------------ isValue -------------------------------
-
-  /**
-   * Check if the given value has the value given.
-   *
-   * @param       inValue the value to look for
-   * @param       inKey   the key of the value to check in
-   *
-   * @return      true if it is in, false if it is not, null if undefined or
-   *              invalid
-   *
-   */
-  public @Nullable Boolean isValue(String inValue, String inKey)
-  {
-    Value<?> value = getValue(inKey);
-    if(value == null || !value.isDefined())
-      return null;
-
-    return inValue.equalsIgnoreCase(value.toString());
   }
 
   //........................................................................

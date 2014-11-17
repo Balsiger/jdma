@@ -45,7 +45,6 @@ import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.ValueGroup;
-import net.ixitxachitls.dma.entries.Variables;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.configuration.Config;
@@ -142,22 +141,6 @@ public abstract class AbstractExtension<T extends AbstractEntry>
   //-------------------------------------------------------------- accessors
 
   //----------------------------- getVariables ------------------------------
-
-  /**
-   * Get the values possible for this group. This version also handles tags,
-   * if they are present.
-   *
-   * @return      all the variables
-   *
-   */
-  @Override
-  public Variables getVariables()
-  {
-    // if(m_tag == null)
-      return super.getVariables();
-
-    // return TaggedValues.tag(super.getValues(), m_tag);
-  }
 
   //........................................................................
   //------------------------------- getValue -------------------------------

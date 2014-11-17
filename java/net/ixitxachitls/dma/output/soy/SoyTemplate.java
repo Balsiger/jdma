@@ -294,7 +294,7 @@ public class SoyTemplate
     public SoyData computeForTofu(List<SoyData> inArgs)
     {
       return StringData.forValue
-        (COMMAND_RENDERER.renderCommands(inArgs.get(0).toString()));
+          (COMMAND_RENDERER.renderCommands(inArgs.get(0).toString()));
     }
   }
 
@@ -497,7 +497,7 @@ public class SoyTemplate
     public SoyData computeForTofu(List<SoyData> inArgs)
     {
       return StringData.forValue(inArgs.get(0).toString()
-                                 .replace("'", "\\'")
+                                       .replace("'", "\\'")
                                  .replace("\"",  "\\\""));
     }
   }
@@ -541,40 +541,6 @@ public class SoyTemplate
     }
   }
 
-  /** A directive to print a value raw. */
-  public static class RawDirective extends SoyAbstractTofuPrintDirective
-  {
-    @Override
-    public String getName()
-    {
-      return "|raw";
-    }
-
-
-    @Override
-    public Set<Integer> getValidArgsSizes()
-    {
-      return ImmutableSet.of(0);
-    }
-
-
-    @Override
-    public boolean shouldCancelAutoescape()
-    {
-      return false;
-    }
-
-
-    @Override
-    public SoyData apply(SoyData inValue, List<SoyData> inArgs)
-    {
-      if(inValue instanceof SoyValue)
-        return StringData.forValue(((SoyValue)inValue).raw());
-
-      return inValue;
-    }
-  }
-
   /** A directive to parse and render comands embedded in a string. */
   public static class CommandsDirective extends SoyAbstractTofuPrintDirective
   {
@@ -602,11 +568,8 @@ public class SoyTemplate
     @Override
     public SoyData apply(SoyData inValue, List<SoyData> inArgs)
     {
-      if(inValue instanceof SoyValue)
-        return StringData.forValue
-          (COMMAND_RENDERER.renderCommands(((SoyValue)inValue).raw()));
-
-      return inValue;
+      return StringData.forValue
+          (COMMAND_RENDERER.renderCommands(inValue.toString()));
     }
   }
 
@@ -651,11 +614,6 @@ public class SoyTemplate
     @Override
     public SoyData apply(SoyData inValue, List<SoyData> inArgs)
     {
-      if(inValue instanceof SoyValue)
-        return StringData.forValue
-          (COMMAND_RENDERER.renderCommands
-           (firstLine(((SoyValue)inValue).raw())));
-
       return StringData.forValue(firstLine(inValue.toString()));
     }
   }
@@ -719,7 +677,6 @@ public class SoyTemplate
 
       soyDirectivesSetBinder.addBinding().to(NumberDirective.class);
       soyDirectivesSetBinder.addBinding().to(CSSDirective.class);
-      soyDirectivesSetBinder.addBinding().to(RawDirective.class);
       soyDirectivesSetBinder.addBinding().to(CommandsDirective.class);
       soyDirectivesSetBinder.addBinding().to(FirstLineDirective.class);
     }

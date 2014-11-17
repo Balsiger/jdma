@@ -57,9 +57,6 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.values.File;
-import net.ixitxachitls.dma.values.FormattedText;
-import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -577,56 +574,6 @@ public abstract class AbstractEntry extends ValueGroup
         return true;
 
     return false;
-  }
-
-  /**
-   * Check if the given value is in the group value with the given key.
-   *
-   * @param       inValue the value to look for
-   * @param       inKey   the key of the value to check in
-   *
-   * @return      true if it is in, false if it is not
-   */
-  @Override
-  public boolean isValueIn(String inValue, String inKey)
-  {
-    if(super.isValueIn(inValue, inKey))
-      return true;
-
-    for(BaseEntry entry : getBaseEntries())
-      if(entry.isValueIn(inValue, inKey))
-        return true;
-
-    return false;
-  }
-
-  /**
-   * Check if the given value has the value given.
-   *
-   * @param       inValue the value to look for
-   * @param       inKey   the key of the value to check in
-   *
-   * @return      true if it is in, false if it is not, null if undefined or
-   *              invalid
-   */
-  @Override
-  public @Nullable Boolean isValue(String inValue, String inKey)
-  {
-    Boolean result = super.isValue(inValue, inKey);
-    if(result != null)
-      return result;
-
-    for(BaseEntry entry : getBaseEntries())
-    {
-      if(entry == null)
-        continue;
-
-      result = entry.isValue(inValue, inKey);
-      if(result != null)
-        return result;
-    }
-
-    return null;
   }
 
   @Override

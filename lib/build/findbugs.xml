@@ -68,11 +68,6 @@
   </Match>
 
   <Match>
-    <Class name="~net.ixitxachitls.dma.values.conditions.Condition.*" />
-    <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
-  </Match>
-
-  <Match>
     <Class name="~net.ixitxachitls.dma.entries.extensions.(Counted|Contents).*" />
     <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
   </Match>

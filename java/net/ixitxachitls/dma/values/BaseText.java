@@ -150,27 +150,6 @@ public class BaseText<T extends BaseText<T>> extends Value<T>
 
   //........................................................................
 
-  //------------------------------- doPrint --------------------------------
-
-  /**
-   * Generate a string representation of the value for printing.
-   *
-   * @param   inEntry    the entry to print
-   *
-   * @return  the printed value as a string.
-   *
-   */
-  @Override
-  @Deprecated // ??
-  protected String doPrint(AbstractEntry inEntry)
-  {
-    if(m_text == null)
-      return "";
-
-    return m_text;
-  }
-
-  //........................................................................
   //------------------------------ doToString ------------------------------
 
   /**

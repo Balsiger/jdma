@@ -326,9 +326,9 @@
     {/call}
     <div class="explanation">
       {if $value.isMetric}
-        {$value.asPounds |raw}
+        {$value.asPounds}
       {else}
-        {$value.asMetric |raw}
+        {$value.asMetric}
       {/if}
     </div>
   </span>
@@ -347,9 +347,9 @@
     {/call}
     <span class="explanation">
       {if $value.isMetric}
-        {$value.asFeet |raw}
+        {$value.asFeet}
       {else}
-        {$value.asMetric |raw}
+        {$value.asMetric}
       {/if}
     </span>
   </span>
@@ -368,9 +368,9 @@
     {/call}
     <div class="explanation">
       {if $value.isMetric}
-       {$value.asRounds |raw}
+       {$value.asRounds}
       {else}
-        {$value.asMetric |raw}
+        {$value.asMetric}
       {/if}
     </div>
   </span>
@@ -390,15 +390,15 @@
     <div class="explanation">
       {if $value.isLiquid}
         {if $value.isMetric}
-          {$value.asLiters |raw}
+          {$value.asLiters}
         {else}
-          {$value.asGallons |raw}
+          {$value.asGallons}
         {/if}
       {else}
         {if $value.isMetric}
-          {$value.asFeet |raw}
+          {$value.asFeet}
         {else}
-          {$value.asMetric |raw}
+          {$value.asMetric}
         {/if}
       {/if}
     </div>
@@ -827,7 +827,7 @@
  *
  */
 {template .condition}
-  <em>{$value |raw}</em>
+  <em>{$value}</em>
 {/template}
 
 /**
@@ -837,7 +837,7 @@
  * @ param args arguments to the template
  */
 {template .modifier}
-  {$value |raw}
+  {$value}
 {/template}
 
 /**
@@ -856,7 +856,7 @@
         <br />
       {/foreach}
     </span>
-    {$value |raw}
+    {$value}
   </span>
 {/template}
 
