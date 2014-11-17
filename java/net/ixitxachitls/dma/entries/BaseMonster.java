@@ -43,7 +43,7 @@ import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Modifier;
-import net.ixitxachitls.dma.values.NewRange;
+import net.ixitxachitls.dma.values.Range;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Size;
@@ -195,13 +195,13 @@ public class BaseMonster extends BaseEntry
 
   public static class Advancement
   {
-    public Advancement(NewRange inRange, Size inSize)
+    public Advancement(Range inRange, Size inSize)
     {
       m_range = inRange;
       m_size = inSize;
     }
 
-    private NewRange m_range;
+    private Range m_range;
     private Size m_size;
 
     public static final NewValue.Parser<Advancement> PARSER =
@@ -210,7 +210,7 @@ public class BaseMonster extends BaseEntry
         @Override
         public Optional<Advancement> doParse(String inRange, String inSize)
         {
-          Optional<NewRange> range = NewRange.PARSER.parse(inRange);
+          Optional<Range> range = Range.PARSER.parse(inRange);
           if(!range.isPresent())
             return Optional.absent();
 
@@ -222,7 +222,7 @@ public class BaseMonster extends BaseEntry
         }
       };
 
-    public NewRange getRange()
+    public Range getRange()
     {
       return m_range;
     }
@@ -3199,7 +3199,7 @@ public class BaseMonster extends BaseEntry
 
     for(BaseMonsterProto.Advancement advancement : proto.getAdvancementList())
       m_advancements.add
-      (new Advancement(NewRange.fromProto(advancement.getRange()),
+      (new Advancement(Range.fromProto(advancement.getRange()),
                        Size.fromProto(advancement.getSize())));
 
     if(proto.hasLevelAdjustment())

@@ -60,15 +60,15 @@ public class ProductReference extends Reference<BaseProduct>
     super(BaseProduct.TYPE, inName);
   }
 
-  public ProductReference(String inName, NewRange ... inPages)
+  public ProductReference(String inName, Range... inPages)
   {
     this(inName);
 
-    for(NewRange page : inPages)
+    for(Range page : inPages)
       m_pages.add(page);
   }
 
-  public ProductReference(String inName, List<NewRange> inPages)
+  public ProductReference(String inName, List<Range> inPages)
   {
     this(inName);
 
@@ -80,7 +80,7 @@ public class ProductReference extends Reference<BaseProduct>
   public static final Parser<ProductReference> PARSER =
     new ProductReferenceParser();
 
-  private final List<NewRange> m_pages = new ArrayList<>();
+  private final List<Range> m_pages = new ArrayList<>();
 
   /**
    * Get the product title.
@@ -111,7 +111,7 @@ public class ProductReference extends Reference<BaseProduct>
    *
    * @return the pages
    */
-  public List<NewRange> getPages()
+  public List<Range> getPages()
   {
     return Collections.unmodifiableList(m_pages);
   }
@@ -133,7 +133,7 @@ public class ProductReference extends Reference<BaseProduct>
       BaseEntryProto.Reference.newBuilder();
 
     reference.setName(m_name);
-    for(NewRange page : m_pages)
+    for(Range page : m_pages)
       reference.addPages(page.toProto());
 
     return reference.build();
@@ -149,7 +149,7 @@ public class ProductReference extends Reference<BaseProduct>
   {
     ProductReference reference = new ProductReference(inProto.getName());
     for(RangeProto page : inProto.getPagesList())
-      reference.m_pages.add(NewRange.fromProto(page));
+      reference.m_pages.add(Range.fromProto(page));
 
     return reference;
   }
@@ -163,10 +163,10 @@ public class ProductReference extends Reference<BaseProduct>
    */
   public static Optional<ProductReference> parse(String inName, String inPages)
   {
-    List<NewRange> pages = new ArrayList<>();
+    List<Range> pages = new ArrayList<>();
     for(String page : COMMA_SPLITTER.split(inPages))
     {
-      Optional<NewRange> range = NewRange.PARSER.parse(page);
+      Optional<Range> range = Range.PARSER.parse(page);
       if(!range.isPresent())
         return Optional.absent();
 
