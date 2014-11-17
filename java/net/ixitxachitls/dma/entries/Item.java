@@ -123,7 +123,7 @@ public class Item extends CampaignEntry
   /**
    * The time remaining for a timed item.
    */
-  protected Optional<NewDuration> m_timeLeft = Optional.absent();
+  protected Optional<Duration> m_timeLeft = Optional.absent();
 
   /**
    * The cached contents.
@@ -416,9 +416,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDuration>> getCombinedDon()
+  public Annotated<Optional<Duration>> getCombinedDon()
   {
-    Annotated.Arithmetic<NewDuration> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Duration> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedDon());
 
@@ -431,9 +431,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDuration>> getCombinedDonHastily()
+  public Annotated<Optional<Duration>> getCombinedDonHastily()
   {
-    Annotated.Arithmetic<NewDuration> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Duration> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedDonHastily());
 
@@ -446,9 +446,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDuration>> getCombinedRemove()
+  public Annotated<Optional<Duration>> getCombinedRemove()
   {
-    Annotated.Arithmetic<NewDuration> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Duration> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : this.getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedRemove());
 
@@ -504,7 +504,7 @@ public class Item extends CampaignEntry
    *
    * @return the time
    */
-  public Optional<NewDuration> getTimeLeft()
+  public Optional<Duration> getTimeLeft()
   {
     return m_timeLeft;
   }
@@ -515,9 +515,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDuration>> getCombinedTimed()
+  public Annotated<Optional<Duration>> getCombinedTimed()
   {
-    Annotated.Min<NewDuration> combined = new Annotated.Min<>();
+    Annotated.Min<Duration> combined = new Annotated.Min<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedTimed());
 
@@ -1239,7 +1239,7 @@ public class Item extends CampaignEntry
     m_dmNotes = inValues.use("dm_notes", m_dmNotes);
     m_multiple = inValues.use("multiple", m_multiple, NewValue.INTEGER_PARSER);
     m_multiuse = inValues.use("multiuse", m_multiuse, NewValue.INTEGER_PARSER);
-    m_timeLeft = inValues.use("time_left", m_timeLeft, NewDuration.PARSER);
+    m_timeLeft = inValues.use("time_left", m_timeLeft, Duration.PARSER);
 
     if(m_parentName.isPresent() && !m_parentName.get().contains("/"))
       m_parentName = Optional.of("item/" + m_parentName.get());
@@ -1462,7 +1462,7 @@ public class Item extends CampaignEntry
       m_multiuse = Optional.of(proto.getMultiuse());
 
     if(proto.hasTimeLeft())
-      m_timeLeft = Optional.of(NewDuration.fromProto(proto.getTimeLeft()));
+      m_timeLeft = Optional.of(Duration.fromProto(proto.getTimeLeft()));
 
     super.fromProto(proto.getBase());
   }

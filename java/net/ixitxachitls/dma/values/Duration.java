@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2013 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -19,735 +19,453 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.annotation.concurrent.Immutable;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Values.DurationProto;
-import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.util.configuration.Config;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
+import net.ixitxachitls.util.Strings;
 
 /**
- * This class stores a duration value. It's a convenience class for the
- * Units class.
+ * A duration.
  *
- * @file          Duration.java
- *
- * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
+ * @file   NewCritical.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
-@Immutable
-@ParametersAreNonnullByDefault
-public class Duration extends Units<Duration>
+public class Duration extends NewValue.Arithmetic<DurationProto>
+  implements Comparable<Duration>
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------ Duration --------------------------------
-
-  /**
-   * Construct the duration object with an undefined value.
-   *
-   */
-  public Duration()
+  public static final Parser<Duration> PARSER = new Parser<Duration>(1)
   {
-    super(s_sets, 5);
+    @Override
+    protected Optional<Duration> doParse(String inValue)
+    {
+      if(inValue.trim().isEmpty())
+        return Optional.absent();
 
-    withTemplate("duration");
-  }
+      List<String []>parts =
+        Strings.getAllPatterns(inValue,
+                               "^(?:\\s*(.*?)"
+                                 + "\\s*(day|days|d|ds|hour|hours|h|hr|hrs|"
+                                 + "minute|minutes|m|min|mins|"
+                                 + "second|seconds|s|sec|secs|"
+                                 + "round|rounds|r|rd|rds|"
+                                 + "standard action|standard actions|"
+                                 + "move action|move actions|"
+                                 + "swift action|swift actions|"
+                                 + "free action|free actions))\\s*$");
+      if(parts.isEmpty())
+        return Optional.absent();
 
-  //........................................................................
-  //------------------------------ Duration --------------------------------
+      Optional<NewRational> days = Optional.absent();
+      Optional<NewRational> hours = Optional.absent();
+      Optional<NewRational> minutes = Optional.absent();
+      Optional<NewRational> seconds = Optional.absent();
+      Optional<NewRational> rounds = Optional.absent();
+      Optional<NewRational> standardActions = Optional.absent();
+      Optional<NewRational> moveActions = Optional.absent();
+      Optional<NewRational> swiftActions= Optional.absent();
+      Optional<NewRational> freeActions= Optional.absent();
 
-  /**
-   * Construct the duration object.
-   *
-   * @param       inDays    the number of days
-   * @param       inHours   the number of hours
-   * @param       inMinutes the number of minutes
-   * @param       inSeconds the number of seconds
-   *
-   */
-  public Duration(@Nullable Rational inDays, @Nullable Rational inHours,
-                  @Nullable Rational inMinutes, @Nullable Rational inSeconds)
-  {
-    super(new Rational [] { inDays, inHours, inMinutes, inSeconds },
-          s_sets, s_sets[0], 5);
-
-    withTemplate("duration");
-  }
-
-  //........................................................................
-  //------------------------------ Duration --------------------------------
-
-  /**
-   * Construct the duration object.
-   *
-   * @param       inRounds the number of rounds
-   *
-   */
-  public Duration(Rational inRounds)
-  {
-    super(new Rational [] { inRounds }, s_sets, s_sets[1], 5);
-
-    withTemplate("duration");
-  }
-
-  //........................................................................
-
-  //------------------------------- create ---------------------------------
-
-  /**
-   * Create a new list with the same type information as this one, but one
-   * that is still undefined.
-   *
-   * @return      a similar list, but without any contents
-   *
-   */
-  @Override
-  public Duration create()
-  {
-    return super.create(new Duration());
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
-
-  /** The definition of the unit value.
-   *
-   * The action values have a divider of 1/10 each, although this is not really
-   * true. But this prevents them from being reduced to rounds.  Adding these
-   * values and having many of these values might fail, though.  Furthermore,
-   * the number of seconds extracted from this value will probably be wrong.
-   */
-  private static String s_definition =
-    Config.get
-    ("/rules/duration.units",
-     "1/1    : Seconds = 86400/1 : day|days : d|ds,"
-     + "                  3600/1 : hour|hours|hour : h|hr|hrs,"
-     + "                    60/1 : minute|minutes  : m|min|mins,"
-     + "                     1/1 : second|seconds  : s|sec|secs."
-     + "1/6    : Rounds =    1/1 : round|rounds    : r|rd|rds."
-     + "1/6    : Actions =   1/1 : round|rounds    : r|rd|rds,"
-     + "                    1/10 : standard action|standard actions : st,"
-     + "                   1/100 : move action|move actions         : mo,"
-     + "                  1/1000 : swift action|swift actions       : sw,"
-     + "                 1/10000 : free action|free actions         : fr,"
-     + "                    60/1 : minute|minutes : m|min|mins.");
-
-  /** The sets of units for this value. */
-  private static final Set []s_sets = parseDefinition(s_definition);
-
-  /** The grouping for durations (time). */
-  protected static final Group<Duration, Long, String> s_timeGrouping =
-    new Group<Duration, Long, String>(new Group.Extractor<Duration, Long>()
+      for(String []part : parts)
       {
-        /** Serial verison id. */
-        private static final long serialVersionUID = 1L;
+        if(part.length != 2)
+          return Optional.absent();
 
-        @Override
-        public Long extract(Duration inValue)
+        Optional<NewRational> number = NewRational.PARSER.parse(part[0]);
+        if(!number.isPresent())
+          return Optional.absent();
+
+        switch(part[1].toLowerCase())
         {
-          return (long)inValue.getAsSeconds().getValue();
+          case "day":
+          case "days":
+          case "d":
+          case "ds":
+            days = add(days, number);
+            break;
+
+          case "hour":
+          case "hours":
+          case "h":
+          case "hr":
+          case "hrs":
+            hours = add(hours, number);
+            break;
+
+          case "minutes":
+          case "minute":
+          case "m":
+          case "min":
+          case "mins":
+            minutes = add(minutes, number);
+            break;
+
+          case "second":
+          case "seconds":
+          case "s":
+          case "sec":
+          case "secs":
+            seconds = add(seconds, number);
+            break;
+
+          case "round":
+          case "rounds":
+          case "r":
+          case "rd":
+          case "rds":
+            rounds = add(rounds, number);
+            break;
+
+          case "standard action":
+          case "standard actions":
+            standardActions = add(standardActions, number);
+            break;
+
+          case "move action":
+          case "move actions":
+            moveActions = add(moveActions, number);
+            break;
+
+          case "swift action":
+          case "swift actions":
+            swiftActions = add(swiftActions, number);
+            break;
+
+          case "free action":
+          case "free actions":
+            freeActions = add(freeActions, number);
+            break;
         }
-      }, new Long [] { 0L, 1L, 6L, 60L, 5 * 60L, 10 * 60L, 15 * 60L, 30 * 60L,
-                       45 * 60L, 60 * 60L, 2 * 60 * 60L, 4 * 60 * 60L,
-                       6 * 60 * 60L, 12 * 60 * 60L, 24 * 60 * 60L, },
-                               new String []
-      { "0 seconds", "1 second", "6 seconds", "1 minute", "5 minutes",
-        "10 minutes", "15 minutes", "30 minutes", "45 minutes", "1 hour",
-        "2 hours", "4 hours", "6 hours", "12 hours", "1 day", "very long",
-      }, "$undefined$");
+      }
 
-  /** The grouping for durations (rounds). */
-  protected static final Group<Duration, Long, String> s_roundGrouping =
-    new Group<Duration, Long, String>(new Group.Extractor<Duration, Long>()
-      {
-        /** Serial version id. */
-        private static final long serialVersionUID = 1L;
+      return Optional.of(new Duration(days, hours, minutes, seconds, rounds,
+                                         standardActions, moveActions,
+                                         swiftActions, freeActions));
+    }
+  };
 
-        @Override
-        public Long extract(Duration inValue)
-        {
-          return (long)inValue.getAsRounds().getValue() * 10000;
-        }
-      }, new Long [] { 0L, 1L, 10L, 100L, 1000L, 10000L, 2 * 10000L,
-                       3 * 10000L, 5 * 10000L, 10 * 10000L,
-                       5 * 10 * 10000L, 10 * 10 * 10000L, 15 * 10 * 10000L,
-                       30 * 10 * 10000L, 45 * 10 * 10000L,
-                       60 * 10 * 10000L, 2 * 60 * 10 * 10000L,
-                       4 * 60 * 10 * 10000L, 6 * 60 * 10 * 10000L,
-                       12 * 60 * 10 * 10000L, 24 * 60 * 10 * 10000L, },
-                        new String []
-        { "0 rounds", "1 free action", "1 swift action", "1 move action",
-          "1 standard action", "1 round", "2 rounds", "3 rounds", "5 rounds",
-          "10 rounds", "5 minutes", "10 minutes", "15 minutes", "30 minutes",
-          "45 minutes", "1 hour", "2 hours", "4 hours", "6 hours", "12 hours",
-          "1 day", "very long",
-        }, "$undefined$");
-
-  /** A single round. */
-  public static final Duration ROUND = new Duration(Rational.ONE);
-
-  /** A single second. */
-  public static final Duration SECOND =
-    new Duration(null, null, null, Rational.ONE);
-
-  /** A single minute. */
-  public static final Duration MINUTE =
-    new Duration(null, null, Rational.ONE, null);
-
-  /** A single hour. */
-  public static final Duration HOUR =
-    new Duration(null, Rational.ONE, null, null);
-
-  /** A single day. */
-  public static final Duration DAY =
-    new Duration(Rational.ONE, null, null, null);
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------- isMetric -------------------------------
-
-  /**
-   * Determine if metric values are stored.
-   *
-   * @return      true if metric values are stored, false else
-   *
-   */
-  public boolean isMetric()
+  public Duration(Optional<NewRational> inDays,
+                  Optional<NewRational> inHours,
+                  Optional<NewRational> inMinutes,
+                  Optional<NewRational> inSeconds,
+                  Optional<NewRational> inRounds,
+                  Optional<NewRational> inStandardActions,
+                  Optional<NewRational> inMoveActions,
+                  Optional<NewRational> inSwiftActions,
+                  Optional<NewRational> inFreeActions)
   {
-    return m_set == m_sets[0];
+    m_days = inDays;
+    m_hours = inHours;
+    m_minutes = inMinutes;
+    m_seconds = inSeconds;
+    m_rounds = inRounds;
+    m_standardActions = inStandardActions;
+    m_moveActions = inMoveActions;
+    m_swiftActions = inSwiftActions;
+    m_freeActions = inFreeActions;
   }
 
-  //........................................................................
-  //------------------------------ isRounds --------------------------------
+  private final Optional<NewRational> m_days;
+  private final Optional<NewRational> m_hours;
+  private final Optional<NewRational> m_minutes;
+  private final Optional<NewRational> m_seconds;
+  private final Optional<NewRational> m_rounds;
+  private final Optional<NewRational> m_standardActions;
+  private final Optional<NewRational> m_moveActions;
+  private final Optional<NewRational> m_swiftActions;
+  private final Optional<NewRational> m_freeActions;
 
-  /**
-   * Determine if round values are stored.
-   *
-   * @return      true if round values are stored, false else
-   *
-   */
-  public boolean isRounds()
-  {
-    return m_set == m_sets[1];
-  }
-
-  //........................................................................
-  //--------------------------- isStandardAction ---------------------------
-
-  /**
-   * Determines if the duration represents a standard action.
-   *
-   * @return true if the duration represents a standard action, false if not
-   */
-  public boolean isStandardAction()
-  {
-    if(m_set != m_sets[2])
-      return false;
-
-    Rational base = getAsBase();
-    return base.getNominator() == 1 && base.getDenominator() == 10;
-  }
-
-  //........................................................................
-
-  //----------------------------- getAsRounds ------------------------------
-
-  /**
-   * Get the value as an approximate equivalent of rounds.
-   *
-   * @return      the rounds
-   *
-   */
-  public Rational getAsRounds()
-  {
-    if(!isDefined())
-      return new Rational(0);
-
-    if(m_set == m_sets[1])
-      return getAsBase();
-
-    return toSet(1, false).getAsBase();
-  }
-
-  //........................................................................
-  //----------------------------- getAsSeconds -----------------------------
-
-  /**
-   * Get the value as an approximate equivalent of seconds.
-   *
-   * @return      the seconds
-   *
-   */
-  public Rational getAsSeconds()
-  {
-    if(!isDefined())
-      return new Rational(0);
-
-    if(m_set == m_sets[0])
-      return getAsBase();
-
-    return toSet(0, false).getAsBase();
-  }
-
-  //........................................................................
-
-  //------------------------------- asMetric -------------------------------
-
-  /**
-   * Convert this value into a metric value.
-   *
-   * @return      the corresponding metric value.
-   *
-   */
-  public Duration asMetric()
-  {
-    if(m_set == m_sets[0])
-      return this;
-
-    return toSet(0, true);
-  }
-
-  //........................................................................
-  //------------------------------- asRounds -------------------------------
-
-  /**
-   * Convert this value into a feet value.
-   *
-   * @return      the corresponding feet value.
-   *
-   */
-  public Duration asRounds()
-  {
-    if(m_set == m_sets[1])
-      return this;
-
-    return toSet(1, true);
-  }
-
-  //........................................................................
-
-  //----------------------------- collectData ------------------------------
-
-  /**
-   * Collect the data available for printing the value.
-   *
-   * @param       inEntry    the entry this value is in
-   * @param       inRenderer the renderer to render sub values
-   *
-   * @return      the data as a map
-   *
-   */
-  // @Override
-  // public Map<String, Object> collectData(AbstractEntry inEntry,
-  //                                        SoyRenderer inRenderer)
-  // {
-  //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
-
-  //   data.put("metric", isMetric());
-  //   data.put("rounds", isRounds());
-  //   data.put("asmetric",
-  //            new SoyValue("as metric", asMetric(), inEntry, inRenderer));
-  //   data.put("asrounds",
-  //            new SoyValue("as rounds", asRounds(), inEntry, inRenderer));
-
-  //   return data;
-  // }
-
-  //........................................................................
-  //------------------------------- doGroup --------------------------------
-
-  /**
-   * Return the group this value belongs to.
-   *
-   * @return      a string denoting the group this value is in
-   *
-   */
   @Override
-  public String doGroup()
+  public String toString()
   {
-    if(isMetric())
-      return s_timeGrouping.group(this);
+    List<String> parts = new ArrayList<>();
 
-    return s_roundGrouping.group(this);
+    if(m_days.isPresent())
+      parts.add(m_days.get() + " days");
+
+    if(m_hours.isPresent())
+      parts.add(m_hours.get() + " hours");
+
+    if(m_minutes.isPresent())
+      parts.add(m_minutes.get() + " minutes");
+
+    if(m_seconds.isPresent())
+      parts.add(m_seconds.get() + " seconds");
+
+    if(m_rounds.isPresent())
+      parts.add(m_rounds.get() + " rounds");
+
+    if(m_standardActions.isPresent())
+      parts.add(m_standardActions.get() + " standard actions");
+
+    if(m_moveActions.isPresent())
+      parts.add(m_moveActions.get() + " move actions");
+
+    if(m_swiftActions.isPresent())
+      parts.add(m_swiftActions.get() + " swift actions");
+
+    if(m_freeActions.isPresent())
+      parts.add(m_freeActions.get() + " free actions");
+
+    if(parts.isEmpty())
+      return "0 s";
+
+    return Strings.SPACE_JOINER.join(parts);
   }
 
-  //........................................................................
-  //------------------------------- compute --------------------------------
+  public String toShortString()
+  {
+    List<String> parts = new ArrayList<>();
 
-  /**
-   * Compute a value for a given key.
-   *
-   * @param    inKey the key of the value to compute
-   *
-   * @return   the computed value
-   *
-   */
+    if(m_days.isPresent())
+      parts.add(m_days.get() + "d");
+
+    if(m_hours.isPresent())
+      parts.add(m_hours.get() + "h");
+
+    if(m_minutes.isPresent())
+      parts.add(m_minutes.get() + "m");
+
+    if(m_seconds.isPresent())
+      parts.add(m_seconds.get() + "s");
+
+    if(m_rounds.isPresent())
+      parts.add(m_rounds.get() + "r");
+
+    if(m_standardActions.isPresent())
+      parts.add(m_standardActions.get() + "st");
+
+    if(m_moveActions.isPresent())
+      parts.add(m_moveActions.get() + "mv");
+
+    if(m_swiftActions.isPresent())
+      parts.add(m_swiftActions.get() + "sw");
+
+    if(m_freeActions.isPresent())
+      parts.add(m_freeActions.get() + "fr");
+
+    if(parts.isEmpty())
+      return "0s";
+
+    return Strings.SPACE_JOINER.join(parts);
+  }
+
+  public int asSeconds() {
+    int seconds = 0;
+
+    if(m_days.isPresent())
+      seconds += m_days.get().asDouble() * 24 * 60 * 60;
+
+    if(m_hours.isPresent())
+      seconds += m_hours.get().asDouble() * 60 * 60;
+
+    if(m_minutes.isPresent())
+      seconds += m_minutes.get().asDouble() * 60;
+
+    if(m_seconds.isPresent())
+      seconds += m_seconds.get().asDouble();
+
+    if(m_rounds.isPresent())
+      seconds += m_rounds.get().asDouble() * 6;
+
+    if(m_standardActions.isPresent())
+      seconds += m_standardActions.get().asDouble() * 4;
+
+    if(m_moveActions.isPresent())
+      seconds += m_moveActions.get().asDouble() * 2;
+
+    if(m_swiftActions.isPresent())
+      seconds += m_swiftActions.get().asDouble();
+
+    return seconds;
+  }
+
   @Override
-  public @Nullable Object compute(String inKey)
-  {
-    if("isMetric".equals(inKey))
-      return isMetric();
-
-    if("asRounds".equals(inKey))
-      return asRounds();
-
-    if("asMetric".equals(inKey))
-      return asMetric();
-
-    return null;
-  }
-
-  //........................................................................
-
-  /**
-   * Create a proto for the value.
-   *
-   * @return the proto representation
-   */
   public DurationProto toProto()
   {
     DurationProto.Builder builder = DurationProto.newBuilder();
+    if(m_days.isPresent() || m_hours.isPresent() || m_minutes.isPresent()
+      || m_seconds.isPresent())
+    {
+      DurationProto.Metric.Builder metric = DurationProto.Metric.newBuilder();
 
-    if(m_set == m_sets[0])
-      if(m_values != null && m_values.length == 4)
-      {
-        DurationProto.Metric.Builder metric = DurationProto.Metric.newBuilder();
+      if(m_days.isPresent())
+        metric.setDays(m_days.get().toProto());
+      if(m_hours.isPresent())
+        metric.setHours(m_hours.get().toProto());
+      if(m_minutes.isPresent())
+        metric.setMinutes(m_minutes.get().toProto());
+      if(m_seconds.isPresent())
+        metric.setSeconds(m_seconds.get().toProto());
 
-        if(m_values[0] != null)
-          metric.setDays(m_values[0].toProto());
-        if(m_values[1] != null)
-          metric.setHours(m_values[1].toProto());
-        if(m_values[2] != null)
-          metric.setMinutes(m_values[2].toProto());
-        if(m_values[3] != null)
-          metric.setSeconds(m_values[3].toProto());
+      builder.setMetric(metric.build());
+    }
 
-        builder.setMetric(metric.build());
-      }
+    if(m_rounds.isPresent())
+      builder.setRounds(m_rounds.get().toProto());
 
-    if(m_set == m_sets[1])
-      if(m_values != null && m_values.length == 1)
-        if(m_values[0] != null)
-          builder.setRounds(m_values[0].toProto());
+    if(m_standardActions.isPresent() || m_moveActions.isPresent()
+      || m_swiftActions.isPresent() || m_freeActions.isPresent())
+    {
+      DurationProto.Actions.Builder actions =
+        DurationProto.Actions.newBuilder();
 
-    if(m_set == m_sets[2])
-      if(m_values != null && m_values.length == 6)
-      {
-        DurationProto.Actions.Builder actions =
-          DurationProto.Actions.newBuilder();
+      if(m_standardActions.isPresent())
+        actions.setStandardActions(m_standardActions.get().toProto());
+      if(m_moveActions.isPresent())
+        actions.setMoveActions(m_moveActions.get().toProto());
+      if(m_swiftActions.isPresent())
+        actions.setSwiftActions(m_swiftActions.get().toProto());
+      if(m_freeActions.isPresent())
+        actions.setFreeActions(m_freeActions.get().toProto());
 
-        if(m_values[0] != null)
-          actions.setRounds(m_values[0].toProto());
-        if(m_values[1] != null)
-          actions.setStandardActions(m_values[1].toProto());
-        if(m_values[2] != null)
-          actions.setMoveActions(m_values[2].toProto());
-        if(m_values[3] != null)
-          actions.setSwiftActions(m_values[3].toProto());
-        if(m_values[4] != null)
-          actions.setFreeActions(m_values[4].toProto());
-        if(m_values[5] != null)
-          actions.setMinutes(m_values[5].toProto());
-
-        builder.setActions(actions.build());
-      }
+      builder.setActions(actions.build());
+    }
 
     return builder.build();
   }
 
+
+  @Override
+  public NewValue.Arithmetic<DurationProto>
+    add(NewValue.Arithmetic<DurationProto> inValue)
+  {
+    if(!(inValue instanceof Duration))
+      return this;
+
+    Duration value = (Duration)inValue;
+
+    return new Duration(add(m_days, value.m_days),
+                           add(m_hours, value.m_hours),
+                           add(m_minutes, value.m_minutes),
+                           add(m_seconds, value.m_seconds),
+                           add(m_rounds, value.m_rounds),
+                           add(m_standardActions, value.m_standardActions),
+                           add(m_moveActions, value.m_moveActions),
+                           add(m_swiftActions, value.m_swiftActions),
+                           add(m_freeActions, value.m_freeActions));
+  }
+
+  @Override
+  public NewValue.Arithmetic<DurationProto> multiply(int inFactor)
+  {
+    return new Duration(multiply(m_days, inFactor),
+                           multiply(m_hours, inFactor),
+                           multiply(m_minutes, inFactor),
+                           multiply(m_seconds, inFactor),
+                           multiply(m_rounds, inFactor),
+                           multiply(m_standardActions, inFactor),
+                           multiply(m_moveActions, inFactor),
+                           multiply(m_swiftActions, inFactor),
+                           multiply(m_freeActions, inFactor));
+  }
+
   /**
-   * Create a new duration similar to the current but with data from the
-   * given proto.
+   * Create a new duration value with the values from the given proto.
    *
-   * @param inProto  the proto with the data
+   * @param inProto the proto to read the values from
    * @return the newly created duration
    */
-  public Duration fromProto(DurationProto inProto)
+  public static Duration fromProto(DurationProto inProto)
   {
-    Duration result = create();
+    Optional<NewRational> days = Optional.absent();
+    Optional<NewRational> hours = Optional.absent();
+    Optional<NewRational> minutes = Optional.absent();
+    Optional<NewRational> seconds = Optional.absent();
+    Optional<NewRational> rounds = Optional.absent();
+    Optional<NewRational> standardActions = Optional.absent();
+    Optional<NewRational> moveActions = Optional.absent();
+    Optional<NewRational> swiftActions = Optional.absent();
+    Optional<NewRational> freeActions = Optional.absent();
 
     if(inProto.hasMetric())
     {
-      result.m_values = new Rational[4];
       if(inProto.getMetric().hasDays())
-        result.m_values[0] = Rational.fromProto(inProto.getMetric().getDays());
+        days = Optional.of(NewRational.fromProto(inProto.getMetric().getDays()));
       if(inProto.getMetric().hasHours())
-        result.m_values[1] = Rational.fromProto(inProto.getMetric().getHours());
+        hours =
+          Optional.of(NewRational.fromProto(inProto.getMetric().getHours()));
       if(inProto.getMetric().hasMinutes())
-        result.m_values[2] =
-          Rational.fromProto(inProto.getMetric().getMinutes());
+        minutes =
+          Optional.of(NewRational.fromProto(inProto.getMetric().getMinutes()));
       if(inProto.getMetric().hasSeconds())
-        result.m_values[3] =
-          Rational.fromProto(inProto.getMetric().getSeconds());
-      result.m_set = result.m_sets[0];
+        seconds =
+          Optional.of(NewRational.fromProto(inProto.getMetric().getSeconds()));
     }
-    else if(inProto.hasRounds())
+
+    if(inProto.hasRounds())
+      rounds = Optional.of(NewRational.fromProto(inProto.getRounds()));
+
+    if(inProto.hasActions())
     {
-      result.m_values = new Rational[1];
-      result.m_values[0] = Rational.fromProto(inProto.getRounds());
-      result.m_set = result.m_sets[1];
-    }
-    else if(inProto.hasActions())
-    {
-      result.m_values = new Rational[6];
-      if(inProto.getActions().hasRounds())
-        result.m_values[0] =
-          Rational.fromProto(inProto.getActions().getRounds());
       if(inProto.getActions().hasStandardActions())
-        result.m_values[1] =
-          Rational.fromProto(inProto.getActions().getStandardActions());
+        standardActions =
+          Optional.of(NewRational.fromProto
+                      (inProto.getActions().getStandardActions()));
       if(inProto.getActions().hasMoveActions())
-        result.m_values[2] =
-          Rational.fromProto(inProto.getActions().getMoveActions());
+        moveActions =
+          Optional.of(NewRational.fromProto
+                      (inProto.getActions().getMoveActions()));
       if(inProto.getActions().hasSwiftActions())
-        result.m_values[3] =
-          Rational.fromProto(inProto.getActions().getSwiftActions());
+        swiftActions =
+          Optional.of(NewRational.fromProto
+                      (inProto.getActions().getSwiftActions()));
       if(inProto.getActions().hasFreeActions())
-        result.m_values[4] =
-          Rational.fromProto(inProto.getActions().getFreeActions());
-      if(inProto.getActions().hasMinutes())
-        result.m_values[5] =
-          Rational.fromProto(inProto.getActions().getMinutes());
-      result.m_set = result.m_sets[2];
+        freeActions =
+          Optional.of(NewRational.fromProto
+                      (inProto.getActions().getFreeActions()));
     }
 
-    return result;
+    return new Duration(days, hours, minutes, seconds,
+                           rounds,
+                           standardActions, moveActions, swiftActions,
+                           freeActions);
   }
 
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------ asMetric --------------------------------
-
-  /**
-   * Set the weight as metric value.
-   *
-   * @param       inDays    the number of days
-   * @param       inHours   the number of hours
-   * @param       inMinutes the number of minutes
-   * @param       inSeconds the number of seconds
-   *
-   * @return      true if set, false if values invalid
-   *
-   */
-  public Duration asMetric(@Nullable Rational inDays,
-                           @Nullable Rational inHours,
-                           @Nullable Rational inMinutes,
-                           @Nullable Rational inSeconds)
+  @Override
+  public int compareTo(Duration inOther)
   {
-    return as(new Rational [] { inDays, inHours, inMinutes, inSeconds }, 0);
+    if(this == inOther)
+      return 0;
+
+    return Integer.compare(asSeconds(), inOther.asSeconds());
   }
 
-  //........................................................................
-  //------------------------------ setRounds -------------------------------
-
-  /**
-   * Set the weight as metric value.
-   *
-   * @param       inRounds the number of rounds
-   *
-   * @return      true if set, false if values invalid
-   *
-   */
-  public Duration asRounds(Rational inRounds)
+  @Override
+  public boolean canAdd(NewValue.Arithmetic<DurationProto> inValue)
   {
-    return as(new Rational [] { inRounds }, 1);
+    return inValue instanceof Duration;
   }
 
-  //........................................................................
+  //----------------------------------------------------------------------------
 
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
-
-  /** The Test. */
+  /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- init -----------------------------------------------------------
-
     /** Testing init. */
     @org.junit.Test
-    @SuppressWarnings("rawtypes")
-    public void init()
+    public void parse()
     {
-      Duration value = new Duration();
-
-      // undefined value
-      assertEquals("not undefined at start", false, value.isDefined());
-      assertEquals("undefined value not correct", "$undefined$",
-                   value.toString());
-      assertEquals("feet",   false, value.isRounds());
-      assertEquals("metric", false, value.isMetric());
-      assertEquals("undefined value not correct", "0",
-                   value.getAsSeconds().toString());
-      assertEquals("undefined value not correct", "0",
-                   value.getAsRounds().toString());
-
-      // now with some value (pounds)
-      value = new Duration(null, null, null, new Rational(1, 1, 2));
-
-      assertEquals("not defined at start", true, value.isDefined());
-      assertEquals("string ", "1 1/2 seconds", value.toString());
-      assertEquals("rounds", false, value.isRounds());
-      assertEquals("metric", true,  value.isMetric());
-      assertEquals("rd",     "1/4", value.getAsRounds().toString());
-      assertEquals("s",      "1 1/2", value.getAsSeconds().toString());
-
-      value = new Duration(new Rational(2), new Rational(1, 2, 3),
-                           new Rational(3), new Rational(1));
-
-      assertEquals("not defined at start", true, value.isDefined());
-      assertEquals("string", "2 days 1 2/3 hours 3 minutes 1 second",
-                   value.toString());
-      assertEquals("rounds", false,  value.isRounds());
-      assertEquals("metric", true,   value.isMetric());
-      assertEquals("rd", "29830 1/6", value.getAsRounds().toString());
-      assertEquals("s",  "178981", value.getAsSeconds().toString());
-
-      // now with some value (metric)
-       value = new Duration(new Rational(1, 1, 2));
-
-      assertEquals("not defined at start", true, value.isDefined());
-      assertEquals("string", "1 1/2 rounds", value.toString());
-      assertEquals("rounds", true,  value.isRounds());
-      assertEquals("metric", false,  value.isMetric());
-      assertEquals("rd",   "1 1/2", value.getAsRounds().toString());
-      assertEquals("s",    "9", value.getAsSeconds().toString());
-
-      value = new Duration(new Rational(12033));
-
-      assertEquals("not defined at start", true, value.isDefined());
-      assertEquals("string", "12033 rounds",
-                   value.toString());
-      assertEquals("feet",   true,  value.isRounds());
-      assertEquals("metric", false, value.isMetric());
-      assertEquals("in", "12033", value.getAsRounds().toString());
-      assertEquals("cm", "72198", value.getAsSeconds().toString());
-
-      // setting
-      value =
-        value.asMetric(null, new Rational(3), null, new Rational(1, 2, 3));
-      assertEquals("set metric", "3 hours 1 2/3 seconds", value.toString());
-
-      value = value.asRounds(new Rational(22));
-      assertEquals("set rounds", "22 rounds", value.toString());
-
-      Value.Test.createTest(value);
-   }
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** Testing read. */
-    @org.junit.Test
-    public void read()
-    {
-      String []texts =
-        {
-          "simple", "1 day", "1 day", null,
-          "no space", "1min", "1 minute", null,
-
-          "whites", "1 \n1/2    minute 5 \n    seconds",
-          "1 1/2 minutes 5 seconds", null,
-
-          "round", "5 round", "5 rounds", null,
-          "other", "22 1/2 minute", "22 1/2 minutes", null,
-          "mixed", "5 seconds 200 rounds", "5 seconds", " 200 rounds",
-          "none", "", null, null,
-          "incomplete", "22", null, "22",
-          "incomplete", "22.5 seconds", null, "22.5 seconds",
-          "invalid", "1/2 guru", null, "1/2 guru",
-        };
-
-      Value.Test.readTest(texts, new Duration());
+      assertEquals("parse", "None", PARSER.parse(" none  ").get().toString());
+      assertEquals("parse", "x3", PARSER.parse(" x 3  ").get().toString());
+      assertEquals("parse", "x3", PARSER.parse(" 20/x3  ").get().toString());
+      assertEquals("parse", "19-20/x2",
+                   PARSER.parse(" 19 - 20 / x 2 ").get().toString());
+      assertEquals("parse", "12-19/x5",
+                   PARSER.parse("12-19/x5").get().toString());
+      assertFalse("parse", PARSER.parse("/").isPresent());
+      assertFalse("parse", PARSER.parse("").isPresent());
+      assertFalse("parse", PARSER.parse("12").isPresent());
+      assertFalse("parse", PARSER.parse("x").isPresent());
+      assertFalse("parse", PARSER.parse("19-20 x3").isPresent());
+      assertFalse("parse", PARSER.parse("19 - x 4").isPresent());
     }
-
-    //......................................................................
-
-    //----- rounds ---------------------------------------------------------
-
-    /** Testing rounds. */
-    @org.junit.Test
-    public void rounds()
-    {
-      String []texts =
-        {
-          "1 round",    "6 seconds",
-          "10 rounds",  "1 minute",
-          "1/24 round", "1/4 second",
-        };
-
-      Duration value = new Duration();
-
-      for(int i = 0; i < texts.length; i += 2)
-      {
-        try (ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test"))
-        {
-          value = value.read(reader);
-          assertEquals("test " + i, texts[i + 1], value.asMetric().toString());
-        }
-      }
-    }
-
-    //......................................................................
-    //----- metric ---------------------------------------------------------
-
-    /** Testing metric. */
-    @org.junit.Test
-    public void metric()
-    {
-      String []texts =
-        {
-          "6 seconds",          "1 round",
-          "9 seconds",          "1 1/2 rounds",
-          "22 minutes 3 days",  "43420 rounds",
-          "66 seconds",         "11 rounds",
-        };
-
-      Duration value = new Duration();
-
-      for(int i = 0; i < texts.length; i += 2)
-      {
-        try (ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test"))
-        {
-          value = value.read(reader);
-          assertEquals("test " + i / 2, texts[i + 1],
-                       value.asRounds().toString());
-        }
-      }
-    }
-
-    //......................................................................
   }
 
-  //........................................................................
 }

@@ -56,10 +56,10 @@ import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.CountUnit;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Distance;
+import net.ixitxachitls.dma.values.Duration;
 import net.ixitxachitls.dma.values.ModifierType;
 import net.ixitxachitls.dma.values.NamedModifier;
 import net.ixitxachitls.dma.values.NewCritical;
-import net.ixitxachitls.dma.values.NewDuration;
 import net.ixitxachitls.dma.values.NewModifier;
 import net.ixitxachitls.dma.values.NewMoney;
 import net.ixitxachitls.dma.values.NewValue;
@@ -171,7 +171,7 @@ public class BaseItem extends BaseEntry
   protected Optional<Distance> m_shadowyLight = Optional.absent();
 
   /** The time this item is functioning. */
-  protected Optional<NewDuration> m_timed = Optional.absent();
+  protected Optional<Duration> m_timed = Optional.absent();
 
   /** The magical modifier. */
   protected List<NamedModifier> m_magicalModifiers = new ArrayList<>();
@@ -249,13 +249,13 @@ public class BaseItem extends BaseEntry
   protected Slot m_slot = Slot.UNKNOWN;
 
   /** How much time it takes to don the item. */
-  protected Optional<NewDuration> m_don = Optional.absent();
+  protected Optional<Duration> m_don = Optional.absent();
 
   /** How much time it takes to don the item hastily. */
-  protected Optional<NewDuration> m_donHastily = Optional.absent();
+  protected Optional<Duration> m_donHastily = Optional.absent();
 
   /** How much time it takes to remove the item. */
-  protected Optional<NewDuration> m_remove = Optional.absent();
+  protected Optional<Duration> m_remove = Optional.absent();
 
   /**
    * Check whether this item has weapon properties.
@@ -983,7 +983,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the time
    */
-  public Optional<NewDuration> getTimed()
+  public Optional<Duration> getTimed()
   {
     return m_timed;
   }
@@ -994,12 +994,12 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDuration>> getCombinedTimed()
+  public Annotated<Optional<Duration>> getCombinedTimed()
   {
     if(m_timed.isPresent())
-      return new Annotated.Min<NewDuration>(m_timed.get(), getName());
+      return new Annotated.Min<Duration>(m_timed.get(), getName());
 
-    Annotated.Min<NewDuration> combined = new Annotated.Min<>();
+    Annotated.Min<Duration> combined = new Annotated.Min<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedTimed());
 
@@ -1626,7 +1626,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the don duration
    */
-  public Optional<NewDuration> getDon()
+  public Optional<Duration> getDon()
   {
     return m_don;
   }
@@ -1637,12 +1637,12 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDuration>> getCombinedDon()
+  public Annotated<Optional<Duration>> getCombinedDon()
   {
     if(m_don.isPresent())
-      return new Annotated.Arithmetic<NewDuration>(m_don.get(), getName());
+      return new Annotated.Arithmetic<Duration>(m_don.get(), getName());
 
-    Annotated.Arithmetic<NewDuration> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Duration> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedDon());
 
@@ -1654,7 +1654,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the don hastily duration
    */
-  public Optional<NewDuration> getDonHastily()
+  public Optional<Duration> getDonHastily()
   {
     return m_donHastily;
   }
@@ -1665,13 +1665,13 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDuration>> getCombinedDonHastily()
+  public Annotated<Optional<Duration>> getCombinedDonHastily()
   {
     if(m_donHastily.isPresent())
-      return new Annotated.Arithmetic<NewDuration>(m_donHastily.get(),
+      return new Annotated.Arithmetic<Duration>(m_donHastily.get(),
                                                    getName());
 
-    Annotated.Arithmetic<NewDuration> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Duration> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedDonHastily());
 
@@ -1683,7 +1683,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the remove duration
    */
-  public Optional<NewDuration> getRemove()
+  public Optional<Duration> getRemove()
   {
     return m_remove;
   }
@@ -1694,12 +1694,12 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDuration>> getCombinedRemove()
+  public Annotated<Optional<Duration>> getCombinedRemove()
   {
     if(m_remove.isPresent())
-      return new Annotated.Arithmetic<NewDuration>(m_remove.get(), getName());
+      return new Annotated.Arithmetic<Duration>(m_remove.get(), getName());
 
-    Annotated.Arithmetic<NewDuration> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Duration> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : this.getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedRemove());
 
@@ -2103,7 +2103,7 @@ public class BaseItem extends BaseEntry
                                  Distance.PARSER);
     m_shadowyLight = inValues.use("light.shadowy", m_shadowyLight,
                                   Distance.PARSER);
-    m_timed = inValues.use("timed", m_timed, NewDuration.PARSER);
+    m_timed = inValues.use("timed", m_timed, Duration.PARSER);
     m_magicalModifiers = inValues.use("magical", m_magicalModifiers,
                                       NamedModifier.PARSER,
                                       "type", "modifier");
@@ -2148,10 +2148,10 @@ public class BaseItem extends BaseEntry
     m_state = inValues.use("container.state", m_state, AggregationState.PARSER);
 
     m_slot = inValues.use("wearable.slot", m_slot, Slot.PARSER);
-    m_don = inValues.use("wearable.don", m_don, NewDuration.PARSER);
+    m_don = inValues.use("wearable.don", m_don, Duration.PARSER);
     m_donHastily = inValues.use("wearable.don_hastily", m_donHastily,
-                                NewDuration.PARSER);
-    m_remove = inValues.use("wearable.remove", m_remove, NewDuration.PARSER);
+                                Duration.PARSER);
+    m_remove = inValues.use("wearable.remove", m_remove, Duration.PARSER);
   }
 
   @Override
@@ -2260,13 +2260,13 @@ public class BaseItem extends BaseEntry
         m_slot = Slot.fromProto(wearableProto. getSlot());
 
       if(wearableProto. hasWear())
-        m_don = Optional.of(NewDuration.fromProto(wearableProto. getWear()));
+        m_don = Optional.of(Duration.fromProto(wearableProto.getWear()));
 
       if(wearableProto. hasWearHastily())
-        m_donHastily = Optional.of(NewDuration.fromProto(wearableProto. getWearHastily()));
+        m_donHastily = Optional.of(Duration.fromProto(wearableProto.getWearHastily()));
 
       if(wearableProto. hasRemove())
-        m_remove = Optional.of(NewDuration.fromProto(wearableProto. getRemove()));
+        m_remove = Optional.of(Duration.fromProto(wearableProto.getRemove()));
     }
 
     if(proto.hasMagic())
@@ -2275,8 +2275,8 @@ public class BaseItem extends BaseEntry
 
     if(proto.hasTimed())
       m_timed =
-        Optional.of(NewDuration.fromProto
-                    (proto.getTimed().getDuration().getDuration()));
+        Optional.of(Duration.fromProto
+            (proto.getTimed().getDuration().getDuration()));
 
     if(proto.hasArmor())
     {

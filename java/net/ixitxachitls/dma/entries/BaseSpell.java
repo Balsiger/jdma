@@ -34,7 +34,6 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
 import net.ixitxachitls.dma.values.Distance;
-import net.ixitxachitls.dma.values.NewDuration;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
@@ -204,8 +203,8 @@ public class BaseSpell extends BaseEntry
       m_text = inText;
     }
 
-    public Duration(NewDuration inDuration, Optional<String> inLevels,
-                    Optional<NewDuration> inPlusDuration,
+    public Duration(net.ixitxachitls.dma.values.Duration inDuration, Optional<String> inLevels,
+                    Optional<net.ixitxachitls.dma.values.Duration> inPlusDuration,
                     boolean inDismissable, Optional<String> inText)
     {
       m_durationText = Optional.absent();
@@ -217,9 +216,9 @@ public class BaseSpell extends BaseEntry
     }
 
     private final Optional<String> m_durationText;
-    private final Optional<NewDuration> m_duration;
+    private final Optional<net.ixitxachitls.dma.values.Duration> m_duration;
     private final Optional<String> m_levels;
-    private final Optional<NewDuration> m_plusDuration;
+    private final Optional<net.ixitxachitls.dma.values.Duration> m_plusDuration;
     private final boolean m_dismissable;
     private final Optional<String> m_text;
     public static final NewValue.Parser<Duration> PARSER =
@@ -231,7 +230,7 @@ public class BaseSpell extends BaseEntry
                                           String inDismissable,
                                           String inText)
         {
-          Optional<NewDuration> duration = NewDuration.PARSER.parse(inDuration);
+          Optional<net.ixitxachitls.dma.values.Duration> duration = net.ixitxachitls.dma.values.Duration.PARSER.parse(inDuration);
           if(!duration.isPresent())
           {
             return Optional.of(new Duration
@@ -246,7 +245,7 @@ public class BaseSpell extends BaseEntry
           return Optional.of(new Duration
                              (duration.get(),
                               Optional.of(inLevels),
-                              NewDuration.PARSER.parse(inPlusDuration),
+                              net.ixitxachitls.dma.values.Duration.PARSER.parse(inPlusDuration),
                               !inDismissable.isEmpty(), Optional.of(inText)));
 
         }
@@ -257,7 +256,7 @@ public class BaseSpell extends BaseEntry
       return m_durationText;
     }
 
-    public Optional<NewDuration> getDuration()
+    public Optional<net.ixitxachitls.dma.values.Duration> getDuration()
     {
       return m_duration;
     }
@@ -267,7 +266,7 @@ public class BaseSpell extends BaseEntry
       return m_levels;
     }
 
-    public Optional<NewDuration> getPlusDuration()
+    public Optional<net.ixitxachitls.dma.values.Duration> getPlusDuration()
     {
       return m_plusDuration;
     }
@@ -507,7 +506,7 @@ public class BaseSpell extends BaseEntry
   protected Optional<Material> m_focus = Optional.absent();
 
   /** The casting time required for this spell. */
-  protected Optional<NewDuration> m_castingTime = Optional.absent();
+  protected Optional<net.ixitxachitls.dma.values.Duration> m_castingTime = Optional.absent();
 
   /** The range of the spell. */
   protected SpellRange m_range = SpellRange.UNKNOWN;
@@ -573,7 +572,7 @@ public class BaseSpell extends BaseEntry
     return m_focus;
   }
 
-  public Optional<NewDuration> getCastingTime()
+  public Optional<net.ixitxachitls.dma.values.Duration> getCastingTime()
   {
     return m_castingTime;
   }
@@ -1171,14 +1170,14 @@ public class BaseSpell extends BaseEntry
     m_focus = inValues.use("focus", m_focus, Material.PARSER,
                            "use", "components");
     m_castingTime = inValues.use("casting_time", m_castingTime,
-                                 NewDuration.PARSER);
+                                 net.ixitxachitls.dma.values.Duration.PARSER);
     m_range = inValues.use("range", m_range, SpellRange.PARSER);
     m_distance = inValues.use("distance", m_distance, Distance.PARSER);
     m_effect = inValues.use("effect", m_effect, Effect.PARSER,
                             "distance", "effect", "text");
     m_target = inValues.use("target", m_target);
     m_area = inValues.use("area", m_area);
-    m_duration = inValues.use("duration", m_duration, Duration.PARSER,
+    m_duration = inValues.use("duration", m_duration, BaseSpell.Duration.PARSER,
                               "duration", "levels", "plus", "dismissable",
                               "text");
     m_savingThrow = inValues.use("saving_throw", m_savingThrow);
@@ -1335,7 +1334,7 @@ public class BaseSpell extends BaseEntry
 
     if(proto.hasCastingTime())
       m_castingTime =
-        Optional.of(NewDuration.fromProto(proto.getCastingTime()));
+        Optional.of(net.ixitxachitls.dma.values.Duration.fromProto(proto.getCastingTime()));
 
     if(proto.hasSpecialRange())
       m_range = SpellRange.fromProto(proto.getSpecialRange());
@@ -1371,15 +1370,15 @@ public class BaseSpell extends BaseEntry
                         : Optional.<String>absent()));
       else
         m_duration = Optional.of
-          (new Duration(NewDuration.fromProto(proto.getDuration().getDuration()),
+          (new Duration(net.ixitxachitls.dma.values.Duration.fromProto(proto.getDuration().getDuration()),
                         proto.getDuration().hasLevels()
                         ? Optional.of(proto.getDuration().getLevels())
                         : Optional.<String>absent(),
                         proto.getDuration().hasAdditionalDuration()
                         ? Optional.of
-                          (NewDuration.fromProto(proto.getDuration()
-                                                 .getAdditionalDuration()))
-                        : Optional.<NewDuration>absent(),
+                          (net.ixitxachitls.dma.values.Duration.fromProto(proto.getDuration()
+                                                                               .getAdditionalDuration()))
+                        : Optional.<net.ixitxachitls.dma.values.Duration>absent(),
                         proto.getDuration().hasFlags(),
                         proto.getDuration().hasDescription()
                         ? Optional.of(proto.getDuration().getDescription())
