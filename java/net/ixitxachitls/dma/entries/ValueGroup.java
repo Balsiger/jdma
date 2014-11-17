@@ -966,29 +966,6 @@ public abstract class ValueGroup implements Changeable
    */
   public abstract void fromProto(Message inProto);
 
-  /**
-   * Set the value for the given key.
-   *
-   * @param       inKey  the name of the key to set the value for
-   * @param       inText the text to set the value to
-   *
-   * @return      the part of the string that could not be parsed
-   */
-  public @Nullable String set(String inKey, String inText)
-  {
-    Variable variable = getVariable(inKey);
-
-    if(variable == null)
-    {
-      Log.warning("trying to set undefined variable " + inKey + " with "
-                  + inText + " in " + getName() + " [" + getClass() + "]");
-      return inText;
-    }
-
-    changed();
-    return variable.setFromString(this, inText);
-  }
-
   public void set(Values inValues)
   {
     // no values here

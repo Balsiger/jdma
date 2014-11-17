@@ -558,7 +558,7 @@ public class DMARequest extends HttpServletRequestWrapper
     public void user()
     {
       BaseCharacter user = new BaseCharacter("test");
-      user.set("email", "\"test@test.net\"");
+      //user.set("email", "\"test@test.net\"");
       addEntry(user);
       m_localServiceTestHelper.setEnvIsLoggedIn(true);
 
@@ -582,7 +582,7 @@ public class DMARequest extends HttpServletRequestWrapper
     public void userOverride()
     {
       BaseCharacter user = new BaseCharacter("test");
-      user.set("email", "\"test@test.net\"");
+      //user.set("email", "\"test@test.net\"");
       user.setGroup(BaseCharacter.Group.ADMIN);
       addEntry(user);
       BaseCharacter other = new BaseCharacter("other");
@@ -608,7 +608,7 @@ public class DMARequest extends HttpServletRequestWrapper
     public void userOverrideNonAdmin()
     {
       BaseCharacter user = new BaseCharacter("test");
-      user.set("email", "\"test@test.net\"");
+      //user.set("email", "\"test@test.net\"");
       addEntry(user);
       BaseCharacter other = new BaseCharacter("other");
       addEntry(other);

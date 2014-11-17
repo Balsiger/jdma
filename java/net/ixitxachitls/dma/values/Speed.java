@@ -30,7 +30,7 @@ import net.ixitxachitls.util.Strings;
 
 public class Speed extends NewValue.Arithmetic<SpeedProto>
 {
-  public Speed(MovementMode inMode, NewDistance inSpeed,
+  public Speed(MovementMode inMode, Distance inSpeed,
                Optional<Maneuverability> inManeuverability)
   {
     m_mode = inMode;
@@ -42,7 +42,7 @@ public class Speed extends NewValue.Arithmetic<SpeedProto>
   }
 
   private MovementMode m_mode;
-  private NewDistance m_speed;
+  private Distance m_speed;
   private Optional<Maneuverability> m_maneuverability;
 
   /** The parser for armor types. */
@@ -56,7 +56,7 @@ public class Speed extends NewValue.Arithmetic<SpeedProto>
         if(!mode.isPresent())
           mode = Optional.of(MovementMode.RUN);
 
-        Optional<NewDistance> speed = NewDistance.PARSER.parse(inSpeed);
+        Optional<Distance> speed = Distance.PARSER.parse(inSpeed);
         if(!speed.isPresent())
           return Optional.absent();
 
@@ -82,7 +82,7 @@ public class Speed extends NewValue.Arithmetic<SpeedProto>
     return m_mode;
   }
 
-  public NewDistance getSpeed()
+  public Distance getSpeed()
   {
     return m_speed;
   }
@@ -121,7 +121,7 @@ public class Speed extends NewValue.Arithmetic<SpeedProto>
   public static Speed fromProto(SpeedProto inProto)
   {
     return new Speed(MovementMode.fromProto(inProto.getMode()),
-                     NewDistance.fromProto(inProto.getDistance()),
+                     Distance.fromProto(inProto.getDistance()),
                      inProto.hasManeuverability()
                       ? Optional.of(Maneuverability.fromProto
                                     (inProto.getManeuverability()))
@@ -137,7 +137,7 @@ public class Speed extends NewValue.Arithmetic<SpeedProto>
 
     Speed speed = (Speed)inValue;
     return new Speed(m_mode,
-                     (NewDistance) m_speed.add(speed.m_speed),
+                     (Distance) m_speed.add(speed.m_speed),
                      min(speed.m_maneuverability, m_maneuverability));
   }
 
@@ -169,7 +169,7 @@ public class Speed extends NewValue.Arithmetic<SpeedProto>
   public NewValue.Arithmetic<SpeedProto> multiply(int inFactor)
   {
     return new Speed(m_mode,
-                     (NewDistance)m_speed.multiply(inFactor),
+                     (Distance)m_speed.multiply(inFactor),
                      m_maneuverability);
   }
 }

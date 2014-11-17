@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2013 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -19,642 +19,299 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
 
 package net.ixitxachitls.dma.values;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.annotation.concurrent.Immutable;
+
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Values.DistanceProto;
-import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.util.configuration.Config;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
+import net.ixitxachitls.util.Strings;
 
 /**
- * This class stores a distance. This is a convenience class for Units.
+ * A representation of a distance value.
  *
- * @file          Distance.java
- *
- * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
+ * @file   NewDistance.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
-@Immutable
-@ParametersAreNonnullByDefault
-public class Distance extends Units<Distance>
+public class Distance extends NewValue.Arithmetic<DistanceProto>
+  implements Comparable<Distance>
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------ Distance --------------------------------
-
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
-
-  /**
-   * Construct the distance object with an undefined value.
-   *
-   */
-  public Distance()
+  public static class DistanceParser extends Parser<Distance>
   {
-    super(s_sets, 3);
+    public DistanceParser()
+    {
+      super(1);
+    }
 
-    m_template = "distance";
+    @Override
+    public Optional<Distance> doParse(String inValue)
+    {
+      Optional<NewRational> miles = Optional.absent();
+      Optional<NewRational> feet = Optional.absent();
+      Optional<NewRational> inches = Optional.absent();
+
+      List<String []> parts =
+        Strings.getAllPatterns(inValue,
+                               "(?:\\s*(.*?)"
+                               + "\\s*(in|inch|inches"
+                                 + "|ml|mile|miles|ft|feet|foot))");
+
+      if(parts.isEmpty())
+        return Optional.absent();
+
+      for(String []part : parts)
+      {
+        if(part.length != 2)
+          return Optional.absent();
+
+        Optional<NewRational> number = NewRational.PARSER.parse(part[0]);
+        if(!number.isPresent())
+          return Optional.absent();
+
+        switch(part[1].toLowerCase())
+        {
+          case "ml":
+          case "mile":
+          case "miles":
+            miles = add(miles, number);
+            break;
+
+          case "ft":
+          case "feet":
+          case "foot":
+            feet = add(feet, number);
+            break;
+
+          case "in":
+          case "inch":
+          case "inches":
+            inches = add(inches, number);
+            break;
+        }
+      }
+
+      return Optional.of(new Distance(miles, feet, inches));
+    }
   }
 
-  //........................................................................
-  //------------------------------ Distance --------------------------------
-
-  /**
-   * Construct the distance object.
-   *
-   * @param       inLarge  the large number (yards or km)
-   * @param       inMiddle the middle number (feet or m)
-   * @param       inSmall  the small number (inches or cm)
-   * @param       inMetric a flag for metric values (feet if false)
-   *
-   */
-  public Distance(@Nullable Rational inLarge, @Nullable Rational inMiddle,
-                  @Nullable Rational inSmall, boolean inMetric)
+  public Distance(Optional<NewRational> inMiles,
+                  Optional<NewRational> inFeet,
+                  Optional<NewRational> inInches)
   {
-    super(new Rational [] { inLarge, inMiddle, inSmall }, s_sets,
-          s_sets[inMetric ? 1 : 0], 3);
-
-    m_template = "distance";
+    m_miles = inMiles;
+    m_feet = inFeet;
+    m_inches = inInches;
   }
 
-  //........................................................................
+  public static Parser<Distance> PARSER = new DistanceParser();
 
-  //-------------------------------- create --------------------------------
+  private final Optional<NewRational> m_miles;
+  private final Optional<NewRational> m_feet;
+  private final Optional<NewRational> m_inches;
 
-  /**
-   * Create a new list with the same type information as this one, but one
-   * that is still undefined.
-   *
-   * @return      a similar list, but without any contents
-   *
-   */
+  public double asMiles()
+  {
+    return (m_miles.isPresent() ? m_miles.get().asDouble() : 0)
+      + (m_feet.isPresent() ? m_feet.get().asDouble() / 5280 : 0)
+      + (m_inches.isPresent() ? m_inches.get().asDouble() / 63360 : 0);
+  }
+
+  public double asFeet()
+  {
+    return (m_miles.isPresent() ? m_miles.get().asDouble() * 5280 : 0)
+      + (m_feet.isPresent() ? m_feet.get().asDouble() : 0)
+      + (m_inches.isPresent() ? m_inches.get().asDouble() / 12 : 0);
+  }
+
+  public double asInches()
+  {
+    return (m_miles.isPresent() ? m_miles.get().asDouble() * 63360 : 0)
+      + (m_feet.isPresent() ? m_feet.get().asDouble() * 12 : 0)
+      + (m_inches.isPresent() ? m_inches.get().asDouble() : 0);
+  }
+
   @Override
-public Distance create()
+  public String toString()
   {
-    return super.create(new Distance());
+    if(!m_miles.isPresent() && !m_feet.isPresent() && !m_inches.isPresent())
+      return "0 ft";
+
+    List<String> parts = new ArrayList<>();
+    if(m_miles.isPresent())
+      parts.add(m_miles.get() + " ml");
+
+    if(m_feet.isPresent())
+      parts.add(m_feet.get() + " ft");
+
+    if(m_inches.isPresent())
+      parts.add(m_inches.get() + " in");
+
+    return Strings.SPACE_JOINER.join(parts);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  /** The definition of distances. */
-  private static String s_definition =
-    Config.get("/game.distance",
-               "1/1    : Feet =   5280/1   : mi : mile|miles,"
-               + "                     1/1   : ft : foot|feet,"
-               + "                     1/12  : in : inch|inches."
-               + "2/5    : Metric = 1000/1   : km : kilometer|kilometers,"
-               + "                     1/1   : m  : meter|meters,"
-               + "                     1/100 : cm : centimeter|centimeters.");
-
-  /** The sets with the possible units. */
-  private static Set []s_sets = parseDefinition(s_definition);
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------- isMetric -------------------------------
-
-  /**
-   * Determine if metric values are stored.
-   *
-   * @return      true if metric values are stored, false else
-   *
-   */
-  public boolean isMetric()
-  {
-    return m_set == m_sets[1];
-  }
-
-  //........................................................................
-  //------------------------------- isFeet ---------------------------------
-
-  /**
-   * Determine if feet values are stored.
-   *
-   * @return      true if feet values are stored, false else
-   *
-   */
-  public boolean isFeet()
-  {
-    return m_set == s_sets[0];
-  }
-
-  //........................................................................
-
-  //------------------------------ getAsFeet -------------------------------
-
-  /**
-   * Get the value as an approximate equivalent of inches.
-   *
-   * @return      the inches
-   *
-   */
-  public Rational getAsFeet()
-  {
-    if(!isDefined())
-      return new Rational(0);
-
-    if(m_set == m_sets[0])
-      return getAsBase();
-
-    return toSet(0, false).getAsBase();
-  }
-
-  //........................................................................
-  //----------------------------- getAsMeters ------------------------------
-
-  /**
-   * Get the value as an approximate equivalent of centimeters.
-   *
-   * @return      the inches
-   *
-   */
-  public Rational getAsMeters()
-  {
-    if(!isDefined())
-      return new Rational(0);
-
-    if(m_set == m_sets[1])
-      return getAsBase();
-
-    return toSet(1, false).getAsBase();
-  }
-
-  //........................................................................
-
-  //------------------------------- asMetric -------------------------------
-
-  /**
-   * Convert this value into a metric value.
-   *
-   * @return      the corresponding metric value.
-   *
-   */
-  public Distance asMetric()
-  {
-    if(m_set == m_sets[1])
-      return this;
-
-    return toSet(1, true);
-  }
-
-  //........................................................................
-  //-------------------------------- asFeet --------------------------------
-
-  /**
-   * Convert this value into a feet value.
-   *
-   * @return      the corresponding feet value.
-   *
-   */
-  public Distance asFeet()
-  {
-    if(m_set == m_sets[0])
-      return this;
-
-    return toSet(0, true);
-  }
-
-  //........................................................................
-
-  //----------------------------- collectData ------------------------------
-
-  /**
-   * Collect the data available for printing the value.
-   *
-   * @param       inEntry    the entry this value is in
-   * @param       inRenderer the renderer to render sub values
-   *
-   * @return      the data as a map
-   *
-   */
-  // @Override
-  // public Map<String, Object> collectData(AbstractEntry inEntry,
-  //                                        SoyRenderer inRenderer)
-  // {
-  //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
-
-  //   data.put("metric", isMetric());
-  //   data.put("feet", isFeet());
-  //   data.put("asfeet",
-  //            new SoyValue("as feet", asFeet(), inEntry, inRenderer));
-  //   data.put("asmetric",
-  //            new SoyValue("as metric", asMetric(), inEntry, inRenderer));
-
-  //   return data;
-  // }
-
-  //........................................................................
-  //------------------------------- doGroup --------------------------------
-
-  /**
-   * Return the group this value belongs to.
-   *
-   * @return      a string denoting the group this value is in
-   *
-   */
   @Override
-  public String doGroup()
+  public String group()
   {
-    Rational distance = getAsFeet();
-
-    if(distance.compare(new Rational(1, 120)) <= 0)
-      return "1/10 in";
-
-    if(distance.compare(new Rational(1, 48)) <= 0)
-      return "1/4 in";
-
-    if(distance.compare(new Rational(1, 24)) <= 0)
-      return "1/2 in";
-
-    if(distance.compare(new Rational(1, 12)) <= 0)
+    double inches = asInches();
+    if(inches <= 1)
       return "1 in";
 
-    if(distance.compare(new Rational(1, 6)) <= 0)
+    if(inches <= 2)
       return "2 in";
 
-    if(distance.compare(new Rational(1, 4)) <= 0)
-      return "3 in";
+    if(inches <= 6)
+      return "6 in";
 
-    if(distance.compare(new Rational(1, 3)) <= 0)
-      return "4 in";
-
-    if(distance.compare(new Rational(5, 12)) <= 0)
-      return "5 in";
-
-    if(distance.compare(new Rational(5, 6)) <= 0)
-      return "10 in";
-
-    if(distance.compare(1) <= 0)
+    double feet = asFeet();
+    if(feet <= 1)
       return "1 ft";
 
-    if(distance.compare(5) <= 0)
+    if(feet <= 5)
       return "5 ft";
 
-    if(distance.compare(10) <= 0)
+    if(feet <= 10)
       return "10 ft";
 
-    if(distance.compare(25) <= 0)
+    if(feet <= 25)
       return "25 ft";
 
-    if(distance.compare(50) <= 0)
+    if(feet <= 50)
       return "50 ft";
 
-    if(distance.compare(100) <= 0)
+    if(feet <= 100)
       return "100 ft";
 
-    if(distance.compare(250) <= 0)
-      return "250 ft";
-
-    if(distance.compare(500) <= 0)
+    if(feet <= 500)
       return "500 ft";
 
-    if(distance.compare(1000) <= 0)
+    if(feet <= 1000)
       return "1000 ft";
 
-    if(distance.compare(5280) <= 0)
+    double miles = asMiles();
+    if(miles <= 1)
       return "1 ml";
 
-    if(distance.compare(2 * 5280) <= 0)
-      return "2 ml";
-
-    if(distance.compare(5 * 5280) <= 0)
+    if(miles <= 5)
       return "5 ml";
 
-    if(distance.compare(10 * 5280) <= 0)
+    if(miles <= 10)
       return "10 ml";
 
-    if(distance.compare(25 * 5280) <= 0)
+    if(miles <= 25)
       return "25 ml";
 
-    if(distance.compare(50 * 5280) <= 0)
+    if(miles <= 50)
       return "50 ml";
 
-    if(distance.compare(100 * 5280) <= 0)
+    if(miles <= 100)
       return "100 ml";
 
-    return "Infinite";
+    return "a lot";
   }
 
-  //........................................................................
-
-  /**
-   * Create a proto from the duration value.
-   *
-   * @return  the proto created
-   */
+  @Override
   public DistanceProto toProto()
   {
-    DistanceProto.Builder builder = DistanceProto.newBuilder();
+    DistanceProto.Imperial.Builder builder = DistanceProto.Imperial.newBuilder();
 
-    if(m_set == m_sets[0])
-      if(m_values != null && m_values.length == 3)
-      {
-        DistanceProto.Imperial.Builder imperial =
-          DistanceProto.Imperial.newBuilder();
+    if(m_miles.isPresent())
+      builder.setMiles(m_miles.get().toProto());
+    if(m_feet.isPresent())
+      builder.setFeet(m_feet.get().toProto());
+    if(m_inches.isPresent())
+      builder.setInches(m_inches.get().toProto());
 
-        if(m_values[0] != null)
-          imperial.setMiles(m_values[0].toProto());
-        if(m_values[1] != null)
-          imperial.setFeet(m_values[1].toProto());
-        if(m_values[2] != null)
-          imperial.setInches(m_values[2].toProto());
-
-        builder.setImperial(imperial.build());
-      }
-
-    if(m_set == m_sets[1])
-      if(m_values != null && m_values.length == 3)
-      {
-        DistanceProto.Metric.Builder metric =
-          DistanceProto.Metric.newBuilder();
-
-        if(m_values[0] != null)
-          metric.setKilometers(m_values[0].toProto());
-        if(m_values[1] != null)
-          metric.setMeters(m_values[1].toProto());
-        if(m_values[2] != null)
-          metric.setCentimeters(m_values[2].toProto());
-
-        builder.setMetric(metric.build());
-      }
-
-    return builder.build();
+    return DistanceProto.newBuilder().setImperial(builder.build()).build();
   }
 
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------- asMetric -------------------------------
-
-  /**
-   * Set the weight as metric value.
-   *
-   * @param       inKilometers  the number of kilometers
-   * @param       inMeters      the number of meters
-   * @param       inCentimeters the number of centimeters
-   *
-   * @return      a new object with the given value
-   *
-   */
-  public Distance setMetric(@Nullable Rational inKilometers,
-                            @Nullable Rational inMeters,
-                            @Nullable Rational inCentimeters)
+  public static Distance fromProto(DistanceProto inProto)
   {
-    return as(new Rational [] { inKilometers, inMeters, inCentimeters }, 1);
+    if(!inProto.hasImperial())
+      throw new IllegalArgumentException("expected an imperial distance");
+
+    Optional<NewRational> miles = Optional.absent();
+    Optional<NewRational> feet = Optional.absent();
+    Optional<NewRational> inches = Optional.absent();
+
+    if(inProto.getImperial().hasMiles())
+      miles =
+        Optional.of(NewRational.fromProto(inProto.getImperial().getMiles()));
+    if(inProto.getImperial().hasFeet())
+      feet =
+        Optional.of(NewRational.fromProto(inProto.getImperial().getFeet()));
+    if(inProto.getImperial().hasInches())
+      inches =
+        Optional.of(NewRational.fromProto(inProto.getImperial().getInches()));
+
+    return new Distance(miles, feet, inches);
   }
 
-  //........................................................................
-  //-------------------------------- asFeet --------------------------------
-
-  /**
-   * Set the weight as feet value.
-   *
-   * @param       inMiles  the number of kilometers
-   * @param       inFeet   the number of meters
-   * @param       inInches the number of centimeters
-   *
-   * @return      a new object with the new values
-   *
-   */
-  public Distance asFeet(@Nullable Rational inMiles,
-                         @Nullable Rational inFeet,
-                         @Nullable Rational inInches)
+  @Override
+  public NewValue.Arithmetic<DistanceProto>
+    add(@Nullable NewValue.Arithmetic<DistanceProto> inValue)
   {
-    return as(new Rational [] { inMiles, inFeet, inInches }, 0);
+    if(inValue == null)
+      return this;
+
+    if(!(inValue instanceof Distance))
+      throw new IllegalArgumentException("can only add another distance value");
+
+    Distance value = (Distance)inValue;
+    return new Distance(add(m_miles, value.m_miles),
+                           add(m_feet, value.m_feet),
+                           add(m_inches, value.m_inches));
   }
 
-  //........................................................................
-
-  /**
-   * Create a distnace like this from the given proto values.
-   *
-   * @param inProto the proto with the values
-   * @return the newly created distance
-   */
-  public Distance fromProto(DistanceProto inProto)
+  @Override
+  public boolean canAdd(NewValue.Arithmetic<DistanceProto> inValue)
   {
-    Distance result = create();
-
-    if(inProto.hasMetric())
-    {
-      result.m_values = new Rational[3];
-      if(inProto.getMetric().hasKilometers())
-        result.m_values[0] =
-          Rational.fromProto(inProto.getMetric().getKilometers());
-      if(inProto.getMetric().hasMeters())
-        result.m_values[1] =
-          Rational.fromProto(inProto.getMetric().getMeters());
-      if(inProto.getMetric().hasCentimeters())
-        result.m_values[2] =
-          Rational.fromProto(inProto.getMetric().getCentimeters());
-      result.m_set = m_sets[1];
-    }
-    else if(inProto.hasImperial())
-    {
-      result.m_values = new Rational[3];
-      if(inProto.getImperial().hasMiles())
-        result.m_values[0] =
-          Rational.fromProto(inProto.getImperial().getMiles());
-      if(inProto.getImperial().hasFeet())
-        result.m_values[1] =
-          Rational.fromProto(inProto.getImperial().getFeet());
-      if(inProto.getImperial().hasInches())
-        result.m_values[2] =
-          Rational.fromProto(inProto.getImperial().getInches());
-      result.m_set = m_sets[0];
-    }
-
-    return result;
+    return inValue instanceof Distance;
   }
 
-  //........................................................................
+  @Override
+  public NewValue.Arithmetic<DistanceProto> multiply(int inFactor)
+  {
+    return new Distance(multiply(m_miles, inFactor),
+                           multiply(m_feet, inFactor),
+                           multiply(m_inches, inFactor));
 
-  //------------------------------------------------- other member functions
-  //........................................................................
+  }
 
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
-  /** The Test. */
+  /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- init -----------------------------------------------------------
-
-    /** Testing init. */
+    /** Spaces tests. */
     @org.junit.Test
-    public void init()
+    public void parse()
     {
-      Distance value = new Distance();
-
-      // undefined value
-      assertEquals("not undefined at start", false, value.isDefined());
-      assertEquals("undefined value not correct", "$undefined$",
-                   value.toString());
-      assertEquals("feet",   false, value.isFeet());
-      assertEquals("metric", false, value.isMetric());
-      assertEquals("undefined value not correct", "0",
-                   value.getAsMeters().toString());
-      assertEquals("undefined value not correct", "0",
-                   value.getAsFeet().toString());
-
-      // now with some value (cm)
-      value = new Distance(null, null, new Rational(1, 1, 2), true);
-
-      assertEquals("not defined at start", true, value.isDefined());
-      assertEquals("string ", "1 1/2 cm", value.toString());
-      assertEquals("feet",   false,  value.isFeet());
-      assertEquals("metric", true,   value.isMetric());
-      assertEquals("cm",   "3/200", value.getAsMeters().toString());
-      assertEquals("in",   "3/80", value.getAsFeet().toString());
-
-      value = new Distance(new Rational(1), new Rational(1, 2, 3),
-                           new Rational(2), false);
-
-      assertEquals("not defined at start", true, value.isDefined());
-      assertEquals("string", "1 mi 1 2/3 ft 2 in", value.toString());
-      assertEquals("feet",   true,  value.isFeet());
-      assertEquals("metric", false, value.isMetric());
-      assertEquals("cm", "2112 11/15", value.getAsMeters().toString());
-      assertEquals("in", "5281 5/6", value.getAsFeet().toString());
-
-      // now with some value (metric)
-       value = new Distance(null, new Rational(1, 1, 2), null, true);
-
-      assertEquals("not defined at start", true, value.isDefined());
-      assertEquals("string", "1 1/2 m", value.toString());
-      assertEquals("feet",   false,  value.isFeet());
-      assertEquals("metric", true,  value.isMetric());
-      assertEquals("cm",  "1 1/2", value.getAsMeters().toString());
-      assertEquals("in",   "3 3/4", value.getAsFeet().toString());
-
-      value = new Distance(new Rational(1), new Rational(3, 1, 4),
-                           new Rational(20), true);
-
-      assertEquals("not defined at start", true, value.isDefined());
-      assertEquals("string", "1 km 3 1/4 m 20 cm",
-                   value.toString());
-      assertEquals("feet",   false, value.isFeet());
-      assertEquals("metric", true,  value.isMetric());
-      assertEquals("in", "2508 5/8", value.getAsFeet().toString());
-      assertEquals("cm", "1003 9/20", value.getAsMeters().toString());
-
-      // setting
-      value = value.setMetric(new Rational(1), null, new Rational(1, 2));
-
-      assertEquals("set metric", "1 km 1/2 cm", value.toString());
-
-      value = value.asFeet(null, new Rational(3, 2), new Rational(1, 1, 2));
-
-      assertEquals("set feet", "3/2 ft 1 1/2 in", value.toString());
-
-      Value.Test.createTest(value);
-   }
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** Testing reading. */
-    @org.junit.Test
-    public void read()
-    {
-      String []tests =
-        {
-          "simple", "1 km", "1 km", null,
-          "no space", "5m 300cm", "5 m 300 cm", null,
-          "whites", "1 \n1/2    ft 5 \n in", "1 1/2 ft 5 in", null,
-          "order", "30 cm 5 m 10 cm 1 km", "1 km 5 m 40 cm", null,
-          "other text", "1km 5 m 0 a", "1 km 5 m", " 0 a",
-          "nothing", "50", null, "50",
-          "nothing", "22.3 cm", null, "22.3 cm",
-          "nothing", "1/4 gu", null, "1/4 gu",
-          "mixed", "5 ft 200 cm", "5 ft", " 200 cm",
-        };
-
-      Value.Test.readTest(tests, new Distance());
+      assertEquals("parse", "1 ml", PARSER.parse("1 ml").toString());
+      assertEquals("parse", "1 ml", PARSER.parse("1   mls").toString());
+      assertEquals("parse", "1/2 in", PARSER.parse("1/2 inch").toString());
+      assertEquals("parse", "3 ml 3 in",
+                   PARSER.parse("1 ml 2 ml 3 in").toString());
+      assertEquals("parse", "1 ml", PARSER.parse("1 mile").toString());
+      assertNull("parse", PARSER.parse("1"));
+      assertEquals("parse", "1 ft", PARSER.parse("1 ft 2").toString());
+      assertEquals("parse", "1 ft", PARSER.parse("1 ftt").toString());
+      assertEquals("parse", "1 ft 1 in",
+                   PARSER.parse("1 ft 1 in 1 guru").toString());
+      assertNull("parse", PARSER.parse(""));
     }
-
-    //......................................................................
-
-    //----- metric ---------------------------------------------------------
-
-    /** Testing metric values. */
-    @org.junit.Test
-    public void metric()
-    {
-      String []texts =
-        {
-          "1 1/2 ft",  "60 cm",
-          "5 mi",      "10 km 560 m",
-          "3 ft",      "1 m 20 cm",
-          "3 in 5 ft", "2 m 10 cm",
-        };
-
-      Distance value = new Distance();
-
-      for(int i = 0; i < texts.length; i += 2)
-      {
-        try (ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test"))
-        {
-          value = value.read(reader);
-          assertEquals("test " + i / 2, texts[i + 1],
-                       value.asMetric().toString());
-        }
-      }
-    }
-
-    //......................................................................
-    //----- feet -----------------------------------------------------------
-
-    /** Testing feet values. */
-    @org.junit.Test
-    public void feet()
-    {
-      String []texts =
-        {
-          "20 km",            "9 mi 2480 ft",
-          "1 1/2 cm",         "9/20 in",
-          "1 1/2m",           "3 ft 9 in",
-          "1 km 300 m 30 cm", "3250 ft 9 in",
-          "2 m",              "5 ft",
-        };
-
-      Distance value = new Distance();
-
-      for(int i = 0; i < texts.length; i += 2)
-      {
-        try (ParseReader reader =
-          new ParseReader(new java.io.StringReader(texts[i]), "test"))
-        {
-          value = value.read(reader);
-          assertEquals("test " + i / 2, texts[i + 1],
-                       value.asFeet().toString());
-        }
-      }
-    }
-
-    //......................................................................
   }
 
-  //........................................................................
+  @Override
+  public int compareTo(Distance inOther)
+  {
+    if(this == inOther)
+      return 0;
+
+    return Double.compare(asFeet(), inOther.asFeet());
+  }
 }

@@ -40,8 +40,8 @@ import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Values.SpeedProto;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Damage;
+import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.NewDice;
-import net.ixitxachitls.dma.values.NewDistance;
 import net.ixitxachitls.dma.values.NewModifier;
 import net.ixitxachitls.dma.values.NewRange;
 import net.ixitxachitls.dma.values.NewRational;
@@ -369,10 +369,10 @@ public class BaseMonster extends BaseEntry
   protected List<Attack> m_secondaryAttacks = new ArrayList<>();
 
   /** The space the monster occupies (computed). */
-  protected Optional<NewDistance> m_space = Optional.absent();
+  protected Optional<Distance> m_space = Optional.absent();
 
   /** The reach of the monster. */
-  protected Optional<NewDistance> m_reach = Optional.absent();
+  protected Optional<Distance> m_reach = Optional.absent();
 
   /** The special attacks. */
   List<String> m_specialAttacks = new ArrayList<>();
@@ -789,18 +789,18 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
-  public Optional<NewDistance> getSpace()
+  public Optional<Distance> getSpace()
   {
     return m_space;
   }
 
-  public Annotated<Optional<NewDistance>> getCombinedSpace()
+  public Annotated<Optional<Distance>> getCombinedSpace()
   {
     if(m_space.isPresent())
-      return new Annotated.Max<NewDistance>(m_space.get(), getName());
+      return new Annotated.Max<Distance>(m_space.get(), getName());
 
-    Annotated<Optional<NewDistance>> combined =
-      new Annotated.Max<NewDistance>();
+    Annotated<Optional<Distance>> combined =
+      new Annotated.Max<Distance>();
     for(BaseEntry base : getBaseEntries())
       combined.add(((BaseMonster)base).getCombinedSpace());
 
@@ -1163,18 +1163,18 @@ public class BaseMonster extends BaseEntry
    *
    * @return      the monsters reach
    */
-  public Optional<NewDistance> getReach()
+  public Optional<Distance> getReach()
   {
     return m_reach;
   }
 
-  public Annotated<Optional<NewDistance>> getCombinedReach()
+  public Annotated<Optional<Distance>> getCombinedReach()
   {
     if(m_reach.isPresent())
-      return new Annotated.Max<NewDistance>(m_reach.get(), getName());
+      return new Annotated.Max<Distance>(m_reach.get(), getName());
 
-    Annotated<Optional<NewDistance>> combined =
-      new Annotated.Max<NewDistance>();
+    Annotated<Optional<Distance>> combined =
+      new Annotated.Max<Distance>();
     for(BaseEntry base : getBaseEntries())
       combined.add(((BaseMonster)base).getCombinedReach());
 
@@ -2846,8 +2846,8 @@ public class BaseMonster extends BaseEntry
     m_secondaryAttacks = inValues.use("secondary_attack", m_primaryAttacks,
                                       Attack.PARSER,
                                       "number", "mode", "style", "damage");
-    m_space = inValues.use("space", m_space, NewDistance.PARSER);
-    m_reach = inValues.use("reach", m_reach, NewDistance.PARSER);
+    m_space = inValues.use("space", m_space, Distance.PARSER);
+    m_reach = inValues.use("reach", m_reach, Distance.PARSER);
     m_specialAttacks = inValues.use("special_attack", m_specialAttacks);
     m_specialQualities = inValues.use("special_quality", m_specialQualities);
     m_classSkills = inValues.use("class_skill", m_classSkills);
@@ -3148,10 +3148,10 @@ public class BaseMonster extends BaseEntry
                   Damage.fromProto(attack.getDamage())));
 
     if(proto.hasSpace())
-      m_space = Optional.of(NewDistance.fromProto(proto.getSpace()));
+      m_space = Optional.of(Distance.fromProto(proto.getSpace()));
 
     if(proto.hasReach())
-      m_reach = Optional.of(NewDistance.fromProto(proto.getReach()));
+      m_reach = Optional.of(Distance.fromProto(proto.getReach()));
 
     for(BaseMonsterProto.QualityReference reference
       : proto.getSpecialAttackList())

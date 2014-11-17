@@ -31,7 +31,7 @@ import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.EncounterProto;
-import net.ixitxachitls.dma.values.NewDistance;
+import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -343,7 +343,7 @@ public class Encounter extends CampaignEntry
   protected List<String> m_skills = new ArrayList<>();
 
   /** The initial encounter distance. */
-  protected Optional<NewDistance> m_distance = Optional.absent();
+  protected Optional<Distance> m_distance = Optional.absent();
 
   @Override
   public Message toProto()
@@ -446,7 +446,7 @@ public class Encounter extends CampaignEntry
       m_light = Optional.of(proto.getLight());
 
     if(proto.hasDistance())
-      m_distance = Optional.of(NewDistance.fromProto(proto.getDistance()));
+      m_distance = Optional.of(Distance.fromProto(proto.getDistance()));
   }
 
   @Override

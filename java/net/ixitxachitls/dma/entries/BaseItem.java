@@ -55,10 +55,10 @@ import net.ixitxachitls.dma.values.AreaShape;
 import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.CountUnit;
 import net.ixitxachitls.dma.values.Damage;
+import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.ModifierType;
 import net.ixitxachitls.dma.values.NamedModifier;
 import net.ixitxachitls.dma.values.NewCritical;
-import net.ixitxachitls.dma.values.NewDistance;
 import net.ixitxachitls.dma.values.NewDuration;
 import net.ixitxachitls.dma.values.NewModifier;
 import net.ixitxachitls.dma.values.NewMoney;
@@ -147,7 +147,7 @@ public class BaseItem extends BaseEntry
   protected Substance m_substance = Substance.UNKNOWN;
 
   /** The thickness of the item of the substance above. */
-  protected Optional<NewDistance> m_thickness = Optional.absent();
+  protected Optional<Distance> m_thickness = Optional.absent();
 
   /** The break DC for breaking this item (or bursting out of it). */
   protected Optional<Integer> m_break = Optional.absent();
@@ -165,10 +165,10 @@ public class BaseItem extends BaseEntry
   protected AreaShape m_lightShape = AreaShape.UNKNOWN;
 
   /** The radius this item sheds bright light. */
-  protected Optional<NewDistance> m_brightLight = Optional.absent();
+  protected Optional<Distance> m_brightLight = Optional.absent();
 
   /** The radius this item sheds shadowy light. */
-  protected Optional<NewDistance> m_shadowyLight = Optional.absent();
+  protected Optional<Distance> m_shadowyLight = Optional.absent();
 
   /** The time this item is functioning. */
   protected Optional<NewDuration> m_timed = Optional.absent();
@@ -198,10 +198,10 @@ public class BaseItem extends BaseEntry
   protected Proficiency m_proficiency = Proficiency.UNKNOWN;
 
   /** The range increment, if any, for this weapon. */
-  protected Optional<NewDistance> m_range = Optional.absent();
+  protected Optional<Distance> m_range = Optional.absent();
 
   /** The reach of the weapon. */
-  protected Optional<NewDistance> m_reach = Optional.absent();
+  protected Optional<Distance> m_reach = Optional.absent();
 
   /** The maximal number of attacks per round. */
   protected Optional<Integer> m_maxAttacks = Optional.absent();
@@ -228,16 +228,16 @@ public class BaseItem extends BaseEntry
   protected Optional<Integer> m_arcane = Optional.absent();
 
   /** The speed in the armor for 30ft base. */
-  protected Optional<NewDistance> m_speedFast = Optional.absent();
+  protected Optional<Distance> m_speedFast = Optional.absent();
 
   /** The speed in the armor for 20ft base. */
-  protected Optional<NewDistance> m_speedSlow = Optional.absent();
+  protected Optional<Distance> m_speedSlow = Optional.absent();
 
   /** The area for this commodity. */
   protected Optional<Area> m_area = Optional.absent();
 
   /** The length of this commodity. */
-  protected Optional<NewDistance> m_length = Optional.absent();
+  protected Optional<Distance> m_length = Optional.absent();
 
   /** The container's capacity. */
   protected Optional<Volume> m_capacity = Optional.absent();
@@ -657,7 +657,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the thickness
    */
-  public Optional<NewDistance> getThickness()
+  public Optional<Distance> getThickness()
   {
     return m_thickness;
   }
@@ -667,13 +667,13 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedThickness()
+  public Annotated<Optional<Distance>> getCombinedThickness()
   {
     if(m_thickness.isPresent())
       return
-          new Annotated.Arithmetic<NewDistance>(m_thickness.get(), getName());
+          new Annotated.Arithmetic<Distance>(m_thickness.get(), getName());
 
-    Annotated.Arithmetic<NewDistance> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Distance> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedThickness());
 
@@ -900,7 +900,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the bright light radius
    */
-  public Optional<NewDistance> getBrightLight()
+  public Optional<Distance> getBrightLight()
   {
     return m_brightLight;
   }
@@ -911,12 +911,12 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedBrightLight()
+  public Annotated<Optional<Distance>> getCombinedBrightLight()
   {
     if(m_brightLight.isPresent())
-      return new Annotated.Max<NewDistance>(m_brightLight.get(), getName());
+      return new Annotated.Max<Distance>(m_brightLight.get(), getName());
 
-    Annotated.Max<NewDistance> combined = new Annotated.Max<>();
+    Annotated.Max<Distance> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedBrightLight());
 
@@ -928,7 +928,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the shadowy light radius
    */
-  public Optional<NewDistance> getShadowyLight()
+  public Optional<Distance> getShadowyLight()
   {
     return m_shadowyLight;
   }
@@ -939,12 +939,12 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedShadowyLight()
+  public Annotated<Optional<Distance>> getCombinedShadowyLight()
   {
     if(m_shadowyLight.isPresent())
-      return new Annotated.Max<NewDistance>(m_shadowyLight.get(), getName());
+      return new Annotated.Max<Distance>(m_shadowyLight.get(), getName());
 
-    Annotated.Max<NewDistance> combined = new Annotated.Max<>();
+    Annotated.Max<Distance> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedShadowyLight());
 
@@ -1176,7 +1176,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the range value
    */
-  public Optional<NewDistance> getRange()
+  public Optional<Distance> getRange()
   {
     return m_range;
   }
@@ -1187,12 +1187,12 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedRange()
+  public Annotated<Optional<Distance>> getCombinedRange()
   {
     if(m_range.isPresent())
-      return new Annotated.Min<NewDistance>(m_range.get(), getName());
+      return new Annotated.Min<Distance>(m_range.get(), getName());
 
-    Annotated.Min<NewDistance> combined = new Annotated.Min<>();
+    Annotated.Min<Distance> combined = new Annotated.Min<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedRange());
 
@@ -1204,7 +1204,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the reach value
    */
-  public Optional<NewDistance> getReach()
+  public Optional<Distance> getReach()
   {
     return m_reach;
   }
@@ -1215,12 +1215,12 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedReach()
+  public Annotated<Optional<Distance>> getCombinedReach()
   {
     if(m_reach.isPresent())
-      return new Annotated.Min<NewDistance>(m_reach.get(), getName());
+      return new Annotated.Min<Distance>(m_reach.get(), getName());
 
-    Annotated.Min<NewDistance> combined = new Annotated.Min<>();
+    Annotated.Min<Distance> combined = new Annotated.Min<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedReach());
 
@@ -1435,7 +1435,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the slow speed value
    */
-  public Optional<NewDistance> getSlowSpeed()
+  public Optional<Distance> getSlowSpeed()
   {
     return m_speedSlow;
   }
@@ -1445,13 +1445,13 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedSlowSpeed()
+  public Annotated<Optional<Distance>> getCombinedSlowSpeed()
   {
     if(m_speedSlow.isPresent())
-      return new Annotated.Arithmetic<NewDistance>(m_speedSlow.get(),
+      return new Annotated.Arithmetic<Distance>(m_speedSlow.get(),
                                                    getName());
 
-    Annotated.Arithmetic<NewDistance> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Distance> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedSlowSpeed());
 
@@ -1463,7 +1463,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the fast speed value
    */
-  public Optional<NewDistance> getFastSpeed()
+  public Optional<Distance> getFastSpeed()
   {
     return m_speedFast;
   }
@@ -1473,13 +1473,13 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedFastSpeed()
+  public Annotated<Optional<Distance>> getCombinedFastSpeed()
   {
     if(m_speedFast.isPresent())
-      return new Annotated.Arithmetic<NewDistance>(m_speedFast.get(),
+      return new Annotated.Arithmetic<Distance>(m_speedFast.get(),
                                                    getName());
 
-    Annotated.Arithmetic<NewDistance> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Distance> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedFastSpeed());
 
@@ -1518,7 +1518,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the length
    */
-  public Optional<NewDistance> getLength()
+  public Optional<Distance> getLength()
   {
     return m_length;
   }
@@ -1528,12 +1528,12 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedLength()
+  public Annotated<Optional<Distance>> getCombinedLength()
   {
     if(m_length.isPresent())
-      return new Annotated.Arithmetic<NewDistance>(m_length.get(), getName());
+      return new Annotated.Arithmetic<Distance>(m_length.get(), getName());
 
-    Annotated.Arithmetic<NewDistance> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Distance> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedLength());
 
@@ -2087,7 +2087,7 @@ public class BaseItem extends BaseEntry
     m_size = inValues.use("size", m_size, Size.PARSER);
     m_sizeModifier = inValues.use("size_modifier", m_sizeModifier,
                                   SizeModifier.PARSER);
-    m_thickness = inValues.use("thickness", m_thickness, NewDistance.PARSER);
+    m_thickness = inValues.use("thickness", m_thickness, Distance.PARSER);
     m_hardness = inValues.use("hardness", m_hardness, NewValue.INTEGER_PARSER);
     m_break = inValues.use("break", m_break, NewValue.INTEGER_PARSER);
     m_probability = inValues.use("probability", m_probability,
@@ -2100,9 +2100,9 @@ public class BaseItem extends BaseEntry
     m_countUnit = inValues.use("count_unit", m_countUnit, CountUnit.PARSER);
     m_lightShape = inValues.use("light.shape", m_lightShape, AreaShape.PARSER);
     m_brightLight = inValues.use("light.bright", m_brightLight,
-                                 NewDistance.PARSER);
+                                 Distance.PARSER);
     m_shadowyLight = inValues.use("light.shadowy", m_shadowyLight,
-                                  NewDistance.PARSER);
+                                  Distance.PARSER);
     m_timed = inValues.use("timed", m_timed, NewDuration.PARSER);
     m_magicalModifiers = inValues.use("magical", m_magicalModifiers,
                                       NamedModifier.PARSER,
@@ -2118,8 +2118,8 @@ public class BaseItem extends BaseEntry
     m_style = inValues.use("weapon.style", m_style, WeaponStyle.PARSER);
     m_proficiency = inValues.use("weapon.proficiency", m_proficiency,
                                  Proficiency.PARSER);
-    m_range = inValues.use("weapon.range", m_range, NewDistance.PARSER);
-    m_reach = inValues.use("weapon.reach", m_reach, NewDistance.PARSER);
+    m_range = inValues.use("weapon.range", m_range, Distance.PARSER);
+    m_reach = inValues.use("weapon.reach", m_reach, Distance.PARSER);
     m_maxAttacks = inValues.use("weapon.max_attacks", m_maxAttacks,
                                 NewValue.INTEGER_PARSER);
     m_finesse = inValues.use("weapon.finesse", m_finesse,
@@ -2137,12 +2137,12 @@ public class BaseItem extends BaseEntry
     m_arcane = inValues.use("armor.arcane_failure", m_arcane,
                             NewModifier.INTEGER_PARSER);
     m_speedSlow = inValues.use("armor.speed_slow", m_speedSlow,
-                               NewDistance.PARSER);
+                               Distance.PARSER);
     m_speedFast = inValues.use("armor.speed_fast", m_speedFast,
-                               NewDistance.PARSER);
+                               Distance.PARSER);
 
     m_area = inValues.use("commodity.area", m_area, Area.PARSER);
-    m_length = inValues.use("commodity.length", m_length, NewDistance.PARSER);
+    m_length = inValues.use("commodity.length", m_length, Distance.PARSER);
 
     m_capacity = inValues.use("container.capacity", m_capacity, Volume.PARSER);
     m_state = inValues.use("container.state", m_state, AggregationState.PARSER);
@@ -2197,8 +2197,8 @@ public class BaseItem extends BaseEntry
     {
       m_substance = Substance.fromProto(proto.getSubstance().getMaterial());
       if(proto.getSubstance().hasThickness())
-        m_thickness = Optional.of(NewDistance.fromProto
-                                      (proto.getSubstance().getThickness()));
+        m_thickness = Optional.of(Distance.fromProto
+            (proto.getSubstance().getThickness()));
     }
 
     if(proto.hasBreakDc())
@@ -2242,9 +2242,9 @@ public class BaseItem extends BaseEntry
       if(weaponProto.hasProficiency())
         m_proficiency = Proficiency.fromProto(weaponProto.getProficiency());
       if(weaponProto.hasRange())
-        m_range = Optional.of(NewDistance.fromProto(weaponProto.getRange()));
+        m_range = Optional.of(Distance.fromProto(weaponProto.getRange()));
       if(weaponProto.hasReach())
-        m_reach = Optional.of(NewDistance.fromProto(weaponProto.getReach()));
+        m_reach = Optional.of(Distance.fromProto(weaponProto.getReach()));
       if(weaponProto.hasMaxAttacks())
         m_maxAttacks = Optional.of(weaponProto.getMaxAttacks());
       if(weaponProto.hasFinesse())
@@ -2293,9 +2293,9 @@ public class BaseItem extends BaseEntry
       if(armorProto. hasArcaneFailure())
         m_arcane = Optional.of(armorProto. getArcaneFailure());
       if(armorProto. hasSpeedFast())
-        m_speedFast = Optional.of(NewDistance.fromProto(armorProto. getSpeedFast()));
+        m_speedFast = Optional.of(Distance.fromProto(armorProto.getSpeedFast()));
       if(armorProto. hasSpeedSlow())
-        m_speedFast = Optional.of(NewDistance.fromProto(armorProto. getSpeedSlow()));
+        m_speedFast = Optional.of(Distance.fromProto(armorProto.getSpeedSlow()));
     }
 
     if(proto.hasCommodity())
@@ -2304,7 +2304,7 @@ public class BaseItem extends BaseEntry
         m_area = Optional.of(Area.fromProto(proto.getCommodity().getArea()));
       if(proto.getCommodity().hasLength())
         m_length =
-          Optional.of(NewDistance.fromProto(proto.getCommodity().getLength()));
+          Optional.of(Distance.fromProto(proto.getCommodity().getLength()));
     }
 
     if(proto.hasContainer())
@@ -2321,14 +2321,14 @@ public class BaseItem extends BaseEntry
       if(proto.getLight().hasBright())
       {
         m_brightLight = Optional.of
-          (NewDistance.fromProto(proto.getLight().getBright().getDistance()));
+          (Distance.fromProto(proto.getLight().getBright().getDistance()));
         m_lightShape =
           AreaShape.fromProto(proto.getLight().getBright().getShape());
       }
       if(proto.getLight().hasShadowy())
       {
         m_shadowyLight = Optional.of
-          (NewDistance.fromProto(proto.getLight().getShadowy().getDistance()));
+          (Distance.fromProto(proto.getLight().getShadowy().getDistance()));
         m_lightShape =
           AreaShape.fromProto(proto.getLight().getShadowy().getShape());
       }

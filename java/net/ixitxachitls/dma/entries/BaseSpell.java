@@ -33,7 +33,7 @@ import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.values.NewDistance;
+import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.NewDuration;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.input.ParseReader;
@@ -144,7 +144,7 @@ public class BaseSpell extends BaseEntry
 
   public static class Effect
   {
-    public Effect(Optional<NewDistance> inDistance,
+    public Effect(Optional<Distance> inDistance,
                   Optional<SpellEffect> inEffect, String inText)
     {
       m_distance = inDistance;
@@ -152,7 +152,7 @@ public class BaseSpell extends BaseEntry
       m_text = inText;
     }
 
-    private final Optional<NewDistance> m_distance;
+    private final Optional<Distance> m_distance;
     private final Optional<SpellEffect> m_effect;
     private final String m_text;
     public static final NewValue.Parser<Effect> PARSER =
@@ -162,13 +162,13 @@ public class BaseSpell extends BaseEntry
         public Optional<Effect> doParse(String inDistance, String inEffect,
                                         String inText)
         {
-          return Optional.of(new Effect(NewDistance.PARSER.parse(inDistance),
+          return Optional.of(new Effect(Distance.PARSER.parse(inDistance),
                                         SpellEffect.fromString(inEffect),
                                         inText));
         }
       };
 
-    public Optional<NewDistance> getDistance()
+    public Optional<Distance> getDistance()
     {
       return m_distance;
     }
@@ -513,7 +513,7 @@ public class BaseSpell extends BaseEntry
   protected SpellRange m_range = SpellRange.UNKNOWN;
 
   /** The distance the spell works at. */
-  protected Optional<NewDistance> m_distance = Optional.absent();
+  protected Optional<Distance> m_distance = Optional.absent();
 
   /** The target of the spell. */
   protected Optional<Effect> m_effect = Optional.absent();
@@ -583,7 +583,7 @@ public class BaseSpell extends BaseEntry
     return m_range;
   }
 
-  public Optional<NewDistance> getDistance()
+  public Optional<Distance> getDistance()
   {
     return m_distance;
   }
@@ -1173,7 +1173,7 @@ public class BaseSpell extends BaseEntry
     m_castingTime = inValues.use("casting_time", m_castingTime,
                                  NewDuration.PARSER);
     m_range = inValues.use("range", m_range, SpellRange.PARSER);
-    m_distance = inValues.use("distance", m_distance, NewDistance.PARSER);
+    m_distance = inValues.use("distance", m_distance, Distance.PARSER);
     m_effect = inValues.use("effect", m_effect, Effect.PARSER,
                             "distance", "effect", "text");
     m_target = inValues.use("target", m_target);
@@ -1341,14 +1341,14 @@ public class BaseSpell extends BaseEntry
       m_range = SpellRange.fromProto(proto.getSpecialRange());
 
     if(proto.hasRange())
-      m_distance = Optional.of(NewDistance.fromProto(proto.getRange()));
+      m_distance = Optional.of(Distance.fromProto(proto.getRange()));
 
     if(proto.hasEffect())
       m_effect = Optional.of
         (new Effect(proto.getEffect().hasDistance()
-                    ? Optional.of(NewDistance.fromProto
-                                  (proto.getEffect().getDistance()))
-                    : Optional.<NewDistance>absent(),
+                    ? Optional.of(Distance.fromProto
+            (proto.getEffect().getDistance()))
+                    : Optional.<Distance>absent(),
                     proto.getEffect().hasType()
                     ? Optional.of(SpellEffect.fromProto
                                   (proto.getEffect().getType()))

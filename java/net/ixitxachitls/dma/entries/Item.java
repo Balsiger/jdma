@@ -317,9 +317,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedThickness()
+  public Annotated<Optional<Distance>> getCombinedThickness()
   {
-    Annotated.Max<NewDistance> combined = new Annotated.Max<>();
+    Annotated.Max<Distance> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedThickness());
 
@@ -475,9 +475,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedBrightLight()
+  public Annotated<Optional<Distance>> getCombinedBrightLight()
   {
-    Annotated.Max<NewDistance> combined = new Annotated.Max<>();
+    Annotated.Max<Distance> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedBrightLight());
 
@@ -490,9 +490,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedShadowyLight()
+  public Annotated<Optional<Distance>> getCombinedShadowyLight()
   {
-    Annotated.Max<NewDistance> combined = new Annotated.Max<>();
+    Annotated.Max<Distance> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedShadowyLight());
 
@@ -529,9 +529,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedLength()
+  public Annotated<Optional<Distance>> getCombinedLength()
   {
-    Annotated.Arithmetic<NewDistance> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Distance> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedLength());
 
@@ -644,9 +644,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedRange()
+  public Annotated<Optional<Distance>> getCombinedRange()
   {
-    Annotated.Min<NewDistance> combined = new Annotated.Min<>();
+    Annotated.Min<Distance> combined = new Annotated.Min<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedRange());
 
@@ -659,9 +659,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedReach()
+  public Annotated<Optional<Distance>> getCombinedReach()
   {
-    Annotated.Min<NewDistance> combined = new Annotated.Min<>();
+    Annotated.Min<Distance> combined = new Annotated.Min<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedReach());
 
@@ -773,9 +773,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedSlowSpeed()
+  public Annotated<Optional<Distance>> getCombinedSlowSpeed()
   {
-    Annotated.Arithmetic<NewDistance> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Distance> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedSlowSpeed());
 
@@ -787,9 +787,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewDistance>> getCombinedFastSpeed()
+  public Annotated<Optional<Distance>> getCombinedFastSpeed()
   {
-    Annotated.Arithmetic<NewDistance> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Distance> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedFastSpeed());
 
@@ -1152,18 +1152,18 @@ public class Item extends CampaignEntry
     return result;
   }
 
-  public NewDistance getRange()
+  public Distance getRange()
   {
-    NewDistance result = null;
+    Distance result = null;
     for(BaseEntry base : getBaseEntries())
     {
-      Optional<NewDistance> range =
+      Optional<Distance> range =
           ((BaseItem)base).getCombinedRange().get();
       if(range.isPresent())
         if(result == null)
           result = range.get();
         else
-          result = (NewDistance)result.add(range.get());
+          result = (Distance)result.add(range.get());
     }
 
     return result;

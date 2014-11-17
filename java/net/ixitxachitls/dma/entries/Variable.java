@@ -260,68 +260,7 @@ public class Variable extends ValueHandle<Variable>
   }
 
   //........................................................................
-  //---------------------------- setFromString -----------------------------
 
-  /**
-   * Set the value of the variable in a specific entry as a String. This
-   * method does not change the variable itself.
-   *
-   * @param       inEntry  the entry to set the value in
-   * @param       inValue  the value to set to
-   *
-   * @return      the text of the input String that was not used or null if
-   *              all was used
-   *
-   */
-  public @Nullable String setFromString(Changeable inEntry, String inValue)
-  {
-    if(inValue.isEmpty())
-      return inValue;
-
-    String rest;
-    if(inValue.startsWith(Value.UNDEFINED))
-    {
-      Value value = get(inEntry);
-      if(value == null)
-        return inValue;
-
-      set(inEntry, value.create());
-
-      rest = inValue.substring(Value.UNDEFINED.length());
-    }
-    else
-    {
-      // init the reader
-      try (StringReader string = new StringReader(inValue);
-        ParseReader reader  = new ParseReader(string, "set"))
-      {
-        Value<?> value = get(inEntry);
-        if(value == null)
-          return inValue;
-
-        value = value.read(reader);
-
-        if(value == null)
-          return inValue;
-
-        set(inEntry, value);
-
-        // return the part that was not read
-        rest = reader.read(inValue.length());
-      }
-
-      if(rest.isEmpty() || rest.matches("\\s*"))
-        return null;
-    }
-
-    return rest;
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
   //........................................................................
 
   //------------------------------------------------------------------- test
@@ -394,7 +333,7 @@ public class Variable extends ValueHandle<Variable>
         .withEditable(true);
       TestObject test = new TestObject();
 
-      variable.setFromString(test, "guru");
+      //variable.setFromString(test, "guru");
       assertEquals("setting", "guru", variable.get(test).toString());
     }
 
