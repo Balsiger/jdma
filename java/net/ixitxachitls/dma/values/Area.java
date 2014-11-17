@@ -64,19 +64,19 @@ public class Area extends NewValue.Arithmetic<AreaProto>
       if(parts.isEmpty())
         return Optional.absent();
 
-      Optional<NewRational> sqYards= Optional.absent();
-      Optional<NewRational> sqFeet = Optional.absent();
-      Optional<NewRational> sqInches = Optional.absent();
-      Optional<NewRational> sqMeters = Optional.absent();
-      Optional<NewRational> sqDeciMeters = Optional.absent();
-      Optional<NewRational> sqCentiMeters = Optional.absent();
+      Optional<Rational> sqYards= Optional.absent();
+      Optional<Rational> sqFeet = Optional.absent();
+      Optional<Rational> sqInches = Optional.absent();
+      Optional<Rational> sqMeters = Optional.absent();
+      Optional<Rational> sqDeciMeters = Optional.absent();
+      Optional<Rational> sqCentiMeters = Optional.absent();
 
       for(String []part : parts)
       {
         if(part.length != 2)
           return Optional.absent();
 
-        Optional<NewRational> number = NewRational.PARSER.parse(part[0]);
+        Optional<Rational> number = Rational.PARSER.parse(part[0]);
         if(!number.isPresent())
           return Optional.absent();
 
@@ -128,12 +128,12 @@ public class Area extends NewValue.Arithmetic<AreaProto>
   /**
    * Construct the area object with an undefined value.
    */
-  public Area(Optional<NewRational> inSqYards,
-              Optional<NewRational> inSqFeet,
-              Optional<NewRational> inSqInches,
-              Optional<NewRational> inSqMeters,
-              Optional<NewRational> inSqDeciMeters,
-              Optional<NewRational> inSqCentiMeters)
+  public Area(Optional<Rational> inSqYards,
+              Optional<Rational> inSqFeet,
+              Optional<Rational> inSqInches,
+              Optional<Rational> inSqMeters,
+              Optional<Rational> inSqDeciMeters,
+              Optional<Rational> inSqCentiMeters)
   {
     m_sqYards = inSqYards;
     m_sqFeet = inSqFeet;
@@ -143,12 +143,12 @@ public class Area extends NewValue.Arithmetic<AreaProto>
     m_sqCentiMeters = inSqCentiMeters;
   }
 
-  private final Optional<NewRational> m_sqYards;
-  private final Optional<NewRational> m_sqFeet;
-  private final Optional<NewRational> m_sqInches;
-  private final Optional<NewRational> m_sqMeters;
-  private final Optional<NewRational> m_sqDeciMeters;
-  private final Optional<NewRational> m_sqCentiMeters;
+  private final Optional<Rational> m_sqYards;
+  private final Optional<Rational> m_sqFeet;
+  private final Optional<Rational> m_sqInches;
+  private final Optional<Rational> m_sqMeters;
+  private final Optional<Rational> m_sqDeciMeters;
+  private final Optional<Rational> m_sqCentiMeters;
 
   /**
    * Determine if metric values are stored.
@@ -248,38 +248,38 @@ public class Area extends NewValue.Arithmetic<AreaProto>
    */
   public static Area fromProto(AreaProto inProto)
   {
-    Optional<NewRational> sqYards= Optional.absent();
-    Optional<NewRational> sqFeet = Optional.absent();
-    Optional<NewRational> sqInches = Optional.absent();
-    Optional<NewRational> sqMeters = Optional.absent();
-    Optional<NewRational> sqDeciMeters = Optional.absent();
-    Optional<NewRational> sqCentiMeters = Optional.absent();
+    Optional<Rational> sqYards= Optional.absent();
+    Optional<Rational> sqFeet = Optional.absent();
+    Optional<Rational> sqInches = Optional.absent();
+    Optional<Rational> sqMeters = Optional.absent();
+    Optional<Rational> sqDeciMeters = Optional.absent();
+    Optional<Rational> sqCentiMeters = Optional.absent();
 
     if(inProto.hasMetric())
     {
       if(inProto.getMetric().hasSquareMeters())
-        sqMeters = Optional.of(NewRational.fromProto
-                               (inProto.getMetric().getSquareMeters()));
+        sqMeters = Optional.of(Rational.fromProto
+            (inProto.getMetric().getSquareMeters()));
       if(inProto.getMetric().hasSquareDecimeters())
-        sqDeciMeters = Optional.of(NewRational.fromProto
-                                   (inProto.getMetric().getSquareDecimeters()));
+        sqDeciMeters = Optional.of(Rational.fromProto
+            (inProto.getMetric().getSquareDecimeters()));
       if(inProto.getMetric().hasSquareCentimeters())
         sqCentiMeters =
-          Optional.of(NewRational.fromProto
-                      (inProto.getMetric().getSquareCentimeters()));
+          Optional.of(Rational.fromProto
+              (inProto.getMetric().getSquareCentimeters()));
     }
 
     if(inProto.hasImperial())
     {
       if(inProto.getImperial().hasSquareYards())
-        sqYards = Optional.of(NewRational.fromProto
-                              (inProto.getImperial().getSquareYards()));
+        sqYards = Optional.of(Rational.fromProto
+            (inProto.getImperial().getSquareYards()));
       if(inProto.getImperial().hasSquareFeet())
-        sqFeet= Optional.of(NewRational.fromProto
-                            (inProto.getImperial().getSquareFeet()));
+        sqFeet= Optional.of(Rational.fromProto
+            (inProto.getImperial().getSquareFeet()));
       if(inProto.getImperial().hasSquareInches())
-        sqInches = Optional.of(NewRational.fromProto
-                              (inProto.getImperial().getSquareInches()));
+        sqInches = Optional.of(Rational.fromProto
+            (inProto.getImperial().getSquareInches()));
     }
 
     return new Area(sqYards, sqFeet, sqInches,
@@ -328,12 +328,12 @@ public class Area extends NewValue.Arithmetic<AreaProto>
     @org.junit.Test
     public void init()
     {
-      Area value = new Area(Optional.<NewRational>absent(),
-                            Optional.<NewRational>absent(),
-                            Optional.<NewRational>absent(),
-                            Optional.<NewRational>absent(),
-                            Optional.<NewRational>absent(),
-                            Optional.<NewRational>absent());
+      Area value = new Area(Optional.<Rational>absent(),
+                            Optional.<Rational>absent(),
+                            Optional.<Rational>absent(),
+                            Optional.<Rational>absent(),
+                            Optional.<Rational>absent(),
+                            Optional.<Rational>absent());
 
       // undefined value
       assertEquals("undefined value not correct", "0 sq ft", value.toString());
@@ -341,23 +341,23 @@ public class Area extends NewValue.Arithmetic<AreaProto>
       assertEquals("metric", false, value.isMetric());
 
       // now with some value (sq cm)
-      value = new Area(Optional.<NewRational>absent(),
-                       Optional.<NewRational>absent(),
-                       Optional.<NewRational>absent(),
-                       Optional.<NewRational>absent(),
-                       Optional.<NewRational>absent(),
-                       Optional.of(new NewRational(1, 1, 2)));
+      value = new Area(Optional.<Rational>absent(),
+                       Optional.<Rational>absent(),
+                       Optional.<Rational>absent(),
+                       Optional.<Rational>absent(),
+                       Optional.<Rational>absent(),
+                       Optional.of(new Rational(1, 1, 2)));
 
       assertEquals("string ", "1 1/2 sq cm", value.toString());
       assertEquals("feet",   false,  value.isFeet());
       assertEquals("metric", true,   value.isMetric());
 
-       value = new Area(Optional.<NewRational>absent(),
-                        Optional.of(new NewRational(1, 2, 3)),
-                        Optional.of(new NewRational(2, 0, 0)),
-                        Optional.<NewRational>absent(),
-                        Optional.<NewRational>absent(),
-                        Optional.<NewRational>absent());
+       value = new Area(Optional.<Rational>absent(),
+                        Optional.of(new Rational(1, 2, 3)),
+                        Optional.of(new Rational(2, 0, 0)),
+                        Optional.<Rational>absent(),
+                        Optional.<Rational>absent(),
+                        Optional.<Rational>absent());
 
        assertEquals("string", "1 2/3 sq ft 2 sq in", value.toString());
        assertEquals("feet",   true,  value.isFeet());

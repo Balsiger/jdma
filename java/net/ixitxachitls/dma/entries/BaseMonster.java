@@ -44,7 +44,7 @@ import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.NewRange;
-import net.ixitxachitls.dma.values.NewRational;
+import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Size;
 import net.ixitxachitls.dma.values.SizeModifier;
@@ -396,7 +396,7 @@ public class BaseMonster extends BaseEntry
   protected List<Group> m_organizations = new ArrayList<>();
 
   /** The monsters challenge rating. */
-  protected Optional<NewRational> m_cr = Optional.absent();
+  protected Optional<Rational> m_cr = Optional.absent();
 
   /** The monster's possible treasure. */
   protected Treasure m_treasure = Treasure.UNKNOWN;
@@ -926,17 +926,17 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
-  public Optional<NewRational> getCr()
+  public Optional<Rational> getCr()
   {
     return m_cr;
   }
 
-  public Annotated<Optional<NewRational>> getCombinedCr()
+  public Annotated<Optional<Rational>> getCombinedCr()
   {
     if(m_cr.isPresent())
-      return new Annotated.Arithmetic<NewRational>(m_cr.get(), getName());
+      return new Annotated.Arithmetic<Rational>(m_cr.get(), getName());
 
-    Annotated<Optional<NewRational>> combined = new Annotated.Arithmetic<>();
+    Annotated<Optional<Rational>> combined = new Annotated.Arithmetic<>();
     for(BaseEntry base : getBaseEntries())
       combined.add(((BaseMonster)base).getCombinedCr());
 
@@ -2854,7 +2854,7 @@ public class BaseMonster extends BaseEntry
     m_feats = inValues.use("feats", m_feats);
     m_terrain = inValues.use("terrain", m_terrain, Terrain.PARSER);
     m_climate = inValues.use("climate", m_climate, Climate.PARSER);
-    m_cr = inValues.use("cr", m_cr, NewRational.PARSER);
+    m_cr = inValues.use("cr", m_cr, Rational.PARSER);
     m_organizations = inValues.use("organization", m_organizations, Group.PARSER,
                                    "organization", "number", "plus");
     m_treasure = inValues.use("treasure", m_treasure, Treasure.PARSER);
@@ -3186,7 +3186,7 @@ public class BaseMonster extends BaseEntry
     }
 
     if(proto.hasChallengeRating())
-      m_cr = Optional.of(NewRational.fromProto(proto.getChallengeRating()));
+      m_cr = Optional.of(Rational.fromProto(proto.getChallengeRating()));
 
     if(proto.hasTreasure())
       m_treasure = Treasure.fromProto(proto.getTreasure());

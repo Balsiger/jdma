@@ -33,43 +33,43 @@ import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
 public enum Size implements EnumSelection.Named, EnumSelection.Short
 {
   /** This is an unknown size. */
-  UNKNOWN("Unknown", "U", 0, 0, NewRational.ZERO, 0, 0, 0,
+  UNKNOWN("Unknown", "U", 0, 0, Rational.ZERO, 0, 0, 0,
           BaseItemProto.Size.UNKNOWN_SIZE),
 
   /** The smallest size. */
-  FINE("Fine", "F", 0, 0, new NewRational(0, 1, 2), 0, 8, -16,
+  FINE("Fine", "F", 0, 0, new Rational(0, 1, 2), 0, 8, -16,
        BaseItemProto.Size.FINE),
 
   /** A very small size. */
-  DIMINUTIVE("Diminutive", "D", 0, 0, NewRational.ONE, 0, 4, -12,
+  DIMINUTIVE("Diminutive", "D", 0, 0, Rational.ONE, 0, 4, -12,
              BaseItemProto.Size.DIMINUTIVE),
 
   /** Smaller than small. */
-  TINY("Tiny", "T", 0, 0, new NewRational(2, 1, 2), 0, 2, -8,
+  TINY("Tiny", "T", 0, 0, new Rational(2, 1, 2), 0, 2, -8,
        BaseItemProto.Size.TINY),
 
   /** Just small. */
-  SMALL("Small", "S", 0, 5, NewRational.FIVE, 10, 1, -4,
+  SMALL("Small", "S", 0, 5, Rational.FIVE, 10, 1, -4,
         BaseItemProto.Size.SMALL),
 
   /** This is the medium size. */
-  MEDIUM("Medium-size", "M", 5, 5, NewRational.FIVE, 20, 0, 0,
+  MEDIUM("Medium-size", "M", 5, 5, Rational.FIVE, 20, 0, 0,
          BaseItemProto.Size.MEDIUM),
 
   /** Simply large. */
-  LARGE("Large", "L", 5, 10, NewRational.TEN, 30, -1, 4,
+  LARGE("Large", "L", 5, 10, Rational.TEN, 30, -1, 4,
         BaseItemProto.Size.LARGE),
 
   /** Larger than large. */
-  HUGE("Huge", "H", 10, 15, NewRational.FIFTEEN, 40, -2, 8,
+  HUGE("Huge", "H", 10, 15, Rational.FIFTEEN, 40, -2, 8,
        BaseItemProto.Size.HUGE),
 
   /** Really large. */
-  GARGANTUAN("Gargantuan", "G", 15, 20, NewRational.TWENTY, 60, -4, 12,
+  GARGANTUAN("Gargantuan", "G", 15, 20, Rational.TWENTY, 60, -4, 12,
              BaseItemProto.Size.GARGANTUAN),
 
   /** This is the biggest size. */
-  COLOSSAL("Colossal", "C", 20, 30, NewRational.THIRTY, 80, -8, 16,
+  COLOSSAL("Colossal", "C", 20, 30, Rational.THIRTY, 80, -8, 16,
            BaseItemProto.Size.COLOSSAL);
 
   /** The value's name. */
@@ -85,7 +85,7 @@ public enum Size implements EnumSelection.Named, EnumSelection.Short
   private int m_reachTall;
 
   /** The space required for this size. */
-  private NewRational m_space;
+  private Rational m_space;
 
   /** The bonus hit points for a construct of this size. */
   private int m_construct;
@@ -124,7 +124,7 @@ public enum Size implements EnumSelection.Named, EnumSelection.Short
    * @param inProto     the proto enum value
    */
   private Size(String inName, String inShort, int inReachLong,
-               int inReachTall, NewRational inSpace, int inConstruct, int inModifier,
+               int inReachTall, Rational inSpace, int inConstruct, int inModifier,
                int inGrapple, BaseItemProto.Size inProto)
   {
     m_name      = inName;
@@ -249,7 +249,7 @@ public enum Size implements EnumSelection.Named, EnumSelection.Short
    *
    * @return the space in feet
    */
-  public NewRational space()
+  public Rational space()
   {
     return m_space;
   }

@@ -22,8 +22,6 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.common.base.Optional;
 import com.google.protobuf.Message;
 
@@ -183,23 +181,23 @@ public abstract class NewValue<T extends Message>
     return toString();
   }
 
-  protected static Optional<NewRational> add(Optional<NewRational> inFirst,
-                                             Optional<NewRational> inSecond)
+  protected static Optional<Rational> add(Optional<Rational> inFirst,
+                                             Optional<Rational> inSecond)
   {
     if(!inFirst.isPresent())
       return inSecond;
     if(!inSecond.isPresent())
       return inFirst;
 
-    return Optional.of((NewRational)inFirst.get().add(inSecond.get()));
+    return Optional.of((Rational)inFirst.get().add(inSecond.get()));
   }
 
-  protected static Optional<NewRational> multiply(Optional<NewRational> inValue,
+  protected static Optional<Rational> multiply(Optional<Rational> inValue,
                                                   int inFactor)
   {
     if(!inValue.isPresent())
       return inValue;
 
-    return Optional.of((NewRational)inValue.get().multiply(inFactor));
+    return Optional.of((Rational)inValue.get().multiply(inFactor));
   }
 }

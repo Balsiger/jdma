@@ -54,6 +54,7 @@ import net.ixitxachitls.dma.values.Area;
 import net.ixitxachitls.dma.values.AreaShape;
 import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.CountUnit;
+import net.ixitxachitls.dma.values.Critical;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Duration;
@@ -61,7 +62,6 @@ import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.ModifierType;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.NamedModifier;
-import net.ixitxachitls.dma.values.NewCritical;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.Probability;
@@ -189,7 +189,7 @@ public class BaseItem extends BaseEntry
   protected WeaponType m_weaponType = WeaponType.UNKNOWN;
 
   /** The critical range. */
-  protected Optional<NewCritical> m_critical = Optional.absent();
+  protected Optional<Critical> m_critical = Optional.absent();
 
   /** The style of the weapon (for a medium character). */
   protected WeaponStyle m_style = WeaponStyle.UNKNOWN;
@@ -1260,7 +1260,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the critical value
    */
-  public Optional<NewCritical> getCritical()
+  public Optional<Critical> getCritical()
   {
     return m_critical;
   }
@@ -1271,12 +1271,12 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewCritical>> getCombinedCritical()
+  public Annotated<Optional<Critical>> getCombinedCritical()
   {
     if(m_critical.isPresent())
-      return new Annotated.Arithmetic<NewCritical>(m_critical.get(), getName());
+      return new Annotated.Arithmetic<Critical>(m_critical.get(), getName());
 
-    Annotated.Arithmetic<NewCritical> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Critical> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedCritical());
 
@@ -2113,7 +2113,7 @@ public class BaseItem extends BaseEntry
                                      m_secondaryDamage, Damage.PARSER);
     m_splash = inValues.use("weapon.damage.splash", m_splash, Damage.PARSER);
     m_critical = inValues.use("weapon.damage.critical", m_critical,
-                              NewCritical.PARSER);
+                              Critical.PARSER);
     m_weaponType = inValues.use("weapon.type", m_weaponType, WeaponType.PARSER);
     m_style = inValues.use("weapon.style", m_style, WeaponStyle.PARSER);
     m_proficiency = inValues.use("weapon.proficiency", m_proficiency,
@@ -2236,7 +2236,7 @@ public class BaseItem extends BaseEntry
         m_weaponType = WeaponType.fromProto(weaponProto.getType());
       if(weaponProto.hasCritical())
         m_critical =
-        Optional.of(NewCritical.fromProto(weaponProto.getCritical()));
+        Optional.of(Critical.fromProto(weaponProto.getCritical()));
       if(weaponProto.hasStyle())
         m_style = WeaponStyle.fromProto(weaponProto.getStyle());
       if(weaponProto.hasProficiency())

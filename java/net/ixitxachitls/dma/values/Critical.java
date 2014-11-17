@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2013 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -19,360 +19,143 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.annotation.concurrent.Immutable;
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Values.CriticalProto;
-import net.ixitxachitls.input.ParseReader;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
+import net.ixitxachitls.dma.proto.Values.RangeProto;
+import net.ixitxachitls.util.Strings;
 
 /**
- * This class stores a critical and is capable of reading such criticals
- * from a reader (and write it to a writer of course).
+ * A critical descriptor for a weapon.
  *
- * @file          Critical.java
- *
- * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
+ * @file   NewCritical.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
-@Immutable
-@ParametersAreNonnullByDefault
-public class Critical extends BaseNumber<Critical>
+public class Critical extends NewValue.Arithmetic<CriticalProto>
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------- Critical -------------------------------
-
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
-
-  /**
-   * Construct the critical object using real values.
-   *
-   * @param       inLow        the low threat value
-   * @param       inHigh       the high threat value
-   * @param       inMultiplier the critical multiplier
-   *
-   */
-  public Critical(long inLow, long inHigh, long inMultiplier)
+  public static final Parser<Critical> PARSER = new Parser<Critical>(1)
   {
-    super(inMultiplier, 1, 5);
+    @Override
+    protected Optional<Critical> doParse(String inValue)
+    {
+      if(inValue.trim().isEmpty())
+        return Optional.absent();
 
-    m_threat = new Range(inLow, inHigh, 10, 20);
+      if("none".equalsIgnoreCase(inValue.trim()))
+        return Optional.of(new Critical(1, 20));
+
+      String []parts =
+        Strings.getPatterns(inValue,
+                            "^(?:\\s*(?:(\\d+)?\\s*-)?\\s*(\\d+)\\s*/\\s*)?"
+                            + "(?:\\s*x\\s*(\\d+))?\\s*$");
+      if(parts == null || parts.length == 0)
+        return Optional.absent();
+
+      try
+      {
+        int multiplier = 1;
+        int threatLow = 20;
+        if(parts[0] != null && parts[1] != null)
+        {
+          threatLow = Integer.parseInt(parts[0]);
+        }
+
+        if(parts[2] != null)
+          multiplier = Integer.parseInt(parts[2]);
+
+        return Optional.of(new Critical(multiplier, threatLow));
+      }
+      catch(NumberFormatException e)
+      {
+        return Optional.absent();
+      }
+    }
+  };
+
+  public Critical(int inMultiplier, int inLowThreat)
+  {
+    m_multiplier = inMultiplier;
+    m_threatLow = inLowThreat;
   }
 
-  //........................................................................
-  //------------------------------- Critical -------------------------------
+  private final int m_multiplier;
+  private final int m_threatLow;
 
-  /**
-   * Construct the critical object using real values.
-   *
-   * @param       inMultiplier the critical multiplier only
-   *
-   */
-  public Critical(long inMultiplier)
+  public int getMultiplier()
   {
-    super(inMultiplier, 1, 5);
-
-    m_threat = new Range(10, 20);
+    return m_multiplier;
   }
 
-  //........................................................................
-  //------------------------------- Critical -------------------------------
-
-  /**
-   * Construct the critical object using real values.
-   *
-   */
-  public Critical()
+  public int getLowThreat()
   {
-    super(1, 5);
-
-    m_threat = new Range(10, 20);
+    return m_threatLow;
   }
 
-  //........................................................................
-
-  //-------------------------------- create --------------------------------
-
-  /**
-   * Create a new list with the same type information as this one, but one
-   * that is still undefined.
-   *
-   * @return      a similar list, but without any contents
-   *
-   */
   @Override
-  public Critical create()
+  public String toString()
   {
-    return super.create(new Critical());
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  /** The threat range value. */
-  protected Range m_threat;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //---------------------------- getThreatRange ----------------------------
-
-  /**
-   * Get the threat range of the critical.
-   *
-   * @return      the threat range
-   *
-   */
-  public Range getThreatRange()
-  {
-    return m_threat;
-  }
-
-  //........................................................................
-  //---------------------------- getMultiplier -----------------------------
-
-  /**
-   * Get the multiplication value.
-   *
-   * @return      the multiplier for the critical damage
-   *
-   */
-  public long getMultiplier()
-  {
-    return get();
-  }
-
-  //........................................................................
-
-  //------------------------------ doToString ------------------------------
-
-  /**
-   * Convert the value to a string, depending on the given kind.
-   *
-   * @return      a String representation, depending on the kind given
-   *
-   */
-  @Override
-  protected String doToString()
-  {
-    if(m_number == 1)
+    if(m_multiplier == 1)
       return "None";
 
-    StringBuilder result = new StringBuilder();
+    if(m_threatLow != 20)
+      return m_threatLow + "-20" + "/x" + m_multiplier;
 
-    if(m_threat.isDefined())
-    {
-      result.append(m_threat.toString());
-      result.append('/');
-    }
-
-    result.append("x" + super.doToString());
-
-    return result.toString();
+    return "x" + m_multiplier;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //--------------------------------- add ----------------------------------
-
-  /**
-   * Add the given and current values.
-   *
-   * @param       inValue the value to add to this one
-   *
-   * @return      the addition of both values
-   *
-   */
   @Override
-  public Critical add(Critical inValue)
-  {
-    return super.add(inValue);
-  }
-
-  //........................................................................
-  //------------------------------- multiply -------------------------------
-
-  /**
-   * Multiply the number.
-   *
-   * @param       inValue the multiplication factor
-   *
-   * @return      true if multiplied, false if not
-   *
-   */
-  // public boolean multiply(long inValue)
-  // {
-  //   if(!m_defined)
-  //     return false;
-
-  //   m_stored  = true;
-
-  //   long start = m_threat.getStart();
-  //   long end   = m_threat.getEnd();
-
-  //   m_threat.set(end - ((end - start) * inValue), end);
-
-  //   check();
-
-  //   return true;
-  // }
-
-  //........................................................................
-  //------------------------------- multiply -------------------------------
-
-  /**
-   * Multiply the value with the given value.
-   *
-   * @param       inValue the multiplication factor
-   *
-   * @return      true if multiplied, false if not
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean multiply(@MayBeNull Rational inValue)
-  // {
-  //   if(inValue == null)
-  //     return false;
-
-  //   if(!m_defined)
-  //     return false;
-
-  //   m_stored  = true;
-  //   m_stored  = true;
-
-  //   long start = m_threat.getStart();
-  //   long end   = m_threat.getEnd();
-
-  //   m_threat.set((long)(end - ((end - start) * inValue.getValue())), end);
-
-  //   return true;
-  // }
-
-  //........................................................................
-  //-------------------------------- divide --------------------------------
-
-  /**
-   * Divide the dice. This decreases the dice type to the corresponding
-   * dice, as shown in the Player's Handbook p. 116 and 114.
-   *
-   * @param       inValue the division factor
-   *
-   * @return      true if divided, false if not
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean divide(long inValue)
-  // {
-  //   if(!m_defined)
-  //     return false;
-
-  //   m_stored = true;
-  //   long start = m_threat.getStart();
-  //   long end   = m_threat.getEnd();
-
-  //   m_threat.set(end - ((end - start) / inValue), end);
-
-  //   check();
-
-  //   return true;
-  // }
-
-  //........................................................................
-
-  //------------------------------- doRead ---------------------------------
-
-  /**
-   * Read the value from the reader and replace the current one.
-   *
-   * @param       inReader the reader to read from
-   *
-   * @return      true if read, false if not
-   *
-   */
-  @Override
-  protected boolean doRead(ParseReader inReader)
-  {
-    if(inReader.expect("none"))
-    {
-      m_number = 1;
-      m_threat = m_threat.as(20, 20);
-
-      return true;
-    }
-
-    if(m_threat.doRead(inReader))
-      if(!inReader.expect("/"))
-        return false;
-
-    if(!inReader.expect('x'))
-      return false;
-
-    return super.doRead(inReader);
-  }
-
-  //........................................................................
-  //------------------------------- doubled --------------------------------
-
-  /**
-   * Double the thread range for the crictical.
-   *
-   * @return  a new cricitcal with doubled thread range
-   *
-   */
-  public Critical doubled()
-  {
-    Critical doubled = create();
-    doubled.m_threat = m_threat.as(2 * m_threat.getStart() - m_threat.getEnd(),
-                                   m_threat.getEnd());
-
-    return doubled;
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  /**
-   * Create a proto representation of the value.
-   *
-   * @return the proto
-   */
   public CriticalProto toProto()
   {
     CriticalProto.Builder builder = CriticalProto.newBuilder();
+    if(m_threatLow != 20)
+      builder.setThreat(RangeProto.newBuilder()
+                        .setLow(m_threatLow)
+                        .build());
 
-    if(m_threat.isDefined())
-      builder.setThreat(m_threat.toProto());
-    if(get() > 0)
-      builder.setMultiplier((int)m_number);
+    builder.setMultiplier(m_multiplier);
 
     return builder.build();
+  }
+
+  @Override
+  public NewValue.Arithmetic<CriticalProto>
+    add(NewValue.Arithmetic<CriticalProto> inValue)
+  {
+    if(!(inValue instanceof Critical))
+      return this;
+
+    Critical value = (Critical)inValue;
+
+    if(value.m_threatLow == 2 && value.m_multiplier == 1)
+      return doubled();
+
+    if(m_threatLow == 2 && value.m_multiplier == 1)
+      return value.doubled();
+
+    if(m_threatLow == value.m_threatLow && m_multiplier == value.m_multiplier)
+      return this;
+
+    return new Critical(Math.max(m_multiplier, value.m_multiplier),
+                           Math.min(m_threatLow, value.m_threatLow));
+  }
+
+  @Override
+  public NewValue.Arithmetic<CriticalProto> multiply(int inFactor)
+  {
+    if(inFactor >= 2)
+      return doubled();
+
+    return this;
+  }
+
+  public Critical doubled()
+  {
+    int threatLow = 2 * m_threatLow - 20;
+    return new Critical(m_multiplier, threatLow);
   }
 
   /**
@@ -381,134 +164,50 @@ public class Critical extends BaseNumber<Critical>
    * @param inProto the proto to read the values from
    * @return the newly created critical
    */
-  public Critical fromProto(CriticalProto inProto)
+  public static Critical fromProto(CriticalProto inProto)
   {
-    Critical result = create();
+    int threatLow = 20;
 
     if(inProto.hasThreat())
     {
-      result.m_threat = result.m_threat.fromProto(inProto.getThreat());
-      result.m_defined = true;
-    }
-    if(inProto.hasMultiplier())
-    {
-      result.m_number = inProto.getMultiplier();
-      result.m_defined = true;
+      threatLow = (int)inProto.getThreat().getLow();
     }
 
-    return result;
+    int multiplier = 1;
+    if(inProto.hasMultiplier())
+      multiplier = inProto.getMultiplier();
+
+    return new Critical(multiplier, threatLow);
   }
 
-  //........................................................................
+  @Override
+  public boolean canAdd(NewValue.Arithmetic<CriticalProto> inValue)
+  {
+    return inValue instanceof Critical;
+  }
 
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- init -----------------------------------------------------------
-
     /** Testing init. */
     @org.junit.Test
-    public void init()
+    public void parse()
     {
-      Critical critical = new Critical();
-
-      // undefined value
-      assertEquals("not undefined at start", false, critical.isDefined());
-      assertEquals("undefined value not correct", "$undefined$",
-                   critical.toString());
-
-      // now with some critical
-      critical = new Critical(19, 20, 3);
-
-      assertEquals("not defined after setting", true, critical.isDefined());
-      assertEquals("value not correctly converted", "19-20/x3",
-                   critical.toString());
-
-      // less values
-      critical = new Critical(20, 20, 4);
-
-      assertEquals("not defined after setting", true, critical.isDefined());
-      assertEquals("value not correctly converted", "20/x4",
-                   critical.toString());
-
-      assertEquals("multiplier", 4, critical.getMultiplier());
-      assertEquals("threat range", "20", critical.getThreatRange().toString());
-
-      // even less values
-      critical = new Critical(2);
-
-      assertEquals("not defined after setting", true, critical.isDefined());
-      assertEquals("value not correctly converted", "x2",
-                   critical.toString());
-
-      Value.Test.createTest(critical);
+      assertEquals("parse", "None", PARSER.parse(" none  ").get().toString());
+      assertEquals("parse", "x3", PARSER.parse(" x 3  ").get().toString());
+      assertEquals("parse", "x3", PARSER.parse(" 20/x3  ").get().toString());
+      assertEquals("parse", "19-20/x2",
+                   PARSER.parse(" 19 - 20 / x 2 ").get().toString());
+      assertEquals("parse", "12-19/x5",
+                   PARSER.parse("12-19/x5").get().toString());
+      assertFalse("parse", PARSER.parse("/").isPresent());
+      assertFalse("parse", PARSER.parse("").isPresent());
+      assertFalse("parse", PARSER.parse("12").isPresent());
+      assertFalse("parse", PARSER.parse("x").isPresent());
+      assertFalse("parse", PARSER.parse("19-20 x3").isPresent());
+      assertFalse("parse", PARSER.parse("19 - x 4").isPresent());
     }
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** Testing read. */
-    @org.junit.Test
-    public void read()
-    {
-      String []tests =
-        {
-          "simple", "19-20/x2", "19-20/x2",  null,
-          "whites", "\n   19   -\n 20 /   x\n 2 ", "19-20/x2", " ",
-          "single", "20/x3", "20/x3",  null,
-          "multiplier", "x5", "x5",  null,
-          "invalid", "a", null, "a",
-          "empty", "", null, null,
-          "delimiter 1", "19-20x2", null, "19-20x2",
-          "delimiter 2", "19-20/2", null, "19-20/2",
-          "too high", "19-21/x3", null, "19-21/x3",
-          "too high", "18-17/x3", null, "18-17/x3",
-          "too high", "x6", null, "x6",
-          "too high", "19-20/x6", null, "19-20/x6",
-          "too high", "22/x5", null, "22/x5",
-          "too low", "5-7/x3", null, "5-7/x3",
-          "too low", "5-17/x3", null, "5-17/x3",
-          "none", "15-17/x1", "None", null,
-          "too low", "-5-17/x2", null, "-5-17/x2",
-          "none 2", "x1", "None", null,
-          "too low", "x-1", null, "x-1",
-        };
-
-      m_logger.addExpectedPattern("WARNING:.*\\(maximal 20\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.19->>>21/x3\\.\\.\\.");
-      m_logger.addExpectedPattern("WARNING:.*\\(minimal 18\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.18->>>17/x3\\.\\.\\.");
-      m_logger.addExpectedPattern("WARNING:.*\\(maximal 5\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.x>>>6\\.\\.\\.");
-      m_logger.addExpectedPattern("WARNING:.*\\(maximal 5\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.19-20/x>>>6\\.\\.\\.");
-      m_logger.addExpectedPattern("WARNING:.*\\(maximal 20\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.>>>22/x5\\.\\.\\.");
-      m_logger.addExpectedPattern("WARNING:.*\\(minimal 10\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.>>>5-7/x3\\.\\.\\.");
-      m_logger.addExpectedPattern("WARNING:.*\\(minimal 10\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.>>>5-17/x3\\.\\.\\.");
-      m_logger.addExpectedPattern("WARNING:.*\\(minimal 10\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.>>>-5-17/x2\\.\\.\\.");
-      m_logger.addExpectedPattern("WARNING:.*\\(minimal 1\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.x>>>-1\\.\\.\\.");
-
-      Value.Test.readTest(tests, new Critical());
-    }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

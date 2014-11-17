@@ -689,9 +689,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewCritical>> getCombinedCritical()
+  public Annotated<Optional<Critical>> getCombinedCritical()
   {
-    Annotated.Arithmetic<NewCritical> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Critical> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedCritical());
 
@@ -1135,18 +1135,18 @@ public class Item extends CampaignEntry
     return damage;
   }
 
-  public NewCritical getCritical()
+  public Critical getCritical()
   {
-    NewCritical result = null;
+    Critical result = null;
     for(BaseEntry base : getBaseEntries())
     {
-      Optional<NewCritical> critical =
+      Optional<Critical> critical =
           ((BaseItem)base).getCombinedCritical().get();
       if (critical.isPresent())
         if(result == null)
           result = critical.get();
         else
-          result = (NewCritical)result.add(critical.get());
+          result = (Critical)result.add(critical.get());
     }
 
     return result;

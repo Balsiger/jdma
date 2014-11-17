@@ -51,9 +51,9 @@ public class Distance extends NewValue.Arithmetic<DistanceProto>
     @Override
     public Optional<Distance> doParse(String inValue)
     {
-      Optional<NewRational> miles = Optional.absent();
-      Optional<NewRational> feet = Optional.absent();
-      Optional<NewRational> inches = Optional.absent();
+      Optional<Rational> miles = Optional.absent();
+      Optional<Rational> feet = Optional.absent();
+      Optional<Rational> inches = Optional.absent();
 
       List<String []> parts =
         Strings.getAllPatterns(inValue,
@@ -69,7 +69,7 @@ public class Distance extends NewValue.Arithmetic<DistanceProto>
         if(part.length != 2)
           return Optional.absent();
 
-        Optional<NewRational> number = NewRational.PARSER.parse(part[0]);
+        Optional<Rational> number = Rational.PARSER.parse(part[0]);
         if(!number.isPresent())
           return Optional.absent();
 
@@ -99,9 +99,9 @@ public class Distance extends NewValue.Arithmetic<DistanceProto>
     }
   }
 
-  public Distance(Optional<NewRational> inMiles,
-                  Optional<NewRational> inFeet,
-                  Optional<NewRational> inInches)
+  public Distance(Optional<Rational> inMiles,
+                  Optional<Rational> inFeet,
+                  Optional<Rational> inInches)
   {
     m_miles = inMiles;
     m_feet = inFeet;
@@ -110,9 +110,9 @@ public class Distance extends NewValue.Arithmetic<DistanceProto>
 
   public static Parser<Distance> PARSER = new DistanceParser();
 
-  private final Optional<NewRational> m_miles;
-  private final Optional<NewRational> m_feet;
-  private final Optional<NewRational> m_inches;
+  private final Optional<Rational> m_miles;
+  private final Optional<Rational> m_feet;
+  private final Optional<Rational> m_inches;
 
   public double asMiles()
   {
@@ -234,19 +234,19 @@ public class Distance extends NewValue.Arithmetic<DistanceProto>
     if(!inProto.hasImperial())
       throw new IllegalArgumentException("expected an imperial distance");
 
-    Optional<NewRational> miles = Optional.absent();
-    Optional<NewRational> feet = Optional.absent();
-    Optional<NewRational> inches = Optional.absent();
+    Optional<Rational> miles = Optional.absent();
+    Optional<Rational> feet = Optional.absent();
+    Optional<Rational> inches = Optional.absent();
 
     if(inProto.getImperial().hasMiles())
       miles =
-        Optional.of(NewRational.fromProto(inProto.getImperial().getMiles()));
+        Optional.of(Rational.fromProto(inProto.getImperial().getMiles()));
     if(inProto.getImperial().hasFeet())
       feet =
-        Optional.of(NewRational.fromProto(inProto.getImperial().getFeet()));
+        Optional.of(Rational.fromProto(inProto.getImperial().getFeet()));
     if(inProto.getImperial().hasInches())
       inches =
-        Optional.of(NewRational.fromProto(inProto.getImperial().getInches()));
+        Optional.of(Rational.fromProto(inProto.getImperial().getInches()));
 
     return new Distance(miles, feet, inches);
   }

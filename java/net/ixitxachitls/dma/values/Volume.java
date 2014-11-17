@@ -70,25 +70,25 @@ public class Volume extends NewValue.Arithmetic<VolumeProto>
       if(parts.isEmpty())
         return Optional.absent();
 
-      Optional<NewRational> feet = Optional.absent();
-      Optional<NewRational> inches = Optional.absent();
-      Optional<NewRational> meters = Optional.absent();
-      Optional<NewRational> decimeters = Optional.absent();
-      Optional<NewRational> centimeters = Optional.absent();
-      Optional<NewRational> gallons = Optional.absent();
-      Optional<NewRational> quarts = Optional.absent();
-      Optional<NewRational> pints = Optional.absent();
-      Optional<NewRational> cups = Optional.absent();
-      Optional<NewRational> liters = Optional.absent();
-      Optional<NewRational> deciliters = Optional.absent();
-      Optional<NewRational> centiliters = Optional.absent();
+      Optional<Rational> feet = Optional.absent();
+      Optional<Rational> inches = Optional.absent();
+      Optional<Rational> meters = Optional.absent();
+      Optional<Rational> decimeters = Optional.absent();
+      Optional<Rational> centimeters = Optional.absent();
+      Optional<Rational> gallons = Optional.absent();
+      Optional<Rational> quarts = Optional.absent();
+      Optional<Rational> pints = Optional.absent();
+      Optional<Rational> cups = Optional.absent();
+      Optional<Rational> liters = Optional.absent();
+      Optional<Rational> deciliters = Optional.absent();
+      Optional<Rational> centiliters = Optional.absent();
 
       for(String []part : parts)
       {
         if(part.length != 2)
           return Optional.absent();
 
-        Optional<NewRational> number = NewRational.PARSER.parse(part[0]);
+        Optional<Rational> number = Rational.PARSER.parse(part[0]);
         if(!number.isPresent())
           return Optional.absent();
 
@@ -171,18 +171,18 @@ public class Volume extends NewValue.Arithmetic<VolumeProto>
   /**
    * Construct the volume object with an undefined value.
    */
-  public Volume(Optional<NewRational> inFeet,
-                Optional<NewRational> inInches,
-                Optional<NewRational> inMeters,
-                Optional<NewRational> inDecimeters,
-                Optional<NewRational> inCentimeters,
-                Optional<NewRational> inGallons,
-                Optional<NewRational> inQuarts,
-                Optional<NewRational> inPints,
-                Optional<NewRational> inCups,
-                Optional<NewRational> inLiters,
-                Optional<NewRational> inDeciliters,
-                Optional<NewRational> inCentiliters)
+  public Volume(Optional<Rational> inFeet,
+                Optional<Rational> inInches,
+                Optional<Rational> inMeters,
+                Optional<Rational> inDecimeters,
+                Optional<Rational> inCentimeters,
+                Optional<Rational> inGallons,
+                Optional<Rational> inQuarts,
+                Optional<Rational> inPints,
+                Optional<Rational> inCups,
+                Optional<Rational> inLiters,
+                Optional<Rational> inDeciliters,
+                Optional<Rational> inCentiliters)
   {
     m_feet = inFeet;
     m_inches = inInches;
@@ -198,18 +198,18 @@ public class Volume extends NewValue.Arithmetic<VolumeProto>
     m_centiliters = inCentiliters;
   }
 
-  private final Optional<NewRational> m_feet;
-  private final Optional<NewRational> m_inches;
-  private final Optional<NewRational> m_meters;
-  private final Optional<NewRational> m_decimeters;
-  private final Optional<NewRational> m_centimeters;
-  private final Optional<NewRational> m_gallons;
-  private final Optional<NewRational> m_quarts;
-  private final Optional<NewRational> m_pints;
-  private final Optional<NewRational> m_cups;
-  private final Optional<NewRational> m_liters;
-  private final Optional<NewRational> m_deciliters;
-  private final Optional<NewRational> m_centiliters;
+  private final Optional<Rational> m_feet;
+  private final Optional<Rational> m_inches;
+  private final Optional<Rational> m_meters;
+  private final Optional<Rational> m_decimeters;
+  private final Optional<Rational> m_centimeters;
+  private final Optional<Rational> m_gallons;
+  private final Optional<Rational> m_quarts;
+  private final Optional<Rational> m_pints;
+  private final Optional<Rational> m_cups;
+  private final Optional<Rational> m_liters;
+  private final Optional<Rational> m_deciliters;
+  private final Optional<Rational> m_centiliters;
 
   /**
    * Determine if metric values are stored.
@@ -421,69 +421,69 @@ public class Volume extends NewValue.Arithmetic<VolumeProto>
    */
   public static Volume fromProto(VolumeProto inProto)
   {
-    Optional<NewRational> feet = Optional.absent();
-    Optional<NewRational> inches = Optional.absent();
-    Optional<NewRational> meters = Optional.absent();
-    Optional<NewRational> decimeters = Optional.absent();
-    Optional<NewRational> centimeters = Optional.absent();
-    Optional<NewRational> gallons = Optional.absent();
-    Optional<NewRational> quarts = Optional.absent();
-    Optional<NewRational> pints = Optional.absent();
-    Optional<NewRational> cups = Optional.absent();
-    Optional<NewRational> liters = Optional.absent();
-    Optional<NewRational> deciliters = Optional.absent();
-    Optional<NewRational> centiliters = Optional.absent();
+    Optional<Rational> feet = Optional.absent();
+    Optional<Rational> inches = Optional.absent();
+    Optional<Rational> meters = Optional.absent();
+    Optional<Rational> decimeters = Optional.absent();
+    Optional<Rational> centimeters = Optional.absent();
+    Optional<Rational> gallons = Optional.absent();
+    Optional<Rational> quarts = Optional.absent();
+    Optional<Rational> pints = Optional.absent();
+    Optional<Rational> cups = Optional.absent();
+    Optional<Rational> liters = Optional.absent();
+    Optional<Rational> deciliters = Optional.absent();
+    Optional<Rational> centiliters = Optional.absent();
 
     if(inProto.hasMetric())
     {
       if(inProto.getMetric().hasCubicMeters())
-        meters = Optional.of(NewRational.fromProto
-                             (inProto.getMetric().getCubicMeters()));
+        meters = Optional.of(Rational.fromProto
+            (inProto.getMetric().getCubicMeters()));
       if(inProto.getMetric().hasCubicDecimeters())
-        decimeters = Optional.of(NewRational.fromProto
-                                 (inProto.getMetric().getCubicDecimeters()));
+        decimeters = Optional.of(Rational.fromProto
+            (inProto.getMetric().getCubicDecimeters()));
       if(inProto.getMetric().hasCubicCentimeters())
-        centimeters = Optional.of(NewRational.fromProto
-                                  (inProto.getMetric().getCubicCentimeters()));
+        centimeters = Optional.of(Rational.fromProto
+            (inProto.getMetric().getCubicCentimeters()));
     }
 
     if(inProto.hasImperial())
     {
       if(inProto.getImperial().hasCubicFeet())
-        feet = Optional.of(NewRational.fromProto
-                           (inProto.getImperial().getCubicFeet()));
+        feet = Optional.of(Rational.fromProto
+            (inProto.getImperial().getCubicFeet()));
       if(inProto.getImperial().hasCubicInches())
-        inches = Optional.of(NewRational.fromProto
-                             (inProto.getImperial().getCubicInches()));
+        inches = Optional.of(Rational.fromProto
+            (inProto.getImperial().getCubicInches()));
     }
 
     if(inProto.hasGallons())
     {
       if(inProto.getGallons().hasGallons())
-        gallons = Optional.of(NewRational.fromProto
-                              (inProto.getGallons().getGallons()));
+        gallons = Optional.of(Rational.fromProto
+            (inProto.getGallons().getGallons()));
       if(inProto.getGallons().hasQuarts())
-        quarts = Optional.of(NewRational.fromProto
-                             (inProto.getGallons().getQuarts()));
+        quarts = Optional.of(Rational.fromProto
+            (inProto.getGallons().getQuarts()));
       if(inProto.getGallons().hasPints())
-        pints = Optional.of(NewRational.fromProto
-                            (inProto.getGallons().getPints()));
+        pints = Optional.of(Rational.fromProto
+            (inProto.getGallons().getPints()));
       if(inProto.getGallons().hasCups())
-        cups = Optional.of(NewRational.fromProto
-                           (inProto.getGallons().getCups()));
+        cups = Optional.of(Rational.fromProto
+            (inProto.getGallons().getCups()));
     }
 
     if(inProto.hasLiters())
     {
       if(inProto.getLiters().hasLiters())
-        liters = Optional.of(NewRational.fromProto
-                             (inProto.getLiters().getLiters()));
+        liters = Optional.of(Rational.fromProto
+            (inProto.getLiters().getLiters()));
       if(inProto.getLiters().hasDeciliters())
-        deciliters = Optional.of(NewRational.fromProto
-                                 (inProto.getLiters().getDeciliters()));
+        deciliters = Optional.of(Rational.fromProto
+            (inProto.getLiters().getDeciliters()));
       if(inProto.getLiters().hasCentiliters())
-        centiliters = Optional.of(NewRational.fromProto
-                                  (inProto.getLiters().getCentiliters()));
+        centiliters = Optional.of(Rational.fromProto
+            (inProto.getLiters().getCentiliters()));
     }
 
     return new Volume(feet, inches,
@@ -548,18 +548,18 @@ public class Volume extends NewValue.Arithmetic<VolumeProto>
     @org.junit.Test
     public void init()
     {
-      Volume value = new Volume(Optional.<NewRational>absent(),
-                                Optional.<NewRational>absent(),
-                                Optional.<NewRational>absent(),
-                                Optional.<NewRational>absent(),
-                                Optional.<NewRational>absent(),
-                                Optional.<NewRational>absent(),
-                                Optional.<NewRational>absent(),
-                                Optional.<NewRational>absent(),
-                                Optional.<NewRational>absent(),
-                                Optional.<NewRational>absent(),
-                                Optional.<NewRational>absent(),
-                                Optional.<NewRational>absent());
+      Volume value = new Volume(Optional.<Rational>absent(),
+                                Optional.<Rational>absent(),
+                                Optional.<Rational>absent(),
+                                Optional.<Rational>absent(),
+                                Optional.<Rational>absent(),
+                                Optional.<Rational>absent(),
+                                Optional.<Rational>absent(),
+                                Optional.<Rational>absent(),
+                                Optional.<Rational>absent(),
+                                Optional.<Rational>absent(),
+                                Optional.<Rational>absent(),
+                                Optional.<Rational>absent());
 
       // undefined value
       assertEquals("undefined value not correct", "0 cu ft",
@@ -568,36 +568,36 @@ public class Volume extends NewValue.Arithmetic<VolumeProto>
       assertEquals("metric", false, value.isMetric());
 
       // now with some value (cu cm)
-      value = new Volume(Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.of(new NewRational(1, 1, 2)),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent());
+      value = new Volume(Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.of(new Rational(1, 1, 2)),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent());
 
       assertEquals("string ", "1 1/2 cu dm", value.toString());
       assertEquals("feet",   false,  value.isImperial());
       assertEquals("metric", true,   value.isMetric());
       assertEquals("liquid", false,   value.isLiquid());
 
-      value = new Volume(Optional.of(new NewRational(1, 2, 3)),
-                         Optional.of(new NewRational(2, 0, 0)),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent());
+      value = new Volume(Optional.of(new Rational(1, 2, 3)),
+                         Optional.of(new Rational(2, 0, 0)),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent());
 
       assertEquals("string", "1 2/3 cu ft 2 cu in", value.toString());
       assertEquals("feet",   true,  value.isImperial());
@@ -605,18 +605,18 @@ public class Volume extends NewValue.Arithmetic<VolumeProto>
       assertEquals("metric", false,   value.isLiquid());
 
       // now with some value (metric)
-      value = new Volume(Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.of(new NewRational(1, 0, 0)),
-                         Optional.of(new NewRational(1, 1, 2)),
-                         Optional.of(new NewRational(0, 2, 3)),
-                         Optional.of(new NewRational(4, 0, 0)),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent());
+      value = new Volume(Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.of(new Rational(1, 0, 0)),
+                         Optional.of(new Rational(1, 1, 2)),
+                         Optional.of(new Rational(0, 2, 3)),
+                         Optional.of(new Rational(4, 0, 0)),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent());
 
       assertEquals("string", "1 gallon 1 1/2 quarts 2/3 pint 4 cups",
                    value.toString());
@@ -624,18 +624,18 @@ public class Volume extends NewValue.Arithmetic<VolumeProto>
       assertEquals("metric", false,  value.isMetric());
       assertEquals("metric", true,   value.isLiquid());
 
-      value = new Volume(Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.<NewRational>absent(),
-                         Optional.of(new NewRational(1, 0, 0)),
-                         Optional.of(new NewRational(3, 1, 4)),
-                         Optional.<NewRational>absent());
+      value = new Volume(Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.<Rational>absent(),
+                         Optional.of(new Rational(1, 0, 0)),
+                         Optional.of(new Rational(3, 1, 4)),
+                         Optional.<Rational>absent());
 
       assertEquals("string", "1 l 3 1/4 dl", value.toString());
       assertEquals("feet",   false, value.isImperial());

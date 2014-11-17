@@ -62,22 +62,22 @@ public class Duration extends NewValue.Arithmetic<DurationProto>
       if(parts.isEmpty())
         return Optional.absent();
 
-      Optional<NewRational> days = Optional.absent();
-      Optional<NewRational> hours = Optional.absent();
-      Optional<NewRational> minutes = Optional.absent();
-      Optional<NewRational> seconds = Optional.absent();
-      Optional<NewRational> rounds = Optional.absent();
-      Optional<NewRational> standardActions = Optional.absent();
-      Optional<NewRational> moveActions = Optional.absent();
-      Optional<NewRational> swiftActions= Optional.absent();
-      Optional<NewRational> freeActions= Optional.absent();
+      Optional<Rational> days = Optional.absent();
+      Optional<Rational> hours = Optional.absent();
+      Optional<Rational> minutes = Optional.absent();
+      Optional<Rational> seconds = Optional.absent();
+      Optional<Rational> rounds = Optional.absent();
+      Optional<Rational> standardActions = Optional.absent();
+      Optional<Rational> moveActions = Optional.absent();
+      Optional<Rational> swiftActions= Optional.absent();
+      Optional<Rational> freeActions= Optional.absent();
 
       for(String []part : parts)
       {
         if(part.length != 2)
           return Optional.absent();
 
-        Optional<NewRational> number = NewRational.PARSER.parse(part[0]);
+        Optional<Rational> number = Rational.PARSER.parse(part[0]);
         if(!number.isPresent())
           return Optional.absent();
 
@@ -150,15 +150,15 @@ public class Duration extends NewValue.Arithmetic<DurationProto>
     }
   };
 
-  public Duration(Optional<NewRational> inDays,
-                  Optional<NewRational> inHours,
-                  Optional<NewRational> inMinutes,
-                  Optional<NewRational> inSeconds,
-                  Optional<NewRational> inRounds,
-                  Optional<NewRational> inStandardActions,
-                  Optional<NewRational> inMoveActions,
-                  Optional<NewRational> inSwiftActions,
-                  Optional<NewRational> inFreeActions)
+  public Duration(Optional<Rational> inDays,
+                  Optional<Rational> inHours,
+                  Optional<Rational> inMinutes,
+                  Optional<Rational> inSeconds,
+                  Optional<Rational> inRounds,
+                  Optional<Rational> inStandardActions,
+                  Optional<Rational> inMoveActions,
+                  Optional<Rational> inSwiftActions,
+                  Optional<Rational> inFreeActions)
   {
     m_days = inDays;
     m_hours = inHours;
@@ -171,15 +171,15 @@ public class Duration extends NewValue.Arithmetic<DurationProto>
     m_freeActions = inFreeActions;
   }
 
-  private final Optional<NewRational> m_days;
-  private final Optional<NewRational> m_hours;
-  private final Optional<NewRational> m_minutes;
-  private final Optional<NewRational> m_seconds;
-  private final Optional<NewRational> m_rounds;
-  private final Optional<NewRational> m_standardActions;
-  private final Optional<NewRational> m_moveActions;
-  private final Optional<NewRational> m_swiftActions;
-  private final Optional<NewRational> m_freeActions;
+  private final Optional<Rational> m_days;
+  private final Optional<Rational> m_hours;
+  private final Optional<Rational> m_minutes;
+  private final Optional<Rational> m_seconds;
+  private final Optional<Rational> m_rounds;
+  private final Optional<Rational> m_standardActions;
+  private final Optional<Rational> m_moveActions;
+  private final Optional<Rational> m_swiftActions;
+  private final Optional<Rational> m_freeActions;
 
   @Override
   public String toString()
@@ -374,52 +374,52 @@ public class Duration extends NewValue.Arithmetic<DurationProto>
    */
   public static Duration fromProto(DurationProto inProto)
   {
-    Optional<NewRational> days = Optional.absent();
-    Optional<NewRational> hours = Optional.absent();
-    Optional<NewRational> minutes = Optional.absent();
-    Optional<NewRational> seconds = Optional.absent();
-    Optional<NewRational> rounds = Optional.absent();
-    Optional<NewRational> standardActions = Optional.absent();
-    Optional<NewRational> moveActions = Optional.absent();
-    Optional<NewRational> swiftActions = Optional.absent();
-    Optional<NewRational> freeActions = Optional.absent();
+    Optional<Rational> days = Optional.absent();
+    Optional<Rational> hours = Optional.absent();
+    Optional<Rational> minutes = Optional.absent();
+    Optional<Rational> seconds = Optional.absent();
+    Optional<Rational> rounds = Optional.absent();
+    Optional<Rational> standardActions = Optional.absent();
+    Optional<Rational> moveActions = Optional.absent();
+    Optional<Rational> swiftActions = Optional.absent();
+    Optional<Rational> freeActions = Optional.absent();
 
     if(inProto.hasMetric())
     {
       if(inProto.getMetric().hasDays())
-        days = Optional.of(NewRational.fromProto(inProto.getMetric().getDays()));
+        days = Optional.of(Rational.fromProto(inProto.getMetric().getDays()));
       if(inProto.getMetric().hasHours())
         hours =
-          Optional.of(NewRational.fromProto(inProto.getMetric().getHours()));
+          Optional.of(Rational.fromProto(inProto.getMetric().getHours()));
       if(inProto.getMetric().hasMinutes())
         minutes =
-          Optional.of(NewRational.fromProto(inProto.getMetric().getMinutes()));
+          Optional.of(Rational.fromProto(inProto.getMetric().getMinutes()));
       if(inProto.getMetric().hasSeconds())
         seconds =
-          Optional.of(NewRational.fromProto(inProto.getMetric().getSeconds()));
+          Optional.of(Rational.fromProto(inProto.getMetric().getSeconds()));
     }
 
     if(inProto.hasRounds())
-      rounds = Optional.of(NewRational.fromProto(inProto.getRounds()));
+      rounds = Optional.of(Rational.fromProto(inProto.getRounds()));
 
     if(inProto.hasActions())
     {
       if(inProto.getActions().hasStandardActions())
         standardActions =
-          Optional.of(NewRational.fromProto
-                      (inProto.getActions().getStandardActions()));
+          Optional.of(Rational.fromProto
+              (inProto.getActions().getStandardActions()));
       if(inProto.getActions().hasMoveActions())
         moveActions =
-          Optional.of(NewRational.fromProto
-                      (inProto.getActions().getMoveActions()));
+          Optional.of(Rational.fromProto
+              (inProto.getActions().getMoveActions()));
       if(inProto.getActions().hasSwiftActions())
         swiftActions =
-          Optional.of(NewRational.fromProto
-                      (inProto.getActions().getSwiftActions()));
+          Optional.of(Rational.fromProto
+              (inProto.getActions().getSwiftActions()));
       if(inProto.getActions().hasFreeActions())
         freeActions =
-          Optional.of(NewRational.fromProto
-                      (inProto.getActions().getFreeActions()));
+          Optional.of(Rational.fromProto
+              (inProto.getActions().getFreeActions()));
     }
 
     return new Duration(days, hours, minutes, seconds,

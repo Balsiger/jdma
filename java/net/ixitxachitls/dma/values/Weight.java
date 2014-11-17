@@ -49,8 +49,8 @@ public class Weight extends NewValue.Arithmetic<WeightProto>
     @Override
     public Optional<Weight> doParse(String inValue)
     {
-      Optional<NewRational> pounds = Optional.absent();
-      Optional<NewRational> ounces = Optional.absent();
+      Optional<Rational> pounds = Optional.absent();
+      Optional<Rational> ounces = Optional.absent();
 
       List<String []> parts =
         Strings.getAllPatterns(inValue,
@@ -65,7 +65,7 @@ public class Weight extends NewValue.Arithmetic<WeightProto>
         if(part.length != 2)
           return Optional.absent();
 
-        Optional<NewRational> number = NewRational.PARSER.parse(part[0]);
+        Optional<Rational> number = Rational.PARSER.parse(part[0]);
         if(!number.isPresent())
           return Optional.absent();
 
@@ -90,8 +90,8 @@ public class Weight extends NewValue.Arithmetic<WeightProto>
     }
   }
 
-  public Weight(Optional<NewRational> inPounds,
-                Optional<NewRational> inOunces)
+  public Weight(Optional<Rational> inPounds,
+                Optional<Rational> inOunces)
   {
     m_pounds = inPounds;
     m_ounces = inOunces;
@@ -99,8 +99,8 @@ public class Weight extends NewValue.Arithmetic<WeightProto>
 
   public static Parser<Weight> PARSER = new WeightParser();
 
-  private final Optional<NewRational> m_pounds;
-  private final Optional<NewRational> m_ounces;
+  private final Optional<Rational> m_pounds;
+  private final Optional<Rational> m_ounces;
 
   public double asPounds()
   {
@@ -184,15 +184,15 @@ public class Weight extends NewValue.Arithmetic<WeightProto>
     if(!inProto.hasImperial())
       throw new IllegalArgumentException("expected an imperial weight");
 
-    Optional<NewRational> pounds = Optional.absent();
-    Optional<NewRational> ounces = Optional.absent();
+    Optional<Rational> pounds = Optional.absent();
+    Optional<Rational> ounces = Optional.absent();
 
     if(inProto.getImperial().hasPounds())
       pounds =
-        Optional.of(NewRational.fromProto(inProto.getImperial().getPounds()));
+        Optional.of(Rational.fromProto(inProto.getImperial().getPounds()));
     if(inProto.getImperial().hasOunces())
       ounces =
-        Optional.of(NewRational.fromProto(inProto.getImperial().getOunces()));
+        Optional.of(Rational.fromProto(inProto.getImperial().getOunces()));
 
     return new Weight(pounds, ounces);
   }
