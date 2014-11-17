@@ -755,50 +755,10 @@ public class ValueList<T extends Value<T>>
     return result;
   }
 
-  //........................................................................
-  //------------------------------- doRead ---------------------------------
-
-  /**
-   * Read the value from the reader and replace the current one.
-   *
-   * @param       inReader the reader to read from
-   *
-   * @return      true if read, false if not
-   *
-   */
   @Override
-  public boolean doRead(ParseReader inReader)
+  protected boolean doRead(ParseReader inReader)
   {
-    ParseReader.Position pos = inReader.getPosition();
-
-    do
-    {
-      // create a new value
-      T value = m_type.read(inReader);
-
-      // read it
-      if(value == null)
-      {
-        if(isDefined())
-        {
-          // go back before the last delimiter
-          inReader.seek(pos);
-
-          return true;
-        }
-
-        // nothing was read
-        return false;
-      }
-
-      append(value);
-
-      // read ok so far...
-      pos = inReader.getPosition();
-
-    } while(m_delimiter == null || inReader.expect(m_delimiter));
-
-    return true;
+    return false;
   }
 
   //........................................................................
@@ -918,30 +878,6 @@ public class ValueList<T extends Value<T>>
         };
 
       Value.Test.readTest(tests, new ValueList<Name>(new Name()));
-    }
-
-    //......................................................................
-    //----- delimiter ------------------------------------------------------
-
-    /** Testing delimiter. */
-    @org.junit.Test
-    public void delimiter()
-    {
-      String text = "one:two   : three\n\n\n:four = ";
-      try (java.io.StringReader sReader = new java.io.StringReader(text))
-      {
-        ParseReader reader = new ParseReader(sReader, "test");
-
-        // normal read
-        ValueList<Name> list = new ValueList<Name>(new Name(), ":");
-
-        list = list.read(reader);
-        assertTrue("list should have been read", list != null);
-        assertEquals("converted list does not match",
-                     "one:two:three:four", list.toString());
-
-        assertEquals("expecting delimiter", true, reader.expect('='));
-      }
     }
 
     //......................................................................

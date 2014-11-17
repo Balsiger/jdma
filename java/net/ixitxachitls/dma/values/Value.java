@@ -231,25 +231,6 @@ public abstract class Value<T extends Value<T>>
   }
 
   //........................................................................
-  //---------------------------- withExpression ----------------------------
-
-  /**
-   * Set the expression for the value.
-   *
-   * @param       inExpression the expression to set
-   *
-   * @return      the value itself for chaining
-   *
-   */
-  @SuppressWarnings("unchecked")
-  public T withExpression(Expression inExpression)
-  {
-    m_expression = inExpression;
-
-    return (T)this;
-  }
-
-  //........................................................................
   //----------------------------- withTemplate -----------------------------
 
   /**
@@ -537,26 +518,6 @@ public abstract class Value<T extends Value<T>>
 
   //........................................................................
 
-  //-------------------------------- group ---------------------------------
-
-  /**
-   * Return the group this value belongs to. As default we assume that each
-   * distinct value has its own group. If other partitions are desired, they
-   * have to be implemented in derivations or by using a grouping.
-   *
-   * @return      a string denoting the group this value is in
-   *
-   */
-  @SuppressWarnings("unchecked")
-  public String group()
-  {
-    if(m_grouping != null)
-      return m_grouping.group((T)this);
-
-    return doGroup();
-  }
-
-  //........................................................................
   //------------------------------- doGroup --------------------------------
 
   /**
@@ -837,68 +798,6 @@ public abstract class Value<T extends Value<T>>
 
   //........................................................................
 
-  //--------------------------------- read ---------------------------------
-
-  /**
-   * Read the value from the given string.
-   *
-   * @param       inText the text to read from
-   *
-   * @return      the value read, if any
-   *
-   */
-  public @Nullable T read(String inText)
-  {
-    try (StringReader string = new StringReader(inText))
-    {
-      ParseReader reader  = new ParseReader(string, "set");
-
-      return read(reader);
-    }
-  }
-
-  //........................................................................
-
-  //--------------------------------- read ---------------------------------
-
-  /**
-   * Try to read the value from the given stream.
-   *
-   * @param       inReader       the reader to read from
-   *
-   * @return      the value read
-   *
-   */
-  public @Nullable T read(ParseReader inReader)
-  {
-    T result = create();
-
-    // check if undefined is encountered
-    if(inReader.expect(UNDEFINED))
-      return result;
-
-    result.m_remark = Remark.read(inReader);
-    result.m_expression = Expression.read(inReader);
-
-    // store the current position
-    ParseReader.Position pos = inReader.getPosition();
-
-    // could we read the value?
-    if(!result.doRead(inReader))
-    {
-      // restore position
-      inReader.seek(pos);
-
-      if(result.hasExpression())
-        return result;
-
-      return null;
-    }
-
-    return result;
-  }
-
-  //........................................................................
   //-------------------------------- doRead --------------------------------
 
   /**
@@ -949,7 +848,7 @@ public abstract class Value<T extends Value<T>>
         {
           ParseReader reader = new ParseReader(sReader, "test");
 
-          Value<?> value = inValue.read(reader);
+          Value<?> value = null; //inValue.read(reader);
 
           if(inTests[i + 2] == null)
             assertNull(i / 4 + ": " + inTests[i]

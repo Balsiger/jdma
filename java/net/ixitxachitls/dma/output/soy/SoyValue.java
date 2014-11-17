@@ -175,9 +175,6 @@ public class SoyValue extends SoyAbstract
         return StringData.forValue
           (Encodings.encodeHTMLAttribute(m_value.getEditValue()));
 
-      if("raw".equals(inName))
-        return StringData.forValue(m_value.toString(false));
-
       if("short".equals(inName))
         return StringData.forValue(m_value.toShortString());
 
@@ -200,9 +197,6 @@ public class SoyValue extends SoyAbstract
         else
           return StringData.forValue(m_value.getChoices());
       }
-
-      if("group".equals(inName))
-        return StringData.forValue(m_value.group());
 
       if("isArithmetic".equals(inName))
         return BooleanData.forValue(m_value.isArithmetic());

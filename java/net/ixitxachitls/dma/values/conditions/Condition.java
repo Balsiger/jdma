@@ -193,29 +193,6 @@ public class Condition<T extends Condition<T>> extends Value<T>
 
   //----------------------------------------------------------- manipulators
 
-  //------------------------------- doRead ---------------------------------
-
-  /**
-   * Read the values only from the reader and replace the current ones.
-   *
-   * @param       inReader the reader to read from
-   *
-   * @return      true if read, false if not
-   *
-   */
-  @Override
-  public boolean doRead(ParseReader inReader)
-  {
-    FormattedText description = m_description.read(inReader);
-    if (description == null)
-      return false;
-
-    m_description = description;
-    return true;
-  }
-
-  //........................................................................
-
   //........................................................................
 
   //------------------------------------------------- other member functions

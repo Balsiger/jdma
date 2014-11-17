@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2013 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -19,932 +19,248 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.annotation.concurrent.Immutable;
+import java.math.BigInteger;
+
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Values.RationalProto;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
+import net.ixitxachitls.util.Strings;
 
 /**
- * This class stores a rational and is capable of reading such rationals
- * from a reader (and write it to a writer of course).
+ * A rational value, i.e. 2 1/2 or similar.
  *
- * @file          Rational.java
- *
- * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
+ * @file   NewRational.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
-@Immutable
-@ParametersAreNonnullByDefault
-public class Rational extends BaseRational<Rational>
+public class Rational extends NewValue.Arithmetic<RationalProto>
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------- Rational -------------------------------
-
-  /**
-   * Construct the rational object with an undefined value.
-   *
-   */
-  public Rational()
+  public static class RationalParser extends Parser<Rational>
   {
-    // nothing to do
+    public RationalParser()
+    {
+      super(1);
+    }
 
-    m_editType = "name";
+    @Override
+    public Optional<Rational> doParse(String inValue)
+    {
+      String [] parts =
+        Strings.getPatterns(inValue,
+                            "^\\s*(\\d+)?\\s*(?:(\\d+)\\s*/\\s*(\\d+))?$");
+
+      if(parts.length != 3)
+        return Optional.absent();
+
+      try
+      {
+        return Optional.of(new Rational
+          (parts[0] == null ? 0 : Integer.parseInt(parts[0]),
+           parts[1] == null ? 0 : Integer.parseInt(parts[1]),
+           parts[2] == null ? 0 : Integer.parseInt(parts[2])));
+      }
+      catch(IllegalArgumentException e)
+      {
+        return Optional.absent();
+      }
+    }
   }
 
-  //........................................................................
-  //------------------------------- Rational -------------------------------
-
-  /**
-   * Construct the rational object (simple integer).
-   *
-   * @param       inLeader the leading value
-   *
-   */
-  public Rational(long inLeader)
+  public Rational(int inLeader, int inNominator, int inDenominator)
   {
-    this(inLeader, 0, 1);
+    if(inDenominator == 0 && inNominator != 0)
+      throw new IllegalArgumentException("denominator cannot be 0");
+
+    m_leader = inLeader;
+    m_nominator = inNominator;
+    m_denominator = inDenominator;
   }
 
-  //........................................................................
-  //------------------------------- Rational -------------------------------
+  public static Parser<Rational> PARSER = new RationalParser();
+  public static Rational ZERO = new Rational(0, 0, 0);
+  public static Rational ONE = new Rational(1, 0, 0);
+  public static Rational FIVE = new Rational(5, 0, 0);
+  public static Rational TEN = new Rational(10, 0, 0);
+  public static Rational FIFTEEN = new Rational(15, 0, 0);
+  public static Rational TWENTY = new Rational(20, 0, 0);
+  public static Rational THIRTY = new Rational(30, 0, 0);
 
-  /**
-   * Construct the rational object with a real fraction.
-   *
-   * @param       inNominator   value above the line
-   * @param       inDenominator value below the line
-   *
-   */
-  public Rational(long inNominator, long inDenominator)
+  private final int m_leader;
+  private final int m_nominator;
+  private final int m_denominator;
+
+  public int getLeader()
   {
-    this(0, inNominator, inDenominator);
+    return m_leader;
   }
 
-  //........................................................................
-  //------------------------------- Rational -------------------------------
-
-  /**
-   * Construct the rational object with all values.
-   *
-   * @param       inLeader      the leader before the real fraction
-   * @param       inNominator   value above the line
-   * @param       inDenominator value below the line
-   *
-   */
-  public Rational(long inLeader, long inNominator, long inDenominator)
-  {
-    super(inLeader, inNominator, inDenominator);
-
-    m_editType = "name";
-  }
-
-  //........................................................................
-
-  //------------------------------- create ---------------------------------
-
-  /**
-   * Create a new list with the same type information as this one, but one
-   * that is still undefined.
-   *
-   * @return      a similar list, but without any contents
-   *
-   */
-  @Override
-  public Rational create()
-  {
-    return super.create(new Rational());
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
-
-  /** A standard rational for 1. */
-  public static final Rational ONE = new Rational(1);
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //----------------------------- getNominator -----------------------------
-
-  /**
-   * Get the nominator stored.
-   *
-   * @return      the nominator stored
-   *
-   */
-  public long getNominator()
+  public int getNominator()
   {
     return m_nominator;
   }
 
-  //........................................................................
-  //---------------------------- getDenominator ----------------------------
-
-  /**
-   * Get the denominator stored.
-   *
-   * @return      the denominator stored
-   *
-   */
-  public long getDenominator()
+  public int getDenominator()
   {
     return m_denominator;
   }
 
-  //........................................................................
-
-  //------------------------------ hasRandom -------------------------------
-
-  /**
-   * Check if this value has a random element.
-   *
-   * @return      true if there is a random element, false if not
-   *
-   */
-  // public boolean hasRandom()
-  // {
-  //   return m_randomNominator != null || m_randomDenominator != null;
-  // }
-
-  //........................................................................
-
-  //------------------------------- getValue -------------------------------
-
-  /**
-   * Get the real value stored.
-   *
-   * @return      the internal value as a floating point number
-   *
-   */
-  @Override
-  public double getValue()
+  public double asDouble()
   {
-    if(m_denominator == 0)
+    if(m_nominator == 0 || m_denominator == 0)
       return m_leader;
 
-    int nominator   = 1;
-    int denominator = 1;
-
-    if(m_negative)
-      return -1 * (m_leader + ((double)m_nominator * nominator)
-                   / ((double)m_denominator * denominator));
-    else
-      return m_leader + ((double)m_nominator * nominator)
-        / ((double)m_denominator * denominator);
+    return m_leader + m_nominator * 1.0 / m_denominator;
   }
 
-  //........................................................................
-
-  //------------------------------- compare --------------------------------
-
-  /**
-   * Compare the Rational to the given value.
-   *
-   * @param       inValue the value to compare to.
-   *
-   * @return      a value < 0 if this one is below the given value, a
-   *              value > 0, if it is above it and 0 if it is equal
-   *
-   */
   @Override
-  public int compare(long inValue)
+  public String toString()
   {
-    Rational rational = reduce();
+    if(m_nominator == 0)
+      return "" + m_leader;
 
-    if(inValue > 0 && rational.m_negative)
-      return -1;
+    if(m_leader == 0)
+      return m_nominator + "/" + m_denominator;
 
-    if(inValue < 0)
-      if(!rational.m_negative)
-        return +1;
-      else
-        inValue *= -1;
-
-    if(rational.m_leader < inValue)
-      return !rational.m_negative ? -1 : +1;
-
-    if(rational.m_leader > inValue)
-      return !m_negative ? +1 : -1;
-
-    if(rational.m_nominator == 0)
-        return 0;
-
-    return !rational.m_negative ? +1 : -1;
+    return m_leader + " " + m_nominator + "/" + m_denominator;
   }
 
-  //........................................................................
-  //------------------------------- compare --------------------------------
-
-  /**
-   * Compare the Rational to the given value.
-   *
-   * @param       inValue the value to compare to
-   *
-   * @return      a value < 0 if this one is below the given value, a
-   *              value > 0, if it is above it and 0 if it is equal
-   *
-   */
-  public int compare(Rational inValue)
-  {
-    // reduce the fractions if possible
-    Rational first = reduce();
-    Rational second = inValue.reduce();
-
-    if(!second.m_negative && first.m_negative)
-      return -1;
-
-    if(second.m_negative && !first.m_negative)
-      return +1;
-
-    if(first.m_leader < second.m_leader)
-      return !first.m_negative ? -1 : +1;
-
-    if(first.m_leader > second.m_leader)
-      return !first.m_negative ? +1 : -1;
-
-    if(first.m_nominator == second.m_nominator
-       && first.m_denominator == second.m_denominator)
-      return 0;
-
-    if(first.getValue() < second.getValue())
-      return -1;
-
-    return +1;
-  }
-
-  //........................................................................
-
-  /**
-   * Create a proto for the value.
-   *
-   * @return the proto created
-   */
+  @Override
   public RationalProto toProto()
   {
     RationalProto.Builder builder = RationalProto.newBuilder();
 
-    if(m_leader != 0)
-      builder.setLeader((int)m_leader);
-    if(m_nominator != 0 && m_denominator != 0)
+    if (m_leader != 0)
+      builder.setLeader(m_leader);
+
+    if (m_nominator != 0)
     {
-      builder.setDenominator((int)m_denominator);
-      builder.setNominator((int)m_nominator);
+      builder.setNominator(m_nominator);
+      builder.setDenominator(m_denominator);
     }
-    if(m_negative)
-      builder.setNegative(m_negative);
 
     return builder.build();
   }
 
-  /**
-   * Create a new rational from this one with the given proto values.
-   *
-   *
-   * @param inProto the values to use
-   * @return the newly created rational
-   */
   public static Rational fromProto(RationalProto inProto)
   {
-    Rational result = new Rational();
-
-    if(inProto.hasLeader())
-    {
-      result.m_leader = inProto.getLeader();
-      result.m_denominator = 1;
-    }
-    if(inProto.hasNominator())
-      result.m_nominator = inProto.getNominator();
-    if(inProto.hasDenominator())
-      result.m_denominator = inProto.getDenominator();
-    if(inProto.hasNegative())
-      result.m_negative = inProto.getNegative();
-
-    return result;
+    return new Rational(inProto.getLeader(), inProto.getNominator(),
+                           inProto.getDenominator());
   }
 
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //-------------------------------- reduce --------------------------------
-
-  /**
-   * Reduce the fraction, if possible.
-   *
-   * We use the following special cases:
-   *
-   *   a -b/c   is defined as  (a*c - b)/c
-   *   -a -b/c  is defined as  -((a*c - b)/c)
-   *   -a b/c   is defined as  -((a*c + b)/c)
-   *
-   * @return      the reduced rational
-   *
-   */
   @Override
-  public Rational reduce()
+  public NewValue.Arithmetic<RationalProto>
+    add(NewValue.Arithmetic<RationalProto> inValue)
   {
-    return super.reduce();
+    if(!(inValue instanceof Rational))
+      throw new IllegalArgumentException("can only add another rational value");
+
+    Rational value = (Rational)inValue;
+    return new Rational(m_leader + value.m_leader,
+                           m_nominator * value.m_denominator
+                           + value.m_nominator * m_denominator,
+                           m_denominator * value.m_denominator).simplify();
   }
 
-  //........................................................................
+  public Rational simplify()
+  {
+    if(m_nominator == 0 || m_denominator == 0)
+      return this;
 
-  //........................................................................
+    int leader = m_leader + m_nominator / m_denominator;
+    int nominator = m_nominator % m_denominator;
+    int denominator = m_denominator;
 
-  //------------------------------------------------- other member functions
+    int common = BigInteger.valueOf(nominator)
+      				     .gcd(BigInteger.valueOf(m_denominator))
+      				     .intValue();
 
-  //------------------------------- readDice -------------------------------
+    nominator /= common;
+    denominator /= common;
 
-  /**
-   * Read a dice from the given reader.
-   *
-   * @param       inReader the reader to read from
-   *
-   * @return      the Dice read (in '(/)') or null if none found
-   *
-   * @undefined   may return null
-   *
-   */
-  // private Dice readDice(ParseReader inReader)
-  // {
-  //   assert inReader != null : "must have a reader here!";
+    if(denominator == 1)
+      return new Rational(leader + nominator, 0, 0);
 
-  //   // another dice?
-  //   if(!inReader.expect('('))
-  //     return null;
+    return new Rational(leader, nominator, denominator);
+  }
 
-  //   Dice dice = new Dice();
+  @Override
+  public boolean canAdd(NewValue.Arithmetic<RationalProto> inValue)
+  {
+    return inValue instanceof Rational;
+  }
 
-  //   if(!dice.read(inReader) || !inReader.expect(')'))
-  //     return null;
+  @Override
+  public NewValue.Arithmetic<RationalProto> multiply(int inFactor)
+  {
+    return new Rational(m_leader * inFactor, m_nominator * inFactor,
+                           m_denominator).simplify();
+  }
 
-  //   return dice;
-  // }
+  //---------------------------------------------------------------------------
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
-
-  /** The Test class. */
+  /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- init -----------------------------------------------------------
-
-    /** Test init. */
+    /** Parsing tests. */
     @org.junit.Test
-    public void init()
+    public void parse()
     {
-      Rational rational = new Rational();
-
-      // undefined value
-      assertEquals("not undefined at start", false, rational.isDefined());
-      assertEquals("undefined value not correct", "$undefined$",
-                   rational.toString());
-      assertEquals("undefined value", 0.0, rational.getValue(), 0.001);
-      assertEquals("undefined leader", 0, rational.getLeader());
-      assertEquals("undefined nominator", 0, rational.getNominator());
-      assertEquals("undefined denominator", 0, rational.getDenominator());
-      assertFalse("negative", rational.isNegative());
-
-      // now with some rational
-      rational = new Rational(1, 2);
-
-      assertEquals("not defined after setting", true, rational.isDefined());
-      assertEquals("output", "1/2", rational.toString());
-      assertEquals("value", 0.5, rational.getValue(), 0.001);
-      assertEquals("leader", 0, rational.getLeader());
-      assertEquals("nominator", 1, rational.getNominator());
-      assertEquals("denominator", 2, rational.getDenominator());
-      assertFalse("negative", rational.isNegative());
-
-      // now with some rational
-      rational = new Rational(1, 2, 3);
-
-      assertEquals("not defined after setting", true, rational.isDefined());
-      assertEquals("output", "1 2/3", rational.toString());
-      assertEquals("value", 1.666, rational.getValue(), 0.001);
-      assertEquals("leader", 1, rational.getLeader());
-      assertEquals("nominator", 2, rational.getNominator());
-      assertEquals("denominator", 3, rational.getDenominator());
-      assertFalse("negative", rational.isNegative());
-
-      // how about some negative
-      rational = new Rational(1, -2, -3);
-
-      assertEquals("not defined after setting", true, rational.isDefined());
-      assertEquals("output", "1 2/3", rational.toString());
-      assertEquals("value", 1.666, rational.getValue(), 0.001);
-      assertEquals("leader", 1, rational.getLeader());
-      assertEquals("nominator", 2, rational.getNominator());
-      assertEquals("denominator", 3, rational.getDenominator());
-      assertFalse("negative", rational.isNegative());
-
-      // how about some negative
-      rational = new Rational(-1, 2, 3);
-
-      assertEquals("not defined after setting", true, rational.isDefined());
-      assertEquals("output", "-1 2/3", rational.toString());
-      assertEquals("value", -1.666, rational.getValue(), 0.001);
-      assertEquals("leader", 1, rational.getLeader());
-      assertEquals("nominator", 2, rational.getNominator());
-      assertEquals("denominator", 3, rational.getDenominator());
-      assertTrue("negative", rational.isNegative());
-
-      // how about some negative
-      rational = new Rational(-1, -2, 3);
-
-      assertEquals("not defined after setting", true, rational.isDefined());
-      assertEquals("output", "-1 2/3", rational.toString());
-      assertEquals("value", -1.666, rational.getValue(), 0.001);
-      assertEquals("leader", 1, rational.getLeader());
-      assertEquals("nominator", 2, rational.getNominator());
-      assertEquals("denominator", 3, rational.getDenominator());
-      assertTrue("negative", rational.isNegative());
-
-      // how about some negative
-      rational = new Rational(1, -2, 3);
-
-      assertEquals("not defined after setting", true, rational.isDefined());
-      assertEquals("output", "1/3", rational.toString());
-      assertEquals("value", 0.333, rational.getValue(), 0.001);
-      assertEquals("leader", 0, rational.getLeader());
-      assertEquals("nominator", 1, rational.getNominator());
-      assertEquals("denominator", 3, rational.getDenominator());
-      assertFalse("negative", rational.isNegative());
-
-      // how about some negative
-      rational = new Rational(1, -4, 3);
-
-      assertEquals("not defined after setting", true, rational.isDefined());
-      assertEquals("output", "-1/3", rational.toString());
-      assertEquals("value", -0.333, rational.getValue(), 0.001);
-      assertEquals("leader", 0, rational.getLeader());
-      assertEquals("nominator", 1, rational.getNominator());
-      assertEquals("denominator", 3, rational.getDenominator());
-      assertTrue("negative", rational.isNegative());
-
-      // how about some negative
-      rational = new Rational(0, -1, 3);
-
-      assertEquals("not defined after setting", true, rational.isDefined());
-      assertEquals("output", "-1/3", rational.toString());
-      assertEquals("value", -0.333, rational.getValue(), 0.001);
-      assertEquals("leader", 0, rational.getLeader());
-      assertEquals("nominator", 1, rational.getNominator());
-      assertEquals("denominator", 3, rational.getDenominator());
-      assertTrue("negative", rational.isNegative());
-
-      Value.Test.createTest(rational);
+      assertEquals("parsing", "1 1/2", PARSER.parse("1 1/2").toString());
+      assertEquals("parsing", "1 1/2", PARSER.parse("1   1  /   2").toString());
+      assertEquals("parsing", "1", PARSER.parse("1").toString());
+      assertEquals("parsing", "1/2", PARSER.parse("1/2").toString());
+      assertNull("parsing", PARSER.parse("1/0"));
+      assertEquals("parsing", "2/4", PARSER.parse("2/4").toString());
+      assertEquals("parsing", "0", PARSER.parse("0/1").toString());
+      assertNull("parsing", PARSER.parse("1 1"));
+      assertNull("parsing", PARSER.parse("1/"));
     }
 
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** Test reading. */
     @org.junit.Test
-    public void read()
+    public void printing()
     {
-      String []tests =
-        {
-          "simple", "3/4", "3/4", null,
-          "complete", "1 1/4", "1 1/4", null,
-          "negative", "-1 1/3", "-1 1/3", null,
-          "negative 2", "-1/4", "-1/4", null,
-          "zero", "+0 2/3", "2/3", null,
-          "zero 2", "-0 2/3", "2/3", null,
-          "empty", "", null,  null,
-          "whites", "-1 \n1  /  3 ", "-1 1/3", " ",
-          "negatives", "-1/-3", "1/3", null,
-          "negatives 2", "1/-3", "-1/3", null,
-          "negatives 3", "1 -1/-3", "1 1/3", null,
-          "negatives 4", "-1 -1/-3", "-1 1/3", null,
-          "negatives 5", "1 1/-3", "2/3", null,
-          "negatives 6", "-1 1/-3", "-1 1/3", null,
-          "other", "2a", "2", "a",
-          "other 2", "0 a", "0", "a",
-          "invalid", "1/0", "1", "/0",
-          "other 3", "1 2", "1", "2",
-          "zero 3", "0 0/2", "0", null,
-          "zero 4", "5 0/2", "5", null,
-          "none", "a", null, "a",
-          "invalid", "1/a", "1", "/a",
-          "completely invalid", "a/b", null, "a/b",
-          "leader invalid", "1 3/a", "1", "3/a",
-          "zero only", "0", "0", null,
-          "single", "3", "3", null,
-          "simple", "3/4", "3/4", null,
-        };
-
-      Value.Test.readTest(tests, new Rational());
-
-      // m_logger.addExpectedPattern("WARNING:.*\\(5d>>>e\\).*");
+      assertEquals("printing", "0", new Rational(0, 0, 0).toString());
+      assertEquals("printing", "1", new Rational(1, 0, 0).toString());
+      assertEquals("printing", "1 1/2", new Rational(1, 1, 2).toString());
+      assertEquals("printing", "1 1/1", new Rational(1, 1, 1).toString());
+      assertEquals("printing", "2 26/13", new Rational(2, 26, 13).toString());
     }
 
-    //......................................................................
-    //----- reduce ---------------------------------------------------------
-
-    /** Test reduction. */
     @org.junit.Test
-    public void reduce()
+    public void simplify()
     {
-      Rational value = new Rational(4, 8).reduce();
-      assertEquals("reduced", "1/2", value.toString());
-
-      value = new Rational(1, 35, 15).reduce();
-      assertEquals("reduced", "3 1/3", value.toString());
-
-      value = new Rational(1, -1, 2).reduce();
-      assertEquals("reduced", "1/2", value.toString());
-
-      value = new Rational(-1, -1, 2).reduce();
-      assertEquals("reduced", "-1 1/2", value.toString());
-
-      value = new Rational(-1, 1, 2).reduce();
-      assertEquals("reduced", "-1 1/2", value.toString());
-
-      value = new Rational(-1, -1, -2).reduce();
-      assertEquals("reduced", "-1 1/2", value.toString());
-
-      value = new Rational(11, -2).reduce();
-      assertEquals("reduced", "-5 1/2", value.toString());
-
-      value = new Rational(1, 11, -2).reduce();
-      assertEquals("reduced", "-4 1/2", value.toString());
+      assertEquals("simplify", "0",
+                   new Rational(0, 0, 0).simplify().toString());
+      assertEquals("simplify", "1",
+                   new Rational(1, 0, 0).simplify().toString());
+      assertEquals("simplify", "1 1/2",
+                   new Rational(1, 1, 2).simplify().toString());
+      assertEquals("simplify", "2",
+                   new Rational(1, 1, 1).simplify().toString());
+      assertEquals("simplify", "3 1/2",
+                   new Rational(3, 4, 8).simplify().toString());
+      assertEquals("simplify", "1 1/7",
+                   new Rational(1, 7, 49).simplify().toString());
+      assertEquals("simplify", "4",
+                   new Rational(2, 26, 13).simplify().toString());
     }
 
-    //......................................................................
-    //----- add ------------------------------------------------------------
-
-    /** Test additions. */
     @org.junit.Test
     public void add()
     {
-      Rational first  = new Rational(1, 2, 9);
-      Rational second = new Rational(2, 1, 6);
-
-      first = first.add(second);
-      assertEquals("add", "3 7/18", first.toString());
-
-      first = first.add(42);
-      assertEquals("add int", "45 7/18", first.toString());
-
-      first = first.add(-20);
-      assertEquals("add int", "25 7/18", first.toString());
-
-      first = first.add(-30);
-      assertEquals("add int", "-4 11/18", first.toString());
-
-      first = first.add(5);
-      assertEquals("add int", "7/18", first.toString());
-
-      first = first.as(5);
-      second = second.as(-2, 5, 6);
-
-      first = first.add(second);
-      assertEquals("add negative", "2 1/6", first.toString());
-
-      first = first.as(-2, 5, 6);
-      second = second.as(1, 1, 6);
-
-      first = first.add(second);
-      assertEquals("add negative 2", "-1 2/3", first.toString());
+      assertEquals("add", "2",
+                   new Rational(1, 0, 0).add(new Rational(1, 0, 0))
+                   .toString());
+      assertEquals("add", "2",
+                   new Rational(1, 1, 2).add(new Rational(0, 1, 2))
+                   .toString());
+      assertEquals("add", "2 13/15",
+                   new Rational(1, 2, 3).add(new Rational(1, 1, 5))
+                   .toString());
     }
-
-    //......................................................................
-    //----- subtract -------------------------------------------------------
-
-    /** Test subtraction. */
-    @org.junit.Test
-    public void subtract()
-    {
-      Rational first  = new Rational(1, 2, 9);
-      Rational second = new Rational(2, 1, 6);
-
-      first = first.subtract(second);
-      assertEquals("subtract", "-17/18", first.toString());
-
-      first = first.subtract(42);
-      assertEquals("subtract 2", "-42 17/18", first.toString());
-
-      first = new Rational(5);
-      second = new Rational(2, 1, 2);
-
-      first = first.subtract(second);
-      assertEquals("subtract 3", "2 1/2", first.toString());
-
-      first = new Rational(10);
-      second = new Rational(2, 5, 6);
-
-      first = first.subtract(second);
-      assertEquals("subtract 4", "7 1/6", first.toString());
-
-      first = second.as(-2, 1, 6);
-      first = first.subtract(second);
-      assertEquals("subtract negative", "-5", first.toString());
-    }
-
-    //......................................................................
-    //----- divide ---------------------------------------------------------
-
-    /** Test divisions. */
-    @org.junit.Test
-    public void divide()
-    {
-      Rational value  = new Rational(2, 2, 8);
-
-      value = value.divide(1);
-      assertEquals("divide", "2 2/8",  value.toString());
-
-      value = value.divide(5);
-      assertEquals("divide", "9/20",   value.toString());
-
-      value = value.divide(3);
-      assertEquals("divide", "3/20",  value.toString());
-
-      value = value.divide(-2);
-      assertEquals("divide", "-3/40",  value.toString());
-
-      value = value.as(-5, 2, 3);
-      value = value.divide(-3);
-      assertEquals("divide", "1 8/9",  value.toString());
-
-      value = value.as(1, 2, 3);
-      value = value.divide(new Rational(4, 5, 6));
-      assertEquals("divide", "10/29", value.toString());
-    }
-
-    //......................................................................
-    //----- multiply -------------------------------------------------------
-
-    /** Test multiplication. */
-    @org.junit.Test
-    public void multiply()
-    {
-      Rational value  = new Rational(2, 2, 8);
-
-      value = value.multiply(1);
-      assertEquals("multiply", "2 2/8", value.toString());
-
-      value = value.multiply(5);
-      assertEquals("multiply", "11 1/4", value.toString());
-
-      value = value.multiply(4);
-      assertEquals("multiply", "45", value.toString());
-
-      value = value.as(-2, 1, 2);
-      value = value.multiply(-3);
-      assertEquals("multiply", "7 1/2", value.toString());
-
-      value = value.multiply(-2);
-      assertEquals("multiply", "-15", value.toString());
-
-      value = new Rational(2, 3, 5);
-      value = value.multiply(new Rational(3, 4, 6));
-      assertEquals("multiply", "9 8/15", value.toString());
-
-      value = value.multiply(new Rational(1, 4));
-      assertEquals("multiply", "2 23/60", value.toString());
-    }
-
-    //......................................................................
-    //----- as -------------------------------------------------------------
-
-    /** Test setting. */
-    @org.junit.Test
-    public void as()
-    {
-      Rational rational = new Rational();
-
-      // undefined value
-      assertEquals("not undefined at start", false, rational.isDefined());
-      assertEquals("undefined value not correct", "$undefined$",
-                   rational.toString());
-
-      rational = rational.as(5, 6);
-      assertTrue("set", rational.isDefined());
-      assertEquals("set", "5/6", rational.toString());
-
-      rational = rational.as(42, 5, 6);
-      assertTrue("set", rational.isDefined());
-      assertEquals("set", "42 5/6", rational.toString());
-
-      rational = rational.as(0, 0, 1);
-      assertTrue("set", rational.isDefined());
-      assertEquals("set", "0", rational.toString());
-    }
-
-    //......................................................................
-    //----- compare --------------------------------------------------------
-
-    /** Test comparison with base types. */
-    @org.junit.Test
-    public void compare()
-    {
-      assertEquals("lower",  -1, new Rational(5).compare(6));
-      assertEquals("higher", +1, new Rational(5).compare(4));
-      assertEquals("equal",   0, new Rational(5).compare(5));
-
-      assertEquals("higher 2", +1, new Rational(-5).compare(-6));
-      assertEquals("lower 2",  -1, new Rational(-5).compare(-4));
-      assertEquals("equal 2",   0, new Rational(-5).compare(-5));
-
-      assertEquals("lower 3",  -1, new Rational(1, 2).compare(1));
-      assertEquals("higher 3", +1, new Rational(1, 2).compare(0));
-
-      assertEquals("lower 4",  -1, new Rational(-1, 2).compare(0));
-      assertEquals("higher 4", +1, new Rational(-1, 2).compare(-1));
-
-      assertEquals("lower 5",   -1, new Rational(3, 5, 3).compare(5));
-      assertEquals("higher 5a", +1, new Rational(3, 5, 3).compare(4));
-      assertEquals("higher 5b", +1, new Rational(3, 5, 3).compare(-4));
-
-      assertEquals("lower 6a",  -1, new Rational(-3, 5, 3).compare(4));
-      assertEquals("lower 6b",  -1, new Rational(-3, 5, 3).compare(-4));
-      assertEquals("higher 6",  +1, new Rational(-3, 5, 3).compare(-5));
-
-      // special cases
-      assertEquals("equal special",  0, new Rational(5, 5).compare(1));
-      assertEquals("equal special",  0, new Rational(-14, 7).compare(-2));
-
-      assertEquals("lower special",  -1, new Rational(3, 5, 5).compare(5));
-      assertEquals("higher special", +1, new Rational(3, 5, 5).compare(3));
-      assertEquals("equal special",   0, new Rational(3, 5, 5).compare(4));
-    }
-
-    //......................................................................
-    //----- compareRational ------------------------------------------------
-
-    /** Test comparison. */
-    @org.junit.Test
-    public void compareRational()
-    {
-      assertEquals("lower",  -1, new Rational(5).compare(new Rational(6)));
-      assertEquals("lower",  -1, new Rational(5).compare(new Rational(27, 5)));
-      assertEquals("lower",  -1,
-                   new Rational(5).compare(new Rational(5, 1, 3)));
-      assertEquals("higher", +1, new Rational(5).compare(new Rational(4)));
-      assertEquals("higher", +1, new Rational(5).compare(new Rational(19, 4)));
-      assertEquals("higher", +1,
-                   new Rational(5).compare(new Rational(2, 9, 4)));
-      assertEquals("equal",   0, new Rational(5).compare(new Rational(5)));
-      assertEquals("equal",   0, new Rational(5).compare(new Rational(25, 5)));
-      assertEquals("equal",   0, new
-                   Rational(5).compare(new Rational(4, 1, 1)));
-
-      assertEquals("lower",  +1, new Rational(-5).compare(new Rational(-6)));
-      assertEquals("lower",  +1,
-                   new Rational(-5).compare(new Rational(27, -5)));
-      assertEquals("lower",  +1,
-                   new Rational(-5).compare(new Rational(-5, 1, 3)));
-      assertEquals("higher", -1, new Rational(-5).compare(new Rational(-4)));
-      assertEquals("higher", -1,
-                   new Rational(-5).compare(new Rational(-19, 4)));
-      assertEquals("higher", -1,
-                   new Rational(-5).compare(new Rational(-2, 9, 4)));
-      assertEquals("equal",   0, new Rational(-5).compare(new Rational(-5)));
-      assertEquals("equal",   0,
-                   new Rational(-5).compare(new Rational(-25, 5)));
-      assertEquals("equal",   0, new
-                   Rational(-5).compare(new Rational(-4, 1, 1)));
-
-      assertEquals("higher 2", +1, new Rational(-5).compare(new Rational(-6)));
-      assertEquals("higher 2", +1,
-                   new Rational(-5).compare(new Rational(-19, 3)));
-      assertEquals("higher 2", +1,
-                   new Rational(-5).compare(new Rational(-6, 3, 4)));
-      assertEquals("lower 2",  -1, new Rational(-5).compare(new Rational(-4)));
-      assertEquals("lower 2",  -1,
-                   new Rational(-5).compare(new Rational(-17, 4)));
-      assertEquals("lower 2",  -1,
-                   new Rational(-5).compare(new Rational(-4, 2, 3)));
-      assertEquals("equal 2",   0, new Rational(-5).compare(new Rational(-5)));
-      assertEquals("equal 2",   0,
-                   new Rational(-5).compare(new Rational(-10, 2)));
-      assertEquals("equal 2",   0,
-                   new Rational(-5).compare(new Rational(-4, 2, 2)));
-
-      assertEquals("lower 3",  -1,
-                   new Rational(1, 2).compare(new Rational(1)));
-      assertEquals("lower 3",  -1,
-                   new Rational(1, 2).compare(new Rational(2, 3)));
-      assertEquals("lower 3",  -1,
-                   new Rational(1, 2).compare(new Rational(1, 1, 3)));
-      assertEquals("higher 3", +1,
-                   new Rational(1, 2).compare(new Rational(0)));
-      assertEquals("higher 3", +1,
-                   new Rational(1, 2).compare(new Rational(1, 3)));
-      assertEquals("higher 3", +1,
-                   new Rational(1, 2).compare(new Rational(0, 1, 4)));
-
-      assertEquals("lower 4",  -1,
-                   new Rational(-1, 2).compare(new Rational(0)));
-      assertEquals("lower 4",  -1,
-                   new Rational(-1, 2).compare(new Rational(-1, 3)));
-      assertEquals("lower 4",  -1,
-                   new Rational(-1, 2).compare(new Rational(0, 1, 4)));
-      assertEquals("higher 4", +1,
-                   new Rational(-1, 2).compare(new Rational(-1)));
-      assertEquals("higher 4", +1,
-                   new Rational(-1, 2).compare(new Rational(-2, 3)));
-      assertEquals("higher 4", +1,
-                   new Rational(-1, 2).compare(new Rational(-1, 1, 2)));
-
-      assertEquals("lower 5",   -1,
-                   new Rational(3, 5, 3).compare(new Rational(5)));
-      assertEquals("lower 5",   -1,
-                   new Rational(3, 5, 3).compare(new Rational(10, 2)));
-      assertEquals("lower 5",   -1,
-                   new Rational(3, 5, 3).compare(new Rational(3, 6, 3)));
-      assertEquals("higher 5a", +1,
-                   new Rational(3, 5, 3).compare(new Rational(4)));
-      assertEquals("higher 5a", +1,
-                   new Rational(3, 5, 3).compare(new Rational(13, 3)));
-      assertEquals("higher 5a", +1,
-                   new Rational(3, 5, 3).compare(new Rational(4, 1, 3)));
-      assertEquals("higher 5b", +1,
-                   new Rational(3, 5, 3).compare(new Rational(-4)));
-      assertEquals("higher 5b", +1,
-                   new Rational(3, 5, 3).compare(new Rational(-13, 3)));
-      assertEquals("higher 5b", +1,
-                   new Rational(3, 5, 3).compare(new Rational(-4, 1, 3)));
-
-      assertEquals("lower 6a",  -1,
-                   new Rational(-3, 5, 3).compare(new Rational(4)));
-      assertEquals("lower 6a",  -1,
-                   new Rational(-3, 5, 3).compare(new Rational(13, 3)));
-      assertEquals("lower 6a",  -1,
-                   new Rational(-3, 5, 3).compare(new Rational(4, 1, 2)));
-      assertEquals("lower 6b",  -1,
-                   new Rational(-3, 5, 3).compare(new Rational(-4)));
-      assertEquals("lower 6b",  -1,
-                   new Rational(-3, 5, 3).compare(new Rational(-12, 3)));
-      assertEquals("lower 6b",  -1,
-                   new Rational(-3, 5, 3).compare(new Rational(-3, 4, 3)));
-      assertEquals("higher 6",  +1,
-                   new Rational(-3, 5, 3).compare(new Rational(-5)));
-      assertEquals("higher 6",  +1,
-                   new Rational(-3, 5, 3).compare(new Rational(-19, 4)));
-      assertEquals("higher 6",  +1,
-                   new Rational(-3, 5, 3).compare(new Rational(-4, 3, 3)));
-
-      // special cases
-      assertEquals("equal special",  0,
-                   new Rational(5, 5).compare(new Rational(1)));
-      assertEquals("equal special",  0,
-                   new Rational(5, 5).compare(new Rational(3, 3)));
-      assertEquals("equal special",  0,
-                   new Rational(5, 5).compare(new Rational(0, 4, 4)));
-      assertEquals("equal special",  0,
-                   new Rational(-14, 7).compare(new Rational(-2)));
-      assertEquals("equal special",  0,
-                   new Rational(-14, 7).compare(new Rational(-4, 2)));
-      assertEquals("equal special",  0,
-                   new Rational(-14, 7).compare(new Rational(-1, 3, 3)));
-
-      assertEquals("lower special",  -1,
-                   new Rational(3, 5, 5).compare(new Rational(5)));
-      assertEquals("lower special",  -1,
-                   new Rational(3, 5, 5).compare(new Rational(26, 5)));
-      assertEquals("lower special",  -1,
-                   new Rational(3, 5, 5).compare(new Rational(4, 1, 2)));
-      assertEquals("higher special", +1,
-                   new Rational(3, 5, 5).compare(new Rational(3)));
-      assertEquals("higher special", +1,
-                   new Rational(3, 5, 5).compare(new Rational(19, 6)));
-      assertEquals("higher special", +1,
-                   new Rational(3, 5, 5).compare(new Rational(3, 1, 4)));
-      assertEquals("equal special",   0,
-                   new Rational(3, 5, 5).compare(new Rational(4)));
-      assertEquals("equal special",   0,
-                   new Rational(3, 5, 5).compare(new Rational(16, 4)));
-      assertEquals("equal special",   0,
-                   new Rational(3, 5, 5).compare(new Rational(2, 4, 2)));
-    }
-
-    //......................................................................
   }
 
-  //........................................................................
 }

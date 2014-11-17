@@ -526,50 +526,6 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- init -----------------------------------------------------------
-
-    /** Test of init. */
-    @org.junit.Test
-    @SuppressWarnings("rawtypes")
-    public void init()
-    {
-      BaseNumber number = new BaseNumber(10, 20);
-
-      // undefined value
-      assertFalse("not undefined at start", number.isDefined());
-      assertEquals("undefined value not correct", "$undefined$",
-                   number.toString());
-      assertEquals("undefined value not correct", 15, number.get());
-      assertEquals("group", "$undefined$", number.group());
-
-      // now with some number
-      number = new BaseNumber(10, 0, 20);
-
-      assertEquals("not defined after setting", true, number.isDefined());
-      assertEquals("value not correctly gotten", 10, number.get());
-      assertEquals("value not correctly converted", "10", number.toString());
-      assertEquals("group", "10", number.group());
-
-      assertEquals("max", 20, number.getMax());
-      assertEquals("min", 0, number.getMin());
-
-      BaseNumber number2 = new BaseNumber(522, 0, 1000);
-      assertEquals("group", "750", number2.group());
-
-      // comparisons
-      assertTrue("equal", number.compareTo(number) == 0);
-      assertTrue(">", number2.compareTo(number) > 0);
-      assertTrue("<", number.compareTo(number2) < 0);
-
-      // signs
-      number = new BaseNumber(0, 0, 20, true);
-
-      assertEquals("sign", "+0", number.toString());
-
-      Value.Test.createTest(number);
-    }
-
-    //......................................................................
     //----- read -----------------------------------------------------------
 
     /** Testing reading. */
