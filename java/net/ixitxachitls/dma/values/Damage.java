@@ -70,7 +70,7 @@ public class Damage extends NewValue.Arithmetic<DamageProto>
         if(parts[0] == null)
           return Optional.absent();
 
-        Optional<NewDice> dice = NewDice.PARSER.parse(parts[0]);
+        Optional<Dice> dice = Dice.PARSER.parse(parts[0]);
         if(dice == null)
           return Optional.absent();
 
@@ -89,7 +89,7 @@ public class Damage extends NewValue.Arithmetic<DamageProto>
     }
   }
 
-  public Damage(NewDice inDice, Optional<Type> inType,
+  public Damage(Dice inDice, Optional<Type> inType,
                 Optional<Damage> inOther, Optional<String> inEffect)
   {
     m_dice = inDice;
@@ -98,13 +98,13 @@ public class Damage extends NewValue.Arithmetic<DamageProto>
     m_effect = inEffect;
   }
 
-  public Damage(NewDice inDice, Type inType)
+  public Damage(Dice inDice, Type inType)
   {
     this(inDice, Optional.of(inType), Optional.<Damage>absent(),
          Optional.<String>absent());
   }
 
-  public Damage(NewDice inDice)
+  public Damage(Dice inDice)
   {
     this(inDice, Optional.<Type>absent(), Optional.<Damage>absent(),
          Optional.<String>absent());
@@ -231,7 +231,7 @@ public class Damage extends NewValue.Arithmetic<DamageProto>
   }
 
   /** The base damage. */
-  protected final NewDice m_dice;
+  protected final Dice m_dice;
 
   /** The kind of base damage, if any. */
   protected final Optional<Type> m_type;
@@ -370,7 +370,7 @@ public class Damage extends NewValue.Arithmetic<DamageProto>
   private static Damage fromProto(DamageProto.Damage inProto,
                                      Optional<Damage> inNext)
   {
-    NewDice dice = NewDice.fromProto(inProto.getBase());
+    Dice dice = Dice.fromProto(inProto.getBase());
 
     Optional<Type> type;
     if(inProto.hasType())

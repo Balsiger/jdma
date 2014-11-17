@@ -1113,7 +1113,7 @@ public class Item extends CampaignEntry
     }
 
     if(damage == null)
-      damage = new Damage(new NewDice(0, 0, 0));
+      damage = new Damage(new Dice(0, 0, 0));
 
     // add strength modifier
     int strengthModifier = getPossessor().get().getStrengthModifier();
@@ -1121,12 +1121,12 @@ public class Item extends CampaignEntry
     if(style.isPresent() && style.get().isMelee()
        && getPossessor().isPresent())
       damage = (Damage)
-        damage.add(new Damage(new NewDice(0, 0, strengthModifier)));
+        damage.add(new Damage(new Dice(0, 0, strengthModifier)));
 
     // + additional 1/2 strength bonus for two handed melee weapons
     if(style.isPresent() && style.get() == WeaponStyle.TWOHANDED_MELEE) {
       damage = (Damage)
-        damage.add(new Damage(new NewDice(0, 0, strengthModifier / 2)));
+        damage.add(new Damage(new Dice(0, 0, strengthModifier / 2)));
     }
 
     // TODO: have to subtract strength penalty for non-composite bows

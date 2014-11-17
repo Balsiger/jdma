@@ -40,8 +40,8 @@ import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Values.SpeedProto;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Damage;
+import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Distance;
-import net.ixitxachitls.dma.values.NewDice;
 import net.ixitxachitls.dma.values.NewModifier;
 import net.ixitxachitls.dma.values.NewRange;
 import net.ixitxachitls.dma.values.NewRational;
@@ -65,7 +65,7 @@ public class BaseMonster extends BaseEntry
 {
   public static class Attack
   {
-    public Attack(NewDice inNumber, AttackMode inMode, AttackStyle inStyle,
+    public Attack(Dice inNumber, AttackMode inMode, AttackStyle inStyle,
                   Damage inDamage)
     {
       m_number = inNumber;
@@ -74,7 +74,7 @@ public class BaseMonster extends BaseEntry
       m_damage = inDamage;
     }
 
-    private NewDice m_number;
+    private Dice m_number;
     private AttackMode m_mode;
     private AttackStyle m_style;
     private Damage m_damage;
@@ -86,7 +86,7 @@ public class BaseMonster extends BaseEntry
         public Optional<Attack> doParse(String inNumber, String inMode,
                                         String inStyle, String inDamage)
         {
-          Optional<NewDice> number = NewDice.PARSER.parse(inNumber);
+          Optional<Dice> number = Dice.PARSER.parse(inNumber);
           if(!number.isPresent())
             return Optional.absent();
 
@@ -107,7 +107,7 @@ public class BaseMonster extends BaseEntry
         }
       };
 
-    public NewDice getNumber()
+    public Dice getNumber()
     {
       return m_number;
     }
@@ -133,7 +133,7 @@ public class BaseMonster extends BaseEntry
 
   public static class Group
   {
-    public Group(Organization inOrganization, NewDice inNumber,
+    public Group(Organization inOrganization, Dice inNumber,
                  Optional<String> inPlus)
     {
       m_organization = inOrganization;
@@ -142,7 +142,7 @@ public class BaseMonster extends BaseEntry
     }
 
     private Organization m_organization;
-    private NewDice m_number;
+    private Dice m_number;
     private Optional<String> m_plus;
 
     public static final NewValue.Parser<Group> PARSER =
@@ -157,7 +157,7 @@ public class BaseMonster extends BaseEntry
           if(!organization.isPresent())
             return Optional.absent();
 
-          Optional<NewDice> number = NewDice.PARSER.parse(inNumber);
+          Optional<Dice> number = Dice.PARSER.parse(inNumber);
           if(!number.isPresent())
             return Optional.absent();
 
@@ -173,7 +173,7 @@ public class BaseMonster extends BaseEntry
       return m_organization;
     }
 
-    public NewDice getNumber()
+    public Dice getNumber()
     {
       return m_number;
     }
@@ -324,7 +324,7 @@ public class BaseMonster extends BaseEntry
   protected List<MonsterSubtype> m_monsterSubtypes = new ArrayList<>();
 
   /** The monster's hit dice. */
-  protected Optional<NewDice> m_hitDice = Optional.absent();
+  protected Optional<Dice> m_hitDice = Optional.absent();
 
   /** The monster's speed. */
   protected List<Speed> m_speeds = new ArrayList<>();
@@ -512,7 +512,7 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
-  public Optional<NewDice> getHitDice()
+  public Optional<Dice> getHitDice()
   {
     return m_hitDice;
   }
@@ -2819,7 +2819,7 @@ public class BaseMonster extends BaseEntry
                                  MonsterType.PARSER);
     m_monsterSubtypes = inValues.use("monster_subtype", m_monsterSubtypes,
                                      MonsterSubtype.PARSER);
-    m_hitDice = inValues.use("hit_dice", m_hitDice, NewDice.PARSER);
+    m_hitDice = inValues.use("hit_dice", m_hitDice, Dice.PARSER);
     m_speeds = inValues.use("speed", m_speeds, Speed.PARSER,
                             "mode", "speed", "maneuverability");
     m_naturalArmor = inValues.use("natural_armor", m_naturalArmor,
@@ -3095,7 +3095,7 @@ public class BaseMonster extends BaseEntry
       m_monsterSubtypes.add(MonsterSubtype.fromProto(subtype));
 
     if(proto.hasHitDice())
-      m_hitDice = Optional.of(NewDice.fromProto(proto.getHitDice()));
+      m_hitDice = Optional.of(Dice.fromProto(proto.getHitDice()));
 
     for(SpeedProto speed : proto.getSpeedList())
       m_speeds.add(Speed.fromProto(speed));
@@ -3135,14 +3135,14 @@ public class BaseMonster extends BaseEntry
       m_reflexSave = Optional.of(proto.getReflexSave());
 
     for(BaseMonsterProto.Attack attack : proto.getPrimaryAttackList())
-      m_primaryAttacks.add(new Attack(NewDice.fromProto(attack.getAttacks()),
+      m_primaryAttacks.add(new Attack(Dice.fromProto(attack.getAttacks()),
                                       AttackMode.fromProto(attack.getMode()),
                                       AttackStyle.fromProto(attack.getStyle()),
                                       Damage.fromProto(attack.getDamage())));
 
     for(BaseMonsterProto.Attack attack : proto.getSecondaryAttackList())
       m_secondaryAttacks.add
-      (new Attack(NewDice.fromProto(attack.getAttacks()),
+      (new Attack(Dice.fromProto(attack.getAttacks()),
                   AttackMode.fromProto(attack.getMode()),
                   AttackStyle.fromProto(attack.getStyle()),
                   Damage.fromProto(attack.getDamage())));
@@ -3181,7 +3181,7 @@ public class BaseMonster extends BaseEntry
 
       m_organizations.add
       (new Group(Organization.fromProto(org.getType()),
-                 NewDice.fromProto(org.getNumber()),
+                 Dice.fromProto(org.getNumber()),
                  Optional.of(Strings.COMMA_JOINER.join(pluses))));
     }
 

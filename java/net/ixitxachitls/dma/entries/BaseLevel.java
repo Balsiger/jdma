@@ -37,7 +37,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseLevelProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.values.ArmorType;
-import net.ixitxachitls.dma.values.NewDice;
+import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Proficiency;
@@ -181,7 +181,7 @@ public class BaseLevel extends BaseEntry
     new ArrayList<>();
 
   /** The hit die. */
-  protected Optional<NewDice> m_hitDie = Optional.absent();
+  protected Optional<Dice> m_hitDie = Optional.absent();
 
   /** Skill points per level (x4 at first level, +Int modifier). */
   protected Optional<Integer> m_skillPoints = Optional.absent();
@@ -344,7 +344,7 @@ public class BaseLevel extends BaseEntry
    *
    * @return  the hit die
    */
-  public Optional<NewDice> getHitDie()
+  public Optional<Dice> getHitDie()
   {
     return m_hitDie;
   }
@@ -540,7 +540,7 @@ public class BaseLevel extends BaseEntry
     m_allowedAlignments =
       inValues.use("allowed_alignment", m_allowedAlignments,
                    Alignment.PARSER);
-    m_hitDie = inValues.use("hit_die", m_hitDie, NewDice.PARSER);
+    m_hitDie = inValues.use("hit_die", m_hitDie, Dice.PARSER);
     m_skillPoints = inValues.use("skill_points", m_skillPoints,
                                  NewValue.INTEGER_PARSER);
     m_classSkills =
@@ -731,7 +731,7 @@ public class BaseLevel extends BaseEntry
       m_allowedAlignments.add(Alignment.fromProto(alignment));
 
     if(proto.hasHitDice())
-      m_hitDie = Optional.of(NewDice.fromProto(proto.getHitDice()));
+      m_hitDie = Optional.of(Dice.fromProto(proto.getHitDice()));
 
     if(proto.hasSkillPoints())
       m_skillPoints = Optional.of(proto.getSkillPoints());
