@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2013 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -19,58 +19,38 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
 
 package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.annotation.concurrent.Immutable;
-
-import com.google.common.collect.Iterators;
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.proto.Values.ModifierProto;
-import net.ixitxachitls.dma.values.conditions.And;
-import net.ixitxachitls.dma.values.conditions.Condition;
-import net.ixitxachitls.input.ParseReader;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
+import net.ixitxachitls.util.Strings;
 
 /**
- * This class stores a single modifier value.
+ * A modifier value.
  *
- * @file          Modifier.java
- *
- * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
+ * @file   NewModifier.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
-@ParametersAreNonnullByDefault
-@Immutable
-public class Modifier extends Value<Modifier>
+public class Modifier extends NewValue.Arithmetic<ModifierProto>
 {
-  //----------------------------------------------------------------- nested
+  /** An interface for stackable objects. */
+  public interface Stackable
+  {
 
-  //----- type -------------------------------------------------------------
-
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
+  }
 
   /** The modifiers type. */
   public enum Type implements EnumSelection.Named
   {
-    /** Doding stuff. */
+    /** Dodging stuff. */
     DODGE("dodge", true, ModifierProto.Type.DODGE),
 
     /** Better armor. */
@@ -191,756 +171,178 @@ public class Modifier extends Value<Modifier>
 
       throw new IllegalStateException("invalid proto type: " + inProto);
     }
+
+    /**
+     * Get the armor type from the given string.
+     *
+     * @param inValue the string representation
+     * @return the matching type, if any
+     */
+    public static Optional<Type> fromString(String inValue)
+    {
+      for(Type type : values())
+        if(type.getName().equalsIgnoreCase(inValue))
+          return Optional.of(type);
+
+      return Optional.absent();
+    }
+
+    /**
+     * Get the possible names of types.
+     *
+     * @return a list of the namees
+     */
+    public static List<String> names()
+    {
+      List<String> names = new ArrayList<>();
+      for(Type type : values())
+        names.add(type.getName());
+
+      return names;
+    }
   }
 
-  //........................................................................
+  public static final Parser<Modifier> PARSER = new Parser<Modifier>(0)
+  {
+    @Override
+    protected Optional<Modifier> doParse(String ... inValues)
+    {
+      return parse(Strings.COMMA_SPLITTER.splitToList
+                   (Strings.COMMA_JOINER.join(inValues)));
+    }
 
-  //........................................................................
+    private Optional<Modifier> parse(List<String> inValues)
+    {
+      List<String> values = new ArrayList<>(inValues);
+      Collections.reverse(values);
+      Optional<Modifier> result = Optional.absent();
+      for(String value : values)
+      {
+        String []parts =
+          Strings.getPatterns(value,
+                              "^([+-]\\d+)\\s*(" + types + ")?\\s*"
+                              + "(?: if\\s+(.*))?$");
+        if(parts == null || parts.length == 0)
+          return Optional.absent();
 
-  //--------------------------------------------------------- constructor(s)
+        try
+        {
+          int modifier = Integer.parseInt(parts[0]);
+          Type type;
+          if(parts[1] == null)
+            type = Type.GENERAL;
+          else
+            type = Type.fromString(parts[1]).get();
 
-  //------------------------------- Modifier -------------------------------
+          Optional<String> condition = Optional.fromNullable(parts[2]);
 
-  /**
-   * Construct the modifier object with an undefined value.
-   *
-   */
+          result =
+            Optional.of(new Modifier(modifier, type, condition, result));
+        }
+        catch(NumberFormatException e)
+        {
+          return Optional.absent();
+        }
+      }
+
+      return result;
+    }
+  };
+
   public Modifier()
   {
-    // nothing to do
+    this(0, Type.GENERAL, Optional.<String>absent(),
+         Optional.<Modifier>absent());
   }
 
-  //........................................................................
-  //------------------------------- Modifier -------------------------------
-
-  /**
-   * Construct the modifier object with a general modifier.
-   *
-   * @param       inValue       the modifier value
-   *
-   */
-  public Modifier(int inValue)
+  public Modifier(int inModifier, Type inType, Optional<String> inCondition,
+                  Optional<Modifier> inNext)
   {
-    this(inValue, Type.GENERAL);
-  }
-
-  //........................................................................
-  //------------------------------- Modifier -------------------------------
-
-  /**
-   * Construct the modifier object.
-   *
-   * @param       inValue       the modifier value
-   * @param       inType        the type of the modifier
-   *
-   */
-  public Modifier(int inValue, Type inType)
-  {
-    m_value = inValue;
-    m_type  = inType;
-    m_defined = true;
-  }
-
-  //........................................................................
-  //---------------------------- withCondition -----------------------------
-
-  /**
-   * Sets the condition for the modifier. Setting a null condition will
-   * clear any existing condition.
-   *
-   * @param    inCondition an optional condition
-   *
-   * @return   the condition for chaining
-   *
-   */
-  public Modifier withCondition(@Nullable Condition<?> inCondition)
-  {
-    if(inCondition == null)
-      return this;
-
-    if(m_condition == null)
-      m_condition = inCondition;
-    else
-      m_condition = new And(m_condition, inCondition);
-
-    return this;
-  }
-
-  //........................................................................
-  //--------------------------- withDefaultType ----------------------------
-
-  /**
-   * Sets the default type.
-   *
-   * @param   inDefault the default type to use if none is given
-   *
-   * @return  the modifier for chaining
-   */
-  public Modifier withDefaultType(Type inDefault)
-  {
-    m_defaultType = inDefault;
-
-    return this;
-  }
-
-  //........................................................................
-
-  {
-    withTemplate("modifier");
-    withEditType("non-empty");
-  }
-
-  //-------------------------------- create --------------------------------
-
-  /**
-   * Create a new list with the same type information as this one, but one
-   * that is still undefined.
-   *
-   * @return      a similar list, but without any contents
-   *
-   */
-  @Override
-  public Modifier create()
-  {
-    return super.create(new Modifier().withDefaultType(m_defaultType));
-  }
-
-  //........................................................................
-  //------------------------------- withNext -------------------------------
-
-  /**
-   * Set the next modifier in the chain.
-   *
-   * @param       inNext the next modifier
-   *
-   * @return      this modifier for chaining
-   *
-   */
-  public Modifier withNext(@Nullable Modifier inNext)
-  {
+    m_modifier = inModifier;
+    m_type = inType;
+    m_condition = inCondition;
     m_next = inNext;
-
-    return this;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
+  private static final String types = Strings.PIPE_JOINER.join(Type.names());
 
   /** The modifier value itself. */
-  private int m_value = 0;
+  private final int m_modifier;
 
   /** The type of the modifier. */
-  private Type m_type = Type.GENERAL;
+  private final Type m_type;
 
   /** The default type, if any. */
-  private Type m_defaultType = Type.GENERAL;
-
-  /** The flag if defined or not. */
-  private boolean m_defined = false;
+  private final Type m_defaultType = Type.GENERAL;
 
   /** The condition for the modifier, if any. */
-  private @Nullable Condition<?> m_condition;
+  private final Optional<String> m_condition;
 
   /** A next modifier, if any. */
-  private @Nullable Modifier m_next;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------- getValue -------------------------------
+  private final Optional<Modifier> m_next;
 
   /**
-   * Get the value of the modifier stored.
+   * Get the value of the modifier, ignoring additional modifiers.
    *
-   * @return      the requested value
-   *
+   * @return      the requested valu
    */
-  public int getValue()
+  public int getModifier()
   {
-    if(m_next == null)
-      return m_value;
-
-    return m_value + m_next.getValue();
+    return m_modifier;
   }
 
-  //........................................................................
-  //------------------------------ getMinValue -----------------------------
-
   /**
-   * Get the value of the modifier stored.
+   * Get the type of the modifier.
    *
-   * @return      the minimally possible value
-   *
-   */
-  public int getMinValue()
-  {
-    if(m_next == null)
-      return minValue();
-
-    return minValue() + m_next.getMinValue();
-  }
-
-  //........................................................................
-  //------------------------------- minValue -------------------------------
-
-  /**
-   * Compute the minimal value of this modifier, ignoring the next.
-   *
-   * @return   the minimal possible value
-   *
-   */
-  private int minValue()
-  {
-    if(m_condition == null || m_condition.check(false) == Condition.Result.TRUE)
-      return m_value;
-
-    if(m_condition.check(false) == Condition.Result.FALSE)
-      return 0;
-
-    if(m_value < 0)
-      return m_value;
-
-    return 0;
-  }
-
-  //........................................................................
-  //------------------------------ getMaxValue -----------------------------
-
-  /**
-   * Get the value of the modifier stored.
-   *
-   * @return      the maximally possible value
-   *
-   */
-  public int getMaxValue()
-  {
-    if(m_next == null)
-      return maxValue();
-
-    return maxValue() + m_next.getMaxValue();
-  }
-
-  //........................................................................
-  //------------------------------- maxValue -------------------------------
-
-  /**
-   * Compute the minimal value of this modifier, ignoring the next.
-   *
-   * @return  the maxiamally possible value
-   *
-   */
-  private int maxValue()
-  {
-    if(m_condition == null || m_condition.check(false) == Condition.Result.TRUE)
-      return m_value;
-
-    if(m_condition.check(false) == Condition.Result.FALSE)
-      return 0;
-
-    if(m_value > 0)
-      return m_value;
-
-    return 0;
-  }
-
-  //........................................................................
-  //-------------------------------- getType -------------------------------
-
-  /**
-   * Get the modifier type stored.
-   *
-   * @return      the requested type
-   *
+   * @return the modifier type
    */
   public Type getType()
   {
     return m_type;
   }
 
-  //........................................................................
-  //----------------------------- getCondition -----------------------------
-
   /**
-   * Get the condition type stored.
+   * Get the condition of the modifier, if any.
    *
-   * @return      the requested condition
-   *
+   * @return the condition
    */
-  public @Nullable Condition<?> getCondition()
+  public Optional<String> getCondition()
   {
     return m_condition;
   }
 
-  //........................................................................
-  //----------------------------- hasCondition -----------------------------
-
   /**
-   * Check if the modifier has a condition.
+   * Get the next modifier if there are chained modifiers.
    *
-   * @return      true if there is a condition, false if not
-   *
+   * @return the next modifier
    */
-  public boolean hasCondition()
-  {
-    return m_condition != null;
-  }
-
-  //........................................................................
-  //-------------------------------- getNext -------------------------------
-
-  /**
-   * Get the next modifier stored.
-   *
-   * @return      the next modifier, if any
-   *
-   */
-  public @Nullable Modifier getNext()
+  public Optional<Modifier> getNext()
   {
     return m_next;
   }
 
-  //........................................................................
-  //------------------------------- getBase --------------------------------
-
-  /**
-   * Get the base modifiers, without conditions.
-   *
-   * @return      a list of the modifiers found
-   *
-   */
-  public List<String> getBase()
-  {
-    List<String> result = new ArrayList<String>();
-    return addBase(result);
-  }
-
-  //........................................................................
-  //------------------------------- addBase --------------------------------
-
-  /**
-   * Add the base modifier value (without condition) to the given list.
-   *
-   * @param       ioBases the list to add to
-   *
-   * @return      the complete list
-   *
-   */
-  private List<String> addBase(List<String> ioBases)
-  {
-    if(!isDefined())
-      return ioBases;
-
-    ioBases.add((m_value >= 0 ? "+" : "") + m_value + " " + m_type);
-    if(m_next != null)
-      m_next.addBase(ioBases);
-
-    return ioBases;
-  }
-
-  //........................................................................
-
-  //----------------------------- stackOrMore ------------------------------
-
-  /**
-   * Check if this modifier is stackable with the given one or if it has
-   * a larger bonus, id est it has to be used. If the modifier types are
-   * different, they stack in any case
-   *
-   * @param       inOther the other modifier to check against
-   *
-   * @return      true if the modifier is still useful, false else
-   *
-   */
-  public boolean stackOrMore(Modifier inOther)
-  {
-    if(stacks() || inOther.stacks())
-      return true;
-
-    if(m_condition != null
-       && m_condition.check(false) == Condition.Result.FALSE)
-      return false;
-
-    if(inOther.m_condition != null
-       && inOther.m_condition.check(false) == Condition.Result.FALSE)
-      return true;
-
-    // the values generally don't stack, i.e. only the larger one is used
-    return m_value > inOther.m_value;
-  }
-
-  //........................................................................
-  //----------------------------- stackOrMore ------------------------------
-
-  /**
-   * Check if this modifier is stackable with the given ones or if it has
-   * a larger bonus, id est it has to be used. If the modifier types are
-   * different, they stack in any case
-   *
-   * @param       inOthers the other modifiers to check against
-   *
-   * @return      true if the modifier is still useful, false else
-   *
-   */
-  public boolean stackOrMore(List<Modifier> inOthers)
-  {
-    // penalties always stack!
-    if(m_value < 0)
-      return true;
-
-    for(Iterator<Modifier> i = inOthers.iterator(); i.hasNext(); )
-      if(!stackOrMore(i.next()))
-        return false;
-
-    return true;
-  }
-
-  //........................................................................
-  //----------------------------- stackOrMore ------------------------------
-
-  /**
-   * Check if this modifier is stackable with the given one or if it has
-   * a larger bonus, id est it has to be used. If the modifier types are
-   * different, they stack in any case
-   *
-   * @param       inOthers the other modifiers to check against
-   *
-   * @return      true if the modifier is still useful, false else
-   *
-   */
-  public boolean stackOrMore(Modifier ... inOthers)
-  {
-    // penalties always stack!
-    if(m_value < 0)
-      return true;
-
-    for(int i = 0; i < inOthers.length; i++)
-      if(!stackOrMore(inOthers[i]))
-        return false;
-
-    return true;
-  }
-
-  //........................................................................
-  //-------------------------------- stacks --------------------------------
-
-  /**
-   * Check if this modifier stacks with others of the same type.
-   *
-   * @return      true if it stacks, false else
-   *
-   */
-  private boolean stacks()
-  {
-    // TODO: check if this is still true!
-    if(m_value < 0)
-      return true;
-
-    // undefined conditions always stack to let the user decide
-    if(m_condition != null
-       && m_condition.check(false) == Condition.Result.UNDEFINED)
-      return true;
-
-    return m_type.stacks();
-  }
-
-  //........................................................................
-
-  //------------------------------ isDefined -------------------------------
-
-  /**
-   * Check if the value is defined or not.
-   *
-   * @return      true if the value is defined, false if not
-   *
-   */
   @Override
-  public boolean isDefined()
-  {
-    return m_defined;
-  }
-
-  //........................................................................
-  //-------------------------------- isZero --------------------------------
-
-  /**
-   * Checks whether the modifier represents a zero value.
-   *
-   * @return   true if the modifier represents 0, false if not
-   */
-  public boolean isZero()
-  {
-    return getValue() == 0;
-  }
-
-  //........................................................................
-
-  //------------------------------ doToString ------------------------------
-
-  /**
-   * Convert the value to a string.
-   *
-   * @return      a String representation
-   *
-   */
-  @Override
-  protected String doToString()
+  public String toString()
   {
     StringBuilder result = new StringBuilder();
+    if(m_modifier >= 0)
+      result.append("+");
 
-    if(m_value >= 0)
-      result.append('+');
+    result.append(m_modifier);
 
-    result.append(m_value);
-    result.append(" " + m_type);
+    if(m_type != Type.GENERAL)
+      result.append(" " + m_type);
 
-    if(m_condition != null)
-    {
-      result.append(" if ");
-      result.append(m_condition.toString());
-    }
+    if(m_condition.isPresent())
+      result.append(" if " + m_condition.get());
 
-    if(m_next != null)
-    {
-      result.append(' ');
-      result.append(m_next.toString());
-    }
+    if(m_next.isPresent())
+      result.append(", " + m_next.get());
 
     return result.toString();
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //---------------------------------- as ----------------------------------
-
-  /**
-   * Create a new the value with similar setup but new value.
-   *
-   * @param       inValue the new value of the modifier
-   * @param       inType  the type of the modifier
-   *
-   * @return      the new value
-   *
-   */
-  public Modifier as(int inValue, Type inType)
-  {
-    return as(inValue, inType, null, null);
-  }
-
-  //........................................................................
-  //---------------------------------- as ----------------------------------
-
-  /**
-   * Create a new the value with similar setup but new value.
-   *
-   * @param       inValue     the new value of the modifier
-   * @param       inType      the type of the modifier
-   * @param       inCondition the condition, if any
-   * @param       inNext      the next modifier for this chain
-   *
-   * @return      the new value
-   *
-   */
-  public Modifier as(int inValue, Type inType,
-                     @Nullable Condition<?> inCondition,
-                     @Nullable Modifier inNext)
-  {
-    Modifier modifier = create();
-
-    modifier.m_value = inValue;
-    modifier.m_type = inType;
-    modifier.m_defined = true;
-    modifier.m_condition = inCondition;
-    modifier.m_next = inNext;
-
-    return modifier;
-  }
-
-  //........................................................................
-  //---------------------------------- as ----------------------------------
-
-  /**
-   * Create a new the value with similar setup but new value.
-   *
-   * @param       inNext  the next modifier for this chain
-   *
-   * @return      the new value
-   *
-   */
-  public Modifier as(@Nullable Modifier inNext)
-  {
-    if(m_next == null)
-      return as(m_value, m_type, m_condition, inNext);
-
-    return as(m_value, m_type, m_condition, m_next.as(inNext));
-  }
-
-  //........................................................................
-  //-------------------------------- retype --------------------------------
-
-  /**
-   * Create a new modifier with the same values but a new type.
-   *
-   * @param    inType the new type of the modifier
-   *
-   * @return   the modifier with the new type
-   */
-  public Modifier retype(Type inType)
-  {
-    Modifier modifier = create();
-
-    modifier.m_value = m_value;
-    modifier.m_type = inType;
-    modifier.m_defined = true;
-    modifier.m_condition = m_condition;
-    if (m_next == null)
-      modifier.m_next = null;
-    else
-      modifier.m_next = m_next.retype(inType);
-
-    return modifier;
-  }
-
-  //........................................................................
-
-  //-------------------------------- doRead --------------------------------
-
-  /**
-   * Read the value from the reader and replace the current one.
-   *
-   * @param       inReader the reader to read from
-   *
-   * @return      true if read, false if not
-   *
-   */
   @Override
-  @SuppressWarnings("rawtypes")
-  public boolean doRead(ParseReader inReader)
-  {
-    try
-    {
-      m_value = inReader.readInt();
-
-      m_defined = true;
-
-      m_type = inReader.expect(Iterators.forArray(Type.values()));
-
-      // no type read, thus it is general
-      if(m_type == null)
-        m_type = m_defaultType;
-
-      ParseReader.Position pos = inReader.getPosition();
-      if(inReader.expect("if"))
-      {
-        m_condition = (Condition)new Condition().read(inReader);
-
-        if(m_condition == null)
-        {
-          inReader.logError(pos, "expected.condition", null);
-          inReader.seek(pos);
-        }
-       }
-
-      m_next = read(inReader);
-    }
-    catch(net.ixitxachitls.input.ReadException e)
-    {
-      return false;
-    }
-
-    return true;
-  }
-
-  //........................................................................
-  //--------------------------------- add ----------------------------------
-
-  /**
-   * Add the current and given value and return it. The current value is not
-   * changed.
-   *
-   * @param       inValue the value to add to this one
-   *
-   * @return      the added values
-   *
-   */
-  @Override
-  public Modifier add(Modifier inValue)
-  {
-    int value = m_value;
-    if(m_type == inValue.m_type
-       && ((m_condition != null && m_condition.equals(inValue.m_condition))
-           || m_condition == null && inValue.m_condition == null))
-    {
-      Modifier next;
-      if(m_next == null)
-        next = inValue.m_next;
-      else if(inValue.m_next == null)
-        next = m_next;
-      else
-        next = m_next.add(inValue.m_next);
-
-      if(m_type.stacks())
-        return as(m_value + inValue.m_value, m_type, m_condition, next);
-      else
-        return
-          as(Math.max(value, inValue.m_value), m_type, m_condition, next);
-    }
-
-    if(m_next == null)
-      return as(m_value, m_type, m_condition, inValue);
-
-    return as(m_value, m_type, m_condition, m_next.add(inValue));
-  }
-
-  //........................................................................
-  //-------------------------------- ignore --------------------------------
-
-  /**
-   * Ignore all modifiers with the given type.
-   *
-   * @param      inTypes the types to ignore
-   *
-   * @return     the modifier that is left after ignoring the given types, if
-   *             any
-   *
-   */
-  public @Nullable Modifier ignore(Type ... inTypes)
-  {
-    for(Type type : inTypes)
-      if(m_type == type && m_value >= 0)
-        if(m_next != null)
-          return m_next.ignore(inTypes);
-        else
-          return null;
-
-    if(m_next == null)
-      return this;
-
-    Modifier next = m_next.ignore(inTypes);
-    if(next == m_next)
-      return this;
-
-    return as(m_value, m_type, m_condition, next);
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  /**
-   * Create a proto for the value.
-   *
-   * @return the proto representation
-   */
   public ModifierProto toProto()
   {
     ModifierProto.Builder builder = ModifierProto.newBuilder();
@@ -949,7 +351,7 @@ public class Modifier extends Value<Modifier>
     return builder.build();
   }
 
-  /**
+    /**
    * Add the values of this modifier to the given proto.
    *
    * @param inBuilder the builder to fill
@@ -959,182 +361,114 @@ public class Modifier extends Value<Modifier>
     ModifierProto.Modifier.Builder modifier =
       ModifierProto.Modifier.newBuilder();
 
-    modifier.setBaseValue(m_value);
+    modifier.setBaseValue(m_modifier);
     modifier.setType(m_type.getProto());
-    if (m_condition != null)
-      modifier.setCondition(m_condition.getDescription());
+    if (m_condition.isPresent())
+      modifier.setCondition(m_condition.get());
 
     inBuilder.addModifier(modifier.build());
 
-    if(m_next != null)
-      m_next.addToProto(inBuilder);
+    if(m_next.isPresent())
+      m_next.get().addToProto(inBuilder);
    }
 
+  @Override
+  public NewValue.Arithmetic<ModifierProto>
+    add(NewValue.Arithmetic<ModifierProto> inValue)
+  {
+    if(!(inValue instanceof Modifier))
+      return this;
+
+    Modifier value = (Modifier)inValue;
+    if(m_type == value.m_type && m_condition.equals(value.m_condition))
+    {
+      Optional<Modifier> next;
+      if(!m_next.isPresent())
+        next = value.m_next;
+      else if(!value.m_next.isPresent())
+        next = m_next;
+      else
+        next = Optional.of((Modifier)m_next.get().add(value.m_next.get()));
+
+      if(m_type.stacks())
+        return new Modifier(m_modifier + value.m_modifier, m_type,
+                               m_condition, next);
+      else
+        return new Modifier(Math.max(m_modifier, value.m_modifier), m_type,
+                               m_condition, next);
+    }
+
+    if(!m_next.isPresent())
+      return new Modifier(m_modifier, m_type, m_condition,
+                             Optional.of(value));
+
+    return new Modifier(m_modifier, m_type, m_condition,
+                             Optional.of((Modifier)m_next.get().add(value)));
+  }
+
+  @Override
+  public NewValue.Arithmetic<ModifierProto> multiply(int inFactor)
+  {
+    return new Modifier(m_modifier * inFactor, m_type, m_condition,
+                           m_next.isPresent()
+                             ? Optional.of((Modifier)
+                                           m_next.get().multiply(inFactor))
+                             : m_next);
+  }
+
   /**
-   * Create a new modifier similar to the current but with data from the
-   * given proto.
+   * Create a new modifier with the values from the given proto.
    *
-   *
-   * @param inProto  the proto with the data
-   * @return the newly created modifier
+   * @param inProto the proto to read the values from
+   * @return the newly created critical
    */
-  public Modifier fromProto(ModifierProto inProto)
+  public static Modifier fromProto(ModifierProto inProto)
   {
     Modifier result = null;
-    Modifier next = null;
-    for(ModifierProto.Modifier modifier : inProto.getModifierList())
+    List<ModifierProto.Modifier> modifiers =
+      new ArrayList<>(inProto.getModifierList());
+    Collections.reverse(modifiers);
+    for(ModifierProto.Modifier modifier : modifiers)
     {
-      if(result == null)
-      {
-        result = create();
-        next = result;
-      }
-      else
-      {
-        next.m_next = create();
-        next = next.m_next;
-      }
-
-      next.m_value = modifier.getBaseValue();
-      next.m_type = Type.fromProto(modifier.getType());
-      if(modifier.hasCondition())
-        next.m_condition = new Condition(modifier.getCondition());
-      next.m_defined = true;
+      result = new Modifier(modifier.getBaseValue(),
+                               Type.fromProto(modifier.getType()),
+                               modifier.hasCondition()
+                                 ? Optional.of(modifier.getCondition())
+                                 : Optional.<String>absent(),
+                               Optional.fromNullable(result));
     }
 
     return result;
   }
 
-  //........................................................................
+  @Override
+  public boolean canAdd(NewValue.Arithmetic<ModifierProto> inValue)
+  {
+    return inValue instanceof Modifier;
+  }
 
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- init -----------------------------------------------------------
-
     /** Testing init. */
     @org.junit.Test
-    public void init()
+    public void parse()
     {
-      Modifier value = new Modifier();
-
-      // undefined value
-      assertEquals("not undefined at start", false, value.isDefined());
-      assertEquals("undefined value not correct", "$undefined$",
-                   value.toString());
-
-      // now with some value
-      value = new Modifier(2, Type.DODGE);
-
-      assertEquals("not defined at start", true, value.isDefined());
-      assertEquals("output", "+2 dodge", value.toString());
-
-      value = new Modifier(0);
-
-      assertEquals("not defined at start", true, value.isDefined());
-      assertEquals("output", "+0 general", value.toString());
-
-      // now with some value
-      value = new Modifier(-5, Type.ARMOR);
-
-      assertEquals("not defined at start", true, value.isDefined());
-      assertEquals("output", "-5 armor", value.toString());
-
-      Value.Test.createTest(value);
-
-      m_logger.verify();
-   }
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** Testing reading. */
-    @org.junit.Test
-    public void read()
-    {
-     String []texts =
-        {
-          "empty", "", null, null,
-          "invalid", "hello", null, "hello",
-          "number only", "+2 ", "+2 general", " ",
-          "invalid type", "-5 hi", "-5 general", " hi",
-          "plus", "5 dodge", "+5 dodge", null,
-          "complete", "0 general", "+0 general",   null,
-          "complete 2", "0 armor \"test\"", "+0 armor", " \"test\"",
-          "complete negative", "-3 dodge", "-3 dodge",   null,
-          "condition", "+3 armor if \"just a test\"",
-          "+3 armor if \"just a test\"", null,
-
-          "multiple", "+3 armor +2 shield", "+3 armor +2 shield", null,
-          "multiple no type", "+3 +2", "+3 general +2 general", null,
-          "multiple no type", "+3 +2 dodge", "+3 general +2 dodge", null,
-          "multiple condition", "+3 shield if \"test\" +2 armor",
-          "+3 shield if \"test\" +2 armor", null,
-        };
-
-     Value.Test.readTest(texts, new Modifier());
+      assertEquals("parse", "None", PARSER.parse(" none  ").get().toString());
+      assertEquals("parse", "x3", PARSER.parse(" x 3  ").get().toString());
+      assertEquals("parse", "x3", PARSER.parse(" 20/x3  ").get().toString());
+      assertEquals("parse", "19-20/x2",
+                   PARSER.parse(" 19 - 20 / x 2 ").get().toString());
+      assertEquals("parse", "12-19/x5",
+                   PARSER.parse("12-19/x5").get().toString());
+      assertFalse("parse", PARSER.parse("/").isPresent());
+      assertFalse("parse", PARSER.parse("").isPresent());
+      assertFalse("parse", PARSER.parse("12").isPresent());
+      assertFalse("parse", PARSER.parse("x").isPresent());
+      assertFalse("parse", PARSER.parse("19-20 x3").isPresent());
+      assertFalse("parse", PARSER.parse("19 - x 4").isPresent());
     }
-
-    //......................................................................
-    //----- stack ----------------------------------------------------------
-
-    /** Testing stacking. */
-    @org.junit.Test
-    public void stack()
-    {
-      Modifier first  = new Modifier(4, Type.ARMOR);
-      Modifier second = new Modifier(3, Type.ARMOR);
-
-      assertEquals("stack",          true,  first.stackOrMore(second));
-      assertEquals("not stack",      false, second.stackOrMore(first));
-      assertEquals("not stack self", false, first.stackOrMore(first));
-      assertEquals("not stack self", false, second.stackOrMore(second));
-
-      first  = new Modifier(2, Type.DODGE);
-      second = new Modifier(3, Type.DODGE);
-
-      assertEquals("stack",      true, first.stackOrMore(second));
-      assertEquals("stack",      true, second.stackOrMore(first));
-      assertEquals("stack self", true, first.stackOrMore(first));
-      assertEquals("stack self", true, second.stackOrMore(second));
-
-      List<Modifier> list = new ArrayList<Modifier>();
-
-      list.add(new Modifier(2, Type.DODGE));
-      list.add(new Modifier(4, Type.DODGE));
-      list.add(new Modifier(5, Type.ARMOR));
-      list.add(new Modifier(6, Type.SHIELD));
-
-      assertTrue("stack", first.stackOrMore(list));
-      assertFalse("stack",
-                  new Modifier(3, Type.ARMOR)
-                  .stackOrMore(new Modifier(2, Type.DODGE),
-                               new Modifier(4, Type.ARMOR)));
-    }
-
-    //......................................................................
-    //----- as -------------------------------------------------------------
-
-    /** Testing sets. */
-    @org.junit.Test
-    public void as()
-    {
-      Modifier value = new Modifier();
-
-      // undefined value
-      assertFalse("not undefined at start", value.isDefined());
-      assertEquals("undefined value not correct", "$undefined$",
-                   value.toString());
-
-      value = value.as(42, Type.ARMOR);
-      assertTrue("value", value.isDefined());
-      assertEquals("value", "+42 armor", value.toString());
-    }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

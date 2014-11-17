@@ -38,7 +38,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
 import net.ixitxachitls.dma.values.AbilityModifier;
 import net.ixitxachitls.dma.values.ExpressionValue;
 import net.ixitxachitls.dma.values.KeyedModifier;
-import net.ixitxachitls.dma.values.NewModifier;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.enums.Immunity;
 import net.ixitxachitls.util.logging.Log;
@@ -100,22 +100,22 @@ public class BaseQuality extends BaseEntry
   private List<Immunity> m_immunities = new ArrayList<>();
 
   /** Relfex modifier. */
-  private Optional<NewModifier> m_reflexModifier = Optional.absent();
+  private Optional<Modifier> m_reflexModifier = Optional.absent();
 
   /** Will modifier.*/
-  private Optional<NewModifier> m_willModifier = Optional.absent();
+  private Optional<Modifier> m_willModifier = Optional.absent();
 
   /** Fortitude modifier.*/
-  private Optional<NewModifier> m_fortitudeModifier = Optional.absent();
+  private Optional<Modifier> m_fortitudeModifier = Optional.absent();
 
   /** The skill modifiers. */
   private List<KeyedModifier> m_skillModifiers = new ArrayList<>();
 
   /** The modifier for attacks. */
-  private Optional<NewModifier> m_attackModifier = Optional.absent();
+  private Optional<Modifier> m_attackModifier = Optional.absent();
 
   /** The modifier for damage. */
-  private Optional<NewModifier> m_damageModifier = Optional.absent();
+  private Optional<Modifier> m_damageModifier = Optional.absent();
 
   /** The bonus feats (or-ed). */
   private List<String> m_bonusFeats = new ArrayList<>();
@@ -155,17 +155,17 @@ public class BaseQuality extends BaseEntry
     return Collections.unmodifiableList(m_immunities);
   }
 
-  public Optional<NewModifier> getReflexModifier()
+  public Optional<Modifier> getReflexModifier()
   {
     return m_reflexModifier;
   }
 
-  public Optional<NewModifier> getWillModifier()
+  public Optional<Modifier> getWillModifier()
   {
     return m_willModifier;
   }
 
-  public Optional<NewModifier> getFortitudeModifier()
+  public Optional<Modifier> getFortitudeModifier()
   {
     return m_fortitudeModifier;
   }
@@ -175,12 +175,12 @@ public class BaseQuality extends BaseEntry
     return Collections.unmodifiableList(m_skillModifiers);
   }
 
-  public Optional<NewModifier> getAttackModifier()
+  public Optional<Modifier> getAttackModifier()
   {
     return m_attackModifier;
   }
 
-  public Optional<NewModifier> getDamageModifier()
+  public Optional<Modifier> getDamageModifier()
   {
     return m_damageModifier;
   }
@@ -212,19 +212,19 @@ public class BaseQuality extends BaseEntry
                                       "ability", "modifier");
     m_immunities = inValues.use("immunity", m_immunities, Immunity.PARSER);
     m_reflexModifier = inValues.use("reflex_modifier", m_reflexModifier,
-                                    NewModifier.PARSER);
+                                    Modifier.PARSER);
     m_willModifier = inValues.use("will_modifier", m_willModifier,
-                                  NewModifier.PARSER);
+                                  Modifier.PARSER);
     m_fortitudeModifier = inValues.use("fortitude_modifier",
                                        m_fortitudeModifier,
-                                       NewModifier.PARSER);
+                                       Modifier.PARSER);
     m_skillModifiers = inValues.use("skill_modifier", m_skillModifiers,
                                       KeyedModifier.PARSER,
                                       "skill", "modifier");
     m_attackModifier = inValues.use("attack_modifier", m_attackModifier,
-                                    NewModifier.PARSER);
+                                    Modifier.PARSER);
     m_damageModifier = inValues.use("damage_modifier", m_damageModifier,
-                                    NewModifier.PARSER);
+                                    Modifier.PARSER);
     m_bonusFeats = inValues.use("bonus_feat", m_bonusFeats);
   }
 
@@ -461,9 +461,9 @@ public class BaseQuality extends BaseEntry
                        ? Optional.of(effect.getReference())
                        : Optional.<String>absent(),
                      effect.hasModifier()
-                       ? Optional.of(NewModifier.fromProto
-                                     (effect.getModifier()))
-                       : Optional.<NewModifier>absent(),
+                       ? Optional.of(Modifier.fromProto
+                         (effect.getModifier()))
+                       : Optional.<Modifier>absent(),
                      effect.hasText()
                        ? Optional.of(effect.getText())
                        : Optional.<String>absent()));
@@ -487,23 +487,23 @@ public class BaseQuality extends BaseEntry
 
     if(proto.hasReflexModifier())
       m_reflexModifier =
-        Optional.of(NewModifier.fromProto(proto.getReflexModifier()));
+        Optional.of(Modifier.fromProto(proto.getReflexModifier()));
 
     if(proto.hasWillModifier())
       m_willModifier =
-        Optional.of(NewModifier.fromProto(proto.getWillModifier()));
+        Optional.of(Modifier.fromProto(proto.getWillModifier()));
 
     if(proto.hasFortitudeModifier())
       m_fortitudeModifier =
-        Optional.of(NewModifier.fromProto(proto.getFortitudeModifier()));
+        Optional.of(Modifier.fromProto(proto.getFortitudeModifier()));
 
     if(proto.hasAttackModifier())
       m_attackModifier =
-        Optional.of(NewModifier.fromProto(proto.getAttackModifier()));
+        Optional.of(Modifier.fromProto(proto.getAttackModifier()));
 
     if(proto.hasDamageModifier())
       m_damageModifier =
-        Optional.of(NewModifier.fromProto(proto.getDamageModifier()));
+        Optional.of(Modifier.fromProto(proto.getDamageModifier()));
 
     for(BaseQualityProto.KeyedModifier skillModifeir
           : proto.getSkillModifierList())

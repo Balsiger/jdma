@@ -42,7 +42,7 @@ import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Distance;
-import net.ixitxachitls.dma.values.NewModifier;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.NewRange;
 import net.ixitxachitls.dma.values.NewRational;
 import net.ixitxachitls.dma.values.NewValue;
@@ -330,7 +330,7 @@ public class BaseMonster extends BaseEntry
   protected List<Speed> m_speeds = new ArrayList<>();
 
   /** The natural armor of the monster. */
-  protected Optional<NewModifier> m_naturalArmor = Optional.absent();
+  protected Optional<Modifier> m_naturalArmor = Optional.absent();
 
   /** The base attack bonus. */
   protected Optional<Integer> m_baseAttack = Optional.absent();
@@ -560,18 +560,18 @@ public class BaseMonster extends BaseEntry
     return speeds;
   }
 
-  public Optional<NewModifier> getNaturalArmor()
+  public Optional<Modifier> getNaturalArmor()
   {
     return m_naturalArmor;
   }
 
-  public Annotated.Arithmetic<NewModifier> getCombinedNaturalArmor()
+  public Annotated.Arithmetic<Modifier> getCombinedNaturalArmor()
   {
     if(m_naturalArmor.isPresent())
-      return new Annotated.Arithmetic<NewModifier>(m_naturalArmor.get(),
+      return new Annotated.Arithmetic<Modifier>(m_naturalArmor.get(),
                                                    getName());
 
-    Annotated.Arithmetic<NewModifier> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Modifier> combined = new Annotated.Arithmetic<>();
     for(BaseEntry base : getBaseEntries())
       combined.add(((BaseMonster)base).getCombinedNaturalArmor());
 
@@ -2823,7 +2823,7 @@ public class BaseMonster extends BaseEntry
     m_speeds = inValues.use("speed", m_speeds, Speed.PARSER,
                             "mode", "speed", "maneuverability");
     m_naturalArmor = inValues.use("natural_armor", m_naturalArmor,
-                                  NewModifier.PARSER);
+                                  Modifier.PARSER);
     m_baseAttack = inValues.use("attack", m_baseAttack,
                                 NewValue.INTEGER_PARSER);
     m_strength = inValues.use("strength", m_strength, NewValue.INTEGER_PARSER);
@@ -3102,7 +3102,7 @@ public class BaseMonster extends BaseEntry
 
     if(proto.hasNaturalArmor())
       m_naturalArmor =
-        Optional.of(NewModifier.fromProto(proto.getNaturalArmor()));
+        Optional.of(Modifier.fromProto(proto.getNaturalArmor()));
 
     if(proto.hasBaseAttack())
       m_baseAttack = Optional.of(proto.getBaseAttack());

@@ -703,9 +703,9 @@ public class Item extends CampaignEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewModifier>> getCombinedArmorBonus()
+  public Annotated<Optional<Modifier>> getCombinedArmorBonus()
   {
-    Annotated.Arithmetic<NewModifier> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Modifier> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedArmorBonus());
 
@@ -1195,15 +1195,15 @@ public class Item extends CampaignEntry
     return result;
   }
 
-  public Optional<NewModifier> getArmorClass()
+  public Optional<Modifier> getArmorClass()
   {
-    Optional<NewModifier> armor = Optional.absent();
+    Optional<Modifier> armor = Optional.absent();
     for(BaseEntry base : getBaseEntries())
     {
-      Optional<NewModifier> baseArmor = ((BaseItem)base).getArmorBonus();
+      Optional<Modifier> baseArmor = ((BaseItem)base).getArmorBonus();
       if(baseArmor.isPresent())
         if(armor.isPresent())
-          armor = Optional.of((NewModifier) armor.get().add(baseArmor.get()));
+          armor = Optional.of((Modifier) armor.get().add(baseArmor.get()));
         else
           armor = baseArmor;
     }

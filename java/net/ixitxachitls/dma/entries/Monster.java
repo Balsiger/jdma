@@ -39,8 +39,8 @@ import net.ixitxachitls.dma.proto.Entries.MonsterProto;
 import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
 import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Money;
-import net.ixitxachitls.dma.values.NewModifier;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Size;
 import net.ixitxachitls.dma.values.Speed;
@@ -1300,63 +1300,63 @@ public class Monster extends CampaignEntry
     return save;
   }
 
-  public Annotated.Arithmetic<NewModifier> getCombinedNaturalArmor()
+  public Annotated.Arithmetic<Modifier> getCombinedNaturalArmor()
   {
-    Annotated.Arithmetic<NewModifier> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Modifier> combined = new Annotated.Arithmetic<>();
     for(BaseEntry base : getBaseEntries())
       combined.add(((BaseMonster)base).getCombinedNaturalArmor());
 
     return combined;
   }
 
-  public NewModifier getArmorBonus()
+  public Modifier getArmorBonus()
   {
-    NewModifier bonus = null;
+    Modifier bonus = null;
     for(Item armor : getArmor())
     {
       if(armor.getArmorType().isShield())
         continue;
 
-      Optional<NewModifier> modifier = armor.getArmorClass();
+      Optional<Modifier> modifier = armor.getArmorClass();
       if(modifier.isPresent())
         if(bonus == null)
           bonus = modifier.get();
         else
-          bonus = (NewModifier) bonus.add(modifier.get());
+          bonus = (Modifier) bonus.add(modifier.get());
     }
 
     if(bonus == null)
-      return new NewModifier();
+      return new Modifier();
 
     return bonus;
   }
 
-  public NewModifier getShieldBonus()
+  public Modifier getShieldBonus()
   {
-    NewModifier bonus = null;
+    Modifier bonus = null;
     for(Item armor : getArmor())
     {
       if(!armor.getArmorType().isShield())
         continue;
 
-      Optional<NewModifier> modifier = armor.getArmorClass();
+      Optional<Modifier> modifier = armor.getArmorClass();
       if(modifier.isPresent())
         if(bonus == null)
           bonus = modifier.get();
         else
-          bonus = (NewModifier) bonus.add(modifier.get());
+          bonus = (Modifier) bonus.add(modifier.get());
     }
 
     if(bonus == null)
-      return new NewModifier();
+      return new Modifier();
 
     return bonus;
   }
 
   public int getArmorClass()
   {
-    NewModifier armor = getArmorBonus();
-    NewModifier shield = getShieldBonus();
+    Modifier armor = getArmorBonus();
+    Modifier shield = getShieldBonus();
     int dexterity = getDexterityModifier();
 
     return 10 + armor.getModifier() + shield.getModifier() + dexterity;
@@ -1371,8 +1371,8 @@ public class Monster extends CampaignEntry
 
   public int getFlatFootedArmorClass()
   {
-    NewModifier armor = getArmorBonus();
-    NewModifier shield = getShieldBonus();
+    Modifier armor = getArmorBonus();
+    Modifier shield = getShieldBonus();
 
     return 10 + armor.getModifier() + shield.getModifier();
   }

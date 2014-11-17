@@ -25,18 +25,17 @@ package net.ixitxachitls.dma.values;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMagicProto;
-import net.ixitxachitls.dma.proto.Entries.BaseMagicProto.Modifier;
 
 public class NamedModifier extends NewValue.Arithmetic<BaseMagicProto.Modifier>
 {
-  public NamedModifier(ModifierType inType, NewModifier inModifier)
+  public NamedModifier(ModifierType inType, Modifier inModifier)
   {
     m_type = inType;
     m_modifier = inModifier;
   }
 
   private final ModifierType m_type;
-  private final NewModifier m_modifier;
+  private final Modifier m_modifier;
 
   public final static NewValue.Parser<NamedModifier> PARSER =
     new NewValue.Parser<NamedModifier>(2)
@@ -46,7 +45,7 @@ public class NamedModifier extends NewValue.Arithmetic<BaseMagicProto.Modifier>
                                                String inModifier)
       {
         Optional<ModifierType> type = ModifierType.PARSER.parse(inType);
-        Optional<NewModifier> modifier = NewModifier.PARSER.parse(inModifier);
+        Optional<Modifier> modifier = Modifier.PARSER.parse(inModifier);
 
         if(type.isPresent() && modifier.isPresent())
           return Optional.of(new NamedModifier(type.get(),
@@ -67,7 +66,7 @@ public class NamedModifier extends NewValue.Arithmetic<BaseMagicProto.Modifier>
     return m_type;
   }
 
-  public NewModifier getModifier()
+  public Modifier getModifier()
   {
     return m_modifier;
   }
@@ -78,10 +77,10 @@ public class NamedModifier extends NewValue.Arithmetic<BaseMagicProto.Modifier>
    * @param inProto the proto to generate from
    * @return the newly created named modifier
    */
-  public static NamedModifier fromProto(Modifier inProto)
+  public static NamedModifier fromProto(BaseMagicProto.Modifier inProto)
   {
     return new NamedModifier(ModifierType.fromProto(inProto.getType()),
-                             NewModifier.fromProto(inProto.getModifier()));
+                             Modifier.fromProto(inProto.getModifier()));
   }
 
   @Override
@@ -92,7 +91,7 @@ public class NamedModifier extends NewValue.Arithmetic<BaseMagicProto.Modifier>
 
     NamedModifier value = (NamedModifier)inValue;
     return new NamedModifier(m_type,
-                               (NewModifier)
+                               (Modifier)
                                m_modifier.add(value.getModifier()));
   }
 
@@ -110,7 +109,7 @@ public class NamedModifier extends NewValue.Arithmetic<BaseMagicProto.Modifier>
   public Arithmetic<BaseMagicProto.Modifier> multiply(int inFactor)
   {
     return new NamedModifier(m_type,
-                             (NewModifier)m_modifier.multiply(inFactor));
+                             (Modifier)m_modifier.multiply(inFactor));
   }
 
   @Override

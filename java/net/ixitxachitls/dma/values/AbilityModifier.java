@@ -36,14 +36,14 @@ import net.ixitxachitls.dma.values.enums.Ability;
  */
 public class AbilityModifier extends NewValue<BaseQualityProto.AbilityModifier>
 {
-  public AbilityModifier(Ability inAbility, NewModifier inModifier)
+  public AbilityModifier(Ability inAbility, Modifier inModifier)
   {
     m_ability = inAbility;
     m_modifier = inModifier;
   }
 
   private final Ability m_ability;
-  private final NewModifier m_modifier;
+  private final Modifier m_modifier;
 
   public static final Parser<AbilityModifier> PARSER =
     new Parser<AbilityModifier>(2)
@@ -53,7 +53,7 @@ public class AbilityModifier extends NewValue<BaseQualityProto.AbilityModifier>
                                                String inModifier)
       {
         Optional<Ability> ability = Ability.fromString(inAbility);
-        Optional<NewModifier> modifier = NewModifier.PARSER.parse(inModifier);
+        Optional<Modifier> modifier = Modifier.PARSER.parse(inModifier);
         if(!ability.isPresent() || !modifier.isPresent())
           return Optional.absent();
 
@@ -66,7 +66,7 @@ public class AbilityModifier extends NewValue<BaseQualityProto.AbilityModifier>
     return m_ability;
   }
 
-  public NewModifier getModifier()
+  public Modifier getModifier()
   {
     return m_modifier;
   }
@@ -90,6 +90,6 @@ public class AbilityModifier extends NewValue<BaseQualityProto.AbilityModifier>
   fromProto(BaseQualityProto.AbilityModifier inProto)
   {
     return new AbilityModifier(Ability.fromProto(inProto.getAbility()),
-                               NewModifier.fromProto(inProto.getModifier()));
+                               Modifier.fromProto(inProto.getModifier()));
   }
 }

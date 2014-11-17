@@ -24,13 +24,13 @@ package net.ixitxachitls.dma.entries;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.values.NewModifier;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.NewValue;
 
 public class Effect
 {
   public Effect(Affects inAffects,Optional<String> inName,
-                Optional<NewModifier> inModifier, Optional<String> inText)
+                Optional<Modifier> inModifier, Optional<String> inText)
   {
     m_affects = inAffects;
     m_name = inName;
@@ -40,7 +40,7 @@ public class Effect
 
   private final Affects m_affects;
   private final Optional<String> m_name;
-  private final Optional<NewModifier> m_modifier;
+  private final Optional<Modifier> m_modifier;
   private final Optional<String> m_text;
 
   public static final NewValue.Parser<Effect> PARSER =
@@ -56,8 +56,8 @@ public class Effect
 
         Optional<String> name =
           inName.isEmpty() ? Optional.<String>absent() : Optional.of(inName);
-        Optional<NewModifier> modifier =
-          NewModifier.PARSER.parse(inModifier);
+        Optional<Modifier> modifier =
+          Modifier.PARSER.parse(inModifier);
         Optional<String> text = inText.isEmpty()
           ? Optional.<String>absent() : Optional.of(inText);
 
@@ -75,7 +75,7 @@ public class Effect
     return m_name;
   }
 
-  public Optional<NewModifier> getModifier()
+  public Optional<Modifier> getModifier()
   {
     return m_modifier;
   }

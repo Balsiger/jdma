@@ -57,10 +57,10 @@ import net.ixitxachitls.dma.values.CountUnit;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Duration;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.ModifierType;
 import net.ixitxachitls.dma.values.NamedModifier;
 import net.ixitxachitls.dma.values.NewCritical;
-import net.ixitxachitls.dma.values.NewModifier;
 import net.ixitxachitls.dma.values.NewMoney;
 import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.NewWeight;
@@ -213,7 +213,7 @@ public class BaseItem extends BaseEntry
   protected boolean m_ammunition = false;
 
   /** The bonus of the armor. */
-  protected Optional<NewModifier> m_armorBonus = Optional.absent();
+  protected Optional<Modifier> m_armorBonus = Optional.absent();
 
   /** The type of the armor. */
   protected ArmorType m_armorType = ArmorType.UNKNOWN;
@@ -1299,7 +1299,7 @@ public class BaseItem extends BaseEntry
    *
    * @return      the bonus value
    */
-  public Optional<NewModifier> getArmorBonus()
+  public Optional<Modifier> getArmorBonus()
   {
     return m_armorBonus;
   }
@@ -1309,13 +1309,13 @@ public class BaseItem extends BaseEntry
    *
    * @return a combination value with the sum and their sources.
    */
-  public Annotated<Optional<NewModifier>> getCombinedArmorBonus()
+  public Annotated<Optional<Modifier>> getCombinedArmorBonus()
   {
     if(m_armorBonus.isPresent())
-      return new Annotated.Arithmetic<NewModifier>(m_armorBonus.get(),
+      return new Annotated.Arithmetic<Modifier>(m_armorBonus.get(),
                                                    getName());
 
-    Annotated.Arithmetic<NewModifier> combined = new Annotated.Arithmetic<>();
+    Annotated.Arithmetic<Modifier> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedArmorBonus());
 
@@ -2128,14 +2128,14 @@ public class BaseItem extends BaseEntry
                                 NewValue.BOOLEAN_PARSER);
 
     m_armorBonus = inValues.use("armor.bonus", m_armorBonus,
-                                NewModifier.PARSER);
+                                Modifier.PARSER);
     m_armorType = inValues.use("armor.type", m_armorType, ArmorType.PARSER);
     m_maxDex = inValues.use("armor.max_dex", m_maxDex,
-                            NewModifier.INTEGER_PARSER);
+                            Modifier.INTEGER_PARSER);
     m_checkPenalty = inValues.use("armor.check_penalty", m_checkPenalty,
-                                  NewModifier.INTEGER_PARSER);
+                                  Modifier.INTEGER_PARSER);
     m_arcane = inValues.use("armor.arcane_failure", m_arcane,
-                            NewModifier.INTEGER_PARSER);
+                            Modifier.INTEGER_PARSER);
     m_speedSlow = inValues.use("armor.speed_slow", m_speedSlow,
                                Distance.PARSER);
     m_speedFast = inValues.use("armor.speed_fast", m_speedFast,
@@ -2283,7 +2283,7 @@ public class BaseItem extends BaseEntry
       BaseArmorProto armorProto = proto.getArmor();
 
       if(armorProto. hasAcBonus())
-        m_armorBonus = Optional.of(NewModifier.fromProto(armorProto. getAcBonus()));
+        m_armorBonus = Optional.of(Modifier.fromProto(armorProto.getAcBonus()));
       if(armorProto. hasType())
         m_armorType = ArmorType.fromProto(armorProto. getType());
       if(armorProto. hasMaxDexterity())

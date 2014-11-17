@@ -34,7 +34,7 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
-import net.ixitxachitls.dma.values.NewModifier;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.logging.Log;
 
@@ -245,9 +245,9 @@ public class BaseFeat extends BaseEntry
                                  ? Optional.of(effect.getReference())
                                  : Optional.<String>absent(),
                                effect.hasModifier()
-                                 ? Optional.of(NewModifier.fromProto
-                                               (effect.getModifier()))
-                                 : Optional.<NewModifier>absent(),
+                                 ? Optional.of(Modifier.fromProto
+                                   (effect.getModifier()))
+                                 : Optional.<Modifier>absent(),
                                Optional.<String>absent()));
   }
 

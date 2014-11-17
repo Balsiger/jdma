@@ -35,14 +35,14 @@ import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
  */
 public class KeyedModifier extends NewValue<BaseQualityProto.KeyedModifier>
 {
-  public KeyedModifier(String inKey, NewModifier inModifier)
+  public KeyedModifier(String inKey, Modifier inModifier)
   {
     m_key = inKey;
     m_modifier = inModifier;
   }
 
   private final String m_key;
-  private final NewModifier m_modifier;
+  private final Modifier m_modifier;
 
   public static final Parser<KeyedModifier> PARSER =
     new Parser<KeyedModifier>(2)
@@ -51,7 +51,7 @@ public class KeyedModifier extends NewValue<BaseQualityProto.KeyedModifier>
       public Optional<KeyedModifier> doParse(String inKey,
                                              String inModifier)
       {
-        Optional<NewModifier> modifier = NewModifier.PARSER.parse(inModifier);
+        Optional<Modifier> modifier = Modifier.PARSER.parse(inModifier);
         if(!modifier.isPresent())
           return Optional.absent();
 
@@ -64,7 +64,7 @@ public class KeyedModifier extends NewValue<BaseQualityProto.KeyedModifier>
     return m_key;
   }
 
-  public NewModifier getModifier()
+  public Modifier getModifier()
   {
     return m_modifier;
   }
@@ -87,6 +87,6 @@ public class KeyedModifier extends NewValue<BaseQualityProto.KeyedModifier>
   public static KeyedModifier fromProto(BaseQualityProto.KeyedModifier inProto)
   {
     return new KeyedModifier(inProto.getKey(),
-                               NewModifier.fromProto(inProto.getModifier()));
+                               Modifier.fromProto(inProto.getModifier()));
   }
 }
