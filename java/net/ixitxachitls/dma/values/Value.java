@@ -31,7 +31,7 @@ import com.google.protobuf.Message;
  * @file   NewValue.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
-public abstract class NewValue<T extends Message>
+public abstract class Value<T extends Message>
 {
   /** Simple interface for parsing values. */
   public static abstract class Parser<P>
@@ -127,7 +127,7 @@ public abstract class NewValue<T extends Message>
     }
   }
 
-  public static abstract class Arithmetic<V extends Message> extends NewValue<V>
+  public static abstract class Arithmetic<V extends Message> extends Value<V>
   {
     public abstract Arithmetic<V> add(Arithmetic<V> inValue);
     public abstract boolean canAdd(Arithmetic<V> inValue);
