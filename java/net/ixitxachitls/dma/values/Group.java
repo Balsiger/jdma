@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.values;
 
 import java.io.Serializable;
@@ -33,10 +31,6 @@ import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.util.Grouping;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * A standard grouping accordig to strings extracted from values.
  *
@@ -47,13 +41,7 @@ import net.ixitxachitls.util.Grouping;
  * @param         <T> the type of value that is grouped
  * @param         <S> the type that is used for comparing the values
  * @param         <U> the type values are grouped into
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
 @Immutable
 @ParametersAreNonnullByDefault
 public class Group<T,
@@ -61,8 +49,6 @@ public class Group<T,
                    U extends Serializable>
   implements Grouping<T, U>, Comparator<U>, Serializable
 {
-  //----------------------------------------------------------------- nested
-
   /**
    * The interface for exracting data.
    *
@@ -86,12 +72,6 @@ public class Group<T,
     //......................................................................
   }
 
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //-------------------------------- Group ---------------------------------
-
   /**
    * Create the group.
    *
@@ -99,7 +79,6 @@ public class Group<T,
    * @param       inRanges    the values to compare against
    * @param       inGroups    the group values to return
    * @param       inUndefined the undefined value to use if none given
-   *
    */
   public Group(Extractor<T, S> inExtractor, S []inRanges,
                U []inGroups, U inUndefined)
@@ -113,12 +92,6 @@ public class Group<T,
     m_undefined = inUndefined;
     m_groups    = Arrays.copyOf(inGroups, inGroups.length);
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The extractor to get the value. */
   private Extractor<T, S> m_extractor;
@@ -135,19 +108,12 @@ public class Group<T,
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //-------------------------------- group ---------------------------------
-
   /**
    * Group the given value.
    *
    * @param       inValue the value to group
    *
    * @return      the group this value belongs to
-   *
    */
   @Override
   public U group(T inValue)
@@ -166,23 +132,16 @@ public class Group<T,
     return m_groups[m_groups.length - 1];
   }
 
-  //........................................................................
-  //------------------------------- toString -------------------------------
-
   /**
    * Convert the grouping to a human readable string.
    *
    * @return      a human readable representation of the grouping
-   *
    */
   @Override
   public String toString()
   {
     return Arrays.toString(m_groups);
   }
-
-  //........................................................................
-  //------------------------------ compareTo -------------------------------
 
   /**
    * Compare two values for ordering.
@@ -191,16 +150,12 @@ public class Group<T,
    * @param  inSecond the second values to compare
    *
    * @return <0 if first is smaller, 0 if equal, >0 if first is bigger
-   *
    */
   @Override
   public int compare(@Nullable U inFirst, @Nullable U inSecond)
   {
     return ordinal(inFirst) - ordinal(inSecond);
   }
-
-  //........................................................................
-  //------------------------------- ordinal --------------------------------
 
   /**
    * The number of the given string in the list of groups.
@@ -209,7 +164,6 @@ public class Group<T,
    *
    * @return      the index into the possible groups, can be higher in case of
    *              undefined or null
-   *
    */
   public int ordinal(@Nullable U inGroup)
   {
@@ -226,63 +180,10 @@ public class Group<T,
     return m_groups.length;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- grouping -------------------------------------------------------
-
-    /** Test grouping. */
-    @org.junit.Test
-    public void grouping()
-    {
-      if(true)
-      {
-        // simple test
-        Group<Name, String, String> group = new Group<Name, String, String>
-          (new Extractor<Name, String>()
-          {
-            /** The serial version id. */
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public String extract(Name inValue)
-            {
-              return inValue.get();
-            }
-          }, new String [] { "a", "b", "c", "d", "e", "f", },
-           new String [] { "start with a", "b starting", "now c", "how about d",
-                           "e", "finally f", "last one", }, "$undefined$");
-
-        assertEquals("simple", "now c",
-                     group.group(new Name("bbb")));
-        assertEquals("simple", "start with a",
-                     group.group(new Name("a")));
-        assertEquals("simple", "e",
-                     group.group(new Name("dudel")));
-        assertEquals("simple", "last one",
-                   group.group(new Name("guru")));
-        assertEquals("simple", "start with a",
-                     group.group(new Name("")));
-        assertEquals("string",
-                     "[start with a, b starting, now c, how about d, e, "
-                     + "finally f, last one]", group.toString());
-      }
-    }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

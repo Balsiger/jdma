@@ -30,13 +30,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.*;
 
 /** The possible saves in the game. */
 @ParametersAreNonnullByDefault
-public enum Save implements EnumSelection.Named, EnumSelection.Short,
-  EnumSelection.Proto<BaseMonsterProto.Save>
+public enum Save implements Named, net.ixitxachitls.dma.values.enums.Short,
+    Proto<BaseMonsterProto.Save>
 {
   UNKNOWN("Unknown", "Unk", BaseMonsterProto.Save.UNKNOWN_SAVE),
 

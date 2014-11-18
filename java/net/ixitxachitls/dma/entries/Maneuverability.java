@@ -29,13 +29,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Values.SpeedProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible movement modes in the game. */
 @ParametersAreNonnullByDefault
-public enum Maneuverability implements EnumSelection.Named,
-  EnumSelection.Proto<SpeedProto.Maneuverability>
+public enum Maneuverability implements Named,
+    Proto<SpeedProto.Maneuverability>
 {
   UNKNOWN("Unknown", SpeedProto.Maneuverability.UNKNOWN_MANEUVERABILITY),
 

@@ -28,12 +28,13 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible spell ranges. */
 public enum SpellRange
-  implements EnumSelection.Named, EnumSelection.Proto<BaseSpellProto.Range>
+  implements Named, Proto<BaseSpellProto.Range>
 {
   /** Unknown. */
   UNKNOWN("Unknown", BaseSpellProto.Range.UNKNOWN),

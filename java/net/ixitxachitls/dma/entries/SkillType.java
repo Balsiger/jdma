@@ -29,12 +29,13 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Values.SharedProto;
 import net.ixitxachitls.dma.proto.Values.SharedProto.SkillSubtype;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible sizes in the game. */
-public enum SkillType implements EnumSelection.Named,
-  EnumSelection.Proto<SharedProto.SkillSubtype>
+public enum SkillType implements Named,
+    Proto<SkillSubtype>
 {
   /** Unknown type. */
   UNKNOWN("Unknown", SharedProto.SkillSubtype.UNKNOWN_SKILL_SUBTYPE),

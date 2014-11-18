@@ -27,12 +27,13 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.CharacterProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The character state. */
-public enum CharacterState implements EnumSelection.Named,
-  EnumSelection.Proto<CharacterProto.State>
+public enum CharacterState implements Named,
+    Proto<CharacterProto.State>
 {
   UNKNOWN("unknown", CharacterProto.State.UNKNOWN),
   /** A normal character going on adventures. */

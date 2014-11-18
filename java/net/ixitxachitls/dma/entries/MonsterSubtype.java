@@ -30,13 +30,14 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Subtype;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible monster sub types in the game. */
 @ParametersAreNonnullByDefault
-public enum MonsterSubtype implements EnumSelection.Named,
-  EnumSelection.Proto<BaseMonsterProto.Subtype>
+public enum MonsterSubtype implements Named,
+    Proto<Subtype>
 {
   UNKNOWN("Unknown", BaseMonsterProto.Subtype.UNKNOWN_SUBTYPE),
 

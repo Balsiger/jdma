@@ -29,10 +29,12 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseArmorProto;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible armor types. */
-public enum ArmorType implements EnumSelection.Named,
-  EnumSelection.Proto<BaseArmorProto.Type>
+public enum ArmorType implements Named,
+    Proto<BaseArmorProto.Type>
 {
   /** The unknown armor type. */
   UNKNOWN("Unknown", BaseArmorProto.Type.UNKNOWN),

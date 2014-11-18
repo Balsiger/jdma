@@ -29,10 +29,11 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
+import net.ixitxachitls.dma.values.enums.*;
 
 /** The possible weapon types. */
-public enum WeaponType implements EnumSelection.Named, EnumSelection.Short,
-  EnumSelection.Proto<BaseWeaponProto.Type>
+public enum WeaponType implements Named, net.ixitxachitls.dma.values.enums.Short,
+    Proto<BaseWeaponProto.Type>
 {
   /** An unknown type. */
   UNKNOWN("Unknown", "U", BaseWeaponProto.Type.UNKNOWN),

@@ -30,13 +30,12 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
 
 /** The possible sizes in the game. */
 @ParametersAreNonnullByDefault
-public enum Alignment implements EnumSelection.Named, EnumSelection.Short,
-  EnumSelection.Proto<BaseMonsterProto.Alignment>
+public enum Alignment implements Named, Short,
+    Proto<BaseMonsterProto.Alignment>
 {
   UNKNOWN("Unknown", "UN", BaseMonsterProto.Alignment.UNKNOWN_ALIGNMENT),
 

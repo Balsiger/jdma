@@ -29,9 +29,10 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
+import net.ixitxachitls.dma.values.enums.Named;
 
 /** The possible sizes in the game. */
-public enum Substance implements EnumSelection.Named
+public enum Substance implements Named
 {
   /** Unknown substance,. */
   UNKNOWN("unknown", 0, 0, BaseItemProto.Substance.Material.UNKNOWN),

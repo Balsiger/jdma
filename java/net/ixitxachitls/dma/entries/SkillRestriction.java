@@ -28,12 +28,13 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible sizes in the game. */
-public enum SkillRestriction implements EnumSelection.Named,
-  EnumSelection.Proto<BaseSkillProto.Restriction>
+public enum SkillRestriction implements Named,
+    Proto<BaseSkillProto.Restriction>
 {
   /** Unknown. */
   UNKNOWN("Unknown", BaseSkillProto.Restriction.UNKNOWN),

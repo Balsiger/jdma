@@ -27,9 +27,8 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Values.ExpressionProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 
-public enum Operator implements EnumSelection.Proto<ExpressionProto.Operator>
+public enum Operator implements Proto<ExpressionProto.Operator>
 {
   NONE("", ExpressionProto.Operator.NONE, false),
   ADD("+", ExpressionProto.Operator.ADD, false),

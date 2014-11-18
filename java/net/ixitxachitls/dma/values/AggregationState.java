@@ -28,10 +28,11 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseContainerProto;
+import net.ixitxachitls.dma.values.enums.*;
 
 /** The possible sizes in the game. */
-public enum AggregationState implements EnumSelection.Named,
-  EnumSelection.Short, EnumSelection.Proto<BaseContainerProto.State>
+public enum AggregationState implements Named,
+    net.ixitxachitls.dma.values.enums.Short, Proto<BaseContainerProto.State>
 {
   /** Unknown state. */
   UNKNOWN("unknown", "unk", BaseContainerProto.State.UNKNOWN),

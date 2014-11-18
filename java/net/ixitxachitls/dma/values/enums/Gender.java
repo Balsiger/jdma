@@ -28,12 +28,11 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
 
 /** The possible gender types in the game. */
-public enum Gender implements EnumSelection.Named,
-  EnumSelection.Proto<NPCProto.Gender>
+public enum Gender implements Named,
+    Proto<NPCProto.Gender>
 {
   /** Male. */
   MALE("Male", NPCProto.Gender.MALE),

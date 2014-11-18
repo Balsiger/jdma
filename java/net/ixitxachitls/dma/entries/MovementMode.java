@@ -29,13 +29,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Values.SpeedProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible movement modes in the game. */
 @ParametersAreNonnullByDefault
-public enum MovementMode implements EnumSelection.Named,
-  EnumSelection.Proto<SpeedProto.Mode>
+public enum MovementMode implements Named,
+    Proto<SpeedProto.Mode>
 {
   UNKNOWN("Unknown", SpeedProto.Mode.UNKNONW_MODE),
 

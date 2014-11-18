@@ -30,13 +30,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible alignment modifiers in the game. */
 @ParametersAreNonnullByDefault
-public enum AlignmentStatus implements EnumSelection.Named,
-  EnumSelection.Proto<BaseMonsterProto.AlignmentStatus>
+public enum AlignmentStatus implements Named,
+    Proto<BaseMonsterProto.AlignmentStatus>
 {
   UNKNOWN("Unknown", BaseMonsterProto.AlignmentStatus.UNKNOWN_ALIGNMENT_STATU),
   /** Always. */

@@ -29,10 +29,8 @@ import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -48,12 +46,7 @@ import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
-import net.ixitxachitls.util.logging.Log;
 
 /**
  * This class groups a bunch of Values, its be base for all entries.

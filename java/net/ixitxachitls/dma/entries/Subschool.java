@@ -27,12 +27,13 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible spell schools (cf. PHB 172/173). */
 public enum Subschool
-  implements EnumSelection.Named, EnumSelection.Proto<BaseSpellProto.Subschool>
+  implements Named, Proto<BaseSpellProto.Subschool>
 {
   /** Unknown. */
   UNKNOWN("Unknown", BaseSpellProto.Subschool.UNKNOWN_SUBSCHOOL),

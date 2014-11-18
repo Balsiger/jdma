@@ -29,10 +29,12 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible weapon proficiencies. */
-public enum Proficiency implements EnumSelection.Named,
-  EnumSelection.Proto<BaseWeaponProto.Proficiency>
+public enum Proficiency implements Named,
+    Proto<BaseWeaponProto.Proficiency>
 {
   /** An unknown proficiency. */
   UNKNOWN("Unknown", BaseWeaponProto.Proficiency.UNKNOWN_PROFICIENCY),

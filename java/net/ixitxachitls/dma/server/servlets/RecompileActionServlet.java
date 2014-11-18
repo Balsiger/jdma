@@ -27,7 +27,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
-import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 

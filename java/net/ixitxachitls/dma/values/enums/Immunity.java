@@ -29,12 +29,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
 
 /** The possible sizes in the game. */
 @ParametersAreNonnullByDefault
-public enum Immunity implements EnumSelection.Named
+public enum Immunity implements Named
 {
   UNKNOWN("Unknown", BaseQualityProto.Immunity.UNKNOWN_IMMUNITY),
   SLEEP_SPELLS("Sleep Spells", BaseQualityProto.Immunity.SLEEP_SPELLS),

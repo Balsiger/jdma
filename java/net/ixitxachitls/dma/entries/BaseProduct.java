@@ -45,7 +45,6 @@ import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 import net.ixitxachitls.dma.values.Content;
 import net.ixitxachitls.dma.values.Date;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
 import net.ixitxachitls.dma.values.ISBN;
 import net.ixitxachitls.dma.values.ISBN13;
@@ -53,7 +52,7 @@ import net.ixitxachitls.dma.values.NewValue;
 import net.ixitxachitls.dma.values.Person;
 import net.ixitxachitls.dma.values.Price;
 import net.ixitxachitls.dma.values.ProductReference;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -120,7 +119,7 @@ public class BaseProduct extends BaseEntry
      "Wiley");
 
   /** The product parts. */
-  public enum Part implements EnumSelection.Named
+  public enum Part implements Named
   {
     /** A game board. */
     BOARD("Board", BaseProductProto.Content.Part.BOARD),
@@ -258,7 +257,7 @@ public class BaseProduct extends BaseEntry
   }
 
   /** The product layouts. */
-  public enum Layout implements EnumSelection.Named
+  public enum Layout implements Named
   {
     /** An undefined layout. */
     UNKNOWN("Unknown", BaseProductProto.Layout.UNKNOWN_LAYOUT),
@@ -360,7 +359,7 @@ public class BaseProduct extends BaseEntry
   }
 
   /** The game system. */
-  public enum System implements EnumSelection.Named
+  public enum System implements Named
   {
     /** No game system, e.g. for novels. */
     NONE("None", BaseProductProto.System.NONE, null),
@@ -601,7 +600,7 @@ public class BaseProduct extends BaseEntry
   }
 
   /** The product types. */
-  public enum ProductType implements EnumSelection.Named
+  public enum ProductType implements Named
   {
     /** A game accessory, e.g. an optional product enhancing the game. */
     ACCESSORY("Accessory", BaseProductProto.Type.ACCESSORY, "Accessories"),
@@ -765,7 +764,7 @@ public class BaseProduct extends BaseEntry
   }
 
   /** The product styles. */
-  public enum Style implements EnumSelection.Named
+  public enum Style implements Named
   {
     /** A booklet, i.e. a small, stapled book. */
     BOOKLET("Booklet", BaseProductProto.Style.BOOKLET, null),
@@ -898,7 +897,7 @@ public class BaseProduct extends BaseEntry
   }
 
   /** The audiences for products. */
-  public enum Audience implements EnumSelection.Named
+  public enum Audience implements Named
   {
     /** Material indented for the DM only. */
     DM("DM", BaseProductProto.Audience.DM),
@@ -1652,7 +1651,7 @@ public class BaseProduct extends BaseEntry
                    Index.groupsToString("" + m_date.get().getYear(), month));
     }
     else
-      values.put(Index.Path.DATES, Value.UNDEFINED);
+      values.put(Index.Path.DATES, NewValue.UNDEFINED);
 
     // audience
     values.put(Index.Path.AUDIENCES, m_audience.toString());

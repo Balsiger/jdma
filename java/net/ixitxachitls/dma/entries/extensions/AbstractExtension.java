@@ -140,37 +140,6 @@ public abstract class AbstractExtension<T extends AbstractEntry>
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getVariables ------------------------------
-
-  //........................................................................
-  //------------------------------- getValue -------------------------------
-
-  /**
-   * Get a value given as a field. We have to copy the method from ValueGroup
-   * to give ValueGroups access to protected fields of this class.
-   *
-   * @param       inField the field for which to get the value
-   *
-   * @return      the value the field has in this object, if any
-   *
-   */
-  public @Nullable Value<?> getValue(Field inField)
-  {
-    if(inField == null)
-      throw new IllegalArgumentException("must have a field here");
-
-    try
-    {
-      return (Value)inField.get(this);
-    }
-    catch(java.lang.IllegalAccessException e)
-    {
-      throw new UnsupportedOperationException
-        ("Cannot access field " + inField.getName(), e);
-    }
-  }
-
-  //........................................................................
   //------------------------------- getType --------------------------------
 
   /**

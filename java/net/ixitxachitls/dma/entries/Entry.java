@@ -35,7 +35,6 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.EntryProto;
 import net.ixitxachitls.dma.values.Annotated;
-import net.ixitxachitls.dma.values.ID;
 import net.ixitxachitls.dma.values.ProductReference;
 import net.ixitxachitls.util.logging.Log;
 
@@ -84,6 +83,9 @@ public abstract class Entry extends AbstractEntry
 
   /** The name of a temporary entry. */
   public static final String TEMPORARY = "TEMPORARY";
+
+  /** The number of digits to be used in ids. */
+  public static final int s_digits = 4;
 
   /**
    * Get the combined description of the entry, including values of base items.
@@ -157,7 +159,11 @@ public abstract class Entry extends AbstractEntry
    */
   public void randomID()
   {
-    m_name = ID.random().get();
+    char []generated = new char[s_digits];
+    for(int i = 0; i < s_digits; i++)
+      generated[i] = (char)(s_random.nextInt(26) + 'A');
+
+    m_name = new String(generated);
     changed(true);
   }
 

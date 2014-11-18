@@ -27,12 +27,13 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible spell descriptors. */
 public enum SpellDescriptor
-  implements EnumSelection.Named, EnumSelection.Proto<BaseSpellProto.Descriptor>
+  implements Named, Proto<BaseSpellProto.Descriptor>
 {
   /** Unknown. */
   UNKNOWN("Unknown", BaseSpellProto.Descriptor.UNKNOWN_DESCRIPTOR),

@@ -27,11 +27,11 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.*;
 
 /** The possible spell components (cf. PHB 174). */
-public enum EffectType implements EnumSelection.Named, EnumSelection.Short
+public enum EffectType implements Named, net.ixitxachitls.dma.values.enums.Short
 {
   /** Unknown. */
   UNKNOWN("Unknown", "Un", BaseQualityProto.Type.UNKNOWN),

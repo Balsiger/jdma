@@ -29,13 +29,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible climates in the game. */
 @ParametersAreNonnullByDefault
-public enum Climate implements EnumSelection.Named,
-  EnumSelection.Proto<BaseMonsterProto.Climate>
+public enum Climate implements Named,
+    Proto<BaseMonsterProto.Climate>
 {
   UNKNOWN("Unknown", BaseMonsterProto.Climate.UNKNOWN_CLIMATE),
 

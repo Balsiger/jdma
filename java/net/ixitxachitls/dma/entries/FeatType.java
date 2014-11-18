@@ -28,12 +28,13 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible feat types to affect (cf. PHB 175). */
 public enum FeatType
-  implements EnumSelection.Named, EnumSelection.Proto<BaseFeatProto.Type>
+  implements Named, Proto<BaseFeatProto.Type>
 {
   /** Unknown type. */
   UNKNOWN("Unknown", BaseFeatProto.Type.UNKNOWN),

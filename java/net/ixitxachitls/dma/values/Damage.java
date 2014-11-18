@@ -28,6 +28,8 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Values.DamageProto;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 import net.ixitxachitls.util.Strings;
 
 /**
@@ -112,7 +114,7 @@ public class Damage extends NewValue.Arithmetic<DamageProto>
 
   /** The possible damage types. */
   public enum Type
-    implements EnumSelection.Named, EnumSelection.Proto<DamageProto.Damage.Type>
+    implements Named, Proto<DamageProto.Damage.Type>
   {
     /** Fire damage. */
     FIRE("fire", DamageProto.Damage.Type.FIRE),

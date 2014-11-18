@@ -28,10 +28,12 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseLightProto;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible areas to affect (cf. PHB 175). */
-public enum AreaShape implements EnumSelection.Named,
-  EnumSelection.Proto<BaseLightProto.Light.Shape>
+public enum AreaShape implements Named,
+    Proto<BaseLightProto.Light.Shape>
 {
   /** An unknown shape. */
   UNKNOWN("Unknown", BaseLightProto.Light.Shape.UNKNOWN),

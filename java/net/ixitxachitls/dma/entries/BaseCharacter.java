@@ -35,8 +35,9 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.proto.Entries.BaseCharacterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -52,8 +53,8 @@ import net.ixitxachitls.util.logging.Log;
 public class BaseCharacter extends BaseEntry
 {
   /** The possible groups for a character. */
-  public enum Group implements EnumSelection.Named,
-                               EnumSelection.Proto<BaseCharacterProto.Group>
+  public enum Group implements Named,
+      Proto<BaseCharacterProto.Group>
   {
     /** An administrator. */
     ADMIN("Admin", BaseCharacterProto.Group.ADMIN),

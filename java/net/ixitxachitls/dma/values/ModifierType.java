@@ -28,10 +28,11 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMagicProto;
+import net.ixitxachitls.dma.values.enums.*;
 
 /** The possible modifier types. */
-public enum ModifierType implements EnumSelection.Named, EnumSelection.Short,
-  EnumSelection.Proto<BaseMagicProto.Type>
+public enum ModifierType implements Named, net.ixitxachitls.dma.values.enums.Short,
+    Proto<BaseMagicProto.Type>
 {
   /** The unknown armor type. */
   UNKNOWN("Unknown", "U", BaseMagicProto.Type.UNKNOWN),

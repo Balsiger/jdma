@@ -31,13 +31,14 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Attack.Mode;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible attack styles in the game. */
 @ParametersAreNonnullByDefault
-public enum AttackMode implements EnumSelection.Named,
-  EnumSelection.Proto<BaseMonsterProto.Attack.Mode>
+public enum AttackMode implements Named,
+    Proto<Mode>
 {
   UNKNOWN("Unknown", false, BaseMonsterProto.Attack.Mode.UNKNOWN_MODE),
 

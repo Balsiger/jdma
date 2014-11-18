@@ -28,10 +28,12 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.ProductProto;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The product status. */
-public enum ProductStatus implements EnumSelection.Named,
-  EnumSelection.Proto<ProductProto.Status>
+public enum ProductStatus implements Named,
+    Proto<ProductProto.Status>
 {
   /** The unknown status. */
   UNKNOWN("unknown", ProductProto.Status.UNKNOWN),

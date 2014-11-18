@@ -29,10 +29,12 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseCountedProto;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible counting unites in the game. */
-public enum CountUnit implements EnumSelection.Named,
-  EnumSelection.Proto<BaseCountedProto.Unit>
+public enum CountUnit implements Named,
+    Proto<BaseCountedProto.Unit>
 {
   /** Unknown count. */
   UNKNOWN("unknown", "unknowns", BaseCountedProto.Unit.UNKNOWN),

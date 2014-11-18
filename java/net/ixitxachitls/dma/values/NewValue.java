@@ -134,6 +134,9 @@ public abstract class NewValue<T extends Message>
     public abstract Arithmetic<V> multiply(int inFactor);
   }
 
+  /** The string value for an undefined value. */
+  public static final String UNDEFINED = "$undefined$";
+
   public static final Parser<Integer> INTEGER_PARSER = new Parser<Integer>(1)
   {
     @Override

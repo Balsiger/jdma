@@ -27,12 +27,13 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible sizes in the game. */
 public enum SkillModifier
-  implements EnumSelection.Named, EnumSelection.Proto<BaseSkillProto.Modifier>
+  implements Named, Proto<BaseSkillProto.Modifier>
 {
   /** Unknown. */
   UNKNOWN("Unknown", BaseSkillProto.Modifier.UNKNOWN_MODIFIER),

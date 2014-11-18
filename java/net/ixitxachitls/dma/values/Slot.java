@@ -29,10 +29,11 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseWearableProto;
+import net.ixitxachitls.dma.values.enums.*;
 
 /** The available body slots (cf. ). */
-public enum Slot implements EnumSelection.Named, EnumSelection.Short,
-  EnumSelection.Proto<BaseWearableProto.Slot>
+public enum Slot implements Named, net.ixitxachitls.dma.values.enums.Short,
+    Proto<BaseWearableProto.Slot>
 {
   /** Unknown slots. */
   UNKNOWN("Unknown", "U", BaseWearableProto.Slot.UNKNOWN),

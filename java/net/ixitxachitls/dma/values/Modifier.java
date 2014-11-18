@@ -30,6 +30,7 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.proto.Values.ModifierProto;
+import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.util.Strings;
 
 /**
@@ -48,7 +49,7 @@ public class Modifier extends NewValue.Arithmetic<ModifierProto>
   }
 
   /** The modifiers type. */
-  public enum Type implements EnumSelection.Named
+  public enum Type implements Named
   {
     /** Dodging stuff. */
     DODGE("dodge", true, ModifierProto.Type.DODGE),

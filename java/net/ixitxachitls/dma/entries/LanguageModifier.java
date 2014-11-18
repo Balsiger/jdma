@@ -30,13 +30,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible sizes in the game. */
 @ParametersAreNonnullByDefault
-public enum LanguageModifier implements EnumSelection.Named,
-  EnumSelection.Proto<BaseMonsterProto.Language.Modifier>
+public enum LanguageModifier implements Named,
+    Proto<BaseMonsterProto.Language.Modifier>
 {
   UNKNOWN("Unknown", BaseMonsterProto.Language.Modifier.UNKNOWN_MODIFIER),
   /** Automatic. */

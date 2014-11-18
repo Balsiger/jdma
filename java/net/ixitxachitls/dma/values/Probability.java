@@ -29,9 +29,10 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
+import net.ixitxachitls.dma.values.enums.Named;
 
 /** The possible probabilities for items. */
-public enum Probability implements EnumSelection.Named
+public enum Probability implements Named
 {
   /** Only a single such item exists in the world. */
   UNKNOWN("Unknown", BaseItemProto.Probability.UNKNOWN),

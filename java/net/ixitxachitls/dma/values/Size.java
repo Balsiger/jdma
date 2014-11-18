@@ -28,9 +28,10 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
+import net.ixitxachitls.dma.values.enums.*;
 
 /** The possible sizes in the game. */
-public enum Size implements EnumSelection.Named, EnumSelection.Short
+public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
 {
   /** This is an unknown size. */
   UNKNOWN("Unknown", "U", 0, 0, Rational.ZERO, 0, 0, 0,
