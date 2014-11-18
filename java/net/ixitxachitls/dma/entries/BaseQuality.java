@@ -40,6 +40,7 @@ import net.ixitxachitls.dma.values.ExpressionValue;
 import net.ixitxachitls.dma.values.KeyedModifier;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Speed;
+import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Immunity;
 import net.ixitxachitls.util.logging.Log;
 

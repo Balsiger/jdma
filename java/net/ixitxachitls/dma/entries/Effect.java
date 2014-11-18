@@ -26,6 +26,7 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.enums.Affects;
 
 public class Effect
 {

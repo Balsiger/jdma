@@ -118,8 +118,7 @@ public class Group<T,
   @Override
   public U group(T inValue)
   {
-    if(inValue == null
-      || (inValue instanceof Value && !((Value)inValue).isDefined()))
+    if(inValue == null)
       return m_undefined;
 
     S compare = m_extractor.extract(inValue);

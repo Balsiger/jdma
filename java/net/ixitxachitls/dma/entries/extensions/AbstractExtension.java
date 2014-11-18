@@ -24,7 +24,6 @@
 package net.ixitxachitls.dma.entries.extensions;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,7 +45,6 @@ import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................

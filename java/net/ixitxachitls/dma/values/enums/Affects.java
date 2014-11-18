@@ -20,16 +20,16 @@
  *****************************************************************************/
 
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.entries.BaseQuality;
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
 import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.*;
 
 /** The possible affects in the game. */
 public enum Affects implements Named, net.ixitxachitls.dma.values.enums.Short
