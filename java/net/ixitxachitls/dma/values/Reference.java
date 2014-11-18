@@ -33,7 +33,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 
 @ParametersAreNonnullByDefault
 public class Reference<T extends AbstractEntry>
-  extends NewValue<BaseEntryProto.Reference>
+  extends Value<BaseEntryProto.Reference>
   implements Comparable<Reference>
 {
   public static class ReferenceParser<T extends AbstractEntry,

@@ -35,6 +35,7 @@ import net.ixitxachitls.dma.entries.ValueGroup.Values;
 import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.values.ExpressionValue;
 import net.ixitxachitls.dma.values.Speed;
+import net.ixitxachitls.dma.values.enums.MovementMode;
 
 /**
  * A monster specific quality.

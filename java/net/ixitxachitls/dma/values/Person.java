@@ -28,7 +28,8 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 
 /** Small class to encapsulate person information with job. */
-public class Person extends NewValue<BaseProductProto.Person> {
+public class Person extends Value<BaseProductProto.Person>
+{
 
   public static class PersonParser extends Parser<Person>
   {

@@ -20,13 +20,12 @@
  *****************************************************************************/
 
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.values.Modifier;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Affects;
+import net.ixitxachitls.dma.values.Value;
 
 public class Effect
 {
@@ -44,8 +43,8 @@ public class Effect
   private final Optional<Modifier> m_modifier;
   private final Optional<String> m_text;
 
-  public static final NewValue.Parser<Effect> PARSER =
-    new NewValue.Parser<Effect>(4)
+  public static final Value.Parser<Effect> PARSER =
+    new Value.Parser<Effect>(4)
     {
       @Override
       public Optional<Effect> doParse

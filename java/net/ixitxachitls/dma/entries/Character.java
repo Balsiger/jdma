@@ -35,6 +35,7 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CharacterProto;
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
 import net.ixitxachitls.dma.values.File;
+import net.ixitxachitls.dma.values.enums.CharacterState;
 import net.ixitxachitls.util.logging.Log;
 
 /**

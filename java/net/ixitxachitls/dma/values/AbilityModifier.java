@@ -34,7 +34,7 @@ import net.ixitxachitls.dma.values.enums.Ability;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class AbilityModifier extends NewValue<BaseQualityProto.AbilityModifier>
+public class AbilityModifier extends Value<BaseQualityProto.AbilityModifier>
 {
   public AbilityModifier(Ability inAbility, Modifier inModifier)
   {

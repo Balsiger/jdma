@@ -46,7 +46,7 @@ import net.ixitxachitls.util.Strings;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class ExpressionValue<T> extends NewValue
+public class ExpressionValue<T> extends Value
 {
   public ExpressionValue(T inValue)
   {
@@ -209,7 +209,7 @@ public class ExpressionValue<T> extends NewValue
 
   @SuppressWarnings("unchecked")
   public Optional<T> getValue(Map<String, String> inParameters,
-                              NewValue.Parser<T> inParser)
+                              Value.Parser<T> inParser)
   {
     Optional<? extends Object> value = evaluate(inParameters, inParser);
     if(!value.isPresent())
@@ -226,12 +226,12 @@ public class ExpressionValue<T> extends NewValue
   private boolean isArithmetic(Optional<? extends Object> inValue)
   {
     return inValue.isPresent()
-      && inValue.get() instanceof NewValue.Arithmetic<?>;
+      && inValue.get() instanceof Value.Arithmetic<?>;
   }
 
   @SuppressWarnings("unchecked")
   private Optional<? extends Object> evaluate(Map<String, String> inParameters,
-                                              NewValue.Parser<T> inParser)
+                                              Value.Parser<T> inParser)
   {
     if(m_variable.isPresent())
     {
@@ -280,8 +280,8 @@ public class ExpressionValue<T> extends NewValue
                              + (Integer) operands.get(1).get());
         if(isArithmetic(operands.get(0)) && isArithmetic(operands.get(1)))
           return Optional.of
-            (((NewValue.Arithmetic<Message>) operands.get(0).get())
-             .add((NewValue.Arithmetic<Message>) operands.get(1).get()));
+            (((Value.Arithmetic<Message>) operands.get(0).get())
+             .add((Value.Arithmetic<Message>) operands.get(1).get()));
 
         return Optional.absent();
 
@@ -304,11 +304,11 @@ public class ExpressionValue<T> extends NewValue
                              * (Integer) operands.get(1).get());
         if(isArithmetic(operands.get(0)) && isInteger(operands.get(1)))
           return Optional.of
-            (((NewValue.Arithmetic<Message>) operands.get(0).get())
+            (((Value.Arithmetic<Message>) operands.get(0).get())
              .multiply((Integer) operands.get(1).get()));
         if(isArithmetic(operands.get(1)) && isInteger(operands.get(0)))
           return Optional.of
-            (((NewValue.Arithmetic<Message>) operands.get(1).get())
+            (((Value.Arithmetic<Message>) operands.get(1).get())
              .multiply((Integer) operands.get(0).get()));
 
         return Optional.absent();
@@ -374,7 +374,7 @@ public class ExpressionValue<T> extends NewValue
   }
 
   @SuppressWarnings("unchecked")
-  public static <V extends NewValue> ExpressionValue<V>
+  public static <V extends Value> ExpressionValue<V>
     fromProto(ExpressionProto inProto)
   {
     if(inProto.hasLiteral())
@@ -458,8 +458,8 @@ public class ExpressionValue<T> extends NewValue
     public void evaluate()
     {
       assertEquals("evaluate", "42",
-                   parser(NewValue.INTEGER_PARSER).parse("$guru").get()
-                     .getValue(map("guru", "42"), NewValue.INTEGER_PARSER)
+                   parser(Value.INTEGER_PARSER).parse("$guru").get()
+                     .getValue(map("guru", "42"), Value.INTEGER_PARSER)
                      .get().toString());
       assertEquals("evaluate", "10 ft",
                    parser(Speed.PARSER).parse("$guru").get()
@@ -467,16 +467,16 @@ public class ExpressionValue<T> extends NewValue
                      .get().toString());
 
       assertEquals("evaluate", "65",
-                   parser(NewValue.INTEGER_PARSER).parse("42 + $guru").get()
-                     .getValue(map("guru", "23"), NewValue.INTEGER_PARSER)
+                   parser(Value.INTEGER_PARSER).parse("42 + $guru").get()
+                     .getValue(map("guru", "23"), Value.INTEGER_PARSER)
                      .get().toString());
       assertEquals("evaluate", "29",
-                   parser(NewValue.INTEGER_PARSER).parse("(42 + $guru * 2)/3")
-                     .get().getValue(map("guru", "23"), NewValue.INTEGER_PARSER)
+                   parser(Value.INTEGER_PARSER).parse("(42 + $guru * 2)/3")
+                     .get().getValue(map("guru", "23"), Value.INTEGER_PARSER)
                      .get().toString());
       assertEquals("evaluate", "46",
-                   parser(NewValue.INTEGER_PARSER).parse("max(2, 3, $guru) * 2")
-                     .get().getValue(map("guru", "23"), NewValue.INTEGER_PARSER)
+                   parser(Value.INTEGER_PARSER).parse("max(2, 3, $guru) * 2")
+                     .get().getValue(map("guru", "23"), Value.INTEGER_PARSER)
                      .get().toString());
 
       assertEquals("evaluate", "15 ft",

@@ -26,7 +26,7 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMagicProto;
 
-public class NamedModifier extends NewValue.Arithmetic<BaseMagicProto.Modifier>
+public class NamedModifier extends Value.Arithmetic<BaseMagicProto.Modifier>
 {
   public NamedModifier(ModifierType inType, Modifier inModifier)
   {
@@ -37,8 +37,8 @@ public class NamedModifier extends NewValue.Arithmetic<BaseMagicProto.Modifier>
   private final ModifierType m_type;
   private final Modifier m_modifier;
 
-  public final static NewValue.Parser<NamedModifier> PARSER =
-    new NewValue.Parser<NamedModifier>(2)
+  public final static Value.Parser<NamedModifier> PARSER =
+    new Value.Parser<NamedModifier>(2)
     {
       @Override
       protected Optional<NamedModifier> doParse(String inType,

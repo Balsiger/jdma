@@ -19,16 +19,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.entries.BaseSpell;
 import net.ixitxachitls.dma.proto.Values.SharedProto;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.*;
+import net.ixitxachitls.dma.values.Value;
 
 /** The possible spell classes. */
 public enum SpellClass implements Named, net.ixitxachitls.dma.values.enums.Short,
@@ -142,8 +142,8 @@ public enum SpellClass implements Named, net.ixitxachitls.dma.values.enums.Short
   private String m_short;
 
   /** The parser for armor types. */
-  public static final NewValue.Parser<SpellClass> PARSER =
-    new NewValue.Parser<SpellClass>(1)
+  public static final Value.Parser<SpellClass> PARSER =
+    new Value.Parser<SpellClass>(1)
     {
       @Override
       public Optional<SpellClass> doParse(String inValue)

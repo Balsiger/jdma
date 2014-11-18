@@ -40,10 +40,11 @@ import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Modifier;
-import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Size;
 import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.enums.Alignment;
+import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -1406,15 +1407,15 @@ public class Monster extends CampaignEntry
     super.set(inValues);
 
     m_alignment = inValues.use("alignment", m_alignment, Alignment.PARSER);
-    m_strength = inValues.use("strength", m_strength, NewValue.INTEGER_PARSER);
+    m_strength = inValues.use("strength", m_strength, Value.INTEGER_PARSER);
     m_constitution = inValues.use("constitution", m_constitution,
-                                  NewValue.INTEGER_PARSER);
+                                  Value.INTEGER_PARSER);
     m_dexterity = inValues.use("dexterity", m_dexterity,
-                               NewValue.INTEGER_PARSER);
+                               Value.INTEGER_PARSER);
     m_intelligence = inValues.use("intelligence", m_intelligence,
-                                  NewValue.INTEGER_PARSER);
-    m_wisdom = inValues.use("wisdom", m_wisdom, NewValue.INTEGER_PARSER);
-    m_charisma = inValues.use("charisma", m_charisma, NewValue.INTEGER_PARSER);
+                                  Value.INTEGER_PARSER);
+    m_wisdom = inValues.use("wisdom", m_wisdom, Value.INTEGER_PARSER);
+    m_charisma = inValues.use("charisma", m_charisma, Value.INTEGER_PARSER);
     m_feats = inValues.useEntries("feat", m_feats,
                                   new NestedEntry.Creator<Feat>()
                                   {
@@ -1424,7 +1425,7 @@ public class Monster extends CampaignEntry
                                       return new Feat();
                                     }
                                   });
-    m_hp = inValues.use("hp", m_hp, NewValue.INTEGER_PARSER);
+    m_hp = inValues.use("hp", m_hp, Value.INTEGER_PARSER);
     m_qualities = inValues.useEntries("quality", m_qualities,
                                       new NestedEntry.Creator<Quality>()
                                       {

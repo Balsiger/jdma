@@ -39,7 +39,7 @@ import net.ixitxachitls.util.Strings;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class Damage extends NewValue.Arithmetic<DamageProto>
+public class Damage extends Value.Arithmetic<DamageProto>
 {
   public static class DamageParser extends Parser<Damage>
   {
@@ -390,8 +390,8 @@ public class Damage extends NewValue.Arithmetic<DamageProto>
   }
 
   @Override
-  public NewValue.Arithmetic<DamageProto>
-    add(NewValue.Arithmetic<DamageProto> inValue)
+  public Value.Arithmetic<DamageProto>
+    add(Value.Arithmetic<DamageProto> inValue)
   {
     if(inValue == null)
       return this;
@@ -427,13 +427,13 @@ public class Damage extends NewValue.Arithmetic<DamageProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Arithmetic<DamageProto> inValue)
+  public boolean canAdd(Value.Arithmetic<DamageProto> inValue)
   {
     return inValue instanceof Damage;
   }
 
   @Override
-  public NewValue.Arithmetic<DamageProto> multiply(int inFactor)
+  public Value.Arithmetic<DamageProto> multiply(int inFactor)
   {
     return new Damage(m_dice.multiply(inFactor),
                          m_type,

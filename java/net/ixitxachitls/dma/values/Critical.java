@@ -35,7 +35,7 @@ import net.ixitxachitls.util.Strings;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class Critical extends NewValue.Arithmetic<CriticalProto>
+public class Critical extends Value.Arithmetic<CriticalProto>
 {
   public static final Parser<Critical> PARSER = new Parser<Critical>(1)
   {
@@ -122,8 +122,8 @@ public class Critical extends NewValue.Arithmetic<CriticalProto>
   }
 
   @Override
-  public NewValue.Arithmetic<CriticalProto>
-    add(NewValue.Arithmetic<CriticalProto> inValue)
+  public Value.Arithmetic<CriticalProto>
+    add(Value.Arithmetic<CriticalProto> inValue)
   {
     if(!(inValue instanceof Critical))
       return this;
@@ -144,7 +144,7 @@ public class Critical extends NewValue.Arithmetic<CriticalProto>
   }
 
   @Override
-  public NewValue.Arithmetic<CriticalProto> multiply(int inFactor)
+  public Value.Arithmetic<CriticalProto> multiply(int inFactor)
   {
     if(inFactor >= 2)
       return doubled();
@@ -181,7 +181,7 @@ public class Critical extends NewValue.Arithmetic<CriticalProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Arithmetic<CriticalProto> inValue)
+  public boolean canAdd(Value.Arithmetic<CriticalProto> inValue)
   {
     return inValue instanceof Critical;
   }

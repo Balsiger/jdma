@@ -86,8 +86,8 @@ public enum WeaponStyle implements Named, net.ixitxachitls.dma.values.enums.Shor
   private BaseWeaponProto.Style m_proto;
 
   /** The parser for weapon styles. */
-  public static final NewValue.Parser<WeaponStyle> PARSER =
-    new NewValue.Parser<WeaponStyle>(1)
+  public static final Value.Parser<WeaponStyle> PARSER =
+    new Value.Parser<WeaponStyle>(1)
     {
       @Override
       public Optional<WeaponStyle> doParse(String inValue)

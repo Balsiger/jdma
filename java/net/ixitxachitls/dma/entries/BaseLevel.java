@@ -39,7 +39,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Reference;
-import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.util.logging.Log;
@@ -69,8 +69,8 @@ public class BaseLevel extends BaseEntry
     private final int m_usesPerDay;
     private final Optional<String> m_condition;
 
-    public static final NewValue.Parser<QualityReference> PARSER =
-      new NewValue.Parser<QualityReference>(4)
+    public static final Value.Parser<QualityReference> PARSER =
+      new Value.Parser<QualityReference>(4)
       {
         @Override
         public Optional<QualityReference> doParse
@@ -542,7 +542,7 @@ public class BaseLevel extends BaseEntry
                    Alignment.PARSER);
     m_hitDie = inValues.use("hit_die", m_hitDie, Dice.PARSER);
     m_skillPoints = inValues.use("skill_points", m_skillPoints,
-                                 NewValue.INTEGER_PARSER);
+                                 Value.INTEGER_PARSER);
     m_classSkills =
       inValues.use("class_skill", m_classSkills,
                    new Reference.ReferenceParser<>(BaseSkill.TYPE));
@@ -560,13 +560,13 @@ public class BaseLevel extends BaseEntry
                    m_specialQualities, QualityReference.PARSER,
                    "name", "level", "per_day", "condition");
     m_baseAttacks =
-      inValues.use("base_attack", m_baseAttacks, NewValue.INTEGER_PARSER);
+      inValues.use("base_attack", m_baseAttacks, Value.INTEGER_PARSER);
     m_fortitudeSaves =
-      inValues.use("fortitude_save", m_fortitudeSaves, NewValue.INTEGER_PARSER);
+      inValues.use("fortitude_save", m_fortitudeSaves, Value.INTEGER_PARSER);
     m_reflexSaves =
-      inValues.use("reflex_save", m_reflexSaves, NewValue.INTEGER_PARSER);
+      inValues.use("reflex_save", m_reflexSaves, Value.INTEGER_PARSER);
     m_willSaves =
-      inValues.use("will_save", m_willSaves, NewValue.INTEGER_PARSER);
+      inValues.use("will_save", m_willSaves, Value.INTEGER_PARSER);
   }
 
   @Override

@@ -19,7 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,47 +28,49 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.proto.Values.SpeedProto;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.values.Value;
 
 /** The possible movement modes in the game. */
 @ParametersAreNonnullByDefault
-public enum MovementMode implements Named,
-    Proto<SpeedProto.Mode>
+public enum Maneuverability implements Named,
+    Proto<SpeedProto.Maneuverability>
 {
-  UNKNOWN("Unknown", SpeedProto.Mode.UNKNONW_MODE),
+  UNKNOWN("Unknown", SpeedProto.Maneuverability.UNKNOWN_MANEUVERABILITY),
 
-  /** Burrowing movement. */
-  BURROW("Burrow", SpeedProto.Mode.BURROW),
+  /** Perfect maneuverability. */
+  PERFECT("Perfect", SpeedProto.Maneuverability.PERFECT),
 
-  /** Climbing. */
-  CLIMB("Climb", SpeedProto.Mode.CLIMB),
+  /** Good maneuverability. */
+  GOOD("Good", SpeedProto.Maneuverability.GOOD),
 
-  /** Flying. */
-  FLY("Fly", SpeedProto.Mode.FLY),
+  /** Average maneuverability. */
+  AVERAGE("Average", SpeedProto.Maneuverability.AVERAGE),
 
-  /** Swimming. */
-  SWIM("Swim", SpeedProto.Mode.SWIM),
+  /** Poor maneuverability. */
+  POOR("Poor", SpeedProto.Maneuverability.POOR),
 
-  /** Running. */
-  RUN("", SpeedProto.Mode.RUN);
+  /** Clumsy maneuverability. */
+  CLUMSY("Clumsy", SpeedProto.Maneuverability.CLUMSY),
+
+  /** Clumsy maneuverability. */
+  NONE("", SpeedProto.Maneuverability.NONE);
 
   /** The value's name. */
   private String m_name;
 
   /** The proto enum value. */
-  private SpeedProto.Mode m_proto;
+  private SpeedProto.Maneuverability m_proto;
 
   /** The parser for armor types. */
-  public static final NewValue.Parser<MovementMode> PARSER =
-    new NewValue.Parser<MovementMode>(1)
+  public static final Value.Parser<Maneuverability> PARSER =
+    new Value.Parser<Maneuverability>(1)
     {
       @Override
-      public Optional<MovementMode> doParse(String inValue)
+      public Optional<Maneuverability> doParse(String inValue)
       {
-        return MovementMode.fromString(inValue);
+        return Maneuverability.fromString(inValue);
       }
     };
 
@@ -76,11 +78,11 @@ public enum MovementMode implements Named,
    * Create the enum value.
    *
    * @param inName the name of the value
-   * @param inProto the corresponding proto value
+   * @param inProto the proto value
    */
-  private MovementMode(String inName, SpeedProto.Mode inProto)
+  private Maneuverability(String inName, SpeedProto.Maneuverability inProto)
   {
-    m_name = BaseMonster.constant("movement.mode", inName);
+    m_name = BaseMonster.constant("maneuverability", inName);
     m_proto = inProto;
   }
 
@@ -97,24 +99,24 @@ public enum MovementMode implements Named,
   }
 
   @Override
-  public SpeedProto.Mode toProto()
+  public SpeedProto.Maneuverability toProto()
   {
     return m_proto;
   }
 
   /**
-   * Convert the proto value to the corresponding enum value.
+   * Convert the proto value into the corresponding enum value.
    *
-   * @param inProto the proto to convert
+   * @param inProto the proto value to convert
    * @return the corresponding enum value
    */
-  public static MovementMode fromProto(SpeedProto.Mode inProto)
+  public static Maneuverability fromProto(SpeedProto.Maneuverability inProto)
   {
-    for(MovementMode mode : values())
-      if(mode.m_proto == inProto)
-        return mode;
+    for(Maneuverability maneuverability : values())
+      if(maneuverability.m_proto == inProto)
+        return maneuverability;
 
-    throw new IllegalArgumentException("cannot convert movement mode: "
+    throw new IllegalArgumentException("cannot convert maneuverability: "
                                        + inProto);
   }
 
@@ -124,11 +126,11 @@ public enum MovementMode implements Named,
    * @param inValue the string representation
    * @return the matching type, if any
    */
-  public static Optional<MovementMode> fromString(String inValue)
+  public static Optional<Maneuverability> fromString(String inValue)
   {
-    for(MovementMode mode : values())
-      if(mode.getName().equalsIgnoreCase(inValue))
-        return Optional.of(mode);
+    for(Maneuverability maneuverability : values())
+      if(maneuverability.getName().equalsIgnoreCase(inValue))
+        return Optional.of(maneuverability);
 
     return Optional.absent();
   }
@@ -141,8 +143,8 @@ public enum MovementMode implements Named,
   public static List<String> names()
   {
     List<String> names = new ArrayList<>();
-    for(MovementMode type : values())
-      names.add(type.getName());
+    for(Maneuverability maneuverability : values())
+      names.add(maneuverability.getName());
 
     return names;
   }

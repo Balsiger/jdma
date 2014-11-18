@@ -61,8 +61,8 @@ public enum Proficiency implements Named,
   private BaseWeaponProto.Proficiency m_proto;
 
   /** The parser for proficiency values. */
-  public static final NewValue.Parser<Proficiency> PARSER =
-    new NewValue.Parser<Proficiency>(1)
+  public static final Value.Parser<Proficiency> PARSER =
+    new Value.Parser<Proficiency>(1)
     {
       @Override
       public Optional<Proficiency> doParse(String inValue)

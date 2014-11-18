@@ -30,7 +30,7 @@ import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
  * A simple representation for a file associated with an entry.
  */
 @ParametersAreNonnullByDefault
-public class File extends NewValue<AbstractEntryProto.File>
+public class File extends Value<AbstractEntryProto.File>
 {
   /**
    * Create the file with all its data.

@@ -19,7 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +28,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Type;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.values.Value;
 
 /** The possible monster types in the game. */
 @ParametersAreNonnullByDefault
@@ -94,8 +93,8 @@ public enum MonsterType implements Named,
   private BaseMonsterProto.Type m_proto;
 
   /** The parser for armor types. */
-  public static final NewValue.Parser<MonsterType> PARSER =
-    new NewValue.Parser<MonsterType>(1)
+  public static final Value.Parser<MonsterType> PARSER =
+    new Value.Parser<MonsterType>(1)
     {
       @Override
       public Optional<MonsterType> doParse(String inValue)

@@ -101,8 +101,8 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
   private BaseItemProto.Size m_proto;
 
   /** The parser for item sizes. */
-  public static final NewValue.Parser<Size> PARSER =
-    new NewValue.Parser<Size>(1)
+  public static final Value.Parser<Size> PARSER =
+    new Value.Parser<Size>(1)
     {
       @Override
       public Optional<Size> doParse(String inValue)

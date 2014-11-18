@@ -45,7 +45,7 @@ import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.configuration.Config;
 
 /**
@@ -270,7 +270,7 @@ public abstract class ValueGroup implements Changeable
       return result;
     }
 
-    public <T> T use(String inKey, T inDefault, NewValue.Parser<T> inParser,
+    public <T> T use(String inKey, T inDefault, Value.Parser<T> inParser,
                      String ... inParts) {
       List<String []> values = listValues(inKey, inParts);
       if(values.size() == 0 || allEmpty(values.get(0)))
@@ -303,7 +303,7 @@ public abstract class ValueGroup implements Changeable
     }
 
     public <T> Optional<T> use(String inKey, Optional<T> inDefault,
-                               NewValue.Parser<T> inParser,
+                               Value.Parser<T> inParser,
                                String ... inParts) {
       List<String []> values = listValues(inKey, inParts);
       if(values.size() == 0 || allEmpty(values.get(0)))
@@ -336,7 +336,7 @@ public abstract class ValueGroup implements Changeable
     }
 
     public <T> List<T> use(String inKey, List<T> inDefault,
-                           NewValue.Parser<T> inParser, String ... inParts)
+                           Value.Parser<T> inParser, String ... inParts)
     {
       List<String []> values = listValues(inKey, inParts);
       List<T> results = new ArrayList<>();

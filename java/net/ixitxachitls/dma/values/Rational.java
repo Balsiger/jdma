@@ -36,7 +36,7 @@ import net.ixitxachitls.util.Strings;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class Rational extends NewValue.Arithmetic<RationalProto>
+public class Rational extends Value.Arithmetic<RationalProto>
 {
   public static class RationalParser extends Parser<Rational>
   {
@@ -151,8 +151,8 @@ public class Rational extends NewValue.Arithmetic<RationalProto>
   }
 
   @Override
-  public NewValue.Arithmetic<RationalProto>
-    add(NewValue.Arithmetic<RationalProto> inValue)
+  public Value.Arithmetic<RationalProto>
+    add(Value.Arithmetic<RationalProto> inValue)
   {
     if(!(inValue instanceof Rational))
       throw new IllegalArgumentException("can only add another rational value");
@@ -187,13 +187,13 @@ public class Rational extends NewValue.Arithmetic<RationalProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Arithmetic<RationalProto> inValue)
+  public boolean canAdd(Value.Arithmetic<RationalProto> inValue)
   {
     return inValue instanceof Rational;
   }
 
   @Override
-  public NewValue.Arithmetic<RationalProto> multiply(int inFactor)
+  public Value.Arithmetic<RationalProto> multiply(int inFactor)
   {
     return new Rational(m_leader * inFactor, m_nominator * inFactor,
                            m_denominator).simplify();

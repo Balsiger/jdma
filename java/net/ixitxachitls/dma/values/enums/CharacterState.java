@@ -19,7 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +27,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.CharacterProto;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.values.Value;
 
 /** The character state. */
 public enum CharacterState implements Named,
@@ -52,8 +50,8 @@ public enum CharacterState implements Named,
   private CharacterProto.State m_proto;
 
   /** The parser for alignment. */
-  public static final NewValue.Parser<CharacterState> PARSER =
-    new NewValue.Parser<CharacterState>(1)
+  public static final Value.Parser<CharacterState> PARSER =
+    new Value.Parser<CharacterState>(1)
   {
     @Override
     public Optional<CharacterState> doParse(String inValue)

@@ -79,8 +79,8 @@ public enum WeaponType implements Named, net.ixitxachitls.dma.values.enums.Short
   private BaseWeaponProto.Type m_proto;
 
   /** The parser for weapon types. */
-  public static final NewValue.Parser<WeaponType> PARSER =
-    new NewValue.Parser<WeaponType>(1)
+  public static final Value.Parser<WeaponType> PARSER =
+    new Value.Parser<WeaponType>(1)
     {
       @Override
       public Optional<WeaponType> doParse(String inValue)

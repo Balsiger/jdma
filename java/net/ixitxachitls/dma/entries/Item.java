@@ -1237,8 +1237,8 @@ public class Item extends CampaignEntry
     m_playerNotes = inValues.use("player_notes", m_playerNotes);
     m_playerName = inValues.use("player_name", m_playerName);
     m_dmNotes = inValues.use("dm_notes", m_dmNotes);
-    m_multiple = inValues.use("multiple", m_multiple, NewValue.INTEGER_PARSER);
-    m_multiuse = inValues.use("multiuse", m_multiuse, NewValue.INTEGER_PARSER);
+    m_multiple = inValues.use("multiple", m_multiple, Value.INTEGER_PARSER);
+    m_multiuse = inValues.use("multiuse", m_multiuse, Value.INTEGER_PARSER);
     m_timeLeft = inValues.use("time_left", m_timeLeft, Duration.PARSER);
 
     if(m_parentName.isPresent() && !m_parentName.get().contains("/"))

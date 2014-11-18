@@ -34,8 +34,10 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
-import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.enums.Ability;
+import net.ixitxachitls.dma.values.enums.SkillModifier;
+import net.ixitxachitls.dma.values.enums.SkillRestriction;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.logging.Log;
 
@@ -60,8 +62,8 @@ public class BaseSkill extends BaseEntry
     private final int m_dc;
     private final String m_description;
 
-    public static final NewValue.Parser<DC> PARSER =
-      new NewValue.Parser<DC>(2)
+    public static final Value.Parser<DC> PARSER =
+      new Value.Parser<DC>(2)
       {
         @Override
         public Optional<DC> doParse(String inValue, String inText)

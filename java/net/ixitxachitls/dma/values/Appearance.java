@@ -35,8 +35,8 @@ public class Appearance implements Comparable<Appearance>
 
   private final Probability m_probability;
   private final String m_text;
-  public static final NewValue.Parser<Appearance> PARSER =
-    new NewValue.Parser<Appearance>(2)
+  public static final Value.Parser<Appearance> PARSER =
+    new Value.Parser<Appearance>(2)
     {
       @Override
       public Optional<Appearance> doParse

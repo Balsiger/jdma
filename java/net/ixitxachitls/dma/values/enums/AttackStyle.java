@@ -20,66 +20,59 @@
  *****************************************************************************/
 
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.proto.Values.SharedProto;
-import net.ixitxachitls.dma.proto.Values.SharedProto.SkillSubtype;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.entries.BaseMonster;
+import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
+import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Attack.Style;
+import net.ixitxachitls.dma.values.Value;
 
-/** The possible sizes in the game. */
-public enum SkillType implements Named,
-    Proto<SkillSubtype>
+/** The possible attack styles in the game. */
+@ParametersAreNonnullByDefault
+public enum AttackStyle implements Named,
+    Proto<Style>
 {
-  /** Unknown type. */
-  UNKNOWN("Unknown", SharedProto.SkillSubtype.UNKNOWN_SKILL_SUBTYPE),
+  UNKNOWN("Unknown", BaseMonsterProto.Attack.Style.UNKNOWN_STYLE),
 
-  /** Drow religion. */
-  DROW_RELIGION("Drow Religion", SharedProto.SkillSubtype.DROW_RELIGION),
+  /** A melee attack. */
+  MELEE("melee", BaseMonsterProto.Attack.Style.MELEE),
 
-  /** Religion. */
-  RELIGION("Religion", SharedProto.SkillSubtype.RELIGION),
-
-  /** Arcana. */
-  ARCANA("Arcana", SharedProto.SkillSubtype.ARCANA),
-
-  /** Alchemy. */
-  ALCHEMY("Alchemy", SharedProto.SkillSubtype.ALCHEMY),
-
-  /** Any sub type. */
-  ANY_ONE("Any One", SharedProto.SkillSubtype.ANY_ONE);
+  /** A ranged attack. */
+  RANGED("ranged", BaseMonsterProto.Attack.Style.RANGED);
 
   /** The value's name. */
   private String m_name;
 
   /** The proto enum value. */
-  private SharedProto.SkillSubtype m_proto;
+  private BaseMonsterProto.Attack.Style m_proto;
 
   /** The parser for armor types. */
-  public static final NewValue.Parser<SkillType> PARSER =
-    new NewValue.Parser<SkillType>(1)
+  public static final Value.Parser<AttackStyle> PARSER =
+    new Value.Parser<AttackStyle>(1)
     {
       @Override
-      public Optional<SkillType> doParse(String inValue)
+      public Optional<AttackStyle> doParse(String inValue)
       {
-        return SkillType.fromString(inValue);
+        return AttackStyle.fromString(inValue);
       }
     };
 
-  /** Create the name.
+  /**
+   * Create the name.
    *
    * @param inName       the name of the value
    * @param inProto      the proto enum value
    */
-  private SkillType(String inName, SharedProto.SkillSubtype inProto)
+  private AttackStyle(String inName, BaseMonsterProto.Attack.Style inProto)
   {
-    m_name = BaseSkill.constant("skill.subtype", inName);
+    m_name = BaseMonster.constant("attack.style", inName);
     m_proto = inProto;
   }
 
@@ -96,24 +89,24 @@ public enum SkillType implements Named,
   }
 
   @Override
-  public SkillSubtype toProto()
+  public Style toProto()
   {
     return m_proto;
   }
 
   /**
-   * Convert the given proto to an enum value.
+   * Convert the proto enum value to its enum value.
    *
-   * @param inProto the proto value to convert
-   * @return the corresponding enum value
+   * @param inProto  the proto value to convert
+   * @return         the corresponding enum value
    */
-  public static SkillType fromProto(SharedProto.SkillSubtype inProto)
+  public static AttackStyle fromProto(BaseMonsterProto.Attack.Style inProto)
   {
-    for(SkillType subtype : values())
-      if(subtype.m_proto == inProto)
-        return subtype;
+    for(AttackStyle style : values())
+      if(style.m_proto == inProto)
+        return style;
 
-    throw new IllegalArgumentException("cannot convert skill subtype: "
+    throw new IllegalArgumentException("cannot convert attack style: "
                                        + inProto);
   }
 
@@ -123,11 +116,11 @@ public enum SkillType implements Named,
    * @param inValue the string representation
    * @return the matching type, if any
    */
-  public static Optional<SkillType> fromString(String inValue)
+  public static Optional<AttackStyle> fromString(String inValue)
   {
-    for(SkillType type : values())
-      if(type.getName().equalsIgnoreCase(inValue))
-        return Optional.of(type);
+    for(AttackStyle style : values())
+      if(style.getName().equalsIgnoreCase(inValue))
+        return Optional.of(style);
 
     return Optional.absent();
   }
@@ -140,8 +133,8 @@ public enum SkillType implements Named,
   public static List<String> names()
   {
     List<String> names = new ArrayList<>();
-    for(SkillType type : values())
-      names.add(type.getName());
+    for(AttackStyle style : values())
+      names.add(style.getName());
 
     return names;
   }

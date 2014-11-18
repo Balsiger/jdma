@@ -201,7 +201,7 @@ util.link = function(inEvent, inTarget, inFunction)
 
   // inform google analytics about this page change
   if(location.hostname != 'localhost')
-    ga('send', 'screenview', { 'screenName': inTarget });
+    ga('send', 'pageview');
 
   var target = inTarget;
   if(!target.match(/\?/))
@@ -519,7 +519,21 @@ util.removeQueryParam = function(inText, inName)
   var text = inText.replace(new RegExp('[?&]' + inName + '(=[^&]*)?', 'g'), '');
   text = text.replace(/^&/, '?');
   return text;
-}
+};
+
+/**
+ * Track an event.
+ *
+ * @param inCateogry the category for the event.
+ * @param inAction   the action tracked.
+ * @param inLabel    the event label.
+ * @param inValue    a number value for the event.
+ */
+
+util.track = function(inCategory, inAction, inLabel, inValue)
+{
+  ga('send', 'event', inCategory, inAction, inLabel, inValue);
+};
 
 //..........................................................................
 
@@ -676,6 +690,8 @@ Function.prototype.bind = function()
 };
 
 //..........................................................................
+
+
 
 //..............................................................................
 

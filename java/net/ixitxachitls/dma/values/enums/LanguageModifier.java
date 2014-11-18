@@ -20,7 +20,7 @@
  *****************************************************************************/
 
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,51 +29,55 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Attack.Style;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.values.Value;
 
-/** The possible attack styles in the game. */
+/** The possible sizes in the game. */
 @ParametersAreNonnullByDefault
-public enum AttackStyle implements Named,
-    Proto<Style>
+public enum LanguageModifier implements Named,
+    Proto<BaseMonsterProto.Language.Modifier>
 {
-  UNKNOWN("Unknown", BaseMonsterProto.Attack.Style.UNKNOWN_STYLE),
+  UNKNOWN("Unknown", BaseMonsterProto.Language.Modifier.UNKNOWN_MODIFIER),
+  /** Automatic. */
+  AUTOMATIC("Automatic", BaseMonsterProto.Language.Modifier.AUTOMATIC),
 
-  /** A melee attack. */
-  MELEE("melee", BaseMonsterProto.Attack.Style.MELEE),
+  /** Bonus. */
+  BONUS("Bonus", BaseMonsterProto.Language.Modifier.BONUS),
 
-  /** A ranged attack. */
-  RANGED("ranged", BaseMonsterProto.Attack.Style.RANGED);
+  /** Some. */
+  SOME("Some", BaseMonsterProto.Language.Modifier.SOME),
+
+  /** Understand. */
+  UNDERSTAND("Understand", BaseMonsterProto.Language.Modifier.UNDERSTAND);
 
   /** The value's name. */
   private String m_name;
 
   /** The proto enum value. */
-  private BaseMonsterProto.Attack.Style m_proto;
+  private BaseMonsterProto.Language.Modifier m_proto;
 
   /** The parser for armor types. */
-  public static final NewValue.Parser<AttackStyle> PARSER =
-    new NewValue.Parser<AttackStyle>(1)
+  public static final Value.Parser<LanguageModifier> PARSER =
+    new Value.Parser<LanguageModifier>(1)
     {
       @Override
-      public Optional<AttackStyle> doParse(String inValue)
+      public Optional<LanguageModifier> doParse(String inValue)
       {
-        return AttackStyle.fromString(inValue);
+        return LanguageModifier.fromString(inValue);
       }
     };
 
-  /**
+    /**
    * Create the name.
    *
    * @param inName       the name of the value
-   * @param inProto      the proto enum value
+   * @param inProto      the proto value
    */
-  private AttackStyle(String inName, BaseMonsterProto.Attack.Style inProto)
+  private LanguageModifier(String inName,
+                           BaseMonsterProto.Language.Modifier inProto)
   {
-    m_name = BaseMonster.constant("attack.style", inName);
+    m_name = BaseMonster.constant("language.modifier", inName);
     m_proto = inProto;
   }
 
@@ -90,24 +94,25 @@ public enum AttackStyle implements Named,
   }
 
   @Override
-  public Style toProto()
+  public BaseMonsterProto.Language.Modifier toProto()
   {
     return m_proto;
   }
 
   /**
-   * Convert the proto enum value to its enum value.
+   * Convert a proto value to the enum value.
    *
-   * @param inProto  the proto value to convert
-   * @return         the corresponding enum value
+   * @param inProto the proto value to convert
+   * @return the corresponding enum value
    */
-  public static AttackStyle fromProto(BaseMonsterProto.Attack.Style inProto)
+  public static LanguageModifier
+    fromProto(BaseMonsterProto.Language.Modifier inProto)
   {
-    for(AttackStyle style : values())
-      if(style.m_proto == inProto)
-        return style;
+    for(LanguageModifier modifier : values())
+      if(modifier.m_proto == inProto)
+        return modifier;
 
-    throw new IllegalArgumentException("cannot convert attack style: "
+    throw new IllegalArgumentException("cannot convert language modifier: "
                                        + inProto);
   }
 
@@ -117,11 +122,11 @@ public enum AttackStyle implements Named,
    * @param inValue the string representation
    * @return the matching type, if any
    */
-  public static Optional<AttackStyle> fromString(String inValue)
+  public static Optional<LanguageModifier> fromString(String inValue)
   {
-    for(AttackStyle style : values())
-      if(style.getName().equalsIgnoreCase(inValue))
-        return Optional.of(style);
+    for(LanguageModifier modifier : values())
+      if(modifier.getName().equalsIgnoreCase(inValue))
+        return Optional.of(modifier);
 
     return Optional.absent();
   }
@@ -134,8 +139,8 @@ public enum AttackStyle implements Named,
   public static List<String> names()
   {
     List<String> names = new ArrayList<>();
-    for(AttackStyle style : values())
-      names.add(style.getName());
+    for(LanguageModifier modifier: values())
+      names.add(modifier.getName());
 
     return names;
   }

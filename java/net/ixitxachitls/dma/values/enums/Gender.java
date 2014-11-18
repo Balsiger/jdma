@@ -28,7 +28,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
-import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.Value;
 
 /** The possible gender types in the game. */
 public enum Gender implements Named,
@@ -53,8 +53,8 @@ public enum Gender implements Named,
   NPCProto.Gender m_proto;
 
   /** The parser for gender. */
-  public static final NewValue.Parser<Gender> PARSER =
-    new NewValue.Parser<Gender>(1)
+  public static final Value.Parser<Gender> PARSER =
+    new Value.Parser<Gender>(1)
   {
     @Override
     public Optional<Gender> doParse(String inValue)

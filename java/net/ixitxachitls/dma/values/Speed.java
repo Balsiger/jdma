@@ -23,12 +23,12 @@ package net.ixitxachitls.dma.values;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.Maneuverability;
-import net.ixitxachitls.dma.entries.MovementMode;
+import net.ixitxachitls.dma.values.enums.Maneuverability;
+import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.dma.proto.Values.SpeedProto;
 import net.ixitxachitls.util.Strings;
 
-public class Speed extends NewValue.Arithmetic<SpeedProto>
+public class Speed extends Value.Arithmetic<SpeedProto>
 {
   public Speed(MovementMode inMode, Distance inSpeed,
                Optional<Maneuverability> inManeuverability)
@@ -129,8 +129,8 @@ public class Speed extends NewValue.Arithmetic<SpeedProto>
   }
 
   @Override
-  public NewValue.Arithmetic<SpeedProto>
-    add(NewValue.Arithmetic<SpeedProto> inValue)
+  public Value.Arithmetic<SpeedProto>
+    add(Value.Arithmetic<SpeedProto> inValue)
   {
     if(!canAdd(inValue))
       return this;
@@ -156,7 +156,7 @@ public class Speed extends NewValue.Arithmetic<SpeedProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Arithmetic<SpeedProto> inValue)
+  public boolean canAdd(Value.Arithmetic<SpeedProto> inValue)
   {
     if(!(inValue instanceof Speed))
       return false;
@@ -166,7 +166,7 @@ public class Speed extends NewValue.Arithmetic<SpeedProto>
   }
 
   @Override
-  public NewValue.Arithmetic<SpeedProto> multiply(int inFactor)
+  public Value.Arithmetic<SpeedProto> multiply(int inFactor)
   {
     return new Speed(m_mode,
                      (Distance)m_speed.multiply(inFactor),

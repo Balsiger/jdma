@@ -27,7 +27,8 @@ import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 
 /** Small class to encapsulate person information with job. */
-public class Content extends NewValue<BaseProductProto.Content> {
+public class Content extends Value<BaseProductProto.Content>
+{
 
   public static class ContentParser extends Parser<Content>
   {

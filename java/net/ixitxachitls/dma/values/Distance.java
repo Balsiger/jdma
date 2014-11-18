@@ -38,7 +38,7 @@ import net.ixitxachitls.util.Strings;
  * @file   NewDistance.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
-public class Distance extends NewValue.Arithmetic<DistanceProto>
+public class Distance extends Value.Arithmetic<DistanceProto>
   implements Comparable<Distance>
 {
   public static class DistanceParser extends Parser<Distance>
@@ -252,8 +252,8 @@ public class Distance extends NewValue.Arithmetic<DistanceProto>
   }
 
   @Override
-  public NewValue.Arithmetic<DistanceProto>
-    add(@Nullable NewValue.Arithmetic<DistanceProto> inValue)
+  public Value.Arithmetic<DistanceProto>
+    add(@Nullable Value.Arithmetic<DistanceProto> inValue)
   {
     if(inValue == null)
       return this;
@@ -268,13 +268,13 @@ public class Distance extends NewValue.Arithmetic<DistanceProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Arithmetic<DistanceProto> inValue)
+  public boolean canAdd(Value.Arithmetic<DistanceProto> inValue)
   {
     return inValue instanceof Distance;
   }
 
   @Override
-  public NewValue.Arithmetic<DistanceProto> multiply(int inFactor)
+  public Value.Arithmetic<DistanceProto> multiply(int inFactor)
   {
     return new Distance(multiply(m_miles, inFactor),
                            multiply(m_feet, inFactor),

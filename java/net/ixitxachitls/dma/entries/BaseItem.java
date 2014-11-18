@@ -62,7 +62,7 @@ import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.ModifierType;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.NamedModifier;
-import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.Probability;
 import net.ixitxachitls.dma.values.Proficiency;
@@ -2083,20 +2083,20 @@ public class BaseItem extends BaseEntry
     m_playerName = inValues.use("player_name", m_playerName);
     m_value = inValues.use("value", m_value, Money.PARSER);
     m_weight = inValues.use("weight", m_weight, Weight.PARSER);
-    m_hp = inValues.use("hp", m_hp, NewValue.INTEGER_PARSER);
+    m_hp = inValues.use("hp", m_hp, Value.INTEGER_PARSER);
     m_size = inValues.use("size", m_size, Size.PARSER);
     m_sizeModifier = inValues.use("size_modifier", m_sizeModifier,
                                   SizeModifier.PARSER);
     m_thickness = inValues.use("thickness", m_thickness, Distance.PARSER);
-    m_hardness = inValues.use("hardness", m_hardness, NewValue.INTEGER_PARSER);
-    m_break = inValues.use("break", m_break, NewValue.INTEGER_PARSER);
+    m_hardness = inValues.use("hardness", m_hardness, Value.INTEGER_PARSER);
+    m_break = inValues.use("break", m_break, Value.INTEGER_PARSER);
     m_probability = inValues.use("probability", m_probability,
                                  Probability.PARSER);
     m_substance = inValues.use("substance", m_substance, Substance.PARSER);
     m_appearances = inValues.use("appearances", m_appearances,
                                  Appearance.PARSER, "probability", "text");
-    m_multiple = inValues.use("multiple", m_multiple, NewValue.INTEGER_PARSER);
-    m_multiuse = inValues.use("multiuse", m_multiuse, NewValue.INTEGER_PARSER);
+    m_multiple = inValues.use("multiple", m_multiple, Value.INTEGER_PARSER);
+    m_multiuse = inValues.use("multiuse", m_multiuse, Value.INTEGER_PARSER);
     m_countUnit = inValues.use("count_unit", m_countUnit, CountUnit.PARSER);
     m_lightShape = inValues.use("light.shape", m_lightShape, AreaShape.PARSER);
     m_brightLight = inValues.use("light.bright", m_brightLight,
@@ -2121,11 +2121,11 @@ public class BaseItem extends BaseEntry
     m_range = inValues.use("weapon.range", m_range, Distance.PARSER);
     m_reach = inValues.use("weapon.reach", m_reach, Distance.PARSER);
     m_maxAttacks = inValues.use("weapon.max_attacks", m_maxAttacks,
-                                NewValue.INTEGER_PARSER);
+                                Value.INTEGER_PARSER);
     m_finesse = inValues.use("weapon.finesse", m_finesse,
-                             NewValue.BOOLEAN_PARSER);
+                             Value.BOOLEAN_PARSER);
     m_ammunition = inValues.use("weapon.ammunition", m_ammunition,
-                                NewValue.BOOLEAN_PARSER);
+                                Value.BOOLEAN_PARSER);
 
     m_armorBonus = inValues.use("armor.bonus", m_armorBonus,
                                 Modifier.PARSER);

@@ -19,8 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,57 +28,58 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.*;
+import net.ixitxachitls.dma.entries.BaseMonster;
+import net.ixitxachitls.dma.proto.Values.SpeedProto;
+import net.ixitxachitls.dma.values.Value;
 
-/** The possible saves in the game. */
+/** The possible movement modes in the game. */
 @ParametersAreNonnullByDefault
-public enum Save implements Named, net.ixitxachitls.dma.values.enums.Short,
-    Proto<BaseMonsterProto.Save>
+public enum MovementMode implements Named,
+    Proto<SpeedProto.Mode>
 {
-  UNKNOWN("Unknown", "Unk", BaseMonsterProto.Save.UNKNOWN_SAVE),
+  UNKNOWN("Unknown", SpeedProto.Mode.UNKNONW_MODE),
 
-  /** Fortitude. */
-  FORTITUDE("Fortitude", "For", BaseMonsterProto.Save.FORTITUDE),
+  /** Burrowing movement. */
+  BURROW("Burrow", SpeedProto.Mode.BURROW),
 
-  /** Reflex. */
-  REFLEX("Reflex", "Ref", BaseMonsterProto.Save.REFLEX),
+  /** Climbing. */
+  CLIMB("Climb", SpeedProto.Mode.CLIMB),
 
-  /** Wisdom. */
-  WISDOM("Wisdom", "Wis", BaseMonsterProto.Save.WISDOM_SAVE);
+  /** Flying. */
+  FLY("Fly", SpeedProto.Mode.FLY),
+
+  /** Swimming. */
+  SWIM("Swim", SpeedProto.Mode.SWIM),
+
+  /** Running. */
+  RUN("", SpeedProto.Mode.RUN);
 
   /** The value's name. */
   private String m_name;
 
-  /** The value's short name. */
-  private String m_short;
-
   /** The proto enum value. */
-  private BaseMonsterProto.Save m_proto;
+  private SpeedProto.Mode m_proto;
 
   /** The parser for armor types. */
-  public static final NewValue.Parser<Save> PARSER =
-    new NewValue.Parser<Save>(1)
+  public static final Value.Parser<MovementMode> PARSER =
+    new Value.Parser<MovementMode>(1)
     {
       @Override
-      public Optional<Save> doParse(String inValue)
+      public Optional<MovementMode> doParse(String inValue)
       {
-        return Save.fromString(inValue);
+        return MovementMode.fromString(inValue);
       }
     };
 
-    /**
-   * Create the name.
+  /**
+   * Create the enum value.
    *
-   * @param inName       the name of the value
-   * @param inShort      the short name of the value
-   * @param inProto      the proto value
+   * @param inName the name of the value
+   * @param inProto the corresponding proto value
    */
-  private Save(String inName, String inShort, BaseMonsterProto.Save inProto)
+  private MovementMode(String inName, SpeedProto.Mode inProto)
   {
-    m_name = BaseMonster.constant("save.name", inName);
-    m_short = BaseMonster.constant("save.short", inShort);
+    m_name = BaseMonster.constant("movement.mode", inName);
     m_proto = inProto;
   }
 
@@ -90,30 +90,31 @@ public enum Save implements Named, net.ixitxachitls.dma.values.enums.Short,
   }
 
   @Override
-  public String getShort()
-  {
-    return m_short;
-  }
-
-  @Override
   public String toString()
   {
     return m_name;
   }
 
   @Override
-  public BaseMonsterProto.Save toProto()
+  public SpeedProto.Mode toProto()
   {
     return m_proto;
   }
 
-  public static Save fromProto(BaseMonsterProto.Save inProto)
+  /**
+   * Convert the proto value to the corresponding enum value.
+   *
+   * @param inProto the proto to convert
+   * @return the corresponding enum value
+   */
+  public static MovementMode fromProto(SpeedProto.Mode inProto)
   {
-    for(Save save : values())
-      if(save.m_proto == inProto)
-        return save;
+    for(MovementMode mode : values())
+      if(mode.m_proto == inProto)
+        return mode;
 
-    throw new IllegalArgumentException("cannot convert save: " + inProto);
+    throw new IllegalArgumentException("cannot convert movement mode: "
+                                       + inProto);
   }
 
   /**
@@ -122,11 +123,11 @@ public enum Save implements Named, net.ixitxachitls.dma.values.enums.Short,
    * @param inValue the string representation
    * @return the matching type, if any
    */
-  public static Optional<Save> fromString(String inValue)
+  public static Optional<MovementMode> fromString(String inValue)
   {
-    for(Save save : values())
-      if(save.getName().equalsIgnoreCase(inValue))
-        return Optional.of(save);
+    for(MovementMode mode : values())
+      if(mode.getName().equalsIgnoreCase(inValue))
+        return Optional.of(mode);
 
     return Optional.absent();
   }
@@ -139,8 +140,8 @@ public enum Save implements Named, net.ixitxachitls.dma.values.enums.Short,
   public static List<String> names()
   {
     List<String> names = new ArrayList<>();
-    for(Save save : values())
-      names.add(save.getName());
+    for(MovementMode type : values())
+      names.add(type.getName());
 
     return names;
   }

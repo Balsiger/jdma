@@ -33,7 +33,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class KeyedModifier extends NewValue<BaseQualityProto.KeyedModifier>
+public class KeyedModifier extends Value<BaseQualityProto.KeyedModifier>
 {
   public KeyedModifier(String inKey, Modifier inModifier)
   {

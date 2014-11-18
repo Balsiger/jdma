@@ -20,7 +20,7 @@
  *****************************************************************************/
 
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +29,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.values.Value;
 
 /** The possible alignment modifiers in the game. */
 @ParametersAreNonnullByDefault
@@ -56,8 +55,8 @@ public enum AlignmentStatus implements Named,
   private BaseMonsterProto.AlignmentStatus m_proto;
 
   /** The parser for armor types. */
-  public static final NewValue.Parser<AlignmentStatus> PARSER =
-    new NewValue.Parser<AlignmentStatus>(1)
+  public static final Value.Parser<AlignmentStatus> PARSER =
+    new Value.Parser<AlignmentStatus>(1)
     {
       @Override
       public Optional<AlignmentStatus> doParse(String inValue)
@@ -97,7 +96,7 @@ public enum AlignmentStatus implements Named,
     return m_proto;
   }
 
-  static AlignmentStatus
+  public static AlignmentStatus
     fromProto(BaseMonsterProto.AlignmentStatus inProto)
   {
     for(AlignmentStatus status : values())

@@ -20,17 +20,16 @@
  *****************************************************************************/
 
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.proto.Entries.ProductProto;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.values.Value;
 
 /** The product condition. */
 public enum ProductCondition implements Named,
@@ -62,8 +61,8 @@ public enum ProductCondition implements Named,
   private ProductProto.Condition m_proto;
 
   /** The parser for condition values. */
-  public static final NewValue.Parser<ProductCondition> PARSER =
-    new NewValue.Parser<ProductCondition>(1)
+  public static final Value.Parser<ProductCondition> PARSER =
+    new Value.Parser<ProductCondition>(1)
     {
       @Override
       public Optional<ProductCondition> doParse(String inValue)

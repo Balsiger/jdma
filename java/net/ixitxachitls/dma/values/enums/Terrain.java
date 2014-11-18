@@ -20,7 +20,7 @@
  *****************************************************************************/
 
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +29,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.values.Value;
 
 /** The possible terrains in the game. */
 @ParametersAreNonnullByDefault
@@ -106,8 +105,8 @@ public enum Terrain implements Named,
   private BaseMonsterProto.Terrain m_proto;
 
   /** The parser for armor types. */
-  public static final NewValue.Parser<Terrain> PARSER =
-    new NewValue.Parser<Terrain>(1)
+  public static final Value.Parser<Terrain> PARSER =
+    new Value.Parser<Terrain>(1)
     {
       @Override
       public Optional<Terrain> doParse(String inValue)

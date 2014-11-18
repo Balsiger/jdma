@@ -39,7 +39,7 @@ import net.ixitxachitls.util.Strings;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class Price extends NewValue<PriceProto>
+public class Price extends Value<PriceProto>
 {
   public static class PriceParser extends Parser<Price>
   {

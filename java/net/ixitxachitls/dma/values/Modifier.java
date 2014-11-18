@@ -40,7 +40,7 @@ import net.ixitxachitls.util.Strings;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class Modifier extends NewValue.Arithmetic<ModifierProto>
+public class Modifier extends Value.Arithmetic<ModifierProto>
 {
   /** An interface for stackable objects. */
   public interface Stackable
@@ -374,8 +374,8 @@ public class Modifier extends NewValue.Arithmetic<ModifierProto>
    }
 
   @Override
-  public NewValue.Arithmetic<ModifierProto>
-    add(NewValue.Arithmetic<ModifierProto> inValue)
+  public Value.Arithmetic<ModifierProto>
+    add(Value.Arithmetic<ModifierProto> inValue)
   {
     if(!(inValue instanceof Modifier))
       return this;
@@ -408,7 +408,7 @@ public class Modifier extends NewValue.Arithmetic<ModifierProto>
   }
 
   @Override
-  public NewValue.Arithmetic<ModifierProto> multiply(int inFactor)
+  public Value.Arithmetic<ModifierProto> multiply(int inFactor)
   {
     return new Modifier(m_modifier * inFactor, m_type, m_condition,
                            m_next.isPresent()
@@ -443,7 +443,7 @@ public class Modifier extends NewValue.Arithmetic<ModifierProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Arithmetic<ModifierProto> inValue)
+  public boolean canAdd(Value.Arithmetic<ModifierProto> inValue)
   {
     return inValue instanceof Modifier;
   }

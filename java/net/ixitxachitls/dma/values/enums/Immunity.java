@@ -29,7 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
-import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.Value;
 
 /** The possible sizes in the game. */
 @ParametersAreNonnullByDefault
@@ -46,8 +46,8 @@ public enum Immunity implements Named
   private BaseQualityProto.Immunity m_proto;
 
   /** The parser for abilities. */
-  public static final NewValue.Parser<Immunity> PARSER =
-    new NewValue.Parser<Immunity>(1)
+  public static final Value.Parser<Immunity> PARSER =
+    new Value.Parser<Immunity>(1)
     {
       @Override
       public Optional<Immunity> doParse(String inValue)

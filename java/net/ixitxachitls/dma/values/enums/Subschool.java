@@ -19,17 +19,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.entries.BaseSpell;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.values.Value;
 
 /** The possible spell schools (cf. PHB 172/173). */
 public enum Subschool
@@ -95,8 +94,8 @@ public enum Subschool
   private BaseSpellProto.Subschool m_proto;
 
   /** The parser for armor types. */
-  public static final NewValue.Parser<Subschool> PARSER =
-    new NewValue.Parser<Subschool>(1)
+  public static final Value.Parser<Subschool> PARSER =
+    new Value.Parser<Subschool>(1)
     {
       @Override
       public Optional<Subschool> doParse(String inValue)

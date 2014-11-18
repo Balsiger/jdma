@@ -37,7 +37,7 @@ import net.ixitxachitls.util.Strings;
  * @file   NewWeight.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
-public class Weight extends NewValue.Arithmetic<WeightProto>
+public class Weight extends Value.Arithmetic<WeightProto>
 {
   public static class WeightParser extends Parser<Weight>
   {
@@ -198,8 +198,8 @@ public class Weight extends NewValue.Arithmetic<WeightProto>
   }
 
   @Override
-  public NewValue.Arithmetic<WeightProto>
-    add(@Nullable NewValue.Arithmetic<WeightProto> inValue)
+  public Value.Arithmetic<WeightProto>
+    add(@Nullable Value.Arithmetic<WeightProto> inValue)
   {
     if(inValue == null)
       return this;
@@ -213,14 +213,14 @@ public class Weight extends NewValue.Arithmetic<WeightProto>
   }
 
   @Override
-  public NewValue.Arithmetic<WeightProto> multiply(int inFactor)
+  public Value.Arithmetic<WeightProto> multiply(int inFactor)
   {
     return new Weight(multiply(m_pounds, inFactor),
                          multiply(m_ounces, inFactor));
   }
 
   @Override
-  public boolean canAdd(NewValue.Arithmetic<WeightProto> inValue)
+  public boolean canAdd(Value.Arithmetic<WeightProto> inValue)
   {
     return inValue instanceof Weight;
   }

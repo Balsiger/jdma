@@ -45,11 +45,25 @@ import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Range;
 import net.ixitxachitls.dma.values.Rational;
-import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Size;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.enums.Alignment;
+import net.ixitxachitls.dma.values.enums.AlignmentStatus;
+import net.ixitxachitls.dma.values.enums.AttackMode;
+import net.ixitxachitls.dma.values.enums.AttackStyle;
+import net.ixitxachitls.dma.values.enums.Climate;
+import net.ixitxachitls.dma.values.enums.Language;
+import net.ixitxachitls.dma.values.enums.LanguageModifier;
+import net.ixitxachitls.dma.values.enums.Maneuverability;
+import net.ixitxachitls.dma.values.enums.MonsterSubtype;
+import net.ixitxachitls.dma.values.enums.MonsterType;
+import net.ixitxachitls.dma.values.enums.MovementMode;
+import net.ixitxachitls.dma.values.enums.Organization;
+import net.ixitxachitls.dma.values.enums.Save;
+import net.ixitxachitls.dma.values.enums.Terrain;
+import net.ixitxachitls.dma.values.enums.Treasure;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -79,8 +93,8 @@ public class BaseMonster extends BaseEntry
     private AttackStyle m_style;
     private Damage m_damage;
 
-    public static final NewValue.Parser<Attack> PARSER =
-      new NewValue.Parser<Attack>(4)
+    public static final Value.Parser<Attack> PARSER =
+      new Value.Parser<Attack>(4)
       {
         @Override
         public Optional<Attack> doParse(String inNumber, String inMode,
@@ -145,8 +159,8 @@ public class BaseMonster extends BaseEntry
     private Dice m_number;
     private Optional<String> m_plus;
 
-    public static final NewValue.Parser<Group> PARSER =
-      new NewValue.Parser<Group>(3)
+    public static final Value.Parser<Group> PARSER =
+      new Value.Parser<Group>(3)
       {
         @Override
         public Optional<Group> doParse(String inOrganization,
@@ -204,8 +218,8 @@ public class BaseMonster extends BaseEntry
     private Range m_range;
     private Size m_size;
 
-    public static final NewValue.Parser<Advancement> PARSER =
-      new NewValue.Parser<Advancement>(3)
+    public static final Value.Parser<Advancement> PARSER =
+      new Value.Parser<Advancement>(3)
       {
         @Override
         public Optional<Advancement> doParse(String inRange, String inSize)
@@ -249,8 +263,8 @@ public class BaseMonster extends BaseEntry
     private Language m_language;
     private LanguageModifier m_modifier;
 
-    public static final NewValue.Parser<LanguageOption> PARSER =
-      new NewValue.Parser<LanguageOption>(2)
+    public static final Value.Parser<LanguageOption> PARSER =
+      new Value.Parser<LanguageOption>(2)
       {
         @Override
         public Optional<LanguageOption> doParse(String inLanguage,
@@ -2757,7 +2771,7 @@ public class BaseMonster extends BaseEntry
   /**
    * Make a grouping of the given HPs.
    *
-   * @param       inHP the input value
+   * @ param       inHP the input value
    *
    * @return      the grouped value (as a String)
    */
@@ -2825,21 +2839,21 @@ public class BaseMonster extends BaseEntry
     m_naturalArmor = inValues.use("natural_armor", m_naturalArmor,
                                   Modifier.PARSER);
     m_baseAttack = inValues.use("attack", m_baseAttack,
-                                NewValue.INTEGER_PARSER);
-    m_strength = inValues.use("strength", m_strength, NewValue.INTEGER_PARSER);
+                                Value.INTEGER_PARSER);
+    m_strength = inValues.use("strength", m_strength, Value.INTEGER_PARSER);
     m_dexterity = inValues.use("dexterity", m_dexterity,
-                               NewValue.INTEGER_PARSER);
+                               Value.INTEGER_PARSER);
     m_constitution = inValues.use("constitution", m_constitution,
-                                  NewValue.INTEGER_PARSER);
+                                  Value.INTEGER_PARSER);
     m_intelligence = inValues.use("intelligence", m_intelligence,
-                                  NewValue.INTEGER_PARSER);
-    m_wisdom = inValues.use("wisdom", m_wisdom, NewValue.INTEGER_PARSER);
-    m_charisma = inValues.use("charisma", m_charisma, NewValue.INTEGER_PARSER);
+                                  Value.INTEGER_PARSER);
+    m_wisdom = inValues.use("wisdom", m_wisdom, Value.INTEGER_PARSER);
+    m_charisma = inValues.use("charisma", m_charisma, Value.INTEGER_PARSER);
     m_reflexSave = inValues.use("reflex_save", m_reflexSave,
-                                NewValue.INTEGER_PARSER);
-    m_willSave = inValues.use("will_save", m_willSave, NewValue.INTEGER_PARSER);
+                                Value.INTEGER_PARSER);
+    m_willSave = inValues.use("will_save", m_willSave, Value.INTEGER_PARSER);
     m_fortitudeSave = inValues.use("fortitude_save", m_fortitudeSave,
-                                   NewValue.INTEGER_PARSER);
+                                   Value.INTEGER_PARSER);
     m_primaryAttacks = inValues.use("primary_attack", m_primaryAttacks,
                                     Attack.PARSER,
                                     "number", "mode", "style", "damage");
@@ -2865,7 +2879,7 @@ public class BaseMonster extends BaseEntry
                                   Advancement.PARSER,
                                   "range", "size");
     m_levelAdjustment = inValues.use("level_adjustment", m_levelAdjustment,
-                                     NewValue.INTEGER_PARSER);
+                                     Value.INTEGER_PARSER);
     m_languages = inValues.use("language", m_languages, LanguageOption.PARSER,
                                "language", "modifier");
     m_encounter = inValues.use("encounter", m_encounter);

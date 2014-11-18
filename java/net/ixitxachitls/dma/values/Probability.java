@@ -54,8 +54,8 @@ public enum Probability implements Named
   private BaseItemProto.Probability m_proto;
 
   /** The parser for probability values. */
-  public static final NewValue.Parser<Probability> PARSER =
-    new NewValue.Parser<Probability>(1)
+  public static final Value.Parser<Probability> PARSER =
+    new Value.Parser<Probability>(1)
     {
       @Override
       public Optional<Probability> doParse(String inValue)

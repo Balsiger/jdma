@@ -20,65 +20,65 @@
  *****************************************************************************/
 
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.entries.BaseSkill;
+import net.ixitxachitls.dma.proto.Values.SharedProto;
+import net.ixitxachitls.dma.proto.Values.SharedProto.SkillSubtype;
+import net.ixitxachitls.dma.values.Value;
 
 /** The possible sizes in the game. */
-@ParametersAreNonnullByDefault
-public enum LanguageModifier implements Named,
-    Proto<BaseMonsterProto.Language.Modifier>
+public enum SkillType implements Named,
+    Proto<SkillSubtype>
 {
-  UNKNOWN("Unknown", BaseMonsterProto.Language.Modifier.UNKNOWN_MODIFIER),
-  /** Automatic. */
-  AUTOMATIC("Automatic", BaseMonsterProto.Language.Modifier.AUTOMATIC),
+  /** Unknown type. */
+  UNKNOWN("Unknown", SharedProto.SkillSubtype.UNKNOWN_SKILL_SUBTYPE),
 
-  /** Bonus. */
-  BONUS("Bonus", BaseMonsterProto.Language.Modifier.BONUS),
+  /** Drow religion. */
+  DROW_RELIGION("Drow Religion", SharedProto.SkillSubtype.DROW_RELIGION),
 
-  /** Some. */
-  SOME("Some", BaseMonsterProto.Language.Modifier.SOME),
+  /** Religion. */
+  RELIGION("Religion", SharedProto.SkillSubtype.RELIGION),
 
-  /** Understand. */
-  UNDERSTAND("Understand", BaseMonsterProto.Language.Modifier.UNDERSTAND);
+  /** Arcana. */
+  ARCANA("Arcana", SharedProto.SkillSubtype.ARCANA),
+
+  /** Alchemy. */
+  ALCHEMY("Alchemy", SharedProto.SkillSubtype.ALCHEMY),
+
+  /** Any sub type. */
+  ANY_ONE("Any One", SharedProto.SkillSubtype.ANY_ONE);
 
   /** The value's name. */
   private String m_name;
 
   /** The proto enum value. */
-  private BaseMonsterProto.Language.Modifier m_proto;
+  private SharedProto.SkillSubtype m_proto;
 
   /** The parser for armor types. */
-  public static final NewValue.Parser<LanguageModifier> PARSER =
-    new NewValue.Parser<LanguageModifier>(1)
+  public static final Value.Parser<SkillType> PARSER =
+    new Value.Parser<SkillType>(1)
     {
       @Override
-      public Optional<LanguageModifier> doParse(String inValue)
+      public Optional<SkillType> doParse(String inValue)
       {
-        return LanguageModifier.fromString(inValue);
+        return SkillType.fromString(inValue);
       }
     };
 
-    /**
-   * Create the name.
+  /** Create the name.
    *
    * @param inName       the name of the value
-   * @param inProto      the proto value
+   * @param inProto      the proto enum value
    */
-  private LanguageModifier(String inName,
-                           BaseMonsterProto.Language.Modifier inProto)
+  private SkillType(String inName, SharedProto.SkillSubtype inProto)
   {
-    m_name = BaseMonster.constant("language.modifier", inName);
+    m_name = BaseSkill.constant("skill.subtype", inName);
     m_proto = inProto;
   }
 
@@ -95,25 +95,24 @@ public enum LanguageModifier implements Named,
   }
 
   @Override
-  public BaseMonsterProto.Language.Modifier toProto()
+  public SkillSubtype toProto()
   {
     return m_proto;
   }
 
   /**
-   * Convert a proto value to the enum value.
+   * Convert the given proto to an enum value.
    *
    * @param inProto the proto value to convert
    * @return the corresponding enum value
    */
-  public static LanguageModifier
-    fromProto(BaseMonsterProto.Language.Modifier inProto)
+  public static SkillType fromProto(SharedProto.SkillSubtype inProto)
   {
-    for(LanguageModifier modifier : values())
-      if(modifier.m_proto == inProto)
-        return modifier;
+    for(SkillType subtype : values())
+      if(subtype.m_proto == inProto)
+        return subtype;
 
-    throw new IllegalArgumentException("cannot convert language modifier: "
+    throw new IllegalArgumentException("cannot convert skill subtype: "
                                        + inProto);
   }
 
@@ -123,11 +122,11 @@ public enum LanguageModifier implements Named,
    * @param inValue the string representation
    * @return the matching type, if any
    */
-  public static Optional<LanguageModifier> fromString(String inValue)
+  public static Optional<SkillType> fromString(String inValue)
   {
-    for(LanguageModifier modifier : values())
-      if(modifier.getName().equalsIgnoreCase(inValue))
-        return Optional.of(modifier);
+    for(SkillType type : values())
+      if(type.getName().equalsIgnoreCase(inValue))
+        return Optional.of(type);
 
     return Optional.absent();
   }
@@ -140,8 +139,8 @@ public enum LanguageModifier implements Named,
   public static List<String> names()
   {
     List<String> names = new ArrayList<>();
-    for(LanguageModifier modifier: values())
-      names.add(modifier.getName());
+    for(SkillType type : values())
+      names.add(type.getName());
 
     return names;
   }

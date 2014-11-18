@@ -58,8 +58,8 @@ public enum ArmorType implements Named,
   private BaseArmorProto.Type m_proto;
 
   /** The parser for armor types. */
-  public static final NewValue.Parser<ArmorType> PARSER =
-    new NewValue.Parser<ArmorType>(1)
+  public static final Value.Parser<ArmorType> PARSER =
+    new Value.Parser<ArmorType>(1)
     {
       @Override
       public Optional<ArmorType> doParse(String inValue)

@@ -44,7 +44,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class Date extends NewValue<BaseProductProto.Date>
+public class Date extends Value<BaseProductProto.Date>
   implements Comparable<Date>
 {
   public static class DateParser extends Parser<Date>

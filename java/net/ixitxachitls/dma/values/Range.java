@@ -35,7 +35,7 @@ import net.ixitxachitls.dma.proto.Values.RangeProto;
  * @file   NewRange.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
-public class Range extends NewValue<RangeProto>
+public class Range extends Value<RangeProto>
 {
   public Range(int inNumber)
   {

@@ -19,63 +19,68 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-package net.ixitxachitls.dma.entries;
+
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.*;
+import net.ixitxachitls.dma.entries.BaseFeat;
+import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
+import net.ixitxachitls.dma.values.Value;
 
-/** The possible spell components (cf. PHB 174). */
-public enum EffectType implements Named, net.ixitxachitls.dma.values.enums.Short
+/** The possible feat types to affect (cf. PHB 175). */
+public enum FeatType
+  implements Named, Proto<BaseFeatProto.Type>
 {
-  /** Unknown. */
-  UNKNOWN("Unknown", "Un", BaseQualityProto.Type.UNKNOWN),
+  /** Unknown type. */
+  UNKNOWN("Unknown", BaseFeatProto.Type.UNKNOWN),
 
-  /** Extraordinary effects. */
-  EXTRAORDINARY("Extraordinary", "Ex", BaseQualityProto.Type.EXTRAORDINARY),
+  /** A general feat. */
+  GENERAL("General", BaseFeatProto.Type.GENERAL),
 
-  /** Spell like effects. */
-  SPELL_LIKE("Spell-like", "Sp", BaseQualityProto.Type.SPELL_LIKE),
+  /** An item creation feat. */
+  ITEM_CREATION("Item Creation", BaseFeatProto.Type.ITEM_CREATION),
 
-  /** Supernatural effects. */
-  SUPERNATURAL("Supernatural", "Su", BaseQualityProto.Type.SUPERNATURAL);
+  /** A metamagic feat. */
+  METAMAGIC("Metamagic", BaseFeatProto.Type.METAMAGIC),
+
+  /** A regional feat. */
+  REGIONAL("Regional", BaseFeatProto.Type.REGIONAL),
+
+  /** A special feat. */
+  SPECIAL("Special", BaseFeatProto.Type.SPECIAL),
+
+  /** A fighter feat. */
+  FIGHTER("Fighter", BaseFeatProto.Type.FIGHTER);
 
   /** The value's name. */
   private String m_name;
 
-  /** The value's short name. */
-  private String m_short;
+  /** The proto enum value. */
+  private BaseFeatProto.Type m_proto;
 
-  /** The enum proto value. */
-  private BaseQualityProto.Type m_proto;
-
-  /** The parser for armor types. */
-  public static final NewValue.Parser<EffectType> PARSER =
-    new NewValue.Parser<EffectType>(1)
+  /** The parser for feat types. */
+  public static final Value.Parser<FeatType> PARSER =
+    new Value.Parser<FeatType>(1)
     {
       @Override
-      public Optional<EffectType> doParse(String inValue)
+      public Optional<FeatType> doParse(String inValue)
       {
-        return EffectType.fromString(inValue);
+        return FeatType.fromString(inValue);
       }
     };
 
-  /** Create the effect type.
+    /** Create the name.
    *
-   * @param inName      the name of the value
-   * @param inShort     the short name of the value
-   * @param inProto     the proto enum value
+   * @param inName     the name of the value
+   * @param inProto    the proto enum value
    */
-  private EffectType(String inName, String inShort,
-                     BaseQualityProto.Type inProto)
+  private FeatType(String inName, BaseFeatProto.Type inProto)
   {
-    m_name = BaseQuality.constant("type", inName);
-    m_short = BaseQuality.constant("type.short", inShort);
+    m_name = BaseFeat.constant("feat.type", inName);
     m_proto = inProto;
   }
 
@@ -92,17 +97,7 @@ public enum EffectType implements Named, net.ixitxachitls.dma.values.enums.Short
   }
 
   @Override
-  public String getShort()
-  {
-    return m_short;
-  }
-
-  /**
-   * Get the proto value for this value.
-   *
-   * @return the proto enum value
-   */
-  public BaseQualityProto.Type toProto()
+  public BaseFeatProto.Type toProto()
   {
     return m_proto;
   }
@@ -113,9 +108,9 @@ public enum EffectType implements Named, net.ixitxachitls.dma.values.enums.Short
    * @param  inProto     the proto value to look for
    * @return the matched enum (will throw exception if not found)
    */
-  public static EffectType fromProto(BaseQualityProto.Type inProto)
+  public static FeatType fromProto(BaseFeatProto.Type inProto)
   {
-    for(EffectType type : values())
+    for(FeatType type: values())
       if(type.m_proto == inProto)
         return type;
 
@@ -128,9 +123,9 @@ public enum EffectType implements Named, net.ixitxachitls.dma.values.enums.Short
    * @param inValue the string representation
    * @return the matching type, if any
    */
-  public static Optional<EffectType> fromString(String inValue)
+  public static Optional<FeatType> fromString(String inValue)
   {
-    for(EffectType type : values())
+    for(FeatType type : values())
       if(type.getName().equalsIgnoreCase(inValue))
         return Optional.of(type);
 
@@ -145,7 +140,7 @@ public enum EffectType implements Named, net.ixitxachitls.dma.values.enums.Short
   public static List<String> names()
   {
     List<String> names = new ArrayList<>();
-    for(EffectType type : values())
+    for(FeatType type : values())
       names.add(type.getName());
 
     return names;

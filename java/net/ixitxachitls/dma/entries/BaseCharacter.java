@@ -35,7 +35,7 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.proto.Entries.BaseCharacterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
-import net.ixitxachitls.dma.values.NewValue;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
 import net.ixitxachitls.util.Strings;
@@ -324,7 +324,7 @@ public class BaseCharacter extends BaseEntry
 
     m_realName = inValues.use("real_name", m_realName);
     m_email = inValues.use("email", m_email);
-    m_group = inValues.use("group", m_group, new NewValue.Parser<Group>(1) {
+    m_group = inValues.use("group", m_group, new Value.Parser<Group>(1) {
       @Override
       public Optional<Group> doParse(String inValue)
       {

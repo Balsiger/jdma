@@ -41,7 +41,7 @@ import net.ixitxachitls.util.Strings;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class Volume extends NewValue.Arithmetic<VolumeProto>
+public class Volume extends Value.Arithmetic<VolumeProto>
 {
   public static final Parser<Volume> PARSER = new Parser<Volume>(1)
   {
@@ -534,7 +534,7 @@ public class Volume extends NewValue.Arithmetic<VolumeProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Arithmetic<VolumeProto> inValue)
+  public boolean canAdd(Value.Arithmetic<VolumeProto> inValue)
   {
     return inValue instanceof Volume;
   }

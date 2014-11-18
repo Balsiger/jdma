@@ -42,7 +42,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class ISBN13 extends NewValue<BaseProductProto.ISBN13>
+public class ISBN13 extends Value<BaseProductProto.ISBN13>
 {
   public static class ISBNParser extends Parser<ISBN13>
   {

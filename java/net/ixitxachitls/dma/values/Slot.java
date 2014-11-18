@@ -70,8 +70,8 @@ public enum Slot implements Named, net.ixitxachitls.dma.values.enums.Short,
   private BaseWearableProto.Slot m_proto;
 
   /** THe parser for slots. */
-  public static final NewValue.Parser<Slot> PARSER =
-    new NewValue.Parser<Slot>(1)
+  public static final Value.Parser<Slot> PARSER =
+    new Value.Parser<Slot>(1)
     {
       @Override
       public Optional<Slot> doParse(String inValue)

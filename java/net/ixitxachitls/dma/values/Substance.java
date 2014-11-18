@@ -96,8 +96,8 @@ public enum Substance implements Named
   private BaseItemProto.Substance.Material m_proto;
 
   /** The parser for substance values. */
-  public static final NewValue.Parser<Substance> PARSER =
-    new NewValue.Parser<Substance>(1)
+  public static final Value.Parser<Substance> PARSER =
+    new Value.Parser<Substance>(1)
     {
       @Override
       public Optional<Substance> doParse(String inValue)

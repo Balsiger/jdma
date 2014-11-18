@@ -20,7 +20,7 @@
  *****************************************************************************/
 
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +29,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.values.Value;
 
 /** The possible sizes in the game. */
 @ParametersAreNonnullByDefault
@@ -124,8 +123,8 @@ public enum Language implements Named,
   private BaseMonsterProto.Language.Name m_proto;
 
   /** The parser for armor types. */
-  public static final NewValue.Parser<Language> PARSER =
-    new NewValue.Parser<Language>(1)
+  public static final Value.Parser<Language> PARSER =
+    new Value.Parser<Language>(1)
     {
       @Override
       public Optional<Language> doParse(String inValue)

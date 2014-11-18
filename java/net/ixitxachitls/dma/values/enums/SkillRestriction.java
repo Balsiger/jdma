@@ -19,56 +19,60 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-package net.ixitxachitls.dma.entries;
+
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.entries.BaseSkill;
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.values.Value;
 
 /** The possible sizes in the game. */
-public enum SkillModifier
-  implements Named, Proto<BaseSkillProto.Modifier>
+public enum SkillRestriction implements Named,
+    Proto<BaseSkillProto.Restriction>
 {
   /** Unknown. */
-  UNKNOWN("Unknown", BaseSkillProto.Modifier.UNKNOWN_MODIFIER),
+  UNKNOWN("Unknown", BaseSkillProto.Restriction.UNKNOWN),
 
-  /** The skill is modified by a creatures speed. */
-  SPEED("Speed", BaseSkillProto.Modifier.SPEED),
+  /** Trained only. */
+  TRAINED_ONLY("Trained Only", BaseSkillProto.Restriction.TRAINED_ONLY),
 
-  /** The skill is modified by a creatures size. */
-  SIZE("Size", BaseSkillProto.Modifier.SIZE);
+  /** Armor check penalty. */
+  ARMOR_CHECK_PENALTY("Armor Check Penalty",
+                      BaseSkillProto.Restriction.ARMOR_CHECK_PENALTY),
+
+  /** Armor check penalty. */
+  SUBTYPE_ONLY("Subtype Only", BaseSkillProto.Restriction.SUBTYPE_ONLY);
 
   /** The value's name. */
   private String m_name;
 
   /** The prot enum value. */
-  private BaseSkillProto.Modifier m_proto;
+  private BaseSkillProto.Restriction m_proto;
 
-  /** The parser for skill modifiers. */
-  public static final NewValue.Parser<SkillModifier> PARSER =
-    new NewValue.Parser<SkillModifier>(1)
+  /** The parser for armor types. */
+  public static final Value.Parser<SkillRestriction> PARSER =
+    new Value.Parser<SkillRestriction>(1)
     {
       @Override
-      public Optional<SkillModifier> doParse(String inValue)
+      public Optional<SkillRestriction> doParse(String inValue)
       {
-        return SkillModifier.fromString(inValue);
+        return SkillRestriction.fromString(inValue);
       }
     };
 
   /** Create the name.
    *
-   * @param inName      the name of the value
-   * @param inProto     the prot enum value
+   * @param inName       the name of the value
+   * @param inProto      the proto enum value
    */
-  private SkillModifier(String inName, BaseSkillProto.Modifier inProto)
+  private SkillRestriction(String inName, BaseSkillProto.Restriction inProto)
   {
-    m_name = BaseSkill.constant("skill.modifier", inName);
+    m_name = BaseSkill.constant("skill.restrictions", inName);
     m_proto = inProto;
   }
 
@@ -79,7 +83,13 @@ public enum SkillModifier
   }
 
   @Override
-  public BaseSkillProto.Modifier toProto()
+  public String toString()
+  {
+    return m_name;
+  }
+
+  @Override
+  public BaseSkillProto.Restriction toProto()
   {
     return m_proto;
   }
@@ -90,13 +100,13 @@ public enum SkillModifier
    * @param  inProto     the proto value to look for
    * @return the matched enum (will throw exception if not found)
    */
-  public static SkillModifier fromProto(BaseSkillProto.Modifier inProto)
+  public static SkillRestriction fromProto(BaseSkillProto.Restriction inProto)
   {
-    for(SkillModifier modifier: values())
-      if(modifier.m_proto == inProto)
-        return modifier;
+    for(SkillRestriction restriction : values())
+      if(restriction.m_proto == inProto)
+        return restriction;
 
-    throw new IllegalStateException("invalid proto modifier: " + inProto);
+    throw new IllegalStateException("invalid proto restriction: " + inProto);
   }
 
   /**
@@ -105,11 +115,11 @@ public enum SkillModifier
    * @param inValue the string representation
    * @return the matching type, if any
    */
-  public static Optional<SkillModifier> fromString(String inValue)
+  public static Optional<SkillRestriction> fromString(String inValue)
   {
-    for(SkillModifier modifier : values())
-      if(modifier.getName().equalsIgnoreCase(inValue))
-        return Optional.of(modifier);
+    for(SkillRestriction restriction : values())
+      if(restriction.getName().equalsIgnoreCase(inValue))
+        return Optional.of(restriction);
 
     return Optional.absent();
   }
@@ -122,8 +132,8 @@ public enum SkillModifier
   public static List<String> names()
   {
     List<String> names = new ArrayList<>();
-    for(SkillModifier modifier : values())
-      names.add(modifier.getName());
+    for(SkillRestriction restriction : values())
+      names.add(restriction.getName());
 
     return names;
   }

@@ -53,8 +53,8 @@ public enum ProductStatus implements Named,
   private ProductProto.Status m_proto;
 
   /** The parser for status values. */
-  public static final NewValue.Parser<ProductStatus> PARSER =
-    new NewValue.Parser<ProductStatus>(1)
+  public static final Value.Parser<ProductStatus> PARSER =
+    new Value.Parser<ProductStatus>(1)
     {
       @Override
       public Optional<ProductStatus> doParse(String inValue)

@@ -20,7 +20,7 @@
  *****************************************************************************/
 
 
-package net.ixitxachitls.dma.entries;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +28,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.values.NewValue;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.values.Value;
 
 /** The possible spell ranges. */
 public enum SpellRange
@@ -95,8 +93,8 @@ public enum SpellRange
   private final BaseSpellProto.Range m_proto;
 
   /** The parser for armor types. */
-  public static final NewValue.Parser<SpellRange> PARSER =
-    new NewValue.Parser<SpellRange>(1)
+  public static final Value.Parser<SpellRange> PARSER =
+    new Value.Parser<SpellRange>(1)
     {
       @Override
       public Optional<SpellRange> doParse(String inValue)

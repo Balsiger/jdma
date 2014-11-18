@@ -272,7 +272,7 @@ public abstract class Annotated<V>
     }
   }
 
-  public static class Arithmetic<V extends NewValue.Arithmetic>
+  public static class Arithmetic<V extends Value.Arithmetic>
     extends Annotated<Optional<V>>
   {
     public Arithmetic()

@@ -37,7 +37,7 @@ import net.ixitxachitls.util.Strings;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class Duration extends NewValue.Arithmetic<DurationProto>
+public class Duration extends Value.Arithmetic<DurationProto>
   implements Comparable<Duration>
 {
   public static final Parser<Duration> PARSER = new Parser<Duration>(1)
@@ -333,8 +333,8 @@ public class Duration extends NewValue.Arithmetic<DurationProto>
 
 
   @Override
-  public NewValue.Arithmetic<DurationProto>
-    add(NewValue.Arithmetic<DurationProto> inValue)
+  public Value.Arithmetic<DurationProto>
+    add(Value.Arithmetic<DurationProto> inValue)
   {
     if(!(inValue instanceof Duration))
       return this;
@@ -353,7 +353,7 @@ public class Duration extends NewValue.Arithmetic<DurationProto>
   }
 
   @Override
-  public NewValue.Arithmetic<DurationProto> multiply(int inFactor)
+  public Value.Arithmetic<DurationProto> multiply(int inFactor)
   {
     return new Duration(multiply(m_days, inFactor),
                            multiply(m_hours, inFactor),
@@ -438,7 +438,7 @@ public class Duration extends NewValue.Arithmetic<DurationProto>
   }
 
   @Override
-  public boolean canAdd(NewValue.Arithmetic<DurationProto> inValue)
+  public boolean canAdd(Value.Arithmetic<DurationProto> inValue)
   {
     return inValue instanceof Duration;
   }

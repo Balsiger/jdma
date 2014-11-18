@@ -36,7 +36,7 @@ import net.ixitxachitls.util.Strings;
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-public class Dice extends NewValue<DiceProto>
+public class Dice extends Value<DiceProto>
 {
   public static class DiceParser extends Parser<Dice>
   {
