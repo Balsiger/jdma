@@ -75,7 +75,7 @@ public class SoyServlet extends DMAServlet
   private static final long serialVersionUID = 1L;
 
   /** The template to render a page. */
-  protected static final SoyTemplate TEMPLATE =
+  public static final SoyTemplate TEMPLATE =
      new SoyTemplate("page", "errors", "about", "main", "navigation", "entry",
                      "commands", "value", "admin", "cards", "edit",
                      "entries/basecharacters", "entries/characters",
@@ -140,7 +140,7 @@ public class SoyServlet extends DMAServlet
     inResponse.setHeader("Cache-Control", "max-age=0");
 
     Tracer tracer = new Tracer("creating renderer");
-    SoyRenderer renderer = new SoyRenderer(TEMPLATE);
+    SoyRenderer renderer = new SoyRenderer();
     tracer.done();
     // we have to collect injected data before other data to have it available
     // when collecting
@@ -279,8 +279,7 @@ public class SoyServlet extends DMAServlet
 
       SoyServlet servlet = new SoyServlet();
       assertEquals("content", "{}",
-                   servlet.collectData(request,
-                                       new SoyRenderer(new SoyTemplate()))
+                   servlet.collectData(request, new SoyRenderer())
                    .toString());
 
       EasyMock.verify(request);
@@ -313,7 +312,7 @@ public class SoyServlet extends DMAServlet
                    + "loginURL=/_ah/login?continue=path}",
                    servlet.collectInjectedData
                    (request,
-                    new SoyRenderer(new SoyTemplate())).toString());
+                    new SoyRenderer()).toString());
 
       EasyMock.verify(request);
     }

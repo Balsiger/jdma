@@ -387,8 +387,7 @@ public class IndexServlet extends PageServlet
 
       String content = servlet.collectData
         (request,
-         new SoyRenderer(new SoyTemplate("lib/test/soy/errors",
-                                         "lib/test/soy/entry")))
+         new SoyRenderer())
         .get("content").toString();
 
       EasyMock.verify(request);

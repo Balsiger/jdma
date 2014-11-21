@@ -26,7 +26,7 @@
   </class-loader-config>
 
   <precompilation-enabled>
-    false
+    true
   </precompilation-enabled>
 
 </appengine-web-app>

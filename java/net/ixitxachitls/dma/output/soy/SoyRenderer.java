@@ -35,6 +35,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.template.soy.data.SoyMapData;
 
+import net.ixitxachitls.dma.server.servlets.SoyServlet;
 import net.ixitxachitls.util.configuration.Config;
 
 /**
@@ -49,16 +50,10 @@ public class SoyRenderer
 {
   /**
    * Create the renderer.
-   *
-   * @param   inTemplate the soy template that can be used for rendering.
    */
-  public SoyRenderer(SoyTemplate inTemplate)
+  public SoyRenderer()
   {
-    m_template = inTemplate;
   }
-
-  /** The soy template. */
-  private SoyTemplate m_template;
 
   /** The data to be used when rendering, if any. */
   private @Nullable SoyMapData m_data = null;
@@ -170,7 +165,7 @@ public class SoyRenderer
                        @Nullable Map<String, Object> inInjected,
                        @Nullable Set<String> inDelegates)
   {
-    return m_template.render(inName, inData, inInjected, inDelegates);
+    return SoyServlet.TEMPLATE.render(inName, inData, inInjected, inDelegates);
   }
 
   /**
@@ -192,7 +187,7 @@ public class SoyRenderer
 
     try
     {
-      return m_template.render(inName, data, m_injected, inDelegates);
+      return SoyServlet.TEMPLATE.render(inName, data, m_injected, inDelegates);
     }
     catch(Exception e) // $codepro.audit.disable caughtExceptions
     {
@@ -215,7 +210,7 @@ public class SoyRenderer
    */
   public String render(String inName, @Nullable Set<String> inDelegates)
   {
-    return m_template.render(inName, m_data, m_injected, inDelegates);
+    return SoyServlet.TEMPLATE.render(inName, m_data, m_injected, inDelegates);
   }
 
   /**
@@ -228,7 +223,7 @@ public class SoyRenderer
    */
   public String render(String inName)
   {
-    return m_template.render(inName, m_data, m_injected, null);
+    return SoyServlet.TEMPLATE.render(inName, m_data, m_injected, null);
   }
 
   /**
@@ -244,7 +239,7 @@ public class SoyRenderer
                        @Nullable Map<String, ? extends Object> inData,
                        @Nullable Map<String, Object> inInjected)
   {
-    return m_template.render(inName, inData, inInjected, null);
+    return SoyServlet.TEMPLATE.render(inName, inData, inInjected, null);
   }
 
   /**
@@ -258,12 +253,13 @@ public class SoyRenderer
    */
   public String render(String inName, @Nullable Map<String, Object> inData)
   {
-    return m_template.render(inName, new SoyMapData(inData), m_injected, null);
+    return SoyServlet.TEMPLATE.render(inName, new SoyMapData(inData),
+                                      m_injected, null);
   }
 
   public void compile()
   {
-    m_template.compile();
+    SoyServlet.TEMPLATE.compile();
   }
 
 
@@ -272,7 +268,7 @@ public class SoyRenderer
    */
   public void recompile()
   {
-    m_template.recompile();
+    SoyServlet.TEMPLATE.recompile();
   }
 
   /**
@@ -394,10 +390,10 @@ public class SoyRenderer
       // TODO: need to catch proper exception here
       try
       {
-        builder.append(m_template.render
-                       (m_commandPrefix + "." + name,
-                        new SoyMapData("opt", optionals, "arg", arguments),
-                        null, null));
+        builder.append(SoyServlet.TEMPLATE.render
+            (m_commandPrefix + "." + name,
+             new SoyMapData("opt", optionals, "arg", arguments),
+             null, null));
       }
       catch(com.google.template.soy.tofu.SoyTofuException e)
       {
@@ -542,7 +538,7 @@ public class SoyRenderer
     public void renderCommands()
     {
       SoyRenderer renderer =
-        new SoyRenderer(new SoyTemplate("lib/test/soy/test"));
+        new SoyRenderer();
 
       renderer.m_commandPrefix = "test.commands";
       assertEquals("empty", "", renderer.renderCommands(""));
@@ -560,7 +556,7 @@ public class SoyRenderer
     public void render()
     {
       SoyRenderer renderer =
-        new SoyRenderer(new SoyTemplate("lib/test/soy/test"));
+        new SoyRenderer();
 
       renderer.m_commandPrefix = "test.commands";
       assertEquals("render",

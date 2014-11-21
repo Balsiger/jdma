@@ -703,8 +703,7 @@ public class SoyTemplate
   private Injector m_injector = createInjector();
 
   /** The command renderer for rendering values. */
-  public static final SoyRenderer COMMAND_RENDERER =
-    new SoyRenderer(new SoyTemplate("commands", "value", "page"));
+  public static final SoyRenderer COMMAND_RENDERER = new SoyRenderer();
 
 
   /**
