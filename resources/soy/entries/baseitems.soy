@@ -70,10 +70,7 @@
         {call dma.entry.value}
           {param label: 'Player Name' /}
           {param value}
-            {call dma.entry.concatenated}
-              {param value: $entry.player_name /}
-              {param concatenate: $entry.combined_player_name /}
-            {/call}
+            {annotate($entry.combined_player_name)}
           {/param}
           {param color: '#008' /}
         {/call}
@@ -90,8 +87,7 @@
           {param color: '#008' /}
         {/call}
       {/if}      
-      {if length($entry.categories) or 
-          length($entry.combined_categories.annotate)}
+      {if $entry.categories.present or $entry.combined_categories.get.present}
         {call dma.entry.value}
           {param label: 'Categories' /}
           {param value}
@@ -101,13 +97,7 @@
                 {if not isLast($category)}, {/if}
               {/foreach}
             {/if}
-            {if length($entry.combined_categories.annotate)}
-              {if length($entry.categories)},{sp}{/if}
-              {call dma.entry.concatenated_list}
-                {param values: [] /}
-                {param concatenate: $entry.combined_categories /}
-              {/call}
-            {/if}
+            {annotate($entry.combined_categories)}
           {/param}
           {param color: '#008' /}
         {/call}
@@ -115,24 +105,18 @@
       {call dma.entry.value}
         {param label: 'Worlds' /}        
         {param value}
-          {call dma.entry.concatenated_list}
-            {param values: $entry.worlds /}
-            {param concatenate: $entry.combined_worlds /}
-          {/call}
+          {annotate($entry.combined_worlds)}
         {/param}
         {param color: '#008' /}
       {/call}
-      {if $entry.incomplete or length($entry.combined_incomplete.annotate) > 0}
+      {if $entry.incomplete.present or $entry.combined_incomplete.get.present}
         {call dma.entry.value}
           {param label: 'Incomplete' /}
           {param value}
             {if $entry.incomplete}
               {$entry.incomplete}{sp}
             {/if}
-            {call dma.entry.concatenated}
-              {param value: '' /}
-              {param concatenate: $entry.combined_incomplete /}
-            {/call}
+              {annotate($entry.combined_incomplete)}
           {/param}
           {param color: '#008' /}
         {/call}
@@ -155,81 +139,39 @@
       {call dma.entry.value}
         {param label: 'Size' /}
         {param value}
-          {call dma.entry.single}
-            {param combination: $entry.combined_size /}
-          {/call}
-          {sp}
-          {call dma.entry.single}
-            {param combination: $entry.combined_size_modifier /}
-          {/call}
+          {annotate($entry.combined_size)}{sp}
+          {annotate($entry.combined_size_modifier)}
         {/param}
         {param color: '#008' /}
       {/call}
       {call dma.entry.value}
         {param label: 'Substance' /}
         {param value}
-          {call dma.entry.single}
-            {param combination: $entry.combined_substance /}
-          {/call}
-          {sp}
-          {call dma.entry.single}
-            {param combination: $entry.combined_thickness /}
-          {/call}
-          , hardness{sp}
-          {call dma.entry.single}
-            {param value: $entry.hardness /}
-            {param combination: $entry.combined_hardness /}
-          {/call}
-          , break dc{sp}
-          {call dma.entry.single}
-            {param value: $entry.break_DC /}
-            {param combination: $entry.combined_break_DC /}
-          {/call}
+          {annotate($entry.combined_substance)}
+          {sp}{annotate($entry.combined_thickness)}
+          , hardness {annotate($entry.combined_hardness)}
+          , break dc {annotate($entry.break_DC)}
         {/param}
         {param color: '#008' /}
       {/call}
       {call dma.entry.value}
         {param label: 'Probability' /}
-        {param value}
-          {call dma.entry.single}
-            {param combination: $entry.combined_probability /}
-          {/call}
-        {/param}
+        {param value: annotate($entry.combined_probability) /}
         {param color: '#008' /}
       {/call}
       {call dma.entry.value}
         {param label: 'Appearances' /}        
-        {param value}
-          {call dma.entry.concatenated_list}
-            {param values: $entry.appearances /}
-            {param concatenate: $entry.combined_appearances /}
-          {/call}
-        {/param}
+        {param value: annotate($entry.combined_appearances) /}
         {param color: '#008' /}
       {/call}
       {if $entry.isWearable}
         {call dma.entry.value}
           {param label: 'Wear' /}        
           {param value}
-            {call dma.entry.single}
-              {param value: $entry.slot /}
-              {param combination: $entry.combined_slot /}
-            {/call}
-            , don{sp}
-            {call dma.entry.added}
-              {param value: $entry.don /}
-              {param addable: $entry.combined_don /}
-            {/call}
-            {sp}(hastily{sp} 
-            {call dma.entry.added}
-              {param value: $entry.don_hastily /}
-              {param addable: $entry.combined_don_hastily /}
-            {/call})
-            , remove{sp}
-            {call dma.entry.added}
-              {param value: $entry.remove /}
-              {param addable: $entry.combined_remove /}
-            {/call}
+            {annotate($entry.combined_slot)}
+            , don {annotate($entry.combined_don)}
+            {sp}(hastily {annotate($entry.combined_hastily)}
+            , remove {annotate($entry.combined_remove)}
           {/param}
           {param color: '#008' /}          
         {/call}
@@ -238,33 +180,17 @@
         {call dma.entry.value}
           {param label: 'Armor' /}
           {param value}
-            {call dma.entry.single}
-              {param value: $entry.armor_type /}
-              {param combination: $entry.combined_armor_type /}
-            {/call},
-            max dexterity{sp}
-            {call dma.entry.single}
-              {param value: $entry.max_dex /}
-              {param combination: $entry.combined_max_dex /}
-            {/call},{sp}
-            {call dma.entry.single}
-              {param value: $entry.check_penalty /}
-              {param combination: $entry.combined_check_penalty /}
-            {/call} check penalty,{sp}
-            {call dma.entry.single}
-              {param value: $entry.arcane_failure /}
-              {param combination: $entry.combined_arcane_failure /}
-            {/call}% arcane failure
+            {annotate($entry.combined_armor_type)},
+            max dexterity {annotate($entry.combined_max_dex)},{sp}
+            {annotate($entry.combined_check_penalty)} check penalty,{sp}
+            {annotate($entry.arcane_failure)}% arcane failure
           {/param}
           {param color: '#008' /}
         {/call}
         {call dma.entry.value}
           {param label: 'AC Bonus' /}        
           {param value}
-            {call dma.entry.added}
-              {param value: $entry.armor_bonus /}
-              {param addable: $entry.combined_armor_bonus /}
-            {/call}
+            {annotate($entry.combined_armor_bonus)}
           {/param}
           {param color: '#008' /}          
         {/call}
@@ -273,32 +199,14 @@
         {call dma.entry.value}
           {param label: 'Weapon' /}
           {param value}
-            {call dma.entry.single}
-              {param value: $entry.weapon_type /}
-              {param combination: $entry.combined_weapon_type /}
-            {/call}
+            {annotate($entry.combined_weapon_type)}
             {sp}
-            {call dma.entry.single}
-              {param value: $entry.weapon_style /}
-              {param combination: $entry.combined_weapon_style /}
-            {/call}
+            {annotate($entry.combined_weapon_style)}
             {sp}
-            {call dma.entry.single}
-              {param value: $entry.proficiency /}
-              {param combination: $entry.combined_proficiency /}
-            {/call}, range{sp}
-            {call dma.entry.single}
-              {param value: $entry.range /}
-              {param combination: $entry.combined_range /}
-            {/call}, reach{sp}
-            {call dma.entry.single}
-              {param value: $entry.reach /}
-              {param combination: $entry.combined_reach /}
-            {/call}, max attacks{sp}                
-            {call dma.entry.single}
-              {param value: $entry.max_attacks /}
-              {param combination: $entry.combined_max_attacks /}
-            {/call}
+            {annotate($entry.combined_proficiency)}
+            , range {annotate($entry.combined_range)}
+            , reach {annotate($entry.combined_reach)}
+            , max attacks {annotate($entry.combined_max_attacks)}
             {if $entry.ammunition}
               , ammunition
             {/if}
@@ -308,25 +216,14 @@
         {call dma.entry.value}
           {param label: 'Damage' /}
           {param value}
-            {call dma.entry.single}
-              {param combination: $entry.combined_damage /}
-            {/call}
-            {if $entry.combined_secondary_damage.any_value}
-              /
-              {call dma.entry.single}
-                {param combination: $entry.combined_secondary_damage /}
-              {/call}
+            {annotate($entry.combined_damage)}
+            {if $entry.combined_secondary_damage.get.present}
+              /{annotate($entry.combined_secondary_damage)}
             {/if}
-            {if $entry.combined_splash.any_value}
-              &nbsp;splash&nbsp; 
-              {call dma.entry.single}
-                {param combination: $entry.combined_splash /}
-              {/call}
+            {if $entry.combined_splash.combined_splash.get.present}
+              &nbsp;splash&nbsp;{annotate($entry.combined_splash)}
             {/if}
-            &nbsp;(
-            {call dma.entry.single}
-              {param combination: $entry.combined_critical /}
-            {/call})
+            &nbsp;({annotate($entry.combined_critical)})
           {/param}
           {param color: '#008' /}
         {/call}
@@ -336,14 +233,8 @@
           {param label: 'Commodity' /}        
           {param color: '#008' /}
           {param value}
-            {call dma.entry.single}
-              {param value: $entry.area /}
-              {param combination: $entry.combined_area /}
-            {/call}
-            {call dma.entry.single}
-              {param value: $entry.length /}
-              {param combination: $entry.combined_length /}
-            {/call}
+            {annotate($entry.combined_area)}
+            {annotate($entry.combined_length)}
           {/param}
         {/call}
       {/if}
@@ -352,14 +243,8 @@
           {param label: 'Container' /}        
           {param color: '#008' /}
           {param value}
-            {call dma.entry.single}
-              {param value: $entry.state /}
-              {param combination: $entry.combined_state /}
-            {/call},{sp}
-            {call dma.entry.single}
-              {param value: $entry.capacity /}
-              {param combination: $entry.combined_capacity /}
-            {/call}
+            {annotate($entry.combined_state)}{sp}
+            {annotate($entry.combined_capacity)}
           {/param}
         {/call}
       {/if}
@@ -369,26 +254,15 @@
             {param label: 'Multiple' /}        
             {param color: '#008' /}
             {param value}
-              {call dma.entry.single}
-                {param value: $entry.multiple /}
-                {param combination: $entry.combined_multiple /}
-              {/call}{sp}
-              {call dma.entry.single}
-                {param value: $entry.count_unit /}
-                {param combination: $entry.combined_count_unit /}
-              {/call}
+              {annotate($entry.combined_multiple)}{sp}
+              {annotate($entry.combined_count_unit)}
             {/param}
           {/call}
         {else}
           {call dma.entry.value}
             {param label: 'Multiuse' /}        
             {param color: '#008' /}
-            {param value}
-              {call dma.entry.single}
-                {param value: $entry.multiuse /}
-                {param combination: $entry.combined_multiuse /}
-              {/call}{sp}
-            {/param}
+            {param value: annotate($entry.combined_multiuse) /}
           {/call}
         {/if}
       {/if}
@@ -397,18 +271,9 @@
           {param label: 'Light' /}        
           {param color: '#008' /}
           {param value}
-            {call dma.entry.single}
-              {param value: $entry.light_shape /}
-              {param combination: $entry.combined_light_shape /}
-            {/call} bright{sp}
-            {call dma.entry.single}
-              {param value: $entry.bright_light /}
-              {param combination: $entry.combined_bright_light /}
-            {/call} shadowy {sp}
-            {call dma.entry.single}
-              {param value: $entry.shadowy_light /}
-              {param combination: $entry.combined_shadowy_light /}
-            {/call}
+            {annotate($entry.light_shape)}{sp}
+            bright {annotate($entry.combined_bright_light)} bright{sp}
+            shadowy {annotate($entry.combined_shadowy_light)}
           {/param}
         {/call}
       {/if}
@@ -416,12 +281,7 @@
         {call dma.entry.value}
           {param label: 'Timed' /}        
           {param color: '#008' /}
-          {param value}
-            {call dma.entry.single}
-              {param value: $entry.timed /}
-              {param combination: $entry.combined_timed /}
-            {/call}
-          {/param}
+          {param value: annotate($entry.combined_time) /}
         {/call}
       {/if}
       {if $entry.isMagical}
@@ -429,20 +289,14 @@
           {param label: 'Magic' /}        
           {param color: '#008' /}
           {param value}
-            {call dma.entry.concatenated_list}
-              {param values: [] /}
-              {param concatenate: $entry.combined_magical_modifiers /}
-            {/call}
+            {annotate($entry.combined_magical_modifiers)}
           {/param}
         {/call}
       {/if}
       {call dma.entry.value}
         {param label: 'References' /}
         {param value}
-          {call dma.entry.concatenated_list}
-            {param values: [] /}
-            {param concatenate: $entry.combined_references /}
-          {/call}
+          {annotate($entry.combined_references)}
         {/param}
         {param color: '#008' /}
       {/call}
