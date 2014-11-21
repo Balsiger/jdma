@@ -30,6 +30,7 @@ import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.proto.Entries.BaseEncounterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -240,7 +241,6 @@ public class BaseEncounter extends BaseEntry
     return proto;
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseEncounterProto))

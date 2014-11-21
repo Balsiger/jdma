@@ -28,7 +28,8 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
-import net.ixitxachitls.dma.values.enums.*;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The special size modifiers for monsters. */
 public enum SizeModifier implements Named, net.ixitxachitls.dma.values.enums.Short,

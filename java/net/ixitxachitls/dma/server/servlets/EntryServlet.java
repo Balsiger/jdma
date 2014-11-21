@@ -36,6 +36,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
+import net.ixitxachitls.dma.values.Values;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -46,7 +47,6 @@ import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.server.ServerUtils;
@@ -168,7 +168,7 @@ public class EntryServlet extends PageServlet
               values.put(parts[0], parts[1]);
             }
 
-            entry.set(new ValueGroup.Values(values));
+            entry.set(new Values(values));
           }
 
           // bases are overwritten by values if done before!

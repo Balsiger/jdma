@@ -270,11 +270,6 @@
   </Match>
 
  <Match>
-    <Class name="~net.ixitxachitls.dma.entries.ValueGroup" />
-    <Bug pattern="NP_BOOLEAN_RETURN_NULL" />
-  </Match>
-
- <Match>
     <Class name="~net.ixitxachitls.dma.data.DMAFile" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>

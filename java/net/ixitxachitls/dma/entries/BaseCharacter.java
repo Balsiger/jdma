@@ -36,6 +36,7 @@ import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.proto.Entries.BaseCharacterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
 import net.ixitxachitls.util.Strings;
@@ -78,7 +79,7 @@ public class BaseCharacter extends BaseEntry
      */
     private Group(String inName, BaseCharacterProto.Group inProto)
     {
-      m_name = constant("group", inName);
+      m_name = inName;
       m_proto = inProto;
     }
 
@@ -377,7 +378,6 @@ public class BaseCharacter extends BaseEntry
     }
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseCharacterProto))

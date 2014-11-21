@@ -23,9 +23,9 @@ package net.ixitxachitls.dma.values;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.proto.Values.SpeedProto;
 import net.ixitxachitls.dma.values.enums.Maneuverability;
 import net.ixitxachitls.dma.values.enums.MovementMode;
-import net.ixitxachitls.dma.proto.Values.SpeedProto;
 import net.ixitxachitls.util.Strings;
 
 public class Speed extends Value.Arithmetic<SpeedProto>

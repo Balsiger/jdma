@@ -28,7 +28,8 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseContainerProto;
-import net.ixitxachitls.dma.values.enums.*;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible sizes in the game. */
 public enum AggregationState implements Named,

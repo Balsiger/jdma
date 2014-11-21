@@ -26,7 +26,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseSpell;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
 import net.ixitxachitls.dma.values.Value;
 
@@ -93,8 +92,8 @@ public enum School implements Named, net.ixitxachitls.dma.values.enums.Short,
    */
   private School(String inName, String inShort, BaseSpellProto.School inProto)
   {
-    m_name = BaseSpell.constant("school.name", inName);
-    m_short = BaseSpell.constant("school.short", inShort);
+    m_name = inName;
+    m_short = inShort;
     m_proto = inProto;
   }
 

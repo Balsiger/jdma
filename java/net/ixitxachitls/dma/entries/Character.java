@@ -35,6 +35,7 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CharacterProto;
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
 import net.ixitxachitls.dma.values.File;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.CharacterState;
 import net.ixitxachitls.util.logging.Log;
 
@@ -282,7 +283,7 @@ public class Character extends NPC
    * Compute a value for a given key, taking base entries into account if
    * available.
    *
-   * @param    inKey the key of the value to compute
+   * @ param    inKey the key of the value to compute
    *
    * @return   the compute value
    */
@@ -347,7 +348,7 @@ public class Character extends NPC
   /**
    * Add the given entry to the character entry.
    *
-   * @param       inEntry the entry to add
+   * @ param       inEntry the entry to add
    *
    * @return      true if added, false if not
    *
@@ -404,7 +405,6 @@ public class Character extends NPC
     return proto;
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof CharacterProto))

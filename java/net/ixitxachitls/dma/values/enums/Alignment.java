@@ -23,12 +23,10 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.values.Value;
 
@@ -111,8 +109,8 @@ public enum Alignment implements Named, Short,
   private Alignment(String inName, String inShort,
                     BaseMonsterProto.Alignment inProto)
   {
-    m_name = BaseMonster.constant("alignment",       inName);
-    m_short = BaseMonster.constant("alignment.short", inShort);
+    m_name = inName;
+    m_short = inShort;
     m_proto = inProto;
   }
 

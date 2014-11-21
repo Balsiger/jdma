@@ -35,6 +35,7 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.CampaignProto;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -79,7 +80,6 @@ public class Campaign extends CampaignEntry
   /** The dm for this campaign. */
   protected Optional<String> m_dm = Optional.absent();
 
-  @Override
   public EntryKey getKey()
   {
     List<String> names = getBaseNames();
@@ -149,7 +149,7 @@ public class Campaign extends CampaignEntry
    * Compute a value for a given key, taking base entries into account if
    * available.
    *
-   * @param    inKey the key of the value to compute
+   * @ param    inKey the key of the value to compute
    *
    * @return   the compute value
    *
@@ -292,13 +292,6 @@ public class Campaign extends CampaignEntry
   }
 
   @Override
-  public String getEditType()
-  {
-    return "/" + BaseCampaign.TYPE + "/" + m_base.get(0)
-      + "/" + Campaign.TYPE + "/" + getName();
-  }
-
-  @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
   {
     if(!inUser.isPresent())
@@ -329,7 +322,6 @@ public class Campaign extends CampaignEntry
     return proto;
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof CampaignProto))

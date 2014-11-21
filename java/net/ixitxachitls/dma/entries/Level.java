@@ -28,6 +28,7 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.LevelProto;
+import net.ixitxachitls.dma.values.Values;
 
 /**
  * An actual character level.
@@ -100,7 +101,7 @@ public class Level extends NestedEntry
   }
 
   @Override
-  public void set(ValueGroup.Values inValues)
+  public void set(Values inValues)
   {
     m_name = inValues.use("name", m_name);
     m_hp = inValues.use("hp", m_hp);

@@ -36,6 +36,7 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.EntryProto;
 import net.ixitxachitls.dma.proto.Entries.ProductProto;
 import net.ixitxachitls.dma.values.ProductStatus;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.ProductCondition;
 import net.ixitxachitls.util.logging.Log;
 
@@ -165,12 +166,6 @@ public class Product extends Entry
   }
 
   @Override
-  public String getEditType()
-  {
-    return "/user/" + m_owner.get() + "/" + super.getEditType();
-  }
-
-  @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
   {
     if(!inUser.isPresent())
@@ -196,7 +191,6 @@ public class Product extends Entry
     return getName();
   }
 
-  @Override
   @SuppressWarnings("unchecked")
   public EntryKey getKey()
   {
@@ -292,7 +286,6 @@ public class Product extends Entry
     return builder.build();
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof ProductProto))

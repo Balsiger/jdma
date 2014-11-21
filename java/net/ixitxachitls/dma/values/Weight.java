@@ -23,7 +23,6 @@
 package net.ixitxachitls.dma.values;
 
 import java.util.List;
-
 import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;

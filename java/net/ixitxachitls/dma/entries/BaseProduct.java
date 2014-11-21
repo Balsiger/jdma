@@ -52,6 +52,7 @@ import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Person;
 import net.ixitxachitls.dma.values.Price;
 import net.ixitxachitls.dma.values.ProductReference;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
@@ -187,7 +188,7 @@ public class BaseProduct extends BaseEntry
      */
     private Part(String inName, BaseProductProto.Content.Part inPart)
     {
-      m_name = constant("product.part", inName);
+      m_name = inName;
       m_proto = inPart;
     }
 
@@ -289,7 +290,7 @@ public class BaseProduct extends BaseEntry
      */
     private Layout(String inName, BaseProductProto.Layout inProto)
     {
-      m_name = constant("product.layout", inName);
+      m_name = inName;
       m_proto = inProto;
     }
 
@@ -492,11 +493,9 @@ public class BaseProduct extends BaseEntry
     private System(String inName, BaseProductProto.System inProto,
                    @Nullable String inGroup)
     {
-      m_name  = constant("system.name",  inName);
+      m_name  = inName;
       m_proto = inProto;
-
-      if(inGroup != null)
-        m_group = constant("system.group", inName, inGroup);
+      m_group = inGroup;
     }
 
     @Override
@@ -681,10 +680,9 @@ public class BaseProduct extends BaseEntry
     private ProductType(String inName, BaseProductProto.Type inProto,
                         @Nullable String inGroup)
     {
-      m_name  = constant("product.type.name",  inName);
+      m_name  = inName;
       m_proto = inProto;
-      if(inGroup != null)
-        m_group = constant("product.type.group", inName, inGroup);
+      m_group = inGroup;
     }
 
     @Override
@@ -820,10 +818,9 @@ public class BaseProduct extends BaseEntry
     private Style(String inName, BaseProductProto.Style inProto,
                   @Nullable String inGroup)
     {
-      m_name  = constant("product.style.name",  inName);
+      m_name  = inName;
       m_proto = inProto;
-      if(inGroup != null)
-        m_group = constant("product.style.group", inName, inGroup);
+      m_group = inGroup;
     }
 
     /**
@@ -922,7 +919,7 @@ public class BaseProduct extends BaseEntry
      */
     private Audience(String inName, BaseProductProto.Audience inProto)
     {
-      m_name = constant("audiences", inName);
+      m_name = inName;
       m_proto = inProto;
     }
 
@@ -1849,7 +1846,6 @@ public class BaseProduct extends BaseEntry
     return proto;
   }
 
-  @Override
   @SuppressWarnings("unchecked")
   public void fromProto(Message inProto)
   {

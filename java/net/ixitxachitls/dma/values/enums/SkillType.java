@@ -27,7 +27,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseSkill;
 import net.ixitxachitls.dma.proto.Values.SharedProto;
 import net.ixitxachitls.dma.proto.Values.SharedProto.SkillSubtype;
 import net.ixitxachitls.dma.values.Value;
@@ -78,7 +77,7 @@ public enum SkillType implements Named,
    */
   private SkillType(String inName, SharedProto.SkillSubtype inProto)
   {
-    m_name = BaseSkill.constant("skill.subtype", inName);
+    m_name = inName;
     m_proto = inProto;
   }
 

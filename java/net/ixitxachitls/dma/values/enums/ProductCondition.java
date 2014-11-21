@@ -27,7 +27,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.proto.Entries.ProductProto;
 import net.ixitxachitls.dma.values.Value;
 
@@ -79,7 +78,7 @@ public enum ProductCondition implements Named,
    */
   private ProductCondition(String inName, ProductProto.Condition inProto)
   {
-    m_name = Product.constant("product.condition", inName);
+    m_name = inName;
     m_proto = inProto;
   }
 

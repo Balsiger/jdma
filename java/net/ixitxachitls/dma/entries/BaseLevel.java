@@ -41,6 +41,7 @@ import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Proficiency;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.util.logging.Log;
 
@@ -494,7 +495,7 @@ public class BaseLevel extends BaseEntry
   /**
    * Collect special qualities from all levels.
    *
-   * @param  inLevel the level for which to compute qualities
+   * @ param  inLevel the level for which to compute qualities
    * @return all the special quality references for the given level
    */
   /*
@@ -684,7 +685,6 @@ public class BaseLevel extends BaseEntry
     return proto;
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseLevelProto))

@@ -161,7 +161,7 @@ public abstract class Entry extends AbstractEntry
   {
     char []generated = new char[s_digits];
     for(int i = 0; i < s_digits; i++)
-      generated[i] = (char)(s_random.nextInt(26) + 'A');
+      generated[i] = (char)(RANDOM.nextInt(26) + 'A');
 
     m_name = new String(generated);
     changed(true);
@@ -204,7 +204,6 @@ public abstract class Entry extends AbstractEntry
     return builder.build();
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof EntryProto))

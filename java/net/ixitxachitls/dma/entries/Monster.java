@@ -41,8 +41,9 @@ import net.ixitxachitls.dma.proto.Entries.SkillProto;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.Size;
+import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.dma.values.Speed;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.util.logging.Log;
@@ -652,7 +653,7 @@ public class Monster extends CampaignEntry
   // protected Money m_money = new Money();
 
   /** The random generator. */
-  // private static Random s_random = new Random();
+  // private static Random RANDOM = new Random();
 
   /** The treasures per level. */
   //private static List<Treasure> s_treasures = new ArrayList<Treasure>();
@@ -3430,12 +3431,12 @@ public class Monster extends CampaignEntry
 
 //     for(int i = 0; i < inType.multiplier(); i++)
 //     {
-//       Coins coins = treasure.coins(s_random.nextInt(100) + 1);
+//       Coins coins = treasure.coins(RANDOM.nextInt(100) + 1);
 
 //       if(coins != null)
 //         coins.roll(m_money);
 
-//       Goods goods = treasure.goods(s_random.nextInt(100) + 1);
+//       Goods goods = treasure.goods(RANDOM.nextInt(100) + 1);
 
 //       if(goods != null)
 //       {
@@ -3450,7 +3451,7 @@ public class Monster extends CampaignEntry
 //         }
 //       }
 
-//       Items items = treasure.items(s_random.nextInt(100) + 1);
+//       Items items = treasure.items(RANDOM.nextInt(100) + 1);
 
 //       if(items != null)
 //       {
@@ -3520,7 +3521,6 @@ public class Monster extends CampaignEntry
     return proto;
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof MonsterProto))

@@ -38,6 +38,7 @@ import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.ProductReference;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -451,7 +452,6 @@ public class BaseEntry extends AbstractEntry
     m_incomplete = inValues.use("incomplete", m_incomplete);
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseEntryProto))

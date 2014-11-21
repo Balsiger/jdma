@@ -19,16 +19,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-package net.ixitxachitls.dma.values;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
-import net.ixitxachitls.dma.values.enums.*;
+import net.ixitxachitls.dma.values.Rational;
+import net.ixitxachitls.dma.values.SizeModifier;
+import net.ixitxachitls.dma.values.Value;
 
 /** The possible sizes in the game. */
 public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
@@ -133,9 +134,9 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
     m_reachLong = inReachLong;
     m_reachTall = inReachTall;
     m_space     = inSpace;
-    m_construct = BaseItem.constant("size.hp.construct", inName, inConstruct);
-    m_modifier  = BaseItem.constant("size.modifier",     inName, inModifier);
-    m_grapple   = BaseItem.constant("size.grapple",      inName, inGrapple);
+    m_construct = inConstruct;
+    m_modifier  = inModifier;
+    m_grapple   = inGrapple;
     m_proto     = inProto;
   }
 

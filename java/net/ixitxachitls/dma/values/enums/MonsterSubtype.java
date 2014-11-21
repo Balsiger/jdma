@@ -23,12 +23,10 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Subtype;
 import net.ixitxachitls.dma.values.Value;
@@ -143,7 +141,7 @@ public enum MonsterSubtype implements Named,
    */
   private MonsterSubtype(String inName, BaseMonsterProto.Subtype inProto)
   {
-    m_name = BaseMonster.constant("monster.type", inName);
+    m_name = inName;
     m_proto = inProto;
   }
 

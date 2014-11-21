@@ -49,14 +49,18 @@ import com.google.appengine.tools.cloudstorage.ListItem;
 import com.google.appengine.tools.cloudstorage.ListOptions;
 import com.google.appengine.tools.cloudstorage.RetryParams;
 import com.google.common.base.Optional;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.values.File;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -69,7 +73,7 @@ import net.ixitxachitls.util.logging.Log;
  */
 
 @ParametersAreNonnullByDefault
-public abstract class AbstractEntry extends ValueGroup
+public abstract class AbstractEntry
   implements Comparable<AbstractEntry>, Serializable
 {
   /** A simple auxiliary class to store a link with name. */
@@ -241,10 +245,57 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @return   the key for the entry
    */
-  @Override
   public EntryKey getKey()
   {
     return new EntryKey(getName(), getType());
+  }
+
+  /**
+   * Check whether the given user is the DM for this entry.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true for DM, false for not
+   */
+  public boolean isDM(Optional<BaseCharacter> inUser)
+  {
+    return false;
+  }
+
+  /**
+   * Check whether the given user is the owner of this entry.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true for owner, false for not
+   */
+  public boolean isOwner(@Nullable BaseCharacter inUser)
+  {
+    if(inUser == null)
+      return false;
+
+    // Admins are owners of everything
+    return inUser.hasAccess(BaseCharacter.Group.ADMIN);
+  }
+
+  /**
+   * Get all the values for all the indexes.
+   *
+   * @return      a multi map of values per index name
+   */
+  public Multimap<Index.Path, String> computeIndexValues()
+  {
+    return HashMultimap.create();
+  }
+
+  /**
+   * Check if the current entry represents a base entry or not.
+   *
+   * @return      true if this is a base entry, false else
+   */
+  public boolean isBase()
+  {
+    return false;
   }
 
   /**
@@ -252,21 +303,9 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @return      the requested name
    */
-  @Override
   public String getName()
   {
     return m_name;
-  }
-
-  /**
-   * Get the entry associated with this group.
-   *
-   * @return  the associated entry
-   */
-  @Override
-  public AbstractEntry getEntry()
-  {
-    return this;
   }
 
   /**
@@ -310,7 +349,6 @@ public abstract class AbstractEntry extends ValueGroup
    * @return      the requested base entries; note that an entry can be null
    *              if it is not found
    */
-  @Override
   public List<BaseEntry> getBaseEntries()
   {
     if(m_baseEntries == null || m_baseEntries.isEmpty())
@@ -375,9 +413,8 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @return      the requested id
    */
-  @Override
   @Deprecated
-  public String getID()
+  private String getID()
   {
     return getName();
   }
@@ -387,7 +424,6 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @return      the requested name
    */
-  @Override
   public AbstractType<?> getType()
   {
     return m_type;
@@ -398,7 +434,6 @@ public abstract class AbstractEntry extends ValueGroup
    *
    * @return      the requested name
    */
-  @Override
   public String getEditType()
   {
     return m_type.toString();
@@ -686,7 +721,7 @@ public abstract class AbstractEntry extends ValueGroup
   /**
    * Get a summary for the entry, using the given parameters.
    *
-   * @param       inParameters  the parameters to parameterize the summary
+   * @ param       inParameters  the parameters to parameterize the summary
    *
    * @return      the string with the summary
    */
@@ -720,7 +755,6 @@ public abstract class AbstractEntry extends ValueGroup
     return "";
   }
 
-  @Override
   public void set(Values inValues)
   {
     m_name = inValues.use("name", m_name, Values.NOT_EMPTY);
@@ -983,95 +1017,6 @@ public abstract class AbstractEntry extends ValueGroup
   */
 
   //........................................................................
-  //------------------------------ readEntry -------------------------------
-
-  /**
-   * Read an entry, and only the entry without type and comments, from the
-   * reader.
-   *
-   * @param       inReader the reader to read from
-   *
-   * @return      true if read successfully, false else
-   *
-   */
-  /*
-  protected boolean readEntry(ParseReader inReader)
-  {
-    if(inReader.isAtEnd())
-      return false;
-
-    //----- extension ------------------------------------------------------
-
-    List<String> extensions = new ArrayList<String>();
-
-    // now check for extensions
-    if(inReader.expect("with"))
-    {
-      try
-      {
-        while(true)
-        {
-          // handle the extension
-          String name = inReader.readWord();
-
-          // if(inReader.expect(':'))
-          //   // tag
-          //   name += ':' + inReader.readWord();
-
-          extensions.add(name);
-
-          if(!inReader.expect(','))
-            break;
-        }
-
-      }
-      catch(net.ixitxachitls.input.ReadException e)
-      {
-        inReader.logWarning(inReader.getPosition(), "extension.incomplete",
-                            null);
-      }
-    }
-
-    //......................................................................
-    //----- name -----------------------------------------------------------
-
-    BaseText<?> name = m_name.read(inReader);
-    if(name != null)
-      m_name = name;
-
-    // determine if we read values at all
-    boolean values = true;
-
-    if(inReader.expect(s_delimiter))
-      values = false;
-    else
-    {
-      ParseReader.Position pos = inReader.getPosition();
-      if(!inReader.expect(INTRODUCER))
-      {
-        inReader.logWarning(pos, "entry.missing.introducer",
-                            "introducer is " + INTRODUCER);
-
-        return false;
-      }
-    }
-
-    //......................................................................
-
-    addExtensions(extensions);
-
-    // read the values (including the final delimiter)
-    if(values)
-      readValues(inReader);
-
-    // add the automatic extensions from base
-    setupExtensions();
-
-    return true;
-  }
-  */
-
-  //........................................................................
   //------------------------------- addBase --------------------------------
 
   /**
@@ -1187,10 +1132,17 @@ public abstract class AbstractEntry extends ValueGroup
    *                        for unchanged (clean)
    *
    */
-  @Override
   public void changed(boolean inChanged)
   {
     m_changed = inChanged;
+  }
+
+  /**
+   * Set the state of the file to changed.
+   */
+  public void changed()
+  {
+    changed(true);
   }
 
   //........................................................................
@@ -1489,7 +1441,6 @@ public abstract class AbstractEntry extends ValueGroup
     }
   }
 
-  @Override
   public Message toProto()
   {
     AbstractEntryProto.Builder builder = AbstractEntryProto.newBuilder();
@@ -1501,7 +1452,6 @@ public abstract class AbstractEntry extends ValueGroup
     return builder.build();
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof AbstractEntryProto))

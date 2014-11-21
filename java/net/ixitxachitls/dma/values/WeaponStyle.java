@@ -27,9 +27,9 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
-import net.ixitxachitls.dma.values.enums.*;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible weapon styles. */
 public enum WeaponStyle implements Named, net.ixitxachitls.dma.values.enums.Short,
@@ -108,8 +108,8 @@ public enum WeaponStyle implements Named, net.ixitxachitls.dma.values.enums.Shor
   private WeaponStyle(String inName, String inShort, boolean inMelee,
                 int inSizeDifference, BaseWeaponProto.Style inProto)
   {
-    m_name = BaseItem.constant("weapon.types", inName);
-    m_short = BaseItem.constant("weapon.types.short", inShort);
+    m_name = inName;
+    m_short = inShort;
     m_melee = inMelee;
     m_sizeDifference = inSizeDifference;
     m_proto = inProto;

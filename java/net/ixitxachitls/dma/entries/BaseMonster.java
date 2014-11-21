@@ -46,9 +46,10 @@ import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Range;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.Size;
+import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.Speed;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.dma.values.enums.AlignmentStatus;
 import net.ixitxachitls.dma.values.enums.AttackMode;
@@ -3087,7 +3088,6 @@ public class BaseMonster extends BaseEntry
     return proto;
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseMonsterProto))

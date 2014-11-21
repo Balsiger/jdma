@@ -391,7 +391,6 @@ public class Encounter extends CampaignEntry
     return proto;
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof EncounterProto))

@@ -26,7 +26,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseSpell;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
 import net.ixitxachitls.dma.values.Value;
 
@@ -112,7 +111,7 @@ public enum Subschool
    */
   private Subschool(String inName, BaseSpellProto.Subschool inProto)
   {
-    m_name = BaseSpell.constant("subschool.name", inName);
+    m_name = inName;
     m_proto = inProto;
   }
 

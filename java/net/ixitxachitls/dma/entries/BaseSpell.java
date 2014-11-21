@@ -35,6 +35,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.School;
 import net.ixitxachitls.dma.values.enums.SpellClass;
 import net.ixitxachitls.dma.values.enums.SpellComponent;
@@ -1299,7 +1300,6 @@ public class BaseSpell extends BaseEntry
     return proto;
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseSpellProto))

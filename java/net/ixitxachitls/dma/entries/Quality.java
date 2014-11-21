@@ -31,7 +31,7 @@ import java.util.Map;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.entries.ValueGroup.Values;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.values.ExpressionValue;
 import net.ixitxachitls.dma.values.Speed;

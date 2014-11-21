@@ -24,12 +24,10 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.values.Value;
 
@@ -78,8 +76,8 @@ public enum Save implements Named, net.ixitxachitls.dma.values.enums.Short,
    */
   private Save(String inName, String inShort, BaseMonsterProto.Save inProto)
   {
-    m_name = BaseMonster.constant("save.name", inName);
-    m_short = BaseMonster.constant("save.short", inShort);
+    m_name = inName;
+    m_short = inShort;
     m_proto = inProto;
   }
 

@@ -105,7 +105,6 @@ public class BaseCampaign extends BaseEntry
     return proto;
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseCampaignProto))

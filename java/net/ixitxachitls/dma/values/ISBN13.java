@@ -22,7 +22,6 @@
 package net.ixitxachitls.dma.values;
 
 import java.util.List;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 

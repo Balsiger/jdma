@@ -28,7 +28,8 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMagicProto;
-import net.ixitxachitls.dma.values.enums.*;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The possible modifier types. */
 public enum ModifierType implements Named, net.ixitxachitls.dma.values.enums.Short,

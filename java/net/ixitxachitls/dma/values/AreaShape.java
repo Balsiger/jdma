@@ -26,7 +26,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseLightProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
@@ -70,7 +69,7 @@ public enum AreaShape implements Named,
    */
   private AreaShape(String inName, BaseLightProto.Light.Shape inProto)
   {
-    m_name = BaseItem.constant("area.shapes", inName);
+    m_name = inName;
     m_proto = inProto;
   }
 

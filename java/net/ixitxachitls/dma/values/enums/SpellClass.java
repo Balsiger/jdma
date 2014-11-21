@@ -26,7 +26,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseSpell;
 import net.ixitxachitls.dma.proto.Values.SharedProto;
 import net.ixitxachitls.dma.values.Value;
 
@@ -162,8 +161,8 @@ public enum SpellClass implements Named, net.ixitxachitls.dma.values.enums.Short
   private SpellClass(String inName, String inShort,
                      SharedProto.SpellClass inProto)
   {
-    m_name = BaseSpell.constant("spellclass.name", inName);
-    m_short = BaseSpell.constant("spellclass.short", inShort);
+    m_name = inName;
+    m_short = inShort;
     m_proto = inProto;
   }
 

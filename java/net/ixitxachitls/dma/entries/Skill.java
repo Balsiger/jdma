@@ -22,7 +22,7 @@
 
 package net.ixitxachitls.dma.entries;
 
-import net.ixitxachitls.dma.entries.ValueGroup.Values;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
 
 /**

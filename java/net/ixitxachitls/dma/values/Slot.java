@@ -27,9 +27,9 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseWearableProto;
-import net.ixitxachitls.dma.values.enums.*;
+import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.enums.Proto;
 
 /** The available body slots (cf. ). */
 public enum Slot implements Named, net.ixitxachitls.dma.values.enums.Short,
@@ -89,8 +89,8 @@ public enum Slot implements Named, net.ixitxachitls.dma.values.enums.Short,
    */
   private Slot(String inName, String inShort, BaseWearableProto.Slot inProto)
   {
-    m_name = BaseItem.constant("body.slots", inName);
-    m_short = BaseItem.constant("body.slots.short", inShort);
+    m_name = inName;
+    m_short = inShort;
     m_proto = inProto;
   }
 

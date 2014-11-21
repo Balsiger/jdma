@@ -23,34 +23,29 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSortedSet;
+import com.google.common.collect.SortedSetMultimap;
+import com.google.common.collect.TreeMultimap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
-
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
-
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSortedSet;
-import com.google.common.collect.SortedSetMultimap;
-import com.google.common.collect.TreeMultimap;
-
-import org.easymock.EasyMock;
-
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
+import org.easymock.EasyMock;
 
 //..........................................................................
 
@@ -159,7 +154,8 @@ public class IndexServlet extends PageServlet
       group = group.replace("%20", " ");
 
     // determine the index to use
-    Index index = ValueGroup.getIndex(name, type);
+    // TODO: this needs to be fixed. We currently don't show indexes anywere.
+    Index index = null; //ValueGroup.getIndex(name, type);
     if(index == null)
     {
       data.put("content",

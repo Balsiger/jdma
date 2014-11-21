@@ -23,6 +23,7 @@
 package net.ixitxachitls.dma.entries;
 
 import com.google.common.base.Optional;
+import net.ixitxachitls.dma.values.Values;
 
 /**
  * An entry that is nested as part of another entry. This entry cannot be saved
@@ -50,5 +51,5 @@ public abstract class NestedEntry
   }
 
 
-  public abstract void set(ValueGroup.Values inValues);
+  public abstract void set(Values inValues);
 }

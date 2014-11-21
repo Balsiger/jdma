@@ -35,6 +35,7 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.EntryProto;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -106,7 +107,6 @@ public abstract class CampaignEntry extends Entry
   /** The cached parent entry, if any. */
   private Optional<CampaignEntry> m_cachedParent = Optional.absent();
 
-  @Override
   public EntryKey getKey()
   {
     Optional<Campaign> campaign = getCampaign();
@@ -348,7 +348,6 @@ public abstract class CampaignEntry extends Entry
     return builder.build();
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof CampaignEntryProto))

@@ -27,7 +27,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseFeat;
 import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
 import net.ixitxachitls.dma.values.Value;
 
@@ -80,7 +79,7 @@ public enum FeatType
    */
   private FeatType(String inName, BaseFeatProto.Type inProto)
   {
-    m_name = BaseFeat.constant("feat.type", inName);
+    m_name = inName;
     m_proto = inProto;
   }
 

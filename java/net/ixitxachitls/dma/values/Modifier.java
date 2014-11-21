@@ -28,7 +28,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.proto.Values.ModifierProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.util.Strings;
@@ -111,7 +110,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
      */
     private Type(String inName, boolean inStacks, ModifierProto.Type inProto)
     {
-      m_name = ValueGroup.constant("product.part", inName);
+      m_name = inName;
       m_stacks = inStacks;
       m_proto = inProto;
     }

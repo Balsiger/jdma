@@ -24,12 +24,10 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.values.Value;
 
@@ -85,7 +83,7 @@ public enum Treasure implements Named,
   private Treasure(String inName, int inMultiplier,
                    BaseMonsterProto.Treasure inProto)
   {
-    m_name = BaseMonster.constant("skill.modifier", inName);
+    m_name = inName;
     m_multiplier = inMultiplier;
     m_proto = inProto;
   }

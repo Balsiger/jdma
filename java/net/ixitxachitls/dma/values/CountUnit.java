@@ -27,7 +27,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseCountedProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
@@ -85,8 +84,8 @@ public enum CountUnit implements Named,
   private CountUnit(String inName, String inMultiple,
                     BaseCountedProto.Unit inProto)
   {
-    m_name = BaseItem.constant("count.unit.name", inName);
-    m_multiple = BaseItem.constant("count.unit.multiple", inMultiple);
+    m_name = inName;
+    m_multiple = inMultiple;
     m_proto = inProto;
   }
 

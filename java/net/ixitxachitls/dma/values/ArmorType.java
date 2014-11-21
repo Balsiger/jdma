@@ -27,7 +27,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseArmorProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
@@ -75,7 +74,7 @@ public enum ArmorType implements Named,
    */
   private ArmorType(String inName, BaseArmorProto.Type inProto)
   {
-    m_name = BaseItem.constant("armor.types", inName);
+    m_name = inName;
     m_proto = inProto;
   }
 

@@ -27,7 +27,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
 import net.ixitxachitls.dma.values.enums.Named;
 
@@ -72,7 +71,7 @@ public enum Probability implements Named
    */
   private Probability(String inName, BaseItemProto.Probability inProto)
   {
-    m_name = BaseItem.constant("item.probabilities", inName);
+    m_name = inName;
     m_proto = inProto;
   }
 

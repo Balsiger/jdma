@@ -33,6 +33,7 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.ItemProto;
 import net.ixitxachitls.dma.values.*;
+import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -1426,7 +1427,6 @@ public class Item extends CampaignEntry
     return proto;
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof ItemProto))
@@ -1494,9 +1494,9 @@ public class Item extends CampaignEntry
     // {
     //   super.setUp();
 
-    //   m_random = Item.s_random;
+    //   m_random = Item.RANDOM;
 
-    //   s_random = EasyMock.createMock(java.util.Random.class);
+    //   RANDOM = EasyMock.createMock(java.util.Random.class);
 
     //   BaseCampaign.GLOBAL.m_bases.clear();
     // }
@@ -1508,7 +1508,7 @@ public class Item extends CampaignEntry
      */
     // public void tearDown()
     // {
-    //   s_random = m_random;
+    //   RANDOM = m_random;
 
     //   super.tearDown();
 
@@ -1527,10 +1527,10 @@ public class Item extends CampaignEntry
     //     throw new IllegalArgumentException("must have pairs of values");
 
     //   for(int i = 0; i < inValues.length; i += 2)
-    //     EasyMock.expect(s_random.nextInt(inValues[i]))
+    //     EasyMock.expect(RANDOM.nextInt(inValues[i]))
     //       .andReturn(inValues[i + 1]);
 
-    //   EasyMock.replay(s_random);
+    //   EasyMock.replay(RANDOM);
     // }
 
     //----- createItem() -----------------------------------------------
@@ -1814,9 +1814,9 @@ public class Item extends CampaignEntry
     //                item.m_value.toString());
     //   assertEquals("appearance", "rare appearance", item.getAppearance());
 
-    //   EasyMock.verify(s_random);
+    //   EasyMock.verify(RANDOM);
 
-    //   //s_random = old;
+    //   //RANDOM = old;
     // }
 
     /** Testing printing. */

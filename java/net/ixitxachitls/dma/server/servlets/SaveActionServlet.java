@@ -29,13 +29,13 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.values.Values;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.EntryKey;
-import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.util.Encodings;
 
 /**
@@ -103,7 +103,7 @@ public class SaveActionServlet extends ActionServlet
       else
         return "gui.alert('Cannot find entry for " + key + "');";
 
-    ValueGroup.Values values = new ValueGroup.Values(inRequest.getParams());
+    Values values = new Values(inRequest.getParams());
     entry.set(values);
     List<String> errors = values.obtainMessages();
 

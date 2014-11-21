@@ -63,10 +63,11 @@ import net.ixitxachitls.dma.values.ModifierType;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.NamedModifier;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.Probability;
 import net.ixitxachitls.dma.values.Proficiency;
-import net.ixitxachitls.dma.values.Size;
+import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.Slot;
 import net.ixitxachitls.dma.values.Substance;
@@ -2154,7 +2155,6 @@ public class BaseItem extends BaseEntry
     m_remove = inValues.use("wearable.remove", m_remove, Duration.PARSER);
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseItemProto))

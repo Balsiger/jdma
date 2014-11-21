@@ -24,12 +24,10 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.values.Value;
 
@@ -74,7 +72,7 @@ public enum AlignmentStatus implements Named,
   private AlignmentStatus(String inName,
                           BaseMonsterProto.AlignmentStatus inProto)
   {
-    m_name = BaseMonster.constant("alignment.status", inName);
+    m_name = inName;
     m_proto = inProto;
   }
 

@@ -27,7 +27,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
 import net.ixitxachitls.dma.values.enums.Named;
 
@@ -116,9 +115,9 @@ public enum Substance implements Named
   private Substance(String inName, int inHardness, int inHP,
                     BaseItemProto.Substance.Material inProto)
   {
-    m_name     = BaseItem.constant("substance.name",     inName);
-    m_hardness = BaseItem.constant("substance.hardness", inName, inHardness);
-    m_hp       = BaseItem.constant("substance.hp",       inName, inHP);
+    m_name = inName;
+    m_hardness = inHardness;
+    m_hp = inHP;
     m_proto = inProto;
   }
 

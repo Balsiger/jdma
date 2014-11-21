@@ -27,7 +27,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseQuality;
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
 import net.ixitxachitls.dma.values.Value;
 
@@ -121,8 +120,8 @@ public enum Affects implements Named, net.ixitxachitls.dma.values.enums.Short
   private Affects(String inName, String inShort,
                   BaseQualityProto.Effect.Affects inProto)
   {
-    m_name = BaseQuality.constant("affects", inName);
-    m_short = BaseQuality.constant("affects.short", inShort);
+    m_name = inName;
+    m_short = inShort;
     m_proto = inProto;
   }
 

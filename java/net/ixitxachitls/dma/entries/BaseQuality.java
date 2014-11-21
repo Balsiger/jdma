@@ -40,6 +40,7 @@ import net.ixitxachitls.dma.values.ExpressionValue;
 import net.ixitxachitls.dma.values.KeyedModifier;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Speed;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Effect;
 import net.ixitxachitls.dma.values.enums.EffectType;
@@ -441,7 +442,6 @@ public class BaseQuality extends BaseEntry
     return proto;
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseQualityProto))

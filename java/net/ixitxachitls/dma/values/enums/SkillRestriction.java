@@ -27,7 +27,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.entries.BaseSkill;
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
 import net.ixitxachitls.dma.values.Value;
 
@@ -72,7 +71,7 @@ public enum SkillRestriction implements Named,
    */
   private SkillRestriction(String inName, BaseSkillProto.Restriction inProto)
   {
-    m_name = BaseSkill.constant("skill.restrictions", inName);
+    m_name = inName;
     m_proto = inProto;
   }
 

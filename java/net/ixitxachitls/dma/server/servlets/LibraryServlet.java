@@ -27,16 +27,12 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
-
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseType;
-import net.ixitxachitls.dma.entries.ValueGroup;
-import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.util.Files;
 
@@ -80,6 +76,7 @@ public class LibraryServlet extends PageServlet
     Map<String, List<Map<String, Object>>> indexes =
       new HashMap<String, List<Map<String, Object>>>();
 
+    /* TODO: indexes are currently empty.
     for(Index index : ValueGroup.getIndexes())
     {
       String name = index.getType().getName();
@@ -93,6 +90,7 @@ public class LibraryServlet extends PageServlet
       group.add(map("title", index.getTitle(),
                     "path", index.getPath()));
     }
+    */
 
     for(List<Map<String, Object>> index : indexes.values())
       Collections.sort(index, new Comparator<Map<String, Object>>()

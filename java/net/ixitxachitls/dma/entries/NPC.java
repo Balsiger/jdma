@@ -38,6 +38,7 @@ import net.ixitxachitls.dma.proto.Entries.LevelProto;
 import net.ixitxachitls.dma.proto.Entries.MonsterProto;
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
 import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Gender;
 import net.ixitxachitls.util.logging.Log;
 
@@ -415,7 +416,6 @@ public class NPC extends Monster
     return proto;
   }
 
-  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof NPCProto))
