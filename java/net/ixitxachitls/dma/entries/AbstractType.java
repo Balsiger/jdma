@@ -30,65 +30,144 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.logging.Log;
 
 /**
- * The type abstract base of the entriy types.
- * TODO: change to abstract entry when that is available.
+ * The type abstract base of the entry types.
  *
  * @file          AbstractType.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  * @param         <T> the type represented by this type spec
  */
-
 @Immutable
-@ParametersAreNonnullByDefault
 public class AbstractType<T extends AbstractEntry>
   implements Comparable<AbstractType<? extends AbstractEntry>>,
   java.io.Serializable
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- AbstractType -----------------------------
-
   /**
-   * Create the type.
+   * A builder for an abstract type.
    *
-   * @param       inClass the class represented by this type
-   *
+   * @param <T> the entries for the type
+   * @param <B> the builder for the type (for extension)
    */
-  public AbstractType(Class<T> inClass)
+  public static class Builder<T extends AbstractEntry, B extends Builder<T, B>>
   {
-    this(inClass, Classes.fromClassName(inClass) + "s");
+    /** The class for the type of entries. */
+    protected final Class<T> m_class;
+
+    /** The string to use for multiple values of this type. */
+    protected Optional<String> m_multiple = Optional.absent();
+
+    /** The string to use to link to this type. */
+    protected Optional<String> m_link = Optional.absent();
+
+    /** The string to use to link to multiple of this type. */
+    protected Optional<String> m_multipleLink = Optional.absent();
+
+    /** The name of the field to use for sortig this type. */
+    protected Optional<String> m_sort = Optional.absent();
+
+    /**
+     * Create the builder.
+     *
+     * @param inClass the class for entries of this type
+     */
+    public Builder(Class<T> inClass)
+    {
+      m_class = inClass;
+    }
+
+    /**
+     * Build the type.
+     *
+     * @return the type built.
+     */
+    public AbstractType<T> build()
+    {
+      return new AbstractType(m_class, m_multiple, m_link, m_multipleLink,
+                              m_sort);
+    }
+
+    /** Set the string to use for the multiple name of the type.
+     *
+     * @param inMultiple the name to use for multiple entries
+     * @return the builder, for chaining
+     */
+    public B multiple(String inMultiple)
+    {
+      m_multiple = Optional.of(inMultiple);
+      return (B)this;
+    }
+
+    /**
+     * Set how to link to this type.
+     *
+     * @param inLink          the name to use to link
+     * @param inMultipleLink  the name to use to link to multiple
+     * @return the builder, for chaining
+     */
+    public B link(String inLink, String inMultipleLink)
+    {
+      m_link = Optional.of(inLink);
+      m_multipleLink = Optional.of(inMultipleLink);
+      return (B)this;
+    }
+
+    /**
+     * Set the sort field of the type.
+     * @param inSort the field to sort by
+     * @return the builder, for chaining
+     */
+    public B sort(String inSort)
+    {
+      m_sort = Optional.of(inSort);
+      return (B)this;
+    }
   }
 
-  //........................................................................
-  //----------------------------- AbstractType -----------------------------
-
   /**
-   * Create the type.
-   *
-   * @param       inClass    the class represented by this type
-   * @param       inMultiple the name to use for multiple entries of the type
-   *
+   * Create 
+   * @param inClass
+   * @param inMultiple
+   * @param inLink
+   * @param inMultipleLink
+   * @param inSort
    */
-  public AbstractType(Class<T> inClass, String inMultiple)
+  protected AbstractType(Class<T> inClass, Optional<String> inMultiple,
+                         Optional<String> inLink,
+                         Optional<String> inMultipleLink,
+                         Optional<String> inSort)
   {
-    m_name      = Classes.fromClassName(inClass).toLowerCase(Locale.US);
-    m_class     = inClass;
-    m_multiple  = inMultiple;
+    m_name = Classes.fromClassName(inClass).toLowerCase(Locale.US);
+    m_class = inClass;
+
+    if(inMultiple.isPresent())
+      m_multiple = inMultiple.get();
+    else
+      m_multiple = Classes.fromClassName(m_class) + "s";
+
     m_className = inClass.getName().replaceAll(".*\\.", "");
 
-    String []parts = m_name.split("\\s+");
-    m_link = parts[parts.length - 1].toLowerCase(Locale.US);
-    m_multipleLink = m_link + "s";
+    if(inLink.isPresent())
+      m_link = inLink.get();
+    else
+    {
+      String[] parts = m_name.split("\\s+");
+      m_link = parts[parts.length - 1].toLowerCase(Locale.US);
+    }
+
+    if(inMultipleLink.isPresent())
+      m_multipleLink = inMultipleLink.get();
+    else
+      m_multipleLink = m_link + "s";
+
+    m_sort = inSort;
 
     s_types.put(getName(), this);
     s_types.put(getLink(), this);
@@ -105,10 +184,6 @@ public class AbstractType<T extends AbstractEntry>
     s_all.add(this);
   }
 
-  //........................................................................
-
-  //------------------------------- withLink -------------------------------
-
   /**
    * Set the link to use for this type.
    *
@@ -116,7 +191,6 @@ public class AbstractType<T extends AbstractEntry>
    * @param       inMultipleLink the name to link to multiple entries
    *
    * @return      the type for chaining
-   *
    */
   public AbstractType<T> withLink(String inLink, String inMultipleLink)
   {
@@ -128,41 +202,31 @@ public class AbstractType<T extends AbstractEntry>
     return this;
   }
 
-  //........................................................................
-  //------------------------------- withSort -------------------------------
-
   /**
    * Set the sort field to use for this type.
    *
    * @param       inSort  the field used to sort
    *
    * @return      the type for chaining
-   *
    */
   public AbstractType<T> withSort(String inSort)
   {
-    m_sort = inSort;
+    m_sort = Optional.of(inSort);
 
     return this;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** the name of the type. */
-  private String m_name;
+  private final String m_name;
 
   /** the name for multiple instances of the type. */
-  private String m_multiple;
+  private final String m_multiple;
 
   /** the class for the type. */
-  private Class<T> m_class;
+  private final Class<T> m_class;
 
   /** The class name without package. */
-  private String m_className;
+  private final String m_className;
 
   /** The link to use to reference an entry of this type. */
   private String m_link;
@@ -171,7 +235,7 @@ public class AbstractType<T extends AbstractEntry>
   private String m_multipleLink;
 
   /** The field to be used for sorting. */
-  private @Nullable String m_sort = null;
+  private Optional<String> m_sort = null;
 
   /** All the available types. */
   private static final Map<String, AbstractType<? extends AbstractEntry>>
@@ -192,177 +256,98 @@ public class AbstractType<T extends AbstractEntry>
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //-------------------------------- getLink -------------------------------
-
   /**
    * Get the name to link to such a type.
    *
    * @return      the link
-   *
    */
   public String getLink()
   {
     return m_link;
   }
 
-  //.......................................................................
-  //-------------------------------- getName -------------------------------
-
   /**
    * Get the name for this type.
    *
    * @return      the class name
-   *
    */
   public String getName()
   {
     return m_name;
   }
 
-  //........................................................................
-  //----------------------------- getClassName -----------------------------
-
   /**
    * Get the class name (without package) for this type.
    *
    * @return      the class name
-   *
    */
   public String getClassName()
   {
     return m_className;
   }
 
-  //........................................................................
-  //------------------------------ getMultiple -----------------------------
-
   /**
    * Get the name for multiples of this type.
    *
    * @return      the multiple name
-   *
    */
   public String getMultiple()
   {
     return m_multiple;
   }
 
-  //........................................................................
-  //---------------------------- getMultipleLink ---------------------------
-
   /**
    * Get the name for multiples of this type.
    *
    * @return      the multiple name
-   *
    */
   public String getMultipleLink()
   {
     return m_multipleLink;
   }
 
-  //........................................................................
-  //---------------------------- getMultipleDir ----------------------------
-
   /**
    * Get the name for multiples of this type.
    *
    * @return      the multiple name as directory reference
-   *
    */
   public String getMultipleDir()
   {
     return m_multiple.replaceAll(" ", "");
   }
 
-  //........................................................................
-  //--------------------------------- get ----------------------------------
-
   /**
    * Get the type for the given name.
    *
    * @param     inName the name of the type to get
    *
    * @return    the type found, if any
-   *
    */
-  @Deprecated
-  public static @Nullable
-    AbstractType<? extends AbstractEntry>get(String inName)
-  {
-    return s_types.get(inName);
-  }
-
-  //........................................................................
-  //------------------------------ getLinked -------------------------------
-
-  /**
-   * Get the type for the given name.
-   *
-   * @param     inName the name of the type to get
-   *
-   * @return    the type found, if any
-   *
-   */
-  public static @Nullable AbstractType<? extends AbstractEntry>
-    getLinked(String inName)
-  {
-    return s_types.get(inName);
-  }
-
-  //........................................................................
-  //------------------------------- getTyped -------------------------------
-
-  /**
-   * Get the type for the given name.
-   *
-   * @param     inName the name of the type to get
-   *
-   * @return    the type found, if any
-   *
-   */
-  public static @Nullable AbstractType<? extends AbstractEntry>
+  public static Optional<? extends AbstractType<? extends AbstractEntry>>
     getTyped(String inName)
   {
-    return s_typedTypes.get(inName);
+    return Optional.fromNullable(s_typedTypes.get(inName));
   }
-
-  //........................................................................
-  //----------------------------- getBaseType ------------------------------
 
   /**
    * Get the base type to this one.
    *
    * @return      the requested base type or null if already a base type
-   *
    */
-  public @Nullable AbstractType<? extends AbstractEntry> getBaseType()
+  public AbstractType<? extends AbstractEntry> getBaseType()
   {
     return this;
   }
-
-  //........................................................................
-  //-------------------------------- getAll --------------------------------
 
   /**
    * Get the type for the given name.
    *
    * @return    the type found, if any
-   *
    */
-  public static @Nullable
-    Set<AbstractType<? extends AbstractEntry>> getAll()
+  public static Set<AbstractType<? extends AbstractEntry>> getAll()
   {
     return ImmutableSet.copyOf(s_all);
   }
-
-  //........................................................................
-
-  //------------------------------ compareTo -------------------------------
 
   /**
    * Compare this type to another one for sorting.
@@ -370,19 +355,12 @@ public class AbstractType<T extends AbstractEntry>
    * @param       inOther the other type to compare to
    *
    * @return      < 0 if this is lower, > if this is bigger, 0 if equal
-   *
    */
   @Override
-  public int compareTo(@Nullable AbstractType<? extends AbstractEntry> inOther)
+  public int compareTo(AbstractType<? extends AbstractEntry> inOther)
   {
-    if(inOther == null)
-      return -1;
-
     return m_name.compareTo(inOther.m_name);
   }
-
-  //........................................................................
-  //-------------------------------- equals --------------------------------
 
   /**
    * Check for equality of the given errors.
@@ -390,7 +368,6 @@ public class AbstractType<T extends AbstractEntry>
    * @param       inOther the object to compare to
    *
    * @return      true if equal, false else
-   *
    */
   @Override
   public boolean equals(Object inOther)
@@ -407,14 +384,10 @@ public class AbstractType<T extends AbstractEntry>
       return false;
   }
 
-  //........................................................................
-  //------------------------------- hashCode -------------------------------
-
   /**
    * Compute the hash code for this class.
    *
    * @return      the hash code
-   *
    */
   @Override
   public int hashCode()
@@ -422,14 +395,10 @@ public class AbstractType<T extends AbstractEntry>
     return m_name.hashCode();
   }
 
-  //........................................................................
-  //------------------------------- toString -------------------------------
-
   /**
    * Convert to human readable representation.
    *
    * @return      the converted String
-   *
    */
   @Override
   public String toString()
@@ -437,42 +406,26 @@ public class AbstractType<T extends AbstractEntry>
     return m_name;
   }
 
-  //........................................................................
-  //----------------------------- getSortField -----------------------------
-
   /**
    * Get the name of the field to be used for sorting.
    *
    * @return      the field to use for sorting, if any
-   *
    */
-  public @Nullable String getSortField()
+  public Optional<String> getSortField()
   {
     return m_sort;
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //-------------------------------- create --------------------------------
 
   /**
    * Create a entry of the type.
    *
    * @return      an empty, undefined entry of the type.
-   *
    */
-  public @Nullable T create()
+  public Optional<T> create()
   {
     try
     {
-      return m_class.newInstance();
+      return Optional.of(m_class.newInstance());
     }
     catch(java.lang.InstantiationException e)
     {
@@ -487,11 +440,8 @@ public class AbstractType<T extends AbstractEntry>
       e.printStackTrace(System.err);
     }
 
-    return null;
+    return Optional.absent();
   }
-
-  //......................................................................
-  //-------------------------------- create --------------------------------
 
   /**
    * Create a entry of the type.
@@ -499,14 +449,14 @@ public class AbstractType<T extends AbstractEntry>
    * @param       inID   the id of the entry to create
    *
    * @return      an empty, undefined entry of the type.
-   *
    */
-  public @Nullable T create(String inID)
+  public Optional<T> create(String inID)
   {
     try
     {
       // create the object
-      return m_class.getConstructor(String.class).newInstance(inID);
+      return Optional.of(m_class.getConstructor(String.class)
+                                .newInstance(inID));
     }
     catch(java.lang.NoSuchMethodException e)
     {
@@ -533,58 +483,20 @@ public class AbstractType<T extends AbstractEntry>
       e.printStackTrace(System.err);
     }
 
-    return null;
+    return Optional.absent();
   }
 
-  //........................................................................
+  //----------------------------------------------------------------------------
 
-  //........................................................................
-
-  //------------------------------------------------------------------- test
-
-  /** The test. */
+  /** The tests. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    /**
-     * A type for testing.
-     *
-     *  @param <T> the real type of entry
-     */
-    public static class TestType<T extends AbstractEntry>
-      extends AbstractType<T>
-    {
-      /**
-       * Create the type.
-       *
-       * @param inClass the class of the type
-       */
-      public TestType(Class<T> inClass)
-      {
-        super(inClass);
-      }
-
-      /**
-       * Create the type.
-       *
-       * @param inClass the class of the type
-       * @param inMultiple the text for multiple types
-       */
-      public TestType(Class<T> inClass, String inMultiple)
-      {
-        super(inClass, inMultiple);
-      }
-
-      /** The id for serialization. */
-      private static final long serialVersionUID = 1L;
-    }
-
-    //----- create ---------------------------------------------------------
-
     /** The create Test. */
     @org.junit.Test
     public void create()
     {
-      AbstractType<BaseEntry> type = new TestType<BaseEntry>(BaseEntry.class);
+      AbstractType<BaseEntry> type =
+          new AbstractType.Builder<>(BaseEntry.class).build();
 
       assertEquals("link", "entry", type.getLink());
       assertEquals("class name", "BaseEntry", type.getClassName());
@@ -594,24 +506,19 @@ public class AbstractType<T extends AbstractEntry>
       assertEquals("multiple dir", "BaseEntrys", type.getMultipleDir());
       assertEquals("string", "base entry", type.toString());
 
-      BaseEntry entry = type.create();
-      assertEquals("create", "base entry $undefined$ =\n\n.\n",
+      BaseEntry entry = type.create().get();
+      assertEquals("create", "base entry ",
                    entry.toString());
 
-      entry = type.create("guru");
-      assertEquals("create",
-                   "#----- guru\n"
-                   + "\n"
-                   + "base entry guru =\n"
-                   + "\n"
-                   + "  name              guru.\n"
-                   + "\n"
-                   + "#.....\n",
-                   entry.toString());
+      entry = type.create("guru").get();
+      assertEquals("create", "base entry guru", entry.toString());
 
       AbstractType<AbstractEntry> type2 =
-        new TestType<AbstractEntry>(AbstractEntry.class, "Many More")
-        .withLink("baseentry-link", "baseentry-links");
+        new AbstractType.Builder<>(AbstractEntry.class)
+            .multiple("Many More")
+            .link("baseentry-link", "baseentry-links")
+            .sort("sort")
+          .build();
 
       assertEquals("link", "baseentry-link", type2.getLink());
       assertEquals("class name", "AbstractEntry", type2.getClassName());
@@ -619,31 +526,25 @@ public class AbstractType<T extends AbstractEntry>
       assertEquals("multiple", "Many More", type2.getMultiple());
       assertEquals("multiple link", "baseentry-links", type2.getMultipleLink());
       assertEquals("multiple dir", "ManyMore", type2.getMultipleDir());
+      assertEquals("sort", "sort", type2.getSortField().get());
       assertEquals("string", "abstract entry", type2.toString());
     }
-
-    //......................................................................
-    //----- compare --------------------------------------------------------
 
     /** The compare Test. */
     @org.junit.Test
     public void compare()
     {
-      TestType<AbstractEntry> type1 =
-        new TestType<AbstractEntry>(AbstractEntry.class);
-      TestType<BaseEntry> type2 = new TestType<BaseEntry>(BaseEntry.class);
+      AbstractType<AbstractEntry> type1 =
+          new AbstractType.Builder<>(AbstractEntry.class)
+              .build();
+      AbstractType<BaseEntry> type2 =
+          new AbstractType.Builder<>(BaseEntry.class).build();
 
       assertEquals("compare", 0, type1.compareTo(type1));
-      assertTrue("compare", type1.compareTo(null) < 0);
       assertTrue("compare", type1.compareTo(type2) < 0);
       assertTrue("compare", type2.compareTo(type1) > 0);
 
       assertEquals("compare", 0, type2.compareTo(type2));
-      assertTrue("compare", type2.compareTo(null) < 0);
     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -39,8 +40,6 @@ import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
 
 /**
  * A page servlet to serve a list of values.
@@ -105,19 +104,19 @@ public class EntryListServlet extends PageServlet
     if(path != null)
       typeName = Strings.getPattern(path, "([^/]*)/?$");
 
-    AbstractType<? extends AbstractEntry> type =
+    Optional<? extends AbstractType<? extends AbstractEntry>> type =
       AbstractType.getTyped(typeName);
-    if(type == null)
+    if(!type.isPresent())
     {
       data.put("content", inRenderer.render("dma.error.invalidType",
                                             map("type", typeName)));
       return data;
     }
 
-    String title = Encodings.toWordUpperCase(type.getMultipleLink());
+    String title = Encodings.toWordUpperCase(type.get().getMultipleLink());
     Log.info("serving dynamic list " + title);
 
-    List<AbstractEntry> rawEntries = getEntries(inRequest, path, type,
+    List<AbstractEntry> rawEntries = getEntries(inRequest, path, type.get(),
                                                 inRequest.getStart(),
                                                 inRequest.getPageSize() + 1);
 
@@ -127,14 +126,15 @@ public class EntryListServlet extends PageServlet
 
     data.put("content",
              inRenderer.render
-             ("dma.entries." + type.getMultipleDir().toLowerCase() + ".list",
+             ("dma.entries." + type.get().getMultipleDir().toLowerCase()
+                  + ".list",
               map("title", title,
                   "entries", entries,
                   "label", title.toLowerCase(Locale.US),
                   "path", path,
                   "pagesize", inRequest.getPageSize(),
                   "start", inRequest.getStart()),
-              ImmutableSet.of(type.getName().replace(" ", ""))));
+              ImmutableSet.of(type.get().getName().replace(" ", ""))));
 
     return data;
   }

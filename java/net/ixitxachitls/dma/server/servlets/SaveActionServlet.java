@@ -93,18 +93,23 @@ public class SaveActionServlet extends ActionServlet
     if(!key.isPresent())
       return "gui.alert('Cannot create entry key for " + keyParam + "');";
 
-    AbstractEntry entry = DMADataFactory.get().getEntry(key.get());
-    if(entry == null)
+    Optional<AbstractEntry> entry = DMADataFactory.get().getEntry(key.get());
+    if(!entry.isPresent())
       if(inRequest.hasParam("_create_"))
       {
-        entry = key.get().getType().create(key.get().getID());
-        entry.updateKey(key.get());
+        entry = (Optional<AbstractEntry>)
+            key.get().getType().create(key.get().getID());
+        if(entry.isPresent())
+          entry.get().updateKey(key.get());
       }
       else
         return "gui.alert('Cannot find entry for " + key + "');";
 
+    if(!entry.isPresent())
+      return "gui.alert('could not create entry');";
+
     Values values = new Values(inRequest.getParams());
-    entry.set(values);
+    entry.get().set(values);
     List<String> errors = values.obtainMessages();
 
     if(!errors.isEmpty())
@@ -113,9 +118,10 @@ public class SaveActionServlet extends ActionServlet
 
     if(values.isChanged())
     {
-      entry.changed();
-      entry.save();
-      return "gui.info('Entry " + entry.getName() + " has been saved.'); true";
+      entry.get().changed();
+      entry.get().save();
+      return "gui.info('Entry " + entry.get().getName()
+          + " has been saved.'); true";
     }
 
     return "gui.info('No changes needed saving'); true";

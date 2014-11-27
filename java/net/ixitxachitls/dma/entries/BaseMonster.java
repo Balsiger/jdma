@@ -324,7 +324,7 @@ public class BaseMonster extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseMonster> TYPE =
-    new BaseType<BaseMonster>(BaseMonster.class);
+    new BaseType.Builder<>(BaseMonster.class).build();
 
   /** The monsters size. */
   protected Size m_size = Size.UNKNOWN;

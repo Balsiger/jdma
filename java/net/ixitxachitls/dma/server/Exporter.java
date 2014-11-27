@@ -47,6 +47,7 @@ import com.google.appengine.api.utils.SystemProperty;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.google.common.base.Charsets;
+import com.google.common.base.Optional;
 import com.google.common.io.ByteSink;
 import com.google.common.io.CharSink;
 import com.google.protobuf.Message;
@@ -138,15 +139,15 @@ public final class Exporter
 
       Log.important("converting entity " + entity.getKind() + ": "
                     + entity.getKey());
-      AbstractEntry entry = m_dmaStore.convert(entity);
+      Optional<AbstractEntry> entry = m_dmaStore.convert(entity);
 
-      if(entry == null)
+      if(!entry.isPresent())
       {
         Log.warning("could not convert " + entity);
         continue;
       }
 
-      export(entry, inDir, inBlobs);
+      export(entry.get(), inDir, inBlobs);
     }
   }
 

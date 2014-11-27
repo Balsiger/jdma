@@ -484,7 +484,7 @@ public class BaseSpell extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseSpell> TYPE =
-    new BaseType<BaseSpell>(BaseSpell.class);
+    new BaseType.Builder<>(BaseSpell.class).build();
 
   /** The serial version id. */
   private static final long serialVersionUID = 1L;

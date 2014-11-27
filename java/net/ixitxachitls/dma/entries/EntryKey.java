@@ -27,10 +27,7 @@ import com.google.common.base.Optional;
 
 /**
  * The key for an entry for storage.
- *
- * @param     <T> the type of the entry represented by this key
  */
-@ParametersAreNonnullByDefault
 public class EntryKey
 {
   /**
@@ -143,14 +140,14 @@ public class EntryKey
       return Optional.absent();
 
     String id = inPaths[inIndex--].replace("%20", " ");
-    AbstractType<?> type =
+    Optional<? extends AbstractType<? extends AbstractEntry>> type =
       AbstractType.getTyped(inPaths[inIndex].replace("%20", " "));
 
-    if(type == null)
+    if(!type.isPresent())
       return Optional.absent();
 
     Optional<EntryKey> parent = fromString(inPaths, inIndex - 1);
-    EntryKey key = new EntryKey(id, type, parent);
+    EntryKey key = new EntryKey(id, type.get(), parent);
     return Optional.of(key);
   }
 

@@ -75,7 +75,7 @@ public class BaseFeat extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseFeat> TYPE =
-    new BaseType<BaseFeat>(BaseFeat.class);
+    new BaseType.Builder<>(BaseFeat.class).build();
 
   /** The type of the feat. */
   protected FeatType m_featType = FeatType.UNKNOWN;

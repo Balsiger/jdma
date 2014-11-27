@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -54,7 +55,6 @@ import net.ixitxachitls.output.html.JsonWriter;
  */
 
 @Immutable
-@ParametersAreNonnullByDefault
 public class Autocomplete extends JSONServlet
 {
   /**
@@ -90,19 +90,19 @@ public class Autocomplete extends JSONServlet
     if(parts.length > 3)
     {
       String term = normalize(inRequest.getParam("term"));
-      AbstractType<? extends AbstractEntry> type =
+      Optional<? extends AbstractType<? extends AbstractEntry>> type =
         AbstractType.getTyped(parts[2]);
       String field = parts[3];
       String []keys = Arrays.copyOfRange(parts, 2, parts.length);
 
-      if(type != null && field != null)
+      if(type.isPresent() && field != null)
       {
         Collection<String> items;
         if("name".equals(field))
-          items = DMADataFactory.get().getIDs(type, null);
+          items = DMADataFactory.get().getIDs(type.get(), null);
         else
         {
-          ensureCached(type, field);
+          ensureCached(type.get(), field);
           items = cached(keys);
         }
 

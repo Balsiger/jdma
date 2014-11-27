@@ -73,7 +73,7 @@ public class Product extends Entry
 
   /** The type of this entry. */
   public static final Type<Product> TYPE =
-    new Type<Product>(Product.class, BaseProduct.TYPE);
+    new Type.Builder<>(Product.class, BaseProduct.TYPE).build();
 
   /** The edition of the copy. */
   protected Optional<String> m_edition = Optional.absent();

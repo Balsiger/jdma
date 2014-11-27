@@ -44,7 +44,6 @@ import net.ixitxachitls.util.logging.Log;
  *
  * @file          CampaignEntry.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- * @param         <T> the type of base entry associated with this entry
  */
 
 @ParametersAreNonnullByDefault
@@ -147,10 +146,10 @@ public abstract class CampaignEntry extends Entry
   {
     if(!m_cachedCampaign.isPresent() && m_baseCampaignName.isPresent()
       && m_campaignName.isPresent())
-      m_cachedCampaign = Optional.of((Campaign)DMADataFactory.get().getEntry
+      m_cachedCampaign = DMADataFactory.get().getEntry
         (new EntryKey(m_campaignName.get(), Campaign.TYPE,
          Optional.of(new EntryKey(m_baseCampaignName.get(),
-                                  BaseCampaign.TYPE)))));
+                                  BaseCampaign.TYPE))));
 
     return m_cachedCampaign;
   }
@@ -174,8 +173,7 @@ public abstract class CampaignEntry extends Entry
         EntryKey.fromString(getCampaign().get().getKey() + "/"
                             + m_parentName.get());
       if(parentKey.isPresent())
-        m_cachedParent = Optional.fromNullable((CampaignEntry)
-          DMADataFactory.get().getEntry(parentKey.get()));
+        m_cachedParent = DMADataFactory.get().getEntry(parentKey.get());
     }
 
     return m_cachedParent;

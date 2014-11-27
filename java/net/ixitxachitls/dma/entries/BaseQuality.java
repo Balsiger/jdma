@@ -80,8 +80,10 @@ public class BaseQuality extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseQuality> TYPE =
-    new BaseType<BaseQuality>(BaseQuality.class, "Base Qualities")
-    .withLink("quality", "qualities");
+      new BaseType.Builder<BaseQuality>(BaseQuality.class)
+        .multiple("Base Qualities")
+        .link("quality", "qualities")
+        .build();
 
   /** The type of the effect. */
   private EffectType m_qualityType = EffectType.UNKNOWN;

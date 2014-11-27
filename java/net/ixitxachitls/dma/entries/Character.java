@@ -78,7 +78,7 @@ public class Character extends NPC
 
   /** The type of this entry. */
   public static final Type<Character> TYPE =
-    new Type<Character>(Character.class, BaseMonster.TYPE);
+    new Type.Builder<>(Character.class, BaseMonster.TYPE).build();
 
   /** The state value. */
   protected CharacterState m_state = CharacterState.UNKNOWN;
@@ -197,10 +197,8 @@ public class Character extends NPC
     if(!m_player.isPresent())
     {
       if(m_playerName.isPresent())
-        m_player = Optional.of(Optional.fromNullable
-                               ((BaseCharacter)DMADataFactory.get().getEntry
-                                (new EntryKey(m_playerName.get(),
-                                              BaseCharacter.TYPE))));
+        m_player = Optional.of(DMADataFactory.get().<BaseCharacter>getEntry
+            (new EntryKey(m_playerName.get(), BaseCharacter.TYPE)));
       else
         return Optional.absent();
     }
@@ -322,10 +320,8 @@ public class Character extends NPC
       if(!m_monsterName.isPresent())
         return Optional.absent();
 
-      m_monster = Optional.of(
-        Optional.fromNullable((Monster)DMADataFactory.get()
-                              .getEntry(new EntryKey(m_monsterName.get(),
-                                                     Monster.TYPE))));
+      m_monster = Optional.of(DMADataFactory.get().<Monster>getEntry
+          (new EntryKey(m_monsterName.get(), Monster.TYPE)));
     }
 
     return m_monster.get();

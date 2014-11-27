@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.util.Collection;
@@ -32,73 +30,51 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
+import com.google.common.base.Optional;
 
 /**
  * The type specification for an entry.
  *
  * @file          BaseType.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  * @param         <T> the type represented by this type spec
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @Immutable
-@ParametersAreNonnullByDefault
 public class Type<T extends Entry> extends AbstractType<T>
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //--------------------------------- Type ---------------------------------
-
-  /**
-   * Create the type.
-   *
-   * @param       inClass the class represented by this type
-   * @param       inBase  the base class for the type
-   */
-  @SuppressWarnings("unchecked") // We don't use Class<T> here, as this would
-                                 // not allow us to create Entry.TYPE properly.
-  public Type(Class<?> inClass, BaseType<? extends BaseEntry> inBase)
+  public static class Builder<T extends Entry>
+      extends AbstractType.Builder<T, Builder<T>>
   {
-    super((Class<T>)inClass);
+    private final BaseType<? extends BaseEntry> m_base;
+
+    public Builder(Class<T> inClass, BaseType<? extends BaseEntry> inBase)
+    {
+      super(inClass);
+
+      m_base = inBase;
+    }
+
+    public Type<T> build()
+    {
+      return new Type(m_class, m_base, m_multiple, m_link, m_multipleLink,
+                      m_sort);
+    }
+  }
+
+  protected Type(Class<T> inClass, BaseType<? extends BaseEntry> inBase,
+                 Optional<String> inMultiple,
+                 Optional<String> inLink,
+                 Optional<String> inMultipleLink,
+                 Optional<String> inSort)
+  {
+    super(inClass, inMultiple, inLink, inMultipleLink, inSort);
 
     m_base = inBase;
   }
-
-  //........................................................................
-  //--------------------------------- Type ---------------------------------
-
-  /**
-   * Create the type.
-   *
-   * @param       inClass    the class represented by this type
-   * @param       inBase     the base class for the type
-   * @param       inMultiple the name to use for multiple entries of the type
-   *
-   */
-  public Type(Class<T> inClass, BaseType<BaseEntry> inBase,
-              String inMultiple)
-  {
-    super(inClass, inMultiple);
-
-    m_base = inBase;
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** the type of the corresponding base entry. */
-  private @Nullable BaseType<? extends BaseEntry> m_base;
+  private final BaseType<? extends BaseEntry> m_base;
 
   /** All the non-base types available. */
   private static final Map<String, Type<? extends Entry>> s_types =
@@ -107,26 +83,16 @@ public class Type<T extends Entry> extends AbstractType<T>
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------ compareTo -------------------------------
-
   /**
    * Compare this type to another one for sorting.
    *
    * @param       inOther the other type to compare to
    *
    * @return      < 0 if this is lower, > if this is bigger, 0 if equal
-   *
    */
   @Override
-  public int compareTo(@Nullable AbstractType<? extends AbstractEntry> inOther)
+  public int compareTo(AbstractType<? extends AbstractEntry> inOther)
   {
-    if(inOther == null)
-      return -1;
-
     if(inOther instanceof Type)
     {
       Type<?> other = (Type<?>)inOther;
@@ -141,17 +107,13 @@ public class Type<T extends Entry> extends AbstractType<T>
     return super.compareTo(inOther);
   }
 
-  //........................................................................
-  //----------------------------- getBaseType ------------------------------
-
   /**
    * Get the base type to this one.
    *
    * @return      the requested base type or null if already a base type
-   *
    */
   @Override
-  public @Nullable BaseType<? extends BaseEntry> getBaseType()
+  public AbstractType<? extends AbstractEntry> getBaseType()
   {
     return m_base;
   }
@@ -164,9 +126,9 @@ public class Type<T extends Entry> extends AbstractType<T>
    * @return      the base entry type with the given name or null if not
    *              found.
    */
-  public static @Nullable Type<? /*extends Entry*/> getType(String inName)
+  public static <E extends Entry> Optional<Type<E>> getType(String inName)
   {
-    return s_types.get(inName);
+    return Optional.fromNullable((Type<E>) s_types.get(inName));
   }
 
   /**

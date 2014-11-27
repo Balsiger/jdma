@@ -220,7 +220,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
       {
         String []parts =
           Strings.getPatterns(value,
-                              "^([+-]\\d+)\\s*(" + types + ")?\\s*"
+                              "^\\s*([+-]\\d+)\\s*(" + types + ")?\\s*"
                               + "(?: if\\s+(.*))?$");
         if(parts == null || parts.length == 0)
           return Optional.absent();
@@ -351,7 +351,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     return builder.build();
   }
 
-    /**
+  /**
    * Add the values of this modifier to the given proto.
    *
    * @param inBuilder the builder to fill
@@ -456,19 +456,69 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     @org.junit.Test
     public void parse()
     {
-      assertEquals("parse", "None", PARSER.parse(" none  ").get().toString());
-      assertEquals("parse", "x3", PARSER.parse(" x 3  ").get().toString());
-      assertEquals("parse", "x3", PARSER.parse(" 20/x3  ").get().toString());
-      assertEquals("parse", "19-20/x2",
-                   PARSER.parse(" 19 - 20 / x 2 ").get().toString());
-      assertEquals("parse", "12-19/x5",
-                   PARSER.parse("12-19/x5").get().toString());
-      assertFalse("parse", PARSER.parse("/").isPresent());
+      assertFalse("parse", PARSER.parse(null).isPresent());
       assertFalse("parse", PARSER.parse("").isPresent());
-      assertFalse("parse", PARSER.parse("12").isPresent());
-      assertFalse("parse", PARSER.parse("x").isPresent());
-      assertFalse("parse", PARSER.parse("19-20 x3").isPresent());
-      assertFalse("parse", PARSER.parse("19 - x 4").isPresent());
+      assertFalse("parse", PARSER.parse(" none  ").isPresent());
+      assertEquals("parse", "+2",
+                   PARSER.parse(" +2 general  ").get().toString());
+      assertEquals("parse", "+2 dodge, +3 shield",
+                   PARSER.parse("+2 dodge,   +3 shield ").get().toString());
+      assertEquals("parse", "+2 dodge, +3 dodge",
+                   PARSER.parse("+2 dodge, +3 dodge").get().toString());
+      assertEquals("parse", "+2 dodge if guru, +3 shield",
+                   PARSER.parse("+2 dodge if guru, +3 shield")
+                         .get().toString());
+      assertFalse("parse", PARSER.parse("+2 dodge guru").isPresent());
+      assertFalse("parse", PARSER.parse("+2 dodge +3 guru").isPresent());
+      assertFalse("parse", PARSER.parse("+ 2 dodge").isPresent());
+    }
+
+    @org.junit.Test
+    public void proto()
+    {
+      ModifierProto proto = ModifierProto
+          .newBuilder()
+          .addModifier(ModifierProto.Modifier
+                           .newBuilder()
+                           .setBaseValue(42)
+                           .setType(ModifierProto.Type.RAGE)
+                           .setCondition("condition"))
+          .build();
+      Modifier modifier = Modifier.fromProto(proto);
+
+      assertEquals("from proto", "+42 rage if condition", modifier.toString());
+      assertEquals("to proto", proto, modifier.toProto());
+      assertEquals("modifier", 42, modifier.getModifier());
+      assertEquals("condition", "condition", modifier.getCondition().get());
+      assertEquals("type", Type.RAGE, modifier.getType());
+    }
+
+    @org.junit.Test
+    public void add()
+    {
+      Modifier modifier = new Modifier(23, Type.ARMOR,
+                                       Optional.<String>absent(),
+                                       Optional.<Modifier>absent());
+      modifier = (Modifier)
+          modifier.add(new Modifier(42, Type.GENERAL, Optional.<String>absent(),
+                                    Optional.<Modifier>absent()));
+      modifier = (Modifier)
+          modifier.add(new Modifier(1, Type.ARMOR, Optional.<String>absent(),
+                                    Optional.of
+                                        (new Modifier
+                                             (1, Type.GENERAL,
+                                              Optional.<String>absent(),
+                                              Optional.<Modifier>absent()))));
+      modifier = (Modifier)
+          modifier.add(new Modifier(1, Type.ARMOR, Optional.of("maybe"),
+                                    Optional.of(
+                                        new Modifier
+                                            (1, Type.GENERAL,
+                                             Optional.of("maybe"),
+                                             Optional.<Modifier>absent()))));
+
+      assertEquals("modifier", "+23 armor, +43, +1 armor if maybe, +1 if maybe",
+                   modifier.toString());
     }
   }
 }

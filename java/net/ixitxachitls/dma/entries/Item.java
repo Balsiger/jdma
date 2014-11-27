@@ -74,7 +74,7 @@ public class Item extends CampaignEntry
    * The type of this entry.
    */
   public static final Type<Item> TYPE =
-      new Type<Item>(Item.class, BaseItem.TYPE);
+      new Type.Builder<>(Item.class, BaseItem.TYPE).build();
 
   /**
    * The type of the base entry to this entry.
@@ -1039,20 +1039,24 @@ public class Item extends CampaignEntry
       {
         String []parts = m_parentName.get().split("/");
         String id = parts[1];
-        AbstractType type = AbstractType.getTyped(parts[0]);
-        if(type == Item.TYPE)
+        Optional<? extends AbstractType<? extends AbstractEntry>> type =
+            AbstractType.getTyped(parts[0]);
+        if(type.isPresent() && type.get() == Item.TYPE)
         {
-          Item container = (Item)DMADataFactory.get().getEntry
+          Optional<Item> container = DMADataFactory.get().getEntry
             (new EntryKey(id, Item.TYPE,
                           Optional.of(getCampaign().get().getKey())));
-          m_possessor = container.getPossessor();
+          if(container.isPresent())
+            m_possessor = container.get().getPossessor();
+          else
+            m_possessor = Optional.absent();
         }
-        else if(type == Monster.TYPE || type == NPC.TYPE
-                || type == Character.TYPE)
+        else if(type.isPresent()
+            && (type.get() == Monster.TYPE || type.get() == NPC.TYPE
+                || type.get() == Character.TYPE))
         {
-          Monster possessor = (Monster)DMADataFactory.get().getEntry
-            (new EntryKey(id, type, Optional.of(getCampaign().get().getKey())));
-          m_possessor = Optional.fromNullable(possessor);
+          m_possessor = DMADataFactory.get().getEntry
+            (new EntryKey(id, type.get(), Optional.of(getCampaign().get().getKey())));
         }
         else
           m_possessor = Optional.absent();

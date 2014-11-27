@@ -116,16 +116,15 @@ public class SoyTemplate
         return StringData.forValue("invalid key '" + inArgs.get(0) + "'");
       }
 
-      AbstractEntry entry = DMADataFactory.get().getEntry(key.get());
-
-      if(entry == null)
+      Optional<AbstractEntry> entry = DMADataFactory.get().getEntry(key.get());
+      if(!entry.isPresent())
       {
         Log.warning("unknown entry for entry soy function for "
                     + inArgs.get(0));
         return StringData.forValue("unknown entry '" + inArgs.get(0) + "'");
       }
 
-      return new SoyEntry(entry);
+      return new SoyEntry(entry.get());
     }
   }
 

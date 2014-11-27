@@ -162,7 +162,8 @@ public abstract class AbstractEntry
 
   /** The type of this entry. */
   public static final AbstractType<AbstractEntry> TYPE =
-    new AbstractType<AbstractEntry>(AbstractEntry.class);
+    new AbstractType.Builder<>
+        (AbstractEntry.class).build();
 
   /** The entry type. */
   protected AbstractType<?> m_type;
@@ -358,10 +359,10 @@ public abstract class AbstractEntry
       // TODO: make this in a single datastore request
       for(String base : m_base)
       {
-        BaseEntry entry = (BaseEntry)DMADataFactory.get()
+        Optional<BaseEntry> entry = DMADataFactory.get()
           .getEntry(createKey(base, getType().getBaseType()));
-        if(entry != null)
-          m_baseEntries.add(entry);
+        if(entry.isPresent())
+          m_baseEntries.add(entry.get());
       }
     }
 
@@ -1036,9 +1037,9 @@ public abstract class AbstractEntry
       if(inName.equalsIgnoreCase(getID()))
         return;
 
-    BaseEntry entry =
-      (BaseEntry)DMADataFactory.get().getEntry(createKey(inName, baseType));
-    if(entry == null)
+    Optional<BaseEntry> entry =
+      DMADataFactory.get().getEntry(createKey(inName, baseType));
+    if(!entry.isPresent())
       Log.warning("base " + getType() + " '" + inName + "' not found");
     // else
     //   addExtensions(entry.getExtensionNames());
@@ -1047,7 +1048,8 @@ public abstract class AbstractEntry
       m_baseEntries = new ArrayList<BaseEntry>();
 
     m_base.add(inName);
-    m_baseEntries.add(entry);
+    if(entry.isPresent())
+      m_baseEntries.add(entry.get());
   }
 
   //........................................................................
@@ -1460,10 +1462,20 @@ public abstract class AbstractEntry
       return;
     }
 
+
     AbstractEntryProto proto = (AbstractEntryProto)inProto;
 
+    Optional<? extends AbstractType<? extends AbstractEntry>> type =
+        AbstractType.getTyped(proto.getType());
+
+    if(!type.isPresent())
+    {
+      Log.warning("Cannot get type for " + proto.getType());
+      return;
+    }
+
     m_name = proto.getName();
-    m_type = AbstractType.getTyped(proto.getType());
+    m_type = type.get();
     m_base = proto.getBaseList();
   }
 

@@ -115,7 +115,7 @@ public class BaseSkill extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseSkill> TYPE =
-    new BaseType<BaseSkill>(BaseSkill.class);
+    new BaseType.Builder<>(BaseSkill.class).build();
 
   /** The base ability for this skill. */
   public Ability m_ability = Ability.UNKNOWN;

@@ -37,6 +37,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.util.CommandLineParser;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -91,8 +92,8 @@ public class EntryServlet extends PageServlet
   @Override
   public boolean isPublic(DMARequest inRequest)
   {
-    AbstractEntry entry = getEntry(inRequest);
-    return entry != null && entry.isBase();
+    Optional<AbstractEntry> entry = getEntry(inRequest);
+    return entry.isPresent() && entry.get().isBase();
   }
 
   @Override
@@ -114,8 +115,8 @@ public class EntryServlet extends PageServlet
     else
       action = "show";
 
-    AbstractEntry entry = getEntry(inRequest, path);
-    if(entry != null && !entry.isShownTo(inRequest.getUser()))
+    Optional<? extends AbstractEntry> entry = getEntry(inRequest, path);
+    if(entry.isPresent() && !entry.get().isShownTo(inRequest.getUser()))
     {
       data.put("content", inRenderer.render
                ("dma.errors.invalidPage",
@@ -124,7 +125,7 @@ public class EntryServlet extends PageServlet
       return data;
     }
 
-    if(entry == null)
+    if(!entry.isPresent())
     {
       Optional<EntryKey> key = extractKey(path);
       if(!key.isPresent())
@@ -154,41 +155,44 @@ public class EntryServlet extends PageServlet
             postfix = "-" + inRequest.getParam("store");
 
           entry = type.create(Entry.TEMPORARY + postfix);
-          entry.updateKey(key.get());
-
-          if(inRequest.hasParam("values"))
+          if(entry.isPresent())
           {
-            Multimap<String, String> values = ArrayListMultimap.create();
-            for(String value : inRequest.getParam("values").split("\\s*,\\s*"))
-            {
-              String []parts = value.split(":");
-              if(parts.length != 2)
-                continue;
+            entry.get().updateKey(key.get());
 
-              values.put(parts[0], parts[1]);
+            if(inRequest.hasParam("values"))
+            {
+              Multimap<String, String> values = ArrayListMultimap.create();
+              for(String value : inRequest.getParam("values").split("\\s*,\\s*"))
+              {
+                String[] parts = value.split(":");
+                if(parts.length != 2)
+                  continue;
+
+                values.put(parts[0], parts[1]);
+              }
+
+              entry.get().set(new Values(values));
             }
 
-            entry.set(new Values(values));
+            // bases are overwritten by values if done before!
+            if(inRequest.hasParam("bases"))
+              for(String base : inRequest.getParam("bases").split("\\s*,\\s*"))
+                if(!base.isEmpty())
+                  entry.get().addBase(base);
+
+            if(inRequest.hasParam("identified") && entry.get() instanceof Item)
+              ((Item) entry.get()).identify();
+
+            if(entry.get() instanceof Entry)
+              ((Entry) entry.get()).complete();
           }
-
-          // bases are overwritten by values if done before!
-          if(inRequest.hasParam("bases"))
-            for(String base : inRequest.getParam("bases").split("\\s*,\\s*"))
-              if(!base.isEmpty())
-                entry.addBase(base);
-
-          if(inRequest.hasParam("identified") && entry instanceof Item)
-            ((Item)entry).identify();
-
-          if(entry instanceof Entry)
-            ((Entry)entry).complete();
-
         }
 
-        entry.setOwner(inRequest.getUser().get());
+        if(entry.isPresent())
+          entry.get().setOwner(inRequest.getUser().get());
       }
 
-      if(entry == null)
+      if(!entry.isPresent())
       {
         data.put("content", inRenderer.render("dma.entry.create",
                                               map("id", id,
@@ -197,69 +201,72 @@ public class EntryServlet extends PageServlet
       }
     }
 
-    AbstractType<? extends AbstractEntry> type = entry.getType();
-    List<String> ids = DMADataFactory.get().getIDs(type, null);
-
-    int current = ids.indexOf(entry.getName().toLowerCase(Locale.US));
-    int last = ids.size() - 1;
-
-    String template;
-    String extension;
-    switch(action)
+    if(entry.isPresent())
     {
-      case "dma":
-        extension = ".dma";
-        if(inRequest.hasParam("deep"))
-          template = "dma.entry.dmadeepcontainer";
-        else
-          template = "dma.entry.dmacontainer";
-        break;
+      AbstractType<? extends AbstractEntry> type = entry.get().getType();
+      List<String> ids = DMADataFactory.get().getIDs(type, null);
 
-      case "print":
-        extension = ".print";
-        template = "dma.entry.printcontainer";
-        break;
+      int current = ids.indexOf(entry.get().getName().toLowerCase(Locale.US));
+      int last = ids.size() - 1;
 
-      case "summary":
-        extension = ".summary";
-        template = "dma.entry.summarycontainer";
-        break;
+      String template;
+      String extension;
+      switch(action)
+      {
+        case "dma":
+          extension = ".dma";
+          if(inRequest.hasParam("deep"))
+            template = "dma.entry.dmadeepcontainer";
+          else
+            template = "dma.entry.dmacontainer";
+          break;
 
-      case "card":
-        extension = ".card";
-        template = "dma.entries."
-          + entry.getType().getMultipleDir().toLowerCase() + ".large";
-        break;
+        case "print":
+          extension = ".print";
+          template = "dma.entry.printcontainer";
+          break;
 
-      case "create":
-      case "edit":
-        extension = ".edit";
-        template = "dma.entries."
-          + entry.getType().getMultipleDir().toLowerCase() + ".edit";
-        break;
+        case "summary":
+          extension = ".summary";
+          template = "dma.entry.summarycontainer";
+          break;
 
-      case "show":
-      default:
-        extension = "";
-        template = "dma.entries."
-          + entry.getType().getMultipleDir().toLowerCase() + ".show";
+        case "card":
+          extension = ".card";
+          template = "dma.entries."
+              + entry.get().getType().getMultipleDir().toLowerCase() + ".large";
+          break;
+
+        case "create":
+        case "edit":
+          extension = ".edit";
+          template = "dma.entries."
+              + entry.get().getType().getMultipleDir().toLowerCase() + ".edit";
+          break;
+
+        case "show":
+        default:
+          extension = "";
+          template = "dma.entries."
+              + entry.get().getType().getMultipleDir().toLowerCase() + ".show";
+      }
+
+      data.put
+          ("content",
+           inRenderer.render
+               (template,
+                map("entry", new SoyEntry(entry.get()),
+                    "first", current <= 0 ? "" : ids.get(0) + extension,
+                    "previous", current <= 0 ? "" : ids.get(current - 1) + extension,
+                    "list", "/" + entry.get().getType().getMultipleLink(),
+                    "next", current >= last ? "" : ids.get(current + 1) + extension,
+                    "last", current >= last ? "" : ids.get(last) + extension,
+                    "variant", type.getName().replace(" ", ""),
+                    "id", inRequest.getParam("id"),
+                    "create", "create".equals(action)),
+                ImmutableSet.of(type.getName().replace(" ", ""))));
+      data.put("title", entry.get().getName());
     }
-
-    data.put
-      ("content",
-       inRenderer.render
-       (template,
-        map("entry", new SoyEntry(entry),
-            "first", current <= 0 ? "" : ids.get(0) + extension,
-            "previous", current <= 0 ? "" : ids.get(current - 1) + extension,
-            "list", "/" + entry.getType().getMultipleLink(),
-            "next", current >= last ? "" : ids.get(current + 1) + extension,
-            "last", current >= last ? "" : ids.get(last) + extension,
-            "variant", type.getName().replace(" ", ""),
-            "id", inRequest.getParam("id"),
-            "create", "create".equals(action)),
-        ImmutableSet.of(type.getName().replace(" ", ""))));
-    data.put("title", entry.getName());
 
     return data;
   }
@@ -270,16 +277,17 @@ public class EntryServlet extends PageServlet
   {
     Tracer tracer = new Tracer("collecting entry injected data");
     Optional<BaseCharacter> user = inRequest.getUser();
-    AbstractEntry entry = getEntry(inRequest);
+    Optional<AbstractEntry> entry = getEntry(inRequest);
 
     Map<String, Object> data = super.collectInjectedData(inRequest, inRenderer);
 
     // If we don't have an entry, it's probably being created and thus we
     // should have access to it.
-    data.put("isDM", user != null && (entry == null || entry.isDM(user)));
+    data.put("isDM", user != null
+        && (!entry.isPresent() || entry.get().isDM(user)));
     data.put("isDev", DMAServlet.isDev() || inRequest.hasParam("dev"));
-    data.put("isOwner",
-             user.isPresent() && (entry == null || entry.isOwner(user.get())));
+    data.put("isOwner", user.isPresent()
+        && (!entry.isPresent() || entry.get().isOwner(user.get())));
 
     Tracer tracer2 = new Tracer("collecting request parameters");
     Map<String, Object> params = Maps.newHashMap();
@@ -296,11 +304,7 @@ public class EntryServlet extends PageServlet
     return data;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.server.ServerUtils.Test
@@ -315,8 +319,6 @@ public class EntryServlet extends PageServlet
     private net.ixitxachitls.server.ServerUtils.Test.MockServletOutputStream
       m_output = null;
 
-    //----- setUp ----------------------------------------------------------
-
     /** Setup the mocks for testing. */
     @org.junit.Before
       public void setUp()
@@ -328,9 +330,6 @@ public class EntryServlet extends PageServlet
         .MockServletOutputStream();
     }
 
-    //......................................................................
-    //----- cleanup --------------------------------------------------------
-
     /**
      * Cleanup after a test.
      *
@@ -341,9 +340,6 @@ public class EntryServlet extends PageServlet
     {
       m_output.close(); // $codepro.audit.disable closeInFinally
     }
-
-    //......................................................................
-    //----- createServlet --------------------------------------------------
 
     /**
      * Create the servlet for testing.
@@ -358,7 +354,7 @@ public class EntryServlet extends PageServlet
      * @throws Exception should not happen
      */
     public EntryServlet createServlet
-      (String inPath, final @Nullable AbstractEntry inEntry,
+      (String inPath, final Optional<? extends AbstractEntry> inEntry,
        @Nullable final AbstractType<? extends AbstractEntry> inType,
        @Nullable final String inID, boolean inCreate) throws Exception
     {
@@ -375,7 +371,7 @@ public class EntryServlet extends PageServlet
       EasyMock.expect(m_request.getParams())
         .andReturn(ImmutableListMultimap.<String, String>of())
         .anyTimes();
-      if(inEntry == null && inType != null && inID != null)
+      if(!inEntry.isPresent() && inType != null && inID != null)
         EasyMock.expect(m_request.hasParam("create")).andReturn(inCreate);
       EasyMock.replay(m_request, m_response);
 
@@ -385,17 +381,13 @@ public class EntryServlet extends PageServlet
           private static final long serialVersionUID = 1L;
 
           @Override
-          public @Nullable AbstractEntry getEntry(DMARequest inRequest,
+          public Optional<AbstractEntry> getEntry(DMARequest inRequest,
                                                   String inPath)
           {
-            return inEntry;
+            return (Optional<AbstractEntry>) inEntry;
           }
         };
     }
-
-    //......................................................................
-
-    //----- simple ---------------------------------------------------------
 
     /**
      * The simple Test.
@@ -407,7 +399,7 @@ public class EntryServlet extends PageServlet
     {
       EntryServlet servlet =
         createServlet("/baseentry/guru",
-                      new net.ixitxachitls.dma.entries.BaseItem("guru"), null,
+                      Optional.of(new net.ixitxachitls.dma.entries.BaseItem("guru")), null,
                       null, false);
 
       assertNull("handle", servlet.handle(m_request, m_response));
@@ -416,9 +408,6 @@ public class EntryServlet extends PageServlet
 
       EasyMock.verify(m_request, m_response);
     }
-
-    //......................................................................
-    //----- no path ---------------------------------------------------------
 
     /**
      * No path test.
@@ -442,9 +431,6 @@ public class EntryServlet extends PageServlet
 
       EasyMock.verify(m_request, m_response);
     }
-
-    //......................................................................
-    //----- no entry --------------------------------------------------------
 
     /**
      * No entry test.
@@ -470,9 +456,6 @@ public class EntryServlet extends PageServlet
       EasyMock.verify(m_request, m_response);
     }
 
-    //......................................................................
-    //----- no id -----------------------------------------------------------
-
     /**
      * No id test.
      *
@@ -497,9 +480,6 @@ public class EntryServlet extends PageServlet
       EasyMock.verify(m_request, m_response);
     }
 
-    //......................................................................
-    //----- create ---------------------------------------------------------
-
     /**
      * create test.
      *
@@ -518,9 +498,6 @@ public class EntryServlet extends PageServlet
 
       EasyMock.verify(m_request, m_response);
     }
-
-    //......................................................................
-    //----- no create ------------------------------------------------------
 
     /**
      * no create test.
@@ -544,9 +521,6 @@ public class EntryServlet extends PageServlet
       EasyMock.verify(m_request, m_response);
     }
 
-    //......................................................................
-    //----- path -----------------------------------------------------------
-
     /** The path Test. */
     @org.junit.Test
     public void path()
@@ -557,7 +531,7 @@ public class EntryServlet extends PageServlet
 
       EasyMock.expect(m_request.getEntry
                       (DMAServlet.extractKey("/base entry/test").get()))
-        .andStubReturn(entry);
+        .andStubReturn(Optional.<AbstractEntry>of(entry));
 
       EasyMock.replay(m_request, m_response);
 
@@ -572,9 +546,10 @@ public class EntryServlet extends PageServlet
 
       assertEquals("entry", "test",
                    servlet.getEntry(m_request, "/just/some/base entry/test")
-                   .getName());
+                          .get().getName());
       assertEquals("entry", "test",
-                   servlet.getEntry(m_request, "/base entry/test").getName());
+                   servlet.getEntry(m_request, "/base entry/test").get()
+                          .getName());
       assertNull("entry", servlet.getEntry(m_request, "test"));
       assertNull("entry", servlet.getEntry(m_request, ""));
       assertNull("entry", servlet.getEntry(m_request, "test/"));
@@ -590,9 +565,5 @@ public class EntryServlet extends PageServlet
 
       EasyMock.verify(m_request, m_response);
     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -113,9 +114,9 @@ public class RegisterServlet extends ActionServlet
       return "You must login to register";
     }
 
-    BaseCharacter user = (BaseCharacter)DMADataFactory.get().getEntry
+    Optional<BaseCharacter> user = DMADataFactory.get().getEntry
       (AbstractEntry.createKey(username, BaseCharacter.TYPE));
-    if(user != null)
+    if(user.isPresent())
     {
       return "Username allready used, choose a new one.";
     }

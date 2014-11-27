@@ -72,7 +72,7 @@ public class Campaign extends CampaignEntry
 
   /** The type of this entry. */
   public static final Type<Campaign> TYPE =
-    new Type<Campaign>(Campaign.class, BaseCampaign.TYPE);
+    new Type.Builder<>(Campaign.class, BaseCampaign.TYPE).build();
 
   /** The type of the base entry to this entry. */
   public static final BaseType<BaseCampaign> BASE_TYPE = BaseCampaign.TYPE;
@@ -119,11 +119,10 @@ public class Campaign extends CampaignEntry
    *
    * @return      the item found or null if not found
    */
-  public @Nullable Item getItem(String inName)
+  public Optional<Item> getItem(String inName)
   {
-    return (Item)
-      DMADataFactory.get().getEntry(new EntryKey(inName, Item.TYPE,
-                                                 Optional.of(getKey())));
+    return DMADataFactory.get().getEntry(new EntryKey(inName, Item.TYPE,
+                                                      Optional.of(getKey())));
   }
 
   @Override

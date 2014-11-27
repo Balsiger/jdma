@@ -66,7 +66,7 @@ public class BaseCampaign extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseCampaign> TYPE =
-    new BaseType<BaseCampaign>(BaseCampaign.class);
+    new BaseType.Builder<BaseCampaign>(BaseCampaign.class).build();
 
   /*
   @Override

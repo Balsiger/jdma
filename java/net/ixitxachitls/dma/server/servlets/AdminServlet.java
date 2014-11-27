@@ -46,31 +46,16 @@ import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * Servlet for the admin page.
  *
  * @file          AdminServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @Immutable
-@ParametersAreNonnullByDefault
 public class AdminServlet extends SoyServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- AdminServlet -----------------------------
-
   /**
    * Create the admin servlet.
    */
@@ -78,35 +63,19 @@ public class AdminServlet extends SoyServlet
   {
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //--------------------------- getLastModified ----------------------------
 
   /**
     * Get the time of the last modification.
     *
     * @return      the time of the last modification in miliseconds or -1
     *              if unknown
-    *
     */
   public long getLastModified()
   {
     return -1;
   }
-
-  //........................................................................
-  //--------------------------- getTemplateName ----------------------------
 
   /**
    * Get the name of the template to render the page.
@@ -114,21 +83,12 @@ public class AdminServlet extends SoyServlet
    * @param     inRequest the request for the page
    *
    * @return    the name of the template
-   *
    */
   @Override
   protected String getTemplateName(DMARequest inRequest)
   {
     return "dma.admin.page";
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //----------------------------- collectData ------------------------------
 
   /**
    * Collect the data that is to be printed.
@@ -138,7 +98,6 @@ public class AdminServlet extends SoyServlet
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
-   *
    */
   @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
@@ -173,9 +132,6 @@ public class AdminServlet extends SoyServlet
     return data;
   }
 
-  //........................................................................
-  //--------------------------------- handle -------------------------------
-
   /**
    * Handles the body content of the request.
    *
@@ -186,7 +142,6 @@ public class AdminServlet extends SoyServlet
    *
    * @throws      IOException      writing to the page failed
    * @throws      javax.servlet.ServletException  writing to the page failed
-   *
    */
   @Override
   protected @Nullable SpecialResult handle(HttpServletRequest inRequest,
@@ -221,12 +176,13 @@ public class AdminServlet extends SoyServlet
       inResponse.setHeader("Content-Type", "text/html");
       inResponse.setHeader("Cache-Control", "max-age=0");
 
-      AbstractType<? extends AbstractEntry> type = AbstractType.getTyped(reset);
-      if(type == null)
+      Optional<? extends AbstractType<? extends AbstractEntry>> type =
+          AbstractType.getTyped(reset);
+      if(!type.isPresent())
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "Invalid type '" + reset + "'.");
 
-      int size = DMADataFactory.get().rebuild(type);
+      int size = DMADataFactory.get().rebuild(type.get());
 
       try (PrintWriter writer = new PrintWriter(inResponse.getOutputStream()))
       {
@@ -272,13 +228,13 @@ public class AdminServlet extends SoyServlet
       inResponse.setHeader("Content-Type", "text/html");
       inResponse.setHeader("Cache-Control", "max-age=0");
 
-      AbstractType<? extends AbstractEntry> type =
+      Optional<? extends AbstractType<? extends AbstractEntry>> type =
         AbstractType.getTyped(refresh);
-      if(type == null)
+      if(!type.isPresent())
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "Invalid type '" + refresh + "'.");
 
-      int size = DMADataFactory.get().refresh(type, request);
+      int size = DMADataFactory.get().refresh(type.get(), request);
 
       Log.event(user.get().getName(), "admin refresh " + refresh,
                 size + " entries of " + refresh + " have been refreshed.");
@@ -356,16 +312,7 @@ public class AdminServlet extends SoyServlet
     return super.handle(inRequest, inResponse);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** No test here, as we don't have mocks for the surrounding classes. */
-
-  //........................................................................
 }

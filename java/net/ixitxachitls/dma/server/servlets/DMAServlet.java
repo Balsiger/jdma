@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
@@ -45,10 +43,6 @@ import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * The base servlet for DMA specific servlets.
  *
@@ -57,23 +51,14 @@ import net.ixitxachitls.util.logging.Log;
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @Immutable
-@ParametersAreNonnullByDefault
 public abstract class DMAServlet extends BaseServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------ DMAServlet ------------------------------
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**
-   * Cerate the dma servlet.
+   * Crerte the dma servlet.
    *
    */
   protected DMAServlet()
@@ -81,39 +66,22 @@ public abstract class DMAServlet extends BaseServlet
     // nothing to do here
   }
 
-  //........................................................................
-
-  //------------------------------ withAccess ------------------------------
-
   /**
    * Set the access level for this servlet.
    *
    * @param       inGroup the group required for accessing the servlet
    *
    * @return      this servlet for chaining
-   *
    */
   public DMAServlet withAccess(BaseCharacter.Group inGroup)
   {
-    m_group = inGroup;
+    m_group = Optional.of(inGroup);
 
     return this;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The group required for accessing the content of this servlet. */
-  private @Nullable BaseCharacter.Group m_group;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //-------------------------------- allows --------------------------------
+  private Optional<BaseCharacter.Group> m_group;
 
   /**
    * Check for access to the page.
@@ -121,24 +89,20 @@ public abstract class DMAServlet extends BaseServlet
    * @param       inRequest the request to the page
    *
    * @return      true for access, false for not
-   *
    */
   protected boolean allows(DMARequest inRequest)
   {
     // no access restriction defined
-    if(m_group == null)
+    if(!m_group.isPresent())
       return true;
 
     // normal user access
-    return inRequest.hasUser() && inRequest.getUser().get().hasAccess(m_group);
+    return inRequest.hasUser()
+        && inRequest.getUser().get().hasAccess(m_group.get());
   }
 
-  //........................................................................
-
-  //-------------------------------- isDev ---------------------------------
-
   /**
-   * Checks wether we are running on dev or not.
+   * Checks whether we are running on dev or not.
    *
    * @return      true if running on a dev system
    */
@@ -147,9 +111,6 @@ public abstract class DMAServlet extends BaseServlet
     return SystemProperty.environment.value()
       == SystemProperty.Environment.Value.Development;
   }
-
-  //........................................................................
-  //------------------------------ extractKey ------------------------------
 
   /**
    * Extract the key to an entry from the given path. A path is assumed to have
@@ -160,16 +121,12 @@ public abstract class DMAServlet extends BaseServlet
    * @param    inPath a path denoting an entry
    *
    * @return   the entry key for the path, if any
-   *
-   */
+\   */
   public static
   Optional<EntryKey> extractKey(String inPath)
   {
     return EntryKey.fromString(inPath);
   }
-
-  //........................................................................
-  //------------------------------- getEntry -------------------------------
 
   /**
    * Get the abstract entry associated with the given request.
@@ -179,17 +136,15 @@ public abstract class DMAServlet extends BaseServlet
    * @return      the entry or null if it could not be found
    *
    */
-  public @Nullable AbstractEntry getEntry(DMARequest inRequest)
+  public Optional<AbstractEntry> getEntry(DMARequest inRequest)
   {
     Tracer tracer = new Tracer("getting entry for request");
-    AbstractEntry entry = getEntry(inRequest, inRequest.getRequestURI());
+    Optional<AbstractEntry> entry =
+        getEntry(inRequest, inRequest.getRequestURI());
 
     tracer.done();
     return entry;
   }
-
-  //........................................................................
-  //------------------------------- getEntry -------------------------------
 
   /**
    * Get the abstract entry associated with the given path.
@@ -199,23 +154,15 @@ public abstract class DMAServlet extends BaseServlet
    *
    * @return      the entry or null if it could not be found
    */
-  public @Nullable AbstractEntry getEntry(DMARequest inRequest, String inPath)
+  public Optional<AbstractEntry> getEntry(DMARequest inRequest, String inPath)
   {
     String path = inPath.replaceAll("\\.[^\\./\\\\]*$", "");
     Optional<EntryKey> key = extractKey(path);
     if(!key.isPresent())
-      return null;
+      return Optional.absent();
 
     return inRequest.getEntry(key.get());
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //-------------------------------- handle --------------------------------
 
   /**
    * Handle the request if it is allowed.
@@ -256,9 +203,6 @@ public abstract class DMAServlet extends BaseServlet
 
   }
 
-  //........................................................................
-  //-------------------------------- handle --------------------------------
-
   /**
    * Handle the request if it is allowed.
    *
@@ -275,14 +219,7 @@ public abstract class DMAServlet extends BaseServlet
     (DMARequest inRequest, HttpServletResponse inResponse)
     throws ServletException, IOException;
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
@@ -359,6 +296,4 @@ public abstract class DMAServlet extends BaseServlet
     //......................................................................
 
  }
-
-  //........................................................................
 }

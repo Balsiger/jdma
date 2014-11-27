@@ -219,7 +219,8 @@ public class BaseCharacter extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseCharacter> TYPE =
-    new BaseType<BaseCharacter>(BaseCharacter.class).withLink("user", "users");
+    new BaseType.Builder<BaseCharacter>(BaseCharacter.class)
+        .link("user", "users").build();
 
   /** The serial version id. */
   private static final long serialVersionUID = 1L;

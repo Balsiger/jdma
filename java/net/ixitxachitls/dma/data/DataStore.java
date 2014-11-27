@@ -40,6 +40,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.memcache.Expiration;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSortedSet;
 
 import net.ixitxachitls.dma.server.servlets.DMARequest;
@@ -209,7 +210,7 @@ public class DataStore
    */
   public Iterable<Entity> getEntities(String inType,
                                       @Nullable Key inParent,
-                                      @Nullable String inSortField,
+                                      Optional<String> inSortField,
                                       int inStart, int inSize)
   {
     Tracer tracer = new Tracer("getting entities for " + inType);
@@ -219,8 +220,8 @@ public class DataStore
     else
       query = new Query(inType, inParent);
 
-    if(inSortField != null)
-      query.addSort(inSortField, Query.SortDirection.ASCENDING);
+    if(inSortField.isPresent())
+      query.addSort(inSortField.get(), Query.SortDirection.ASCENDING);
 
     FetchOptions options =
       FetchOptions.Builder.withOffset(inStart).limit(inSize);
@@ -381,7 +382,7 @@ public class DataStore
    * @return      the list of ids found
    */
   @SuppressWarnings("unchecked")
-  public List<String> getIDs(String inType, @Nullable String inSortField,
+  public List<String> getIDs(String inType, Optional<String> inSortField,
                              @Nullable Key inParent)
   {
     List<String> ids = (List<String>)s_cacheIDs.get(inType);
@@ -397,8 +398,8 @@ public class DataStore
       else
         query = new Query(inType, inParent);
 
-      if(inSortField != null)
-        query.addSort(inSortField, Query.SortDirection.ASCENDING);
+      if(inSortField.isPresent())
+        query.addSort(inSortField.get(), Query.SortDirection.ASCENDING);
 
       query.setKeysOnly();
       FetchOptions options = FetchOptions.Builder.withChunkSize(1000);

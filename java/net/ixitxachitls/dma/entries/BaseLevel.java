@@ -142,7 +142,7 @@ public class BaseLevel extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseLevel> TYPE =
-    new BaseType<>(BaseLevel.class);
+    new BaseType.Builder<>(BaseLevel.class).build();
 
   /** Serialize version id. */
   private static final long serialVersionUID = 1L;

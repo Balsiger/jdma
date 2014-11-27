@@ -104,12 +104,10 @@ public class BaseEntry extends AbstractEntry
   /**
    * The default constructor, with undefined values.
    */
-  /*
   protected BaseEntry()
   {
     super(TYPE);
   }
-  */
 
    /**
    * The default constructor, with undefined values.
@@ -144,7 +142,9 @@ public class BaseEntry extends AbstractEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseEntry> TYPE =
-    new BaseType<BaseEntry>(BaseEntry.class, "Base Entries");
+    new BaseType.Builder<BaseEntry>(BaseEntry.class)
+        .multiple("Base Entries")
+        .build();
 
   /** The world. */
   public List<String> m_worlds = new ArrayList<>();

@@ -52,9 +52,8 @@ public class Feat extends NestedEntry
     if(!m_base.isPresent())
     {
       if(m_name.isPresent())
-        m_base = Optional.of(Optional.fromNullable
-                             ((BaseFeat)DMADataFactory.get().getEntry
-                              (new EntryKey(m_name.get(), BaseFeat.TYPE))));
+        m_base = Optional.of(DMADataFactory.get().<BaseFeat>getEntry
+            (new EntryKey(m_name.get(), BaseFeat.TYPE)));
       else
         return Optional.absent();
     }

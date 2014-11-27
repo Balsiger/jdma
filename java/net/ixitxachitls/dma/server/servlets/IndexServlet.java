@@ -19,10 +19,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.server.servlets;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.SortedSetMultimap;
@@ -47,31 +46,16 @@ import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 import org.easymock.EasyMock;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * The base handler for all indexes.
  *
  * @file          IndexServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @Immutable
-@ParametersAreNonnullByDefault
 public class IndexServlet extends PageServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- IndexServlet -----------------------------
-
   /**
    * Create the servlet for indexes.
    */
@@ -79,26 +63,8 @@ public class IndexServlet extends PageServlet
   {
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //----------------------------- collectData ------------------------------
 
   /**
    * Collect the data that is to be printed.
@@ -108,7 +74,6 @@ public class IndexServlet extends PageServlet
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
-   *
    */
   @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
@@ -128,7 +93,7 @@ public class IndexServlet extends PageServlet
 
     String []match =
       Strings.getPatterns(path, "^/_index/([^/]+)/([^/]+)(?:/(.*$))?");
-    AbstractType<? extends AbstractEntry> type = null;
+    Optional<? extends AbstractType<? extends AbstractEntry>> type = null;
     String name = null;
     String group = null;
 
@@ -139,7 +104,7 @@ public class IndexServlet extends PageServlet
       group = match[2];
     }
 
-    if(name == null || name.isEmpty() || type == null)
+    if(name == null || name.isEmpty() || !type.isPresent())
     {
       data.put("content",
                inRenderer.render("dma.errors.invalidPage",
@@ -175,7 +140,7 @@ public class IndexServlet extends PageServlet
       // SortedSet<String> indexes =
       //   DMADataFactory.get().getIndexNames(name, type, false);
       SortedSet<String> indexes =
-        DMADataFactory.get().getValues(type, Index.PREFIX + name);
+        DMADataFactory.get().getValues(type.get(), Index.PREFIX + name);
 
       if(indexes.size() == 1)
         group = indexes.iterator().next();
@@ -189,10 +154,10 @@ public class IndexServlet extends PageServlet
                    ("dma.entry.indexoverview",
                     map("title", title,
                         "indexes", groups,
-                        "type", type.getMultipleLink(),
+                        "type", type.get().getMultipleLink(),
                         "keys", new ArrayList<String>(groups.keySet()),
                         "name", name),
-                    ImmutableSet.of(type.getName().replace(" ", ""))));
+                    ImmutableSet.of(type.get().getName().replace(" ", ""))));
         }
         else
           data.put("content",
@@ -200,9 +165,9 @@ public class IndexServlet extends PageServlet
                    ("dma.entry.indexoverview",
                     map("title", title,
                         "indexes", new ArrayList<String>(indexes),
-                        "type", type.getMultipleLink(),
+                        "type", type.get().getMultipleLink(),
                         "name", name),
-                    ImmutableSet.of(type.getName().replace(" ", ""))));
+                    ImmutableSet.of(type.get().getName().replace(" ", ""))));
 
         return data;
       }
@@ -211,7 +176,7 @@ public class IndexServlet extends PageServlet
     title += " - " + group.replace("::", " ");
 
     List<? extends AbstractEntry> rawEntries =
-      DMADataFactory.get().getIndexEntries(name, type, null, group,
+      DMADataFactory.get().getIndexEntries(name, type.get(), null, group,
                                            inRequest.getStart(),
                                            inRequest.getPageSize() + 1);
 
@@ -227,13 +192,10 @@ public class IndexServlet extends PageServlet
                   "start", inRequest.getStart(),
                   "pagesize", inRequest.getPageSize(),
                   "entries", entries),
-              ImmutableSet.of(type.getName().replace(" ", ""))));
+              ImmutableSet.of(type.get().getName().replace(" ", ""))));
 
     return data;
   }
-
-  //........................................................................
-  //----------------------------- nestedGroups -----------------------------
 
   /**
    * Generate the data structure for nested groups.
@@ -241,7 +203,6 @@ public class IndexServlet extends PageServlet
    * @param  inValues the index groups
    *
    * @return A sorted map of index groups to indexs pages
-   *
    */
   public static SortedMap<String, List<String>> nestedGroups
     (SortedSet<String> inValues)
@@ -264,16 +225,12 @@ public class IndexServlet extends PageServlet
     return result;
   }
 
-  //........................................................................
-  //------------------------------- isNested -------------------------------
-
   /**
    * Check if the index values represent a nested index or not.
    *
    * @param   inValues the index groups
    *
    * @return  true if nested groups are given, false if not
-   *
    */
   public static boolean isNested(SortedSet<String> inValues)
   {
@@ -284,17 +241,11 @@ public class IndexServlet extends PageServlet
     return false;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- nested ---------------------------------------------------------
-
     /** The nested Test. */
     @org.junit.Test
     public void nested()
@@ -306,9 +257,6 @@ public class IndexServlet extends PageServlet
       assertTrue("nested",
                  isNested(ImmutableSortedSet.of("one", "two::nested")));
     }
-
-    //......................................................................
-    //----- groups ---------------------------------------------------------
 
     /** The groups Test. */
     @org.junit.Test
@@ -327,18 +275,12 @@ public class IndexServlet extends PageServlet
                    .toString());
     }
 
-    //......................................................................
-    //----- noPath ---------------------------------------------------------
-
     /** The nopath Test. */
     @org.junit.Test
     public void noPath()
     {
       assertEquals("no path", "invalid page: null", checkContent(null));
     }
-
-    //......................................................................
-    //----- invalidPath ----------------------------------------------------
 
     /** The invalid path Test. */
     @org.junit.Test
@@ -347,9 +289,6 @@ public class IndexServlet extends PageServlet
       assertEquals("invalid path", "invalid page: some page",
                  checkContent("some page"));
     }
-
-    //......................................................................
-    //----- invalidPath ----------------------------------------------------
 
     /** The simple Test. */
     @org.junit.Test
@@ -362,17 +301,12 @@ public class IndexServlet extends PageServlet
                  checkContent("/_index/base item/worlds"));
     }
 
-    //......................................................................
-
-    //---------------------------- checkContent ----------------------------
-
     /**
      * Check the contents of the generated page for a pattern.
      *
      * @param       inPath    the path to the page
      *
      * @return      the content generated
-     *
      */
     public String checkContent(@Nullable String inPath)
     {
@@ -394,11 +328,6 @@ public class IndexServlet extends PageServlet
 
       return content;
     }
-
-    //......................................................................
-
   }
-
-  //........................................................................
 }
 

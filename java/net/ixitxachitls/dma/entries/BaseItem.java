@@ -111,7 +111,7 @@ public class BaseItem extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseItem> TYPE =
-    new BaseType<BaseItem>(BaseItem.class);
+    new BaseType.Builder<>(BaseItem.class).build();
 
   /** The name used by the player for the item. */
   protected Optional<String> m_playerName = Optional.absent();

@@ -369,12 +369,17 @@ public class DMARequest extends HttpServletRequestWrapper
    * @return      the entry found or null if none stored
    */
   @SuppressWarnings("unchecked") // need to cast result
-  public @Nullable <T extends AbstractEntry> T getEntry(EntryKey inKey)
+  public <T extends AbstractEntry> Optional<T> getEntry(EntryKey inKey)
   {
-    if(!m_entries.containsKey(inKey))
-      m_entries.put(inKey, DMADataFactory.get().getEntry(inKey));
+    Optional<T> entry = Optional.fromNullable((T)m_entries.get(inKey));
+    if(entry.isPresent())
+      return entry;
 
-    return (T)m_entries.get(inKey);
+    entry = DMADataFactory.get().getEntry(inKey);
+    if (entry.isPresent())
+      m_entries.put(inKey, entry.get());
+
+    return entry;
   }
 
   /**
@@ -404,17 +409,17 @@ public class DMARequest extends HttpServletRequestWrapper
     if (userService.isUserLoggedIn())
     {
       if (!m_user.isPresent())
-        m_user = Optional.fromNullable(DMADataFactory.get()
+        m_user = DMADataFactory.get()
           .getEntry(BaseCharacter.TYPE, "email",
-                    userService.getCurrentUser().getEmail()));
+                    userService.getCurrentUser().getEmail());
     }
     if (m_user.isPresent())
       m_user.get().action();
 
     String override = getParam("user");
     if(override != null && !override.isEmpty())
-      m_userOverride = Optional.fromNullable((BaseCharacter)DMADataFactory.get()
-        .getEntry(AbstractEntry.createKey(override, BaseCharacter.TYPE)));
+      m_userOverride = DMADataFactory.get()
+        .getEntry(AbstractEntry.createKey(override, BaseCharacter.TYPE));
 
     m_extractedUser = true;
   }

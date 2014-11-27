@@ -199,10 +199,6 @@ util.link = function(inEvent, inTarget, inFunction)
 
   var busy = new gui.Busy('Please wait while ', ['loading page']);
 
-  // inform google analytics about this page change
-  if(location.hostname != 'localhost')
-    ga('send', 'pageview');
-
   var target = inTarget;
   if(!target.match(/\?/))
   {
@@ -252,6 +248,10 @@ util.link = function(inEvent, inTarget, inFunction)
     gui.setupHighlight();
     ready();
   });
+
+  // inform google analytics about this page change
+  if(location.hostname != 'localhost')
+    ga('send', 'pageview', inTarget);
 
   return false;
 };

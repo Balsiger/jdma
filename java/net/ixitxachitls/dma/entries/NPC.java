@@ -81,7 +81,7 @@ public class NPC extends Monster
 
   /** The type of this entry. */
   public static final Type<NPC> TYPE =
-    new Type<NPC>(NPC.class, BaseMonster.TYPE);
+    new Type.Builder<>(NPC.class, BaseMonster.TYPE).build();
 
   /** The type of the base entry to this entry. */
   public static final BaseType<BaseMonster> BASE_TYPE = BaseMonster.TYPE;
@@ -187,21 +187,21 @@ public class NPC extends Monster
 
     for(Multiset.Entry<String> entry : cumulatedLevels().entrySet())
     {
-      BaseLevel level = (BaseLevel)DMADataFactory.get().getEntry
+      Optional<BaseLevel> level = DMADataFactory.get().getEntry
         (new EntryKey(entry.getElement(), BaseLevel.TYPE));
 
       int bonus = 0;
-      if (level != null)
+      if (level.isPresent())
       {
-        List<Integer> attacks = level.getBaseAttacks();
+        List<Integer> attacks = level.get().getBaseAttacks();
         for (int i = 0; i < entry.getCount(); i++)
           if (i < attacks.size())
             bonus += attacks.get(i);
           else
             Log.warning("No base attack information for level " + i + " in "
-                        + level.getName());
+                        + level.get().getName());
 
-        combined.add(bonus, level.getName());
+        combined.add(bonus, level.get().getName());
       }
     }
 
@@ -215,21 +215,21 @@ public class NPC extends Monster
 
     for(Multiset.Entry<String> entry : cumulatedLevels().entrySet())
     {
-      BaseLevel level = (BaseLevel)DMADataFactory.get().getEntry
+      Optional<BaseLevel> level = DMADataFactory.get().getEntry
         (new EntryKey(entry.getElement(), BaseLevel.TYPE));
 
       int bonus = 0;
-      if(level != null)
+      if(level.isPresent())
       {
-        List<Integer> saves = level.getFortitudeSaves();
+        List<Integer> saves = level.get().getFortitudeSaves();
         for(int i = 0; i < entry.getCount(); i++)
           if(i < saves.size())
             bonus += saves.get(i);
           else
             Log.warning("Cannot find fortitude save for level " + i
-                        + " in " + level.getName());
+                        + " in " + level.get().getName());
 
-        save.add(bonus, level.getName() + " " + entry.getCount());
+        save.add(bonus, level.get().getName() + " " + entry.getCount());
       }
     }
 
@@ -243,21 +243,21 @@ public class NPC extends Monster
 
     for(Multiset.Entry<String> entry : cumulatedLevels().entrySet())
     {
-      BaseLevel level = (BaseLevel)DMADataFactory.get().getEntry
+      Optional<BaseLevel> level = DMADataFactory.get().getEntry
         (new EntryKey(entry.getElement(), BaseLevel.TYPE));
 
       int bonus = 0;
-      if(level != null)
+      if(level.isPresent())
       {
-        List<Integer> saves = level.getReflexSaves();
+        List<Integer> saves = level.get().getReflexSaves();
         for(int i = 0; i < entry.getCount(); i++)
           if(i < saves.size())
             bonus += saves.get(i);
           else
             Log.warning("Cannot find reflex save for level " + i + " in "
-                        + level.getName());
+                        + level.get().getName());
 
-        save.add(bonus, level.getName() + " " + entry.getCount());
+        save.add(bonus, level.get().getName() + " " + entry.getCount());
       }
     }
 
@@ -271,21 +271,21 @@ public class NPC extends Monster
 
     for(Multiset.Entry<String> entry : cumulatedLevels().entrySet())
     {
-      BaseLevel level = (BaseLevel)DMADataFactory.get().getEntry
+      Optional<BaseLevel> level = DMADataFactory.get().getEntry
         (new EntryKey(entry.getElement(), BaseLevel.TYPE));
 
       int bonus = 0;
-      if(level != null)
+      if(level.isPresent())
       {
-        List<Integer> saves = level.getWillSaves();
+        List<Integer> saves = level.get().getWillSaves();
         for(int i = 0; i < entry.getCount() && i < saves.size(); i++)
           if(i < saves.size())
             bonus += saves.get(i);
           else
             Log.warning("Cannot find will save for level " + i + " in "
-                        + level.getName());
+                        + level.get().getName());
 
-        save.add(bonus, level.getName() + " " + entry.getCount());
+        save.add(bonus, level.get().getName() + " " + entry.getCount());
       }
     }
 

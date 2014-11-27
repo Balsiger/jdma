@@ -61,7 +61,7 @@ public class BaseEncounter extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseEncounter> TYPE =
-    new BaseType<>(BaseEncounter.class);
+    new BaseType.Builder<>(BaseEncounter.class).build();
 
   /** The default serial version id. */
   private static final long serialVersionUID = 1L;

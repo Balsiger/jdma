@@ -60,9 +60,8 @@ public class Quality extends NestedEntry
     if(!m_base.isPresent())
     {
       if(m_name.isPresent())
-        m_base = Optional.of(Optional.fromNullable
-                             ((BaseQuality)DMADataFactory.get().getEntry
-                              (new EntryKey(m_name.get(), BaseQuality.TYPE))));
+        m_base = Optional.of(DMADataFactory.get().<BaseQuality>getEntry
+            (new EntryKey(m_name.get(), BaseQuality.TYPE)));
       else
         return Optional.absent();
     }

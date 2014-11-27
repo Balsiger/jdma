@@ -60,9 +60,8 @@ public class Level extends NestedEntry
     if(!m_base.isPresent())
     {
       if(m_name.isPresent())
-        m_base = Optional.of(Optional.fromNullable
-                             ((BaseLevel)DMADataFactory.get().getEntry
-                              (new EntryKey(m_name.get(), BaseLevel.TYPE))));
+        m_base = Optional.of(DMADataFactory.get().<BaseLevel>getEntry
+            (new EntryKey(m_name.get(), BaseLevel.TYPE)));
       else
         return Optional.absent();
     }

@@ -74,7 +74,7 @@ public abstract class Entry extends AbstractEntry
 
   /** The type of this entry. */
   public static final Type<Entry> TYPE =
-    new Type<Entry>(Entry.class, BaseEntry.TYPE);
+    new Type.Builder<>(Entry.class, BaseEntry.TYPE).build();
 
   static
   {

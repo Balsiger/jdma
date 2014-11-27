@@ -55,14 +55,12 @@ import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.dma.values.File;
+import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
 /**
  * Wrapper for accessing data from app engine's datastore.
- * TODO: it would be nice to use a chache for entries here. Unfortunately, the
- * guava cache cannot be used on appengine and the memcache required
- * serializable objects and copies them for getting.
  *
  * @file          DMADatastore.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
@@ -105,9 +103,9 @@ public class DMADatastore
     m_cache.get().put(inKey, inEntry);
   }
 
-  private static @Nullable AbstractEntry cached(EntryKey inKey)
+  private static Optional<AbstractEntry> cached(EntryKey inKey)
   {
-    return m_cache.get().get(inKey);
+    return Optional.fromNullable(m_cache.get().get(inKey));
   }
 
   public static void clearCache()
@@ -122,15 +120,15 @@ public class DMADatastore
    *
    * @return     the entry found, if any
    */
-  public @Nullable AbstractEntry getEntry(EntryKey inKey)
+  public <T extends AbstractEntry> Optional<T> getEntry(EntryKey inKey)
   {
-    AbstractEntry entry = cached(inKey);
-    if(entry == null)
+    Optional<T> entry = (Optional<T>) cached(inKey);
+    if(!entry.isPresent())
     {
       Log.debug("getting entry for " + inKey);
-      entry = convert(inKey.getID(), inKey.getType(),
+      entry = (Optional<T>) convert(inKey.getID(), inKey.getType(),
                       m_data.getEntity(convert(inKey)));
-      cache(inKey, entry);
+      cache(inKey, entry.get());
     }
 
     return entry;
@@ -148,10 +146,9 @@ public class DMADatastore
    * @return   a list with all the entries
    */
   @SuppressWarnings("unchecked")
-  public <T extends AbstractEntry>
-  List<T> getEntries(AbstractType<T> inType,
-                     @Nullable EntryKey inParent,
-                     int inStart, int inSize)
+  public <T extends AbstractEntry> List<T>
+    getEntries(AbstractType<T> inType, @Nullable EntryKey inParent,
+               int inStart, int inSize)
   {
     List<T> entries = new ArrayList<>();
     Iterable<Entity> entities =
@@ -159,7 +156,11 @@ public class DMADatastore
                          inType.getSortField(), inStart, inSize);
 
     for(Entity entity : entities)
-      entries.add((T)convert(entity));
+    {
+      Optional<T> entry = convert(entity);
+      if(entry.isPresent())
+        entries.add(entry.get());
+    }
 
     return entries;
   }
@@ -175,13 +176,13 @@ public class DMADatastore
    *
    * @return     the entry found, if any
    */
-  @SuppressWarnings("unchecked") // casting return
-  public @Nullable <T extends AbstractEntry>
-  T getEntry(AbstractType<T> inType, String inKey, String inValue)
+  public <T extends AbstractEntry> Optional<T> getEntry(AbstractType<T> inType,
+                                                        String inKey,
+                                                        String inValue)
   {
     Log.debug("Getting entry for " + inKey + "=" + inValue);
-    return (T)convert(m_data.getEntity(escapeType(inType.toString()),
-                                       inKey, inValue));
+    return convert(m_data.getEntity(escapeType(inType.toString()),
+                                    inKey, inValue));
   }
 
   /**
@@ -281,7 +282,11 @@ public class DMADatastore
                                            convert(inParent),
                                            inStart, inSize,
                                            Index.PREFIX + inIndex, inGroup))
-      entries.add(convert(entity));
+    {
+      Optional<AbstractEntry> entry = convert(entity);
+      if(entry.isPresent())
+        entries.add(entry.get());
+    }
 
     return entries;
   }
@@ -441,7 +446,9 @@ public class DMADatastore
     for(Entity entity : m_data.getEntities(inType.toString(), null, null,
                                            0, 10000))
     {
-      m_data.update(convert(convert(entity)));
+      Optional<AbstractEntry> entry = convert(entity);
+      if(entry.isPresent())
+        m_data.update(convert(entry.get()));
       count++;
     }
 
@@ -480,7 +487,11 @@ public class DMADatastore
         if(inRequest.timeIsRunningOut())
           break;
 
-        Entity converted  = convert(convert(entity));
+        Optional<AbstractEntry> entry = convert(entity);
+        if(!entry.isPresent())
+          continue;
+
+        Entity converted  = convert(entry.get());
         if (equals(entity, converted))
           continue;
 
@@ -580,21 +591,22 @@ public class DMADatastore
    *
    * @return      the converted key
    */
-  public EntryKey convert(Key inKey)
+  public Optional<EntryKey> convert(Key inKey)
   {
     Key parent = inKey.getParent();
+    Optional<? extends AbstractType<? extends AbstractEntry>> type =
+        AbstractType.getTyped(unescapeType(inKey.getKind()));
+
+    if(!type.isPresent())
+      return Optional.absent();
 
     if(parent != null)
     {
-      Optional<EntryKey> parentKey =
-        Optional.of(convert(parent));
-      return new EntryKey(inKey.getName(),
-                          AbstractType.getTyped(unescapeType(inKey.getKind())),
-                          parentKey);
+      Optional<EntryKey> parentKey = convert(parent);
+      return Optional.of(new EntryKey(inKey.getName(), type.get(), parentKey));
     }
 
-    return new EntryKey(inKey.getName(),
-                        AbstractType.getTyped(unescapeType(inKey.getKind())));
+    return Optional.of(new EntryKey(inKey.getName(), type.get()));
   }
 
   /**
@@ -608,35 +620,36 @@ public class DMADatastore
    * @return     the converted entry, if any
    */
   @SuppressWarnings("unchecked")
-  public <T extends AbstractEntry>
-  T convert(String inID, AbstractType<T> inType, @Nullable Entity inEntity)
+  public <T extends AbstractEntry> Optional<T>
+    convert(String inID, AbstractType<T> inType, @Nullable Entity inEntity)
   {
     if(inEntity == null)
-      return null;
+      return Optional.absent();
 
     Tracer tracer = new Tracer("converting " + inID);
 
     Log.debug("converting entity " + inID + " to " + inType);
 
-    T entry = inType.create(inID);
-    if(entry == null)
+    Optional<T> entry = inType.create(inID);
+    if(!entry.isPresent())
     {
       Log.warning("cannot create conversion " + inType + " entity with id "
                   + inID + ": " + inEntity);
       tracer.done("cannot create");
-      return null;
+      return entry;
     }
 
     Tracer parsing = new Tracer("parsing " + inID);
     Blob blob = (Blob)inEntity.getProperty("proto");
     parsing.done("blob property reading");
     if (blob != null)
-      entry.parseFrom(blob.getBytes());
+      entry.get().parseFrom(blob.getBytes());
     parsing.done("parsing");
 
     // update any key related value
-    EntryKey key = convert(inEntity.getKey());
-    entry.updateKey(key);
+    Optional<EntryKey> key = convert(inEntity.getKey());
+    if(key.isPresent())
+    entry.get().updateKey(key.get());
 
     tracer.done("uncached");
     return entry;
@@ -649,8 +662,8 @@ public class DMADatastore
    *
    * @return     the entry found, if any
    */
-  public @Nullable <T extends AbstractEntry>
-  T convert(@Nullable Entity inEntity)
+  public <T extends AbstractEntry> Optional<T>
+    convert(@Nullable Entity inEntity)
   {
     if(inEntity == null)
       return null;
@@ -658,17 +671,17 @@ public class DMADatastore
     Key key = inEntity.getKey();
     String id = key.getName();
     @SuppressWarnings("unchecked")
-    AbstractType<T> type = (AbstractType<T>)
-      AbstractType.getTyped(unescapeType(key.getKind()));
+    Optional<? extends AbstractType<? extends AbstractEntry>> type =
+        AbstractType.getTyped(unescapeType(key.getKind()));
 
-    if(type == null || id == null)
+    if(!type.isPresent() || id == null)
     {
       Log.warning("cannot properly extract type or id: " + type + "/" + id
                   + " - " + key);
       return null;
     }
 
-    return convert(id, type, inEntity);
+    return (Optional<T>) convert(id, type.get(), inEntity);
   }
 
   /**
@@ -685,7 +698,11 @@ public class DMADatastore
     List<T> entries = new ArrayList<>();
 
     for(Entity entity : inEntities)
-      entries.add((T)convert(entity));
+    {
+      Optional<T> entry = convert(entity);
+      if(entry.isPresent())
+      entries.add(entry.get());
+    }
 
     return entries;
   }

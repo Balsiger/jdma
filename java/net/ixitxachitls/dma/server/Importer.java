@@ -54,6 +54,7 @@ import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
 
@@ -314,49 +315,36 @@ public final class Importer
       Log.important("Processing file " + file);
       String []parts = file.split("/");
 
-      AbstractType type;
+      Optional<? extends AbstractType<? extends AbstractEntry>> type;
       if(parts.length >= 3 && "campaign".equals(parts[parts.length - 3]))
-        type = Campaign.TYPE;
+        type = Optional.of(Campaign.TYPE);
       else if (parts.length >= 5 && "campaign".equals(parts[parts.length - 5]))
         type = AbstractType.getTyped(parts[parts.length - 2]);
       else if (parts.length >= 4 && "product".equals(parts[parts.length - 2])
                && "user".equals(parts[parts.length - 4]))
-        type = Product.TYPE;
+        type = Optional.of(Product.TYPE);
       else
         type = AbstractType.getTyped("base " + parts[parts.length - 2]);
 
-      if(type == null)
+      if(!type.isPresent())
         Log.warning("ignoring invalid type for " + file + ": "
                     + Arrays.toString(parts));
       else
       {
-        if (lastType != type && !m_entities.isEmpty())
+        if (lastType != type.get() && !m_entities.isEmpty())
         {
-          lastType = type;
+          lastType = type.get();
           Log.important("storing " + m_entities.size()
                         + " entities in datastore");
           m_store.put(m_entities);
           m_entities.clear();
         }
 
-        final AbstractEntry entry = type.create("proto import");
-        add(entry, fill(entry.toProto().newBuilderForType(), file));
-
-        if(m_blobs)
-        {
-          String path = Files.path(file);
-          String []images = new File(path).list(new FilenameFilter()
-          {
-            @Override
-            public boolean accept(File inDir, String inName)
-            {
-              return
-                inName.matches(Files.encodeName(entry.getName()) + " - .*");
-            }
-          });
-          for(String image : images)
-            m_files.put(Files.concatenate(path, image), entry);
-        }
+        final Optional<? extends AbstractEntry> entry =
+            type.get().create("proto import");
+        if (entry.isPresent())
+          add(entry.get(),
+              fill(entry.get().toProto().newBuilderForType(), file));
       }
     }
 

@@ -124,9 +124,8 @@ public class Reference<T extends AbstractEntry>
       return;
 
     m_resolved = true;
-    m_entry = Optional.fromNullable((T)DMADataFactory.get()
-                                    .getEntry(AbstractEntry
-                                              .createKey(m_name, m_type)));
+    m_entry =
+        DMADataFactory.get().getEntry(AbstractEntry.createKey(m_name, m_type));
   }
 
   /**
@@ -145,12 +144,12 @@ public class Reference<T extends AbstractEntry>
   /**
    * Parse the product reference from the given strings.
    *
+   * @param inType the type of entry to parse
    * @param inName the name of the reference
-   * @param inPages the pages of the reference
-   * @return
+   * @return the parsed reference
    */
   public static <T extends AbstractEntry>
-  Optional<Reference<T>> parse(AbstractType<T> inType, String inName)
+  Optional<? extends Reference<T>> parse(AbstractType<T> inType, String inName)
   {
     return Optional.of(new Reference<T>(inType, inName));
   }

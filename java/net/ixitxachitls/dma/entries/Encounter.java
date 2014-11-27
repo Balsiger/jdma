@@ -62,7 +62,7 @@ public class Encounter extends CampaignEntry
 
   /** The type of this entry. */
   public static final Type<Encounter> TYPE =
-    new Type<Encounter>(Encounter.class, BaseEncounter.TYPE);
+    new Type.Builder<>(Encounter.class, BaseEncounter.TYPE).build();
 
   /** The type of the base entry to this entry. */
   public static final BaseType<BaseEncounter> BASE_TYPE = BaseEncounter.TYPE;

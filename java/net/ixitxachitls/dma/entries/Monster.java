@@ -596,7 +596,7 @@ public class Monster extends CampaignEntry
 
    /** The type of this entry. */
    public static final Type<Monster> TYPE =
-     new Type<Monster>(Monster.class, BaseMonster.TYPE);
+     new Type.Builder<>(Monster.class, BaseMonster.TYPE).build();
 
    /** The type of the base entry to this entry. */
    public static final BaseType<BaseMonster> BASE_TYPE = BaseMonster.TYPE;

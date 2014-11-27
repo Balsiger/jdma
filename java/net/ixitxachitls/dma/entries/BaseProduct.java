@@ -1008,7 +1008,7 @@ public class BaseProduct extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseProduct> TYPE =
-    new BaseType<BaseProduct>(BaseProduct.class).withSort("title");
+    new BaseType.Builder<BaseProduct>(BaseProduct.class).sort("title").build();
 
   /** The title of the product. */
   protected Optional<String> m_title = Optional.absent();

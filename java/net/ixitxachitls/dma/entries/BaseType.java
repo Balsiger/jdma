@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries;
 
 import java.util.Collection;
@@ -32,117 +30,48 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
+import com.google.common.base.Optional;
 
 /**
  * The type specification for a base entry.
  *
  * @file          BaseType.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  * @param         <T> the type represented by this type spec
  *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @Immutable
-@ParametersAreNonnullByDefault
 public class BaseType<T extends BaseEntry> extends AbstractType<T>
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------- BaseType -------------------------------
-
-  /**
-   * Create the type.
-   *
-   * @param       inClass the class represented by this type
-   *
-   */
-  public BaseType(Class<T> inClass)
+  public static class Builder<T extends BaseEntry>
+      extends AbstractType.Builder<T, Builder<T>>
   {
-    super(inClass);
+    public Builder(Class<T> inClass)
+    {
+      super(inClass);
+    }
+
+    public BaseType<T> build()
+    {
+      return new BaseType(m_class, m_multiple, m_link, m_multipleLink, m_sort);
+    }
   }
 
-  //........................................................................
-  //------------------------------- BaseType -------------------------------
-
-  /**
-   * Create the type.
-   *
-   * @param       inClass    the class represented by this type
-   * @param       inMultiple the name to use for multiple entries of the type
-   *
-   */
-  public BaseType(Class<T> inClass, String inMultiple)
+  protected BaseType(Class<T> inClass, Optional<String> inMultiple,
+                     Optional<String> inLink,
+                     Optional<String> inMultipleLink,
+                     Optional<String> inSort)
   {
-    super(inClass, inMultiple);
+    super(inClass, inMultiple, inLink, inMultipleLink, inSort);
   }
-
-  //........................................................................
-  //------------------------------- withLink -------------------------------
-
-  /**
-   * Set the link to use for this type.
-   *
-   * @param       inLink         the name of the link to use
-   * @param       inMultipleLink the name to link to multiple entries
-   *
-   * @return      the type for chaining
-   *
-   */
-  @Override
-  public BaseType<T> withLink(String inLink, String inMultipleLink)
-  {
-    super.withLink(inLink, inMultipleLink);
-
-    return this;
-  }
-
-  //........................................................................
-  //------------------------------- withSort -------------------------------
-
-  /**
-   * Set the sort field to use for this type.
-   *
-   * @param       inSort  the field used to sort
-   *
-   * @return      the type for chaining
-   *
-   */
-  @Override
-  public BaseType<T> withSort(String inSort)
-  {
-    super.withSort(inSort);
-
-    return this;
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** All the non-base types available. */
-  private static final Map<String, BaseType<?/* extends BaseEntry */>> s_types =
-    new HashMap<String, BaseType<?/* extends BaseEntry*/>>();
+  private static final Map<String, BaseType<? extends BaseEntry>> s_types =
+    new HashMap<String, BaseType<? extends BaseEntry>>();
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------- getType --------------------------------
 
   /**
    * Get the base entry type for the given name.
@@ -151,15 +80,12 @@ public class BaseType<T extends BaseEntry> extends AbstractType<T>
    *
    * @return      the base entry type with the given name or null if not
    *              found.
-   *
    */
-  public static @Nullable BaseType<?> getType(String inName)
+  public static <T extends BaseEntry>
+  Optional<BaseType<T>> getType(String inName)
   {
-    return s_types.get(inName);
+    return Optional.fromNullable((BaseType<T>)s_types.get(inName));
   }
-
-  //........................................................................
-  //------------------------------- getTypes -------------------------------
 
   /**
    * Get the non-base types available.
@@ -171,14 +97,4 @@ public class BaseType<T extends BaseEntry> extends AbstractType<T>
   {
     return Collections.unmodifiableCollection(s_types.values());
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
 }
