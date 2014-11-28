@@ -81,7 +81,7 @@ public abstract class DMAServlet extends BaseServlet
   }
 
   /** The group required for accessing the content of this servlet. */
-  private Optional<BaseCharacter.Group> m_group;
+  private Optional<BaseCharacter.Group> m_group = Optional.absent();
 
   /**
    * Check for access to the page.
