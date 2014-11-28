@@ -30,6 +30,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Group;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -154,7 +155,7 @@ public class SaveActionServlet extends ActionServlet
       EasyMock.expect(user.getName()).andStubReturn("user");
       EasyMock.expect(request.getUser()).andStubReturn(Optional.of(user));
       EasyMock.expect(request.getParams()).andStubReturn(params);
-      EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
+      EasyMock.expect(user.hasAccess(Group.ADMIN))
         .andStubReturn(true);
       EasyMock.expect(DMADataFactory.get().update(entry)).andReturn(true);
 
@@ -194,7 +195,7 @@ public class SaveActionServlet extends ActionServlet
 
       EasyMock.expect(request.getUser()).andStubReturn(Optional.of(user));
       EasyMock.expect(request.getParams()).andStubReturn(params);
-      EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
+      EasyMock.expect(user.hasAccess(Group.ADMIN))
         .andStubReturn(false);
       EasyMock.replay(request, response, user);
 
@@ -236,7 +237,7 @@ public class SaveActionServlet extends ActionServlet
 
       EasyMock.expect(request.getUser()).andStubReturn(Optional.of(user));
       EasyMock.expect(request.getParams()).andStubReturn(params);
-      EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
+      EasyMock.expect(user.hasAccess(Group.ADMIN))
         .andStubReturn(true);
       EasyMock.expect(user.getName()).andStubReturn("Merlin");
 
@@ -280,7 +281,7 @@ public class SaveActionServlet extends ActionServlet
 
       EasyMock.expect(request.getUser()).andStubReturn(Optional.of(user));
       EasyMock.expect(request.getParams()).andStubReturn(params);
-      EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
+      EasyMock.expect(user.hasAccess(Group.ADMIN))
         .andStubReturn(false);
 
       EasyMock.replay(request, response, user);
@@ -321,7 +322,7 @@ public class SaveActionServlet extends ActionServlet
 
       EasyMock.expect(request.getUser()).andStubReturn(Optional.of(user));
       EasyMock.expect(request.getParams()).andStubReturn(params);
-      EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
+      EasyMock.expect(user.hasAccess(Group.ADMIN))
         .andStubReturn(true);
       EasyMock.expect(DMADataFactory.get().update(entry)).andReturn(true);
 

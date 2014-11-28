@@ -33,9 +33,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletResponse;
 
+import net.ixitxachitls.dma.values.enums.Group;
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.output.html.HTMLBodyWriter;
 import net.ixitxachitls.output.html.HTMLWriter;
@@ -111,7 +111,7 @@ public class PageServlet extends SoyServlet
 
     if(inRequest.hasUser())
       data.put("dm",
-               inRequest.getUser().get().hasAccess(BaseCharacter.Group.DM));
+               inRequest.getUser().get().hasAccess(Group.DM));
     else
       data.put("dm", false);
 

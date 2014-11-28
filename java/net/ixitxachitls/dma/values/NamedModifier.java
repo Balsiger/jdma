@@ -37,8 +37,8 @@ public class NamedModifier extends Value.Arithmetic<BaseMagicProto.Modifier>
   private final ModifierType m_type;
   private final Modifier m_modifier;
 
-  public final static Value.Parser<NamedModifier> PARSER =
-    new Value.Parser<NamedModifier>(2)
+  public final static Parser<NamedModifier> PARSER =
+    new Parser<NamedModifier>(2)
     {
       @Override
       protected Optional<NamedModifier> doParse(String inType,

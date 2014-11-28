@@ -27,7 +27,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible spell schools (cf. PHB 172/173). */
 public enum School implements Named, net.ixitxachitls.dma.values.enums.Short,
@@ -74,8 +74,8 @@ public enum School implements Named, net.ixitxachitls.dma.values.enums.Short,
   private String m_short;
 
   /** The parser for armor types. */
-  public static final Value.Parser<School> PARSER =
-    new Value.Parser<School>(1)
+  public static final Parser<School> PARSER =
+    new Parser<School>(1)
     {
       @Override
       public Optional<School> doParse(String inValue)

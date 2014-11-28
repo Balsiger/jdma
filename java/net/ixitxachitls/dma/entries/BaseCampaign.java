@@ -29,6 +29,7 @@ import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.proto.Entries.BaseCampaignProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -91,7 +92,7 @@ public class BaseCampaign extends BaseEntry
     if(!inUser.isPresent())
       return false;
 
-    return inUser.get().hasAccess(BaseCharacter.Group.ADMIN);
+    return inUser.get().hasAccess(Group.ADMIN);
   }
 
   @Override

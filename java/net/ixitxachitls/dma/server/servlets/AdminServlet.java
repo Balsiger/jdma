@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +43,7 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -158,7 +158,7 @@ public class AdminServlet extends SoyServlet
     DMARequest request = (DMARequest)inRequest;
 
     Optional<BaseCharacter> user = request.getUser();
-    if(!user.isPresent() || !user.get().hasAccess(BaseCharacter.Group.ADMIN))
+    if(!user.isPresent() || !user.get().hasAccess(Group.ADMIN))
     {
       if(user.isPresent())
         Log.warning("admin request by non-admin " + user.get().getName());

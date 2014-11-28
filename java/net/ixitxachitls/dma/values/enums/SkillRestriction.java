@@ -28,7 +28,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible sizes in the game. */
 public enum SkillRestriction implements Named,
@@ -54,8 +54,8 @@ public enum SkillRestriction implements Named,
   private BaseSkillProto.Restriction m_proto;
 
   /** The parser for armor types. */
-  public static final Value.Parser<SkillRestriction> PARSER =
-    new Value.Parser<SkillRestriction>(1)
+  public static final Parser<SkillRestriction> PARSER =
+    new Parser<SkillRestriction>(1)
     {
       @Override
       public Optional<SkillRestriction> doParse(String inValue)

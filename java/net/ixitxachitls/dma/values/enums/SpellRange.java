@@ -28,7 +28,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible spell ranges. */
 public enum SpellRange
@@ -93,8 +93,8 @@ public enum SpellRange
   private final BaseSpellProto.Range m_proto;
 
   /** The parser for armor types. */
-  public static final Value.Parser<SpellRange> PARSER =
-    new Value.Parser<SpellRange>(1)
+  public static final Parser<SpellRange> PARSER =
+    new Parser<SpellRange>(1)
     {
       @Override
       public Optional<SpellRange> doParse(String inValue)

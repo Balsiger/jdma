@@ -28,7 +28,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible sizes in the game. */
 @ParametersAreNonnullByDefault
@@ -68,8 +68,8 @@ public enum Ability implements Named, Short
   private BaseMonsterProto.Ability m_proto;
 
   /** The parser for abilities. */
-  public static final Value.Parser<Ability> PARSER =
-    new Value.Parser<Ability>(1)
+  public static final Parser<Ability> PARSER =
+    new Parser<Ability>(1)
     {
       @Override
       public Optional<Ability> doParse(String inValue)

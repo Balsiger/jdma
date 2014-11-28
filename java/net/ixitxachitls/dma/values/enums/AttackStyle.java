@@ -30,7 +30,7 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Attack.Style;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible attack styles in the game. */
 @ParametersAreNonnullByDefault
@@ -52,8 +52,8 @@ public enum AttackStyle implements Named,
   private BaseMonsterProto.Attack.Style m_proto;
 
   /** The parser for armor types. */
-  public static final Value.Parser<AttackStyle> PARSER =
-    new Value.Parser<AttackStyle>(1)
+  public static final Parser<AttackStyle> PARSER =
+    new Parser<AttackStyle>(1)
     {
       @Override
       public Optional<AttackStyle> doParse(String inValue)

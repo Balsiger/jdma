@@ -27,7 +27,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible sizes in the game. */
 public enum SkillModifier
@@ -49,8 +49,8 @@ public enum SkillModifier
   private BaseSkillProto.Modifier m_proto;
 
   /** The parser for skill modifiers. */
-  public static final Value.Parser<SkillModifier> PARSER =
-    new Value.Parser<SkillModifier>(1)
+  public static final Parser<SkillModifier> PARSER =
+    new Parser<SkillModifier>(1)
     {
       @Override
       public Optional<SkillModifier> doParse(String inValue)

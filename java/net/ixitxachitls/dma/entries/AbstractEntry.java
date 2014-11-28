@@ -61,6 +61,7 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.values.File;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -276,7 +277,7 @@ public abstract class AbstractEntry
       return false;
 
     // Admins are owners of everything
-    return inUser.hasAccess(BaseCharacter.Group.ADMIN);
+    return inUser.hasAccess(Group.ADMIN);
   }
 
   /**
@@ -668,7 +669,7 @@ public abstract class AbstractEntry
    */
   public boolean canEdit(String inKey, BaseCharacter inUser)
   {
-    return inUser != null && inUser.hasAccess(BaseCharacter.Group.ADMIN);
+    return inUser != null && inUser.hasAccess(Group.ADMIN);
   }
 
   /**

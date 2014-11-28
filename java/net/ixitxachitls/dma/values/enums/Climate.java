@@ -28,7 +28,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible climates in the game. */
 @ParametersAreNonnullByDefault
@@ -56,8 +56,8 @@ public enum Climate implements Named,
   private BaseMonsterProto.Climate m_proto;
 
   /** The parser for armor types. */
-  public static final Value.Parser<Climate> PARSER =
-    new Value.Parser<Climate>(1)
+  public static final Parser<Climate> PARSER =
+    new Parser<Climate>(1)
     {
       @Override
       public Optional<Climate> doParse(String inValue)

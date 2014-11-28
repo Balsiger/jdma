@@ -54,8 +54,8 @@ public enum SizeModifier implements Named, net.ixitxachitls.dma.values.enums.Sho
   private BaseItemProto.SizeModifier m_proto;
 
   /** The parser for size modifiers. */
-  public static final Value.Parser<SizeModifier> PARSER =
-    new Value.Parser<SizeModifier>(1)
+  public static final Parser<SizeModifier> PARSER =
+    new Parser<SizeModifier>(1)
     {
       @Override
       public Optional<SizeModifier> doParse(String inValue)

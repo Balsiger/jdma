@@ -7,7 +7,7 @@ message AbstractEntryProto
   required string name = 1;
   required string type = 2;
   repeated string base = 3;
-  repeated string extensions = 4;
+  repeated string extensions = 4 [deprecated=true];
 
   message File
   {

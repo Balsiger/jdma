@@ -29,7 +29,7 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Type;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible monster types in the game. */
 @ParametersAreNonnullByDefault
@@ -91,8 +91,8 @@ public enum MonsterType implements Named,
   private BaseMonsterProto.Type m_proto;
 
   /** The parser for armor types. */
-  public static final Value.Parser<MonsterType> PARSER =
-    new Value.Parser<MonsterType>(1)
+  public static final Parser<MonsterType> PARSER =
+    new Parser<MonsterType>(1)
     {
       @Override
       public Optional<MonsterType> doParse(String inValue)

@@ -65,8 +65,8 @@ public enum CountUnit implements Named,
   private BaseCountedProto.Unit m_proto;
 
   /** The parser for count units. */
-  public static final Value.Parser<CountUnit> PARSER =
-    new Value.Parser<CountUnit>(1)
+  public static final Parser<CountUnit> PARSER =
+    new Parser<CountUnit>(1)
     {
       @Override
       public Optional<CountUnit> doParse(String inValue)

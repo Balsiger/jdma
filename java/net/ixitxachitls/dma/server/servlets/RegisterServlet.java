@@ -33,7 +33,7 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.dma.entries.BaseCharacter.Group;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................

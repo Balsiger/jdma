@@ -28,7 +28,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible feat types to affect (cf. PHB 175). */
 public enum FeatType
@@ -62,8 +62,8 @@ public enum FeatType
   private BaseFeatProto.Type m_proto;
 
   /** The parser for feat types. */
-  public static final Value.Parser<FeatType> PARSER =
-    new Value.Parser<FeatType>(1)
+  public static final Parser<FeatType> PARSER =
+    new Parser<FeatType>(1)
     {
       @Override
       public Optional<FeatType> doParse(String inValue)

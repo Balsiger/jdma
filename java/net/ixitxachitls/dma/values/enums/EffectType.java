@@ -27,7 +27,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible spell components (cf. PHB 174). */
 public enum EffectType implements Named, net.ixitxachitls.dma.values.enums.Short
@@ -54,8 +54,8 @@ public enum EffectType implements Named, net.ixitxachitls.dma.values.enums.Short
   private BaseQualityProto.Type m_proto;
 
   /** The parser for armor types. */
-  public static final Value.Parser<EffectType> PARSER =
-    new Value.Parser<EffectType>(1)
+  public static final Parser<EffectType> PARSER =
+    new Parser<EffectType>(1)
     {
       @Override
       public Optional<EffectType> doParse(String inValue)

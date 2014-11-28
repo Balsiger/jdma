@@ -67,6 +67,7 @@ import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.Probability;
 import net.ixitxachitls.dma.values.Proficiency;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.Slot;
@@ -1759,7 +1760,7 @@ public class BaseItem extends BaseEntry
     if(!inUser.isPresent())
       return false;
 
-    return inUser.get().hasAccess(BaseCharacter.Group.DM);
+    return inUser.get().hasAccess(Group.DM);
   }
 
   @Override

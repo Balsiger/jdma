@@ -27,7 +27,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible spell components. */
 public enum SpellComponent implements Named, net.ixitxachitls.dma.values.enums.Short,
@@ -73,8 +73,8 @@ public enum SpellComponent implements Named, net.ixitxachitls.dma.values.enums.S
   private BaseSpellProto.Components m_proto;
 
   /** The parser for armor types. */
-  public static final Value.Parser<SpellComponent> PARSER =
-    new Value.Parser<SpellComponent>(1)
+  public static final Parser<SpellComponent> PARSER =
+    new Parser<SpellComponent>(1)
     {
       @Override
       public Optional<SpellComponent> doParse(String inValue)

@@ -132,12 +132,12 @@ public class AbstractType<T extends AbstractEntry>
   }
 
   /**
-   * Create 
-   * @param inClass
-   * @param inMultiple
-   * @param inLink
-   * @param inMultipleLink
-   * @param inSort
+   * Create the type.
+   * @param inClass the class of entries represented by the type
+   * @param inMultiple the name to use for multiple entries of the type
+   * @param inLink the name to use to link to an entry
+   * @param inMultipleLink the name to use to link to multiple entries
+   * @param inSort the name of the field to use for sorting entries
    */
   protected AbstractType(Class<T> inClass, Optional<String> inMultiple,
                          Optional<String> inLink,
@@ -235,7 +235,7 @@ public class AbstractType<T extends AbstractEntry>
   private String m_multipleLink;
 
   /** The field to be used for sorting. */
-  private Optional<String> m_sort = null;
+  private Optional<String> m_sort = Optional.absent();
 
   /** All the available types. */
   private static final Map<String, AbstractType<? extends AbstractEntry>>
@@ -332,7 +332,7 @@ public class AbstractType<T extends AbstractEntry>
   /**
    * Get the base type to this one.
    *
-   * @return      the requested base type or null if already a base type
+   * @return      the requested base type or this if already a base type
    */
   public AbstractType<? extends AbstractEntry> getBaseType()
   {

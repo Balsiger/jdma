@@ -27,9 +27,9 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
+import net.ixitxachitls.dma.values.Parser;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.SizeModifier;
-import net.ixitxachitls.dma.values.Value;
 
 /** The possible sizes in the game. */
 public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
@@ -102,8 +102,8 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
   private BaseItemProto.Size m_proto;
 
   /** The parser for item sizes. */
-  public static final Value.Parser<Size> PARSER =
-    new Value.Parser<Size>(1)
+  public static final Parser<Size> PARSER =
+    new Parser<Size>(1)
     {
       @Override
       public Optional<Size> doParse(String inValue)

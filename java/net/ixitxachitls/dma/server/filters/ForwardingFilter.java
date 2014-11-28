@@ -39,6 +39,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 
+import net.ixitxachitls.dma.values.enums.Group;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
@@ -168,7 +169,7 @@ public class ForwardingFilter implements Filter
           if(forward.contains("@user"))
             forward = forward.replace("@user", user.get().getName());
           else if(forward.startsWith("user:"))
-            if(!user.get().hasAccess(BaseCharacter.Group.USER))
+            if(!user.get().hasAccess(Group.USER))
               continue;
             else
               forward = forward.substring(5);

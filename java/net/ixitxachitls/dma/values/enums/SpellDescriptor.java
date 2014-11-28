@@ -27,7 +27,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible spell descriptors. */
 public enum SpellDescriptor
@@ -114,8 +114,8 @@ public enum SpellDescriptor
   private String m_short;
 
   /** The parser for armor types. */
-  public static final Value.Parser<SpellDescriptor> PARSER =
-    new Value.Parser<SpellDescriptor>(1)
+  public static final Parser<SpellDescriptor> PARSER =
+    new Parser<SpellDescriptor>(1)
     {
       @Override
       public Optional<SpellDescriptor> doParse(String inValue)

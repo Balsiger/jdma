@@ -37,6 +37,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.values.enums.Group;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
@@ -217,7 +218,7 @@ public class SoyServlet extends DMAServlet
          ? inRequest.getRealUser().get().getName() : "",
        "isUser", user.isPresent(),
        "isAdmin", user.isPresent()
-                  && user.get().hasAccess(BaseCharacter.Group.ADMIN),
+                  && user.get().hasAccess(Group.ADMIN),
 
        // classes with static access
        "Level", new SoyAbstract.SoyWrapper("Level", Level.class, Level.class),

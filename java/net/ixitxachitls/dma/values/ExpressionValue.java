@@ -209,7 +209,7 @@ public class ExpressionValue<T> extends Value
 
   @SuppressWarnings("unchecked")
   public Optional<T> getValue(Map<String, String> inParameters,
-                              Value.Parser<T> inParser)
+                              Parser<T> inParser)
   {
     Optional<? extends Object> value = evaluate(inParameters, inParser);
     if(!value.isPresent())
@@ -231,7 +231,7 @@ public class ExpressionValue<T> extends Value
 
   @SuppressWarnings("unchecked")
   private Optional<? extends Object> evaluate(Map<String, String> inParameters,
-                                              Value.Parser<T> inParser)
+                                              Parser<T> inParser)
   {
     if(m_variable.isPresent())
     {

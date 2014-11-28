@@ -28,7 +28,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible spell ranges. */
 public enum SpellEffect implements Named,
@@ -50,8 +50,8 @@ public enum SpellEffect implements Named,
   private final BaseSpellProto.Effect.Type m_proto;
 
   /** The parser for armor types. */
-  public static final Value.Parser<SpellEffect> PARSER =
-    new Value.Parser<SpellEffect>(1)
+  public static final Parser<SpellEffect> PARSER =
+    new Parser<SpellEffect>(1)
     {
       @Override
       public Optional<SpellEffect> doParse(String inValue)

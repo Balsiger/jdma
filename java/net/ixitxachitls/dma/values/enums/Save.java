@@ -29,7 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible saves in the game. */
 @ParametersAreNonnullByDefault
@@ -57,8 +57,8 @@ public enum Save implements Named, net.ixitxachitls.dma.values.enums.Short,
   private BaseMonsterProto.Save m_proto;
 
   /** The parser for armor types. */
-  public static final Value.Parser<Save> PARSER =
-    new Value.Parser<Save>(1)
+  public static final Parser<Save> PARSER =
+    new Parser<Save>(1)
     {
       @Override
       public Optional<Save> doParse(String inValue)

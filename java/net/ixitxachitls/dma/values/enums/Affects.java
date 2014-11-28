@@ -28,7 +28,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible affects in the game. */
 public enum Affects implements Named, net.ixitxachitls.dma.values.enums.Short
@@ -101,8 +101,8 @@ public enum Affects implements Named, net.ixitxachitls.dma.values.enums.Short
   private final BaseQualityProto.Effect.Affects m_proto;
 
   /** The parser for affects. */
-  public static final Value.Parser<Affects> PARSER =
-    new Value.Parser<Affects>(1)
+  public static final Parser<Affects> PARSER =
+    new Parser<Affects>(1)
     {
       @Override
       public Optional<Affects> doParse(String inValue)

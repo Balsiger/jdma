@@ -27,7 +27,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible spell schools (cf. PHB 172/173). */
 public enum Subschool
@@ -93,8 +93,8 @@ public enum Subschool
   private BaseSpellProto.Subschool m_proto;
 
   /** The parser for armor types. */
-  public static final Value.Parser<Subschool> PARSER =
-    new Value.Parser<Subschool>(1)
+  public static final Parser<Subschool> PARSER =
+    new Parser<Subschool>(1)
     {
       @Override
       public Optional<Subschool> doParse(String inValue)

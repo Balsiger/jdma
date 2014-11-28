@@ -24,7 +24,6 @@ package net.ixitxachitls.dma.server.servlets;
 import java.io.IOException;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -34,10 +33,10 @@ import com.google.appengine.api.utils.SystemProperty;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADatastore;
+import net.ixitxachitls.dma.values.enums.Group;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.Tracer;
@@ -73,7 +72,7 @@ public abstract class DMAServlet extends BaseServlet
    *
    * @return      this servlet for chaining
    */
-  public DMAServlet withAccess(BaseCharacter.Group inGroup)
+  public DMAServlet withAccess(Group inGroup)
   {
     m_group = Optional.of(inGroup);
 
@@ -81,7 +80,7 @@ public abstract class DMAServlet extends BaseServlet
   }
 
   /** The group required for accessing the content of this servlet. */
-  private Optional<BaseCharacter.Group> m_group = Optional.absent();
+  private Optional<Group> m_group = Optional.absent();
 
   /**
    * Check for access to the page.

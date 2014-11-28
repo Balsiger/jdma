@@ -34,9 +34,10 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Ability;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.dma.values.enums.SkillModifier;
 import net.ixitxachitls.dma.values.enums.SkillRestriction;
 import net.ixitxachitls.input.ParseReader;
@@ -63,8 +64,8 @@ public class BaseSkill extends BaseEntry
     private final int m_dc;
     private final String m_description;
 
-    public static final Value.Parser<DC> PARSER =
-      new Value.Parser<DC>(2)
+    public static final Parser<DC> PARSER =
+      new Parser<DC>(2)
       {
         @Override
         public Optional<DC> doParse(String inValue, String inText)
@@ -221,7 +222,7 @@ public class BaseSkill extends BaseEntry
     if(!inUser.isPresent())
       return false;
 
-    return inUser.get().hasAccess(BaseCharacter.Group.DM);
+    return inUser.get().hasAccess(Group.DM);
   }
 
   /**

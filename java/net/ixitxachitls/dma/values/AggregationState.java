@@ -58,8 +58,8 @@ public enum AggregationState implements Named,
   private final BaseContainerProto.State m_proto;
 
   /** The parser for aggregation states. */
-  public static final Value.Parser<AggregationState> PARSER =
-    new Value.Parser<AggregationState>(1)
+  public static final Parser<AggregationState> PARSER =
+    new Parser<AggregationState>(1)
     {
       @Override
       public Optional<AggregationState> doParse(String inValue)

@@ -28,7 +28,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.ProductProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The product condition. */
 public enum ProductCondition implements Named,
@@ -60,8 +60,8 @@ public enum ProductCondition implements Named,
   private ProductProto.Condition m_proto;
 
   /** The parser for condition values. */
-  public static final Value.Parser<ProductCondition> PARSER =
-    new Value.Parser<ProductCondition>(1)
+  public static final Parser<ProductCondition> PARSER =
+    new Parser<ProductCondition>(1)
     {
       @Override
       public Optional<ProductCondition> doParse(String inValue)

@@ -27,7 +27,7 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.CharacterProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The character state. */
 public enum CharacterState implements Named,
@@ -50,8 +50,8 @@ public enum CharacterState implements Named,
   private CharacterProto.State m_proto;
 
   /** The parser for alignment. */
-  public static final Value.Parser<CharacterState> PARSER =
-    new Value.Parser<CharacterState>(1)
+  public static final Parser<CharacterState> PARSER =
+    new Parser<CharacterState>(1)
   {
     @Override
     public Optional<CharacterState> doParse(String inValue)

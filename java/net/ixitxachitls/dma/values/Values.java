@@ -135,7 +135,7 @@ public class Values
     return result;
   }
 
-  public <T> T use(String inKey, T inDefault, Value.Parser<T> inParser,
+  public <T> T use(String inKey, T inDefault, net.ixitxachitls.dma.values.Parser<T> inParser,
                    String ... inParts) {
     List<String []> values = listValues(inKey, inParts);
     if(values.size() == 0 || allEmpty(values.get(0)))
@@ -168,7 +168,7 @@ public class Values
   }
 
   public <T> Optional<T> use(String inKey, Optional<T> inDefault,
-                             Value.Parser<T> inParser,
+                             net.ixitxachitls.dma.values.Parser<T> inParser,
                              String ... inParts) {
     List<String []> values = listValues(inKey, inParts);
     if(values.size() == 0 || allEmpty(values.get(0)))
@@ -201,7 +201,7 @@ public class Values
   }
 
   public <T> List<T> use(String inKey, List<T> inDefault,
-                         Value.Parser<T> inParser, String ... inParts)
+                         net.ixitxachitls.dma.values.Parser<T> inParser, String ... inParts)
   {
     List<String []> values = listValues(inKey, inParts);
     List<T> results = new ArrayList<>();

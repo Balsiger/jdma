@@ -71,8 +71,8 @@ public enum ModifierType implements Named, net.ixitxachitls.dma.values.enums.Sho
   private BaseMagicProto.Type m_proto;
 
   /** The parser for armor types. */
-  public static final Value.Parser<ModifierType> PARSER =
-    new Value.Parser<ModifierType>(1)
+  public static final Parser<ModifierType> PARSER =
+    new Parser<ModifierType>(1)
     {
       @Override
       public Optional<ModifierType> doParse(String inValue)

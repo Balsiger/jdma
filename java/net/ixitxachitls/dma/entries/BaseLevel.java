@@ -38,11 +38,13 @@ import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.Dice;
+import net.ixitxachitls.dma.values.Parser;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Alignment;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -70,8 +72,8 @@ public class BaseLevel extends BaseEntry
     private final int m_usesPerDay;
     private final Optional<String> m_condition;
 
-    public static final Value.Parser<QualityReference> PARSER =
-      new Value.Parser<QualityReference>(4)
+    public static final Parser<QualityReference> PARSER =
+      new Parser<QualityReference>(4)
       {
         @Override
         public Optional<QualityReference> doParse
@@ -220,7 +222,7 @@ public class BaseLevel extends BaseEntry
     if(!inUser.isPresent())
       return false;
 
-    return inUser.get().hasAccess(BaseCharacter.Group.DM);
+    return inUser.get().hasAccess(Group.DM);
   }
 
   /**

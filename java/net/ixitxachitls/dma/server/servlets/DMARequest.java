@@ -36,6 +36,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
+import net.ixitxachitls.dma.values.enums.Group;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -309,7 +310,7 @@ public class DMARequest extends HttpServletRequestWrapper
 
     // only admins are allows to override users
     if(m_userOverride.isPresent() && hasUser()
-       && m_user.get().hasAccess(BaseCharacter.Group.ADMIN))
+       && m_user.get().hasAccess(Group.ADMIN))
       return m_userOverride;
 
     tracer.done();
@@ -587,7 +588,7 @@ public class DMARequest extends HttpServletRequestWrapper
     {
       BaseCharacter user = new BaseCharacter("test");
       //user.set("email", "\"test@test.net\"");
-      user.setGroup(BaseCharacter.Group.ADMIN);
+      user.setGroup(Group.ADMIN);
       addEntry(user);
       BaseCharacter other = new BaseCharacter("other");
       addEntry(other);

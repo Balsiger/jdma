@@ -43,6 +43,7 @@ import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Modifier;
+import net.ixitxachitls.dma.values.Parser;
 import net.ixitxachitls.dma.values.Range;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Value;
@@ -94,8 +95,8 @@ public class BaseMonster extends BaseEntry
     private AttackStyle m_style;
     private Damage m_damage;
 
-    public static final Value.Parser<Attack> PARSER =
-      new Value.Parser<Attack>(4)
+    public static final Parser<Attack> PARSER =
+      new Parser<Attack>(4)
       {
         @Override
         public Optional<Attack> doParse(String inNumber, String inMode,
@@ -160,8 +161,8 @@ public class BaseMonster extends BaseEntry
     private Dice m_number;
     private Optional<String> m_plus;
 
-    public static final Value.Parser<Group> PARSER =
-      new Value.Parser<Group>(3)
+    public static final Parser<Group> PARSER =
+      new Parser<Group>(3)
       {
         @Override
         public Optional<Group> doParse(String inOrganization,
@@ -219,8 +220,8 @@ public class BaseMonster extends BaseEntry
     private Range m_range;
     private Size m_size;
 
-    public static final Value.Parser<Advancement> PARSER =
-      new Value.Parser<Advancement>(3)
+    public static final Parser<Advancement> PARSER =
+      new Parser<Advancement>(3)
       {
         @Override
         public Optional<Advancement> doParse(String inRange, String inSize)
@@ -264,8 +265,8 @@ public class BaseMonster extends BaseEntry
     private Language m_language;
     private LanguageModifier m_modifier;
 
-    public static final Value.Parser<LanguageOption> PARSER =
-      new Value.Parser<LanguageOption>(2)
+    public static final Parser<LanguageOption> PARSER =
+      new Parser<LanguageOption>(2)
       {
         @Override
         public Optional<LanguageOption> doParse(String inLanguage,
@@ -1565,7 +1566,7 @@ public class BaseMonster extends BaseEntry
     if(!inUser.isPresent())
       return false;
 
-    return inUser.get().hasAccess(BaseCharacter.Group.DM);
+    return inUser.get().hasAccess(net.ixitxachitls.dma.values.enums.Group.DM);
   }
 
   /**

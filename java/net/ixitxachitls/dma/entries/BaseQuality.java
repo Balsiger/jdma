@@ -44,6 +44,7 @@ import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Effect;
 import net.ixitxachitls.dma.values.enums.EffectType;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.dma.values.enums.Immunity;
 import net.ixitxachitls.util.logging.Log;
 
@@ -375,7 +376,7 @@ public class BaseQuality extends BaseEntry
     if(!inUser.isPresent())
       return false;
 
-    return inUser.get().hasAccess(BaseCharacter.Group.DM);
+    return inUser.get().hasAccess(Group.DM);
   }
 
   @Override

@@ -21,26 +21,19 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableSetMultimap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
-import net.ixitxachitls.dma.data.DMADatastore;
+import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.BaseCharacterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
-import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.util.Strings;
-import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -49,125 +42,13 @@ import net.ixitxachitls.util.logging.Log;
  * @file          BaseCharacter.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
-@ParametersAreNonnullByDefault
 public class BaseCharacter extends BaseEntry
 {
-  /** The possible groups for a character. */
-  public enum Group implements Named,
-      Proto<BaseCharacterProto.Group>
-  {
-    /** An administrator. */
-    ADMIN("Admin", BaseCharacterProto.Group.ADMIN),
-
-    /** A DM (in any campaign). */
-    DM("DM", BaseCharacterProto.Group.DM),
-
-    /** A guest user without any special permissions. */
-    GUEST("Guest", BaseCharacterProto.Group.GUEST),
-
-    /** The player in possession of the entry. */
-    PLAYER("Player", BaseCharacterProto.Group.PLAYER),
-
-    /** A normal user. */
-    USER("User", BaseCharacterProto.Group.USER);
-
-    /** Create the group.
-     *
-     * @param inName  the name of the value
-     * @param inProto the proto enum value
-     */
-    private Group(String inName, BaseCharacterProto.Group inProto)
-    {
-      m_name = inName;
-      m_proto = inProto;
-    }
-
-    /** The name of the group. */
-    private String m_name;
-
-    /** The proto enum value. */
-    private BaseCharacterProto.Group m_proto;
-
-    /**
-     * Check if a group allows a given group.
-     *
-     * @param  inGroup the group to check against
-     *
-     * @return true if the other group is less or equally restricted than the
-     *         current one
-     */
-    public boolean allows(Group inGroup)
-    {
-      return this.ordinal() >= inGroup.ordinal();
-    }
-
-    @Override
-    public String getName()
-    {
-      return m_name;
-    }
-
-    @Override
-    public BaseCharacterProto.Group toProto()
-    {
-      return m_proto;
-    }
-
-    @Override
-    public String toString()
-    {
-      return m_name;
-    }
-
-    /**
-     * Get the group matching the given proto value.
-     *
-     * @param  inGroup the proto value to look for
-     * @return the matched group (will throw exception if not found)
-     */
-    public static Group fromProto(BaseCharacterProto.Group inGroup)
-    {
-      for(Group group : values())
-        if(group.m_proto == inGroup)
-          return group;
-
-      throw new IllegalStateException("invalid proto group: " + inGroup);
-    }
-
-    /**
-     * All the possible names for the group.
-     *
-     * @return the possible names
-     */
-    public static List<String> names()
-    {
-      List<String> names = new ArrayList<>();
-
-      for(Group group : values())
-        names.add(group.getName());
-
-      return names;
-    }
-
-    /**
-     * Get the group matching the given text.
-     */
-    public static Optional<Group> fromString(String inText)
-    {
-      for(Group group : values())
-        if(group.m_name.equalsIgnoreCase(inText))
-          return Optional.of(group);
-
-      return Optional.absent();
-    }
-  }
-
   /**
    * This is the standard constructor to create a base character with its
    * name.
    *
-   * @param       inName the name of the base charcter to create
+   * @param       inName the name of the base character to create
    */
   public BaseCharacter(String inName)
   {
@@ -185,13 +66,12 @@ public class BaseCharacter extends BaseEntry
   {
     this(inName);
 
-    m_email = inEmail;
+    m_email = Optional.of(inEmail);
   }
 
   /**
    * The default internal constructor to create an undefined entry to be
    * filled by reading it from a file.
-   *
    */
   protected BaseCharacter()
   {
@@ -199,23 +79,19 @@ public class BaseCharacter extends BaseEntry
   }
 
   /** The files in the base campaign. */
-  protected String m_email = UNDEFINED_STRING;
+  protected Optional<String> m_email = Optional.absent();
 
   /** The access group of the user. */
   protected Group m_group = Group.GUEST;
 
   /** The files in the base campaign. */
-  protected String m_lastAction = UNDEFINED_STRING;
-
-  /** All the products for this user. */
-  protected transient @Nullable DMADatastore m_productData = null;
+  protected Optional<String> m_lastAction = Optional.absent();
 
   /** The files in the base campaign. */
-  protected String m_realName = UNDEFINED_STRING;
+  protected Optional<String> m_realName = Optional.absent();
 
   /** The number of recent products to show. */
-  public static final int MAX_PRODUCTS =
-    Config.get("entries/basecharacter.products", 5);
+  public static final int MAX_PRODUCTS = 5;
 
   /** The type of this entry. */
   public static final BaseType<BaseCharacter> TYPE =
@@ -232,7 +108,10 @@ public class BaseCharacter extends BaseEntry
    */
   public String getEmail()
   {
-    return m_email;
+    if(m_email.isPresent())
+      return m_email.get();
+
+    return "";
   }
 
   /**
@@ -252,7 +131,10 @@ public class BaseCharacter extends BaseEntry
    */
   public String getRealName()
   {
-    return m_realName;
+    if(m_realName.isPresent())
+      return m_realName.get();
+
+    return "";
   }
 
   /**
@@ -262,7 +144,10 @@ public class BaseCharacter extends BaseEntry
    */
   public String getLastAction()
   {
-    return m_lastAction;
+    if(m_lastAction.isPresent())
+      return m_lastAction.get();
+
+    return "";
   }
 
   /**
@@ -274,7 +159,7 @@ public class BaseCharacter extends BaseEntry
    */
   public boolean hasAccess(Group inGroup)
   {
-    return inGroup.allows(getGroup());
+    return getGroup().allows(inGroup);
   }
 
   @Override
@@ -297,7 +182,7 @@ public class BaseCharacter extends BaseEntry
   {
     Map<String, Object> searchables = super.collectSearchables();
 
-    searchables.put("email", m_email);
+    searchables.put("email", getEmail());
 
     return searchables;
   }
@@ -309,12 +194,12 @@ public class BaseCharacter extends BaseEntry
 
     builder.setBase((BaseEntryProto)super.toProto());
     builder.setGroup(m_group.toProto());
-    if(!m_lastAction.isEmpty())
-      builder.setLastAction(m_lastAction);
-    if(!m_realName.isEmpty())
-      builder.setRealName(m_realName);
-    if(!m_email.isEmpty())
-      builder.setEmail(m_email);
+    if(m_lastAction.isPresent())
+      builder.setLastAction(m_lastAction.get());
+    if(m_realName.isPresent())
+      builder.setRealName(m_realName.get());
+    if(m_email.isPresent())
+      builder.setEmail(m_email.get());
 
     return builder.build();
   }
@@ -326,13 +211,7 @@ public class BaseCharacter extends BaseEntry
 
     m_realName = inValues.use("real_name", m_realName);
     m_email = inValues.use("email", m_email);
-    m_group = inValues.use("group", m_group, new Value.Parser<Group>(1) {
-      @Override
-      public Optional<Group> doParse(String inValue)
-      {
-        return Group.fromString(inValue);
-      }
-    });
+    m_group = inValues.use("group", m_group, Group.PARSER);
   }
 
   /**
@@ -353,7 +232,7 @@ public class BaseCharacter extends BaseEntry
    */
   public void setRealName(String inRealName)
   {
-    m_realName = inRealName;
+    m_realName = Optional.of(inRealName);
     changed();
   }
 
@@ -362,7 +241,7 @@ public class BaseCharacter extends BaseEntry
    */
   public void action()
   {
-    m_lastAction = Strings.today();
+    m_lastAction = Optional.of(Strings.today());
     save();
   }
 
@@ -379,6 +258,11 @@ public class BaseCharacter extends BaseEntry
     }
   }
 
+  /**
+   * Update the entry with the values from the given proto.
+   *
+   * @param inProto the proto to merge from
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseCharacterProto))
@@ -394,11 +278,11 @@ public class BaseCharacter extends BaseEntry
     if(proto.hasGroup())
       m_group = Group.fromProto(proto.getGroup());
     if(proto.hasLastAction())
-      m_lastAction = proto.getLastAction();
+      m_lastAction = Optional.of(proto.getLastAction());
     if(proto.hasRealName())
-      m_realName = proto.getRealName();
+      m_realName = Optional.of(proto.getRealName());
     if(proto.hasEmail())
-      m_email = proto.getEmail();
+      m_email = Optional.of(proto.getEmail());
   }
 
   //----------------------------------------------------------------------------
@@ -441,11 +325,80 @@ public class BaseCharacter extends BaseEntry
     {
       BaseCharacter character = new BaseCharacter("Me");
 
-      assertEquals("id", "Me", character.getName());
-      assertTrue("real name", character.m_realName.isEmpty());
-      assertTrue("email", character.m_email.isEmpty());
-      assertTrue("last action", character.m_lastAction.isEmpty());
+      assertEquals("name", "Me", character.getName());
+      assertFalse("real name", character.m_realName.isPresent());
+      assertFalse("email", character.m_email.isPresent());
+      assertFalse("last action", character.m_lastAction.isPresent());
       assertEquals("group", Group.GUEST, character.m_group);
+    }
+
+    /** Test setting. */
+    @org.junit.Test
+    public void set()
+    {
+      BaseCharacter character = new BaseCharacter("Me");
+
+      character.set(new Values(
+          new ImmutableSetMultimap.Builder<String, String>()
+              .put("name", "Merlin")
+              .put("real_name", "Myrrdin")
+              .put("email", "merlin@camelot.me")
+              .put("group", "DM")
+              .build()));
+      assertEquals("name", "Merlin", character.getName());
+      assertEquals("real name", "Myrrdin", character.getRealName());
+      assertEquals("email", "merlin@camelot.me", character.getEmail());
+      assertFalse("last action", character.m_lastAction.isPresent());
+      assertEquals("group", Group.DM, character.getGroup());
+    }
+
+    /** Test user access. */
+    @org.junit.Test
+    public void user()
+    {
+      BaseCharacter character = new BaseCharacter("Me");
+
+      assertFalse("shown to",
+                  character.isShownTo(Optional.<BaseCharacter>absent()));
+      assertTrue("show to", character.isShownTo(Optional.of(character)));
+
+      assertFalse("is dm",
+                  character.isDM(Optional.<BaseCharacter>absent()));
+      assertFalse("is dm", character.isDM(Optional.of(character)));
+      character.setGroup(Group.ADMIN);
+      assertTrue("is dm", character.isDM(Optional.of(character)));
+    }
+
+    /** Test searchable. */
+    @org.junit.Test
+    public void searchables()
+    {
+      BaseCharacter character = new BaseCharacter("Me");
+      assertEquals("size", 2, character.collectSearchables().size());
+      assertEquals("email", "", character.collectSearchables().get("email"));
+      assertEquals("bases", "[]",
+                   character.collectSearchables().get("bases").toString());
+    }
+
+    /** Test proto. */
+    @org.junit.Test
+    public void proto()
+    {
+      BaseCharacterProto proto = BaseCharacterProto
+          .newBuilder()
+          .setBase(BaseEntryProto.newBuilder()
+                                 .setAbstract(Entries.AbstractEntryProto
+                                                  .newBuilder()
+                                                  .setName("name")
+                                                  .setType("base character")
+                                                  .build()))
+          .setGroup(Group.ADMIN.toProto())
+          .setEmail("email")
+          .setRealName("real name")
+          .build();
+      BaseCharacter character = new BaseCharacter();
+      character.fromProto(proto);
+      assertEquals("proto", proto, character.toProto());
     }
   }
 }

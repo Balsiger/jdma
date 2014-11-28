@@ -39,6 +39,7 @@ import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Effect;
 import net.ixitxachitls.dma.values.enums.FeatType;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.logging.Log;
 
@@ -143,7 +144,7 @@ public class BaseFeat extends BaseEntry
     if(!inUser.isPresent())
       return false;
 
-    return inUser.get().hasAccess(BaseCharacter.Group.DM);
+    return inUser.get().hasAccess(Group.DM);
   }
 
   /**

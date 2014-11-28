@@ -48,6 +48,7 @@ import net.ixitxachitls.dma.values.Date;
 import net.ixitxachitls.dma.values.Group;
 import net.ixitxachitls.dma.values.ISBN;
 import net.ixitxachitls.dma.values.ISBN13;
+import net.ixitxachitls.dma.values.Parser;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Person;
 import net.ixitxachitls.dma.values.Price;
@@ -1604,7 +1605,7 @@ public class BaseProduct extends BaseEntry
     if(!inUser.isPresent())
       return false;
 
-    return inUser.get().hasAccess(BaseCharacter.Group.USER);
+    return inUser.get().hasAccess(net.ixitxachitls.dma.values.enums.Group.USER);
   }
 
   /**
@@ -1719,7 +1720,7 @@ public class BaseProduct extends BaseEntry
     m_isbn13 = inValues.use("isbn.13", m_isbn13, ISBN13.PARSER);
     m_pages = inValues.use("pages", m_pages, Value.INTEGER_PARSER);
     m_producer = inValues.use("producer", m_producer);
-    m_system= inValues.use("system", m_system, new Value.Parser<System>(1) {
+    m_system= inValues.use("system", m_system, new Parser<System>(1) {
       @Override
       public Optional<System> doParse(String inValue)
       {
@@ -1727,7 +1728,7 @@ public class BaseProduct extends BaseEntry
       }
     });
     m_audience = inValues.use("audience", m_audience,
-                              new Value.Parser<Audience>(1) {
+                              new Parser<Audience>(1) {
       @Override
       public Optional<Audience> doParse(String inValue)
       {
@@ -1735,21 +1736,21 @@ public class BaseProduct extends BaseEntry
       }
     });
     m_productType = inValues.use("product type", m_productType,
-                                 new Value.Parser<ProductType>(1) {
+                                 new Parser<ProductType>(1) {
       @Override
       public Optional<ProductType> doParse(String inValue)
       {
         return ProductType.fromString(inValue);
       }
     });
-    m_style = inValues.use("style", m_style, new Value.Parser<Style>(1) {
+    m_style = inValues.use("style", m_style, new Parser<Style>(1) {
       @Override
       public Optional<Style> doParse(String inValue)
       {
         return Style.fromString(inValue);
       }
     });
-    m_layout = inValues.use("layout", m_layout, new Value.Parser<Layout>(1) {
+    m_layout = inValues.use("layout", m_layout, new Parser<Layout>(1) {
       @Override
       public Optional<Layout> doParse(String inValue)
       {

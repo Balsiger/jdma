@@ -28,7 +28,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible terrains in the game. */
 @ParametersAreNonnullByDefault
@@ -111,8 +111,8 @@ public enum Organization implements Named,
   private BaseMonsterProto.Organization.Type m_proto;
 
   /** The parser for armor types. */
-  public static final Value.Parser<Organization> PARSER =
-    new Value.Parser<Organization>(1)
+  public static final Parser<Organization> PARSER =
+    new Parser<Organization>(1)
     {
       @Override
       public Optional<Organization> doParse(String inValue)

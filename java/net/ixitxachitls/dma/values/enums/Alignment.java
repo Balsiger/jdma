@@ -28,7 +28,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 
 /** The possible sizes in the game. */
 @ParametersAreNonnullByDefault
@@ -89,8 +89,8 @@ public enum Alignment implements Named, Short,
   private BaseMonsterProto.Alignment m_proto;
 
   /** The parser for alignment. */
-  public static final Value.Parser<Alignment> PARSER =
-    new Value.Parser<Alignment>(1)
+  public static final Parser<Alignment> PARSER =
+    new Parser<Alignment>(1)
   {
     @Override
     public Optional<Alignment> doParse(String inValue)

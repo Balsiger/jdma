@@ -34,8 +34,9 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
 import net.ixitxachitls.dma.values.Distance;
-import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Parser;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.dma.values.enums.School;
 import net.ixitxachitls.dma.values.enums.SpellClass;
 import net.ixitxachitls.dma.values.enums.SpellComponent;
@@ -68,7 +69,7 @@ public class BaseSpell extends BaseEntry
 
     private final SpellClass m_class;
     private final int m_level;
-    public static final Value.Parser<Level> PARSER = new Value.Parser<Level>(2)
+    public static final Parser<Level> PARSER = new Parser<Level>(2)
     {
       @Override
       public Optional<Level> doParse(String inClass, String inLevel)
@@ -115,8 +116,8 @@ public class BaseSpell extends BaseEntry
 
     private final String m_use;
     private final List<String> m_components;
-    public static final Value.Parser<Material> PARSER =
-      new Value.Parser<Material>(2)
+    public static final Parser<Material> PARSER =
+      new Parser<Material>(2)
       {
         @Override
         public Optional<Material> doParse(String inUse, String inComponents)
@@ -162,8 +163,8 @@ public class BaseSpell extends BaseEntry
     private final Optional<Distance> m_distance;
     private final Optional<SpellEffect> m_effect;
     private final String m_text;
-    public static final Value.Parser<Effect> PARSER =
-      new Value.Parser<Effect>(3)
+    public static final Parser<Effect> PARSER =
+      new Parser<Effect>(3)
       {
         @Override
         public Optional<Effect> doParse(String inDistance, String inEffect,
@@ -229,8 +230,8 @@ public class BaseSpell extends BaseEntry
     private final Optional<net.ixitxachitls.dma.values.Duration> m_plusDuration;
     private final boolean m_dismissable;
     private final Optional<String> m_text;
-    public static final Value.Parser<Duration> PARSER =
-      new Value.Parser<Duration>(5)
+    public static final Parser<Duration> PARSER =
+      new Parser<Duration>(5)
       {
         @Override
         public Optional<Duration> doParse(String inDuration, String inLevels,
@@ -1157,7 +1158,7 @@ public class BaseSpell extends BaseEntry
     if(!inUser.isPresent())
       return false;
 
-    return inUser.get().hasAccess(BaseCharacter.Group.ADMIN);
+    return inUser.get().hasAccess(Group.ADMIN);
   }
 
   @Override

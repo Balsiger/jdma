@@ -52,8 +52,8 @@ public enum AreaShape implements Named,
   private BaseLightProto.Light.Shape m_proto;
 
   /** The parser for an area shape. */
-  public static final Value.Parser<AreaShape> PARSER =
-    new Value.Parser<AreaShape>(1)
+  public static final Parser<AreaShape> PARSER =
+    new Parser<AreaShape>(1)
     {
       @Override
       public Optional<AreaShape> doParse(String inValue)
