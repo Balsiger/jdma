@@ -37,6 +37,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Group;
 import org.easymock.EasyMock;
 
@@ -227,9 +228,11 @@ public class SoyServlet extends DMAServlet
        "Alignment", new SoyAbstract.SoyWrapper("Alignment", Alignment.class,
                                                Alignment.class),
        "Ability", new SoyAbstract.SoyWrapper("Ability", Ability.class,
-                                               Ability.class),
+                                             Ability.class),
+       "Affects", new SoyAbstract.SoyWrapper("Affects", Ability.class,
+                                             Affects.class),
        "Immunity", new SoyAbstract.SoyWrapper("Immunity", Immunity.class,
-                                               Immunity.class));
+                                              Immunity.class));
 
     tracer.done();
     return map;

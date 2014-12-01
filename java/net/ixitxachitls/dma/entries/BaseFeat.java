@@ -24,33 +24,32 @@ package net.ixitxachitls.dma.entries;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
+import net.ixitxachitls.dma.proto.Values.ModifierProto;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Effect;
 import net.ixitxachitls.dma.values.enums.FeatType;
 import net.ixitxachitls.dma.values.enums.Group;
-import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.logging.Log;
 
 /**
- * This is the basic jDMA base spell.
+ * This is the basic jDMA base feat.
  *
  * @file          BaseFeat.java
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
 
-@ParametersAreNonnullByDefault
 public class BaseFeat extends BaseEntry
 {
   /** The serial version id. */
@@ -96,39 +95,65 @@ public class BaseFeat extends BaseEntry
   /** The effects of the feat. */
   protected List<Effect> m_effects = new ArrayList<>();
 
+  /**
+   * Get the type of the feat.
+   *
+   * @return the type
+   */
   public FeatType getFeatType()
   {
     return m_featType;
   }
 
+
+  /**
+   * Get the feats benefits.
+   *
+   * @return the benefits
+   */
   public Optional<String> getBenefit()
   {
     return m_benefit;
   }
 
+  /**
+   * Get the special rules for the feat.
+   *
+   * @return the special
+   */
   public Optional<String> getSpecial()
   {
     return m_special;
   }
 
+  /**
+   * Get the normal handling of situations without the feat.
+   *
+   * @return the normal situation
+   */
   public Optional<String> getNormal()
   {
     return m_normal;
   }
 
+  /**
+   * Get the prerequisites for the feat.
+   *
+   * @return the prerequisites
+   */
   public Optional<String> getPrerequisites()
   {
     return m_prerequisites;
   }
 
+  /**
+   * Get the effects the feat has on values.
+   *
+   * @return a list with all the effects
+   */
   public List<Effect> getEffects()
   {
     return m_effects;
-  }
-
-  public List<String> getAffectNames()
-  {
-    return Affects.names();
   }
 
   /**
@@ -216,6 +241,11 @@ public class BaseFeat extends BaseEntry
     return proto;
   }
 
+  /**
+   * Merge the values of the given proto into this object.
+   *
+   * @param inProto the proto to merge from
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseFeatProto))
@@ -273,161 +303,131 @@ public class BaseFeat extends BaseEntry
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- createBaseFeat() ----------------------------------------------
-
-    /** Create a typical base item for testing purposes.
-     *
-     * @return the newly created base item
-     *
-     */
-    public static AbstractEntry createBaseFeat()
-    {
-      try (ParseReader reader =
-        new ParseReader(new java.io.StringReader(s_text), "test"))
-      {
-        return null; //BaseFeat.read(reader);
-      }
-    }
-
-    //......................................................................
-
-    //----- text -----------------------------------------------------------
-
-    /** Test text. */
-    private static String s_text =
-      "#----- Acrobatic [General] --------------------------------------\n"
-      + "\n"
-      + "base feat Acrobatic =\n"
-      + "\n"
-      + "  type              General;\n"
-      + "  worlds            generic;\n"
-      + "  references        WTC 17524: 89;\n"
-      + "  short description \"+2 bonus on Jump and Tumble checks\";\n"
-      + "  benefit           \"You get a +2 bonus on all Jump checks and "
-      + "Tumble checks.\";\n"
-      + "  description\n"
-      + "\n"
-      + "  \"You have excellent body awareness and coordination.\".\n"
-      + "\n"
-      + "#..............................................................\n"
-      + "\n";
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** Test reading. */
+    /** The init Test. */
     @org.junit.Test
-    public void testRead()
+    public void init()
     {
-      String result =
-      "#----- Acrobatic [General]\n"
-        + "\n"
-        + "base feat Acrobatic =\n"
-        + "\n"
-        + "  type              General;\n"
-        + "  benefit           \"You get a +2 bonus on all Jump checks and "
-        + "Tumble checks.\";\n"
-        + "  worlds            Generic;\n"
-        + "  references        WTC 17524: 89;\n"
-        + "  description       \"You have excellent body awareness and "
-        + "coordination.\";\n"
-        + "  short description \"+2 bonus on Jump and Tumble checks\";\n"
-        + "  name              Acrobatic.\n"
-        + "\n"
-        + "#.....\n";
+      BaseFeat feat = new BaseFeat("Feat");
 
-      AbstractEntry entry = createBaseFeat();
-
-      assertNotNull("base item should have been read", entry);
-      assertEquals("base item name does not match", "Acrobatic",
-                   entry.getName());
-      assertEquals("base item does not match", result, entry.toString());
+      assertEquals("name", "Feat", feat.getName());
+      assertEquals("type", FeatType.UNKNOWN, feat.getFeatType());
+      assertFalse("benefit", feat.getBenefit().isPresent());
+      assertFalse("special", feat.getSpecial().isPresent());
+      assertFalse("normal", feat.getNormal().isPresent());
+      assertFalse("prerequisites", feat.getPrerequisites().isPresent());
+      assertTrue("effects", feat.getEffects().isEmpty());
     }
 
-    //......................................................................
-    //----- print ----------------------------------------------------------
+    /** Test setting. */
+    @org.junit.Test
+    public void set()
+    {
+      BaseFeat feat = new BaseFeat("");
 
-    /** Test raw printing. */
-    // public void testPrint()
-    // {
-    //   ParseReader reader =
-    //     new ParseReader(new java.io.StringReader(s_text), "test");
+      Values values = new Values(
+        new ImmutableSetMultimap.Builder<String, String>()
+            .put("name", "Invincible")
+            .put("feat_type", "FIGHTER")
+            .put("benefit", "Cannot loose")
+            .put("special", "wins")
+            .put("normal", "looses")
+            .put("prerequisites", "Are you a god?")
+            .put("effect.affects", "Armor Class")
+            .put("effect.name", "name-1")
+            .put("effect.modifier", "+2")
+            .put("effect.text", "text-1")
+            .put("effect.affects", "Reflex save")
+            .put("effect.name", "name-2")
+            .put("effect.modifier", "+2 dodge")
+            .put("effect.text", "text-2")
+            .build());
+      feat.set(values);
+      assertEquals("messaegs", "[]", values.obtainMessages().toString());
+      assertEquals("name", "Invincible", feat.getName());
+      assertEquals("type", FeatType.FIGHTER, feat.getFeatType());
+      assertEquals("benefit", "Cannot loose", feat.getBenefit().get());
+      assertEquals("special", "wins", feat.getSpecial().get());
+      assertEquals("normal", "looses", feat.getNormal().get());
+      assertEquals("prerequisites", "Are you a god?",
+                   feat.getPrerequisites().get());
+      assertEquals("effects", "[Armor Class name-1 +2 text-1, "
+                   + "Reflex Save name-2 +2 dodge text-2]",
+                   feat.getEffects().toString());
+    }
 
-    //   AbstractEntry entry = BaseFeat.read(reader);
+    /** Test user access. */
+    @org.junit.Test
+    public void user()
+    {
+      BaseCharacter character = new BaseCharacter("Me");
+      BaseFeat feat = new BaseFeat("");
 
-    //   m_logger.verify();
+      assertTrue("shown to",
+                  feat.isShownTo(Optional.<BaseCharacter>absent()));
+      assertTrue("show to", feat.isShownTo(Optional.of(character)));
 
-    //   // title and icons
-    //   String result = "\\center{"
-    //     + "\\icon{worlds/Generic.png}{world: Generic}"
-    //     + "{../index/worlds/\\worduppercase{Generic}.html}{highlight}"
-    //     + "\\icon{feattypes/General.png}"
-    //     + "{type: General}"
-    //     + "{../index/feattypes/General.html}{highlight}}\n"
-    //     + "\\divider{main}{\\title{Acrobatic\\linebreak "
-    //     + "\\tiny{\\link[BaseFeats/index]{(base feat)}}}\n";
+      assertFalse("is dm",
+                  character.isDM(Optional.<BaseCharacter>absent()));
+      assertFalse("is dm", feat.isDM(Optional.of(character)));
+      character.setGroup(Group.ADMIN);
+      assertTrue("is dm", feat.isDM(Optional.of(character)));
+    }
 
-    //   // description text
-    //   result += "\\textblock[desc]{You have excellent body awareness and "
-    //     + "coordination.}\n";
+    /** Test searchable. */
+    @org.junit.Test
+    public void searchables()
+    {
+      BaseFeat feat = new BaseFeat("Feast");
+      assertEquals("size", 1, feat.collectSearchables().size());
+      assertEquals("bases", "[]",
+                   feat.collectSearchables().get("bases").toString());
+    }
 
-    //   // files
-    //   result += "\\files{BaseFeats/Acrobatic}";
+    /** Test indexes. */
+    @org.junit.Test
+    public void indexes()
+    {
+      BaseFeat feat = new BaseFeat("feat");
+      assertEquals("indexes", "{TYPES=[Unknown]}",
+                   feat.computeIndexValues().toString());
+    }
 
-    //   // description table
-    //   result += "\\table[description]{f19:L(desc-label);100:L(desc-text)}"
-    //     + "{null}{null}"
-    //     + "{\\window{\\bold{Benefit:}}{"
-    //     + Config.get("resource:help/label.benefit", (String)null)
-    //     + "}}{You get a +2 bonus on all Jump checks and Tumble checks.}"
-    //     + "{null}{null}"
-    //     + "{null}{null}"
-    //     + "{\\window{\\bold{Short Description:}}"
-    //     + "{This is the short description of the entry.}}"
-    //     + "{+2 bonus on Jump and Tumble checks}"
-    //     + "{null}{null}"
-    //     + "{\\window{\\bold{Effects:}}{"
-    //     + Config.get("resource:help/label.effects", (String)null)
-    //     + "}}{\\color{error}{$undefined$}}"
-    //     + "{\\window{\\bold{References:}}{"
-    //     + Config.get("resource:help/label.references", (String)null)
-    //     + "}}{\\span{unit}{\\link[BaseProducts/WTC 17524]{WTC 17524} p. 89}}"
-    //     + "{null}{null}"
-    //     + "\\divider{clear}{}}";
-
-    //   // no picture descriptions
-    //   result += "\\nopictures{\\table{f15:L;100:L}"
-    //     + "{\\bold{World:}}{\\link[index/worlds/Generic]{Generic}}"
-    //     + "{\\bold{Type:}}{General}}\n";
-
-    //   assertEquals("print commands",
-    //                result,
-    //                entry.getPrintCommand(false));
-    // }
-
-    //......................................................................
-    //----- shortPrint -----------------------------------------------------
-
-    /** Test short printing. */
-    // public void testShortPrint()
-    // {
-    //   ParseReader reader =
-    //     new ParseReader(new java.io.StringReader(s_text), "test");
-
-    //   AbstractEntry entry = BaseFeat.read(reader);
-
-    //   String result =
-    //     "+2 bonus on Jump and Tumble checks"
-    //     + "\\italic{ (cf. \\span{unit}{\\link[BaseProducts/WTC 17524]"
-    //     + "{WTC 17524} p. 89})}";
-
-    //   //System.out.println(entry.getShortPrintCommand().toString());
-    //   assertEquals("print commands",
-    //                result, entry.getPrintCommand(false));
-    // }
-
-    //......................................................................
+    /** Test proto. */
+    @org.junit.Test
+    public void proto()
+    {
+      BaseFeatProto proto = BaseFeatProto
+          .newBuilder()
+          .setBase(BaseEntryProto.newBuilder()
+                                 .setAbstract(Entries.AbstractEntryProto
+                                                  .newBuilder()
+                                                  .setName("name")
+                                                  .setType("base feat")
+                                                  .build()))
+          .setType(BaseFeatProto.Type.FIGHTER)
+          .setBenefit("benefit")
+          .setSpecial("special")
+          .setNormal("normal")
+          .setPrerequisites("prerequisites")
+          .addEffect(
+              BaseFeatProto.Effect.newBuilder()
+                  .setAffects(Entries.BaseQualityProto.Effect.Affects.AC)
+                  .setReference("refernece")
+                  .setModifier(
+                      ModifierProto.newBuilder()
+                          .addModifier(
+                              ModifierProto.Modifier
+                                  .newBuilder()
+                                  .setBaseValue(42)
+                                  .setType(ModifierProto.Type.RAGE)
+                                  .setCondition("condition")
+                                  .build())
+                          .build())
+                  .build())
+          .build();
+      BaseFeat feat = new BaseFeat();
+      feat.fromProto(proto);
+      assertEquals("proto", proto, feat.toProto());
+    }
   }
-
-  //........................................................................
 }

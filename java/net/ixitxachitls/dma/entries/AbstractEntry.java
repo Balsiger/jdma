@@ -763,262 +763,26 @@ public abstract class AbstractEntry
     m_base = inValues.use("base", m_base, Values.NOT_EMPTY);
   }
 
-  //------------------------------ updateKey -------------------------------
-
   /**
    * Update the values that are related to the key with new data.
    *
    * @param       inKey the new key of the entry
-   *
    */
   public void updateKey(EntryKey inKey)
   {
     // nothing to do here
   }
 
-  //........................................................................
-
-  //------------------------------- setOwner -------------------------------
-
   /**
    * Set the owner of the entry.
    *
    * @param       inOwner the owning entry
-   *
    */
   public void setOwner(AbstractEntry inOwner)
   {
     // abstract entries don't have an owner
   }
 
-  //........................................................................
-  //-------------------------------- store ---------------------------------
-
-  /**
-   * Store this entry in the given storage container.
-   *
-   * @param       inStorage   the storage that stores this entry
-   *
-   * @return      true if stored, false if not
-   *
-   * @undefined   never
-   *
-   */
-//   public boolean store(Storage<? extends AbstractEntry> inStorage)
-//   {
-// //     return store(inStorage, -1, -1, -1, -1);
-//   }
-
-  //........................................................................
-  //-------------------------------- store ---------------------------------
-
-  /**
-   * Store this entry in the given storage container.
-   *
-   * @param       inStorage   the storage that stores this entry
-   * @param       inStartPos  the starting position in the file
-   * @param       inStartLine the start line in the file
-   * @param       inEndPos    the ending position in the file
-   * @param       inEndLine   the ending line in the file
-   *
-   * @return      true if stored, false if not
-   *
-   * @undefined   never
-   *
-   */
-//   @SuppressWarnings("unchecked") // casting of storage type
-//   public boolean store(Storage<? extends AbstractEntry> inStorage,
-//                        long inStartPos, long inStartLine, long inEndPos,
-//                        long inEndLine)
-//   {
-//     remove();
-
-//     m_storage = (Storage<AbstractEntry>)inStorage;
-
-//     // store positions
-// //     m_startPos  = inStartPos;
-// //     m_startLine = inStartLine;
-// //     m_endPos    = inEndPos;
-// //     m_endLine   = inEndLine;
-
-//     if(m_storage == null)
-//       return false;
-
-//     // add the entry to the campaign
-//     if(!m_storage.getCampaign().add(this))
-//       return false;
-
-//     // store all the attachments as well
-//     for(Iterator<AbstractAttachment> i = getAttachments(); i.hasNext(); )
-//       i.next().store(m_storage);
-
-//     // check if complete, if not do it
-//     if(!m_complete)
-//       complete();
-
-//     // apply modifiers to storage, if any
-//     // we don't have any here, but some might be required in derivations
-
-//     return true;
-//   }
-
-  //........................................................................
-  //-------------------------------- remove --------------------------------
-
-  /**
-   * Remove the entry from the current storage.
-   *
-   * @return      true if remove, false if not
-   *
-   * @undefined   never
-   *
-   */
-//   public boolean remove()
-//   {
-//     if(m_storage == null)
-//       return false;
-
-//     // remove the entry from the current storage
-//     m_storage.remove(this);
-//     m_storage = null;
-
-//     return true;
-//   }
-
-  //........................................................................
-  //--------------------------------- read ---------------------------------
-
-  /**
-   * Read an entry from the reader.
-   *
-   * @param       inReader   the reader to read from
-   *
-   * @return      the entry read or null of no matching entry found.
-   *
-   */
-  /*
-  @SuppressWarnings("unchecked") // calling complete on base type
-  public static @Nullable AbstractEntry read(ParseReader inReader)
-  {
-    if(inReader.isAtEnd())
-      return null;
-
-    ParseReader.Position start = inReader.getPosition();
-
-    //----- leading comment ------------------------------------------------
-
-    Comment leading = new Comment(MAX_LEADING_COMMENTS, MAX_LEADING_LINES);
-    leading = leading.read(inReader);
-
-    //......................................................................
-    //----- type -----------------------------------------------------------
-
-    String typeName = "";
-    String className = "";
-    Class<? extends AbstractEntry> entry = null;
-    for(int i = 0; i < MAX_KEYWORD_WORDS; i++)
-    {
-      String word = null;
-      try
-      {
-        word = inReader.readWord();
-      }
-      catch(net.ixitxachitls.input.ReadException e)
-      {
-        break;
-      }
-
-      typeName += " " + word;
-      className += java.lang.Character.toUpperCase(word.charAt(0))
-        + word.substring(1);
-
-      try
-      {
-        entry = (Class<? extends AbstractEntry>)
-          Class.forName(PACKAGE + className);
-
-        // could load class
-        break;
-      }
-      catch(ClassNotFoundException e) // $codepro.audit.disable
-      {
-        // class not found, try with next word
-      }
-    }
-
-    if(entry == null)
-    {
-      inReader.seek(start);
-
-      return null;
-    }
-
-    typeName = typeName.trim();
-
-    //......................................................................
-    //----- create ---------------------------------------------------------
-
-    // create the entry
-    AbstractType<? extends AbstractEntry> type =
-      AbstractType.getTyped(typeName);
-
-    if(type == null)
-    {
-      Log.error("cannot get type for '" + typeName + "'");
-      return null;
-    }
-
-    AbstractEntry result = type.create();
-
-    //......................................................................
-
-    if(result == null || !result.readEntry(inReader))
-      return null;
-
-    // store the additional values
-    if(leading != null)
-      result.m_leadingComment = leading;
-
-    // skip a newline (if any)
-    inReader.expect('\n');
-
-    // read the trailing comment
-    Comment trailing = result.m_trailingComment.read(inReader);
-    if(trailing != null)
-      result.m_trailingComment = trailing;
-
-    // clear the changed flag (we created a new one, of course it is
-    // changed, but who should be interested in that...)
-    result.changed(false);
-
-    ParseReader.Position end = inReader.getPosition();
-    result.m_startLine = start.getLine();
-    result.m_startPos  = start.getPosition();
-    result.m_endLine   = end.getLine();
-    result.m_endPos    = end.getPosition();
-
-    // fix the comments
-    if(!result.m_leadingComment.isDefined() && !result.m_name.isEmpty())
-        result.m_leadingComment =
-          result.m_leadingComment.as("#----- " + result.m_name + "\n\n");
-    else
-      // fix the number of newlines before and after
-      result.m_leadingComment.fix();
-
-    if(!result.m_trailingComment.isDefined())
-      result.m_trailingComment = result.m_trailingComment.as("\n#.....\n");
-    else
-      result.m_trailingComment.fix();
-
-    // obtain and store all errors found for this entry
-    for(BaseError error : inReader.fetchErrors())
-      result.addError(error);
-
-    return result;
-  }
-  */
-
-  //........................................................................
   //------------------------------- addBase --------------------------------
 
   /**
