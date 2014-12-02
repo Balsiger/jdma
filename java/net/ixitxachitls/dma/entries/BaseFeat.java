@@ -325,22 +325,22 @@ public class BaseFeat extends BaseEntry
       BaseFeat feat = new BaseFeat("");
 
       Values values = new Values(
-        new ImmutableSetMultimap.Builder<String, String>()
-            .put("name", "Invincible")
-            .put("feat_type", "FIGHTER")
-            .put("benefit", "Cannot loose")
-            .put("special", "wins")
-            .put("normal", "looses")
-            .put("prerequisites", "Are you a god?")
-            .put("effect.affects", "Armor Class")
-            .put("effect.name", "name-1")
-            .put("effect.modifier", "+2")
-            .put("effect.text", "text-1")
-            .put("effect.affects", "Reflex save")
-            .put("effect.name", "name-2")
-            .put("effect.modifier", "+2 dodge")
-            .put("effect.text", "text-2")
-            .build());
+          new ImmutableSetMultimap.Builder<String, String>()
+              .put("name", "Invincible")
+              .put("feat_type", "FIGHTER")
+              .put("benefit", "Cannot loose")
+              .put("special", "wins")
+              .put("normal", "looses")
+              .put("prerequisites", "Are you a god?")
+              .put("effect.affects", "Armor Class")
+              .put("effect.name", "name-1")
+              .put("effect.modifier", "+2")
+              .put("effect.text", "text-1")
+              .put("effect.affects", "Reflex save")
+              .put("effect.name", "name-2")
+              .put("effect.modifier", "+2 dodge")
+              .put("effect.text", "text-2")
+              .build());
       feat.set(values);
       assertEquals("messaegs", "[]", values.obtainMessages().toString());
       assertEquals("name", "Invincible", feat.getName());
@@ -351,7 +351,7 @@ public class BaseFeat extends BaseEntry
       assertEquals("prerequisites", "Are you a god?",
                    feat.getPrerequisites().get());
       assertEquals("effects", "[Armor Class name-1 +2 text-1, "
-                   + "Reflex Save name-2 +2 dodge text-2]",
+                       + "Reflex Save name-2 +2 dodge text-2]",
                    feat.getEffects().toString());
     }
 
@@ -363,7 +363,7 @@ public class BaseFeat extends BaseEntry
       BaseFeat feat = new BaseFeat("");
 
       assertTrue("shown to",
-                  feat.isShownTo(Optional.<BaseCharacter>absent()));
+                 feat.isShownTo(Optional.<BaseCharacter>absent()));
       assertTrue("show to", feat.isShownTo(Optional.of(character)));
 
       assertFalse("is dm",
@@ -399,11 +399,11 @@ public class BaseFeat extends BaseEntry
       BaseFeatProto proto = BaseFeatProto
           .newBuilder()
           .setBase(BaseEntryProto.newBuilder()
-                                 .setAbstract(Entries.AbstractEntryProto
-                                                  .newBuilder()
-                                                  .setName("name")
-                                                  .setType("base feat")
-                                                  .build()))
+                       .setAbstract(Entries.AbstractEntryProto
+                                        .newBuilder()
+                                        .setName("name")
+                                        .setType("base feat")
+                                        .build()))
           .setType(BaseFeatProto.Type.FIGHTER)
           .setBenefit("benefit")
           .setSpecial("special")

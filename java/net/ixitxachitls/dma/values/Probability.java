@@ -33,41 +33,59 @@ import net.ixitxachitls.dma.values.enums.Named;
 /** The possible probabilities for items. */
 public enum Probability implements Named
 {
-  /** Only a single such item exists in the world. */
+  /**
+   * Only a single such item exists in the world.
+   */
   UNKNOWN("Unknown", BaseItemProto.Probability.UNKNOWN),
-  /** Only a single such item exists in the world. */
+  /**
+   * Only a single such item exists in the world.
+   */
   UNIQUE("Unique", BaseItemProto.Probability.UNIQUE),
-  /** A very rare thing, multiple might exist in the whole world. */
+  /**
+   * A very rare thing, multiple might exist in the whole world.
+   */
   VERY_RARE("Very Rare", BaseItemProto.Probability.VERY_RARE),
-  /** A rare thing, most people rarely see it. */
+  /**
+   * A rare thing, most people rarely see it.
+   */
   RARE("Rare", BaseItemProto.Probability.RARE),
-  /** An uncommon thing, but still often seen. */
+  /**
+   * An uncommon thing, but still often seen.
+   */
   UNCOMMON("Uncommon", BaseItemProto.Probability.UNCOMMON),
-  /** A common, everyday thing. */
+  /**
+   * A common, everyday thing.
+   */
   COMMON("Common", BaseItemProto.Probability.COMMON);
 
-  /** The value's name. */
+  /**
+   * The value's name.
+   */
   private String m_name;
 
-  /** The prot enum value. */
+  /**
+   * The prot enum value.
+   */
   private BaseItemProto.Probability m_proto;
 
-  /** The parser for probability values. */
+  /**
+   * The parser for probability values.
+   */
   public static final Parser<Probability> PARSER =
-    new Parser<Probability>(1)
-    {
-      @Override
-      public Optional<Probability> doParse(String inValue)
+      new Parser<Probability>(1)
       {
-        return Probability.fromString(inValue);
-      }
-    };
+        @Override
+        public Optional<Probability> doParse(String inValue)
+        {
+          return Probability.fromString(inValue);
+        }
+      };
 
   /**
    * Create the name.
    *
-   * @param inName     the name of the value
-   * @param inProto    the proto enum value
+   * @param inName  the name of the value
+   * @param inProto the proto enum value
    */
   private Probability(String inName, BaseItemProto.Probability inProto)
   {
@@ -91,11 +109,11 @@ public enum Probability implements Named
    * Get the probability for this selection.
    *
    * @return the probability number for this. It can be used to randomly roll
-   *         up items with the appropriate probability distribution.
+   * up items with the appropriate probability distribution.
    */
   public int getProbability()
   {
-    return (int)Math.pow(FACTOR, ordinal());
+    return (int) Math.pow(FACTOR, ordinal());
   }
 
   /**
@@ -113,10 +131,14 @@ public enum Probability implements Named
   //  /
   //     | VALUE_MOD_RANGE_LOW   | VALUE_MODE_RANGE_HIGH
 
-  /** The percentage of the random range to use for adjustments (high). */
+  /**
+   * The percentage of the random range to use for adjustments (high).
+   */
   public static final int RANGE_HIGH = 90;
 
-  /** The percentage of the random range to use for adjustments (high). */
+  /**
+   * The percentage of the random range to use for adjustments (high).
+   */
   public static final int RANGE_LOW = 10;
 
   /**
@@ -132,7 +154,7 @@ public enum Probability implements Named
   /**
    * Get the group matching the given proto value.
    *
-   * @param  inProto     the proto value to look for
+   * @param inProto the proto value to look for
    * @return the matched enum (will throw exception if not found)
    */
   public static Probability fromProto(BaseItemProto.Probability inProto)
@@ -144,7 +166,7 @@ public enum Probability implements Named
     throw new IllegalStateException("invalid proto probability: " + inProto);
   }
 
- /**
+  /**
    * All the possible names for the probability.
    *
    * @return the possible names
@@ -169,5 +191,26 @@ public enum Probability implements Named
         return Optional.of(probability);
 
     return Optional.absent();
+  }
+
+  //----------------------------------------------------------------------------
+
+  /**
+   * The test.
+   */
+  public static class Test extends net.ixitxachitls.util.test.TestCase
+  {
+    /**
+     * Test probabilistic value.
+     */
+    @org.junit.Test
+    public void probability()
+    {
+      assertEquals("probability", 1, Probability.UNIQUE.getProbability());
+      assertEquals("probability", 5, Probability.VERY_RARE.getProbability());
+      assertEquals("probability", 25, Probability.RARE.getProbability());
+      assertEquals("probability", 125, Probability.UNCOMMON.getProbability());
+      assertEquals("probability", 625, Probability.COMMON.getProbability());
+    }
   }
 }

@@ -32,6 +32,8 @@ import java.util.regex.Pattern;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.appengine.labs.repackaged.com.google.common.collect.ImmutableList;
+
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.util.configuration.Config;
@@ -110,17 +112,17 @@ public class TestCase extends org.junit.Assert
     List<Object> expected = new ArrayList<Object>();
 
     for(Iterator<?> i = inActual.iterator(); i.hasNext(); )
-      actual.add(i.next());
+      actual.add(i.next().toString());
 
     for(Object o : inExpected)
-      expected.add(o);
+      expected.add(o.toString());
 
     if(actual.size() != expected.size())
       raiseFailure(inMessage, expected, actual);
 
     for(Object o : actual)
       if(!expected.remove(o))
-        raiseFailure(inMessage, expected, actual);
+        raiseFailure(inMessage, ImmutableList.of(o), actual);
   }
 
   //........................................................................

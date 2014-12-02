@@ -25,15 +25,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseArmorProto;
 import net.ixitxachitls.dma.proto.Entries.BaseCommodityProto;
 import net.ixitxachitls.dma.proto.Entries.BaseContainerProto;
@@ -62,21 +61,20 @@ import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.ModifierType;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.NamedModifier;
-import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.Values;
-import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.Probability;
 import net.ixitxachitls.dma.values.Proficiency;
-import net.ixitxachitls.dma.values.enums.Group;
-import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.Slot;
 import net.ixitxachitls.dma.values.Substance;
+import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.Volume;
 import net.ixitxachitls.dma.values.WeaponStyle;
 import net.ixitxachitls.dma.values.WeaponType;
+import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.enums.Ability;
-import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.dma.values.enums.Group;
+import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -86,7 +84,6 @@ import net.ixitxachitls.util.logging.Log;
  * @file          BaseItem.java
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
-@ParametersAreNonnullByDefault
 public class BaseItem extends BaseEntry
 {
   /** The serial version id. */
@@ -412,6 +409,11 @@ public class BaseItem extends BaseEntry
     return false;
   }
 
+  /**
+   * Check whether the item is a weapon with finesse.
+   *
+   * @return true if it has finesse, false else
+   */
   public boolean hasFinesse()
   {
     if(m_finesse)
@@ -737,6 +739,11 @@ public class BaseItem extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the items appearances.
+   *
+   * @return a list of the appearances with probability
+   */
   public List<Appearance> getAppearances()
   {
     return Collections.unmodifiableList(m_appearances);
@@ -1136,7 +1143,7 @@ public class BaseItem extends BaseEntry
    */
   public Annotated<Optional<WeaponStyle>> getCombinedWeaponStyle()
   {
-    if(m_style!= WeaponStyle.UNKNOWN)
+    if(m_style != WeaponStyle.UNKNOWN)
       return new Annotated.Max<WeaponStyle>(m_style, getName());
 
     Annotated.Max<WeaponStyle> combined = new Annotated.Max<>();
@@ -1285,7 +1292,13 @@ public class BaseItem extends BaseEntry
     return combined;
   }
 
-  public boolean isAmmunition() {
+  /**
+   * Check whether the item is ammunition.
+   *
+   * @return true for ammunition, false if not
+   */
+  public boolean isAmmunition()
+  {
     if (m_ammunition)
       return true;
 
@@ -1715,7 +1728,7 @@ public class BaseItem extends BaseEntry
   *
   * @return      the text for the random appearance.
   */
-  public @Nullable String getRandomAppearance(double inFactor)
+  public String getRandomAppearance(double inFactor)
   {
     if(!m_appearances.isEmpty())
     {
@@ -1747,7 +1760,7 @@ public class BaseItem extends BaseEntry
       {
         String appearance = ((BaseItem)base).getRandomAppearance(inFactor);
 
-        if(appearance != null)
+        if(!appearance.isEmpty())
           appearances.add(appearance);
       }
 
@@ -1983,7 +1996,8 @@ public class BaseItem extends BaseEntry
 
     if(isCommodity())
     {
-      BaseCommodityProto.Builder commodityBuilder = BaseCommodityProto.newBuilder();
+      BaseCommodityProto.Builder commodityBuilder =
+          BaseCommodityProto.newBuilder();
 
       if(m_area.isPresent())
         commodityBuilder.setArea(m_area.get().toProto());
@@ -1995,7 +2009,8 @@ public class BaseItem extends BaseEntry
 
     if(isContainer())
     {
-      BaseContainerProto.Builder containerBuilder = BaseContainerProto.newBuilder();
+      BaseContainerProto.Builder containerBuilder =
+          BaseContainerProto.newBuilder();
 
       if(m_capacity.isPresent())
         containerBuilder.setCapacity(m_capacity.get().toProto());
@@ -2007,7 +2022,8 @@ public class BaseItem extends BaseEntry
 
     if(isWearable())
     {
-      BaseWearableProto.Builder wearableBuilder = BaseWearableProto.newBuilder();
+      BaseWearableProto.Builder wearableBuilder =
+          BaseWearableProto.newBuilder();
 
       if(m_slot != Slot.UNKNOWN)
         wearableBuilder.setSlot(m_slot.toProto());
@@ -2156,6 +2172,11 @@ public class BaseItem extends BaseEntry
     m_remove = inValues.use("wearable.remove", m_remove, Duration.PARSER);
   }
 
+  /**
+   * Merge the data from the given proto into this item.
+   *
+   * @param inProto the proto to merge from
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseItemProto))
@@ -2257,16 +2278,17 @@ public class BaseItem extends BaseEntry
     {
       BaseWearableProto wearableProto = proto.getWearable();
 
-      if(wearableProto. hasSlot())
-        m_slot = Slot.fromProto(wearableProto. getSlot());
+      if(wearableProto.hasSlot())
+        m_slot = Slot.fromProto(wearableProto.getSlot());
 
-      if(wearableProto. hasWear())
+      if(wearableProto.hasWear())
         m_don = Optional.of(Duration.fromProto(wearableProto.getWear()));
 
-      if(wearableProto. hasWearHastily())
-        m_donHastily = Optional.of(Duration.fromProto(wearableProto.getWearHastily()));
+      if(wearableProto.hasWearHastily())
+        m_donHastily =
+            Optional.of(Duration.fromProto(wearableProto.getWearHastily()));
 
-      if(wearableProto. hasRemove())
+      if(wearableProto.hasRemove())
         m_remove = Optional.of(Duration.fromProto(wearableProto.getRemove()));
     }
 
@@ -2283,20 +2305,22 @@ public class BaseItem extends BaseEntry
     {
       BaseArmorProto armorProto = proto.getArmor();
 
-      if(armorProto. hasAcBonus())
+      if(armorProto.hasAcBonus())
         m_armorBonus = Optional.of(Modifier.fromProto(armorProto.getAcBonus()));
-      if(armorProto. hasType())
-        m_armorType = ArmorType.fromProto(armorProto. getType());
-      if(armorProto. hasMaxDexterity())
-        m_maxDex = Optional.of(armorProto. getMaxDexterity());
-      if(armorProto. hasCheckPenalty())
-        m_checkPenalty = Optional.of(armorProto. getCheckPenalty());
-      if(armorProto. hasArcaneFailure())
-        m_arcane = Optional.of(armorProto. getArcaneFailure());
-      if(armorProto. hasSpeedFast())
-        m_speedFast = Optional.of(Distance.fromProto(armorProto.getSpeedFast()));
-      if(armorProto. hasSpeedSlow())
-        m_speedFast = Optional.of(Distance.fromProto(armorProto.getSpeedSlow()));
+      if(armorProto.hasType())
+        m_armorType = ArmorType.fromProto(armorProto.getType());
+      if(armorProto.hasMaxDexterity())
+        m_maxDex = Optional.of(armorProto.getMaxDexterity());
+      if(armorProto.hasCheckPenalty())
+        m_checkPenalty = Optional.of(armorProto.getCheckPenalty());
+      if(armorProto.hasArcaneFailure())
+        m_arcane = Optional.of(armorProto.getArcaneFailure());
+      if(armorProto.hasSpeedFast())
+        m_speedFast =
+            Optional.of(Distance.fromProto(armorProto.getSpeedFast()));
+      if(armorProto.hasSpeedSlow())
+        m_speedFast =
+            Optional.of(Distance.fromProto(armorProto.getSpeedSlow()));
     }
 
     if(proto.hasCommodity())
@@ -2353,277 +2377,223 @@ public class BaseItem extends BaseEntry
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
-  //extends ValueGroup.Test
   {
-    /**
-     * Create a typical base item for testing purposes.
-     *
-     * @return the newly created base item
-     */
-    public static AbstractEntry createBaseItem()
-    {
-      try (java.io.StringReader sReader = new java.io.StringReader(s_text))
-      {
-        ParseReader reader = new ParseReader(sReader, "test");
-
-        return null; //BaseItem.read(reader);
-      }
-    }
-
-    /** Test text. */
-    private static String s_text =
-      "#------ winter blanket -------------------\n"
-      + "\n"
-      + "base item with light, timed winter blanket = \n"
-      + "\n"
-      + "  synonyms      \"blanket, winter\", \"guru\";\n"
-      + "  player name   \"guru\";\n"
-      + "  categories    warmth;\n"
-      + "  value         5 sp;\n"
-      + "  weight        [+3 lbs \"guru\"];\n"
-      + "  size          small;\n"
-      + "  probability   rare;\n"
-      + "  hardness      0;\n"
-      + "  hp            1;\n"
-      + "  bright light  2 m sphere;\n"
-      + "  shadowy light 4 m cone;\n"
-      + "  duration      1 hour;\n"
-      + "  world         generic;\n"
-      + "  appearances   unique    \"first\","
-      + "                common    \"second\","
-      + "                common    \"third\","
-      + "                rare      \"fourth\","
-      + "                very rare \"fifth\","
-      + "                unique    \"and sixth, the last one\";"
-      + "  references    \"TSR 11550\" 107;\n"
-      + "  description   \n"
-      + "\n"
-      + "  \"A thick, quilted, wool blanket.\".\n"
-      + "\n"
-      + "#.......................................................\n"
-      + "\n";
-
-    /** Test reading. */
-    // @org.junit.Test
-    // public void read()
-    // {
-    //   String result =
-    //     "#------ winter blanket -------------------\n"
-    //     + "\n"
-    //     + "base item with light, timed winter blanket =\n"
-    //     + "\n"
-    //     + "  bright light      2 m Sphere;\n"
-    //     + "  shadowy light     4 m Cone;\n"
-    //     + "  duration          1 hour;\n"
-    //     + "  value             5 sp;\n"
-    //     + "  weight            [+3 lbs \"guru\"];\n"
-    //     + "  probability       Rare;\n"
-    //     + "  size              Small;\n"
-    //     + "  hardness          0;\n"
-    //     + "  hp                1;\n"
-    //     + "  appearances       Unique \"first\",\n"
-    //     + "                    Common \"second\",\n"
-    //     + "                    Common \"third\",\n"
-    //     + "                    Rare \"fourth\",\n"
-    //     + "                    Very Rare \"fifth\",\n"
-    //     + "                    Unique \"and sixth, the last one\";\n"
-    //     + "  player name       \"guru\";\n"
-    //     + "  world             Generic;\n"
-    //     + "  references        \"TSR 11550\" 107;\n"
-    //     + "  description       \n"
-    //     + "  \"A thick, quilted, wool blanket.\";\n"
-    //     + "  synonyms          \"blanket, winter\",\n"
-    //     + "                    \"guru\";\n"
-    //     + "  categories        warmth.\n"
-    //     + "\n"
-    //     + "#.......................................................\n";
-    //   AbstractEntry entry = createBaseItem();
-
-    //   assertNotNull("base item should have been read", entry);
-    //   assertEquals("base item name does not match", "winter blanket",
-    //                 entry.getName());
-    //   assertEquals("base item does not match", result, entry.toString());
-    // }
-
-    /** Check size values. */
+    /** The init Test. */
     @org.junit.Test
-    public void size()
+    public void init()
     {
-      assertEquals("add", Size.MEDIUM, Size.TINY.add(2));
-      assertEquals("add", Size.LARGE, Size.SMALL.add(2));
-      assertEquals("add", Size.GARGANTUAN, Size.SMALL.add(4));
-      assertEquals("add", Size.SMALL, Size.GARGANTUAN.add(-4));
+      BaseItem item = new BaseItem("Item");
 
-      assertEquals("difference", 1, Size.TINY.difference(Size.DIMINUTIVE));
-      assertEquals("difference", -1, Size.TINY.difference(Size.SMALL));
-      assertEquals("difference", -6, Size.TINY.difference(Size.COLOSSAL));
-
-      assertTrue("bigger", Size.SMALL.isBigger(Size.TINY));
-      assertTrue("bigger", Size.LARGE.isBigger(Size.SMALL));
-      assertTrue("bigger", Size.GARGANTUAN.isBigger(Size.HUGE));
-      assertFalse("bigger", Size.HUGE.isBigger(Size.GARGANTUAN));
-      assertFalse("bigger", Size.SMALL.isBigger(Size.MEDIUM));
-      assertFalse("bigger", Size.TINY.isBigger(Size.GARGANTUAN));
-
-      assertFalse("smaller", Size.SMALL.isSmaller(Size.TINY));
-      assertFalse("smaller", Size.LARGE.isSmaller(Size.SMALL));
-      assertFalse("smaller", Size.GARGANTUAN.isSmaller(Size.HUGE));
-      assertTrue("smaller", Size.HUGE.isSmaller(Size.GARGANTUAN));
-      assertTrue("smaller", Size.SMALL.isSmaller(Size.MEDIUM));
-      assertTrue("smaller", Size.TINY.isSmaller(Size.GARGANTUAN));
-
-      assertEquals("reach", 5, Size.SMALL.reach(SizeModifier.TALL));
-      assertEquals("reach", 0, Size.SMALL.reach(SizeModifier.LONG));
-      assertEquals("reach", 5, Size.MEDIUM.reach(SizeModifier.TALL));
-      assertEquals("reach", 5, Size.MEDIUM.reach(SizeModifier.LONG));
-      assertEquals("reach", 10, Size.LARGE.reach(SizeModifier.TALL));
-      assertEquals("reach", 5, Size.LARGE.reach(SizeModifier.LONG));
-      assertEquals("reach", 20, Size.GARGANTUAN.reach(SizeModifier.TALL));
-      assertEquals("reach", 15, Size.GARGANTUAN.reach(SizeModifier.LONG));
+      assertEquals("name", "Item", item.getName());
+      assertFalse("weapon", item.isWeapon());
+      assertFalse("counted", item.isCounted());
+      assertFalse("light", item.isLight());
+      assertFalse("timed", item.isTimed());
+      assertFalse("magical", item.isMagical());
+      assertFalse("armor", item.isArmor());
+      assertFalse("commodity", item.isCommodity());
+      assertFalse("container", item.isContainer());
+      assertFalse("wearable", item.isWearable());
+      assertFalse("finesse", item.hasFinesse());
+      assertFalse("hp", item.getHP().isPresent());
+      assertEquals("hardness", 0, item.getHardness());
     }
 
-    /** Test probabilistic value. */
+    /** Test setting. */
     @org.junit.Test
-    public void probability()
+    public void set()
     {
-      assertEquals("probability", 1, Probability.UNIQUE.getProbability());
-      assertEquals("probability", 5, Probability.VERY_RARE.getProbability());
-      assertEquals("probability", 25, Probability.RARE.getProbability());
-      assertEquals("probability", 125, Probability.UNCOMMON.getProbability());
-      assertEquals("probability", 625, Probability.COMMON.getProbability());
+      BaseItem item = new BaseItem("");
+
+      Values values = new Values(
+          new ImmutableSetMultimap.Builder<String, String>()
+              .put("name", "Item")
+              .put("player_name", "Player")
+              .put("value", "5gp")
+              .put("weight", "3 lb")
+              .put("hp", "42")
+              .put("size", "TIny")
+              .put("size_modifier", "tall")
+              .put("thickness", "3 in")
+              .put("hardness", "23")
+              .put("break", "33")
+              .put("probability", "RARE")
+              .put("substance", "wood")
+              .put("appearances.probability", "rare")
+              .put("appearances.text", "rare")
+              .put("appearances.probability", "common")
+              .put("appearances.text", "common")
+              .put("appearances.probability", "unique")
+              .put("appearances.text", "unique")
+
+              .put("multiple", "2")
+              .put("multiuse", "4")
+              .put("count_unit", "day")
+
+              .put("light.shape", "sphere")
+              .put("light.bright", "20ft")
+              .put("light.shadowy", "12 ft")
+
+              .put("timed", "3h")
+
+              .put("magical.type", "Strength")
+              .put("magical.modifier", "+2 dodge")
+
+              .put("weapon.damage.first", "2d4")
+              .put("weapon.damage.second", "1d6")
+              .put("weapon.damage.splash", "1d3")
+              .put("weapon.damage.critical", "19-20/x3")
+              .put("weapon.type", "bludgeoning")
+              .put("weapon.proficiency", "martial")
+              .put("weapon.range", "20 ft")
+              .put("weapon.reach", "15 ft")
+              .put("weapon.max_attacks", "3")
+              .put("weapon.finesse", "true")
+              .put("weapon.ammunition", "FALSE")
+
+              .put("armor.bonus", "+2 dodge")
+              .put("armor.type", "light armor")
+              .put("armor.max_dex", "4")
+              .put("armor.check_penalty", "10")
+              .put("armor.arcane_failure", "5")
+              .put("armor.speed_slow", "20 ft")
+              .put("armor.speed_fast", "40 ft")
+
+              .put("commodity.area", "2 sq ft")
+              .put("commodity.length", "3 ft")
+
+              .put("container.capacity", "3 cu in")
+              .put("container.state", "liquid")
+
+              .put("wearable.slot", "TORSO")
+              .put("wearable.don", "4 min")
+              .put("wearable.don_hastily", "1 standard action")
+              .put("wearable.remove", "1 min")
+              .build());
+      item.set(values);
+      assertEquals("messaegs", "[]", values.obtainMessages().toString());
+      assertEquals("name", "Item", item.getName());
+      assertEquals("player name", "Player", item.getPlayerName().get());
+      assertEquals("value", "5 gp", item.getValue().get().toString());
+      assertEquals("weight", "3 lb", item.getWeight().get().toString());
+      assertEquals("hp", 42, (long) item.getHP().get());
+      assertEquals("size", "Tiny", item.getSize().toString());
+      assertEquals("size modifier", "tall", item.getSizeModifier().toString());
+      assertEquals("thickness", "3 in", item.getThickness().get().toString());
+      assertEquals("hardness", 23, item.getHardness());
+      assertEquals("break", 33, (long) item.getBreakDC().get());
+      assertEquals("probability", "Rare", item.getProbability().toString());
+      assertEquals("substance", "wood", item.getSubstance().toString());
+      assertEquals("appearances",
+                   "[rare (Rare), common (Common), unique (Unique)]",
+                   item.getAppearances().toString());
+      assertEquals("multiple", 2, (int) item.getMultiple().get());
+      assertTrue("counted", item.isCounted());
+      assertEquals("multiuse", 4, (int) item.getMultiuse().get());
+      assertEquals("light shape", "Sphere", item.getLightShape().toString());
+      assertEquals("bright light", "20 ft",
+                   item.getBrightLight().get().toString());
+      assertEquals("shadowy light", "12 ft",
+                   item.getShadowyLight().get().toString());
+      assertTrue("timed", item.isTimed());
+      assertEquals("timed", "3 hours", item.getTimed().get().toString());
+      assertEquals("magical", "[Strength +2 dodge]",
+                   item.getMagicalModifiers().toString());
+      assertEquals("weapon damage", "2d4", item.getDamage().get().toString());
+      assertEquals("weapon damage", "1d6",
+                   item.getSecondaryDamage().get().toString());
+      assertEquals("splash", "1d3", item.getSplash().get().toString());
+      assertEquals("critical", "19-20/x3", item.getCritical().get().toString());
+      assertEquals("weapon type", "Bludgeoning",
+                   item.getWeaponType().toString());
+      assertEquals("weapon proficiency", "Martial",
+                   item.getProficiency().toString());
+      assertEquals("range", "20 ft", item.getRange().get().toString());
+      assertEquals("reach", "15 ft", item.getReach().get().toString());
+      assertEquals("max attack", 3, (int) item.getMaxAttacks().get());
+      assertTrue("finesse", item.hasFinesse());
+      assertFalse("ammunition", item.isAmmunition());
+      assertTrue("weapon", item.isWeapon());
+      assertEquals("armor bonus", "+2 dodge",
+                   item.getArmorBonus().get().toString());
+      assertEquals("armor type", "Light Armor", item.getArmorType().toString());
+      assertEquals("max dex", 4, (int) item.getMaxDex().get());
+      assertEquals("check penalty", 10, (int)item.getCheckPenalty().get());
+      assertEquals("arcane failure", 5, (int) item.getArcaneFailure().get());
+      assertEquals("slow speed", "20 ft", item.getSlowSpeed().get().toString());
+      assertEquals("fast speed", "40 ft", item.getFastSpeed().get().toString());
+      assertTrue("armor", item.isArmor());
+      assertEquals("area", "2 sq ft", item.getArea().get().toString());
+      assertEquals("length", "3 ft", item.getLength().get().toString());
+      assertTrue("commodity", item.isCommodity());
+      assertEquals("capacity", "3 cu inches",
+                   item.getCapacity().get().toString());
+      assertEquals("state", "liquid", item.getState().toString());
+      assertTrue("container", item.isContainer());
+      assertEquals("slot", "Torso", item.getSlot().toString());
+      assertEquals("don", "4 minutes", item.getDon().get().toString());
+      assertEquals("player don hastily", "1 standard actions",
+                   item.getDonHastily().get().toString());
+      assertEquals("remove", "1 minutes", item.getRemove().get().toString());
+      assertTrue("wearable", item.isWearable());
     }
 
-    /** Check format for overview. */
-    // @org.junit.Test
-    // public void format()
-    // {
-    //   BaseItem item = new BaseItem("format");
+    /** Test user access. */
+    @org.junit.Test
+    public void user()
+    {
+      BaseCharacter character = new BaseCharacter("Me");
+      BaseItem item = new BaseItem("");
 
-    //   item.setValue(0, 5, 0, 0);
-    //   item.setWeight(33);
+      assertTrue("shown to",
+                 item.isShownTo(Optional.<BaseCharacter>absent()));
+      assertTrue("show to", item.isShownTo(Optional.of(character)));
 
-    //   List<Object> list = FORMATTER.format("key", item);
+      assertFalse("is dm",
+                  character.isDM(Optional.<BaseCharacter>absent()));
+      assertFalse("is dm", item.isDM(Optional.of(character)));
+      character.setGroup(Group.ADMIN);
+      assertTrue("is dm", item.isDM(Optional.of(character)));
+    }
 
-    //   assertEquals("weight", "5 gp", extract(list.get(4), 1, 1, 2));
-    //   assertEquals("value", "33 lbs", extract(list.get(5), 1, 1, 1, 2));
-    // }
+    /** Test searchable. */
+    @org.junit.Test
+    public void searchables()
+    {
+      BaseItem item = new BaseItem("Item");
+      assertEquals("size", 1, item.collectSearchables().size());
+      assertEquals("bases", "[]",
+                   item.collectSearchables().get("bases").toString());
+    }
 
-    /** Testing of the base product specific indexes. */
-    // @org.junit.Test
-    // public void indexes()
-    // {
-    //   BaseCampaign.GLOBAL.m_bases.clear();
+    /** Test indexes. */
+    @org.junit.Test
+    public void indexes()
+    {
+      BaseItem item = new BaseItem("item");
+      assertEquals("size", 10, item.computeIndexValues().size());
+      assertContentAnyOrder("keys", item.computeIndexValues().keySet(),
+                            "ARMOR_TYPES", "HPS", "WEAPON_STYLES", "STATES",
+                            "PROBABILITIES", "WEAPON_TYPES", "PROFICIENCIES",
+                            "SUBSTANCES", "SLOTS", "SIZES");
+    }
 
-    //   BaseItem item1 = new BaseItem("item1");
-    //   BaseItem item2 = new BaseItem("item2");
-
-    //   item1.setSubstance(Substance.GLASS, 3);
-    //   item2.setSubstance(Substance.ADAMANTINE, new Rational(4, 1, 2));
-
-    //   BaseCampaign.GLOBAL.add(item1);
-    //   BaseCampaign.GLOBAL.add(item2);
-
-    //   m_logger.verify();
-
-    //   for(net.ixitxachitls.dma.entries.indexes.Index<?> index : s_indexes)
-    //   {
-    //     if("Item::Physical".equals(index.getGroup())
-    //        && "Substances".equals(index.getTitle()))
-    //     {
-    //       assertEquals("substances", 2,
-    //                    index.buildNames
-    //                    (BaseCampaign.GLOBAL.getAbstractEntries()).size());
-
-    //       Iterator i =
-    //         index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
-    //         .iterator();
-    //       assertEquals("substances", "glass", i.next().toString());
-    //       assertEquals("substances", "adamantine", i.next().toString());
-
-    //       assertFalse("substances", index.matchesName("guru", item1));
-    //       assertTrue("substances", index.matchesName("Glass", item1));
-    //       assertTrue("substances", index.matchesName("Adamantine", item2));
-    //       assertFalse("substances", index.matchesName("Adamantine", item1));
-
-    //       continue;
-    //     }
-
-    //     if("Item::Physical".equals(index.getGroup())
-    //        && "Thicknesses".equals(index.getTitle()))
-    //     {
-    //       assertEquals("thicknesses", 2,
-    //                    index.buildNames
-    //                    (BaseCampaign.GLOBAL.getAbstractEntries()).size());
-
-    //       Iterator i =
-    //         index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
-    //         .iterator();
-    //       assertEquals("thicknesses", "3 in", i.next().toString());
-    //       assertEquals("thicknesses", "5 in", i.next().toString());
-
-    //       assertFalse("thicknesses", index.matchesName("guru", item1));
-    //       assertTrue("thicknesses", index.matchesName("3 in", item1));
-    //       assertTrue("thicknesses", index.matchesName("5 in", item2));
-    //       assertFalse("thicknesses", index.matchesName("4 1/2 in", item1));
-
-    //       continue;
-    //     }
-    //   }
-
-    //   BaseCampaign.GLOBAL.m_bases.clear();
-    // }
-
-    /** Testing get. */
-    // @org.junit.Test
-    // public void get()
-    // {
-    //   ParseReader reader =
-    //     new ParseReader(new java.io.StringReader(s_text), "test");
-
-    //   BaseItem entry = (BaseItem)BaseProduct.read(reader);
-
-    //   assertEquals("hp", 1, entry.getHP());
-
-    //   assertEquals("weight", "3 lbs", entry.getWeight().toString());
-    //   assertEquals("value", "5 sp", entry.getValue().toString());
-    //   assertEquals("size", Size.SMALL, entry.getSize());
-    //   assertEquals("probability", 25, entry.getProbability());
-    //   assertEquals("player name", "guru", entry.getPlayerName());
-    // }
-
-    /** Test basing items on multiple base items. */
-    // @org.junit.Test
-    // public void based()
-    // {
-    //   BaseItem base1 = new BaseItem("base1");
-    //   base1.setValue(0, 10, 0, 0);
-    //   base1.addAttachment("armor");
-    //   base1.set("AC bonus", "+42");
-
-    //   BaseItem base2 = new BaseItem("base2");
-    //   base2.addAttachment("armor");
-    //   base2.set("check penalty", "-2");
-
-    //   BaseItem base3 = new BaseItem("base3");
-    //   base3.setValue(0, 10, 0, 0);
-
-    //   BaseItem item = new BaseItem("test", base1, base2, base3);
-    //   item.setValue(1, 2, 3, 4);
-    //   item.m_value.setInitializer
-    //     (new net.ixitxachitls.dma.values.aux.Initializer
-    //      (net.ixitxachitls.dma.values.aux.Initializer.ADD));
-
-    //   item.complete();
-    //   item.set("check penalty", "0");
-
-    //   assertEquals("value", "1 pp 22 gp 3 sp 4 cp", item.m_value.toString());
-    //   assertEquals("attachment",
-    //                "net.ixitxachitls.dma.entries.attachments.BaseArmor",
-    //                item.getAttachments().next().getClass().getName());
-    //   assertEquals("check penalty", "0",
-    //                item.getValue("check penalty").toString());
-    //   assertEquals("ac bonus", "+42",
-    //                item.getValue("AC bonus").toString());
-    // }
+    /** Test proto. */
+    @org.junit.Test
+    public void proto()
+    {
+      BaseItemProto proto = BaseItemProto
+          .newBuilder()
+          .setBase(BaseEntryProto.newBuilder()
+                       .setAbstract(AbstractEntryProto
+                                        .newBuilder()
+                                        .setName("name")
+                                        .setType("base item")
+                                        .build()))
+          .build();
+      BaseItem item = new BaseItem();
+      item.fromProto(proto);
+      assertEquals("proto", proto, item.toProto());
+    }
   }
 }

@@ -34,83 +34,123 @@ import net.ixitxachitls.dma.values.SizeModifier;
 /** The possible sizes in the game. */
 public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
 {
-  /** This is an unknown size. */
+  /**
+   * This is an unknown size.
+   */
   UNKNOWN("Unknown", "U", 0, 0, Rational.ZERO, 0, 0, 0,
           BaseItemProto.Size.UNKNOWN_SIZE),
 
-  /** The smallest size. */
+  /**
+   * The smallest size.
+   */
   FINE("Fine", "F", 0, 0, new Rational(0, 1, 2), 0, 8, -16,
        BaseItemProto.Size.FINE),
 
-  /** A very small size. */
+  /**
+   * A very small size.
+   */
   DIMINUTIVE("Diminutive", "D", 0, 0, Rational.ONE, 0, 4, -12,
              BaseItemProto.Size.DIMINUTIVE),
 
-  /** Smaller than small. */
+  /**
+   * Smaller than small.
+   */
   TINY("Tiny", "T", 0, 0, new Rational(2, 1, 2), 0, 2, -8,
        BaseItemProto.Size.TINY),
 
-  /** Just small. */
+  /**
+   * Just small.
+   */
   SMALL("Small", "S", 0, 5, Rational.FIVE, 10, 1, -4,
         BaseItemProto.Size.SMALL),
 
-  /** This is the medium size. */
+  /**
+   * This is the medium size.
+   */
   MEDIUM("Medium-size", "M", 5, 5, Rational.FIVE, 20, 0, 0,
          BaseItemProto.Size.MEDIUM),
 
-  /** Simply large. */
+  /**
+   * Simply large.
+   */
   LARGE("Large", "L", 5, 10, Rational.TEN, 30, -1, 4,
         BaseItemProto.Size.LARGE),
 
-  /** Larger than large. */
+  /**
+   * Larger than large.
+   */
   HUGE("Huge", "H", 10, 15, Rational.FIFTEEN, 40, -2, 8,
        BaseItemProto.Size.HUGE),
 
-  /** Really large. */
+  /**
+   * Really large.
+   */
   GARGANTUAN("Gargantuan", "G", 15, 20, Rational.TWENTY, 60, -4, 12,
              BaseItemProto.Size.GARGANTUAN),
 
-  /** This is the biggest size. */
+  /**
+   * This is the biggest size.
+   */
   COLOSSAL("Colossal", "C", 20, 30, Rational.THIRTY, 80, -8, 16,
            BaseItemProto.Size.COLOSSAL);
 
-  /** The value's name. */
+  /**
+   * The value's name.
+   */
   private String m_name;
 
-  /** The value's short name. */
+  /**
+   * The value's short name.
+   */
   private String m_short;
 
-  /** The reach for a long creature. */
+  /**
+   * The reach for a long creature.
+   */
   private int m_reachLong;
 
-  /** The reach for a tall creature. */
+  /**
+   * The reach for a tall creature.
+   */
   private int m_reachTall;
 
-  /** The space required for this size. */
+  /**
+   * The space required for this size.
+   */
   private Rational m_space;
 
-  /** The bonus hit points for a construct of this size. */
+  /**
+   * The bonus hit points for a construct of this size.
+   */
   private int m_construct;
 
-  /** The size modifier for armor class and attacks. */
+  /**
+   * The size modifier for armor class and attacks.
+   */
   private int m_modifier;
 
-  /** The size modifier for grappling. */
+  /**
+   * The size modifier for grappling.
+   */
   private int m_grapple;
 
-  /** The proto enum value. */
+  /**
+   * The proto enum value.
+   */
   private BaseItemProto.Size m_proto;
 
-  /** The parser for item sizes. */
+  /**
+   * The parser for item sizes.
+   */
   public static final Parser<Size> PARSER =
-    new Parser<Size>(1)
-    {
-      @Override
-      public Optional<Size> doParse(String inValue)
+      new Parser<Size>(1)
       {
-        return Size.fromString(inValue);
-      }
-    };
+        @Override
+        public Optional<Size> doParse(String inValue)
+        {
+          return Size.fromString(inValue);
+        }
+      };
 
   /**
    * Create the name.
@@ -129,15 +169,15 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
                int inReachTall, Rational inSpace, int inConstruct, int inModifier,
                int inGrapple, BaseItemProto.Size inProto)
   {
-    m_name      = inName;
-    m_short     = inShort;
+    m_name = inName;
+    m_short = inShort;
     m_reachLong = inReachLong;
     m_reachTall = inReachTall;
-    m_space     = inSpace;
+    m_space = inSpace;
     m_construct = inConstruct;
-    m_modifier  = inModifier;
-    m_grapple   = inGrapple;
-    m_proto     = inProto;
+    m_modifier = inModifier;
+    m_grapple = inGrapple;
+    m_proto = inProto;
   }
 
   /**
@@ -178,7 +218,6 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
    * done by giving a negative value.
    *
    * @param inDifference the difference to compute with
-   *
    * @return the newly calculated size
    */
   public Size add(int inDifference)
@@ -189,8 +228,7 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
   /**
    * Compute the difference between the two sizes (as categories).
    *
-   * @param  inOther the other size to compare to
-   *
+   * @param inOther the other size to compare to
    * @return the size difference
    */
   public int difference(Size inOther)
@@ -205,7 +243,6 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
    * Check if the given size is bigger than the current one.
    *
    * @param inOther the other size to compare to
-   *
    * @return true if this is bigger than the other, false else
    */
   public boolean isBigger(Size inOther)
@@ -220,7 +257,6 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
    * Check if the given size is smaller than the current one.
    *
    * @param inOther the other size to compare to
-   *
    * @return true if this is smaller than the other, false else
    */
   public boolean isSmaller(Size inOther)
@@ -235,7 +271,6 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
    * Get the reach for a creature of this size.
    *
    * @param inModifier the modifier if the creature is more tall or long
-   *
    * @return the reach in feet
    */
   public int reach(SizeModifier inModifier)
@@ -299,7 +334,7 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
   /**
    * Get the group matching the given proto value.
    *
-   * @param  inProto     the proto value to look for
+   * @param inProto the proto value to look for
    * @return the matched enum (will throw exception if not found)
    */
   public static Size fromProto(BaseItemProto.Size inProto)
@@ -311,7 +346,7 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
     throw new IllegalStateException("invalid proto size: " + inProto);
   }
 
- /**
+  /**
    * All the possible names for the layout.
    *
    * @return the possible names
@@ -336,5 +371,50 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
         return Optional.of(size);
 
     return Optional.absent();
+  }
+
+  //----------------------------------------------------------------------------
+
+  /**
+   * The test.
+   */
+  public static class Test extends net.ixitxachitls.util.test.TestCase
+  {
+    /** Check size values. */
+    @org.junit.Test
+    public void size()
+    {
+      assertEquals("add", Size.MEDIUM, Size.TINY.add(2));
+      assertEquals("add", Size.LARGE, Size.SMALL.add(2));
+      assertEquals("add", Size.GARGANTUAN, Size.SMALL.add(4));
+      assertEquals("add", Size.SMALL, Size.GARGANTUAN.add(-4));
+
+      assertEquals("difference", 1, Size.TINY.difference(Size.DIMINUTIVE));
+      assertEquals("difference", -1, Size.TINY.difference(Size.SMALL));
+      assertEquals("difference", -6, Size.TINY.difference(Size.COLOSSAL));
+
+      assertTrue("bigger", Size.SMALL.isBigger(Size.TINY));
+      assertTrue("bigger", Size.LARGE.isBigger(Size.SMALL));
+      assertTrue("bigger", Size.GARGANTUAN.isBigger(Size.HUGE));
+      assertFalse("bigger", Size.HUGE.isBigger(Size.GARGANTUAN));
+      assertFalse("bigger", Size.SMALL.isBigger(Size.MEDIUM));
+      assertFalse("bigger", Size.TINY.isBigger(Size.GARGANTUAN));
+
+      assertFalse("smaller", Size.SMALL.isSmaller(Size.TINY));
+      assertFalse("smaller", Size.LARGE.isSmaller(Size.SMALL));
+      assertFalse("smaller", Size.GARGANTUAN.isSmaller(Size.HUGE));
+      assertTrue("smaller", Size.HUGE.isSmaller(Size.GARGANTUAN));
+      assertTrue("smaller", Size.SMALL.isSmaller(Size.MEDIUM));
+      assertTrue("smaller", Size.TINY.isSmaller(Size.GARGANTUAN));
+
+      assertEquals("reach", 5, Size.SMALL.reach(SizeModifier.TALL));
+      assertEquals("reach", 0, Size.SMALL.reach(SizeModifier.LONG));
+      assertEquals("reach", 5, Size.MEDIUM.reach(SizeModifier.TALL));
+      assertEquals("reach", 5, Size.MEDIUM.reach(SizeModifier.LONG));
+      assertEquals("reach", 10, Size.LARGE.reach(SizeModifier.TALL));
+      assertEquals("reach", 5, Size.LARGE.reach(SizeModifier.LONG));
+      assertEquals("reach", 20, Size.GARGANTUAN.reach(SizeModifier.TALL));
+      assertEquals("reach", 15, Size.GARGANTUAN.reach(SizeModifier.LONG));
+    }
   }
 }
