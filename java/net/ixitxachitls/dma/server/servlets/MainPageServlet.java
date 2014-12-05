@@ -44,6 +44,7 @@ import net.ixitxachitls.dma.entries.Character;
 // import net.ixitxachitls.dma.entries.Character;
 // import net.ixitxachitls.dma.entries.Encounter;
 // import net.ixitxachitls.dma.entries.Entry;
+import net.ixitxachitls.dma.output.soy.SoyAbstract;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 
@@ -99,8 +100,7 @@ public class MainPageServlet extends PageServlet
       return data;
 
     SortedSet<Campaign> campaigns = new TreeSet<Campaign>();
-    Map<String, List<SoyEntry>> characters =
-      new HashMap<String, List<SoyEntry>>();
+    Map<String, List<SoyAbstract.SoyWrapper>> characters = new HashMap<>();
     for(Character character : DMADataFactory.get().getEntries
           (Character.TYPE, null, "base", user.get().getName()))
     {
@@ -108,46 +108,52 @@ public class MainPageServlet extends PageServlet
         continue;
 
       campaigns.add(character.getCampaign().get());
-      List<SoyEntry> list =
+      List<SoyAbstract.SoyWrapper> list =
         characters.get(character.getCampaign().get().getName());
       if(list == null)
       {
-        list = new ArrayList<SoyEntry>();
+        list = new ArrayList<>();
         characters.put(character.getCampaign().get().getName(), list);
       }
 
-      list.add(new SoyEntry(character));
+      list.add(new SoyAbstract.SoyWrapper(character.getKey().toString(),
+                                          character));
     }
 
-    List<SoyEntry> soyCampaigns = new ArrayList<SoyEntry>();
+    List<SoyAbstract.SoyWrapper> soyCampaigns = new ArrayList<>();
     for(Campaign campaign : campaigns)
-      soyCampaigns.add(new SoyEntry(campaign));
+      soyCampaigns.add(new SoyAbstract.SoyWrapper(campaign.getKey().toString(),
+                                                  campaign));
 
     List<Campaign> dmCampaigns =
       DMADataFactory.get().getEntries(Campaign.TYPE, null, "index-dm",
                                       user.get().getName());
-    List<SoyEntry> soyDMCampaigns = new ArrayList<SoyEntry>();
-    Map<String, List<SoyEntry>> dmCharacters =
-      new HashMap<String, List<SoyEntry>>();
+    List<SoyAbstract.SoyWrapper> soyDMCampaigns = new ArrayList<>();
+    Map<String, List<SoyAbstract.SoyWrapper>> dmCharacters = new HashMap<>();
 
     for(Campaign campaign : dmCampaigns)
     {
-      soyDMCampaigns.add(new SoyEntry(campaign));
+      soyDMCampaigns.add(new SoyAbstract.SoyWrapper
+                             (campaign.getKey().toString(),
+                              campaign));
 
       // and all the characters there
-      List<SoyEntry> chars = new ArrayList<SoyEntry>();
+      List<SoyAbstract.SoyWrapper> chars = new ArrayList<>();
       for(Character character : DMADataFactory.get()
             .getEntries(Character.TYPE, campaign.getKey(), 0, 20))
-        chars.add(new SoyEntry(character));
+        chars.add(new SoyAbstract.SoyWrapper(character.getKey().toString(),
+                                             character));
       dmCharacters.put(campaign.getName(), chars);
     }
 
 
     List<BaseCampaign> baseCampaigns =
       DMADataFactory.get().getEntries(BaseCampaign.TYPE, null, 0, 50);
-    List<SoyEntry> soyBaseCampaigns = new ArrayList<SoyEntry>();
+    List<SoyAbstract.SoyWrapper> soyBaseCampaigns = new ArrayList<>();
     for(BaseCampaign campaign : baseCampaigns)
-      soyBaseCampaigns.add(new SoyEntry(campaign));
+      soyBaseCampaigns.add(new SoyAbstract.SoyWrapper(
+          campaign.getKey().toString(),
+          campaign));
 
     data.put("content",
              inRenderer.render

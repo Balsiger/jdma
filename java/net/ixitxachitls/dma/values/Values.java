@@ -135,7 +135,8 @@ public class Values
     return result;
   }
 
-  public <T> T use(String inKey, T inDefault, net.ixitxachitls.dma.values.Parser<T> inParser,
+  public <T> T use(String inKey, T inDefault,
+                   net.ixitxachitls.dma.values.Parser<T> inParser,
                    String ... inParts) {
     List<String []> values = listValues(inKey, inParts);
     if(values.size() == 0 || allEmpty(values.get(0)))

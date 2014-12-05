@@ -61,18 +61,12 @@ public class SoyAbstract extends SoyMapData
     /** Create the wrapper.
      *
      * @param inName  the name of the value
-     * @param inValue the object in which to call the method
      * @param inObject the entry the value comes from
      */
-    public SoyWrapper(String inName, Object inValue, Object inObject)
+    public SoyWrapper(String inName, Object inObject)
     {
       super(inName, inObject);
-
-      m_value = inValue;
     }
-
-    /** The object in which to call the method. */
-    private Object m_value;
 
     /**
      * Get a single, named value.
@@ -86,25 +80,25 @@ public class SoyAbstract extends SoyMapData
     @Override
     public SoyData getSingle(String inName)
     {
-      Object value = m_value;
+      Object value = m_object;
       if(value instanceof Optional)
       {
         if("isPresent".equals(inName) || "present".equals(inName))
           return BooleanData.forValue(((Optional)value).isPresent());
 
         if(((Optional)value).isPresent())
-          value = ((Optional)m_value).get();
+          value = ((Optional)value).get();
         else
           return new Undefined(m_name + "." + inName);
       }
 
-      if("integer".equals(inName) && m_value instanceof Integer)
-        return IntegerData.forValue((Integer)m_value);
+      if("integer".equals(inName) && value instanceof Integer)
+        return IntegerData.forValue((Integer)value);
 
-      if("integer".equals(inName) && m_value instanceof Optional
-        && ((Optional<?>)m_value).isPresent()
-        && ((Optional<?>)m_value).get() instanceof Integer)
-        return IntegerData.forValue(((Optional<Integer>)m_value).get());
+      if("integer".equals(inName) && value instanceof Optional
+        && ((Optional<?>)value).isPresent()
+        && ((Optional<?>)value).get() instanceof Integer)
+        return IntegerData.forValue(((Optional<Integer>)value).get());
 
       value = Classes.callMethod(inName, value);
       if(value != null)
@@ -134,13 +128,13 @@ public class SoyAbstract extends SoyMapData
     @Override
     public String toString()
     {
-      if(m_value instanceof Optional)
-        if(((Optional)m_value).isPresent())
-          return ((Optional)m_value).get().toString();
+      if(m_object instanceof Optional)
+        if(((Optional)m_object).isPresent())
+          return ((Optional)m_object).get().toString();
         else
           return "(undefined)";
 
-      return m_value.toString();
+      return m_object.toString();
     }
   }
 
@@ -215,6 +209,6 @@ public class SoyAbstract extends SoyMapData
     if(inObject == null)
       return new Undefined(m_name + "." + inName);
 
-    return new SoyWrapper(m_name + "." + inName, inObject, m_object);
+    return new SoyWrapper(m_name + "." + inName, inObject);
   }
 }

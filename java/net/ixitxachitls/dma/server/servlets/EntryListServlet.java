@@ -35,6 +35,7 @@ import com.google.common.collect.ImmutableSet;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.output.soy.SoyAbstract;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.util.Encodings;
@@ -120,9 +121,9 @@ public class EntryListServlet extends PageServlet
                                                 inRequest.getStart(),
                                                 inRequest.getPageSize() + 1);
 
-    List<SoyEntry> entries = new ArrayList<SoyEntry>();
+    List<SoyAbstract.SoyWrapper> entries = new ArrayList<>();
     for(AbstractEntry entry : rawEntries)
-      entries.add(new SoyEntry(entry));
+      entries.add(new SoyAbstract.SoyWrapper(entry.getKey().toString(), entry));
 
     data.put("content",
              inRenderer.render

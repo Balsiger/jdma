@@ -33,15 +33,14 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.output.soy.SoyAbstract;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
-import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 import org.easymock.EasyMock;
@@ -180,9 +179,9 @@ public class IndexServlet extends PageServlet
                                            inRequest.getStart(),
                                            inRequest.getPageSize() + 1);
 
-    List<SoyEntry> entries = new ArrayList<SoyEntry>();
+    List<SoyAbstract.SoyWrapper> entries = new ArrayList<>();
     for(AbstractEntry entry : rawEntries)
-      entries.add(new SoyEntry(entry));
+      entries.add(new SoyAbstract.SoyWrapper(entry.getKey().toString(), entry));
 
     data.put("content",
              inRenderer.render

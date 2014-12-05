@@ -1649,7 +1649,7 @@ public class BaseProduct extends BaseEntry
                    Index.groupsToString("" + m_date.get().getYear(), month));
     }
     else
-      values.put(Index.Path.DATES, Value.UNDEFINED);
+      values.put(Index.Path.DATES, "");
 
     // audience
     values.put(Index.Path.AUDIENCES, m_audience.toString());

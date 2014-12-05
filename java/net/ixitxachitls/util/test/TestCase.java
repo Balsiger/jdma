@@ -30,52 +30,27 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import com.google.appengine.labs.repackaged.com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * This is a simple enhancement to a JUnit TestCase, adding a mock logger
  * to the test, including verifying test messages.
  *
  * @file          TestCase.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
-@ParametersAreNonnullByDefault
 public class TestCase extends org.junit.Assert
 {
-  //--------------------------------------------------------- constructor(s)
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The mock logger to test logging statements. */
   protected Log.Test.MockLogger m_logger;
 
   /** The name of the test logger. */
   private static final String s_logger = "test";
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //---------------------------- assertPattern -----------------------------
 
   /**
    * Assert that the given string matches the given pattern.
@@ -83,7 +58,6 @@ public class TestCase extends org.junit.Assert
    * @param       inMessage the message
    * @param       inPattern the expected pattern
    * @param       inText    the text obtained
-   *
    */
   public void assertPattern(String inMessage, String inPattern, String inText)
   {
@@ -94,16 +68,12 @@ public class TestCase extends org.junit.Assert
       throw new org.junit.ComparisonFailure(inMessage, inPattern, inText);
   }
 
-  //........................................................................
-  //------------------------ assertContentsAnyOrder ------------------------
-
   /**
    * Check that the iterable contains the given objects in any order.
    *
    * @param    inMessage  the message to show on failure
    * @param    inActual   the objects that were actually produced
    * @param    inExpected the objects expected
-   *
    */
   public void assertContentAnyOrder(String inMessage, Iterable<?> inActual,
                                     Object ... inExpected)
@@ -125,16 +95,12 @@ public class TestCase extends org.junit.Assert
         raiseFailure(inMessage, ImmutableList.of(o), actual);
   }
 
-  //........................................................................
-  //---------------------------- assertContent -----------------------------
-
   /**
    * Assert the contents in the iterator.
    *
    * @param    inMessage  the message to show on failure
    * @param    inActual   the objects that were actually produced
    * @param    inExpected the objects expected
-   *
    */
   public void assertContent(String inMessage, Iterator<?> inActual,
                             Object ... inExpected)
@@ -159,16 +125,12 @@ public class TestCase extends org.junit.Assert
                                             "not yet at end");
   }
 
-  //........................................................................
-  //---------------------------- assertContent -----------------------------
-
   /**
    * Assert the contents in the iterator.
    *
    * @param    inMessage  the message to show on failure
    * @param    inActual   the objects that were actually produced
    * @param    inExpected the objects expected
-   *
    */
   public void assertContent(String inMessage, Iterable<?> inActual,
                             Object ... inExpected)
@@ -176,16 +138,12 @@ public class TestCase extends org.junit.Assert
     assertContent(inMessage, inActual.iterator(), inExpected);
   }
 
-  //........................................................................
-  //---------------------------- assertContent -----------------------------
-
   /**
    * Assert the contents in the iterator.
    *
    * @param    inMessage  the message to show on failure
    * @param    inActual   the objects that were actually produced
    * @param    inExpected the objects expected, as pairs of key/value
-   *
    */
   public void assertContent(String inMessage, Map<?, ?> inActual,
                             Object ... inExpected)
@@ -240,19 +198,12 @@ public class TestCase extends org.junit.Assert
     }
   }
 
-
-
-  //........................................................................
-
-  //----------------------------- raiseFailure -----------------------------
-
   /**
    * Raise a failure because the actual and expected values don't match.
    *
    * @param       inMessage  the failure message
    * @param       inExpected the epected value
    * @param       inActual   the real value obtained
-   *
    */
    private void raiseFailure(String inMessage, List<?> inExpected,
                              List<?> inActual)
@@ -260,14 +211,6 @@ public class TestCase extends org.junit.Assert
     throw new org.junit.ComparisonFailure(inMessage, inExpected.toString(),
                                           inActual.toString());
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //-------------------------------- setUp ---------------------------------
 
   /**
    * Setup the test for the next test case. This is called before each
@@ -298,13 +241,9 @@ public class TestCase extends org.junit.Assert
     Config.set("web.data.datafiles", false);
   }
 
-  //........................................................................
-  //------------------------------- tearDown -------------------------------
-
   /**
    * Tear down the test after a test case. This is called after each
    * test method.
-   *
    */
   @org.junit.After
   public void tearDown()
@@ -317,24 +256,13 @@ public class TestCase extends org.junit.Assert
     DMADataFactory.clear();
   }
 
-  //........................................................................
-  //------------------------------- addEntry -------------------------------
-
   /**
    * Add the given entry to the data mock.
    *
    * @param       inEntry the entry to add
-   *
    */
   public void addEntry(AbstractEntry inEntry)
   {
     throw new UnsupportedOperationException("no more implemented");
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
 }

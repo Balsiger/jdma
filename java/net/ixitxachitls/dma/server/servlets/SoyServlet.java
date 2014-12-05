@@ -43,7 +43,6 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.Level;
 import net.ixitxachitls.dma.output.soy.SoyAbstract;
-import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.values.enums.Ability;
@@ -205,7 +204,9 @@ public class SoyServlet extends DMAServlet
     UserService userService = UserServiceFactory.getUserService();
 
     Map<String, Object> map = SoyTemplate.map
-      ("user", user.isPresent() ? new SoyEntry(user.get()) : "",
+      ("user", user.isPresent()
+           ? new SoyAbstract.SoyWrapper(user.get().getKey().toString(),
+                                        user.get()) : "",
        "isPublic", isPublic(inRequest),
        "originalPath", inRequest.getOriginalPath(),
        "loginURL", userService.createLoginURL(inRequest.getOriginalPath()),
@@ -220,17 +221,12 @@ public class SoyServlet extends DMAServlet
                   && user.get().hasAccess(Group.ADMIN),
 
        // classes with static access
-       "Level", new SoyAbstract.SoyWrapper("Level", Level.class, Level.class),
-       "Gender", new SoyAbstract.SoyWrapper("Gender", Gender.class,
-                                            Gender.class),
-       "Alignment", new SoyAbstract.SoyWrapper("Alignment", Alignment.class,
-                                               Alignment.class),
-       "Ability", new SoyAbstract.SoyWrapper("Ability", Ability.class,
-                                             Ability.class),
-       "Affects", new SoyAbstract.SoyWrapper("Affects", Ability.class,
-                                             Affects.class),
-       "Immunity", new SoyAbstract.SoyWrapper("Immunity", Immunity.class,
-                                              Immunity.class));
+       "Level", new SoyAbstract.SoyWrapper("Level", Level.class),
+       "Gender", new SoyAbstract.SoyWrapper("Gender", Gender.class),
+       "Alignment", new SoyAbstract.SoyWrapper("Alignment", Alignment.class),
+       "Ability", new SoyAbstract.SoyWrapper("Ability", Ability.class),
+       "Affects", new SoyAbstract.SoyWrapper("Affects", Affects.class),
+       "Immunity", new SoyAbstract.SoyWrapper("Immunity", Immunity.class));
 
     tracer.done();
     return map;

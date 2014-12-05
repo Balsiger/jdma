@@ -493,7 +493,7 @@
             {if $entry.campaign.present}
               {foreach $item in $entry.contents}
                 {call .tiny}             
-                  {param entry: entry($entry.campaign.get.key + '/item/'
+                  {param entry: entry($entry.campaign.key + '/item/'
                       + $item.name) /}
                 {/call}
               {/foreach}

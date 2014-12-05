@@ -124,7 +124,7 @@ public class SoyTemplate
         return StringData.forValue("unknown entry '" + inArgs.get(0) + "'");
       }
 
-      return new SoyEntry(entry.get());
+      return new SoyAbstract.SoyWrapper(key.toString(), entry.get());
     }
   }
 

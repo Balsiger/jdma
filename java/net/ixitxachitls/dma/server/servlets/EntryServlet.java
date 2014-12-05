@@ -36,8 +36,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
+import net.ixitxachitls.dma.output.soy.SoyAbstract;
 import net.ixitxachitls.dma.values.Values;
-import net.ixitxachitls.util.CommandLineParser;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -255,7 +255,9 @@ public class EntryServlet extends PageServlet
           ("content",
            inRenderer.render
                (template,
-                map("entry", new SoyEntry(entry.get()),
+                map("entry",
+                    new SoyAbstract.SoyWrapper(entry.get().getKey().toString(),
+                                               entry.get()),
                     "first", current <= 0 ? "" : ids.get(0) + extension,
                     "previous", current <= 0 ? "" : ids.get(current - 1) + extension,
                     "list", "/" + entry.get().getType().getMultipleLink(),

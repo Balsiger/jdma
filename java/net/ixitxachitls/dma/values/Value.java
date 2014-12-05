@@ -33,16 +33,12 @@ import com.google.protobuf.Message;
  */
 public abstract class Value<T extends Message>
 {
-
   public static abstract class Arithmetic<V extends Message> extends Value<V>
   {
     public abstract Arithmetic<V> add(Arithmetic<V> inValue);
     public abstract boolean canAdd(Arithmetic<V> inValue);
     public abstract Arithmetic<V> multiply(int inFactor);
   }
-
-  /** The string value for an undefined value. */
-  public static final String UNDEFINED = "$undefined$";
 
   public static final Parser<Integer> INTEGER_PARSER = new Parser<Integer>(1)
   {
