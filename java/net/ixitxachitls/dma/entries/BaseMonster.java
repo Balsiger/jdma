@@ -27,8 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -46,10 +44,9 @@ import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Parser;
 import net.ixitxachitls.dma.values.Range;
 import net.ixitxachitls.dma.values.Rational;
-import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.Speed;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.dma.values.enums.AlignmentStatus;
@@ -64,9 +61,9 @@ import net.ixitxachitls.dma.values.enums.MonsterType;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.dma.values.enums.Organization;
 import net.ixitxachitls.dma.values.enums.Save;
+import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.dma.values.enums.Terrain;
 import net.ixitxachitls.dma.values.enums.Treasure;
-import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -76,7 +73,6 @@ import net.ixitxachitls.util.logging.Log;
  * @file          BaseMonster.java
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
-@ParametersAreNonnullByDefault
 public class BaseMonster extends BaseEntry
 {
   public static class Attack
@@ -3273,142 +3269,6 @@ public class BaseMonster extends BaseEntry
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- createBaseMonster() --------------------------------------------
 
-    /**
-     * Create a typical base item for testing purposes.
-     *
-     * @return the newly created base item
-     *
-     */
-    public static AbstractEntry createBaseMonster()
-    {
-      try (ParseReader reader =
-        new ParseReader(new java.io.StringReader(s_text), "test"))
-      {
-        return null; //BaseMonster.read(reader);
-      }
-    }
-
-    //......................................................................
-
-    //----- text -----------------------------------------------------------
-
-    /** Test text. */
-    private static String s_text =
-      "#----- Aboleth -------------------------------------------------\n"
-      + "\n"
-      + "base monster Aboleth = \n"
-      + "\n"
-      + "  size              huge (long);\n"
-      + "  type              Aberration (Aquatic);\n"
-      + "  hit dice          8d8;\n"
-      + "  speed             10 ft, swim 60 ft;\n"
-      + "  natural armor     +7;\n"
-      + "  base attack       +6;  \n"
-      + "  primary attacks   4 tentacle melee (1d6 plus slime);  \n"
-      + "  special attacks   enslave, psionics, slime;\n"
-      + "  special qualities darkvision [range 60 ft], mucus cloud, breathe "
-      + "water, \n"
-      + "                    breathe no air, good swimmer [racial +8];\n"
-      + "  strength          26;\n"
-      + "  dexterity         12;\n"
-      + "  constitution      20;\n"
-      + "  intelligence      15;\n"
-      + "  wisdom            17;\n"
-      + "  charisma          17;\n"
-      + "  class skills      Concentration: +11, Knowledge [subtype any one]: "
-      + "+11, \n"
-      + "                    Listen: +11, Spot: +11, Swim: 0;\n"
-      + "  feats             Alertness, Combat Casting, Iron Will;\n"
-      + "  environment       underground;\n"
-      + "  organization      solitary, brood 1d3+1, \n"
-      + "                    slaver brood 1d3+1 plus 1d6+6 skum;\n"
-      + "  challenge rating  7;\n"
-      + "  treasure          double standard;\n"
-      + "  alignment         usually lawful evil;\n"
-      + "  advancements      9-16 HD (Huge), 17-24 HD (Gargantuan);\n"
-      + "  level adjustment  -;\n"
-      + "  worlds            generic;\n"
-      + "  references        WTC 17755: 8-9;\n"
-      + "  short description \"short description\";\n"
-      + "  encounter         \"encounter\";\n"
-      + "  combat            \"combat\";\n"
-      + "  languages         Aboleth, Undercommon, Aquan;\n"
-      + "  tactics           \"tactic\";\n"
-      + "  character         \"character\";\n"
-      + "  reproduction      \"reproduction\";\n"
-      + "  description \n"
-      + "\n"
-      + "  \"description\".\n"
-      + "\n"
-      + "#...............................................................\n";
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
-
-    /** Test reading. */
-    @org.junit.Test
-    public void testRead()
-    {
-      String result =
-      "#----- Aboleth\n"
-      + "\n"
-      + "base monster Aboleth =\n"
-      + "\n"
-      + "  size              Huge (long);\n"
-      + "  type              Aberration (Aquatic);\n"
-      + "  hit dice          8d8;\n"
-      + "  speed             10 ft, Swim 60 ft;\n"
-      + "  natural armor     +7 natural armor;\n"
-      + "  base attack       +6;\n"
-      + "  strength          26;\n"
-      + "  dexterity         12;\n"
-      + "  constitution      20;\n"
-      + "  intelligence      15;\n"
-      + "  wisdom            17;\n"
-      + "  charisma          17;\n"
-      + "  primary attacks   4 Tentacle melee (1d6 plus slime);\n"
-      + "  special attacks   enslave, psionics, slime;\n"
-      + "  special qualities darkvision [range 60 ft], mucus cloud, breathe "
-      + "water, breathe no air, good swimmer [racial +8];\n"
-      + "  class skills      Concentration: +11 general, "
-      + "Knowledge [subtype Any One]: +11 general, Listen: +11 general, "
-      + "Spot: +11 general, Swim: +0 general;\n"
-      + "  feats             Alertness, Combat Casting, Iron Will;\n"
-      + "  environment       Underground;\n"
-      + "  organization      Solitary, Brood 1d3 +1, Slaver Brood 1d3 +1 "
-      + "plus 1d6 +6 skum;\n"
-      + "  challenge rating  7;\n"
-      + "  treasure          double standard;\n"
-      + "  alignment         Usually Lawful Evil;\n"
-      + "  advancements      9-16 HD (Huge), 17-24 HD (Gargantuan);\n"
-      + "  level adjustment  -;\n"
-      + "  languages         Aboleth, Undercommon, Aquan;\n"
-      + "  encounter         \"encounter\";\n"
-      + "  combat            \"combat\";\n"
-      + "  tactics           \"tactic\";\n"
-      + "  character         \"character\";\n"
-      + "  reproduction      \"reproduction\";\n"
-      + "  possessions       ;\n"
-      + "  worlds            Generic;\n"
-      + "  references        WTC 17755: 8-9;\n"
-      + "  description       \"description\";\n"
-      + "  short description \"short description\";\n"
-      + "  name              Aboleth.\n"
-      + "\n"
-      + "#.....\n";
-
-      AbstractEntry entry = createBaseMonster();
-
-      assertNotNull("base item should have been read", entry);
-      assertEquals("base item name does not match", "Aboleth",
-                   entry.getName());
-      assertEquals("base item does not match", result, entry.toString());
-    }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

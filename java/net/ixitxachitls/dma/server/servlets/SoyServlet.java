@@ -28,7 +28,6 @@ import java.nio.charset.Charset;
 import java.util.Map;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -62,7 +61,6 @@ import net.ixitxachitls.util.Tracer;
  */
 
 @Immutable
-@ParametersAreNonnullByDefault
 public class SoyServlet extends DMAServlet
 {
    /**
@@ -257,9 +255,7 @@ public class SoyServlet extends DMAServlet
   /** The tests. */
   public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
-    //----- map ------------------------------------------------------------
-
-    /** The map Test. */
+    /** The map test. */
     @org.junit.Test
     public void map()
     {
@@ -270,10 +266,7 @@ public class SoyServlet extends DMAServlet
                    .toString());
     }
 
-    //......................................................................
-    //----- collectData ----------------------------------------------------
-
-    /** The collectData Test. */
+    /** The collectData test. */
     @org.junit.Test
     public void collectData()
     {
@@ -289,10 +282,7 @@ public class SoyServlet extends DMAServlet
       EasyMock.verify(request);
     }
 
-    //......................................................................
-    //----- collectInjectedData --------------------------------------------
-
-    /** The collectInjectedData Test. */
+    /** The collectInjectedData test. */
     @org.junit.Test
     public void collectInjectedData()
     {
@@ -320,10 +310,5 @@ public class SoyServlet extends DMAServlet
 
       EasyMock.verify(request);
     }
-
-    //......................................................................
-
   }
-
-  //........................................................................
 }

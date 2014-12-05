@@ -264,12 +264,17 @@ public class Values
   private @Nullable String getFirst(String inKey)
   {
     Collection<String> values = get(inKey);
-    if(values == null || values.isEmpty())
+    if(values == null)
       return null;
 
-    if(values.size() != 1)
+    if(values.isEmpty())
+      return "";
+
+    if(values.size() > 1)
+    {
       m_messages.add("Found multiple values for " + inKey
-                     + ", expected single value.");
+                         + ", expected single value.");
+    }
 
     return values.iterator().next();
   }

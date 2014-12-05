@@ -36,7 +36,6 @@ import com.google.template.soy.data.restricted.BooleanData;
 import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
 
-import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.Pair;
 
@@ -52,54 +51,6 @@ import net.ixitxachitls.util.Pair;
 public class SoyAbstract extends SoyMapData
 {
   /**
-   * An undefined value that can still be dereferenced, resulting in another
-   * undefined value.
-   */
-  @Immutable
-  @ParametersAreNonnullByDefault
-  public static class Undefined extends SoyAbstract
-  {
-    /**
-     * Create the undefined value with the given name.
-     *
-     * @param inName the name of the value
-     */
-    public Undefined(String inName)
-    {
-      super(inName, null);
-    }
-
-    /**
-     * Get the named value.
-     *
-     * @param  inName the name of the value to get
-     *
-     * @return the value with the given name
-     */
-    @Override
-    public SoyData getSingle(String inName)
-    {
-      switch(inName)
-      {
-        case "present":
-          return BooleanData.FALSE;
-      }
-      return new Undefined(m_name + "." + inName);
-    }
-
-    /**
-     * Convert the undefined value to a human readable string.
-     *
-     * @return the string conversion
-     */
-    @Override
-    public String toString()
-    {
-      return "(undefined " + m_name + ")";
-    }
-  }
-
-  /**
    * A wrapper for a soy value calling a method with the given name or
    * returning an undefined value.
    */
@@ -111,7 +62,7 @@ public class SoyAbstract extends SoyMapData
      *
      * @param inName  the name of the value
      * @param inValue the object in which to call the method
-     * @param inEntry the entry the value comes from
+     * @param inObject the entry the value comes from
      */
     public SoyWrapper(String inName, Object inValue, Object inObject)
     {
@@ -221,9 +172,6 @@ public class SoyAbstract extends SoyMapData
    */
   protected SoyData convert(String inName, Object inObject)
   {
-    if(inObject instanceof AbstractEntry)
-      return new SoyEntry((AbstractEntry)inObject);
-
     if(inObject instanceof Iterable)
     {
       SoyListData list = new SoyListData();

@@ -73,14 +73,14 @@
       {if $entry.parent.present}
         {call dma.entry.value}
           {param label: 'Parent' /}
-          {param value: $entry.parent.get /}
+          {param value: $entry.parent /}
           {param color: '#008' /}
         {/call}
       {/if} 
       {call dma.entry.value}
         {param label: 'HP' /}
         {param value}
-         {$entry.HP} (max {annotate($entry.combined_max_HP)}
+         {$entry.HP} (max {annotate($entry.combined_max_HP)})
         {/param}
         {param color: '#008' /}
       {/call}
@@ -133,6 +133,27 @@
           {param color: '#008' /}
         {/call}
       {/if}
+        {if $entry.container}
+          {call dma.entry.value}
+            {param label: 'Contents' /}
+            {param color: '#008' /}
+            {param value}
+              {foreach $item in $entry.contents}
+                {$item.name}
+                {if not isLast($item)}, {/if}
+              {/foreach}
+              {if $ij.user}
+              {sp}|{sp}
+              <span class="action"
+                    onclick="edit.show('', '{$entry.campaign.path}/item/CREATE',
+                                       'add-item', '',
+                                       'parent:item/{$entry.name}')">
+                add item
+              </span>
+              {/if}
+            {/param}
+          {/call}
+        {/if}
     {/param}
   {/call}
   

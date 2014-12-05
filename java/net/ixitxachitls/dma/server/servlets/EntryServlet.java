@@ -115,88 +115,88 @@ public class EntryServlet extends PageServlet
     else
       action = "show";
 
-    Optional<? extends AbstractEntry> entry = getEntry(inRequest, path);
-    if(entry.isPresent() && !entry.get().isShownTo(inRequest.getUser()))
+    Optional<EntryKey> key = extractKey(path);
+    if(!key.isPresent())
     {
-      data.put("content", inRenderer.render
-               ("dma.errors.invalidPage",
-                map("name", inRequest.getAttribute(DMARequest.ORIGINAL_PATH))));
-
+      data.put("content", inRenderer.render("dma.errors.extract",
+                                            map("name", path)));
       return data;
     }
 
-    if(!entry.isPresent())
+    Optional<? extends AbstractEntry> entry = Optional.absent();
+    if(inRequest.hasUser()
+        && (inRequest.hasParam("create")
+            || "CREATE".equalsIgnoreCase(key.get().getID())))
     {
-      Optional<EntryKey> key = extractKey(path);
-      if(!key.isPresent())
-      {
-        data.put("content", inRenderer.render("dma.errors.extract",
-                                              map("name", path)));
-        return data;
-      }
-
       AbstractType<? extends AbstractEntry> type = key.get().getType();
       String id = key.get().getID();
 
-      if(inRequest.hasUser()
-         && (inRequest.hasParam("create") || "CREATE".equals(id)))
+      action = "create";
+
+      // create a new entry for filling out
+      Log.info("creating " + type + " '" + id + "'");
+
+      if(type.getBaseType() == type)
+        entry = type.create(id);
+      else
       {
-        action = "create";
+        String postfix = "";
+        if(inRequest.hasParam("store"))
+          postfix = "-" + inRequest.getParam("store");
 
-        // create a new entry for filling out
-        Log.info("creating " + type + " '" + id + "'");
-
-        if(type.getBaseType() == type)
-          entry = type.create(id);
-        else
+        entry = type.create(Entry.TEMPORARY + postfix);
+        if(entry.isPresent())
         {
-          String postfix = "";
-          if(inRequest.hasParam("store"))
-            postfix = "-" + inRequest.getParam("store");
+          entry.get().updateKey(key.get());
 
-          entry = type.create(Entry.TEMPORARY + postfix);
-          if(entry.isPresent())
+          if(inRequest.hasParam("values"))
           {
-            entry.get().updateKey(key.get());
-
-            if(inRequest.hasParam("values"))
+            Multimap<String, String> values = ArrayListMultimap.create();
+            for(String value : inRequest.getParam("values").split("\\s*,\\s*"))
             {
-              Multimap<String, String> values = ArrayListMultimap.create();
-              for(String value : inRequest.getParam("values").split("\\s*,\\s*"))
-              {
-                String[] parts = value.split(":");
-                if(parts.length != 2)
-                  continue;
+              String[] parts = value.split(":");
+              if(parts.length != 2)
+                continue;
 
-                values.put(parts[0], parts[1]);
-              }
-
-              entry.get().set(new Values(values));
+              values.put(parts[0], parts[1]);
             }
 
-            // bases are overwritten by values if done before!
-            if(inRequest.hasParam("bases"))
-              for(String base : inRequest.getParam("bases").split("\\s*,\\s*"))
-                if(!base.isEmpty())
-                  entry.get().addBase(base);
-
-            if(inRequest.hasParam("identified") && entry.get() instanceof Item)
-              ((Item) entry.get()).identify();
-
-            if(entry.get() instanceof Entry)
-              ((Entry) entry.get()).complete();
+            entry.get().set(new Values(values));
           }
-        }
 
-        if(entry.isPresent())
-          entry.get().setOwner(inRequest.getUser().get());
+          // bases are overwritten by values if done before!
+          if(inRequest.hasParam("bases"))
+            for(String base : inRequest.getParam("bases").split("\\s*,\\s*"))
+              if(!base.isEmpty())
+                entry.get().addBase(base);
+
+          if(inRequest.hasParam("identified") && entry.get() instanceof Item)
+            ((Item) entry.get()).identify();
+
+          if(entry.get() instanceof Entry)
+            ((Entry) entry.get()).complete();
+        }
       }
 
-      if(!entry.isPresent())
+      if(entry.isPresent())
+        entry.get().setOwner(inRequest.getUser().get());
+      else
       {
         data.put("content", inRenderer.render("dma.entry.create",
                                               map("id", id,
                                                   "type", type.getName())));
+        return data;
+      }
+    }
+    else
+    {
+      entry = getEntry(inRequest, path);
+      if(entry.isPresent() && !entry.get().isShownTo(inRequest.getUser()))
+      {
+        data.put("content", inRenderer.render
+            ("dma.errors.invalidPage",
+             map("name", inRequest.getAttribute(DMARequest.ORIGINAL_PATH))));
+
         return data;
       }
     }

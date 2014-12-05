@@ -169,7 +169,7 @@ public class SoyTemplate
     public SoyData computeForTofu(List<SoyData> inArgs)
     {
       if(inArgs.get(0) == null
-         || inArgs.get(0) instanceof SoyAbstract.Undefined)
+         || inArgs.get(0) instanceof Undefined)
         return BooleanData.forValue(false);
 
       return BooleanData.forValue(true);
@@ -197,7 +197,7 @@ public class SoyTemplate
       if(inArgs.get(0) instanceof SoyListData)
         return IntegerData.forValue(((SoyListData)inArgs.get(0)).length());
 
-      if(inArgs.get(0) instanceof SoyAbstract.Undefined)
+      if(inArgs.get(0) instanceof Undefined)
         return IntegerData.forValue(0);
 
       Log.error("trying to compute length of " + inArgs.get(0).getClass()

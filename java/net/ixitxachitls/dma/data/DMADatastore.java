@@ -128,7 +128,8 @@ public class DMADatastore
       Log.debug("getting entry for " + inKey);
       entry = (Optional<T>) convert(inKey.getID(), inKey.getType(),
                       m_data.getEntity(convert(inKey)));
-      cache(inKey, entry.get());
+      if(entry.isPresent())
+        cache(inKey, entry.get());
     }
 
     return entry;

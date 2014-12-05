@@ -97,7 +97,7 @@ public class PageServlet extends SoyServlet
     }
 
     if(!data.containsKey("content"))
-      data.put("content", "No new content defined, yet.");
+      data.put("content", "No content defined!");
 
     return data;
   }

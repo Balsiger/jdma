@@ -293,7 +293,7 @@ public abstract class CampaignEntry extends Entry
       do
       {
         randomID();
-      } while(DMADataFactory.get().getEntry(getKey()) != null);
+      } while(DMADataFactory.get().getEntry(getKey()).isPresent());
 
     return super.save();
   }

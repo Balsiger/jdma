@@ -25,9 +25,7 @@ package net.ixitxachitls.dma.output.soy;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.template.soy.data.SoyData;
@@ -36,7 +34,6 @@ import com.google.template.soy.data.restricted.BooleanData;
 import com.google.template.soy.data.restricted.StringData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.util.Classes;
 
 /**
@@ -48,7 +45,6 @@ import net.ixitxachitls.util.Classes;
  */
 
 @Immutable
-@ParametersAreNonnullByDefault
 public class SoyEntry extends SoyAbstract
 {
   /**

@@ -1285,7 +1285,7 @@ public class Item extends CampaignEntry
         changed();
     }
 
-    if(m_appearance == null)
+    if(!m_appearance.isPresent())
     {
       // correct the random value with the computation from the value in
       // relation to the base value
