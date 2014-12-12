@@ -28,6 +28,8 @@ import java.util.Map;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.base.Optional;
+
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 
 //..........................................................................
@@ -114,19 +116,10 @@ public class StaticPageServlet extends SoyServlet
     {
       // template could not be loaded
       map.put("content",
-              inRenderer.render("dma.errors.invalidPage", map("name", name)));
+              inRenderer.render("dma.errors.invalidPage",
+                                Optional.of(map("name", name))));
     }
 
     return map;
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
 }

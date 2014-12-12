@@ -89,7 +89,11 @@ public class Autocomplete extends JSONServlet
 
     if(parts.length > 3)
     {
-      String term = normalize(inRequest.getParam("term"));
+      Optional<String> param = inRequest.getParam("term");
+      if(!param.isPresent())
+        return;
+
+      String term = normalize(param.get());
       Optional<? extends AbstractType<? extends AbstractEntry>> type =
         AbstractType.getTyped(parts[2]);
       String field = parts[3];

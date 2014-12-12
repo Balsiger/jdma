@@ -35,9 +35,8 @@ import com.google.common.collect.ImmutableSet;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.output.soy.SoyAbstract;
-import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -109,8 +108,9 @@ public class EntryListServlet extends PageServlet
       AbstractType.getTyped(typeName);
     if(!type.isPresent())
     {
-      data.put("content", inRenderer.render("dma.error.invalidType",
-                                            map("type", typeName)));
+      data.put("content",
+               inRenderer.render("dma.error.invalidType",
+                                 Optional.of(map("type", typeName))));
       return data;
     }
 
@@ -121,21 +121,20 @@ public class EntryListServlet extends PageServlet
                                                 inRequest.getStart(),
                                                 inRequest.getPageSize() + 1);
 
-    List<SoyAbstract.SoyWrapper> entries = new ArrayList<>();
+    List<SoyValue> entries = new ArrayList<>();
     for(AbstractEntry entry : rawEntries)
-      entries.add(new SoyAbstract.SoyWrapper(entry.getKey().toString(), entry));
+      entries.add(new SoyValue(entry.getKey().toString(), entry));
 
     data.put("content",
              inRenderer.render
              ("dma.entries." + type.get().getMultipleDir().toLowerCase()
                   + ".list",
-              map("title", title,
+              Optional.of(map("title", title,
                   "entries", entries,
                   "label", title.toLowerCase(Locale.US),
                   "path", path,
                   "pagesize", inRequest.getPageSize(),
-                  "start", inRequest.getStart()),
-              ImmutableSet.of(type.get().getName().replace(" ", ""))));
+                  "start", inRequest.getStart()))));
 
     return data;
   }

@@ -57,6 +57,8 @@ public final class DMADataFactory
     if(s_base == null)
       if(Config.get("web.data.datastore", true))
         s_base = new DMADatastore();
+      else
+        s_base = new FakeDMADatastore();
 
     return s_base;
   }

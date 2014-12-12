@@ -74,15 +74,10 @@ public class DMADatastore
    */
   public DMADatastore()
   {
-    m_blobs = BlobstoreServiceFactory.getBlobstoreService();
-    ImagesServiceFactory.getImagesService();
   }
 
   /** The access to the datastore. Don't use this except in the AdminServlet! */
   private DataStore m_data = new DataStore();
-
-  /** The blob store service. */
-  private BlobstoreService m_blobs;
 
   private static ThreadLocal<Map<EntryKey, AbstractEntry>> m_cache =
       new ThreadLocal<Map<EntryKey, AbstractEntry>>()
@@ -148,8 +143,8 @@ public class DMADatastore
    */
   @SuppressWarnings("unchecked")
   public <T extends AbstractEntry> List<T>
-    getEntries(AbstractType<T> inType, @Nullable EntryKey inParent,
-               int inStart, int inSize)
+  getEntries(AbstractType<T> inType, @Nullable EntryKey inParent,
+             int inStart, int inSize)
   {
     List<T> entries = new ArrayList<>();
     Iterable<Entity> entities =
@@ -313,9 +308,9 @@ public class DMADatastore
   @Deprecated
   @SuppressWarnings("unchecked") // need to cast from property value
   public SortedSet<String> getIndexNames
-    (String inIndex,
-     AbstractType<? extends AbstractEntry> inType, boolean inCached,
-     String ... inFilters)
+  (String inIndex,
+   AbstractType<? extends AbstractEntry> inType, boolean inCached,
+   String ... inFilters)
   {
     SortedSet<String> names = new TreeSet<String>();
 
@@ -346,7 +341,7 @@ public class DMADatastore
    *              in the order they were specificed
    */
   public List<List<String>> getMultiValues
-    (AbstractType<? extends AbstractEntry> inType, String ... inFields)
+  (AbstractType<? extends AbstractEntry> inType, String ... inFields)
   {
     return m_data.getMultiValues(escapeType(inType.toString()), null, inFields);
   }
@@ -361,7 +356,7 @@ public class DMADatastore
    *              in the order they were specificed
    */
   public SortedSet<String> getValues
-    (AbstractType<? extends AbstractEntry> inType, String inField)
+  (AbstractType<? extends AbstractEntry> inType, String inField)
   {
     return m_data.getValues(escapeType(inType.toString()), null, inField);
   }
@@ -385,14 +380,6 @@ public class DMADatastore
    */
   public boolean remove(AbstractEntry inEntry)
   {
-    // also remove all blobs for this entry
-    for(File file : inEntry.getFiles())
-    {
-      m_blobs.delete(new BlobKey(file.getPath().replace("//file/",  "")));
-      Log.important("deleted file " + file.getPath() + " for "
-                    + inEntry.getKey());
-    }
-
     return m_data.remove(convert(inEntry.getKey()));
   }
 

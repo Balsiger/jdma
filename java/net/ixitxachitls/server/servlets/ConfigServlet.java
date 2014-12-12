@@ -32,6 +32,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Optional;
+
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.output.html.HTMLWriter;
@@ -95,8 +97,8 @@ public class ConfigServlet extends BaseServlet
    *
    */
   @Override
-  protected @Nullable SpecialResult handle(HttpServletRequest inRequest,
-                                           HttpServletResponse inResponse)
+  protected Optional<? extends SpecialResult>
+  handle(HttpServletRequest inRequest, HttpServletResponse inResponse)
     throws ServletException, IOException
   {
     // Set the output header.
@@ -127,7 +129,7 @@ public class ConfigServlet extends BaseServlet
         .end("table");
     }
 
-    return null;
+    return Optional.absent();
   }
 
   //........................................................................

@@ -144,15 +144,16 @@ public class AdminServlet extends SoyServlet
    * @throws      javax.servlet.ServletException  writing to the page failed
    */
   @Override
-  protected @Nullable SpecialResult handle(HttpServletRequest inRequest,
-                                           HttpServletResponse inResponse)
+  protected Optional<? extends SpecialResult>
+  handle(HttpServletRequest inRequest, HttpServletResponse inResponse)
     throws IOException, javax.servlet.ServletException
   {
     if(!(inRequest instanceof DMARequest))
     {
       Log.error("expected a dma request");
-      return new TextError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                           "expected a dma request");
+      return Optional.of(
+          new TextError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        "expected a dma request"));
     }
 
     DMARequest request = (DMARequest)inRequest;
@@ -165,22 +166,22 @@ public class AdminServlet extends SoyServlet
       else
         Log.warning("admin request without valid user");
 
-      return new TextError(HttpServletResponse.SC_FORBIDDEN,
-                           "action not allowed");
+      return Optional.of(new TextError(HttpServletResponse.SC_FORBIDDEN,
+                                       "action not allowed"));
     }
 
-    String reset = request.getParam("reset");
-    if(reset != null)
+    Optional<String> reset = request.getParam("reset");
+    if(reset.isPresent())
     {
       // Set the output header.
       inResponse.setHeader("Content-Type", "text/html");
       inResponse.setHeader("Cache-Control", "max-age=0");
 
       Optional<? extends AbstractType<? extends AbstractEntry>> type =
-          AbstractType.getTyped(reset);
+          AbstractType.getTyped(reset.get());
       if(!type.isPresent())
-        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "Invalid type '" + reset + "'.");
+        return Optional.of(new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                                         "Invalid type '" + reset + "'."));
 
       int size = DMADataFactory.get().rebuild(type.get());
 
@@ -196,8 +197,8 @@ public class AdminServlet extends SoyServlet
       return null;
     }
 
-    String cache = request.getParam("cache");
-    if(cache != null)
+    Optional<String> cache = request.getParam("cache");
+    if(cache.isPresent())
     {
       // Set the output header.
       inResponse.setHeader("Content-Type", "text/html");
@@ -221,18 +222,18 @@ public class AdminServlet extends SoyServlet
       return null;
     }
 
-    String refresh = request.getParam("refresh");
-    if(refresh != null)
+    Optional<String> refresh = request.getParam("refresh");
+    if(refresh.isPresent())
     {
       // Set the output header.
       inResponse.setHeader("Content-Type", "text/html");
       inResponse.setHeader("Cache-Control", "max-age=0");
 
       Optional<? extends AbstractType<? extends AbstractEntry>> type =
-        AbstractType.getTyped(refresh);
+        AbstractType.getTyped(refresh.get());
       if(!type.isPresent())
-        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "Invalid type '" + refresh + "'.");
+        return Optional.of(new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                                         "Invalid type '" + refresh + "'."));
 
       int size = DMADataFactory.get().refresh(type.get(), request);
 
@@ -247,8 +248,8 @@ public class AdminServlet extends SoyServlet
       return null;
     }
 
-    String upgrade = request.getParam("upgrade");
-    if(upgrade != null)
+    Optional<String> upgrade = request.getParam("upgrade");
+    if(upgrade.isPresent())
     {
       inResponse.setHeader("Content-Type", "text/html");
       inResponse.setHeader("Cache-Control", "max-age=0");

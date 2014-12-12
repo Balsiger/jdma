@@ -74,8 +74,11 @@ public class RemoveActionServlet extends ActionServlet
     if(!user.isPresent())
       return "gui.alert('Must be logged in to delete!');";
 
-    String keyParam = inRequest.getParam("key");
-    Optional<EntryKey> key = EntryKey.fromString(keyParam);
+    Optional<String> keyParam = inRequest.getParam("key");
+    if(!keyParam.isPresent())
+      return "gui.alert('No key given')";
+
+    Optional<EntryKey> key = EntryKey.fromString(keyParam.get());
 
     if(!key.isPresent())
       return "gui.alert('Invalid key " + keyParam + "');";

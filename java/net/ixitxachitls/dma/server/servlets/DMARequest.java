@@ -24,8 +24,6 @@ package net.ixitxachitls.dma.server.servlets;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -36,13 +34,13 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
-import net.ixitxachitls.dma.values.enums.Group;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.EntryKey;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -53,9 +51,6 @@ import net.ixitxachitls.util.logging.Log;
  * @file          DMARequest.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
-// from base class
-@ParametersAreNonnullByDefault
 public class DMARequest extends HttpServletRequestWrapper
 {
   /**
@@ -96,12 +91,6 @@ public class DMARequest extends HttpServletRequestWrapper
   /** The cached entries for the request. */
   private Map<EntryKey, AbstractEntry> m_entries = Maps.newHashMap();
 
-  /** The player for the request, if any. */
-//   private Character m_player = null;
-
-  /** The dm for the request, if any. */
-//   private BaseCharacter m_dm = null;
-
   /** The default size of an index page (number of entries shown). */
   protected static final int def_pageSize =
     Config.get("resource:html/product.page", 50);
@@ -115,7 +104,7 @@ public class DMARequest extends HttpServletRequestWrapper
     return "DMA Request: "
       + (m_user.isPresent() ? m_user.get().getName() : "[no user]")
       + (m_userOverride.isPresent()
-          ? " (" + m_userOverride.get().getName() + ")": "" )
+          ? " (" + m_userOverride.get().getName() + ")" : "")
       + ", params " + m_params;
 
   }
@@ -143,36 +132,6 @@ public class DMARequest extends HttpServletRequestWrapper
   }
 
   /**
-   * Check if the request has a player associated with it.
-   *
-   * @return      true if there is a player, false if not
-   */
-//   public boolean hasPlayer()
-//   {
-//     return m_player != null;
-//   }
-
-  /**
-   * Check if the request has a DM associated with it.
-   *
-   * @return      true if there is a DM, false if not
-   */
-//   public boolean hasDM()
-//   {
-//     return m_dm != null;
-//   }
-
-  /**
-   * Check if the request has a campaign associated with it.
-   *
-   * @return      true if there is a campaign, false if not
-   */
-//   public boolean hasCampaign()
-//   {
-//     return m_campaign != null;
-//   }
-
-  /**
    * Check if the request has a given parameter.
    *
    * @param       inName the name of the parameter to check for
@@ -183,16 +142,6 @@ public class DMARequest extends HttpServletRequestWrapper
   {
     return getParam(inName) != null;
   }
-
-  /**
-   * Check if the request has an admin parameter.
-   *
-   * @return      true if the admin parameter is there, false if not
-   */
-//   public boolean hasAdminParam()
-//   {
-//     return m_params.get("admin") != null;
-//   }
 
   /**
    * Check if the request should only return the body of a page.
@@ -211,14 +160,14 @@ public class DMARequest extends HttpServletRequestWrapper
    *
    * @return      the value of the parameter or null if not found
    */
-  public @Nullable String getParam(String inName)
+  public Optional<String> getParam(String inName)
   {
     Collection<String> values = m_params.get(inName);
 
     if(values == null || values.isEmpty())
-      return null;
+      return Optional.absent();
 
-    return values.iterator().next();
+    return Optional.of(values.iterator().next());
   }
 
   /**
@@ -229,14 +178,14 @@ public class DMARequest extends HttpServletRequestWrapper
    *
    * @return      the value of the parameter or null if not found
    */
-  public @Nullable int getParam(String inName, int inDefault)
+  public int getParam(String inName, int inDefault)
   {
-    String value = getParam(inName);
+    Optional<String> value = getParam(inName);
 
     try
     {
-      if(value != null)
-        return Integer.parseInt(value);
+      if(value.isPresent())
+        return Integer.parseInt(value.get());
     }
     catch(NumberFormatException e)
     {
@@ -268,16 +217,6 @@ public class DMARequest extends HttpServletRequestWrapper
   }
 
   /**
-   * Get all the keys of all the URL paramters.
-   *
-   * @return      a set of all URL parameter names
-   */
-//   public Set<String> getURLParamNames()
-//   {
-//     return m_params.keySet();
-//   }
-
-  /**
    * Gets the page size.
    *
    * @return      the size of the page.
@@ -287,15 +226,6 @@ public class DMARequest extends HttpServletRequestWrapper
   {
     return getParam("size", def_pageSize);
   }
-
-  /**
-   * Get the campaign for the request.
-   */
-//   @MayReturnNull
-//   public Campaign getCampaign()
-//   {
-//     return m_campaign;
-//   }
 
   /**
    * Get the user for the request.
@@ -327,25 +257,6 @@ public class DMARequest extends HttpServletRequestWrapper
     extractUser();
     return m_user;
   }
-
-  /**
-   * Get the player for the request.
-   *
-   */
-//   @MayReturnNull
-//   public Character getPlayer()
-//   {
-//     return m_player;
-//   }
-
-  /**
-   * Get the dm for the request.
-   */
-//   @MayReturnNull
-//   public BaseCharacter getDM()
-//   {
-//     return m_dm;
-//   }
 
   /**
    * Get the original path of the request.
@@ -417,77 +328,13 @@ public class DMARequest extends HttpServletRequestWrapper
     if (m_user.isPresent())
       m_user.get().action();
 
-    String override = getParam("user");
-    if(override != null && !override.isEmpty())
+    Optional<String> override = getParam("user");
+    if(override.isPresent() && !override.get().isEmpty())
       m_userOverride = DMADataFactory.get()
-        .getEntry(AbstractEntry.createKey(override, BaseCharacter.TYPE));
+        .getEntry(AbstractEntry.createKey(override.get(), BaseCharacter.TYPE));
 
     m_extractedUser = true;
   }
-
-  /**
-   * Extract the campaign from the request, if any.
-   *
-   * @param       inRequest the request to process
-   */
-//   public void extractCampaign(HttpServletRequest inRequest)
-//   {
-//     if(m_campaigns == null)
-//       return;
-
-//     String id = Strings.getPattern(inRequest.getRequestURI(),
-//                                    "^/campaign/([^/]*)");
-
-//     if(id == null)
-//       return;
-
-//     m_campaign = m_campaigns.getEntry(id, Campaign.TYPE);
-//   }
-
-  /**
-   * Extract the DM from the request, if any.
-   *
-   * @param       inRequest the request to process
-   */
-//   public void extractDM(HttpServletRequest inRequest)
-//   {
-//     if(m_user == null || m_campaign == null)
-//       return;
-
-//     if(m_campaign.getDMName().equals(m_user.getName()))
-//       m_dm = m_user;
-//   }
-
-  /**
-   * Extract the player from the request, if any.
-   *
-   * @param       inRequest the request to process
-   */
-//   public void extractPlayer(HttpServletRequest inRequest)
-//   {
-//     if(m_user == null || m_campaign == null)
-//       return;
-
-//     String []parts = Strings.getPatterns(inRequest.getRequestURI(),
-//                                          "^/campaign/.*/(.*)/(.*?)$");
-
-//     if(parts == null || parts.length != 2)
-//       return;
-
-//     String id = parts[1];
-//     AbstractEntry.Type<? extends Entry> type =
-//       AbstractEntry.Type.getEntryType(parts[0]);
-
-//     Entry entry = m_campaign.getEntry(id, type);
-
-//     if(entry == null)
-//       return;
-
-//     m_player = entry.getPlayer();
-
-//     if(m_player != null && !m_player.isBased(m_user))
-//       m_player = null;
-//   }
 
   /**
    * Make sure all the types are properly loaded.
@@ -562,9 +409,6 @@ public class DMARequest extends HttpServletRequestWrapper
     @org.junit.Test
     public void user()
     {
-      BaseCharacter user = new BaseCharacter("test");
-      //user.set("email", "\"test@test.net\"");
-      addEntry(user);
       m_localServiceTestHelper.setEnvIsLoggedIn(true);
 
       HttpServletRequest mockRequest =
@@ -577,7 +421,7 @@ public class DMARequest extends HttpServletRequestWrapper
                        com.google.common.collect.HashMultimap
                        .<String, String>create());
 
-      assertEquals("user", user, request.getUser());
+      assertNotNull("user", request.getUser());
 
       EasyMock.verify(mockRequest);
     }
@@ -586,13 +430,6 @@ public class DMARequest extends HttpServletRequestWrapper
     @org.junit.Test
     public void userOverride()
     {
-      BaseCharacter user = new BaseCharacter("test");
-      //user.set("email", "\"test@test.net\"");
-      user.setGroup(Group.ADMIN);
-      addEntry(user);
-      BaseCharacter other = new BaseCharacter("other");
-      addEntry(other);
-
       HttpServletRequest mockRequest =
         EasyMock.createMock(HttpServletRequest.class);
 
@@ -601,9 +438,9 @@ public class DMARequest extends HttpServletRequestWrapper
       DMARequest request =
         new DMARequest(mockRequest,
                        com.google.common.collect.ImmutableMultimap.of
-                       ("user", "other"));
+                       ("admin", "test"));
 
-      assertEquals("user", other, request.getUser());
+      assertEquals("user", "test", request.getUser().get().getName());
 
       EasyMock.verify(mockRequest);
     }
@@ -612,12 +449,6 @@ public class DMARequest extends HttpServletRequestWrapper
     @org.junit.Test
     public void userOverrideNonAdmin()
     {
-      BaseCharacter user = new BaseCharacter("test");
-      //user.set("email", "\"test@test.net\"");
-      addEntry(user);
-      BaseCharacter other = new BaseCharacter("other");
-      addEntry(other);
-
       HttpServletRequest mockRequest =
         EasyMock.createMock(HttpServletRequest.class);
 
@@ -626,9 +457,9 @@ public class DMARequest extends HttpServletRequestWrapper
       DMARequest request =
          new DMARequest(mockRequest,
                         com.google.common.collect.ImmutableMultimap.of
-                        ("user", "other"));
+                        ("test", "admin"));
 
-      assertEquals("user", user, request.getUser());
+      assertEquals("user", "test", request.getUser().get().getName());
 
       EasyMock.verify(mockRequest);
     }

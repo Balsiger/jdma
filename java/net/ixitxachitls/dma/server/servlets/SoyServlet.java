@@ -36,13 +36,13 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Group;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.Level;
-import net.ixitxachitls.dma.output.soy.SoyAbstract;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.values.enums.Ability;
@@ -130,8 +130,8 @@ public class SoyServlet extends DMAServlet
   }
 
   @Override
-  protected @Nullable SpecialResult handle(DMARequest inRequest,
-                                           HttpServletResponse inResponse)
+  protected Optional<? extends SpecialResult>
+  handle(DMARequest inRequest, HttpServletResponse inResponse)
     throws ServletException, IOException
   {
     // Set the output header.
@@ -205,8 +205,7 @@ public class SoyServlet extends DMAServlet
 
     Map<String, Object> map = SoyTemplate.map
       ("user", user.isPresent()
-           ? new SoyAbstract.SoyWrapper(user.get().getKey().toString(),
-                                        user.get()) : "",
+           ? new SoyValue(user.get().getKey().toString(), user.get()) : "",
        "isPublic", isPublic(inRequest),
        "originalPath", inRequest.getOriginalPath(),
        "loginURL", userService.createLoginURL(inRequest.getOriginalPath()),
@@ -221,12 +220,12 @@ public class SoyServlet extends DMAServlet
                   && user.get().hasAccess(Group.ADMIN),
 
        // classes with static access
-       "Level", new SoyAbstract.SoyWrapper("Level", Level.class),
-       "Gender", new SoyAbstract.SoyWrapper("Gender", Gender.class),
-       "Alignment", new SoyAbstract.SoyWrapper("Alignment", Alignment.class),
-       "Ability", new SoyAbstract.SoyWrapper("Ability", Ability.class),
-       "Affects", new SoyAbstract.SoyWrapper("Affects", Affects.class),
-       "Immunity", new SoyAbstract.SoyWrapper("Immunity", Immunity.class));
+       "Level", new SoyValue("Level", Level.class),
+       "Gender", new SoyValue("Gender", Gender.class),
+       "Alignment", new SoyValue("Alignment", Alignment.class),
+       "Ability", new SoyValue("Ability", Ability.class),
+       "Affects", new SoyValue("Affects", Affects.class),
+       "Immunity", new SoyValue("Immunity", Immunity.class));
 
     tracer.done();
     return map;
@@ -284,25 +283,24 @@ public class SoyServlet extends DMAServlet
     {
       DMARequest request = EasyMock.createMock(DMARequest.class);
 
-      EasyMock.expect(request.getUser()).andStubReturn(null);
+      EasyMock.expect(request.getUser()).andStubReturn(
+          Optional.<BaseCharacter>absent());
       EasyMock.expect(request.getOriginalPath()).andStubReturn("path");
       EasyMock.expect(request.hasUserOverride()).andStubReturn(false);
       EasyMock.replay(request);
 
       SoyServlet servlet = new SoyServlet();
-      assertEquals("content",
-                   "{isUser=false, "
-                   + "registerScript=$().ready(function(){ register(); } );, "
-                   + "userOverride=, "
-                   + "logoutURL=/_ah/logout?continue=path, "
-                   + "isAdmin=false, "
-                   + "originalPath=path, "
-                   + "isPublic=true, "
-                   + "user=, "
-                   + "loginURL=/_ah/login?continue=path}",
-                   servlet.collectInjectedData
-                   (request,
-                    new SoyRenderer()).toString());
+      assertSomeContent("content",
+                        servlet.collectInjectedData(request, new SoyRenderer()),
+                        "isUser", "false",
+                        "registerScript", "",
+                        "userOverride", "",
+                        "logoutURL", "/_ah/logout?continue=path",
+                        "isAdmin", "false",
+                        "originalPath", "path",
+                        "isPublic", "true",
+                        "user", "",
+                        "loginURL", "/_ah/login?continue=path");
 
       EasyMock.verify(request);
     }

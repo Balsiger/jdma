@@ -152,6 +152,12 @@ public class TestCase extends org.junit.Assert
       throw new org.junit.ComparisonFailure(inMessage, "" + inActual.size(),
                                             "" + (inExpected.length / 2));
 
+    assertSomeContent(inMessage, inActual, inExpected);
+  }
+
+  public void assertSomeContent(String inMessage, Map<?, ?> inActual,
+                                Object ... inExpected)
+  {
     for(int i = 0; i < inExpected.length; i += 2)
     {
       Object key = inExpected[i];
@@ -160,11 +166,11 @@ public class TestCase extends org.junit.Assert
       Object actual = inActual.get(key);
 
       if ((actual == null && value != null)
-          || (actual != null && !actual.equals(value)))
+          || (actual != null && !actual.toString().equals(value.toString())))
         throw new org.junit.ComparisonFailure
-          (inMessage + " [" + key + "]",
-           value != null ? value.toString() : "NULL",
-           actual != null ? actual.toString() : "NULL");
+            (inMessage + " [" + key + "]",
+             value != null ? value.toString() : "NULL",
+             actual != null ? actual.toString() : "NULL");
     }
   }
 

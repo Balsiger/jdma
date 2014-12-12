@@ -142,7 +142,7 @@
         {param label: 'Possessions' /}
         {param value}
           {foreach $item in $entry.possessions}
-            {call dma.entries.items.name}
+            {call dma.entries.items.reference}
               {param entry: $item /}
             {/call}
             {if not isLast($item)}, {/if}
@@ -345,11 +345,11 @@
       </div>          
       
       <div class="group" style="width: 19%; margin-left: 5px">
-      
+
         {call .sheet_subtitle}
           {param title: 'Hit Points' /}
         {/call}
-    
+
         <div class="values boxed" style="height: 450px">        
           <div class="hps temporary">
             Temporary<br/>
@@ -1044,7 +1044,7 @@
         {param vSize: '18px' /}
         {param value}
           {if $weapon}
-            {call dma.entries.items.name}
+            {call dma.entries.items.reference}
               {param entry: $weapon /}
             {/call}
           {else}
@@ -1204,7 +1204,15 @@
       {param boxed: true /}
       {param value: $modifier /}
     {/call}
-  
+
+    <div class="group" style="width: 19%; margin-left: 5px">
+
+      {call .sheet_subtitle}
+        {param title: 'Experience Points' /}
+      {/call}
+
+     </div>
+
   </div>
 {/template}
 

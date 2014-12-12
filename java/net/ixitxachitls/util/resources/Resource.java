@@ -160,10 +160,14 @@ public abstract class Resource
     URL url = Resource.class.getResource(Files.concatenate("/", name));
     String protocol = url != null ? url.getProtocol() : null;
 
+    if(url == null)
+      Log.warning("Cannot find resource '/" + name + "'' in "
+                      + System.getProperty("java.class.path"));
+
     if("jar".equals(protocol))
       return new JarResource(name, url);
 
-    return new FileResource(name, url);
+    return new FileResource("/" + name, url);
   }
 
   //........................................................................

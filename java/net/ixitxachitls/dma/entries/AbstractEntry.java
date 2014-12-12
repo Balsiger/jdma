@@ -1235,7 +1235,7 @@ public abstract class AbstractEntry
 
     if(!type.isPresent())
     {
-      Log.warning("Cannot get type for " + proto.getType());
+      Log.warning("Cannot get type for proto " + proto.getType());
       return;
     }
 

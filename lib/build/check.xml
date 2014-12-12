@@ -116,7 +116,7 @@ jDMA checkstyle definition.
     <property name="message" value="Line has trailing spaces."/>
   </module>
   <module name="RegexpHeader">
-    <property name="header" value="^/\*+$\n^ \* Copyright \(c\) (\d\d\d\d-)?201(1|2|3) .*$\n^ \* All rights reserved$"/>
+    <property name="header" value="^/\*+$\n^ \* Copyright \(c\) (\d\d\d\d-)?201(1|2|3|4|5) .*$\n^ \* All rights reserved$"/>
   </module>
   <module name="SuppressionCommentFilter"/>
   <module name="SuppressionFilter">

@@ -94,7 +94,7 @@ public class Character extends NPC
   protected List<String> m_items = new ArrayList<>();
 
   /**
-   *  The standard wealth per level in gold pieces.
+   * The standard wealth per level in gold pieces.
    * There is no closed formula for this.
    */
   private static final int []s_wealth = new int []
@@ -120,8 +120,6 @@ public class Character extends NPC
         580000,
         760000,
       };
-
-
 
   /**
    * Get all the items contained in this contents.

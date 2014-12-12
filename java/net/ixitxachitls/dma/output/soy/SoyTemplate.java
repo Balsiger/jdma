@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.output.soy;
 
 import java.io.File;
@@ -32,9 +30,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
@@ -76,7 +71,6 @@ import net.ixitxachitls.util.resources.Resource;
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
 
-@ParametersAreNonnullByDefault
 public class SoyTemplate
 {
   /**
@@ -124,7 +118,7 @@ public class SoyTemplate
         return StringData.forValue("unknown entry '" + inArgs.get(0) + "'");
       }
 
-      return new SoyAbstract.SoyWrapper(key.toString(), entry.get());
+      return new SoyValue(key.toString(), entry.get());
     }
   }
 
@@ -169,7 +163,7 @@ public class SoyTemplate
     public SoyData computeForTofu(List<SoyData> inArgs)
     {
       if(inArgs.get(0) == null
-         || inArgs.get(0) instanceof Undefined)
+         || inArgs.get(0) instanceof SoyUndefined)
         return BooleanData.forValue(false);
 
       return BooleanData.forValue(true);
@@ -197,7 +191,7 @@ public class SoyTemplate
       if(inArgs.get(0) instanceof SoyListData)
         return IntegerData.forValue(((SoyListData)inArgs.get(0)).length());
 
-      if(inArgs.get(0) instanceof Undefined)
+      if(inArgs.get(0) instanceof SoyUndefined)
         return IntegerData.forValue(0);
 
       Log.error("trying to compute length of " + inArgs.get(0).getClass()
@@ -298,50 +292,6 @@ public class SoyTemplate
   }
 
   /** A plugin function to format numbers or printing. */
-  /*
-  public static class ReferenceFunction implements SoyTofuFunction
-  {
-    @Override
-    public String getName()
-    {
-      return "reference";
-    }
-
-    @Override
-    public Set<Integer> getValidArgsSizes()
-    {
-      return ImmutableSet.of(2);
-    }
-
-    @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
-    {
-      Optional<EntryKey> key =
-        EntryKey.fromString(inArgs.get(0).toString());
-      if(!key.isPresent())
-        return inArgs.get(0);
-
-      BaseEntry entry = (BaseEntry)DMADataFactory.get().getEntry(key.get());
-
-      if(entry == null)
-        return inArgs.get(0);
-
-      Parameters parameters = new Parameters();
-      for(SoyData opt : (SoyListData)inArgs.get(1))
-      {
-        String []parts = Strings.getPatterns(opt.toString(), "^(\\w+)\\s(.*)$");
-        if(parts.length != 2)
-          Log.warning("invalid parameter " + opt + " ignored");
-        else
-          parameters.with(parts[0], new Name(parts[1]), Parameters.Type.UNIQUE);
-      }
-
-      return StringData.forValue(entry.getSummary(parameters));
-    }
-  }
-  */
-
-  /** A plugin function to format numbers or printing. */
   public static class FormatNumberFunction implements SoyTofuFunction
   {
     @Override
@@ -419,11 +369,10 @@ public class SoyTemplate
       {
         SoyMapData data = (SoyMapData)inArgs.get(0);
         return UnsafeSanitizedContentOrdainer.ordainAsSafe
-          (COMMAND_RENDERER.render
-           ("dma.value.annotated",
-            map("value", data,
-                "link", inArgs.size() > 1 ? inArgs.get(1) : ""),
-                (Map<String, Object>)null),
+          (COMMAND_RENDERER.renderSoy
+               ("dma.value.annotated",
+                Optional.of(map("value", data,
+                                "link", inArgs.size() > 1 ? inArgs.get(1) : ""))),
            SanitizedContent.ContentKind.HTML);
       }
 
@@ -685,7 +634,7 @@ public class SoyTemplate
   private List<String> m_files = new ArrayList<String>();
 
   /** The compiled template file set. */
-  private @Nullable SoyTofu m_compiled = null;
+  private Optional<SoyTofu> m_compiled = Optional.absent();
 
   /** The project name. */
   public static final String PROJECT = Config.get("project.name", "jDMA");
@@ -711,24 +660,26 @@ public class SoyTemplate
    * @param       inName      the name of the template to render.
    * @param       inData      the data for the template.
    * @param       inInjected  the injected data for the template.
-   * @param       inDelegates the delegates used for rendering, if any
    *
    * @return      the rendered template as a string
    */
   public String render(String inName,
-                       @Nullable Map<String, ? extends Object> inData,
-                       @Nullable Map<String, Object> inInjected,
-                       @Nullable Set<String> inDelegates)
+                       Optional<Map<String, Object>> inData,
+                       Optional<Map<String, Object>> inInjected)
   {
-    SoyMapData data = null;
-    if(inData != null)
-      data = new SoyMapData(inData);
+    Optional<SoyMapData> data;
+    if(inData.isPresent())
+      data = Optional.of(new SoyMapData(inData.get()));
+    else
+      data = Optional.absent();
 
-    SoyMapData injected = null;
-    if(inInjected != null)
-      injected = new SoyMapData(inInjected);
+    Optional<SoyMapData> injected;
+    if(inInjected.isPresent())
+      injected = Optional.of(new SoyMapData(inInjected.get()));
+    else
+      injected = Optional.absent();
 
-    return render(inName, data, injected, inDelegates);
+    return renderSoy(inName, data, injected);
   }
 
   /**
@@ -737,32 +688,22 @@ public class SoyTemplate
    * @param       inName      the name of the template to render.
    * @param       inData      the data for the template.
    * @param       inInjected  the injected data for the template.
-   * @param       inDelegates the delegates used for rendering, if any
    *
    * @return      the rendered template as a string
    */
-  public String render(String inName,
-                       @Nullable SoyMapData inData,
-                       @Nullable SoyMapData inInjected,
-                       @Nullable Set<String> inDelegates)
+  public String renderSoy(String inName,
+                          Optional<SoyMapData> inData,
+                          Optional<SoyMapData> inInjected)
   {
     compile();
 
-    //try
-    //{
-      return m_compiled.newRenderer(inName)
-        .setData(inData)
-        .setIjData(inInjected)
-        .setActiveDelegatePackageNames(inDelegates)
-        .render();
-    //}
-    // catch(Exception e)
-    // {
-    //   System.out.println("Exception when rendering template:");
-    //   e.printStackTrace(System.out);
-    // }
+    SoyTofu.Renderer renderer = m_compiled.get().newRenderer(inName);
+    if(inData.isPresent())
+      renderer.setData(inData.get());
+    if(inInjected.isPresent())
+      renderer.setIjData(inInjected.get());
 
-    // return "(error)";
+    return renderer.render();
   }
 
   /**
@@ -781,7 +722,7 @@ public class SoyTemplate
    */
   public void recompile()
   {
-    m_compiled = null;
+    m_compiled = Optional.absent();
   }
 
   /**
@@ -789,7 +730,7 @@ public class SoyTemplate
    */
   public void compile()
   {
-    if(m_compiled != null)
+    if(m_compiled.isPresent())
       return;
 
     Log.important("compiling soy templates: " + m_files);
@@ -816,7 +757,7 @@ public class SoyTemplate
                                     "dma.version", VERSION));
 
     // Compile the template into a SoyTofu object.
-    m_compiled = files.build().compileToTofu();
+    m_compiled = Optional.of(files.build().compileToTofu());
   }
 
   /**
@@ -824,16 +765,17 @@ public class SoyTemplate
    * values.
    *
    * @param    inData the data to convert to a map
+   * @param    <T> the type of object values mapped
    *
    * @return   the converted map
    */
-  public static Map<String, Object> map(Object ... inData)
+  public static <T> Map<String, T> map(Object ... inData)
   {
     assert inData.length % 2 == 0 : "invalid number of arguments";
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, T> map = new HashMap<>();
     for(int i = 0; i < inData.length; i += 2)
-      map.put(inData[i].toString(), inData[i + 1]);
+      map.put(inData[i].toString(), (T)inData[i + 1]);
 
     return map;
   }
@@ -875,19 +817,19 @@ public class SoyTemplate
     @org.junit.Test
     public void render()
     {
-      SoyTemplate renderer = new SoyTemplate("lib/test/soy/test");
+      SoyTemplate renderer = new SoyTemplate("test");
 
-      assertEquals("render",
-                   "first: first data second: second data "
-                   + "third: first injected fourth: second injected "
-                   + "fifth: jDMA",
-                   renderer.render
-                   ("test.commands.test",
-                    SoyTemplate.map("first", "first data",
-                                    "second", "second data"),
-                    SoyTemplate.map("first", "first injected",
-                                    "second", "second injected"),
-                    null));
+      assertEquals
+          ("render",
+           "first: first data second: second data "
+               + "third: first injected fourth: second injected "
+               + "fifth: jDMA",
+           renderer.render
+               ("test.commands.test",
+                Optional.of(SoyTemplate.map("first", "first data",
+                                            "second", "second data")),
+                Optional.of(SoyTemplate.map("first", "first injected",
+                                            "second", "second injected"))));
     }
   }
 }

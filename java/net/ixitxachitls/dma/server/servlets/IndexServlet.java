@@ -38,9 +38,8 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.soy.SoyAbstract;
-import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 import org.easymock.EasyMock;
@@ -84,8 +83,9 @@ public class IndexServlet extends PageServlet
     if(path == null)
     {
       data.put("content",
-               inRenderer.render("dma.errors.invalidPage",
-                                 map("name", inRequest.getOriginalPath())));
+               inRenderer.render(
+                   "dma.errors.invalidPage",
+                   Optional.of(map("name", inRequest.getOriginalPath()))));
 
       return data;
     }
@@ -106,8 +106,9 @@ public class IndexServlet extends PageServlet
     if(name == null || name.isEmpty() || !type.isPresent())
     {
       data.put("content",
-               inRenderer.render("dma.errors.invalidPage",
-                                 map("name", inRequest.getOriginalPath())));
+               inRenderer.render(
+                   "dma.errors.invalidPage",
+                   Optional.of(map("name", inRequest.getOriginalPath()))));
 
       return data;
     }
@@ -123,8 +124,9 @@ public class IndexServlet extends PageServlet
     if(index == null)
     {
       data.put("content",
-               inRenderer.render("dma.errors.invalidPage",
-                                 map("name", inRequest.getOriginalPath())));
+               inRenderer.render(
+                   "dma.errors.invalidPage",
+                   Optional.of(map("name", inRequest.getOriginalPath()))));
 
       return data;
     }
@@ -151,22 +153,21 @@ public class IndexServlet extends PageServlet
           data.put("content",
                    inRenderer.render
                    ("dma.entry.indexoverview",
-                    map("title", title,
+                    Optional.of(map(
+                        "title", title,
                         "indexes", groups,
                         "type", type.get().getMultipleLink(),
                         "keys", new ArrayList<String>(groups.keySet()),
-                        "name", name),
-                    ImmutableSet.of(type.get().getName().replace(" ", ""))));
+                        "name", name))));
         }
         else
           data.put("content",
                    inRenderer.render
                    ("dma.entry.indexoverview",
-                    map("title", title,
-                        "indexes", new ArrayList<String>(indexes),
-                        "type", type.get().getMultipleLink(),
-                        "name", name),
-                    ImmutableSet.of(type.get().getName().replace(" ", ""))));
+                    Optional.of(map("title", title,
+                                    "indexes", new ArrayList<String>(indexes),
+                                    "type", type.get().getMultipleLink(),
+                                    "name", name))));
 
         return data;
       }
@@ -179,19 +180,18 @@ public class IndexServlet extends PageServlet
                                            inRequest.getStart(),
                                            inRequest.getPageSize() + 1);
 
-    List<SoyAbstract.SoyWrapper> entries = new ArrayList<>();
+    List<SoyValue> entries = new ArrayList<>();
     for(AbstractEntry entry : rawEntries)
-      entries.add(new SoyAbstract.SoyWrapper(entry.getKey().toString(), entry));
+      entries.add(new SoyValue(entry.getKey().toString(), entry));
 
     data.put("content",
              inRenderer.render
              ("dma.entry.index",
-              map("title", title,
-                  "name", name,
-                  "start", inRequest.getStart(),
-                  "pagesize", inRequest.getPageSize(),
-                  "entries", entries),
-              ImmutableSet.of(type.get().getName().replace(" ", ""))));
+              Optional.of(map("title", title,
+                              "name", name,
+                              "start", inRequest.getStart(),
+                              "pagesize", inRequest.getPageSize(),
+                              "entries", entries))));
 
     return data;
   }

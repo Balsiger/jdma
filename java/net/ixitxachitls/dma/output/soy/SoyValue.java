@@ -48,103 +48,15 @@ import net.ixitxachitls.util.Pair;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class SoyAbstract extends SoyMapData
+public class SoyValue extends SoyMapData
 {
-  /**
-   * A wrapper for a soy value calling a method with the given name or
-   * returning an undefined value.
-   */
-  @Immutable
-  @ParametersAreNonnullByDefault
-  public static class SoyWrapper extends SoyAbstract
-  {
-    /** Create the wrapper.
-     *
-     * @param inName  the name of the value
-     * @param inObject the entry the value comes from
-     */
-    public SoyWrapper(String inName, Object inObject)
-    {
-      super(inName, inObject);
-    }
-
-    /**
-     * Get a single, named value.
-     *
-     * @param  inName the name of the value to get
-     *
-     * @return the value returned by the name method call or undefined if not
-     *         found
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public SoyData getSingle(String inName)
-    {
-      Object value = m_object;
-      if(value instanceof Optional)
-      {
-        if("isPresent".equals(inName) || "present".equals(inName))
-          return BooleanData.forValue(((Optional)value).isPresent());
-
-        if(((Optional)value).isPresent())
-          value = ((Optional)value).get();
-        else
-          return new Undefined(m_name + "." + inName);
-      }
-
-      if("integer".equals(inName) && value instanceof Integer)
-        return IntegerData.forValue((Integer)value);
-
-      if("integer".equals(inName) && value instanceof Optional
-        && ((Optional<?>)value).isPresent()
-        && ((Optional<?>)value).get() instanceof Integer)
-        return IntegerData.forValue(((Optional<Integer>)value).get());
-
-      value = Classes.callMethod(inName, value);
-      if(value != null)
-        return convert(inName, value);
-
-      return new Undefined(m_name + "." + inName);
-    }
-
-    @Override
-    public boolean equals(Object inOther) // $codepro.audit.disable
-    {
-      if (this == inOther)
-        return true;
-
-      if (!(inOther instanceof SoyAbstract))
-        return false;
-
-      return super.equals(inOther);
-    }
-
-    @Override
-    public int hashCode()
-    {
-      return super.hashCode();
-    }
-
-    @Override
-    public String toString()
-    {
-      if(m_object instanceof Optional)
-        if(((Optional)m_object).isPresent())
-          return ((Optional)m_object).get().toString();
-        else
-          return "(undefined)";
-
-      return m_object.toString();
-    }
-  }
-
   /**
    * Create the abstract soy value.
    *
    * @param inName  the name of the soy value
    * @param inEntry the entry in which to evaluate the values
    */
-  public SoyAbstract(String inName, @Nullable Object inEntry)
+  public SoyValue(String inName, @Nullable Object inEntry)
   {
     m_name = inName;
     m_object = inEntry;
@@ -155,6 +67,75 @@ public class SoyAbstract extends SoyMapData
 
   /** The entry with the data. */
   protected final Object m_object;
+
+  /**
+   * Get a single, named value.
+   *
+   * @param  inName the name of the value to get
+   *
+   * @return the value returned by the name method call or undefined if not
+   *         found
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public SoyData getSingle(String inName)
+  {
+    Object value = m_object;
+    if(value instanceof Optional)
+    {
+      if("isPresent".equals(inName) || "present".equals(inName))
+        return BooleanData.forValue(((Optional) value).isPresent());
+
+      if(((Optional)value).isPresent())
+        value = ((Optional)value).get();
+      else
+        return new SoyUndefined(m_name + "." + inName);
+    }
+
+    if("integer".equals(inName) && value instanceof Integer)
+      return IntegerData.forValue((Integer) value);
+
+    if("integer".equals(inName) && value instanceof Optional
+        && ((Optional<?>)value).isPresent()
+        && ((Optional<?>)value).get() instanceof Integer)
+      return IntegerData.forValue(((Optional<Integer>)value).get());
+
+    value = Classes.callMethod(inName, value);
+    if(value != null)
+      return convert(inName, value);
+
+    return new SoyUndefined(m_name + "." + inName);
+  }
+
+  @Override
+  public boolean equals(Object inOther) // $codepro.audit.disable
+  {
+    if (this == inOther)
+      return true;
+
+    if (!(inOther instanceof SoyValue))
+      return false;
+
+    return super.equals(inOther);
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return super.hashCode();
+  }
+
+  @Override
+  public String toString()
+  {
+    if(m_object instanceof Optional)
+      if(((Optional)m_object).isPresent())
+        return ((Optional)m_object).get().toString();
+      else
+        return "(undefined)";
+
+    return m_object.toString();
+  }
 
   /**
    * Convert the given object into a soy value.
@@ -207,8 +188,8 @@ public class SoyAbstract extends SoyMapData
       return StringData.forValue(inObject.toString());
 
     if(inObject == null)
-      return new Undefined(m_name + "." + inName);
+      return new SoyUndefined(m_name + "." + inName);
 
-    return new SoyWrapper(m_name + "." + inName, inObject);
+    return new SoyValue(m_name + "." + inName, inObject);
   }
 }

@@ -44,6 +44,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 
 import org.easymock.EasyMock;
@@ -311,7 +312,7 @@ public class FileServlet extends BaseServlet
    *
    */
   @Override
-  protected synchronized @Nullable SpecialResult handle
+  protected synchronized Optional<? extends SpecialResult> handle
     (HttpServletRequest inRequest,
      HttpServletResponse inResponse)
     throws IOException, ServletException
@@ -339,7 +340,7 @@ public class FileServlet extends BaseServlet
         // miliseconds are not transmitted back to the client, thus we can't
         // use them here
         if(modified + 1000 >= s_startupTime)
-          return new NotModified();
+          return Optional.of(new NotModified());
 
         if(modified < 0)
           s_reloaded = true;
@@ -361,10 +362,11 @@ public class FileServlet extends BaseServlet
     if(resource == null)
     {
       Log.warning("Could not find file '" + path + "' on the server");
-      return new HTMLError(HttpServletResponse.SC_NOT_FOUND,
-                           "Not Found",
-                           "The resource '" + path + "' was not found on the "
-                           + "server!");
+      return Optional.of(new HTMLError(HttpServletResponse.SC_NOT_FOUND,
+                                       "Not Found",
+                                       "The resource '" + path
+                                       + "' was not found on the "
+                                       + "server!"));
     }
 
     // set the content type

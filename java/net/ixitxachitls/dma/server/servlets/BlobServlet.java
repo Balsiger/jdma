@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.Strings;
@@ -95,16 +96,14 @@ public class BlobServlet extends BaseServlet
    *
    */
   @Override
-  public @Nullable SpecialResult handle(HttpServletRequest inRequest,
-                                        HttpServletResponse inResponse)
+  public Optional<? extends SpecialResult>
+  handle(HttpServletRequest inRequest, HttpServletResponse inResponse)
     throws IOException
   {
     String path = Strings.getPattern(inRequest.getPathInfo(), "/([^/]*)$");
     BlobKey key = new BlobKey(path);
     m_blobs.serve(key, inResponse);
 
-    return null;
+    return Optional.absent();
   }
-
-  //........................................................................
 }

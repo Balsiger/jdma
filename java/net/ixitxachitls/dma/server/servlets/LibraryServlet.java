@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
+
+import com.google.common.base.Optional;
+
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseEntry;
@@ -122,8 +125,8 @@ public class LibraryServlet extends PageServlet
 
     data.put("content",
              inRenderer.render("dma.page.library",
-                               map("types", types,
-                                   "indexes", indexes)));
+                               Optional.of(map("types", types,
+                                               "indexes", indexes))));
 
     return data;
   }

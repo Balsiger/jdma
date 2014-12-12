@@ -19,72 +19,39 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
 import java.io.PrintStream;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Optional;
+
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * The base servlet for action calls.
  *
  * @file          ActionServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
-@ParametersAreNonnullByDefault
 public abstract class ActionServlet extends DMAServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //---------------------------- ActionServlet -----------------------------
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**
    * Create the servlet for actions.
-   *
    */
   protected ActionServlet()
   {
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //-------------------------------- doGet ---------------------------------
 
   /**
    * Handle a get requets from the client.
@@ -109,9 +76,6 @@ public abstract class ActionServlet extends DMAServlet
       .send(inResponse);
   }
 
-  //........................................................................
-  //-------------------------------- handle --------------------------------
-
   /**
    * Really handle the request.
    *
@@ -123,11 +87,10 @@ public abstract class ActionServlet extends DMAServlet
    * @throws      IOException       when writing to the page fails
    * @throws      ServletException  a general problem with handling the request
    *                                happens
-   *
    */
   @Override
-  protected @Nullable SpecialResult handle(DMARequest inRequest,
-                                           HttpServletResponse inResponse)
+  protected Optional<? extends SpecialResult>
+  handle(DMARequest inRequest, HttpServletResponse inResponse)
     throws ServletException, IOException
   {
     // set the content type
@@ -156,11 +119,8 @@ public abstract class ActionServlet extends DMAServlet
       Log.warning("could not return action result: " + e);
     }
 
-    return null;
+    return Optional.absent();
   }
-
-  //........................................................................
-  //------------------------------ setMessage ------------------------------
 
   /**
     *
@@ -180,10 +140,6 @@ public abstract class ActionServlet extends DMAServlet
     inResponse.addCookie(cookie);
   }
 
-  //........................................................................
-
-  //------------------------------- doAction -------------------------------
-
   /**
    *
    * Execute the action associated with this servlet.
@@ -192,18 +148,9 @@ public abstract class ActionServlet extends DMAServlet
    * @param       inResponse the response to write to
    *
    * @return      the javascript code to send back to the client
-   *
    */
   protected abstract String doAction(DMARequest inRequest,
                                      HttpServletResponse inResponse);
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //--------------------------------- fail ---------------------------------
 
   /**
    * Fail handling the action with the given message.
@@ -211,7 +158,6 @@ public abstract class ActionServlet extends DMAServlet
    * @param       inMessage the message with which to fail
    *
    * @return      javascript to send back to the client for failure
-   *
    */
   protected String fail(String inMessage)
   {
@@ -220,17 +166,11 @@ public abstract class ActionServlet extends DMAServlet
     return "gui.alert('" + inMessage + "');";
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The tests. */
   public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
-    //----- get ------------------------------------------------------------
-
     /**
      * The get Test.
      *
@@ -264,9 +204,6 @@ public abstract class ActionServlet extends DMAServlet
 
       EasyMock.verify(request, response);
     }
-
-    //......................................................................
-    //----- handle ---------------------------------------------------------
 
     /**
      * The handle Test.
@@ -307,9 +244,6 @@ public abstract class ActionServlet extends DMAServlet
       }
     }
 
-    //......................................................................
-    //----- setMessage -----------------------------------------------------
-
     /** The setMessage Test. */
     @org.junit.Test
     public void setMessage()
@@ -337,9 +271,6 @@ public abstract class ActionServlet extends DMAServlet
       EasyMock.verify(response);
     }
 
-    //......................................................................
-    //----- fail -----------------------------------------------------------
-
     /** The fail Test. */
     @org.junit.Test
     public void checkFail()
@@ -360,9 +291,5 @@ public abstract class ActionServlet extends DMAServlet
 
       m_logger.addExpected("WARNING: message");
     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

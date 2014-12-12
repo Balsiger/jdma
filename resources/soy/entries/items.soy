@@ -139,7 +139,9 @@
             {param color: '#008' /}
             {param value}
               {foreach $item in $entry.contents}
-                {$item.name}
+                {call .reference}
+                  {param entry: $item /}
+                {/call}
                 {if not isLast($item)}, {/if}
               {/foreach}
               {if $ij.user}
@@ -732,4 +734,18 @@
   {/if}
   {sp}({$entry.name})
 {/template}
+
+/**
+ * Format the item as a name with a link.
+ *
+ * @param entry the item to format
+ */
+{template .reference}
+  <a class="Item" href="{$entry.path}">
+    {call .name}
+      {param entry: $entry /}
+    {/call}
+  </a>
+{/template}
+
 

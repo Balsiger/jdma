@@ -19,30 +19,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.server.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Optional;
+
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.server.ServerUtils;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is the base for all servlets used in the DMA web server.
@@ -50,19 +44,9 @@ import net.ixitxachitls.util.logging.Log;
  * @file          BaseServlet.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
 @Immutable
-@ParametersAreNonnullByDefault
 public abstract class BaseServlet extends HttpServlet
 {
-  //----------------------------------------------------------------- nested
-
-  //----- SpecialResult ----------------------------------------------------
-
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
@@ -82,14 +66,10 @@ public abstract class BaseServlet extends HttpServlet
      * Convert to a string for debugging.
      *
      * @return the string representation
-     *
      */
     @Override
     String toString();
   }
-
-  //........................................................................
-  //----- TextError --------------------------------------------------------
 
   /** A class for a handling error. */
   @Immutable
@@ -142,9 +122,6 @@ public abstract class BaseServlet extends HttpServlet
       return m_code + ": " + m_message;
     }
   }
-
-  //........................................................................
-  //----- HTMLError --------------------------------------------------
 
   /** A class for a handling error in html. */
   @Immutable
@@ -213,9 +190,6 @@ public abstract class BaseServlet extends HttpServlet
     }
   }
 
-  //........................................................................
-  //----- NotModified ------------------------------------------------------
-
   /** Special result for not modified pages. */
   @Immutable
   public static class NotModified implements SpecialResult, Serializable
@@ -253,9 +227,6 @@ public abstract class BaseServlet extends HttpServlet
       return "not-modified";
     }
   }
-
-  //........................................................................
-  //----- Redirect ---------------------------------------------------------
 
   /** Special result for redirecting pages. */
   @Immutable
@@ -303,34 +274,12 @@ public abstract class BaseServlet extends HttpServlet
     }
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //---------------------------- BaseServlet -------------------------------
-
   /**
    * Create the base handler.
    */
   protected BaseServlet()
   {
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //-------------------------------- doGet ---------------------------------
 
   /**
    * Handle a get requets from the client.
@@ -354,9 +303,6 @@ public abstract class BaseServlet extends HttpServlet
     Log.debug("...handled");
   }
 
-  //........................................................................
-  //-------------------------------- doPost --------------------------------
-
   /**
    * Handle a post requets from the client.
    *
@@ -365,7 +311,6 @@ public abstract class BaseServlet extends HttpServlet
    *
    * @throws      ServletException general error when processing the page
    * @throws      IOException      writing to the page failed
-   *
    */
   @Override
   public void doPost(HttpServletRequest inRequest,
@@ -380,10 +325,6 @@ public abstract class BaseServlet extends HttpServlet
     Log.debug("...handled");
   }
 
-  //........................................................................
-
-  //---------------------------- handleAndCheck ----------------------------
-
   /**
    * Handle the request and check for errors.
    *
@@ -397,14 +338,11 @@ public abstract class BaseServlet extends HttpServlet
                              HttpServletResponse inResponse)
     throws IOException, ServletException
   {
-    SpecialResult result = handle(inRequest, inResponse);
+    Optional<? extends SpecialResult> result = handle(inRequest, inResponse);
 
-    if(result != null)
-      result.send(inResponse);
+    if(result.isPresent())
+      result.get().send(inResponse);
   }
-
-  //........................................................................
-  //-------------------------------- handle --------------------------------
 
   /**
    * Handle the request if it is allowed.
@@ -417,25 +355,16 @@ public abstract class BaseServlet extends HttpServlet
    * @throws      ServletException general error when processing the page
    * @throws      IOException      writing to the page failed
    */
-  protected abstract @Nullable SpecialResult handle
+  protected abstract Optional<? extends SpecialResult> handle
     (HttpServletRequest inRequest,
      HttpServletResponse inResponse)
     throws ServletException, IOException;
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The tests. */
   public static class Test extends ServerUtils.Test
   {
-    //----- returnNotModified ----------------------------------------------
-
     /**
      * The returns Test.
      * @throws Exception to lazy to catch
@@ -456,10 +385,11 @@ public abstract class BaseServlet extends HttpServlet
           /** Serial version id. */
           private static final long serialVersionUID = 1L;
           @Override
-          protected SpecialResult handle(HttpServletRequest inRequest,
-                                         HttpServletResponse inResponse)
+          protected Optional<? extends SpecialResult>
+          handle(HttpServletRequest inRequest,
+                 HttpServletResponse inResponse)
           {
-            return new NotModified();
+            return Optional.of(new NotModified());
           }
         };
 
@@ -467,9 +397,6 @@ public abstract class BaseServlet extends HttpServlet
 
       EasyMock.verify(request, response);
     }
-
-    //......................................................................
-    //----- returnHTMLError ------------------------------------------------
 
     /**
      * The returnHTMLError Test.
@@ -495,10 +422,10 @@ public abstract class BaseServlet extends HttpServlet
             /** Serial version id. */
             private static final long serialVersionUID = 1L;
             @Override
-            protected SpecialResult handle(HttpServletRequest inRequest,
-                                           HttpServletResponse inResponse)
+            protected Optional<? extends SpecialResult>
+            handle(HttpServletRequest inRequest, HttpServletResponse inResponse)
             {
-              return new HTMLError(200, "title", "message");
+              return Optional.of(new HTMLError(200, "title", "message"));
             }
           };
 
@@ -516,9 +443,6 @@ public abstract class BaseServlet extends HttpServlet
         EasyMock.verify(request, response);
       }
     }
-
-    //......................................................................
-    //----- returnError ----------------------------------------------------
 
     /**
      * The returnError Test.
@@ -539,10 +463,10 @@ public abstract class BaseServlet extends HttpServlet
           /** Serial version id. */
           private static final long serialVersionUID = 1L;
           @Override
-          protected SpecialResult handle(HttpServletRequest inRequest,
-                                         HttpServletResponse inResponse)
+          protected Optional<? extends SpecialResult>
+          handle(HttpServletRequest inRequest, HttpServletResponse inResponse)
           {
-            return new TextError(123, "message");
+            return Optional.of(new TextError(123, "message"));
           }
         };
 
@@ -550,9 +474,6 @@ public abstract class BaseServlet extends HttpServlet
 
       EasyMock.verify(request, response);
     }
-
-    //......................................................................
-    //----- get ------------------------------------------------------------
 
     /**
      * The get Test.
@@ -576,11 +497,11 @@ public abstract class BaseServlet extends HttpServlet
           /** Serial verison id. */
           private static final long serialVersionUID = 1L;
           @Override
-          protected SpecialResult handle(HttpServletRequest inRequest,
-                                         HttpServletResponse inResponse)
+          protected Optional<? extends SpecialResult>
+          handle(HttpServletRequest inRequest, HttpServletResponse inResponse)
           {
             handled.set(true);
-            return null;
+            return Optional.absent();
           }
         };
 
@@ -589,9 +510,5 @@ public abstract class BaseServlet extends HttpServlet
 
       EasyMock.verify(request, response);
     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

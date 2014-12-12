@@ -25,14 +25,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.appengine.api.utils.SystemProperty;
+import com.google.common.base.Optional;
 import com.google.template.soy.data.SoyMapData;
 
 import net.ixitxachitls.dma.server.servlets.SoyServlet;
@@ -44,22 +41,34 @@ import net.ixitxachitls.util.configuration.Config;
  * @file          SoyRenderer.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
-@ParametersAreNonnullByDefault
 public class SoyRenderer
 {
   /**
-   * Create the renderer.
+   * Create the renderer with the default template.
    */
   public SoyRenderer()
   {
+    m_template = SoyServlet.TEMPLATE;
   }
 
+  /**
+   * Create the renderer.
+   *
+   * @param inTemplate the template to use for rendering
+   */
+  private SoyRenderer(SoyTemplate inTemplate)
+  {
+    m_template = inTemplate;
+  }
+
+  /** The template to use for rendering. */
+  private final SoyTemplate m_template;
+
   /** The data to be used when rendering, if any. */
-  private @Nullable SoyMapData m_data = null;
+  private Optional<SoyMapData> m_data = Optional.absent();
 
   /** The injected data to be used when rendering, if any. */
-  private @Nullable SoyMapData m_injected = null;
+  private Optional<SoyMapData> m_injected = Optional.absent();
 
   /** Command starter character. */
   protected static final char s_command =
@@ -129,12 +138,9 @@ public class SoyRenderer
    *
    * @param       inData the data to use
    */
-  public void setData(@Nullable Map<String, Object> inData)
+  public void setData(Map<String, Object> inData)
   {
-    if(inData == null)
-      m_data = null;
-    else
-      m_data = new SoyMapData(inData);
+    m_data = Optional.of(new SoyMapData(inData));
   }
 
   /**
@@ -142,12 +148,9 @@ public class SoyRenderer
    *
    * @param   inData the injected data
    */
-  public void setInjected(@Nullable Map<String, Object> inData)
+  public void setInjected(Map<String, Object> inData)
   {
-    if(inData == null)
-      m_injected = null;
-    else
-      m_injected = new SoyMapData(inData);
+    m_injected = Optional.of(new SoyMapData(inData));
   }
 
   /**
@@ -156,16 +159,14 @@ public class SoyRenderer
    * @param       inName      the name of the template to render.
    * @param       inData      the data for the template.
    * @param       inInjected  the injected data for the template.
-   * @param       inDelegates the delegates used for rendering, if any
    *
    * @return      the rendered template as a string
    */
   public String render(String inName,
-                       @Nullable Map<String, Object> inData,
-                       @Nullable Map<String, Object> inInjected,
-                       @Nullable Set<String> inDelegates)
+                       Optional<Map<String, Object>> inData,
+                       Optional<Map<String, Object>> inInjected)
   {
-    return SoyServlet.TEMPLATE.render(inName, inData, inInjected, inDelegates);
+    return m_template.render(inName, inData, inInjected);
   }
 
   /**
@@ -173,21 +174,20 @@ public class SoyRenderer
    *
    * @param       inName      the name of the template to render.
    * @param       inData      the data for the template.
-   * @param       inDelegates the delegates used for rendering, if any
    *
    * @return      the rendered template as a string
    */
-  public String render(String inName,
-                       @Nullable Map<String, Object> inData,
-                       @Nullable Set<String> inDelegates)
+  public String renderSoy(String inName, Optional<Map<String, Object>> inData)
   {
-    SoyMapData data = null;
-    if(inData != null)
-      data = new SoyMapData(inData);
+    Optional<SoyMapData> data;
+    if(inData.isPresent())
+      data = Optional.of(new SoyMapData(inData));
+    else
+      data = Optional.absent();
 
     try
     {
-      return SoyServlet.TEMPLATE.render(inName, data, m_injected, inDelegates);
+      return m_template.renderSoy(inName, data, m_injected);
     }
     catch(Exception e) // $codepro.audit.disable caughtExceptions
     {
@@ -204,26 +204,12 @@ public class SoyRenderer
    * Render the template named.
    *
    * @param       inName      the name of the template to render.
-   * @param       inDelegates the delegates used for rendering, if any
    *
    * @return      the rendered template as a string
-   */
-  public String render(String inName, @Nullable Set<String> inDelegates)
-  {
-    return SoyServlet.TEMPLATE.render(inName, m_data, m_injected, inDelegates);
-  }
-
-  /**
-   * Render the template named.
-   *
-   * @param       inName      the name of the template to render.
-   *
-   * @return      the rendered template as a string
-   *
    */
   public String render(String inName)
   {
-    return SoyServlet.TEMPLATE.render(inName, m_data, m_injected, null);
+    return m_template.renderSoy(inName, m_data, m_injected);
   }
 
   /**
@@ -231,35 +217,20 @@ public class SoyRenderer
    *
    * @param       inName      the name of the template to render.
    * @param       inData      the data for the template.
-   * @param       inInjected  the injected data for the template.
    *
    * @return      the rendered template as a string
    */
   public String render(String inName,
-                       @Nullable Map<String, ? extends Object> inData,
-                       @Nullable Map<String, Object> inInjected)
+                       Optional<Map<String, Object>> inData)
   {
-    return SoyServlet.TEMPLATE.render(inName, inData, inInjected, null);
+    return m_template.render(inName, inData,
+                             Optional.<Map<String, Object>>absent());
   }
 
-  /**
-   * Render the template named.
-   *
-   * @param       inName      the name of the template to render.
-   * @param       inData      the data for the template.
-   *
-   * @return      the rendered template as a string
-   *
-   */
-  public String render(String inName, @Nullable Map<String, Object> inData)
-  {
-    return SoyServlet.TEMPLATE.render(inName, new SoyMapData(inData),
-                                      m_injected, null);
-  }
-
+  /** Compile the templates used for rendering. */
   public void compile()
   {
-    SoyServlet.TEMPLATE.compile();
+    m_template.compile();
   }
 
 
@@ -268,7 +239,7 @@ public class SoyRenderer
    */
   public void recompile()
   {
-    SoyServlet.TEMPLATE.recompile();
+    m_template.recompile();
   }
 
   /**
@@ -390,10 +361,10 @@ public class SoyRenderer
       // TODO: need to catch proper exception here
       try
       {
-        builder.append(SoyServlet.TEMPLATE.render
+        builder.append(m_template.renderSoy
             (m_commandPrefix + "." + name,
-             new SoyMapData("opt", optionals, "arg", arguments),
-             null, null));
+             Optional.of(new SoyMapData("opt", optionals, "arg", arguments)),
+             Optional.<SoyMapData>absent()));
       }
       catch(com.google.template.soy.tofu.SoyTofuException e)
       {
@@ -509,7 +480,38 @@ public class SoyRenderer
   /** The tests. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- mark -----------------------------------------------------------
+    /** The renderCommands Test. */
+    @org.junit.Test
+    public void renderCommands()
+    {
+      SoyRenderer renderer = new SoyRenderer(new SoyTemplate("test"));
+
+      renderer.m_commandPrefix = "test.commands";
+      assertEquals("empty", "", renderer.renderCommands(""));
+      assertEquals("text", "just a text",
+                   renderer.renderCommands("just a text"));
+      assertEquals("commands", "just a -- command --",
+                   renderer.renderCommands("just a \\bold{command}"));
+    }
+
+    /** The render Test. */
+    @org.junit.Test
+    public void render()
+    {
+      SoyRenderer renderer = new SoyRenderer(new SoyTemplate("test"));
+
+      renderer.m_commandPrefix = "test.commands";
+      assertEquals("render",
+                   "first: first data second: second data "
+                   + "third: first injected fourth: second injected "
+                   + "fifth: jDMA",
+                   renderer.render
+                   ("test.commands.test",
+                    Optional.of(SoyTemplate.map("first", "first data",
+                                                "second", "second data")),
+                    Optional.of(SoyTemplate.map("first", "first injected",
+                                                "second", "second injected"))));
+    }
 
     /** Testing marking of passages. */
     @org.junit.Test
@@ -529,49 +531,5 @@ public class SoyRenderer
       assertEquals("incomplete", "{a\001<0>b\002<0>{",
                    markBrackets("{a{b}{", '\\', '{', '}', '\001', '\002'));
     }
-
-    //......................................................................
-    //----- renderCommands -------------------------------------------------
-
-    /** The renderCommands Test. */
-    @org.junit.Test
-    public void renderCommands()
-    {
-      SoyRenderer renderer =
-        new SoyRenderer();
-
-      renderer.m_commandPrefix = "test.commands";
-      assertEquals("empty", "", renderer.renderCommands(""));
-      assertEquals("text", "just a text",
-                   renderer.renderCommands("just a text"));
-      assertEquals("commands", "just a -- command --",
-                   renderer.renderCommands("just a \\bold{command}"));
-    }
-
-    //......................................................................
-    //----- render ---------------------------------------------------------
-
-    /** The render Test. */
-    @org.junit.Test
-    public void render()
-    {
-      SoyRenderer renderer =
-        new SoyRenderer();
-
-      renderer.m_commandPrefix = "test.commands";
-      assertEquals("render",
-                   "first: first data second: second data "
-                   + "third: first injected fourth: second injected "
-                   + "fifth: jDMA",
-                   renderer.render
-                   ("test.commands.test",
-                    SoyTemplate.map("first", "first data",
-                                    "second", "second data"),
-                    SoyTemplate.map("first", "first injected",
-                                    "second", "second injected")));
-    }
-
-    //......................................................................
-
   }
 }

@@ -31,6 +31,8 @@ import javax.annotation.concurrent.ThreadSafe;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Optional;
+
 import org.easymock.EasyMock;
 
 //..........................................................................
@@ -121,11 +123,11 @@ public class FixedTextServlet extends BaseServlet
    *
    */
   @Override
-protected SpecialResult handle(HttpServletRequest inRequest,
-                               HttpServletResponse inResponse)
+  protected Optional<? extends SpecialResult>
+  handle(HttpServletRequest inRequest, HttpServletResponse inResponse)
     throws IOException
   {
-    return m_error;
+    return Optional.of(m_error);
   }
 
   //........................................................................

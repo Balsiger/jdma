@@ -23,7 +23,6 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
 
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,19 +31,18 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.data.DMADatastore;
-import net.ixitxachitls.dma.values.enums.Group;
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.EntryKey;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
 /**
  * The base servlet for DMA specific servlets.
- *
  *
  * @file          DMAServlet.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
@@ -57,8 +55,7 @@ public abstract class DMAServlet extends BaseServlet
   private static final long serialVersionUID = 1L;
 
   /**
-   * Crerte the dma servlet.
-   *
+   * Create the dma servlet.
    */
   protected DMAServlet()
   {
@@ -176,8 +173,8 @@ public abstract class DMAServlet extends BaseServlet
    *
    */
   @Override
-  protected @Nullable SpecialResult handle(HttpServletRequest inRequest,
-                                           HttpServletResponse inResponse)
+  protected Optional<? extends SpecialResult>
+  handle(HttpServletRequest inRequest, HttpServletResponse inResponse)
     throws ServletException, IOException
   {
     if(inRequest instanceof DMARequest)
@@ -189,15 +186,17 @@ public abstract class DMAServlet extends BaseServlet
         return handle(request, inResponse);
 
       Log.error("No access to page");
-      return new HTMLError(HttpServletResponse.SC_FORBIDDEN,
-                           "Access Denied",
-                           "You don't have access to the requested page.");
+      return Optional.of(new HTMLError(HttpServletResponse.SC_FORBIDDEN,
+                                       "Access Denied",
+                                       "You don't have access to the "
+                                       + "requested page."));
     }
     else
     {
       Log.error("Invalid request, expected a DMA request!");
-      return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                           "Invalid request, expected a DMA request");
+      return Optional.of(new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                                       "Invalid request, expected a DMA "
+                                       + "request"));
     }
 
   }
@@ -214,8 +213,8 @@ public abstract class DMAServlet extends BaseServlet
    * @throws      IOException      writing to the page failed
    *
    */
-  protected abstract @Nullable SpecialResult handle
-    (DMARequest inRequest, HttpServletResponse inResponse)
+  protected abstract Optional<? extends SpecialResult>
+  handle(DMARequest inRequest, HttpServletResponse inResponse)
     throws ServletException, IOException;
 
   //----------------------------------------------------------------------------
@@ -223,8 +222,6 @@ public abstract class DMAServlet extends BaseServlet
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- get ------------------------------------------------------------
-
     /**
      * The get Test.
      * @throws Exception too lazy to catch
@@ -247,11 +244,11 @@ public abstract class DMAServlet extends BaseServlet
           /** Serial version id. */
           private static final long serialVersionUID = 1L;
           @Override
-          protected SpecialResult handle(DMARequest inRequest,
-                                         HttpServletResponse inResponse)
+          protected Optional<? extends SpecialResult>
+          handle(DMARequest inRequest, HttpServletResponse inResponse)
           {
             handled.set(true);
-            return null;
+            return Optional.absent();
           }
         };
 
@@ -260,9 +257,6 @@ public abstract class DMAServlet extends BaseServlet
 
       EasyMock.verify(request, response);
     }
-
-    //......................................................................
-    //----- extractKey -----------------------------------------------------
 
     /** The extractKey Test. */
     @org.junit.Test
@@ -277,9 +271,9 @@ public abstract class DMAServlet extends BaseServlet
         "simple", "/base product/guru", "/base product/guru",
         "simple invalid", "guru/id", null,
         "parent", "/base product/Merlin/product/XYZ",
-        "/base product/Merlin/product/XYZ",
+        "/base product/merlin/product/xyz",
         "double parent", "/base product/FR/product/cotsq/product/Longsword",
-        "/base product/FR/product/cotsq/product/Longsword",
+        "/base product/fr/product/cotsq/product/longsword",
         "leading", "/_entry/base product/guru", "/base product/guru",
         "multi leading", "/a/b/c/d/base product/guru", "/base product/guru",
       };
@@ -288,11 +282,8 @@ public abstract class DMAServlet extends BaseServlet
       {
         Optional<EntryKey> key = DMAServlet.extractKey(tests[i + 1]);
         assertEquals(tests[i], tests[i + 2],
-                     key == null ? null : key.get().toString());
+                     key.isPresent() ? key.get().toString() : null);
       }
     }
-
-    //......................................................................
-
  }
 }

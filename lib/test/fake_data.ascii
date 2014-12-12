@@ -1,0 +1,29 @@
+base_character {
+  base {
+    abstract {
+      name: "test"
+      type: "base character"
+    }
+  }
+
+  email: "test@test.net"
+}
+
+base_character {
+  base {
+    abstract {
+      name: "admin"
+      type: "base character"
+    }
+  }
+
+  email: "admin@test.net"
+  group: ADMIN
+}
+
+base_entry {
+  abstract {
+    name: "test"
+    type: "base entry"
+  }
+}

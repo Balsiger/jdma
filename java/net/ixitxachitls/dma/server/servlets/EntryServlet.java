@@ -25,19 +25,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
-import net.ixitxachitls.dma.output.soy.SoyAbstract;
-import net.ixitxachitls.dma.values.Values;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -45,11 +40,13 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyValue;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.server.ServerUtils;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.Tracer;
@@ -62,8 +59,6 @@ import net.ixitxachitls.util.logging.Log;
  * @file          EntryServlet.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
-@ParametersAreNonnullByDefault
 public class EntryServlet extends PageServlet
 {
   /**
@@ -119,7 +114,7 @@ public class EntryServlet extends PageServlet
     if(!key.isPresent())
     {
       data.put("content", inRenderer.render("dma.errors.extract",
-                                            map("name", path)));
+                                            Optional.of(map("name", path))));
       return data;
     }
 
@@ -152,7 +147,8 @@ public class EntryServlet extends PageServlet
           if(inRequest.hasParam("values"))
           {
             Multimap<String, String> values = ArrayListMultimap.create();
-            for(String value : inRequest.getParam("values").split("\\s*,\\s*"))
+            for(String value
+                : inRequest.getParam("values").get().split("\\s*,\\s*"))
             {
               String[] parts = value.split(":");
               if(parts.length != 2)
@@ -166,7 +162,8 @@ public class EntryServlet extends PageServlet
 
           // bases are overwritten by values if done before!
           if(inRequest.hasParam("bases"))
-            for(String base : inRequest.getParam("bases").split("\\s*,\\s*"))
+            for(String base
+                : inRequest.getParam("bases").get().split("\\s*,\\s*"))
               if(!base.isEmpty())
                 entry.get().addBase(base);
 
@@ -182,9 +179,10 @@ public class EntryServlet extends PageServlet
         entry.get().setOwner(inRequest.getUser().get());
       else
       {
-        data.put("content", inRenderer.render("dma.entry.create",
-                                              map("id", id,
-                                                  "type", type.getName())));
+        data.put("content",
+                 inRenderer.render("dma.entry.create",
+                                   Optional.of(map("id", id,
+                                                   "type", type.getName()))));
         return data;
       }
     }
@@ -195,7 +193,8 @@ public class EntryServlet extends PageServlet
       {
         data.put("content", inRenderer.render
             ("dma.errors.invalidPage",
-             map("name", inRequest.getAttribute(DMARequest.ORIGINAL_PATH))));
+             Optional.of(map(
+                 "name", inRequest.getAttribute(DMARequest.ORIGINAL_PATH)))));
 
         return data;
       }
@@ -251,22 +250,23 @@ public class EntryServlet extends PageServlet
               + entry.get().getType().getMultipleDir().toLowerCase() + ".show";
       }
 
-      data.put
-          ("content",
-           inRenderer.render
-               (template,
-                map("entry",
-                    new SoyAbstract.SoyWrapper(entry.get().getKey().toString(),
-                                               entry.get()),
-                    "first", current <= 0 ? "" : ids.get(0) + extension,
-                    "previous", current <= 0 ? "" : ids.get(current - 1) + extension,
-                    "list", "/" + entry.get().getType().getMultipleLink(),
-                    "next", current >= last ? "" : ids.get(current + 1) + extension,
-                    "last", current >= last ? "" : ids.get(last) + extension,
-                    "variant", type.getName().replace(" ", ""),
-                    "id", inRequest.getParam("id"),
-                    "create", "create".equals(action)),
-                ImmutableSet.of(type.getName().replace(" ", ""))));
+      data.put(
+          "content",
+          inRenderer.render(
+              template,
+              Optional.of(map(
+                  "entry",
+                  new SoyValue(entry.get().getKey().toString(), entry.get()),
+                  "first", current <= 0 ? "" : ids.get(0) + extension,
+                  "previous", current <= 0
+                      ? "" : ids.get(current - 1) + extension,
+                  "list", "/" + entry.get().getType().getMultipleLink(),
+                  "next", current >= last
+                      ? "" : ids.get(current + 1) + extension,
+                  "last", current >= last ? "" : ids.get(last) + extension,
+                  "variant", type.getName().replace(" ", ""),
+                  "id", inRequest.getParam("id"),
+                  "create", "create".equals(action)))));
       data.put("title", entry.get().getName());
     }
 
@@ -294,7 +294,7 @@ public class EntryServlet extends PageServlet
     Tracer tracer2 = new Tracer("collecting request parameters");
     Map<String, Object> params = Maps.newHashMap();
     for(String param : inRequest.getParams().keySet())
-      if(inRequest.getParam(param).isEmpty())
+      if(inRequest.getParam(param).get().isEmpty())
         params.put(param, true);
       else
         params.put(param, inRequest.getParam(param));
@@ -357,8 +357,8 @@ public class EntryServlet extends PageServlet
      */
     public EntryServlet createServlet
       (String inPath, final Optional<? extends AbstractEntry> inEntry,
-       @Nullable final AbstractType<? extends AbstractEntry> inType,
-       @Nullable final String inID, boolean inCreate) throws Exception
+       final Optional<AbstractType<? extends AbstractEntry>> inType,
+       final Optional<String> inID, boolean inCreate) throws Exception
     {
       m_response.setHeader("Content-Type", "text/html");
       m_response.setHeader("Cache-Control", "max-age=0");
@@ -369,11 +369,12 @@ public class EntryServlet extends PageServlet
       EasyMock.expect(m_request.hasUserOverride()).andStubReturn(false);
       EasyMock.expect(m_response.getOutputStream()).andReturn(m_output);
       EasyMock.expect(m_request.hasUser()).andStubReturn(true);
-      EasyMock.expect(m_request.getUser()).andReturn(null).anyTimes();
+      EasyMock.expect(m_request.getUser()).andReturn(
+          Optional.<BaseCharacter>absent()).anyTimes();
       EasyMock.expect(m_request.getParams())
         .andReturn(ImmutableListMultimap.<String, String>of())
         .anyTimes();
-      if(!inEntry.isPresent() && inType != null && inID != null)
+      if(!inEntry.isPresent() && inType.isPresent() && inID.isPresent())
         EasyMock.expect(m_request.hasParam("create")).andReturn(inCreate);
       EasyMock.replay(m_request, m_response);
 
@@ -401,8 +402,9 @@ public class EntryServlet extends PageServlet
     {
       EntryServlet servlet =
         createServlet("/baseentry/guru",
-                      Optional.of(new net.ixitxachitls.dma.entries.BaseItem("guru")), null,
-                      null, false);
+                      Optional.of(new BaseItem("guru")),
+                      Optional.<AbstractType<? extends AbstractEntry>>absent(),
+                      Optional.<String>absent(), false);
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertPattern("content", ".*'DMA - guru'.*>Weight<.*>Probability<.*",
@@ -419,7 +421,10 @@ public class EntryServlet extends PageServlet
     @org.junit.Test
     public void noPath() throws Exception
     {
-      EntryServlet servlet = createServlet("", null, null, null, false);
+      EntryServlet servlet =
+          createServlet("", Optional.<AbstractEntry>absent(),
+                        Optional.<AbstractType<? extends AbstractEntry>>absent(),
+                        Optional.<String>absent(), false);
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
@@ -443,7 +448,9 @@ public class EntryServlet extends PageServlet
     public void noEntry() throws Exception
     {
       EntryServlet servlet =
-        createServlet("/baseentry/guru", null, null, null, false);
+        createServlet("/baseentry/guru", Optional.<AbstractEntry>absent(),
+                      Optional.<AbstractType<? extends AbstractEntry>>absent(),
+                      Optional.<String>absent(), false);
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
@@ -467,7 +474,11 @@ public class EntryServlet extends PageServlet
     public void noID() throws Exception
     {
       EntryServlet servlet =
-        createServlet("/baseentry/guru", null, BaseEntry.TYPE, null, false);
+        createServlet("/baseentry/guru",
+                      Optional.<AbstractEntry>absent(),
+                      Optional.<AbstractType<? extends AbstractEntry>>of(
+                          BaseEntry.TYPE),
+                      Optional.<String>absent(), false);
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
@@ -483,7 +494,7 @@ public class EntryServlet extends PageServlet
     }
 
     /**
-     * create test.
+     * Create test.
      *
      * @throws Exception should not happen
      */
@@ -491,10 +502,11 @@ public class EntryServlet extends PageServlet
     public void create() throws Exception
     {
       EntryServlet servlet =
-        createServlet("/base item/guru", null,
-                      net.ixitxachitls.dma.entries.BaseItem.TYPE, "guru", true);
+        createServlet("/base item/guru", Optional.<AbstractEntry>absent(),
+                      Optional.<AbstractType<? extends AbstractEntry>>of(
+                          BaseItem.TYPE), Optional.of("guru"), true);
 
-      assertNull("handle", servlet.handle(m_request, m_response));
+      assertFalse("handle", servlet.handle(m_request, m_response).isPresent());
       assertPattern("content", ".*'DMA - guru'.*>Weight<.*>Probability<.*",
                     m_output.toString());
 
@@ -510,7 +522,9 @@ public class EntryServlet extends PageServlet
     public void noCreate() throws Exception
     {
       EntryServlet servlet =
-        createServlet("/base entry/guru", null, BaseEntry.TYPE, "guru", false);
+        createServlet("/base entry/guru", Optional.<AbstractEntry>absent(),
+                      Optional.<AbstractType<? extends AbstractEntry>>of(
+                          BaseEntry.TYPE), Optional.of("guru"), false);
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
@@ -527,24 +541,23 @@ public class EntryServlet extends PageServlet
     @org.junit.Test
     public void path()
     {
-      BaseEntry entry = new BaseEntry("test");
-      addEntry(entry);
       EntryServlet servlet = new EntryServlet();
 
       EasyMock.expect(m_request.getEntry
                       (DMAServlet.extractKey("/base entry/test").get()))
-        .andStubReturn(Optional.<AbstractEntry>of(entry));
+        .andStubReturn(DMADataFactory.get().getEntry(
+            DMAServlet.extractKey("/base entry/test").get()));
 
       EasyMock.replay(m_request, m_response);
 
       assertEquals("simple", "id",
                    extractKey("/just/some/base entry/id").get().getID());
 
-      assertNull("simple", extractKey("guru/id"));
+      assertFalse("simple", extractKey("guru/id").isPresent());
       assertEquals("simple", "id.txt-some",
                    extractKey("/just/some/base entry/id.txt-some")
                    .get().getID());
-      assertNull("simple", extractKey("id"));
+      assertFalse("simple", extractKey("id").isPresent());
 
       assertEquals("entry", "test",
                    servlet.getEntry(m_request, "/just/some/base entry/test")
@@ -552,10 +565,11 @@ public class EntryServlet extends PageServlet
       assertEquals("entry", "test",
                    servlet.getEntry(m_request, "/base entry/test").get()
                           .getName());
-      assertNull("entry", servlet.getEntry(m_request, "test"));
-      assertNull("entry", servlet.getEntry(m_request, ""));
-      assertNull("entry", servlet.getEntry(m_request, "test/"));
-      assertNull("entry", servlet.getEntry(m_request, "test/guru"));
+      assertFalse("entry", servlet.getEntry(m_request, "test").isPresent());
+      assertFalse("entry", servlet.getEntry(m_request, "").isPresent());
+      assertFalse("entry", servlet.getEntry(m_request, "test/").isPresent());
+      assertFalse("entry", servlet.getEntry(m_request,
+                                            "test/guru").isPresent());
 
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
                    extractKey("/base entry/test").get().getType());
@@ -563,7 +577,7 @@ public class EntryServlet extends PageServlet
                    extractKey("/just/some/base entry/test").get().getType());
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
                    extractKey("/base entry/test").get().getType());
-      assertNull("type", extractKey(""));
+      assertFalse("type", extractKey("").isPresent());
 
       EasyMock.verify(m_request, m_response);
     }

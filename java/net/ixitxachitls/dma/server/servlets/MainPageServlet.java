@@ -41,12 +41,8 @@ import net.ixitxachitls.dma.entries.BaseCampaign;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.Campaign;
 import net.ixitxachitls.dma.entries.Character;
-// import net.ixitxachitls.dma.entries.Character;
-// import net.ixitxachitls.dma.entries.Encounter;
-// import net.ixitxachitls.dma.entries.Entry;
-import net.ixitxachitls.dma.output.soy.SoyAbstract;
-import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 
 /**
  * The servlet for displaying the overview page for a user.
@@ -100,7 +96,7 @@ public class MainPageServlet extends PageServlet
       return data;
 
     SortedSet<Campaign> campaigns = new TreeSet<Campaign>();
-    Map<String, List<SoyAbstract.SoyWrapper>> characters = new HashMap<>();
+    Map<String, List<SoyValue>> characters = new HashMap<>();
     for(Character character : DMADataFactory.get().getEntries
           (Character.TYPE, null, "base", user.get().getName()))
     {
@@ -108,7 +104,7 @@ public class MainPageServlet extends PageServlet
         continue;
 
       campaigns.add(character.getCampaign().get());
-      List<SoyAbstract.SoyWrapper> list =
+      List<SoyValue> list =
         characters.get(character.getCampaign().get().getName());
       if(list == null)
       {
@@ -116,32 +112,30 @@ public class MainPageServlet extends PageServlet
         characters.put(character.getCampaign().get().getName(), list);
       }
 
-      list.add(new SoyAbstract.SoyWrapper(character.getKey().toString(),
+      list.add(new SoyValue(character.getKey().toString(),
                                           character));
     }
 
-    List<SoyAbstract.SoyWrapper> soyCampaigns = new ArrayList<>();
+    List<SoyValue> soyCampaigns = new ArrayList<>();
     for(Campaign campaign : campaigns)
-      soyCampaigns.add(new SoyAbstract.SoyWrapper(campaign.getKey().toString(),
+      soyCampaigns.add(new SoyValue(campaign.getKey().toString(),
                                                   campaign));
 
     List<Campaign> dmCampaigns =
       DMADataFactory.get().getEntries(Campaign.TYPE, null, "index-dm",
                                       user.get().getName());
-    List<SoyAbstract.SoyWrapper> soyDMCampaigns = new ArrayList<>();
-    Map<String, List<SoyAbstract.SoyWrapper>> dmCharacters = new HashMap<>();
+    List<SoyValue> soyDMCampaigns = new ArrayList<>();
+    Map<String, List<SoyValue>> dmCharacters = new HashMap<>();
 
     for(Campaign campaign : dmCampaigns)
     {
-      soyDMCampaigns.add(new SoyAbstract.SoyWrapper
-                             (campaign.getKey().toString(),
-                              campaign));
+      soyDMCampaigns.add(new SoyValue(campaign.getKey().toString(), campaign));
 
       // and all the characters there
-      List<SoyAbstract.SoyWrapper> chars = new ArrayList<>();
+      List<SoyValue> chars = new ArrayList<>();
       for(Character character : DMADataFactory.get()
             .getEntries(Character.TYPE, campaign.getKey(), 0, 20))
-        chars.add(new SoyAbstract.SoyWrapper(character.getKey().toString(),
+        chars.add(new SoyValue(character.getKey().toString(),
                                              character));
       dmCharacters.put(campaign.getName(), chars);
     }
@@ -149,23 +143,23 @@ public class MainPageServlet extends PageServlet
 
     List<BaseCampaign> baseCampaigns =
       DMADataFactory.get().getEntries(BaseCampaign.TYPE, null, 0, 50);
-    List<SoyAbstract.SoyWrapper> soyBaseCampaigns = new ArrayList<>();
+    List<SoyValue> soyBaseCampaigns = new ArrayList<>();
     for(BaseCampaign campaign : baseCampaigns)
-      soyBaseCampaigns.add(new SoyAbstract.SoyWrapper(
+      soyBaseCampaigns.add(new SoyValue(
           campaign.getKey().toString(),
           campaign));
 
     data.put("content",
              inRenderer.render
              ("dma.page.main",
-              map("playing",
-                  map("campaigns", soyCampaigns,
-                      "characters", characters),
-                  "dm",
-                  map("campaigns", soyDMCampaigns,
-                      "characters", dmCharacters),
-                  "campaigns",
-                  soyBaseCampaigns)));
+              Optional.of(map("playing",
+                              map("campaigns", soyCampaigns,
+                                  "characters", characters),
+                              "dm",
+                              map("campaigns", soyDMCampaigns,
+                                  "characters", dmCharacters),
+                              "campaigns",
+                              soyBaseCampaigns))));
 
     return data;
   }

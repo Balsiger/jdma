@@ -27,16 +27,17 @@ import java.io.StringWriter;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletResponse;
 
-import net.ixitxachitls.dma.values.enums.Group;
+import com.google.common.base.Optional;
+
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.output.html.HTMLBodyWriter;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Encodings;
@@ -54,7 +55,6 @@ import net.ixitxachitls.util.logging.Log;
  */
 
 @Immutable
-@ParametersAreNonnullByDefault
 public class PageServlet extends SoyServlet
 {
   /**
@@ -81,7 +81,7 @@ public class PageServlet extends SoyServlet
       if (bodyOnly)
         try (HTMLWriter writer = new HTMLBodyWriter(buffer))
         {
-          writeBody(writer, path, inRequest);
+          writeBody(writer, Optional.of(path), inRequest);
         }
       else
         try (HTMLWriter writer = new HTMLWriter(buffer))
@@ -89,7 +89,7 @@ public class PageServlet extends SoyServlet
           if(!bodyOnly)
             writeHeader(writer, path, inRequest);
 
-          writeBody(writer, path, inRequest);
+          writeBody(writer, Optional.of(path), inRequest);
 
           if(!bodyOnly)
             writeFooter(writer, path, inRequest);
@@ -143,7 +143,7 @@ public class PageServlet extends SoyServlet
    * @param     inRequest the request for the page
    */
   @OverridingMethodsMustInvokeSuper
-  protected void writeBody(HTMLWriter inWriter, @Nullable String inPath,
+  protected void writeBody(HTMLWriter inWriter, Optional<String> inPath,
                            DMARequest inRequest)
   {
     // nothing done here
@@ -248,8 +248,6 @@ public class PageServlet extends SoyServlet
   /** The test. */
   public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
-    //----- simple ---------------------------------------------------------
-
     /** The simple Test.
      *
      * @throws Exception should not happen
@@ -264,10 +262,12 @@ public class PageServlet extends SoyServlet
 
       try (MockServletOutputStream output = new MockServletOutputStream())
       {
-        response.setHeader("Content-Type", "text/html");
+        response.setContentType("text/html; charset=UTF-8");
         response.setHeader("Cache-Control", "max-age=0");
         EasyMock.expect(request.isBodyOnly()).andReturn(false).anyTimes();
-        EasyMock.expect(request.getUser()).andStubReturn(null);
+        EasyMock.expect(request.hasUser()).andStubReturn(false);
+        EasyMock.expect(request.getUser()).andStubReturn(
+            Optional.<BaseCharacter>absent());
         EasyMock.expect(request.getOriginalPath()).andStubReturn("index.html");
         EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
         EasyMock.expect(request.getRequestURI()).andStubReturn("/about.html");
@@ -280,7 +280,7 @@ public class PageServlet extends SoyServlet
             private static final long serialVersionUID = 1L;
             @Override
             protected void writeBody(HTMLWriter inWriter,
-                                     @Nullable String inPath,
+                                     Optional<String> inPath,
                                      DMARequest inRequest)
             {
               super.writeBody(inWriter, inPath, inRequest);
@@ -290,14 +290,11 @@ public class PageServlet extends SoyServlet
 
         assertNull("handle", servlet.handle(request, response));
         String content = output.toString();
-        assertPattern("content", ".*<title>DMA - Unknown</title>.*", content);
+        assertPattern("content", ".*<title>DMA</title>.*", content);
 
         EasyMock.verify(request, response);
       }
     }
-
-    //......................................................................
-    //----- bodyOnly -------------------------------------------------------
 
     /** The simple Test.
      *
@@ -312,12 +309,14 @@ public class PageServlet extends SoyServlet
 
       try (MockServletOutputStream output = new MockServletOutputStream())
       {
-        response.setHeader("Content-Type", "text/html");
+        response.setContentType("text/html; charset=UTF-8");
         response.setHeader("Cache-Control", "max-age=0");
         EasyMock.expect(request.isBodyOnly()).andReturn(true).anyTimes();
         EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
         EasyMock.expect(request.getRequestURI()).andStubReturn("/about.html");
-        EasyMock.expect(request.getUser()).andStubReturn(null);
+        EasyMock.expect(request.hasUser()).andStubReturn(false);
+        EasyMock.expect(request.getUser()).andStubReturn(
+            Optional.<BaseCharacter>absent());
         EasyMock.expect(request.hasUserOverride()).andStubReturn(false);
         EasyMock.expect(request.getOriginalPath()).andStubReturn("/about.html");
         EasyMock.expect(response.getOutputStream()).andReturn(output);
@@ -328,7 +327,7 @@ public class PageServlet extends SoyServlet
             private static final long serialVersionUID = 1L;
             @Override
             protected void writeBody(HTMLWriter inWriter,
-                                     @Nullable String inPath,
+                                     Optional<String> inPath,
                                      DMARequest inRequest)
             {
               super.writeBody(inWriter, inPath, inRequest);
@@ -337,16 +336,11 @@ public class PageServlet extends SoyServlet
           };
 
         assertNull("handle", servlet.handle(request, response));
-        assertEquals("content",
-                     "No new content defined, yet.\n",
-                     output.toString());
+        assertEquals("content", "No content defined!\n", output.toString());
 
         EasyMock.verify(request, response);
       }
     }
-
-    //......................................................................
-    //----- navigation -----------------------------------------------------
 
     /** The navigation Test.
      *
@@ -408,114 +402,5 @@ public class PageServlet extends SoyServlet
         }
       }
     }
-
-    //......................................................................
-    //----- formatEntries --------------------------------------------------
-
-    /** The formatEntries Test. */
-    // @org.junit.Test
-    // public void formatEntries()
-    // {
-    //   java.io.StringWriter content = new java.io.StringWriter();
-    //   HTMLWriter writer = new HTMLWriter(new java.io.PrintWriter(content));
-    //   List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
-    //   net.ixitxachitls.dma.entries.BaseCharacter first =
-    //     new net.ixitxachitls.dma.entries.BaseCharacter("first")
-    //     {
-    //       @Override
-    //       public boolean isDM(@Nullable BaseCharacter inUser)
-    //       {
-    //         return true;
-    //       }
-
-    //       @Override
-    //       public net.ixitxachitls.dma.entries.Variables
-    //         getVariables()
-    //       {
-    //         return ValueGroup.getVariables
-    //           (net.ixitxachitls.dma.entries.BaseCharacter.class);
-    //       }
-    //     };
-    //   net.ixitxachitls.dma.entries.BaseCharacter second =
-    //     new net.ixitxachitls.dma.entries.BaseCharacter("second")
-    //     {
-    //       @Override
-    //       public boolean isDM(@Nullable BaseCharacter inUser)
-    //       {
-    //         return true;
-    //       }
-
-    //       @Override
-    //       public net.ixitxachitls.dma.entries.Variables
-    //         getVariables()
-    //       {
-    //         return ValueGroup.getVariables
-    //           (net.ixitxachitls.dma.entries.BaseCharacter.class);
-    //       }
-    //     };
-    //   entries.add(first);
-    //   entries.add(second);
-
-    //   PageServlet servlet = new PageServlet();
-    //   servlet.format(writer, entries, first, 0, 50);
-
-    //   writer.close();
-
-    //   assertEquals("content",
-    //                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-    //              + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
-    //                + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-    //                + "\">\n"
-    //                + "<HTML xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-    //                + "  <BODY>\n"
-    //                + "    \n"
-    //                + "<table class=\"entrylist\"><tr class=\"title\">"
-    //                + "<td class=\"title\"></td><td class=\"title\">Name</td>"
-    //                + "<td class=\"title\">Real Name</td>"
-    //                + "<td class=\"title\">Group</td>"
-    //                + "<td class=\"title\">Last Action</td>"
-    //                + "</tr><tr><td class=\"label\">"
-    //                + "<img src=\"/icons/labels/BaseCharacter.png\" "
-    //                + "alt=\"BaseCharacter\" class=\"image label\"/> "
-    //                + "<div id=\"linkrow-user-first\" class=\"\">\n"
-    //                + "<script type='text/javascript'>"
-    //                + "util.linkRow(document.getElementById"
-    //                + "('linkrow-user-first'), '/user/first');</script>\n"
-    //                + "</div></td><td class=\"name\">first</td>"
-    //                + "<td class=\"name\"><dmaeditable name=\"real name\" "
-    //                + "value=\"$undefined$\" key=\"/base character/first\" "
-    //                + "class=\"editable\" type=\"string\"><span></span>"
-    //                + "</dmaeditable></td>"
-    //                + "<td class=\"group\"><dmaeditable name=\"group\" "
-    //                + "value=\"$undefined$\" key=\"/base character/first\" "
-    //                + "class=\"editable\" type=\"selection\" note=\"\" "
-    //              + "values=\"Guest||User||Player||DM||Admin\"><span></span>"
-    //                + "</dmaeditable></td>"
-    //                + "<td class=\"action\"></td></tr>"
-    //                + "<tr><td class=\"label\">"
-    //                + "<img src=\"/icons/labels/BaseCharacter.png\" "
-    //                + "alt=\"BaseCharacter\" class=\"image label\"/> "
-    //                + "<div id=\"linkrow-user-second\" class=\"\">\n"
-    //                + "<script type='text/javascript'>"
-    //                + "util.linkRow(document.getElementById"
-    //                + "('linkrow-user-second'), '/user/second');</script>\n"
-    //                + "</div></td><td class=\"name\">second</td>"
-    //                + "<td class=\"name\"><dmaeditable name=\"real name\" "
-    //                + "value=\"$undefined$\" key=\"/base character/second\" "
-    //                + "class=\"editable\" type=\"string\"><span></span>"
-    //                + "</dmaeditable></td>"
-    //                + "<td class=\"group\"><dmaeditable name=\"group\" "
-    //                + "value=\"$undefined$\" key=\"/base character/second\" "
-    //                + "class=\"editable\" type=\"selection\" note=\"\" "
-    //              + "values=\"Guest||User||Player||DM||Admin\"><span></span>"
-    //                + "</dmaeditable></td>"
-    //                + "<td class=\"action\"></td></tr></table>\n"
-    //                + "  </BODY>\n"
-    //                + "</HTML>\n", content.toString());
-    // }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

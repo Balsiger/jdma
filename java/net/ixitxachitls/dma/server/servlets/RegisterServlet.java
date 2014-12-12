@@ -99,13 +99,13 @@ public class RegisterServlet extends ActionServlet
   protected String doAction(DMARequest inRequest,
                             HttpServletResponse inResponse)
   {
-    String username = inRequest.getParam("username");
-    String realname = inRequest.getParam("realname");
+    Optional<String> username = inRequest.getParam("username");
+    Optional<String> realname = inRequest.getParam("realname");
 
-    if(username == null)
+    if(!username.isPresent())
       return "No username given";
 
-    if(realname == null)
+    if(!realname.isPresent())
       return "No real name given";
 
     UserService userService = UserServiceFactory.getUserService();
@@ -115,20 +115,20 @@ public class RegisterServlet extends ActionServlet
     }
 
     Optional<BaseCharacter> user = DMADataFactory.get().getEntry
-      (AbstractEntry.createKey(username, BaseCharacter.TYPE));
+      (AbstractEntry.createKey(username.get(), BaseCharacter.TYPE));
     if(user.isPresent())
     {
       return "Username allready used, choose a new one.";
     }
 
     //Save the new user with the default group GUEST.
-    BaseCharacter baseCharacter = new BaseCharacter(username, userService
+    BaseCharacter baseCharacter = new BaseCharacter(username.get(), userService
         .getCurrentUser().getEmail());
-    baseCharacter.setRealName(realname);
+    baseCharacter.setRealName(realname.get());
     baseCharacter.setGroup(Group.GUEST);
     baseCharacter.save();
 
-    Log.event(username, "register", "user registered");
+    Log.event(username.get(), "register", "user registered");
 
     return "";
   }

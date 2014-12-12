@@ -85,11 +85,11 @@ public class SaveActionServlet extends ActionServlet
   protected String doAction(DMARequest inRequest,
                             HttpServletResponse inResponse)
   {
-    String keyParam = inRequest.getParam("_key_");
-    if(keyParam == null || keyParam.isEmpty())
+    Optional<String> keyParam = inRequest.getParam("_key_");
+    if(!keyParam.isPresent() || keyParam.get().isEmpty())
       return "gui.alert('Cannot save values, as no key is given');";
 
-    Optional<EntryKey> key = EntryKey.fromString(keyParam);
+    Optional<EntryKey> key = EntryKey.fromString(keyParam.get());
 
     if(!key.isPresent())
       return "gui.alert('Cannot create entry key for " + keyParam + "');";

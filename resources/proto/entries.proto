@@ -1482,6 +1482,7 @@ message EntriesProto
   repeated BaseMonsterProto base_monster = 9;
   repeated BaseEncounterProto base_encounter = 10;
   repeated BaseLevelProto base_level = 11;
+  repeated BaseEntryProto base_entry = 19;
 
   repeated ProductProto product = 12;
   repeated CharacterProto character = 13;
