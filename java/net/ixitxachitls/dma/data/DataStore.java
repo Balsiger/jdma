@@ -209,16 +209,16 @@ public class DataStore
    *
    */
   public Iterable<Entity> getEntities(String inType,
-                                      @Nullable Key inParent,
+                                      Optional<Key> inParent,
                                       Optional<String> inSortField,
                                       int inStart, int inSize)
   {
     Tracer tracer = new Tracer("getting entities for " + inType);
     Query query;
-    if(inParent == null)
-      query = new Query(inType);
+    if(inParent.isPresent())
+      query = new Query(inType, inParent.get());
     else
-      query = new Query(inType, inParent);
+      query = new Query(inType);
 
     if(inSortField.isPresent())
       query.addSort(inSortField.get(), Query.SortDirection.ASCENDING);
@@ -286,7 +286,7 @@ public class DataStore
    *
    */
   @SuppressWarnings("unchecked")
-  public List<Entity> getEntities(String inType, @Nullable Key inParent,
+  public List<Entity> getEntities(String inType, Optional<Key> inParent,
                                   int inStart, int inSize, String ... inFilters)
   {
     String key = Arrays.toString(inFilters);
@@ -298,10 +298,10 @@ public class DataStore
                     + Arrays.toString(inFilters) + " (uncached)");
 
       Query query;
-      if(inParent == null)
-        query = new Query(inType);
+      if(inParent.isPresent())
+        query = new Query(inType, inParent.get());
       else
-        query = new Query(inType, inParent);
+        query = new Query(inType);
 
       if(inFilters.length > 2)
       {
@@ -383,20 +383,20 @@ public class DataStore
    */
   @SuppressWarnings("unchecked")
   public List<String> getIDs(String inType, Optional<String> inSortField,
-                             @Nullable Key inParent)
+                             Optional<Key> inParent)
   {
     List<String> ids = (List<String>)s_cacheIDs.get(inType);
 
     if(ids == null)
     {
       Log.important("gae: getting ids for " + inType
-                    + (inParent != null ? " parent " + inParent : ""));
+                    + (inParent.isPresent() ? " parent " + inParent : ""));
 
       Query query;
-      if(inParent == null)
-        query = new Query(inType);
+      if(inParent.isPresent())
+        query = new Query(inType, inParent.get());
       else
-        query = new Query(inType, inParent);
+        query = new Query(inType);
 
       if(inSortField.isPresent())
         query.addSort(inSortField.get(), Query.SortDirection.ASCENDING);
@@ -425,7 +425,7 @@ public class DataStore
    */
   @SuppressWarnings("unchecked") // cache
   public List<Entity> getRecentEntities(String inType, int inSize,
-                                        @Nullable Key inParent)
+                                        Optional<Key> inParent)
   {
     String key = inType + (inParent != null ? inParent.toString() : "");
     List<Entity> entities = (List<Entity>)s_cacheRecent.get(key);
@@ -436,10 +436,10 @@ public class DataStore
                     + (inParent != null ? " with parent " + inParent : ""));
 
       Query query;
-      if(inParent == null)
-        query = new Query(inType);
+      if(inParent.isPresent())
+        query = new Query(inType, inParent.get());
       else
-        query = new Query(inType, inParent);
+        query = new Query(inType);
 
       query.addSort(CHANGE, Query.SortDirection.DESCENDING);
       FetchOptions options =

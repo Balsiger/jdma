@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.common.base.Optional;
+import com.google.template.soy.data.SoyData;
 
 import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.values.enums.Affects;
@@ -62,52 +63,28 @@ import net.ixitxachitls.util.Tracer;
 @Immutable
 public class SoyServlet extends DMAServlet
 {
-   /**
+  /**
     * Create the servlet.
     */
    public  SoyServlet()
    {
-     // nothing to do
    }
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
-
-  /** The template to render a page. */
-  public static final SoyTemplate TEMPLATE =
-     new SoyTemplate("page", "errors", "about", "main", "navigation", "entry",
-                     "commands", "value", "admin", "cards", "edit",
-                     "entries/basecharacters", "entries/characters",
-                     "entries/baseproducts", "entries/products",
-                     "entries/basecampaigns", "entries/campaigns",
-                     "entries/baseitems", "entries/items",
-                     "entries/basequalities", "entries/qualities",
-                     "entries/baselevels", "entries/levels",
-                     "entries/basefeats", "entries/feats",
-                     "entries/baseskills",
-                     "entries/baseencounters",
-                     "entries/basespells",
-                     "entries/basemonsters"
-                     //"monster",
-                     //"npc",
-                     );
 
   /**
    * Get the name of the template to render the page.
    *
    * @param     inRequest the request for the page
    *
+   * @param inData
    * @return    the name of the template
    */
-  protected String getTemplateName(DMARequest inRequest)
+  protected String getTemplateName(DMARequest inRequest,
+                                   Map<String, SoyData> inData)
   {
-    if(inRequest.isBodyOnly())
-      return "dma.page.bodyOnly";
-
-    if(inRequest.getRequestURI().endsWith(".print"))
-      return "dma.page.print";
-
-    return "dma.page.full";
+    return "dma.page.empty";
   }
 
   /**
@@ -126,18 +103,11 @@ public class SoyServlet extends DMAServlet
   @Override
   public String toString()
   {
-    return "soy servlet with template " + TEMPLATE;
+    return "soy servlet with";
   }
 
-  @Override
-  protected Optional<? extends SpecialResult>
-  handle(DMARequest inRequest, HttpServletResponse inResponse)
-    throws ServletException, IOException
+  protected SoyRenderer createRenderer(DMARequest inRequest)
   {
-    // Set the output header.
-    inResponse.setContentType("text/html; charset=UTF-8");
-    inResponse.setHeader("Cache-Control", "max-age=0");
-
     Tracer tracer = new Tracer("creating renderer");
     SoyRenderer renderer = new SoyRenderer();
     tracer.done();
@@ -153,23 +123,42 @@ public class SoyServlet extends DMAServlet
     renderer.setData(data);
     tracer.done();
 
-    tracer = new Tracer("rendering soy template");
-    try (PrintWriter print =
-           new PrintWriter(new OutputStreamWriter
-                           (inResponse.getOutputStream(),
-                            Charset.forName("UTF-8"))))
+    return renderer;
+  }
+
+  protected void render(DMARequest inRequest, PrintWriter inWriter,
+                        SoyRenderer inRenderer)
+  {
+    inWriter.println(inRenderer.render(getTemplateName(
+        inRequest, inRenderer.getData())));
+  }
+
+  @Override
+  protected Optional<? extends SpecialResult>
+  handle(DMARequest inRequest, HttpServletResponse inResponse)
+    throws ServletException, IOException
+  {
+    // Set the output header.
+    inResponse.setContentType("text/html");
+    inResponse.setCharacterEncoding("UTF-8");
+    inResponse.setHeader("Cache-Control", "max-age=0");
+
+    SoyRenderer renderer = createRenderer(inRequest);
+    Tracer tracer = new Tracer("rendering soy template");
+    try (PrintWriter writer = inResponse.getWriter())
     {
-      print.println(renderer.render(getTemplateName(inRequest)));
+      writer.println(renderer.render("dma.page.intro"));
+      render(inRequest, writer, renderer);
+      writer.println(renderer.render("dma.page.extro"));
     }
     tracer.done();
 
-    return null;
+    return Optional.absent();
   }
 
   @Override
   public void init()
   {
-    TEMPLATE.compile();;
   }
 
   /**
@@ -240,7 +229,7 @@ public class SoyServlet extends DMAServlet
    * @return   the converted map
    *
    */
-  public Map<String, Object> map(Object ... inData)
+  public static Map<String, Object> map(Object ... inData)
   {
     return SoyTemplate.map(inData);
   }
@@ -254,10 +243,9 @@ public class SoyServlet extends DMAServlet
     @org.junit.Test
     public void map()
     {
-      SoyServlet servlet = new SoyServlet();
-      assertEquals("empty", "{}", servlet.map().toString());
+      assertEquals("empty", "{}", SoyServlet.map().toString());
       assertEquals("simple", "{second=b, third=c, first=a}",
-                   servlet.map("first", "a", "second", "b", "third", "c")
+                   SoyServlet.map("first", "a", "second", "b", "third", "c")
                    .toString());
     }
 

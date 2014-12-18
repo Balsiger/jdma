@@ -39,6 +39,7 @@ import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.Tracer;
+import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -106,6 +107,11 @@ public abstract class DMAServlet extends BaseServlet
   {
     return SystemProperty.environment.value()
       == SystemProperty.Environment.Value.Development;
+  }
+
+  public static boolean isTesting()
+  {
+    return Config.get("web.data.testing", false);
   }
 
   /**

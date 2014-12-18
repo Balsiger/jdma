@@ -122,7 +122,7 @@ public class DMADatastore
     {
       Log.debug("getting entry for " + inKey);
       entry = (Optional<T>) convert(inKey.getID(), inKey.getType(),
-                      m_data.getEntity(convert(inKey)));
+                      m_data.getEntity(convert(Optional.of(inKey)).get()));
       if(entry.isPresent())
         cache(inKey, entry.get());
     }
@@ -143,7 +143,7 @@ public class DMADatastore
    */
   @SuppressWarnings("unchecked")
   public <T extends AbstractEntry> List<T>
-  getEntries(AbstractType<T> inType, @Nullable EntryKey inParent,
+  getEntries(AbstractType<T> inType, Optional<EntryKey> inParent,
              int inStart, int inSize)
   {
     List<T> entries = new ArrayList<>();
@@ -194,7 +194,7 @@ public class DMADatastore
    */
   @SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry>
-  List<T> getEntries(AbstractType<T> inType, @Nullable EntryKey inParent,
+  List<T> getEntries(AbstractType<T> inType, Optional<EntryKey> inParent,
                      String inKey, String inValue)
   {
     return (List<T>)
@@ -211,7 +211,7 @@ public class DMADatastore
    * @return      all the ids
    */
   public List<String> getIDs(AbstractType<?> inType,
-                             @Nullable EntryKey inParent)
+                             Optional<EntryKey> inParent)
   {
     return m_data.getIDs(escapeType(inType.toString()), inType.getSortField(),
                          convert(inParent));
@@ -227,7 +227,7 @@ public class DMADatastore
    * @return      all the ids
    */
   public <T extends AbstractEntry>
-  List<T> getRecentEntries(AbstractType<T> inType, @Nullable EntryKey inParent)
+  List<T> getRecentEntries(AbstractType<T> inType, Optional<EntryKey> inParent)
   {
     return convert(m_data.getRecentEntities(escapeType(inType.toString()),
                                             BaseCharacter.MAX_PRODUCTS + 1,
@@ -268,7 +268,7 @@ public class DMADatastore
    */
   public List<AbstractEntry> getIndexEntries(String inIndex,
                                              AbstractType<?> inType,
-                                             @Nullable EntryKey inParent,
+                                             Optional<EntryKey> inParent,
                                              String inGroup,
                                              int inStart, int inSize)
   {
@@ -553,22 +553,28 @@ public class DMADatastore
    *
    * @return      the converted key
    */
-  public @Nullable Key convert(@Nullable EntryKey inKey)
+  public Optional<Key> convert(Optional<EntryKey> inKey)
   {
-    if(inKey == null)
-      return null;
+    if(!inKey.isPresent())
+      return Optional.absent();
 
+    return Optional.of(convert(inKey.get()));
+  }
+
+  public Key convert(EntryKey inKey) {
     Optional<EntryKey> parent = inKey.getParent();
     if(parent.isPresent())
-      return KeyFactory.createKey(convert(parent.get()),
-                                  escapeType(inKey.getType().toString()),
-                                  inKey.getID().toLowerCase(Locale.US));
+      return KeyFactory.createKey(
+          convert(parent).get(),
+          escapeType(inKey.getType().toString()),
+          inKey.getID().toLowerCase(Locale.US));
     else
     {
       if(inKey.getID().isEmpty())
         throw new IllegalArgumentException("name empty for " + inKey);
-      return KeyFactory.createKey(escapeType(inKey.getType().toString()),
-                                  inKey.getID().toLowerCase(Locale.US));
+      return KeyFactory.createKey(
+          escapeType(inKey.getType().toString()),
+          inKey.getID().toLowerCase(Locale.US));
     }
   }
 

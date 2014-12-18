@@ -139,7 +139,8 @@ public class Campaign extends CampaignEntry
   public List<Monster> monsters()
   {
     List<Monster> monsters =
-      DMADataFactory.get().getEntries(Monster.TYPE, getKey(), 0, 100);
+      DMADataFactory.get().getEntries(Monster.TYPE, Optional.of(getKey()),
+                                      0, 100);
 
     return monsters;
   }

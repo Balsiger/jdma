@@ -24,7 +24,7 @@
 /**
  * The error for an invalid page.
  *
- * @param name The name of the page that is invalid.
+ * @param path The name of the page that is invalid.
  */
 {template .invalidPage}
   {call .error}
@@ -32,7 +32,7 @@
       Page Not Found
     {/param}
     {param message}
-      The requested page '{$name}' does not exist.
+      The requested page '{$path}' does not exist.
     {/param}
   {/call}
 {/template}
@@ -40,7 +40,7 @@
 /**
  * The error when extracting the entry fails.
  *
- * @param name The path to the entry that was tried to extract.
+ * @param path The path to the entry that was tried to extract.
  */
 {template .extract}
   {call .error}
@@ -48,7 +48,7 @@
       Could Not Determine Entry Key
     {/param}
     {param message}
-      The key to the entry could not be extracted from '{$name}'.
+      The key to the entry could not be extracted from '{$path}'.
     {/param}
   {/call}
 {/template}

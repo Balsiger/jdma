@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.server.servlets;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
@@ -70,7 +71,7 @@ public class RecompileActionServlet extends ActionServlet
 
     Tracer tracer = new Tracer("compiling soy templates");
     Log.important("recompiling soy templates on dev");
-    SoyServlet.TEMPLATE.recompile();
+    SoyRenderer.TEMPLATE.recompile();
     SoyTemplate.COMMAND_RENDERER.recompile();
     tracer.done();
 

@@ -23,22 +23,20 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Optional;
+import com.google.template.soy.data.SoyData;
 
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.values.enums.Group;
-import net.ixitxachitls.output.html.HTMLBodyWriter;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Files;
@@ -68,38 +66,44 @@ public class PageServlet extends SoyServlet
   private static final long serialVersionUID = 1L;
 
   @Override
-  protected Map<String, Object> collectData(DMARequest inRequest,
-                                            SoyRenderer inRenderer)
+  protected String getTemplateName(DMARequest inDMARequest,
+                                   Map<String, SoyData> inData)
   {
-    Map<String, Object> data = super.collectData(inRequest, inRenderer);
+    return "dma.page.empty";
+  }
 
+  @Override
+  protected void render(DMARequest inRequest, PrintWriter inWriter,
+                        SoyRenderer inRenderer)
+  {
     boolean bodyOnly = inRequest.isBodyOnly();
-    String path = inRequest.getRequestURI();
+    boolean print = inRequest.getRequestURI().endsWith(".print");
 
-    try (PrintWriter buffer = new PrintWriter(new StringWriter()))
+    if(!bodyOnly)
     {
-      if (bodyOnly)
-        try (HTMLWriter writer = new HTMLBodyWriter(buffer))
-        {
-          writeBody(writer, Optional.of(path), inRequest);
-        }
+      inWriter.println(inRenderer.render("dma.page.head"));
+
+      if(print)
+        inWriter.print(inRenderer.render("dma.page.printStart"));
       else
-        try (HTMLWriter writer = new HTMLWriter(buffer))
-        {
-          if(!bodyOnly)
-            writeHeader(writer, path, inRequest);
-
-          writeBody(writer, Optional.of(path), inRequest);
-
-          if(!bodyOnly)
-            writeFooter(writer, path, inRequest);
-        }
+      {
+        inWriter.println(inRenderer.render("dma.page.header"));
+        inWriter.println(inRenderer.render("dma.page.start"));
+      }
     }
 
-    if(!data.containsKey("content"))
-      data.put("content", "No content defined!");
+    super.render(inRequest, inWriter, inRenderer);
 
-    return data;
+    if(!bodyOnly)
+    {
+      if(print)
+        inWriter.println(inRenderer.render("dma.page.printEnd"));
+      else
+      {
+        inWriter.println(inRenderer.render("dma.page.end"));
+        inWriter.println(inRenderer.render("dma.page.footer"));
+      }
+    }
   }
 
   @Override
@@ -117,51 +121,6 @@ public class PageServlet extends SoyServlet
 
     tracer.done();
     return data;
-  }
-
-  /**
-   * Write the header to the writer.
-   *
-   * @param     inWriter  the writer to take up the content (will be closed
-   *                      by the PageServlet)
-   * @param     inPath    the path of the request
-   * @param     inRequest the request for the page
-   */
-  @OverridingMethodsMustInvokeSuper
-  protected void writeHeader(HTMLWriter inWriter, String inPath,
-                             DMARequest inRequest)
-  {
-    // nothing to do here, but maybe in derivations
-  }
-
-  /**
-   * Handles the body content of the request.
-   *
-   * @param     inWriter  the writer to take up the content (will be closed
-   *                      by the PageServlet)
-   * @param     inPath    the path of the request
-   * @param     inRequest the request for the page
-   */
-  @OverridingMethodsMustInvokeSuper
-  protected void writeBody(HTMLWriter inWriter, Optional<String> inPath,
-                           DMARequest inRequest)
-  {
-    // nothing done here
-  }
-
-  /**
-   * Write the footer to the writer.
-   *
-   * @param     inWriter  the writer to take up the content (will be closed
-   *                      by the PageServlet)
-   * @param     inPath    the path of the request
-   * @param     inRequest the request for the page
-   */
-  @OverridingMethodsMustInvokeSuper
-  protected void writeFooter(HTMLWriter inWriter, String inPath,
-                             DMARequest inRequest)
-  {
-    // nothing to do here, but maybe in derivations
   }
 
   /**
@@ -275,19 +234,7 @@ public class PageServlet extends SoyServlet
         EasyMock.expect(response.getOutputStream()).andReturn(output);
         EasyMock.replay(request, response);
 
-        PageServlet servlet = new PageServlet() {
-            /** Serial version id. */
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected void writeBody(HTMLWriter inWriter,
-                                     Optional<String> inPath,
-                                     DMARequest inRequest)
-            {
-              super.writeBody(inWriter, inPath, inRequest);
-              inWriter.add("This is the body.");
-            }
-          };
-
+        PageServlet servlet = new PageServlet();
         assertNull("handle", servlet.handle(request, response));
         String content = output.toString();
         assertPattern("content", ".*<title>DMA</title>.*", content);
@@ -322,19 +269,7 @@ public class PageServlet extends SoyServlet
         EasyMock.expect(response.getOutputStream()).andReturn(output);
         EasyMock.replay(request, response);
 
-        PageServlet servlet = new PageServlet() {
-            /** Serial verison id. */
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected void writeBody(HTMLWriter inWriter,
-                                     Optional<String> inPath,
-                                     DMARequest inRequest)
-            {
-              super.writeBody(inWriter, inPath, inRequest);
-              inWriter.add("This is the body.");
-            }
-          };
-
+        PageServlet servlet = new PageServlet();
         assertNull("handle", servlet.handle(request, response));
         assertEquals("content", "No content defined!\n", output.toString());
 

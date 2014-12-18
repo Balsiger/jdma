@@ -23,6 +23,7 @@ package net.ixitxachitls.dma.data;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,7 +100,7 @@ public class FakeDMADatastore extends DMADatastore
 
   @Override
   public <T extends AbstractEntry> List<T>
-  getEntries(AbstractType<T> inType, @Nullable EntryKey inParent,
+  getEntries(AbstractType<T> inType, Optional<EntryKey> inParent,
              int inStart, int inSize)
   {
     throw new UnsupportedOperationException("not yet implemented");
@@ -124,7 +125,7 @@ public class FakeDMADatastore extends DMADatastore
 
   @Override
   public @Nullable <T extends AbstractEntry>
-  List<T> getEntries(AbstractType<T> inType, @Nullable EntryKey inParent,
+  List<T> getEntries(AbstractType<T> inType, Optional<EntryKey> inParent,
                      String inKey, String inValue)
   {
     throw new UnsupportedOperationException("not yet implemented");
@@ -132,14 +133,18 @@ public class FakeDMADatastore extends DMADatastore
 
   @Override
   public List<String> getIDs(AbstractType<?> inType,
-                             @Nullable EntryKey inParent)
+                             Optional<EntryKey> inParent)
   {
-    throw new UnsupportedOperationException("not yet implemented");
+    List<String> ids = new ArrayList<>();
+    for (AbstractEntry entry : m_entriesByType.get(inType))
+      ids.add(entry.getName());
+
+    return ids;
   }
 
   @Override
   public <T extends AbstractEntry>
-  List<T> getRecentEntries(AbstractType<T> inType, @Nullable EntryKey inParent)
+  List<T> getRecentEntries(AbstractType<T> inType, Optional<EntryKey> inParent)
   {
     throw new UnsupportedOperationException("not yet implemented");
   }
@@ -153,7 +158,7 @@ public class FakeDMADatastore extends DMADatastore
   @Override
   public List<AbstractEntry> getIndexEntries(String inIndex,
                                              AbstractType<?> inType,
-                                             @Nullable EntryKey inParent,
+                                             Optional<EntryKey> inParent,
                                              String inGroup,
                                              int inStart, int inSize)
   {

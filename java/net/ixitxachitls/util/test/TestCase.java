@@ -245,6 +245,7 @@ public class TestCase extends org.junit.Assert
 
     Config.set("web.data.datastore", false);
     Config.set("web.data.datafiles", false);
+    Config.set("web.data.testing", true);
   }
 
   /**

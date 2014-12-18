@@ -22,6 +22,7 @@
 package net.ixitxachitls.dma.output.soy;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,8 @@ import java.util.regex.Pattern;
 
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
+import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyMapData;
 
 import net.ixitxachitls.dma.server.servlets.SoyServlet;
@@ -48,7 +51,7 @@ public class SoyRenderer
    */
   public SoyRenderer()
   {
-    m_template = SoyServlet.TEMPLATE;
+    m_template = getDefaultTemplate();
   }
 
   /**
@@ -60,6 +63,34 @@ public class SoyRenderer
   {
     m_template = inTemplate;
   }
+
+  public static synchronized SoyTemplate getDefaultTemplate() {
+    if(TEMPLATE == null)
+    {
+      System.out.println("creating new template");
+      TEMPLATE = new SoyTemplate("page", "errors", "about", "main",
+                                 "navigation", "entry", "commands", "value",
+                                 "admin", "cards", "edit",
+
+                                 "entries/basecharacters", "entries/characters",
+                                 "entries/baseproducts", "entries/products",
+                                 "entries/basecampaigns", "entries/campaigns",
+                                 "entries/baseitems", "entries/items",
+                                 "entries/basequalities", "entries/qualities",
+                                 "entries/baselevels", "entries/levels",
+                                 "entries/basefeats", "entries/feats",
+
+                                 "entries/baseskills",
+                                 "entries/baseencounters",
+                                 "entries/basespells",
+                                 "entries/basemonsters");
+    }
+
+    return TEMPLATE;
+  }
+
+  /** The template to render a page. */
+  public static SoyTemplate TEMPLATE;
 
   /** The template to use for rendering. */
   private final SoyTemplate m_template;
@@ -134,6 +165,19 @@ public class SoyRenderer
   }
 
   /**
+   * Get the data used for rendering.
+   *
+   * @return the data for rendering.
+   */
+  public Map<String, SoyData> getData()
+  {
+    if(m_data.isPresent())
+      return m_data.get().asMap();
+
+    return new HashMap<>();
+  }
+
+  /**
    * Set the data to be used for rendering.
    *
    * @param       inData the data to use
@@ -181,7 +225,7 @@ public class SoyRenderer
   {
     Optional<SoyMapData> data;
     if(inData.isPresent())
-      data = Optional.of(new SoyMapData(inData));
+      data = Optional.of(new SoyMapData(inData.get()));
     else
       data = Optional.absent();
 

@@ -21,6 +21,8 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -32,6 +34,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import com.google.template.soy.data.SoyData;
 
 import org.easymock.EasyMock;
 
@@ -47,7 +50,6 @@ import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.values.Values;
-import net.ixitxachitls.server.ServerUtils;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
@@ -92,41 +94,117 @@ public class EntryServlet extends PageServlet
   }
 
   @Override
+  protected String getTemplateName(DMARequest inRequest,
+                                   Map<String, SoyData> inData)
+  {
+    String path = inData.get("path").coerceToString();
+    if(path == null)
+    {
+      return "dma.errors.noEntry";
+    }
+
+    EntryKey key = (EntryKey) ((SoyValue) inData.get("key")).getValue();
+    if(key == null)
+    {
+      return "dma.errors.extract";
+    }
+
+    if(!inData.containsKey("entry"))
+      return "dma.errors.invalidPage";
+
+    AbstractEntry entry = (AbstractEntry)
+        ((SoyValue) inData.get("entry")).getValue();
+    if(entry != null && !entry.isShownTo(inRequest.getUser()))
+      return "dma.errors.invalidPage";
+
+    switch(inData.get("action").coerceToString())
+    {
+      case "print":
+        return "dma.entry.printcontainer";
+
+      case "summary":
+        return "dma.entry.summarycontainer";
+
+      case "card":
+        return "dma.entries."
+            + key.getType().getMultipleDir().toLowerCase() + ".large";
+
+      case "create":
+      case "edit":
+        return "dma.entries."
+            + key.getType().getMultipleDir().toLowerCase() + ".edit";
+
+      case "show":
+      default:
+        return "dma.entries."
+            + key.getType().getMultipleDir().toLowerCase() + ".show";
+    }
+  }
+
+  /**
+   * Get the action for the given path and key.
+   *
+   * @param inPath the path of the request
+   * @param inKey the key of the entry to handle
+   * @param inRequest the original request for the page
+   *
+   * @return the action that should be used to show the page
+   */
+  private String getAction(String inPath, EntryKey inKey, DMARequest inRequest)
+  {
+    if(isCreate(inRequest, inKey))
+      return "edit";
+
+    String action = Strings.getPattern(inPath, "\\.(.*)$");
+    if(action != null && !action.isEmpty())
+      return inPath.substring(0, inPath.length() - action.length() - 1);
+
+    return "show";
+  }
+
+  /**
+   * Check whether the request is for creating a new entry.
+   *
+   * @param inRequest the request for the page
+   * @param inKey the key for the entry
+   *
+   * @return true if a new entry is to be created, false if not
+   */
+  private boolean isCreate(DMARequest inRequest, EntryKey inKey)
+  {
+    return inRequest.hasUser()
+        && (inRequest.hasParam("create")
+            || "CREATE".equalsIgnoreCase(inKey.getID()));
+  }
+
+  @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
                                             SoyRenderer inRenderer)
   {
     Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
-    String path = inRequest.getRequestURI();
-    if(path == null)
-    {
-      data.put("content", inRenderer.render("dma.error.noEntry"));
-      return data;
-    }
 
-    String action = Strings.getPattern(path, "\\.(.*)$");
-    if(action != null && !action.isEmpty())
-      path = path.substring(0, path.length() - action.length() - 1);
-    else
-      action = "show";
+    String path = inRequest.getRequestURI();
+    data.put("path", path);
+    if(path == null)
+      return data;
 
     Optional<EntryKey> key = extractKey(path);
+    data.put("key",
+             new SoyValue(key.isPresent() ? key.get().toString() : "(null)",
+                          key.orNull()));
     if(!key.isPresent())
-    {
-      data.put("content", inRenderer.render("dma.errors.extract",
-                                            Optional.of(map("name", path))));
       return data;
-    }
+
+    String action = getAction(path, key.get(), inRequest);
+    data.put("action", action);
 
     Optional<? extends AbstractEntry> entry = Optional.absent();
-    if(inRequest.hasUser()
-        && (inRequest.hasParam("create")
-            || "CREATE".equalsIgnoreCase(key.get().getID())))
+    boolean isCreate = isCreate(inRequest, key.get());
+    if(isCreate)
     {
       AbstractType<? extends AbstractEntry> type = key.get().getType();
       String id = key.get().getID();
-
-      action = "create";
 
       // create a new entry for filling out
       Log.info("creating " + type + " '" + id + "'");
@@ -175,14 +253,13 @@ public class EntryServlet extends PageServlet
         }
       }
 
+      data.put("entry", entry.orNull());
       if(entry.isPresent())
         entry.get().setOwner(inRequest.getUser().get());
       else
       {
-        data.put("content",
-                 inRenderer.render("dma.entry.create",
-                                   Optional.of(map("id", id,
-                                                   "type", type.getName()))));
+        data.put("id", id);
+        data.put("type", type.getName());
         return data;
       }
     }
@@ -191,11 +268,7 @@ public class EntryServlet extends PageServlet
       entry = getEntry(inRequest, path);
       if(entry.isPresent() && !entry.get().isShownTo(inRequest.getUser()))
       {
-        data.put("content", inRenderer.render
-            ("dma.errors.invalidPage",
-             Optional.of(map(
-                 "name", inRequest.getAttribute(DMARequest.ORIGINAL_PATH)))));
-
+        data.put("name", inRequest.getAttribute(DMARequest.ORIGINAL_PATH));
         return data;
       }
     }
@@ -203,70 +276,26 @@ public class EntryServlet extends PageServlet
     if(entry.isPresent())
     {
       AbstractType<? extends AbstractEntry> type = entry.get().getType();
-      List<String> ids = DMADataFactory.get().getIDs(type, null);
+      List<String> ids =
+          DMADataFactory.get().getIDs(type, Optional.<EntryKey>absent());
 
       int current = ids.indexOf(entry.get().getName().toLowerCase(Locale.US));
       int last = ids.size() - 1;
 
-      String template;
-      String extension;
-      switch(action)
-      {
-        case "dma":
-          extension = ".dma";
-          if(inRequest.hasParam("deep"))
-            template = "dma.entry.dmadeepcontainer";
-          else
-            template = "dma.entry.dmacontainer";
-          break;
-
-        case "print":
-          extension = ".print";
-          template = "dma.entry.printcontainer";
-          break;
-
-        case "summary":
-          extension = ".summary";
-          template = "dma.entry.summarycontainer";
-          break;
-
-        case "card":
-          extension = ".card";
-          template = "dma.entries."
-              + entry.get().getType().getMultipleDir().toLowerCase() + ".large";
-          break;
-
-        case "create":
-        case "edit":
-          extension = ".edit";
-          template = "dma.entries."
-              + entry.get().getType().getMultipleDir().toLowerCase() + ".edit";
-          break;
-
-        case "show":
-        default:
-          extension = "";
-          template = "dma.entries."
-              + entry.get().getType().getMultipleDir().toLowerCase() + ".show";
-      }
-
-      data.put(
-          "content",
-          inRenderer.render(
-              template,
-              Optional.of(map(
-                  "entry",
-                  new SoyValue(entry.get().getKey().toString(), entry.get()),
-                  "first", current <= 0 ? "" : ids.get(0) + extension,
-                  "previous", current <= 0
-                      ? "" : ids.get(current - 1) + extension,
-                  "list", "/" + entry.get().getType().getMultipleLink(),
-                  "next", current >= last
-                      ? "" : ids.get(current + 1) + extension,
-                  "last", current >= last ? "" : ids.get(last) + extension,
-                  "variant", type.getName().replace(" ", ""),
-                  "id", inRequest.getParam("id"),
-                  "create", "create".equals(action)))));
+      data.put("entry",
+               new SoyValue(entry.get().getKey().toString(), entry.get()));
+      data.put("first", current <= 0 ? "" : ids.get(0) + "." + action);
+      data.put("previous",
+               current <= 0 ? "" : ids.get(current - 1) + "." + action);
+      data.put("list", "/" + entry.get().getType().getMultipleLink());
+      data.put("next",
+               current >= last ? "" : ids.get(current + 1) + "." + action);
+      data.put("last", current >= last ? "" : ids.get(last) + "." + action);
+      data.put("variant", type.getName().replace(" ", ""));
+      data.put("id",
+               inRequest.hasParam("id")
+                   ? inRequest.getParam("id").get() : null);
+      data.put("create", isCreate);
       data.put("title", entry.get().getName());
     }
 
@@ -318,8 +347,7 @@ public class EntryServlet extends PageServlet
     private HttpServletResponse m_response = null;
 
     /** The output of the test. */
-    private net.ixitxachitls.server.ServerUtils.Test.MockServletOutputStream
-      m_output = null;
+    private StringWriter m_output = null;
 
     /** Setup the mocks for testing. */
     @org.junit.Before
@@ -327,9 +355,7 @@ public class EntryServlet extends PageServlet
     {
       m_request = EasyMock.createMock(DMARequest.class);
       m_response = EasyMock.createMock(HttpServletResponse.class);
-      m_output =
-        new ServerUtils.Test // $codepro.audit.disable closeWhereCreated
-        .MockServletOutputStream();
+      m_output = new StringWriter();
     }
 
     /**
@@ -360,22 +386,32 @@ public class EntryServlet extends PageServlet
        final Optional<AbstractType<? extends AbstractEntry>> inType,
        final Optional<String> inID, boolean inCreate) throws Exception
     {
-      m_response.setHeader("Content-Type", "text/html");
+      m_response.setContentType("text/html");
+      m_response.setCharacterEncoding("UTF-8");
       m_response.setHeader("Cache-Control", "max-age=0");
       EasyMock.expect(m_request.isBodyOnly()).andReturn(true).anyTimes();
       EasyMock.expect(m_request.getQueryString()).andStubReturn("");
       EasyMock.expect(m_request.getRequestURI()).andStubReturn(inPath);
       EasyMock.expect(m_request.getOriginalPath()).andStubReturn(inPath);
       EasyMock.expect(m_request.hasUserOverride()).andStubReturn(false);
-      EasyMock.expect(m_response.getOutputStream()).andReturn(m_output);
+      EasyMock.expect(m_response.getWriter())
+          .andReturn(new PrintWriter(m_output));
       EasyMock.expect(m_request.hasUser()).andStubReturn(true);
       EasyMock.expect(m_request.getUser()).andReturn(
-          Optional.<BaseCharacter>absent()).anyTimes();
+          Optional.of(new BaseCharacter("test"))).anyTimes();
+      EasyMock.expect(m_request.hasParam("dev")).andStubReturn(false);
+      EasyMock.expect(m_request.getParam("id")).andStubReturn(
+          inEntry.isPresent() ? Optional.of(inEntry.get().getName())
+              : Optional.<String>absent());
+      EasyMock.expect(m_request.hasParam("id"))
+          .andStubReturn(inEntry.isPresent());
       EasyMock.expect(m_request.getParams())
         .andReturn(ImmutableListMultimap.<String, String>of())
         .anyTimes();
       if(!inEntry.isPresent() && inType.isPresent() && inID.isPresent())
-        EasyMock.expect(m_request.hasParam("create")).andReturn(inCreate);
+        EasyMock.expect(m_request.hasParam("create")).andStubReturn(inCreate);
+      else
+        EasyMock.expect(m_request.hasParam("create")).andStubReturn(false);
       EasyMock.replay(m_request, m_response);
 
       return new EntryServlet()
@@ -401,13 +437,13 @@ public class EntryServlet extends PageServlet
     public void simple() throws Exception
     {
       EntryServlet servlet =
-        createServlet("/baseentry/guru",
+        createServlet("/base item/guru",
                       Optional.of(new BaseItem("guru")),
                       Optional.<AbstractType<? extends AbstractEntry>>absent(),
                       Optional.<String>absent(), false);
 
-      assertNull("handle", servlet.handle(m_request, m_response));
-      assertPattern("content", ".*'DMA - guru'.*>Weight<.*>Probability<.*",
+      assertFalse("handle", servlet.handle(m_request, m_response).isPresent());
+      assertPattern("content", ".*>Weight:.*>Probability:.*",
                     m_output.toString());
 
       EasyMock.verify(m_request, m_response);
@@ -421,20 +457,21 @@ public class EntryServlet extends PageServlet
     @org.junit.Test
     public void noPath() throws Exception
     {
-      EntryServlet servlet =
-          createServlet("", Optional.<AbstractEntry>absent(),
-                        Optional.<AbstractType<? extends AbstractEntry>>absent(),
-                        Optional.<String>absent(), false);
+      EntryServlet servlet = createServlet(
+          "", Optional.<AbstractEntry>absent(),
+          Optional.<AbstractType<? extends AbstractEntry>>absent(),
+          Optional.<String>absent(), false);
 
-      assertNull("handle", servlet.handle(m_request, m_response));
-      assertEquals("content",
-                   "<script>"
-                   + "document.title = 'DMA - Could Not Determine Entry Key';"
-                   + "</script>"
-                   + "<h1 style=\"\">Could Not Determine Entry Key</h1>"
-                   + "<div>The key to the entry could not be extracted from "
-                   + "&#39;&#39;.</div>\n",
-                   m_output.toString());
+      assertFalse("handle", servlet.handle(m_request, m_response).isPresent());
+      assertPattern("content",
+                    ".*<script>"
+                        + "document.title = "
+                        + "'DMA - Could Not Determine Entry Key';"
+                        + "</script>"
+                        + "<h1 style=\"\">Could Not Determine Entry Key</h1>"
+                        + "<div>The key to the entry could not be extracted "
+                        + "from &#39;&#39;.</div>.*\n",
+                    m_output.toString());
 
       EasyMock.verify(m_request, m_response);
     }
@@ -452,15 +489,16 @@ public class EntryServlet extends PageServlet
                       Optional.<AbstractType<? extends AbstractEntry>>absent(),
                       Optional.<String>absent(), false);
 
-      assertNull("handle", servlet.handle(m_request, m_response));
-      assertEquals("content",
-                   "<script>"
-                   + "document.title = 'DMA - Could Not Determine Entry Key';"
-                   + "</script>"
-                   + "<h1 style=\"\">Could Not Determine Entry Key</h1>"
-                   + "<div>The key to the entry could not be extracted from "
-                   + "&#39;/baseentry/guru&#39;.</div>\n",
-                   m_output.toString());
+      assertFalse("handle", servlet.handle(m_request, m_response).isPresent());
+      assertPattern("content",
+                    ".*<script>"
+                        + "document.title = "
+                        + "'DMA - Could Not Determine Entry Key';"
+                        + "</script>"
+                        + "<h1 style=\"\">Could Not Determine Entry Key</h1>"
+                        + "<div>The key to the entry could not be extracted "
+                        + "from &#39;/baseentry/guru&#39;.</div>.*\n",
+                    m_output.toString());
 
       EasyMock.verify(m_request, m_response);
     }
@@ -480,15 +518,16 @@ public class EntryServlet extends PageServlet
                           BaseEntry.TYPE),
                       Optional.<String>absent(), false);
 
-      assertNull("handle", servlet.handle(m_request, m_response));
-      assertEquals("content",
-                   "<script>"
-                   + "document.title = 'DMA - Could Not Determine Entry Key';"
-                   + "</script>"
-                   + "<h1 style=\"\">Could Not Determine Entry Key</h1>"
-                   + "<div>The key to the entry could not be extracted from "
-                   + "&#39;/baseentry/guru&#39;.</div>\n",
-                   m_output.toString());
+      assertFalse("handle", servlet.handle(m_request, m_response).isPresent());
+      assertPattern("content",
+                    ".*<script>"
+                        + "document.title = "
+                        + "'DMA - Could Not Determine Entry Key';"
+                        + "</script>"
+                        + "<h1 style=\"\">Could Not Determine Entry Key</h1>"
+                        + "<div>The key to the entry could not be extracted "
+                        + "from &#39;/baseentry/guru&#39;.</div>\n.*",
+                    m_output.toString());
 
       EasyMock.verify(m_request, m_response);
     }
@@ -507,7 +546,7 @@ public class EntryServlet extends PageServlet
                           BaseItem.TYPE), Optional.of("guru"), true);
 
       assertFalse("handle", servlet.handle(m_request, m_response).isPresent());
-      assertPattern("content", ".*'DMA - guru'.*>Weight<.*>Probability<.*",
+      assertPattern("content", ".*>Weight:.*>Probability:.*",
                     m_output.toString());
 
       EasyMock.verify(m_request, m_response);
@@ -526,13 +565,11 @@ public class EntryServlet extends PageServlet
                       Optional.<AbstractType<? extends AbstractEntry>>of(
                           BaseEntry.TYPE), Optional.of("guru"), false);
 
-      assertNull("handle", servlet.handle(m_request, m_response));
-      assertEquals("content",
-                   "<script>document.title = 'DMA - Entry Not Found';</script>"
-                   + "<h1 style=\"\">Entry Not Found</h1>"
-                   + "<div>The entry &#39;guru&#39; typed &#39;base entry&#39; "
-                   + "could not be found.</div>\n",
-                   m_output.toString());
+      assertFalse("handle", servlet.handle(m_request, m_response).isPresent());
+      assertPattern("content",
+                    ".*The requested page &#39;/base entry/guru&#39; does not "
+                    + "exist..*",
+                    m_output.toString());
 
       EasyMock.verify(m_request, m_response);
     }

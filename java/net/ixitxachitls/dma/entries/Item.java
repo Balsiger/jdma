@@ -276,11 +276,9 @@ public class Item extends CampaignEntry
   public List<Item> getContents()
   {
     if(!m_contents.isPresent())
-      m_contents = Optional.fromNullable
-          (DMADataFactory.get().getEntries(Item.TYPE,
-                                           getCampaign().get().getKey(),
-                                           "index-parent",
-                                           "item/" + getName().toLowerCase()));
+      m_contents = Optional.fromNullable(DMADataFactory.get().getEntries(
+          Item.TYPE, Optional.of(getCampaign().get().getKey()),
+          "index-parent", "item/" + getName().toLowerCase()));
 
     return m_contents.get();
   }

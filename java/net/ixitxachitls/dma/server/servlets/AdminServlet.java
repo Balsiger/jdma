@@ -37,6 +37,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.base.Optional;
+import com.google.template.soy.data.SoyData;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -77,28 +78,13 @@ public class AdminServlet extends SoyServlet
     return -1;
   }
 
-  /**
-   * Get the name of the template to render the page.
-   *
-   * @param     inRequest the request for the page
-   *
-   * @return    the name of the template
-   */
   @Override
-  protected String getTemplateName(DMARequest inRequest)
+  protected String getTemplateName(DMARequest inRequest,
+                                   Map<String, SoyData> inData)
   {
     return "dma.admin.page";
   }
 
-  /**
-   * Collect the data that is to be printed.
-   *
-   * @param    inRequest  the request for the page
-   * @param    inRenderer the renderer for rendering sub values
-   *
-   * @return   a map with key/value pairs for data (values can be primitives
-   *           or maps or lists)
-   */
   @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
                                             SoyRenderer inRenderer)
@@ -132,17 +118,6 @@ public class AdminServlet extends SoyServlet
     return data;
   }
 
-  /**
-   * Handles the body content of the request.
-   *
-   * @param       inRequest  the original request
-   * @param       inResponse the original response
-   *
-   * @return      an error if something went wrong
-   *
-   * @throws      IOException      writing to the page failed
-   * @throws      javax.servlet.ServletException  writing to the page failed
-   */
   @Override
   protected Optional<? extends SpecialResult>
   handle(HttpServletRequest inRequest, HttpServletResponse inResponse)

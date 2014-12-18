@@ -140,7 +140,7 @@ public class DMARequest extends HttpServletRequestWrapper
    */
   public boolean hasParam(String inName)
   {
-    return getParam(inName) != null;
+    return getParam(inName).isPresent();
   }
 
   /**

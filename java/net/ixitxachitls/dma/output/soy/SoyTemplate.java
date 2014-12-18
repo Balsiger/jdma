@@ -702,6 +702,8 @@ public class SoyTemplate
       renderer.setData(inData.get());
     if(inInjected.isPresent())
       renderer.setIjData(inInjected.get());
+    else
+      renderer.setIjData(new SoyMapData());
 
     return renderer.render();
   }
@@ -728,10 +730,10 @@ public class SoyTemplate
   /**
    * Compile the templates for rendering.
    */
-  public void compile()
+  public SoyTemplate compile()
   {
     if(m_compiled.isPresent())
-      return;
+      return this;
 
     Log.important("compiling soy templates: " + m_files);
 
@@ -758,6 +760,8 @@ public class SoyTemplate
 
     // Compile the template into a SoyTofu object.
     m_compiled = Optional.of(files.build().compileToTofu());
+
+    return this;
   }
 
   /**
