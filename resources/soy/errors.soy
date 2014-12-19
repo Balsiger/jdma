@@ -32,7 +32,11 @@
       Page Not Found
     {/param}
     {param message}
-      The requested page '{$path}' does not exist.
+      {if $path}
+        The requested page '{$path}' does not exist.
+      {else}
+        No path given for page.
+      {/if}
     {/param}
   {/call}
 {/template}

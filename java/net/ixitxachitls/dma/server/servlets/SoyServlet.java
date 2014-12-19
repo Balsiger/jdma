@@ -192,6 +192,7 @@ public class SoyServlet extends DMAServlet
     Optional<BaseCharacter> user = inRequest.getUser();
     UserService userService = UserServiceFactory.getUserService();
 
+    userService.createLoginURL(inRequest.getOriginalPath());
     Map<String, Object> map = SoyTemplate.map
       ("user", user.isPresent()
            ? new SoyValue(user.get().getKey().toString(), user.get()) : "",

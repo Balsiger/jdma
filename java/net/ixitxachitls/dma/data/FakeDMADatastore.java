@@ -197,13 +197,15 @@ public class FakeDMADatastore extends DMADatastore
   @Override
   public boolean update(AbstractEntry inEntry)
   {
-    throw new UnsupportedOperationException("not yet implemented");
+    m_entries.put(inEntry.getKey(), inEntry);
+    return true;
   }
 
   @Override
   public boolean save(AbstractEntry inEntry)
   {
-    throw new UnsupportedOperationException("not yet implemented");
+    m_entries.put(inEntry.getKey(), inEntry);
+    return true;
   }
 
   @Override

@@ -183,7 +183,6 @@ public class EntryServlet extends PageServlet
   {
     Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
-
     String path = inRequest.getRequestURI();
     data.put("path", path);
     if(path == null)

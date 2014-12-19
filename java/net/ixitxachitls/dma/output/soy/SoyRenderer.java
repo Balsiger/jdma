@@ -67,7 +67,6 @@ public class SoyRenderer
   public static synchronized SoyTemplate getDefaultTemplate() {
     if(TEMPLATE == null)
     {
-      System.out.println("creating new template");
       TEMPLATE = new SoyTemplate("page", "errors", "about", "main",
                                  "navigation", "entry", "commands", "value",
                                  "admin", "cards", "edit",

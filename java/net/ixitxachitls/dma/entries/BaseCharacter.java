@@ -159,7 +159,7 @@ public class BaseCharacter extends BaseEntry
    */
   public boolean hasAccess(Group inGroup)
   {
-    return getGroup().allows(inGroup);
+    return inGroup.allows(getGroup());
   }
 
   @Override

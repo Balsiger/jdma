@@ -25,6 +25,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.values.enums.Group;
+
 /**
  * The key for an entry for storage.
  */
@@ -95,6 +98,45 @@ public class EntryKey
   public Optional<EntryKey> getParent()
   {
     return m_parent;
+  }
+
+  public boolean editableBy(BaseCharacter inUser)
+  {
+    // ADMINs can edit anything.
+    if(inUser.hasAccess(Group.ADMIN))
+      return true;
+
+    // DMs can edit anything in their campaign.
+    if(inUser.hasAccess(Group.DM))
+    {
+      Optional<Campaign> campaign = getCampaign();
+      if(!campaign.isPresent())
+        return true;
+
+      return campaign.get().isDM(Optional.of(inUser));
+    }
+
+    return inUser.hasAccess(Group.PLAYER) && isOwner(inUser);
+  }
+
+  public boolean isOwner(BaseCharacter inUser)
+  {
+    Optional<Entry> entry = DMADataFactory.get().getEntry(this);
+    if(!entry.isPresent())
+      return false;
+
+    return entry.get().isOwner(inUser);
+  }
+
+  public Optional<Campaign> getCampaign()
+  {
+    if(getType().equals(Campaign.TYPE))
+      return DMADataFactory.get().getEntry(this);
+
+    if(getParent().isPresent())
+      return getParent().get().getCampaign();
+
+    return Optional.absent();
   }
 
   /**

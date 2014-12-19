@@ -23,6 +23,7 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Locale;
 import java.util.Map;
 
@@ -219,10 +220,11 @@ public class PageServlet extends SoyServlet
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
 
-      try (MockServletOutputStream output = new MockServletOutputStream())
+      try (StringWriter writer = new StringWriter())
       {
-        response.setContentType("text/html; charset=UTF-8");
+        response.setContentType("text/html");
         response.setHeader("Cache-Control", "max-age=0");
+        response.setCharacterEncoding("UTF-8");
         EasyMock.expect(request.isBodyOnly()).andReturn(false).anyTimes();
         EasyMock.expect(request.hasUser()).andStubReturn(false);
         EasyMock.expect(request.getUser()).andStubReturn(
@@ -231,12 +233,13 @@ public class PageServlet extends SoyServlet
         EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
         EasyMock.expect(request.getRequestURI()).andStubReturn("/about.html");
         EasyMock.expect(request.hasUserOverride()).andStubReturn(false);
-        EasyMock.expect(response.getOutputStream()).andReturn(output);
+        EasyMock.expect(response.getWriter())
+            .andStubReturn(new PrintWriter(writer));
         EasyMock.replay(request, response);
 
         PageServlet servlet = new PageServlet();
-        assertNull("handle", servlet.handle(request, response));
-        String content = output.toString();
+        assertFalse("handle", servlet.handle(request, response).isPresent());
+        String content = writer.toString();
         assertPattern("content", ".*<title>DMA</title>.*", content);
 
         EasyMock.verify(request, response);
@@ -254,10 +257,11 @@ public class PageServlet extends SoyServlet
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
 
-      try (MockServletOutputStream output = new MockServletOutputStream())
+      try (StringWriter writer = new StringWriter())
       {
-        response.setContentType("text/html; charset=UTF-8");
+        response.setContentType("text/html");
         response.setHeader("Cache-Control", "max-age=0");
+        response.setCharacterEncoding("UTF-8");
         EasyMock.expect(request.isBodyOnly()).andReturn(true).anyTimes();
         EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
         EasyMock.expect(request.getRequestURI()).andStubReturn("/about.html");
@@ -266,12 +270,13 @@ public class PageServlet extends SoyServlet
             Optional.<BaseCharacter>absent());
         EasyMock.expect(request.hasUserOverride()).andStubReturn(false);
         EasyMock.expect(request.getOriginalPath()).andStubReturn("/about.html");
-        EasyMock.expect(response.getOutputStream()).andReturn(output);
+        EasyMock.expect(response.getWriter())
+            .andReturn(new PrintWriter(writer));
         EasyMock.replay(request, response);
 
         PageServlet servlet = new PageServlet();
-        assertNull("handle", servlet.handle(request, response));
-        assertEquals("content", "No content defined!\n", output.toString());
+        assertFalse("handle", servlet.handle(request, response).isPresent());
+        assertPattern("content", ".*Nothing to see here..*", writer.toString());
 
         EasyMock.verify(request, response);
       }

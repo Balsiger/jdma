@@ -92,7 +92,7 @@ public class Values
 
     if(inChecker.isPresent() && !inChecker.get().check(value))
     {
-      m_messages.add("Check for " + inKey + " failed, value not set.");
+      m_messages.add("Check for '" + inKey + "' failed, value not set.");
       return inDefault;
     }
 

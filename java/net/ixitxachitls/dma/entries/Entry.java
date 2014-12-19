@@ -231,4 +231,10 @@ public abstract class Entry extends AbstractEntry
       Log.warning("could not properly parse proto: " + e);
     }
   }
+
+  public boolean isOwner(BaseCharacter inUser)
+  {
+    // TODO: handle this properly.
+    return false;
+  }
 }
