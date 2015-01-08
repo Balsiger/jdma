@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.util;
 
 import java.util.ArrayList;
@@ -30,8 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -39,134 +35,78 @@ import com.google.common.base.Joiner;
 
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * A simple class for parsing command lines.
  *
  * @file          CommandLineParser.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @NotThreadSafe
-@ParametersAreNonnullByDefault
 public class CommandLineParser
 {
-  //----------------------------------------------------------------- nested
-
-  //----- Option -----------------------------------------------------------
-
   /** The representation of a single command line option. */
   @ThreadSafe
-  @ParametersAreNonnullByDefault
   public abstract static class Option
   {
-    //------------------------------- Option -------------------------------
-
     /**
      * Create the option.
      *
      * @param inShort the short option identifier (-)
      * @param inLong  the long option identifier (--)
      * @param inDescription the help description of the option
-     *
      */
-    protected Option(@Nullable String inShort, @Nullable String inLong,
-                     String inDescription)
+    protected Option(String inShort, String inLong, String inDescription)
     {
-      if(inShort == null && inLong == null)
-        throw new IllegalArgumentException("must have at least a long or "
-                                           + "short identifier");
-
-      m_short       = inShort;
-      m_long        = inLong;
+      m_short = inShort;
+      m_long = inLong;
       m_description = inDescription;
     }
 
-    //......................................................................
-
-    //------------------------------------------------------------ variables
-
     /** The short identifier for this option. */
-    protected @Nullable String m_short;
+    protected String m_short;
 
     /** The long identifier for this option. */
-    protected @Nullable String m_long;
+    protected String m_long;
 
     /** The description. */
     protected String m_description;
-
-    //......................................................................
-
-    //------------------------------ getShort ------------------------------
 
     /**
      * Get the short option identification.
      *
      * @return the short option identification
-     *
      */
-    public @Nullable String getShort()
+    public String getShort()
     {
       return m_short;
     }
-
-    //......................................................................
-    //------------------------------ getLong -------------------------------
 
     /**
      * Get the long option identification.
      *
      * @return the long option identification
-     *
      */
-    public @Nullable String getLong()
+    public String getLong()
     {
       return m_long;
     }
-
-    //......................................................................
-    //--------------------------- getDescription ---------------------------
 
     /**
      * Get the option description.
      *
      * @return the option description
-     *
      */
     public String getDescription()
     {
       return m_description;
     }
 
-    //......................................................................
-    //------------------------------ toString ------------------------------
-
-    /**
-     * Convert the option into a human readable string.
-     *
-     * @return the string representation of the option
-     *
-     */
     @Override
     public String toString()
     {
-      if(m_long != null)
-        return m_long;
-
-      return m_short;
+      return m_long;
     }
-
-    //......................................................................
-    //------------------------------- parse --------------------------------
 
     /**
      * Parse the option from the given arguments.
@@ -175,34 +115,21 @@ public class CommandLineParser
      * @param inIndex     the index from which to start parsing
      *
      * @return the index of the next argument to parse
-     *
      */
     public abstract int parse(String []inArguments, int inIndex);
-
-    //......................................................................
-    //------------------------------ hasValue ------------------------------
 
     /**
      * Determine if the option has a valid value.
      *
      * @return true if a value is present (default or given), false if not
-     *
      */
     public abstract boolean hasValue();
-
-    //......................................................................
   }
-
-  //........................................................................
-  //----- Flag -------------------------------------------------------------
 
   /** A command line option representing a flag value. */
   @ThreadSafe
-  @ParametersAreNonnullByDefault
   public static class Flag extends Option
   {
-    //-------------------------------- Flag --------------------------------
-
     /**
      * Create the flag option.
      *
@@ -211,29 +138,14 @@ public class CommandLineParser
      * @param inDescription the description
      *
      */
-    public Flag(@Nullable String inShort, @Nullable String inLong,
-                String inDescription)
+    public Flag(String inShort, String inLong, String inDescription)
     {
       super(inShort, inLong, inDescription);
     }
 
-    //......................................................................
-
-    //------------------------------------------------------------ variables
-
     /** The flag denoting if the flag was found on the command line or not. */
     private boolean m_present = false;
 
-    //......................................................................
-
-    //------------------------------ toString ------------------------------
-
-    /**
-     * Convert the option into a human readable string.
-     *
-     * @return the string representation of the option
-     *
-     */
     @Override
     public String toString()
     {
@@ -243,18 +155,6 @@ public class CommandLineParser
       return "";
     }
 
-    //......................................................................
-    //------------------------------- parse --------------------------------
-
-    /**
-     * Parse the option from the given arguments.
-     *
-     * @param  inArguments the arguments to parse for an option
-     * @param  inIndex     the index from which to start parsing
-     *
-     * @return the index of the next argument to read
-     *
-     */
     @Override
     public synchronized int parse(String []inArguments, int inIndex)
     {
@@ -264,34 +164,17 @@ public class CommandLineParser
       return inIndex;
     }
 
-    //......................................................................
-    //------------------------------ hasValue ------------------------------
-
-    /**
-     * Determine if the option has a valid value.
-     *
-     * @return true if a value is present (default or given), false if not
-     *
-     */
     @Override
     public synchronized boolean hasValue()
     {
       return m_present;
     }
-
-    //......................................................................
   }
-
-  //........................................................................
-  //----- IntegerOption ----------------------------------------------------
 
   /** An option with an integer value. */
   @NotThreadSafe
-  @ParametersAreNonnullByDefault
   public static class IntegerOption extends Option
   {
-    //--------------------------- IntegerOption ----------------------------
-
     /**
      * Create the integer option.
      *
@@ -299,36 +182,19 @@ public class CommandLineParser
      * @param   inLong        the long name
      * @param   inDescription the option description
      * @param   inDefault     the default value to use if not given
-     *
+     *                        (0 for no default)
      */
-    public IntegerOption(@Nullable String inShort, @Nullable String inLong,
-                         String inDescription, @Nullable Integer inDefault)
+    public IntegerOption(String inShort, String inLong,
+                         String inDescription, int inDefault)
     {
       super(inShort, inLong, inDescription);
 
       m_value = inDefault;
     }
 
-    //......................................................................
-
-    //------------------------------------------------------------ variables
-
     /** The value given with the option. */
-    private @Nullable Integer m_value = null;
+    private int m_value;
 
-    //......................................................................
-
-    //------------------------------- parse --------------------------------
-
-    /**
-     * Parse the given command line arguments.
-     *
-     * @param       inArguments the arguments to parse
-     * @param       inIndex     the index to start parsing from
-     *
-     * @return      the index of the next value to parse
-     *
-     */
     @Override
     public synchronized int parse(String []inArguments, int inIndex)
     {
@@ -352,23 +218,11 @@ public class CommandLineParser
       return inIndex;
     }
 
-    //......................................................................
-    //------------------------------ hasValue ------------------------------
-
-    /**
-     * Check if the option has a value or not.
-     *
-     * @return      true if it has a value, false if not
-     *
-     */
     @Override
     public boolean hasValue()
     {
-      return m_value != null;
+      return m_value != 0;
     }
-
-    //......................................................................
-    //-------------------------------- get ---------------------------------
 
     /**
      * Get the integer value stored with this option.
@@ -377,45 +231,20 @@ public class CommandLineParser
      */
     public int get()
     {
-      if(m_value != null)
-        return m_value;
-
-      return 0;
+      return m_value;
     }
 
-    //......................................................................
-    //------------------------------ toString ------------------------------
-
-    /**
-     * Convert the option to a string for debugging.
-     *
-     * @return      a string representation of the option
-     *
-     * @undefined   never
-     *
-     */
     @Override
     public String toString()
     {
-      if(hasValue())
-        return s_longStart + m_long + "=" + m_value;
-
-      return "";
+      return s_longStart + m_long + "=" + m_value;
     }
-
-    //......................................................................
   }
-
-  //........................................................................
-  //----- StringOption -----------------------------------------------------
 
   /** An option with a string value. */
   @NotThreadSafe
-  @ParametersAreNonnullByDefault
   public static class StringOption extends Option
   {
-    //---------------------------- StringOption ----------------------------
-
     /**
      * Create the string option.
      *
@@ -425,34 +254,17 @@ public class CommandLineParser
      * @param       inDefault     the default value if none given
      *
      */
-    public StringOption(@Nullable String inShort, @Nullable String inLong,
-                        String inDescription, @Nullable String inDefault)
+    public StringOption(String inShort, String inLong,
+                        String inDescription, String inDefault)
     {
       super(inShort, inLong, inDescription);
 
       m_value = inDefault;
     }
 
-    //......................................................................
-
-    //------------------------------------------------------------ variables
-
     /** The value stored. */
-    private @Nullable String m_value = null;
+    private String m_value;
 
-    //......................................................................
-
-    //------------------------------- parse --------------------------------
-
-    /**
-     * Parse the given command line arguments.
-     *
-     * @param       inArguments the argument to parse
-     * @param       inIndex     the index to start parsing from
-     *
-     * @return      the index of the next argument to parse
-     *
-     */
     @Override
     public synchronized int parse(String []inArguments, int inIndex)
     {
@@ -464,66 +276,36 @@ public class CommandLineParser
       return inIndex + 1;
     }
 
-    //......................................................................
-    //------------------------------ hasValue ------------------------------
-
-    /**
-     * Check if the option has a value or not.
-     *
-     * @return      true if it has a value, false if not
-     *
-     */
     @Override
     public boolean hasValue()
     {
-      return m_value != null;
+      return !m_value.isEmpty();
     }
-
-    //......................................................................
-    //-------------------------------- get ---------------------------------
 
     /**
      * Get the string value stored with this option.
      *
      * @return      the value given or the default value
-     *
      */
-    public @Nullable String get()
+    public String get()
     {
       return m_value;
     }
 
-    //......................................................................
-    //------------------------------ toString ------------------------------
-
-    /**
-     * Convert the option to a string for debugging.
-     *
-     * @return      a string representation of the option
-     *
-     */
     @Override
     public String toString()
     {
-      if(hasValue())
-        return s_longStart + m_long + "=" + m_value;
+      if(!hasValue())
+        return "";
 
-      return "";
+      return s_longStart + m_long + "=" + m_value;
     }
-
-    //......................................................................
   }
-
-  //........................................................................
-  //----- StringListOption -------------------------------------------------
 
   /** An option with a string value. */
   @ThreadSafe
-  @ParametersAreNonnullByDefault
   public static class StringListOption extends Option
   {
-    //-------------------------- StringListOption --------------------------
-
     /**
      * Create the string list option.
      *
@@ -531,9 +313,8 @@ public class CommandLineParser
      * @param       inLong        the long name
      * @param       inDescription the option description
      * @param       inDefault     the default value if none given
-     *
      */
-    public StringListOption(@Nullable String inShort, @Nullable String inLong,
+    public StringListOption(String inShort, String inLong,
                             String inDescription, String []inDefault)
     {
       super(inShort, inLong, inDescription);
@@ -541,29 +322,12 @@ public class CommandLineParser
       m_values = Arrays.copyOf(inDefault, inDefault.length);
     }
 
-    //.................................................................
-
-    //------------------------------------------------------------ variables
-
     /** The values stored. */
-    private @Nullable String []m_values = null;
+    private String []m_values;
 
     /** The joiner to convert to string. */
     private static final Joiner s_commaJoiner = Joiner.on(',');
 
-    //......................................................................
-
-    //------------------------------- parse --------------------------------
-
-    /**
-     * Parse the given command line arguments.
-     *
-     * @param       inArguments the argument to parse
-     * @param       inIndex     the index to start parsing from
-     *
-     * @return      the index of the next argument to parse
-     *
-     */
     @Override
     public synchronized int parse(String []inArguments, int inIndex)
     {
@@ -575,29 +339,21 @@ public class CommandLineParser
       return inIndex + 1;
     }
 
-    //......................................................................
-    //------------------------------ hasValue ------------------------------
-
     /**
      * Check if the option has a value or not.
      *
      * @return      true if it has a value, false if not
-     *
      */
     @Override
     public boolean hasValue()
     {
-      return m_values != null;
+      return m_values.length > 0;
     }
-
-    //......................................................................
-    //-------------------------------- get ---------------------------------
 
     /**
      * Get the integer value stored with this option.
      *
      * @return      the value given or the default value
-     *
      */
     public String []get()
     {
@@ -607,37 +363,20 @@ public class CommandLineParser
       return new String[0];
     }
 
-    //......................................................................
-    //------------------------------ toString ------------------------------
-
-    /**
-     * Convert the option to a string for debugging.
-     *
-     * @return      a string representation of the option
-     *
-     */
     @Override
     public String toString()
     {
-      if(hasValue())
-        return s_longStart + m_long + "=" + s_commaJoiner.join(m_values);
+      if(!hasValue())
+        return "";
 
-      return "";
+      return s_longStart + m_long + "=" + s_commaJoiner.join(m_values);
     }
-
-    //......................................................................
   }
-
-  //........................................................................
-  //----- EnumOption -------------------------------------------------------
 
   /** An option with an enumeration value. */
   @ThreadSafe
-  @ParametersAreNonnullByDefault
   public static class EnumOption extends Option
   {
-    //----------------------------- EnumOption -----------------------------
-
     /**
      * Create the enum option.
      *
@@ -645,36 +384,18 @@ public class CommandLineParser
      * @param       inLong        the long name
      * @param       inDescription the option description
      * @param       inDefault     the default value if none given
-     *
      */
-    public EnumOption(@Nullable String inShort, @Nullable String inLong,
-                      String inDescription, @Nullable Enum<?> inDefault)
+    public EnumOption(String inShort, String inLong,
+                      String inDescription, Enum<?> inDefault)
     {
       super(inShort, inLong, inDescription);
 
       m_value = inDefault;
     }
 
-    //......................................................................
-
-    //------------------------------------------------------------ variables
-
     /** The value stored. */
-    private @Nullable Enum<?> m_value;
+    private Enum<?> m_value;
 
-    //......................................................................
-
-    //------------------------------- parse --------------------------------
-
-    /**
-     * Parse the given command line arguments.
-     *
-     * @param       inArguments the argument to parse
-     * @param       inIndex     the index to start parsing from
-     *
-     * @return      the index of the next argument to parse
-     *
-     */
     @Override
     @SuppressWarnings("unchecked")
     public synchronized int parse(String []inArguments, int inIndex)
@@ -687,74 +408,33 @@ public class CommandLineParser
       return inIndex + 1;
     }
 
-    //......................................................................
-    //------------------------------ hasValue ------------------------------
-
-    /**
-     * Check if the option has a value or not.
-     *
-     * @return      true if it has a value, false if not
-     *
-     */
     @Override
     public synchronized boolean hasValue()
     {
-      return m_value != null;
+      return true;
     }
-
-    //......................................................................
-    //-------------------------------- get ---------------------------------
 
     /**
      * Get the integer value stored with this option.
      *
      * @return      the value given or the default value
-     *
      */
-    public synchronized @Nullable Enum<?> get()
+    public synchronized Enum<?> get()
     {
-      if(m_value != null)
-        return m_value;
-
-      return null;
+      return m_value;
     }
 
-    //......................................................................
-    //------------------------------ toString ------------------------------
-
-    /**
-     * Convert the option to a string for debugging.
-     *
-     * @return      a string representation of the option
-     *
-     * @undefined   never
-     *
-     */
     @Override
     public String toString()
     {
-      if(hasValue())
-        return s_longStart + m_long + "=" + m_value;
-
-      return "";
+      return s_longStart + m_long + "=" + m_value;
     }
-
-    //......................................................................
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //-------------------------- CommandLineParser ---------------------------
-
   /**
-   * Create the parser.
+   * Create the command line parser.
    *
    * @param       inOptions the command line options to recognize
-   *
    */
   public CommandLineParser(Option ... inOptions)
   {
@@ -765,12 +445,6 @@ public class CommandLineParser
     for(Option option : inOptions)
       add(option);
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The short ids and its options. */
   private Map<String, Option> m_shorts = new HashMap<String, Option>();
@@ -787,19 +461,12 @@ public class CommandLineParser
   /** A space joiner. */
   private static final Joiner s_spaceJoiner = Joiner.on(' ');
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //------------------------------- hasValue -------------------------------
-
   /**
    * Check if for the given option a value has been given or set per default.
    *
    * @param       inName the long name of the option
    *
    * @return      true if a value was given or a default was set
-   *
    */
   public boolean hasValue(String inName)
   {
@@ -811,15 +478,6 @@ public class CommandLineParser
     return option.hasValue();
   }
 
-  //........................................................................
-  //------------------------------- toString -------------------------------
-
-  /**
-   * Convert to a human readable string representation.
-   *
-   * @return      the String representation
-   *
-   */
   @Override
   public String toString()
   {
@@ -831,14 +489,10 @@ public class CommandLineParser
     return s_spaceJoiner.join(result);
   }
 
-  //........................................................................
-  //--------------------------------- help ---------------------------------
-
   /**
    * Get a help string with all possible options.
    *
    * @return      the help string
-   *
    */
   public String help()
   {
@@ -874,17 +528,12 @@ public class CommandLineParser
     return result.toString();
   }
 
-  //........................................................................
-
-  //------------------------------ getInteger ------------------------------
-
   /**
    * Get an integer value of an option.
    *
    * @param       inName the name of the option value to get (long name)
    *
    * @return      the integer value
-   *
    */
   public int getInteger(String inName)
   {
@@ -901,9 +550,6 @@ public class CommandLineParser
     return ((IntegerOption)option).get();
   }
 
-  //........................................................................
-  //------------------------------ getString -------------------------------
-
   /**
    * Get a string value of an option.
    *
@@ -912,7 +558,7 @@ public class CommandLineParser
    * @return      the string value
    *
    */
-  public @Nullable String getString(String inName)
+  public String getString(String inName)
   {
     Option option = m_longs.get(inName);
 
@@ -927,9 +573,6 @@ public class CommandLineParser
     return ((StringOption)option).get();
   }
 
-  //........................................................................
-  //---------------------------- getStringList -----------------------------
-
   /**
    * Get a string list value of an option.
    *
@@ -938,7 +581,7 @@ public class CommandLineParser
    * @return      the string list value
    *
    */
-  public @Nullable String []getStringList(String inName)
+  public String []getStringList(String inName)
   {
     Option option = m_longs.get(inName);
 
@@ -954,18 +597,14 @@ public class CommandLineParser
     return ((StringListOption)option).get();
   }
 
-  //........................................................................
-  //------------------------------- getEnum --------------------------------
-
   /**
    * Get an enumeration value of an option.
    *
    * @param       inName the name of the option value to get (long name)
    *
    * @return      the string value
-   *
    */
-  public @Nullable Enum<?> getEnum(String inName)
+  public Enum<?> getEnum(String inName)
   {
     Option option = m_longs.get(inName);
 
@@ -980,9 +619,6 @@ public class CommandLineParser
     return ((EnumOption)option).get();
   }
 
-  //........................................................................
-  //--------------------------------- get ----------------------------------
-
   /**
    * Get an integer value of an option.
    *
@@ -991,7 +627,6 @@ public class CommandLineParser
    *                        command line
    *
    * @return      the integer value
-   *
    */
   public int get(String inName, int inDefault)
   {
@@ -1011,9 +646,6 @@ public class CommandLineParser
     return inDefault;
   }
 
-  //........................................................................
-  //--------------------------------- get ----------------------------------
-
   /**
    * Get a string value of an option.
    *
@@ -1022,7 +654,6 @@ public class CommandLineParser
    *                        line
    *
    * @return      the string value
-   *
    */
   public String get(String inName, String inDefault)
   {
@@ -1042,9 +673,6 @@ public class CommandLineParser
     return inDefault;
   }
 
-  //........................................................................
-  //--------------------------------- get ----------------------------------
-
   /**
    * Get a string array value of an option.
    *
@@ -1053,7 +681,6 @@ public class CommandLineParser
    *                        line
    *
    * @return      the string value
-   *
    */
   public String []get(String inName, String []inDefault)
   {
@@ -1074,9 +701,6 @@ public class CommandLineParser
     return inDefault;
   }
 
-  //........................................................................
-  //--------------------------------- get ----------------------------------
-
   /**
    * Get an enumeration value of an option.
    *
@@ -1084,7 +708,6 @@ public class CommandLineParser
    * @param       inDefault the default value to get if non set on command line
    *
    * @return      the string value
-   *
    */
   public Enum<?> get(String inName, Enum<?> inDefault)
   {
@@ -1104,14 +727,6 @@ public class CommandLineParser
     return inDefault;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //--------------------------------- add ----------------------------------
-
   /**
    * Add an option to the parser.
    *
@@ -1129,14 +744,6 @@ public class CommandLineParser
     if(lng != null)
       m_longs.put(lng, inOption);
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //-------------------------------- parse ---------------------------------
 
   /**
    * Parse the given command line arguments.
@@ -1158,9 +765,6 @@ public class CommandLineParser
     return rest;
   }
 
-  //........................................................................
-  //-------------------------------- parse ---------------------------------
-
   /**
    * Internal parsing method for a single option to parse.
    *
@@ -1169,7 +773,6 @@ public class CommandLineParser
    * @param       ioRest      the unparsed rest
    *
    * @return      the next argument to read
-   *
    */
   private int parse(String []inArguments, int inIndex, List<String> ioRest)
   {
@@ -1215,17 +818,11 @@ public class CommandLineParser
     return option.parse(inArguments, inIndex + 1);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //---------------------------------------------------------------------- test
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- default --------------------------------------------------------
-
     /** Test default values. */
     @org.junit.Test
     public void defaultValue()
@@ -1238,17 +835,14 @@ public class CommandLineParser
                    + "  -v  --version  Show version information and quit.\n",
                    clp.help());
 
-      assertEquals("rest", "guru", clp.parse("guru"));
+      assertEquals("rest", "[guru]", clp.parse("guru").toString());
 
       clp = new CommandLineParser();
-      assertEquals("rest", "guru", clp.parse("-h", "guru"));
+      assertEquals("rest", "[guru]", clp.parse("-h", "guru").toString());
       assertEquals("flag", "--help", clp.toString());
       assertTrue("value", clp.hasValue("help"));
       assertFalse("no value", clp.hasValue("guru"));
     }
-
-    //......................................................................
-    //----- integer --------------------------------------------------------
 
     /** Testing integer values. */
     @org.junit.Test
@@ -1258,7 +852,7 @@ public class CommandLineParser
         new CommandLineParser(new IntegerOption("p", "port",
                                                 "The port the server runs on",
                                                 5555),
-                              new IntegerOption("o", "other", "other", null));
+                              new IntegerOption("o", "other", "other", 0));
 
       assertEquals("integer", "--port=5555", clp.toString());
       assertEquals("value", 5555, clp.getInteger("port"));
@@ -1283,24 +877,21 @@ public class CommandLineParser
       { /* nothing to do here */ }
 
       // check for invalid values
-      assertEquals("rest", "hello", clp.parse("hello"));
+      assertEquals("rest", "[hello]", clp.parse("hello").toString());
 
       assertEquals("default", 5555, clp.getInteger("port"));
 
       // correct setting
-      assertNull("rest", clp.parse("-p", "6666"));
+      assertTrue("rest", clp.parse("-p", "6666").isEmpty());
       assertEquals("set", 6666, clp.getInteger("port"));
 
-      assertNull("rest", clp.parse("--port", "7777"));
+      assertTrue("rest", clp.parse("--port", "7777").isEmpty());
       assertEquals("set", 7777, clp.getInteger("port"));
 
       // missing value
-      assertNull("rest", clp.parse("--port"));
+      assertTrue("rest", clp.parse("--port").isEmpty());
       m_logger.addExpected("ERROR: expected a number");
     }
-
-    //......................................................................
-    //----- string ---------------------------------------------------------
 
     /** Testing string values. */
     @org.junit.Test
@@ -1313,23 +904,20 @@ public class CommandLineParser
                                                "localhost"),
                               new StringOption("o", "other",
                                                "The other",
-                                               null));
+                                               ""));
 
       assertEquals("string", "--host=localhost", clp.toString());
       assertEquals("value", "localhost", clp.getString("host"));
 
-      assertNull("rest", clp.parse("--host", "www.ixitxachitls.net"));
+      assertTrue("rest", clp.parse("--host", "www.ixitxachitls.net").isEmpty());
       assertEquals("value", "www.ixitxachitls.net", clp.getString("host"));
       assertEquals("value", "www.ixitxachitls.net", clp.get("host", "guru"));
       assertEquals("no value", "guru", clp.get("other", "guru"));
 
       // no value
-      assertNull("no value", clp.parse("--host"));
+      assertTrue("no value", clp.parse("--host").isEmpty());
       m_logger.addExpected("ERROR: expected a string");
     }
-
-    //......................................................................
-    //----- stringlist -----------------------------------------------------
 
     /** Testing string list values. */
     @org.junit.Test
@@ -1347,7 +935,8 @@ public class CommandLineParser
       assertArrayEquals("value", new String [] { "localhost1", "localhost2" },
                         clp.getStringList("hosts"));
 
-      assertNull("rest", clp.parse("--hosts", "www.ixitxachitls.net,gugus"));
+      assertTrue("rest",
+                 clp.parse("--hosts", "www.ixitxachitls.net,gugus").isEmpty());
       assertArrayEquals("value",
                         new String [] { "www.ixitxachitls.net", "gugus" },
                         clp.getStringList("hosts"));
@@ -1357,13 +946,10 @@ public class CommandLineParser
       assertArrayEquals("no value", new String [] { "default" },
                         clp.get("other", new String [] { "guru" }));
 
-      assertNull("rest", clp.parse("--hosts"));
+      assertTrue("rest", clp.parse("--hosts").isEmpty());
       m_logger.addExpected("ERROR: expected a comma separated list of "
                            + "strings");
     }
-
-    //......................................................................
-    //----- enum -----------------------------------------------------------
 
     /** An enum used for testing. */
     private enum TestEnum { one, two, three, four };
@@ -1377,22 +963,19 @@ public class CommandLineParser
         new CommandLineParser(new EnumOption("e", "enum",
                                              "Some enumeration option",
                                              TestEnum.three),
-                              new EnumOption("o", "other", "other", null));
+                              new EnumOption("o", "other", "other",
+                                             TestEnum.one));
 
-      assertEquals("enum", "--enum=three", clp.toString());
+      assertEquals("enum", "--other=one --enum=three", clp.toString());
       assertEquals("value", TestEnum.three, clp.getEnum("enum"));
 
-      assertNull("rest", clp.parse("--enum", "two"));
+      assertTrue("rest", clp.parse("--enum", "two").isEmpty());
       assertEquals("value", TestEnum.two, clp.getEnum("enum"));
       assertEquals("value", TestEnum.two, clp.get("enum", TestEnum.one));
-      assertEquals("value", TestEnum.three, clp.get("other", TestEnum.three));
+      assertEquals("value", TestEnum.one, clp.get("other", TestEnum.three));
 
-      assertNull("rest", clp.parse("--enum"));
+      assertTrue("rest", clp.parse("--enum").isEmpty());
       m_logger.addExpected("ERROR: expected one of the possible values");
     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

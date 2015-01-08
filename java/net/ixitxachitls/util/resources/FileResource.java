@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.util.resources;
 
 import java.io.ByteArrayOutputStream;
@@ -31,107 +29,61 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
+import com.google.common.base.Optional;
 
 /**
  * A resource for the file system.
  *
  * @file          FileResource.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
-@ParametersAreNonnullByDefault
 public class FileResource extends Resource
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- FileResource -----------------------------
-
   /**
    * Create the file resource.
    *
    * @param    inName the name of the file this resource represents
    * @param    inURL  the url to the resource
-   *
    */
-  FileResource(String inName, @Nullable URL inURL)
+  FileResource(String inName, Optional<URL> inURL)
   {
     super(inName, inURL);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //-------------------------------- files ---------------------------------
-
-  /**
-   * Determine and return the files represented by this resource.
-   *
-   * @return    a list of filenames inside this resource.
-   *
-   */
   @Override
   public List<String> files()
   {
     List<String> result = new ArrayList<String>();
 
-    if(m_url == null)
+    if(!m_url.isPresent())
       return result;
 
-    File file = asFile();
+    Optional<File> file = asFile();
+    if(!file.isPresent())
+      return result;
 
     // not really a directory
-    if(file.isDirectory())
-      for(File entry : file.listFiles())
+    if(file.get().isDirectory())
+      for(File entry : file.get().listFiles())
         result.add(entry.getName());
     else
-      result.add(file.getName());
+      result.add(file.get().getName());
 
     Collections.sort(result);
     return result;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
-
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- directory ------------------------------------------------------
-
-    /** directory Test. */
+    /** Directory Test. */
     @org.junit.Test
     public void directory()
     {
-      Resource resource =
-        new FileResource("css",
-                         FileResource.class.getResource("/css"));
+      Resource resource = new FileResource
+          ("css",
+           Optional.fromNullable(FileResource.class.getResource("/css")));
 
       //on windows, the directory 'css' is copied to WEB-INF/classes
       //without the '.svn' directory
@@ -143,40 +95,33 @@ public class FileResource extends Resource
       else
       {
         assertContentAnyOrder("css", resource.files(),
-                              ".svn", "gui.css", "jdma.css", "smoothness");
+                              "gui.css", "jdma.css", "smoothness");
       }
 
       // invalid
-      resource = new FileResource("guru", null);
+      resource = new FileResource("guru", Optional.<URL>absent());
       assertEquals("empty size", 0, resource.files().size());
     }
-
-    //......................................................................
-    //----- file -----------------------------------------------------------
 
     /**
      * file Test.
      *
      * @throws Exception  cover any exceptions
-     *
      */
     @org.junit.Test
     public void file() throws Exception
     {
-      Resource resource =
-        new FileResource("/css/jdma.css",
-                         FileResource.class.getResource
-                         ("/css/jdma.css"));
+      Resource resource = new FileResource
+          ("/css/jdma.css",
+           Optional.fromNullable(FileResource.class.getResource
+               ("/css/jdma.css")));
 
       assertContentAnyOrder("css/jdma.css", resource.files(),
                             "jdma.css");
 
-      resource = new FileResource("guru", new URL("file:/guru"));
+      resource = new FileResource("guru", Optional.of(new URL("file:/guru")));
       assertContentAnyOrder("non existant", resource.files(), "guru");
     }
-
-    //......................................................................
-    //----- write ----------------------------------------------------------
 
     /**
      * The write Test.
@@ -186,9 +131,9 @@ public class FileResource extends Resource
     @org.junit.Test
     public void write() throws IOException
     {
-      Resource resource =
-        new FileResource("/css/jdma.css",
-                         FileResource.class.getResource("/css"));
+      Resource resource = new FileResource
+          ("/css/jdma.css",
+           Optional.fromNullable(FileResource.class.getResource("/css")));
 
       try (ByteArrayOutputStream output = new ByteArrayOutputStream())
       {
@@ -202,9 +147,5 @@ public class FileResource extends Resource
         m_logger.addExpected("WARNING: cannot obtain input stream for guru");
       }
     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

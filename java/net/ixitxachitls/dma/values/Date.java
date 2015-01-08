@@ -22,7 +22,7 @@
 package net.ixitxachitls.dma.values;
 
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
+
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
@@ -42,12 +42,13 @@ import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
  */
 
 @Immutable
-@ParametersAreNonnullByDefault
 public class Date extends Value<BaseProductProto.Date>
   implements Comparable<Date>
 {
+  /** The parser for date values. */
   public static class DateParser extends Parser<Date>
   {
+    /** Create the parser. */
     public DateParser()
     {
       super(1);
@@ -80,7 +81,7 @@ public class Date extends Value<BaseProductProto.Date>
       }
       catch(NumberFormatException e)
       {
-        return null;
+        return Optional.absent();
       }
     }
   }
@@ -115,7 +116,10 @@ public class Date extends Value<BaseProductProto.Date>
                      "July", "August", "September", "October", "November",
                      "December");
 
+  /** The splitter by spaces. */
   private static final Splitter SPACE_SPLITTER = Splitter.on(' ');
+
+  /** The parser for dates. */
   public static final Parser<Date> PARSER = new DateParser();
 
   /**
@@ -236,12 +240,14 @@ public class Date extends Value<BaseProductProto.Date>
     @org.junit.Test
     public void parse()
     {
-      assertEquals("simple", "May 2002", PARSER.parse("May 2002").toString());
-      assertEquals("casing", "May 2002", PARSER.parse("mAY 2002").toString());
-      assertEquals("year", "1999", PARSER.parse("1999").toString());
-      assertNull("invalid 1", PARSER.parse("guru").toString());
-      assertNull("invalid 2", PARSER.parse("January").toString());
-      assertNull("invalid 3", PARSER.parse("20a").toString());
+      assertEquals("simple", "May 2002",
+                   PARSER.parse("May 2002").get().toString());
+      assertEquals("casing", "May 2002",
+                   PARSER.parse("mAY 2002").get().toString());
+      assertEquals("year", "1999", PARSER.parse("1999").get().toString());
+      assertFalse("invalid 1", PARSER.parse("guru").isPresent());
+      assertFalse("invalid 2", PARSER.parse("January").isPresent());
+      assertFalse("invalid 3", PARSER.parse("20a").isPresent());
     }
   }
 }

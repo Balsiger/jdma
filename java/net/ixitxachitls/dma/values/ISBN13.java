@@ -22,7 +22,7 @@
 package net.ixitxachitls.dma.values;
 
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
+
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
@@ -40,11 +40,12 @@ import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
  */
 
 @Immutable
-@ParametersAreNonnullByDefault
 public class ISBN13 extends Value<BaseProductProto.ISBN13>
 {
+  /** The parser for ISBN13 values. */
   public static class ISBNParser extends Parser<ISBN13>
   {
+    /** Create the parser. */
     public ISBNParser()
     {
       super(1);
@@ -117,7 +118,10 @@ public class ISBN13 extends Value<BaseProductProto.ISBN13>
                                                    m_title));
   }
 
-  private static Splitter DASH_SPLITTER = Splitter.on('-').trimResults();
+  /** The splitter on dashes. */
+  private static final Splitter DASH_SPLITTER = Splitter.on('-').trimResults();
+
+  /** The default parser for isbn 13 values. */
   public static final Parser<ISBN13> PARSER = new ISBNParser();
 
   /** The isbn 13 leading group, if any. */
@@ -246,6 +250,12 @@ public class ISBN13 extends Value<BaseProductProto.ISBN13>
       .build();
   }
 
+  /**
+   * Create the isbn value from the given proto.
+   *
+   * @param inProto the proto to create from
+   * @return the isbn 13 value with all the values from the proto
+   */
   public static ISBN13 fromProto(BaseProductProto.ISBN13 inProto)
   {
     return new ISBN13(inProto.getGroup13(), inProto.getGroup(),
@@ -283,22 +293,23 @@ public class ISBN13 extends Value<BaseProductProto.ISBN13>
     public void parse()
     {
       assertEquals("simple", "978-1-60125-019-3",
-                   PARSER.parse("978-1-60125-019-3"));
+                   PARSER.parse("978-1-60125-019-3").get().toString());
       assertEquals("whites", "978-0-7869-3912-1",
-                   PARSER.parse("978- 0  -   7869\n- 3912 - 1 "));
-      assertNull("invalid 0", PARSER.parse("978-0-7869-3912-2"));
-      assertNull("invalid 2", PARSER.parse("978-0-7869-3912-3"));
-      assertNull("invalid 3", PARSER.parse("978-0-7869-3912-4"));
-      assertNull("invalid 4", PARSER.parse("978-0-7869-3912-5"));
-      assertNull("invalid 5", PARSER.parse("978-0-7869-3912-6"));
-      assertNull("invalid 6", PARSER.parse("978-0-7869-3912-7"));
-      assertNull("invalid 7", PARSER.parse("978-0-7869-3912-8"));
-      assertNull("invalid 8", PARSER.parse("978-0-7869-3912-9"));
-      assertNull("invalid 9", PARSER.parse("978-0-7869-3912-0"));
-      assertNull("missing", PARSER.parse("123-444-222 h"));
-      assertNull("missing 2", PARSER.parse("123-444-22a-3"));
-      assertNull("missing 3", PARSER.parse("123-123-444-22a-3"));
-      assertNull("missing 4", PARSER.parse("123-123-444-22 a-3"));
+                   PARSER.parse("978- 0  -   7869\n- 3912 - 1 ")
+                       .get().toString());
+      assertFalse("invalid 0", PARSER.parse("978-0-7869-3912-2").isPresent());
+      assertFalse("invalid 2", PARSER.parse("978-0-7869-3912-3").isPresent());
+      assertFalse("invalid 3", PARSER.parse("978-0-7869-3912-4").isPresent());
+      assertFalse("invalid 4", PARSER.parse("978-0-7869-3912-5").isPresent());
+      assertFalse("invalid 5", PARSER.parse("978-0-7869-3912-6").isPresent());
+      assertFalse("invalid 6", PARSER.parse("978-0-7869-3912-7").isPresent());
+      assertFalse("invalid 7", PARSER.parse("978-0-7869-3912-8").isPresent());
+      assertFalse("invalid 8", PARSER.parse("978-0-7869-3912-9").isPresent());
+      assertFalse("invalid 9", PARSER.parse("978-0-7869-3912-0").isPresent());
+      assertFalse("missing", PARSER.parse("123-444-222 h").isPresent());
+      assertFalse("missing 2", PARSER.parse("123-444-22a-3").isPresent());
+      assertFalse("missing 3", PARSER.parse("123-123-444-22a-3").isPresent());
+      assertFalse("missing 4", PARSER.parse("123-123-444-22 a-3").isPresent());
     }
 
     /** Test for checks. */

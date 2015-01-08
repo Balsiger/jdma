@@ -21,7 +21,6 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
@@ -38,11 +37,12 @@ import net.ixitxachitls.util.Strings;
  */
 
 @Immutable
-@ParametersAreNonnullByDefault
 public class Price extends Value<PriceProto>
 {
+  /** The parser for prices. */
   public static class PriceParser extends Parser<Price>
   {
+    /** Construct the parser. */
     public PriceParser()
     {
       super(1);
@@ -58,8 +58,9 @@ public class Price extends Value<PriceProto>
   /**
    * Construct the price object with all the values.
    *
-   * @param       inCurrency the currency symbol to use
-   * @param       inNumber   the number itself
+   * @param       inCurrency  the currency symbol to use
+   * @param       inNumber    the number itself
+   * @param       inPrecision the precision for the price (100 for 2 digits)
    */
   public Price(String inCurrency, int inNumber, int inPrecision)
   {
@@ -79,8 +80,6 @@ public class Price extends Value<PriceProto>
 
   /** THe parser for prices. */
   public static final PriceParser PARSER = new PriceParser();
-
-  //------------------------------ getCurrency -----------------------------
 
   /**
    * Get the currency used.
@@ -122,6 +121,12 @@ public class Price extends Value<PriceProto>
       .build();
   }
 
+  /**
+   * Convert the given proto into a price.
+   *
+   * @param  inProto the proto to convert
+   * @return the converted price
+   */
   public static Price fromProto(PriceProto inProto)
   {
     return new Price(inProto.getCurrency(), inProto.getNumber(),
@@ -131,26 +136,36 @@ public class Price extends Value<PriceProto>
   /**
    * Parse the price from the given string.
    *
-   * @param       the text to parse
+   * @param       inText the text to parse
    *
    * @return      the price parsed, if any
-   *
    */
   public static Optional<Price> parse(String inText)
   {
-    String []parts = Strings.getPatterns(inText, "(.*)\\s*(\\d+)(?:\\.(\\d+))");
+    String []parts = Strings.getPatterns(
+        inText, "^\\s*(\\D.*?\\s?)\\s*(\\d+)(?:\\.(\\d+))?$");
     if(parts.length != 3)
       return Optional.absent();
 
     String currency = parts[0];
-    int precision = (int)Math.pow(10, parts[2].length());
-    int number =
-      Integer.parseInt(parts[1]) * precision + Integer.parseInt(parts[2]);
+    int precision;
+    int number;
+    if(parts[2] != null)
+    {
+      precision = (int) Math.pow(10, parts[2].length());
+      number =
+          Integer.parseInt(parts[1]) * precision + Integer.parseInt(parts[2]);
+    }
+    else
+    {
+      precision = 100;
+      number = Integer.parseInt(parts[1]) * 100;
+    }
 
     return Optional.of(new Price(currency, number, precision));
   }
 
-  //---------------------------------------------------------------------------
+  //----------------------------------------------------------------------- test
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
@@ -160,7 +175,7 @@ public class Price extends Value<PriceProto>
     public void init()
     {
       // now with some value
-      Price value = new Price("SFr. ", 10023, 2);
+      Price value = new Price("SFr. ", 10023, 100);
 
       assertEquals("value not correctly gotten", 100.23, value.getPrice(), 0.1);
       assertEquals("value not correctly converted", "SFr. 100.23",
@@ -171,19 +186,17 @@ public class Price extends Value<PriceProto>
     @org.junit.Test
     public void read()
     {
-      assertEquals("simple", "$42.00", Price.parse("$42.00").toString());
-      assertEquals("SFr", "SFr. 1.42", Price.parse("SFr. 1.42").toString());
-      assertEquals("white", "  \nSFr.  \n 11.12",
-                   Price.parse("SFr. 11.12").toString());
-      assertEquals("digits", "$ 1.234", Price.parse("$ 1.234").toString());
-      assertNull("white currency", Price.parse("A \n B 10.20"));
-      assertNull("invalid", Price.parse("1.2"));
-      assertNull("empty", Price.parse(""));
-      assertEquals("no digits", "$ 40", Price.parse("$ 40.00"));
+      assertEquals("simple", "$42.00", Price.parse("$42.00").get().toString());
+      assertEquals("SFr", "SFr. 1.42",
+                   Price.parse("SFr. 1.42").get().toString());
+      assertEquals("white", "SFr. 11.12",
+                   Price.parse("  \nSFr.   \n 11.12").get().toString());
+      assertEquals("digits", "$ 1.234",
+                   Price.parse("$ 1.234").get().toString());
+      assertFalse("invalid", Price.parse("1.2").isPresent());
+      assertFalse("empty", Price.parse("").isPresent());
+      assertEquals("no digits", "$ 40.00",
+                   Price.parse("$ 40").get().toString());
     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

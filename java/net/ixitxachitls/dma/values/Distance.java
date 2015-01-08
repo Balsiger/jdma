@@ -24,7 +24,6 @@ package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 
@@ -40,8 +39,10 @@ import net.ixitxachitls.util.Strings;
 public class Distance extends Value.Arithmetic<DistanceProto>
   implements Comparable<Distance>
 {
+  /** The parser for distance values. */
   public static class DistanceParser extends Parser<Distance>
   {
+    /** Create the parser. */
     public DistanceParser()
     {
       super(1);
@@ -91,6 +92,10 @@ public class Distance extends Value.Arithmetic<DistanceProto>
           case "inches":
             inches = add(inches, number);
             break;
+
+          default:
+            // just ignore it
+            break;
         }
       }
 
@@ -98,6 +103,13 @@ public class Distance extends Value.Arithmetic<DistanceProto>
     }
   }
 
+  /**
+   * Create a distance value.
+   *
+   * @param inMiles  the number of miles
+   * @param inFeet   the number of feet
+   * @param inInches the number of inches
+   */
   public Distance(Optional<Rational> inMiles,
                   Optional<Rational> inFeet,
                   Optional<Rational> inInches)
@@ -107,12 +119,23 @@ public class Distance extends Value.Arithmetic<DistanceProto>
     m_inches = inInches;
   }
 
-  public static Parser<Distance> PARSER = new DistanceParser();
+  /** The default parser for distances. */
+  public static final Parser<Distance> PARSER = new DistanceParser();
 
+  /** The number of miles in the distance. */
   private final Optional<Rational> m_miles;
+
+  /** The number of feet in the distance. */
   private final Optional<Rational> m_feet;
+
+  /** The number of inches. */
   private final Optional<Rational> m_inches;
 
+  /**
+   * Convert the distance into miles only.
+   *
+   * @return the whole distance in miles
+   */
   public double asMiles()
   {
     return (m_miles.isPresent() ? m_miles.get().asDouble() : 0)
@@ -120,6 +143,11 @@ public class Distance extends Value.Arithmetic<DistanceProto>
       + (m_inches.isPresent() ? m_inches.get().asDouble() / 63360 : 0);
   }
 
+  /**
+   * Convert the distance into feet only.
+   *
+   * @return the whole distance as feet
+   */
   public double asFeet()
   {
     return (m_miles.isPresent() ? m_miles.get().asDouble() * 5280 : 0)
@@ -127,6 +155,11 @@ public class Distance extends Value.Arithmetic<DistanceProto>
       + (m_inches.isPresent() ? m_inches.get().asDouble() / 12 : 0);
   }
 
+  /**
+   * Convert the distance into inches only.
+   *
+   * @return the whole distance as inches
+   */
   public double asInches()
   {
     return (m_miles.isPresent() ? m_miles.get().asDouble() * 63360 : 0)
@@ -216,7 +249,8 @@ public class Distance extends Value.Arithmetic<DistanceProto>
   @Override
   public DistanceProto toProto()
   {
-    DistanceProto.Imperial.Builder builder = DistanceProto.Imperial.newBuilder();
+    DistanceProto.Imperial.Builder builder =
+        DistanceProto.Imperial.newBuilder();
 
     if(m_miles.isPresent())
       builder.setMiles(m_miles.get().toProto());
@@ -228,6 +262,12 @@ public class Distance extends Value.Arithmetic<DistanceProto>
     return DistanceProto.newBuilder().setImperial(builder.build()).build();
   }
 
+  /**
+   * Convert the distance proto into a distance value.
+   *
+   * @param inProto the proto value to convert
+   * @return the converted distance
+   */
   public static Distance fromProto(DistanceProto inProto)
   {
     if(!inProto.hasImperial())
@@ -251,12 +291,9 @@ public class Distance extends Value.Arithmetic<DistanceProto>
   }
 
   @Override
-  public Value.Arithmetic<DistanceProto>
-    add(@Nullable Value.Arithmetic<DistanceProto> inValue)
+  public Value.Arithmetic<DistanceProto> add(
+      Value.Arithmetic<DistanceProto> inValue)
   {
-    if(inValue == null)
-      return this;
-
     if(!(inValue instanceof Distance))
       throw new IllegalArgumentException("can only add another distance value");
 
@@ -290,18 +327,19 @@ public class Distance extends Value.Arithmetic<DistanceProto>
     @org.junit.Test
     public void parse()
     {
-      assertEquals("parse", "1 ml", PARSER.parse("1 ml").toString());
-      assertEquals("parse", "1 ml", PARSER.parse("1   mls").toString());
-      assertEquals("parse", "1/2 in", PARSER.parse("1/2 inch").toString());
+      assertEquals("parse", "1 ml", PARSER.parse("1 ml").get().toString());
+      assertEquals("parse", "1 ml", PARSER.parse("1   mls").get().toString());
+      assertEquals("parse", "1/2 in",
+                   PARSER.parse("1/2 inch").get().toString());
       assertEquals("parse", "3 ml 3 in",
-                   PARSER.parse("1 ml 2 ml 3 in").toString());
-      assertEquals("parse", "1 ml", PARSER.parse("1 mile").toString());
-      assertNull("parse", PARSER.parse("1"));
-      assertEquals("parse", "1 ft", PARSER.parse("1 ft 2").toString());
-      assertEquals("parse", "1 ft", PARSER.parse("1 ftt").toString());
+                   PARSER.parse("1 ml 2 ml 3 in").get().toString());
+      assertEquals("parse", "1 ml", PARSER.parse("1 mile").get().toString());
+      assertFalse("parse", PARSER.parse("1").isPresent());
+      assertEquals("parse", "1 ft", PARSER.parse("1 ft 2").get().toString());
+      assertEquals("parse", "1 ft", PARSER.parse("1 ftt").get().toString());
       assertEquals("parse", "1 ft 1 in",
-                   PARSER.parse("1 ft 1 in 1 guru").toString());
-      assertNull("parse", PARSER.parse(""));
+                   PARSER.parse("1 ft 1 in 1 guru").get().toString());
+      assertFalse("parse", PARSER.parse("").isPresent());
     }
   }
 

@@ -31,11 +31,9 @@ import java.util.SortedSet;
 
 import javax.annotation.Nullable;
 
-import com.google.appengine.labs.repackaged.com.google.common.collect.HashMultimap;
 import com.google.appengine.labs.repackaged.com.google.common.collect.LinkedListMultimap;
 import com.google.common.base.Optional;
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
 
@@ -56,18 +54,15 @@ import net.ixitxachitls.util.resources.Resource;
  */
 public class FakeDMADatastore extends DMADatastore
 {
-  private final Map<EntryKey, AbstractEntry> m_entries = new HashMap<>();
-  private final LinkedListMultimap<AbstractType<?>, AbstractEntry>
-      m_entriesByType = LinkedListMultimap.create();
-
+  /** Create the fake datastore. */
   public FakeDMADatastore()
   {
     try
     {
       Entries.EntriesProto.Builder builder = Entries.EntriesProto.newBuilder();
-      TextFormat.merge(
-          new InputStreamReader(Resource.get("fake_data.ascii").getInput()),
-          builder);
+      TextFormat.merge(new InputStreamReader(
+                           Resource.get("fake_data.ascii").getInput().orNull()),
+                       builder);
 
       for(Entries.BaseEntryProto proto : builder.getBaseEntryList())
         add(proto.getAbstract().getName(), BaseEntry.TYPE, proto);
@@ -80,6 +75,21 @@ public class FakeDMADatastore extends DMADatastore
     }
   }
 
+  /** All the available entries. */
+  private final Map<EntryKey, AbstractEntry> m_entries = new HashMap<>();
+
+  /** All the available entries by type. */
+  private final LinkedListMultimap<AbstractType<?>, AbstractEntry>
+      m_entriesByType = LinkedListMultimap.create();
+
+
+  /**
+   * Add an entry to the fake data store.
+   *
+   * @param inID the entry id
+   * @param inType the type of the entry to add
+   * @param inProto the proto data for the entry
+   */
   private void add(String inID, AbstractType<?> inType, Message inProto)
   {
     Optional<? extends AbstractEntry> entry = inType.create();
@@ -110,13 +120,19 @@ public class FakeDMADatastore extends DMADatastore
   public <T extends AbstractEntry>
   Optional<T> getEntry(AbstractType<T> inType, String inKey, String inValue)
   {
-    for(AbstractEntry entry : m_entriesByType.get(inType)) {
+    for(AbstractEntry entry : m_entriesByType.get(inType))
+    {
       if(entry instanceof BaseCharacter)
         switch(inKey)
         {
           case "email":
             if(((BaseCharacter)entry).getEmail().equals(inValue))
               return Optional.of((T)entry);
+            break;
+
+          default:
+            throw new UnsupportedOperationException(
+                inKey + " not supported as lookup field in fake data store");
         }
     }
 

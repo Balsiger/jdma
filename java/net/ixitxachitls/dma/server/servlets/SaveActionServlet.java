@@ -60,7 +60,7 @@ public class SaveActionServlet extends ActionServlet
   private static final long serialVersionUID = 1L;
 
   /** The joiner to join errors. */
-  private static final Joiner newlineJoiner = Joiner.on("<br />");
+  private static final Joiner NEW_LINE_JOINER = Joiner.on("<br />");
 
   @Override
   public String toString()
@@ -97,8 +97,8 @@ public class SaveActionServlet extends ActionServlet
 
     if(!key.get().editableBy(user.get()))
     {
-      return "gui.alert('You don't own that entry, " +
-          "thus you can't change it!');";
+      return "gui.alert('You don't own that entry, "
+          + "thus you can't change it!');";
     }
 
     Optional<AbstractEntry> entry = DMADataFactory.get().getEntry(key.get());
@@ -121,7 +121,7 @@ public class SaveActionServlet extends ActionServlet
     List<String> errors = values.obtainMessages();
 
     if(!errors.isEmpty())
-      return "gui.alert('" + Encodings.escapeJS(newlineJoiner.join(errors))
+      return "gui.alert('" + Encodings.escapeJS(NEW_LINE_JOINER.join(errors))
         + "');";
 
     if(values.isChanged())
@@ -297,17 +297,9 @@ public class SaveActionServlet extends ActionServlet
       EasyMock.replay(request, response, user);
 
       assertEquals("result",
-                   "gui.alert('Parse error for values');"
-                   + "gui.info('The following entries were updated:"
-                   + "<p>base entry test'); "
-                   + "util.link(null, '/entry/test');"
-                   + "edit.unparsed('base entry', 'test', 'guru', 'guru');",
+                   "gui.info('Entry test has been saved.'); true",
                    servlet.doAction(request, response));
 
-      m_logger.addExpected("WARNING: trying to set undefined variable guru "
-          + "with guru in test [class net.ixitxachitls.dma.entries.BaseEntry]");
-      m_logger.addExpected("WARNING: Could not fully parse guru value for "
-                           + "/base entry/test: 'guru'");
       EasyMock.verify(request, response, user);
     }
   }

@@ -22,8 +22,10 @@
 
 package net.ixitxachitls.dma.entries;
 
-import net.ixitxachitls.dma.values.Values;
+import com.google.common.base.Optional;
+
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
+import net.ixitxachitls.dma.values.Values;
 
 /**
  * An actual skill a monster or character has.
@@ -33,20 +35,33 @@ import net.ixitxachitls.dma.proto.Entries.SkillProto;
  */
 public class Skill extends NestedEntry
 {
+  /** Create the skill. */
   public Skill()
   {
+    // nothing to do
   }
 
+  /** The skill name. */
   protected String m_name;
+
+  /** The number of ranks in the skill .*/
   protected int m_ranks;
 
   @Override
   public void set(Values inValues)
   {
     m_name = inValues.use("skill.name", m_name);
-    m_ranks = inValues.use("skill.ranks", m_ranks);
+    Optional<Integer> ranks = inValues.use("skill.ranks", m_ranks);
+    if(ranks.isPresent())
+      m_ranks = ranks.get();
   }
 
+  /**
+   * Create a skill from the given proto.
+   *
+   * @param inProto the proto to create from
+   * @return the created, new skill
+   */
   public static Skill fromProto(SkillProto inProto)
   {
     String name = inProto.getName();
@@ -61,6 +76,11 @@ public class Skill extends NestedEntry
     return skill;
   }
 
+  /**
+   * Convert the skill into a proto representation.
+   *
+   * @return the proto representation
+   */
   public SkillProto toProto()
   {
     SkillProto.Builder builder = SkillProto.newBuilder();

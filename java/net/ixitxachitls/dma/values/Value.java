@@ -30,16 +30,44 @@ import com.google.protobuf.Message;
  *
  * @file   NewValue.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ *
+ * @param <T> the proto message this value can be converted into/from
  */
 public abstract class Value<T extends Message>
 {
+  /**
+   * A value that supports arithmetic computations.
+   *
+   * @param <V> the type of proto message this value converts into/from
+   */
   public static abstract class Arithmetic<V extends Message> extends Value<V>
   {
+    /**
+     * Add another arithmetic value to this one.
+     *
+     * @param inValue the value to add
+     * @return a new value representing the addtion
+     */
     public abstract Arithmetic<V> add(Arithmetic<V> inValue);
+
+    /**
+     * Check whether the given value can be added to this one.
+     *
+     * @param inValue the value to check for
+     * @return true if the value can be added, false if not
+     */
     public abstract boolean canAdd(Arithmetic<V> inValue);
+
+    /**
+     * Multiply the current value by the given factor.
+     *
+     * @param inFactor the factor to multiply with
+     * @return a new value representing the multiplied value
+     */
     public abstract Arithmetic<V> multiply(int inFactor);
   }
 
+  /** A parser for parsing integer values. */
   public static final Parser<Integer> INTEGER_PARSER = new Parser<Integer>(1)
   {
     @Override
@@ -56,6 +84,7 @@ public abstract class Value<T extends Message>
     }
   };
 
+  /** A parser for parsing boolean values. */
   public static final Parser<Boolean> BOOLEAN_PARSER = new Parser<Boolean>(1)
   {
     @Override
@@ -65,6 +94,11 @@ public abstract class Value<T extends Message>
     }
   };
 
+  /**
+   * Convert the value to a short string.
+   *
+   * @return the short textual representation of this value
+   */
   public String toShortString()
   {
     return toString();
@@ -87,8 +121,15 @@ public abstract class Value<T extends Message>
     return toString();
   }
 
+  /**
+   * A utility method for adding two rational values.
+   *
+   * @param inFirst the first value to add
+   * @param inSecond the second value to add
+   * @return the addition of the two values
+   */
   protected static Optional<Rational> add(Optional<Rational> inFirst,
-                                             Optional<Rational> inSecond)
+                                          Optional<Rational> inSecond)
   {
     if(!inFirst.isPresent())
       return inSecond;
@@ -98,8 +139,14 @@ public abstract class Value<T extends Message>
     return Optional.of((Rational)inFirst.get().add(inSecond.get()));
   }
 
+  /** A utility method to multiply a rational with a factor.
+   *
+   * @param inValue the value to multiply
+   * @param inFactor the multiplication factor
+   * @return the multiplied value
+   */
   protected static Optional<Rational> multiply(Optional<Rational> inValue,
-                                                  int inFactor)
+                                               int inFactor)
   {
     if(!inValue.isPresent())
       return inValue;

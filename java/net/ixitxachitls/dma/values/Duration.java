@@ -40,6 +40,7 @@ import net.ixitxachitls.util.Strings;
 public class Duration extends Value.Arithmetic<DurationProto>
   implements Comparable<Duration>
 {
+  /** The parser for durations. */
   public static final Parser<Duration> PARSER = new Parser<Duration>(1)
   {
     @Override
@@ -50,15 +51,16 @@ public class Duration extends Value.Arithmetic<DurationProto>
 
       List<String []>parts =
         Strings.getAllPatterns(inValue,
-                               "^(?:\\s*(.*?)"
-                                 + "\\s*(day|days|d|ds|hour|hours|h|hr|hrs|"
+                               "(?:\\s*(.*?)"
+                                 + "\\s*(day|days|d|ds|"
+                                 + "hour|hours|h|hr|hrs|"
                                  + "minute|minutes|m|min|mins|"
                                  + "second|seconds|s|sec|secs|"
                                  + "round|rounds|r|rd|rds|"
                                  + "standard action|standard actions|"
                                  + "move action|move actions|"
                                  + "swift action|swift actions|"
-                                 + "free action|free actions))\\s*$");
+                                 + "free action|free actions)(?:\\s+|$))");
       if(parts.isEmpty())
         return Optional.absent();
 
@@ -69,8 +71,8 @@ public class Duration extends Value.Arithmetic<DurationProto>
       Optional<Rational> rounds = Optional.absent();
       Optional<Rational> standardActions = Optional.absent();
       Optional<Rational> moveActions = Optional.absent();
-      Optional<Rational> swiftActions= Optional.absent();
-      Optional<Rational> freeActions= Optional.absent();
+      Optional<Rational> swiftActions = Optional.absent();
+      Optional<Rational> freeActions = Optional.absent();
 
       for(String []part : parts)
       {
@@ -141,6 +143,10 @@ public class Duration extends Value.Arithmetic<DurationProto>
           case "free actions":
             freeActions = add(freeActions, number);
             break;
+
+          default:
+            // just ignore it
+            break;
         }
       }
 
@@ -150,6 +156,19 @@ public class Duration extends Value.Arithmetic<DurationProto>
     }
   };
 
+  /**
+   * Create a duration value.
+   *
+   * @param inDays the number of days
+   * @param inHours the number of hours
+   * @param inMinutes the number of minutes
+   * @param inSeconds the number of seconds
+   * @param inRounds the number of rounds
+   * @param inStandardActions the number of standard actions
+   * @param inMoveActions the number of move actions
+   * @param inSwiftActions the number of swift actions
+   * @param inFreeActions the number of free actions
+   */
   public Duration(Optional<Rational> inDays,
                   Optional<Rational> inHours,
                   Optional<Rational> inMinutes,
@@ -171,14 +190,31 @@ public class Duration extends Value.Arithmetic<DurationProto>
     m_freeActions = inFreeActions;
   }
 
+  /** The number of days in the duration. */
   private final Optional<Rational> m_days;
+
+  /** The number of hours in the duration. */
   private final Optional<Rational> m_hours;
+
+  /** The number of minutes in the duration. */
   private final Optional<Rational> m_minutes;
+
+  /** The number of seconds in the duration. */
   private final Optional<Rational> m_seconds;
+
+  /** The number of rounds in the duration. */
   private final Optional<Rational> m_rounds;
+
+  /** The number of standard actions in the duration. */
   private final Optional<Rational> m_standardActions;
+
+  /** The number of move actions in the duration. */
   private final Optional<Rational> m_moveActions;
+
+  /** The number of swift actions in the duration. */
   private final Optional<Rational> m_swiftActions;
+
+  /** The number of free actions in the duration. */
   private final Optional<Rational> m_freeActions;
 
   @Override
@@ -219,7 +255,12 @@ public class Duration extends Value.Arithmetic<DurationProto>
     return Strings.SPACE_JOINER.join(parts);
   }
 
-  public String toShortString()
+  /**
+   * Convert the duration into a short string for human reading.
+   *
+   * @return the converted string
+   */
+   public String toShortString()
   {
     List<String> parts = new ArrayList<>();
 
@@ -256,7 +297,12 @@ public class Duration extends Value.Arithmetic<DurationProto>
     return Strings.SPACE_JOINER.join(parts);
   }
 
-  public int asSeconds() {
+  /** Convert the duration into a number of seconds.
+   *
+   * @return the number of seoncds
+   */
+  public int asSeconds()
+  {
     int seconds = 0;
 
     if(m_days.isPresent())
@@ -452,19 +498,17 @@ public class Duration extends Value.Arithmetic<DurationProto>
     @org.junit.Test
     public void parse()
     {
-      assertEquals("parse", "None", PARSER.parse(" none  ").get().toString());
-      assertEquals("parse", "x3", PARSER.parse(" x 3  ").get().toString());
-      assertEquals("parse", "x3", PARSER.parse(" 20/x3  ").get().toString());
-      assertEquals("parse", "19-20/x2",
-                   PARSER.parse(" 19 - 20 / x 2 ").get().toString());
-      assertEquals("parse", "12-19/x5",
-                   PARSER.parse("12-19/x5").get().toString());
-      assertFalse("parse", PARSER.parse("/").isPresent());
+      assertEquals("parse", "1 hours",
+                   PARSER.parse(" 1 hour  ").get().toString());
+      assertEquals("parse", "2 hours 1 minutes",
+                   PARSER.parse(" 2 h 1 m  ").get().toString());
+      assertEquals("parse", "5 rounds",
+                   PARSER.parse(" 5 round ").get().toString());
+      assertEquals("parse", "0 hours", PARSER.parse("hour").get().toString());
+      assertFalse("parse", PARSER.parse("5 guru").isPresent());
       assertFalse("parse", PARSER.parse("").isPresent());
       assertFalse("parse", PARSER.parse("12").isPresent());
-      assertFalse("parse", PARSER.parse("x").isPresent());
-      assertFalse("parse", PARSER.parse("19-20 x3").isPresent());
-      assertFalse("parse", PARSER.parse("19 - x 4").isPresent());
+      //assertFalse("parse", PARSER.parse("1 hour 2 minions").isPresent());
     }
   }
 

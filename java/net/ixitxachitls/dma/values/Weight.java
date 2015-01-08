@@ -1,5 +1,5 @@
 /******************************************************************************
-" * Copyright (c) 2002-2013 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2014 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -23,7 +23,6 @@
 package net.ixitxachitls.dma.values;
 
 import java.util.List;
-import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 
@@ -38,8 +37,10 @@ import net.ixitxachitls.util.Strings;
  */
 public class Weight extends Value.Arithmetic<WeightProto>
 {
+  /** The weight parser. */
   public static class WeightParser extends Parser<Weight>
   {
+    /** Create the parser. */
     public WeightParser()
     {
       super(1);
@@ -82,6 +83,10 @@ public class Weight extends Value.Arithmetic<WeightProto>
           case "ounces":
             ounces = add(ounces, number);
             break;
+
+          default:
+            // we just ignore it
+            break;
         }
       }
 
@@ -89,6 +94,12 @@ public class Weight extends Value.Arithmetic<WeightProto>
     }
   }
 
+  /**
+   * Create a weight with imperial metrics.
+   *
+   * @param inPounds the number of pounds
+   * @param inOunces the number of ounces
+   */
   public Weight(Optional<Rational> inPounds,
                 Optional<Rational> inOunces)
   {
@@ -96,17 +107,29 @@ public class Weight extends Value.Arithmetic<WeightProto>
     m_ounces = inOunces;
   }
 
-  public static Parser<Weight> PARSER = new WeightParser();
+  /** The parser for weights. */
+  public static final Parser<Weight> PARSER = new WeightParser();
 
+  /** The number of pounds for this weight. */
   private final Optional<Rational> m_pounds;
+
+  /** The number of ounces for this weight. */
   private final Optional<Rational> m_ounces;
 
+  /**
+   * Get the weight as pounds.
+   * @return the weight converted into pounds
+   */
   public double asPounds()
   {
     return (m_pounds.isPresent() ? m_pounds.get().asDouble() : 0)
       + (m_ounces.isPresent() ? m_ounces.get().asDouble() /  16 : 0);
   }
 
+  /**
+   * Get the weight as ounces.
+   * @return the weight converted into ounces
+   */
   public double asOunces()
   {
     return (m_pounds.isPresent() ? m_pounds.get().asDouble() * 16 : 0)
@@ -178,6 +201,12 @@ public class Weight extends Value.Arithmetic<WeightProto>
     return WeightProto.newBuilder().setImperial(builder.build()).build();
   }
 
+  /**
+   * Convert the weight from the given proto.
+   *
+   * @param  inProto the proto to convert from
+   * @return the converted weight
+   */
   public static Weight fromProto(WeightProto inProto)
   {
     if(!inProto.hasImperial())
@@ -198,11 +227,8 @@ public class Weight extends Value.Arithmetic<WeightProto>
 
   @Override
   public Value.Arithmetic<WeightProto>
-    add(@Nullable Value.Arithmetic<WeightProto> inValue)
+    add(Value.Arithmetic<WeightProto> inValue)
   {
-    if(inValue == null)
-      return this;
-
     if(!(inValue instanceof Weight))
       throw new IllegalArgumentException("can only add another weight value");
 
@@ -233,18 +259,18 @@ public class Weight extends Value.Arithmetic<WeightProto>
     @org.junit.Test
     public void parse()
     {
-      assertEquals("parse", "1 lb", PARSER.parse("1 lb").toString());
-      assertEquals("parse", "1 lb", PARSER.parse("1   lbs").toString());
-      assertEquals("parse", "1/2 oz", PARSER.parse("1/2 oz").toString());
+      assertEquals("parse", "1 lb", PARSER.parse("1 lb").get().toString());
+      assertEquals("parse", "1 lb", PARSER.parse("1   lbs").get().toString());
+      assertEquals("parse", "1/2 oz", PARSER.parse("1/2 oz").get().toString());
       assertEquals("parse", "3 lb 3 oz",
-                   PARSER.parse("1 lb 2 lb 3 oz").toString());
-      assertEquals("parse", "1 lb", PARSER.parse("1 pounds").toString());
-      assertNull("parse", PARSER.parse("1"));
-      assertEquals("parse", "1 lb", PARSER.parse("1 lb 2").toString());
-      assertEquals("parse", "1 lb", PARSER.parse("1 lbt").toString());
+                   PARSER.parse("1 lb 2 lb 3 oz").get().toString());
+      assertEquals("parse", "1 lb", PARSER.parse("1 pounds").get().toString());
+      assertFalse("parse", PARSER.parse("1").isPresent());
+      assertEquals("parse", "1 lb", PARSER.parse("1 lb 2").get().toString());
+      assertEquals("parse", "1 lb", PARSER.parse("1 lbt").get().toString());
       assertEquals("parse", "1 lb 1 oz",
-                   PARSER.parse("1 oz 1 lb 1 guru").toString());
-      assertNull("parse", PARSER.parse(""));
+                   PARSER.parse("1 oz 1 lb 1 guru").get().toString());
+      assertFalse("parse", PARSER.parse("").isPresent());
     }
   }
 }

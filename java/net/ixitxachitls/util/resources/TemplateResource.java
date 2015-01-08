@@ -19,49 +19,29 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.util.resources;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.File;
 import java.io.OutputStream;
 import java.net.URL;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.common.base.Charsets;
+import com.google.common.base.Optional;
 import com.google.common.io.Files;
 
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * A resource for the file system with special variable translation.
  *
  * @file          TemplateResource.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
-@ParametersAreNonnullByDefault
 public class TemplateResource extends FileResource
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //--------------------------- TemplateResource ----------------------------
-
   /**
    * Create the template file resource.
    *
@@ -70,34 +50,22 @@ public class TemplateResource extends FileResource
    * @param    inPrefix the prefix into the config for template values
    *
    */
-  TemplateResource(String inName, @Nullable URL inURL, String inPrefix)
+  TemplateResource(String inName, Optional<URL> inURL, String inPrefix)
   {
     super(inName, inURL);
 
     m_prefix = inPrefix;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The prefix into the config for template values. */
   private String m_prefix;
 
   /** The contents of the file (caching). */
-  private @Nullable String m_content;
+  private Optional<String> m_content = Optional.absent();
 
   /** Flag if files should be reread each time they are accessed. */
   private static boolean s_reread = SystemProperty.environment.value()
     == SystemProperty.Environment.Value.Development;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //--------------------------------- get ----------------------------------
 
   /**
    * Get the templated resource represented by the given name.
@@ -108,7 +76,6 @@ public class TemplateResource extends FileResource
    *                          values
    *
    * @return      the templated resource for this name
-   *
    */
   public static Resource get(String inName, String inPrefix)
   {
@@ -120,51 +87,31 @@ public class TemplateResource extends FileResource
       Resource.class.getResource(net.ixitxachitls.util.Files.concatenate
                                  ("/", name));
 
-    return new TemplateResource(name, url, inPrefix);
+    return new TemplateResource(name, Optional.fromNullable(url), inPrefix);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //--------------------------------- read ---------------------------------
-
-  /**
-   * Get the whole contents of the resource as a string. Line termination is
-   * normalized to \n.
-   *
-   * @return      the contents as a string
-   *
-   */
   @Override
   public String read()
   {
-    if(m_content == null)
+    if(!m_content.isPresent())
     {
       try
       {
-        m_content = Files.toString(asFile(), Charsets.UTF_8);
+        Optional<File> file = asFile();
+        String content = Files.toString(file.get(), Charsets.UTF_8);
 
         // do the replacement for all variables
-        m_content = Strings.replaceTemplates(m_content, m_prefix);
+        m_content = Optional.of(Strings.replaceTemplates(content, m_prefix));
       }
       catch(java.io.IOException e)
       {
         Log.warning("cannot read resource '" + this + ": " + e);
-        m_content = "";
+        m_content = Optional.of("");
       }
     }
 
-    return m_content;
+    return m_content.get();
   }
-
-  //........................................................................
-  //-------------------------------- write ---------------------------------
 
   /**
    * Write the resources to the given output.
@@ -172,7 +119,6 @@ public class TemplateResource extends FileResource
    * @param       inOutput the output stream to write to
    *
    * @return      true if writing ok, false if not
-   *
    */
   @Override
   public boolean write(OutputStream inOutput)
@@ -181,7 +127,8 @@ public class TemplateResource extends FileResource
 
     try
     {
-      inOutput.write(m_content.getBytes(Charsets.UTF_8));
+      if(m_content.isPresent())
+        inOutput.write(m_content.get().getBytes(Charsets.UTF_8));
     }
     catch(java.io.IOException e)
     {
@@ -189,55 +136,15 @@ public class TemplateResource extends FileResource
     }
 
     if(s_reread)
-      m_content = null;
+      m_content = Optional.absent();
 
     return true;
   }
-
-  //........................................................................
-
-  //........................................................................
 
   //------------------------------------------------------------------- test
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- write ----------------------------------------------------------
-
-    /**
-     * The write Test.
-     *
-     * @throws IOException when closing output buffer
-     */
-    @org.junit.Test
-    public void write() throws IOException
-    {
-      Resource resource =
-        new TemplateResource("/css/jdma.css",
-                             TemplateResource.class
-                             .getResource("/css/jdma.css"),
-                             "test/test/template");
-
-      try (ByteArrayOutputStream output = new ByteArrayOutputStream())
-      {
-        System.setProperty("test/test/template.color_Monster", "single word");
-        m_logger.banClass(net.ixitxachitls.util.Strings.class);
-        assertTrue("writing", resource.write(output));
-        assertPattern("content",
-                      ".*A.Monster         \\{ color: single word \\}.*",
-                      output.toString());
-
-        // invalid resource
-        resource = new FileResource("guru", null);
-        assertFalse("writing", resource.write(output));
-
-        m_logger.addExpected("WARNING: cannot obtain input stream for guru");
-      }
-    }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

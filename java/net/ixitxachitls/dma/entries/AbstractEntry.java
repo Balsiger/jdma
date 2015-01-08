@@ -81,20 +81,39 @@ public abstract class AbstractEntry
   /** A simple auxiliary class to store a link with name. */
   public static class Link
   {
-    private final String m_name;
-    private final String m_url;
-
+    /**
+     * Create the link.
+     *
+     * @param inName the link name
+     * @param inURL the url to link points to
+     */
     public Link(String inName, String inURL)
     {
       m_name = inName;
       m_url = inURL;
     }
 
+    /** The name of the link. */
+    private final String m_name;
+
+    /** The url the link points to. */
+    private final String m_url;
+
+    /**
+     * Get the name of the link.
+     *
+     * @return the name
+     */
     public String getName()
     {
       return m_name;
     }
 
+    /**
+     * Get the url of the link.
+     *
+     * @return the url
+     */
     public String getURL()
     {
       return m_url;
@@ -226,13 +245,13 @@ public abstract class AbstractEntry
   public static final String UNDEFINED_STRING = "";
 
   /** The name of the abstract entry. */
-  public String m_name = UNDEFINED_STRING;
+  protected String m_name = UNDEFINED_STRING;
 
   /** The base entries for this one. */
-  public List<String> m_base = new ArrayList<>();
+  protected List<String> m_base = new ArrayList<>();
 
   /** Google Cloud Storage service for accessing files. */
-  private final GcsService gcs =
+  private final GcsService m_gcs =
     GcsServiceFactory.createGcsService(new RetryParams.Builder()
       .initialRetryDelayMillis(500)
       .retryMaxAttempts(3)
@@ -240,7 +259,7 @@ public abstract class AbstractEntry
       .build());
 
   /** The application identity to get the default bucket. */
-  private final AppIdentityService appIdentity =
+  private final AppIdentityService m_appIdentity =
     AppIdentityServiceFactory.getAppIdentityService();
 
   /**
@@ -371,6 +390,12 @@ public abstract class AbstractEntry
     return m_baseEntries;
   }
 
+  /**
+   * Check whether the entry has a base entry with the given name.
+   *
+   * @param inName the name of the base entry to look for
+   * @return true if there is a such named base entry, false if not
+   */
   public boolean hasBaseName(String inName)
   {
     for(BaseEntry base : getBaseEntries())
@@ -453,12 +478,12 @@ public abstract class AbstractEntry
     if(m_files.isEmpty() && !DMAServlet.isTesting())
       try
       {
-        String bucket = appIdentity.getDefaultGcsBucketName();
+        String bucket = m_appIdentity.getDefaultGcsBucketName();
         ListOptions options = new ListOptions.Builder()
           .setRecursive(false)
           .setPrefix(getFilePath())
           .build();
-        for(Iterator<ListItem> i = gcs.list(bucket, options); i.hasNext(); )
+        for(Iterator<ListItem> i = m_gcs.list(bucket, options); i.hasNext(); )
         {
           ListItem item = i.next();
           if(item.isDirectory())
@@ -469,7 +494,7 @@ public abstract class AbstractEntry
             "https://storage.cloud.google.com/" + bucket + "/" + item.getName();
 
           GcsFileMetadata meta =
-            gcs.getMetadata(new GcsFilename(bucket, item.getName()));
+            m_gcs.getMetadata(new GcsFilename(bucket, item.getName()));
           String mime = meta.getOptions().getMimeType();
           String icon = icon(mime);
           if(icon.isEmpty())
@@ -631,6 +656,11 @@ public abstract class AbstractEntry
     return "/" + getType().getLink() + "/" + getName();
   }
 
+  /**
+   * Get the path for the entry in the file system.
+   *
+   * @return the file system path
+   */
   public String getFilePath()
   {
     return getType().getName() + "/" + getName().toLowerCase() + "/";
@@ -748,21 +778,33 @@ public abstract class AbstractEntry
   }
   */
 
-  private String icon(String inMimeType)
+  /**
+   * Get the name of the icon to use for the given mime type.
+   *
+   * @param inMimeType the mime type to determine the icon for
+   * @return the name of the icon or an empty string for none
+   */
+  private static String icon(String inMimeType)
   {
     switch(inMimeType)
     {
       case "application/pdf":
         return "/icons/pdf.png";
-    }
 
-    return "";
+      default:
+        return "";
+    }
   }
 
+  /**
+   * Set the values in this entries.
+   *
+   * @param inValues the values to set
+   */
   public void set(Values inValues)
   {
-    m_name = inValues.use("name", m_name, Values.NOT_EMPTY);
-    m_base = inValues.use("base", m_base, Values.NOT_EMPTY);
+    m_name = inValues.use("name", m_name, Optional.of(Values.NOT_EMPTY));
+    m_base = inValues.use("base", m_base, Optional.of(Values.NOT_EMPTY));
   }
 
   /**
@@ -1210,6 +1252,11 @@ public abstract class AbstractEntry
     }
   }
 
+  /**
+   * Convert the entry to a proto message.
+   *
+   * @return the convert proto
+   */
   public Message toProto()
   {
     AbstractEntryProto.Builder builder = AbstractEntryProto.newBuilder();
@@ -1221,6 +1268,11 @@ public abstract class AbstractEntry
     return builder.build();
   }
 
+  /**
+   * Set all the values for this entry from the given proto.
+   *
+   * @param inProto the proto to set from
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof AbstractEntryProto))

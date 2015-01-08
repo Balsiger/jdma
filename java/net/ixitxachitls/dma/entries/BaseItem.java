@@ -61,7 +61,6 @@ import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.ModifierType;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.NamedModifier;
-import net.ixitxachitls.dma.values.Probability;
 import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.Slot;
@@ -74,6 +73,7 @@ import net.ixitxachitls.dma.values.WeaponType;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Group;
+import net.ixitxachitls.dma.values.enums.Probability;
 import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -2471,7 +2471,7 @@ public class BaseItem extends BaseEntry
               .put("wearable.remove", "1 min")
               .build());
       item.set(values);
-      assertEquals("messaegs", "[]", values.obtainMessages().toString());
+      assertEquals("messages", "[]", values.obtainMessages().toString());
       assertEquals("name", "Item", item.getName());
       assertEquals("player name", "Player", item.getPlayerName().get());
       assertEquals("value", "5 gp", item.getValue().get().toString());

@@ -39,11 +39,6 @@
   </security-constraint>
 
   <servlet>
-    <servlet-name>config</servlet-name>
-    <servlet-class>net.ixitxachitls.server.servlets.ConfigServlet</servlet-class>
-  </servlet>
-
-  <servlet>
     <servlet-name>register</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.RegisterServlet</servlet-class>
   </servlet>

@@ -23,7 +23,7 @@ package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
+
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
@@ -39,9 +39,9 @@ import net.ixitxachitls.util.Strings;
  */
 
 @Immutable
-@ParametersAreNonnullByDefault
 public class Area extends Value.Arithmetic<AreaProto>
 {
+  /** The parser for areas. */
   public static final Parser<Area> PARSER = new Parser<Area>(1)
   {
     @Override
@@ -63,7 +63,7 @@ public class Area extends Value.Arithmetic<AreaProto>
       if(parts.isEmpty())
         return Optional.absent();
 
-      Optional<Rational> sqYards= Optional.absent();
+      Optional<Rational> sqYards = Optional.absent();
       Optional<Rational> sqFeet = Optional.absent();
       Optional<Rational> sqInches = Optional.absent();
       Optional<Rational> sqMeters = Optional.absent();
@@ -116,6 +116,10 @@ public class Area extends Value.Arithmetic<AreaProto>
           case "square centimeters":
             sqCentiMeters = add(sqCentiMeters, number);
             break;
+
+          default:
+            // Just ignore it.
+            break;
         }
       }
 
@@ -126,6 +130,13 @@ public class Area extends Value.Arithmetic<AreaProto>
 
   /**
    * Construct the area object with an undefined value.
+   *
+   * @param inSqYards the number of square yards.
+   * @param inSqFeet the number of square feet.
+   * @param inSqInches the number of square inches.
+   * @param inSqMeters the number of square meters.
+   * @param inSqDeciMeters the number of square deci meters.
+   * @param inSqCentiMeters the number of square centi meters.
    */
   public Area(Optional<Rational> inSqYards,
               Optional<Rational> inSqFeet,
@@ -142,11 +153,22 @@ public class Area extends Value.Arithmetic<AreaProto>
     m_sqCentiMeters = inSqCentiMeters;
   }
 
+  /** The number of square yards in the area. */
   private final Optional<Rational> m_sqYards;
+
+  /** The number of square feet in the area. */
   private final Optional<Rational> m_sqFeet;
+
+  /** The number of square inches in the area. */
   private final Optional<Rational> m_sqInches;
+
+  /** The number of square meters in the area. */
   private final Optional<Rational> m_sqMeters;
+
+  /** The number of square deci meters in the area. */
   private final Optional<Rational> m_sqDeciMeters;
+
+  /** The number of square centi meters in the area. */
   private final Optional<Rational> m_sqCentiMeters;
 
   /**
@@ -190,6 +212,9 @@ public class Area extends Value.Arithmetic<AreaProto>
 
     if(m_sqDeciMeters.isPresent())
       parts.add(m_sqDeciMeters.get() + " sq dm");
+
+    if(m_sqCentiMeters.isPresent())
+      parts.add(m_sqCentiMeters.get() + " sq cm");
 
     if(parts.isEmpty())
       return "0 sq ft";
@@ -247,7 +272,7 @@ public class Area extends Value.Arithmetic<AreaProto>
    */
   public static Area fromProto(AreaProto inProto)
   {
-    Optional<Rational> sqYards= Optional.absent();
+    Optional<Rational> sqYards = Optional.absent();
     Optional<Rational> sqFeet = Optional.absent();
     Optional<Rational> sqInches = Optional.absent();
     Optional<Rational> sqMeters = Optional.absent();
@@ -274,7 +299,7 @@ public class Area extends Value.Arithmetic<AreaProto>
         sqYards = Optional.of(Rational.fromProto
             (inProto.getImperial().getSquareYards()));
       if(inProto.getImperial().hasSquareFeet())
-        sqFeet= Optional.of(Rational.fromProto
+        sqFeet = Optional.of(Rational.fromProto
             (inProto.getImperial().getSquareFeet()));
       if(inProto.getImperial().hasSquareInches())
         sqInches = Optional.of(Rational.fromProto

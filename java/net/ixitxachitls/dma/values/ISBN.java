@@ -22,7 +22,7 @@
 package net.ixitxachitls.dma.values;
 
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
+
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
@@ -40,11 +40,12 @@ import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
  */
 
 @Immutable
-@ParametersAreNonnullByDefault
 public class ISBN extends Value<BaseProductProto.ISBN>
 {
+  /** The parser for isbn values. */
   public static class ISBNParser extends Parser<ISBN>
   {
+    /** Create the parser. */
     public ISBNParser()
     {
       super(1);
@@ -119,7 +120,10 @@ public class ISBN extends Value<BaseProductProto.ISBN>
                                                    m_title));
   }
 
+  /** A splitter on dashes. */
   private static final Splitter DASH_SPLITTER = Splitter.on('-').trimResults();
+
+  /** The default parser for isbn values. */
   public static final Parser<ISBN> PARSER = new ISBNParser();
 
   /** The group part of the whole number. */
@@ -203,6 +207,12 @@ public class ISBN extends Value<BaseProductProto.ISBN>
       .build();
   }
 
+  /**
+   * Convert the given proto into an isbn value.
+   *
+   * @param inProto the proto to convert
+   * @return the isbn value
+   */
   public static ISBN fromProto(BaseProductProto.ISBN inProto)
   {
     return new ISBN(inProto.getGroup(), inProto.getPublisher(),
@@ -265,21 +275,21 @@ public class ISBN extends Value<BaseProductProto.ISBN>
     public void parse()
     {
       assertEquals("simple", "0-596-00283-1",
-                   PARSER.parse("0-596-00283-1").toString());
+                   PARSER.parse("0-596-00283-1").get().toString());
       assertEquals("whites", "0-596-00283-1",
-                   PARSER.parse("0-   596\n- 00283 - 1 "));
-      assertNull("invalid 0", PARSER.parse("0-596-00283-0"));
-      assertNull("invalid 2", PARSER.parse("0-596-00283-2"));
-      assertNull("invalid 3", PARSER.parse("0-596-00283-3"));
-      assertNull("invalid 4", PARSER.parse("0-596-00283-4"));
-      assertNull("invalid 5", PARSER.parse("0-596-00283-5"));
-      assertNull("invalid 6", PARSER.parse("0-596-00283-6"));
-      assertNull("invalid 7", PARSER.parse("0-596-00283-7"));
-      assertNull("invalid 8", PARSER.parse("0-596-00283-8"));
-      assertNull("invalid 9", PARSER.parse("0-596-00283-9"));
-      assertNull("invalid X", PARSER.parse("0-596-00283-x"));
-      assertNull("missing", PARSER.parse("123-444-222 h"));
-      assertNull("missing 2", PARSER.parse("123-444-22a-3"));
+                   PARSER.parse("0-   596\n- 00283 - 1 ").get().toString());
+      assertFalse("invalid 0", PARSER.parse("0-596-00283-0").isPresent());
+      assertFalse("invalid 2", PARSER.parse("0-596-00283-2").isPresent());
+      assertFalse("invalid 3", PARSER.parse("0-596-00283-3").isPresent());
+      assertFalse("invalid 4", PARSER.parse("0-596-00283-4").isPresent());
+      assertFalse("invalid 5", PARSER.parse("0-596-00283-5").isPresent());
+      assertFalse("invalid 6", PARSER.parse("0-596-00283-6").isPresent());
+      assertFalse("invalid 7", PARSER.parse("0-596-00283-7").isPresent());
+      assertFalse("invalid 8", PARSER.parse("0-596-00283-8").isPresent());
+      assertFalse("invalid 9", PARSER.parse("0-596-00283-9").isPresent());
+      assertFalse("invalid X", PARSER.parse("0-596-00283-x").isPresent());
+      assertFalse("missing", PARSER.parse("123-444-222 h").isPresent());
+      assertFalse("missing 2", PARSER.parse("123-444-22a-3").isPresent());
     }
 
     /** Test for checks. */

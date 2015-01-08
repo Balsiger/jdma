@@ -34,12 +34,13 @@ import net.ixitxachitls.util.Strings;
  *
  * @file   NewRational.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 public class Rational extends Value.Arithmetic<RationalProto>
 {
+  /** The parser for ration values. */
   public static class RationalParser extends Parser<Rational>
   {
+    /** Create the parser. */
     public RationalParser()
     {
       super(1);
@@ -69,6 +70,13 @@ public class Rational extends Value.Arithmetic<RationalProto>
     }
   }
 
+  /**
+   * Create a rational with specific values.
+   *
+   * @param  inLeader      the number before the fraction
+   * @param  inNominator   the nominator (above the line)
+   * @param  inDenominator the denominator (below the line)
+   */
   public Rational(int inLeader, int inNominator, int inDenominator)
   {
     if(inDenominator == 0 && inNominator != 0)
@@ -79,34 +87,74 @@ public class Rational extends Value.Arithmetic<RationalProto>
     m_denominator = inDenominator;
   }
 
-  public static Parser<Rational> PARSER = new RationalParser();
-  public static Rational ZERO = new Rational(0, 0, 0);
-  public static Rational ONE = new Rational(1, 0, 0);
-  public static Rational FIVE = new Rational(5, 0, 0);
-  public static Rational TEN = new Rational(10, 0, 0);
-  public static Rational FIFTEEN = new Rational(15, 0, 0);
-  public static Rational TWENTY = new Rational(20, 0, 0);
-  public static Rational THIRTY = new Rational(30, 0, 0);
+  /** The parser. */
+  public static final Parser<Rational> PARSER = new RationalParser();
 
+  /** The rational for 0. */
+  public static final Rational ZERO = new Rational(0, 0, 0);
+
+  /** The rational for 1. */
+  public static final Rational ONE = new Rational(1, 0, 0);
+
+  /** The rational for 5. */
+  public static final Rational FIVE = new Rational(5, 0, 0);
+
+  /** The rational for 10. */
+  public static final Rational TEN = new Rational(10, 0, 0);
+
+  /** The rational for 15. */
+  public static final Rational FIFTEEN = new Rational(15, 0, 0);
+
+  /** The rational for 20. */
+  public static final Rational TWENTY = new Rational(20, 0, 0);
+
+  /** The rational for 30. */
+  public static final Rational THIRTY = new Rational(30, 0, 0);
+
+  /** The leading value, before the fraction. */
   private final int m_leader;
+
+  /** The nominator (above line). */
   private final int m_nominator;
+
+  /** The denominator (below line). */
   private final int m_denominator;
 
+  /**
+   * Get the leading value, before the fraction.
+   *
+   * @return the leading value
+   */
   public int getLeader()
   {
     return m_leader;
   }
 
+  /**
+   * Get the nominator (number above the line).
+   *
+   * @return the nominator
+   */
   public int getNominator()
   {
     return m_nominator;
   }
 
+  /**
+   * Get the denominator (number below the line).
+   *
+   * @return the denominator
+   */
   public int getDenominator()
   {
     return m_denominator;
   }
 
+  /**
+   * Convert the rational into a double value.
+   *
+   * @return the rational as double
+   */
   public double asDouble()
   {
     if(m_nominator == 0 || m_denominator == 0)
@@ -144,6 +192,12 @@ public class Rational extends Value.Arithmetic<RationalProto>
     return builder.build();
   }
 
+  /**
+   * Convert the proto into a rational.
+   *
+   * @param  inProto the proto to convert
+   * @return the converted rational
+   */
   public static Rational fromProto(RationalProto inProto)
   {
     return new Rational(inProto.getLeader(), inProto.getNominator(),
@@ -164,6 +218,12 @@ public class Rational extends Value.Arithmetic<RationalProto>
                            m_denominator * value.m_denominator).simplify();
   }
 
+  /**
+   * Simplify into a new rational. This mainly simplifies fractions,
+   * e.g. 2/4 to 1/2. This does _NOT_ change this rational.
+   *
+   * @return the new, simplified rational
+   */
   public Rational simplify()
   {
     if(m_nominator == 0 || m_denominator == 0)
@@ -208,17 +268,19 @@ public class Rational extends Value.Arithmetic<RationalProto>
     @org.junit.Test
     public void parse()
     {
-      assertEquals("parsing", "1 1/2", PARSER.parse("1 1/2").toString());
-      assertEquals("parsing", "1 1/2", PARSER.parse("1   1  /   2").toString());
-      assertEquals("parsing", "1", PARSER.parse("1").toString());
-      assertEquals("parsing", "1/2", PARSER.parse("1/2").toString());
-      assertNull("parsing", PARSER.parse("1/0"));
-      assertEquals("parsing", "2/4", PARSER.parse("2/4").toString());
-      assertEquals("parsing", "0", PARSER.parse("0/1").toString());
-      assertNull("parsing", PARSER.parse("1 1"));
-      assertNull("parsing", PARSER.parse("1/"));
+      assertEquals("parsing", "1 1/2", PARSER.parse("1 1/2").get().toString());
+      assertEquals("parsing", "1 1/2",
+                   PARSER.parse("1   1  /   2").get().toString());
+      assertEquals("parsing", "1", PARSER.parse("1").get().toString());
+      assertEquals("parsing", "1/2", PARSER.parse("1/2").get().toString());
+      assertFalse("parsing", PARSER.parse("1/0").isPresent());
+      assertEquals("parsing", "2/4", PARSER.parse("2/4").get().toString());
+      assertEquals("parsing", "0", PARSER.parse("0/1").get().toString());
+      assertFalse("parsing", PARSER.parse("1 1").isPresent());
+      assertFalse("parsing", PARSER.parse("1/").isPresent());
     }
 
+    /** Printing tests. */
     @org.junit.Test
     public void printing()
     {
@@ -229,6 +291,7 @@ public class Rational extends Value.Arithmetic<RationalProto>
       assertEquals("printing", "2 26/13", new Rational(2, 26, 13).toString());
     }
 
+    /** Simplifying tests. */
     @org.junit.Test
     public void simplify()
     {
@@ -248,6 +311,7 @@ public class Rational extends Value.Arithmetic<RationalProto>
                    new Rational(2, 26, 13).simplify().toString());
     }
 
+    /** Tests for addition. */
     @org.junit.Test
     public void add()
     {
@@ -262,5 +326,4 @@ public class Rational extends Value.Arithmetic<RationalProto>
                    .toString());
     }
   }
-
 }

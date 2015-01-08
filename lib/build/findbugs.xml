@@ -58,11 +58,6 @@
   </Match>
 
   <Match>
-    <Class name="~net.ixitxachitls.server.servlets.ConfigServlet.*" />
-    <Bug pattern="DM_DEFAULT_ENCODING" />
-  </Match>
-
-  <Match>
     <Class name="~net.ixitxachitls.dma.entries.BaseEntry.*" />
     <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD" />
   </Match>
@@ -187,11 +182,6 @@
   <Match>
     <Class name="~net.ixitxachitls.dma.data.DMAData.*" />
     <Bug pattern="SE_BAD_FIELD" />
-  </Match>
-
-  <Match>
-    <Class name="~net.ixitxachitls.server.servlets.FileServlet.*" />
-    <Bug pattern="MTIA_SUSPECT_SERVLET_INSTANCE_FIELD" />
   </Match>
 
   <Match>

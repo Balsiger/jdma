@@ -21,7 +21,8 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -32,7 +33,27 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.ItemProto;
-import net.ixitxachitls.dma.values.*;
+import net.ixitxachitls.dma.values.AggregationState;
+import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.Area;
+import net.ixitxachitls.dma.values.AreaShape;
+import net.ixitxachitls.dma.values.ArmorType;
+import net.ixitxachitls.dma.values.CountUnit;
+import net.ixitxachitls.dma.values.Critical;
+import net.ixitxachitls.dma.values.Damage;
+import net.ixitxachitls.dma.values.Distance;
+import net.ixitxachitls.dma.values.Duration;
+import net.ixitxachitls.dma.values.Modifier;
+import net.ixitxachitls.dma.values.Money;
+import net.ixitxachitls.dma.values.Proficiency;
+import net.ixitxachitls.dma.values.Slot;
+import net.ixitxachitls.dma.values.Substance;
+import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.Volume;
+import net.ixitxachitls.dma.values.WeaponStyle;
+import net.ixitxachitls.dma.values.WeaponType;
+import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -146,6 +167,11 @@ public class Item extends CampaignEntry
     return m_hp;
   }
 
+  /**
+   * Check whether this item supports fighting with finesse.
+   *
+   * @return true if finesse supported, false if not
+   */
   public boolean hasFinesse()
   {
     for(BaseEntry base : getBaseEntries())
@@ -273,6 +299,11 @@ public class Item extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get all the items that are contained within this one.
+   *
+   * @return the items
+   */
   public List<Item> getContents()
   {
     if(!m_contents.isPresent())
@@ -904,16 +935,31 @@ public class Item extends CampaignEntry
     return Strings.SPACE_JOINER.join(parts);
   }
 
+  /**
+   * Get the count for multiple values.
+   *
+   * @return the multiple value, if any.
+   */
   public Optional<Integer> getMultiple()
   {
     return m_multiple;
   }
 
+  /**
+   * Get the count for multi use items.
+   *
+   * @return the number of uses, if any
+   */
   public Optional<Integer> getMultiuse()
   {
     return m_multiuse;
   }
 
+  /**
+   * Check whether the item is a container.
+   *
+   * @return true if this is a container, false if not
+   */
   public boolean isContainer()
   {
     for(BaseEntry base : getBaseEntries())
@@ -923,6 +969,11 @@ public class Item extends CampaignEntry
     return false;
   }
 
+  /**
+   * Check whether the item sheds light.
+   *
+   * @return true if the item produces light, false if not
+   */
   public boolean isLight()
   {
     for(BaseEntry base : getBaseEntries())
@@ -932,11 +983,21 @@ public class Item extends CampaignEntry
     return false;
   }
 
+  /**
+   * Check whether the item has a time constraint.
+   *
+   * @return true if the item is time constraint, false if not
+   */
   public boolean isTimed()
   {
     return m_timeLeft.isPresent();
   }
 
+  /**
+   * Check whether the item can be worn.
+   *
+   * @return true if it is wearable, false if not
+   */
   public boolean isWearable()
   {
     for(BaseEntry base : getBaseEntries())
@@ -946,6 +1007,11 @@ public class Item extends CampaignEntry
     return false;
   }
 
+  /**
+   * Check whether the item is ammunition for a weapon.
+   *
+   * @return true for ammunition, false if not
+   */
   public boolean isAmmunition()
   {
     for(BaseEntry entry : getBaseEntries())
@@ -955,6 +1021,11 @@ public class Item extends CampaignEntry
     return false;
   }
 
+  /**
+   * Check whether the item is armor.
+   *
+   * @return true for armor, false if not
+   */
   public boolean isArmor()
   {
     for(BaseEntry base : getBaseEntries())
@@ -964,6 +1035,11 @@ public class Item extends CampaignEntry
     return false;
   }
 
+  /**
+   * Check whether the item represents a weapon.
+   *
+   * @return true if it is a weapon, false if not
+   */
   public boolean isWeapon()
   {
     for(BaseEntry base : getBaseEntries())
@@ -973,6 +1049,11 @@ public class Item extends CampaignEntry
     return false;
   }
 
+  /**
+   * Check whether an item is counted.
+   *
+   * @return true if counted, false if not.
+   */
   public boolean isCounted()
   {
     for(BaseEntry base : getBaseEntries())
@@ -982,6 +1063,11 @@ public class Item extends CampaignEntry
     return false;
   }
 
+  /**
+   * Check whether an item represents a commodity.
+   *
+   * @return true for commodities, false if not
+   */
   public boolean isCommodity()
   {
     for(BaseEntry base : getBaseEntries())
@@ -1029,6 +1115,11 @@ public class Item extends CampaignEntry
   }
   */
 
+  /**
+   * Get the monster (or NPC, PC) that possess this item, if any.
+   *
+   * @return the monster, if any
+   */
   public Optional<Monster> getPossessor()
   {
     if(m_possessor == null)
@@ -1053,8 +1144,9 @@ public class Item extends CampaignEntry
             && (type.get() == Monster.TYPE || type.get() == NPC.TYPE
                 || type.get() == Character.TYPE))
         {
-          m_possessor = DMADataFactory.get().getEntry
-            (new EntryKey(id, type.get(), Optional.of(getCampaign().get().getKey())));
+          m_possessor = DMADataFactory.get().getEntry(
+              new EntryKey(id, type.get(),
+                           Optional.of(getCampaign().get().getKey())));
         }
         else
           m_possessor = Optional.absent();
@@ -1067,14 +1159,19 @@ public class Item extends CampaignEntry
     return m_possessor;
   }
 
+  /**
+   * Get the attack bonus for this item.
+   *
+   * @return the attack bonus when attacking with this
+   */
   public int getAttackBonus()
   {
     int bonus = 0;
     if(getPossessor().isPresent())
     {
-      Optional<Integer> attack = 
-        getPossessor().get().getCombinedBaseAttack().get(); 
-      bonus = attack.isPresent() ? attack.get() : 0; 
+      Optional<Integer> attack =
+          getPossessor().get().getCombinedBaseAttack().get();
+      bonus = attack.isPresent() ? attack.get() : 0;
 
       if(isWeapon())
       {
@@ -1101,6 +1198,11 @@ public class Item extends CampaignEntry
     return bonus;
   }
 
+  /**
+   * Get the damage this item inflicts (weapons only).
+   *
+   * @return the damage
+   */
   public Damage getDamage()
   {
     Damage damage = null;
@@ -1127,7 +1229,8 @@ public class Item extends CampaignEntry
         damage.add(new Damage(new Dice(0, 0, strengthModifier)));
 
     // + additional 1/2 strength bonus for two handed melee weapons
-    if(style.isPresent() && style.get() == WeaponStyle.TWOHANDED_MELEE) {
+    if(style.isPresent() && style.get() == WeaponStyle.TWOHANDED_MELEE)
+    {
       damage = (Damage)
         damage.add(new Damage(new Dice(0, 0, strengthModifier / 2)));
     }
@@ -1138,6 +1241,11 @@ public class Item extends CampaignEntry
     return damage;
   }
 
+  /**
+   * Get the critical value for this weapon.
+   *
+   * @return the critical value
+   */
   public Critical getCritical()
   {
     Critical result = null;
@@ -1155,6 +1263,11 @@ public class Item extends CampaignEntry
     return result;
   }
 
+  /**
+   * Get the distance this weapon can attack to.
+   *
+   * @return the range
+   */
   public Distance getRange()
   {
     Distance result = null;
@@ -1172,6 +1285,11 @@ public class Item extends CampaignEntry
     return result;
   }
 
+  /**
+   * Get the type of weapon this item represents.
+   *
+   * @return the type of weapon
+   */
   public WeaponType getWeaponType()
   {
     WeaponType result = WeaponType.UNKNOWN;
@@ -1185,6 +1303,11 @@ public class Item extends CampaignEntry
     return result;
   }
 
+  /**
+   * Get the type of this armor.
+   *
+   * @return the armor type
+   */
   public ArmorType getArmorType()
   {
     ArmorType result = ArmorType.UNKNOWN;
@@ -1198,6 +1321,11 @@ public class Item extends CampaignEntry
     return result;
   }
 
+  /**
+   * Get the armor class value of this armor.
+   *
+   * @return the AC value
+   */
   public Optional<Modifier> getArmorClass()
   {
     Optional<Modifier> armor = Optional.absent();
@@ -1226,7 +1354,7 @@ public class Item extends CampaignEntry
     if(name.equalsIgnoreCase(playerName))
       return name;
 
-    return playerName + " (" + name +")";
+    return playerName + " (" + name + ")";
   }
 
   @Override
@@ -1234,7 +1362,10 @@ public class Item extends CampaignEntry
   {
     super.set(inValues);
 
-    m_hp = inValues.use("hp", m_hp);
+    Optional<Integer> hp = inValues.use("hp", m_hp);
+    if(hp.isPresent())
+      m_hp = hp.get();
+
     m_value = inValues.use("value", m_value, Money.PARSER);
     m_appearance = inValues.use("appearance", m_appearance);
     m_playerNotes = inValues.use("player_notes", m_playerNotes);
@@ -1429,6 +1560,7 @@ public class Item extends CampaignEntry
     return proto;
   }
 
+  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof ItemProto))

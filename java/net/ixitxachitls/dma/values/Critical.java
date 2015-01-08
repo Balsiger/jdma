@@ -37,6 +37,7 @@ import net.ixitxachitls.util.Strings;
  */
 public class Critical extends Value.Arithmetic<CriticalProto>
 {
+  /** The parser for critical vaues. */
   public static final Parser<Critical> PARSER = new Parser<Critical>(1)
   {
     @Override
@@ -60,9 +61,7 @@ public class Critical extends Value.Arithmetic<CriticalProto>
         int multiplier = 1;
         int threatLow = 20;
         if(parts[0] != null && parts[1] != null)
-        {
           threatLow = Integer.parseInt(parts[0]);
-        }
 
         if(parts[2] != null)
           multiplier = Integer.parseInt(parts[2]);
@@ -76,20 +75,38 @@ public class Critical extends Value.Arithmetic<CriticalProto>
     }
   };
 
+  /**
+   * Create a critical value.
+   *
+   * @param inMultiplier the critical multiplier (default x2).
+   * @param inLowThreat the low number of the threat (high is always 20).
+   */
   public Critical(int inMultiplier, int inLowThreat)
   {
     m_multiplier = inMultiplier;
     m_threatLow = inLowThreat;
   }
 
+  /** The damage multiplier for the critical. */
   private final int m_multiplier;
+
+  /** The low number of the threat range (high is always 20). */
   private final int m_threatLow;
 
+  /**
+   * Get the damage multiplier.
+   *
+   * @return the damage multiplier
+   */
   public int getMultiplier()
   {
     return m_multiplier;
   }
 
+  /** Get the low end of the threat range.
+   *
+   * @return get the low end of the threat range (high is always 20).
+   */
   public int getLowThreat()
   {
     return m_threatLow;
@@ -152,6 +169,11 @@ public class Critical extends Value.Arithmetic<CriticalProto>
     return this;
   }
 
+  /**
+   * Get a critical with a double threat range than this one.
+   *
+   * @return a new critical with double the threat range
+   */
   public Critical doubled()
   {
     int threatLow = 2 * m_threatLow - 20;
@@ -200,7 +222,7 @@ public class Critical extends Value.Arithmetic<CriticalProto>
       assertEquals("parse", "x3", PARSER.parse(" 20/x3  ").get().toString());
       assertEquals("parse", "19-20/x2",
                    PARSER.parse(" 19 - 20 / x 2 ").get().toString());
-      assertEquals("parse", "12-19/x5",
+      assertEquals("parse", "12-20/x5",
                    PARSER.parse("12-19/x5").get().toString());
       assertFalse("parse", PARSER.parse("/").isPresent());
       assertFalse("parse", PARSER.parse("").isPresent());

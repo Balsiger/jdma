@@ -48,13 +48,24 @@ public class Level extends NestedEntry
   /** The hit points rolled for this level. */
   private int m_hp = 0;
 
+  /** The base level to this level. */
   private Optional<Optional<BaseLevel>> m_base = Optional.absent();
 
+  /**
+   * Get the hp this level gives.
+   *
+   * @return the hp
+   */
   public int getHP()
   {
     return m_hp;
   }
 
+  /**
+   * Get the base level to this level.
+   *
+   * @return the base level
+   */
   public Optional<BaseLevel> getBase()
   {
     if(!m_base.isPresent())
@@ -69,6 +80,11 @@ public class Level extends NestedEntry
     return m_base.get();
   }
 
+  /**
+   * Get the abbreviated name of the level.
+   *
+   * @return the abbreviated name
+   */
   public String getAbbreviation()
   {
     if(getBase().isPresent())
@@ -85,6 +101,11 @@ public class Level extends NestedEntry
     return "(unknown)";
   }
 
+  /**
+   * Get a list of all available level names.
+   *
+   * @return a list of level names
+   */
   public static List<String> getAvailableLevels()
   {
     return DMADataFactory.get().getIDs(BaseLevel.TYPE, null);
@@ -103,9 +124,17 @@ public class Level extends NestedEntry
   public void set(Values inValues)
   {
     m_name = inValues.use("name", m_name);
-    m_hp = inValues.use("hp", m_hp);
+
+    Optional<Integer> hp = inValues.use("hp", m_hp);
+    if(hp.isPresent())
+      m_hp = hp.get();
   }
 
+  /**
+   * Convert the level to a proto value.
+   *
+   * @return the proto
+   */
   public LevelProto toProto()
   {
     LevelProto.Builder builder = LevelProto.newBuilder();
@@ -120,6 +149,12 @@ public class Level extends NestedEntry
     return proto;
   }
 
+  /**
+   * Create a level from the given proto.
+   *
+   * @param inProto the proto to create from
+   * @return a newly create level with the proto values
+   */
   public static Level fromProto(LevelProto inProto)
   {
     Level level = new Level();

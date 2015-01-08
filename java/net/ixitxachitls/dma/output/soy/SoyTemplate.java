@@ -371,8 +371,9 @@ public class SoyTemplate
         return UnsafeSanitizedContentOrdainer.ordainAsSafe
           (COMMAND_RENDERER.renderSoy
                ("dma.value.annotated",
-                Optional.of(map("value", data,
-                                "link", inArgs.size() > 1 ? inArgs.get(1) : ""))),
+                Optional.of(map(
+                    "value", data,
+                    "link", inArgs.size() > 1 ? inArgs.get(1) : ""))),
            SanitizedContent.ContentKind.HTML);
       }
 
@@ -729,6 +730,8 @@ public class SoyTemplate
 
   /**
    * Compile the templates for rendering.
+   *
+   * @return this template for chaining
    */
   public SoyTemplate compile()
   {
@@ -751,7 +754,11 @@ public class SoyTemplate
       if(pureFile.canRead())
         files.add(pureFile);
       else
-        files.add(Resource.get(name).asFile());
+      {
+        Optional<File> fileResource = Resource.get(name).asFile();
+        if(fileResource.isPresent())
+          files.add(fileResource.get());
+      }
     }
 
     files.setCompileTimeGlobals(map("dma.project", PROJECT,

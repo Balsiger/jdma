@@ -23,7 +23,7 @@ package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
+
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
@@ -39,9 +39,9 @@ import net.ixitxachitls.util.Strings;
  */
 
 @Immutable
-@ParametersAreNonnullByDefault
 public class Volume extends Value.Arithmetic<VolumeProto>
 {
+  /** The volume parser. */
   public static final Parser<Volume> PARSER = new Parser<Volume>(1)
   {
     @Override
@@ -157,6 +157,10 @@ public class Volume extends Value.Arithmetic<VolumeProto>
           case "centiliters":
             centiliters = add(centiliters, number);
             break;
+
+          default:
+            // we just ignore this
+            break;
         }
       }
 
@@ -169,6 +173,19 @@ public class Volume extends Value.Arithmetic<VolumeProto>
 
   /**
    * Construct the volume object with an undefined value.
+   *
+   * @param inFeet the value of feet
+   * @param inInches the value of inches
+   * @param inMeters the value of meters
+   * @param inDecimeters the value of deci meters
+   * @param inCentimeters the value of centi meters
+   * @param inGallons the number of gallons
+   * @param inQuarts the number of quarts
+   * @param inPints the number of pints
+   * @param inCups the number of cups
+   * @param inLiters the number of liters
+   * @param inDeciliters the number of deciliters
+   * @param inCentiliters the number of centiliters
    */
   public Volume(Optional<Rational> inFeet,
                 Optional<Rational> inInches,
@@ -197,17 +214,40 @@ public class Volume extends Value.Arithmetic<VolumeProto>
     m_centiliters = inCentiliters;
   }
 
+  /** How many feet in this volume. */
   private final Optional<Rational> m_feet;
+
+  /** How many inches in this volume. */
   private final Optional<Rational> m_inches;
+
+  /** How many meters in this volume. */
   private final Optional<Rational> m_meters;
+
+  /** How many deci meters in this volume. */
   private final Optional<Rational> m_decimeters;
+
+  /** How many centi meters in this volume. */
   private final Optional<Rational> m_centimeters;
+
+  /** How many gallons in this volume. */
   private final Optional<Rational> m_gallons;
+
+  /** How many quarts in this volume. */
   private final Optional<Rational> m_quarts;
+
+  /** How many pints in this volume. */
   private final Optional<Rational> m_pints;
+
+  /** How many cups in this volume. */
   private final Optional<Rational> m_cups;
+
+  /** How many liters in this volume. */
   private final Optional<Rational> m_liters;
+
+  /** How many deci liters in this volume. */
   private final Optional<Rational> m_deciliters;
+
+  /** How many centi liters in this volume. */
   private final Optional<Rational> m_centiliters;
 
   /**
@@ -561,7 +601,7 @@ public class Volume extends Value.Arithmetic<VolumeProto>
                                 Optional.<Rational>absent());
 
       // undefined value
-      assertEquals("undefined value not correct", "0 cu ft",
+      assertEquals("undefined value not correct", "0 cu feet",
                    value.toString());
       assertEquals("feet",   false, value.isImperial());
       assertEquals("metric", false, value.isMetric());
@@ -580,7 +620,7 @@ public class Volume extends Value.Arithmetic<VolumeProto>
                          Optional.<Rational>absent(),
                          Optional.<Rational>absent());
 
-      assertEquals("string ", "1 1/2 cu dm", value.toString());
+      assertEquals("string ", "1 1/2 cu decimeters", value.toString());
       assertEquals("feet",   false,  value.isImperial());
       assertEquals("metric", true,   value.isMetric());
       assertEquals("liquid", false,   value.isLiquid());
@@ -598,7 +638,7 @@ public class Volume extends Value.Arithmetic<VolumeProto>
                          Optional.<Rational>absent(),
                          Optional.<Rational>absent());
 
-      assertEquals("string", "1 2/3 cu ft 2 cu in", value.toString());
+      assertEquals("string", "1 2/3 cu feet 2 cu inches", value.toString());
       assertEquals("feet",   true,  value.isImperial());
       assertEquals("metric", false, value.isMetric());
       assertEquals("metric", false,   value.isLiquid());
@@ -617,7 +657,7 @@ public class Volume extends Value.Arithmetic<VolumeProto>
                          Optional.<Rational>absent(),
                          Optional.<Rational>absent());
 
-      assertEquals("string", "1 gallon 1 1/2 quarts 2/3 pint 4 cups",
+      assertEquals("string", "1 gallons 1 1/2 quarts 2/3 pints 4 cups",
                    value.toString());
       assertEquals("feet",   true,  value.isImperial());
       assertEquals("metric", false,  value.isMetric());
@@ -636,7 +676,7 @@ public class Volume extends Value.Arithmetic<VolumeProto>
                          Optional.of(new Rational(3, 1, 4)),
                          Optional.<Rational>absent());
 
-      assertEquals("string", "1 l 3 1/4 dl", value.toString());
+      assertEquals("string", "1 liters 3 1/4 deciliters", value.toString());
       assertEquals("feet",   false, value.isImperial());
       assertEquals("metric", true,  value.isMetric());
       assertEquals("metric", true,   value.isLiquid());

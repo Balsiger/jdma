@@ -41,8 +41,10 @@ import net.ixitxachitls.util.Strings;
  */
 public class Damage extends Value.Arithmetic<DamageProto>
 {
+  /** The parser for damage values. */
   public static class DamageParser extends Parser<Damage>
   {
+    /** Create the parser. */
     public DamageParser()
     {
       super(0);
@@ -55,6 +57,13 @@ public class Damage extends Value.Arithmetic<DamageProto>
                    (Strings.COMMA_JOINER.join(inValues)));
     }
 
+
+    /**
+     *  Parse a list of values.
+     *
+     * @param inValues the values to parse
+     * @return the parsed damage value, if any
+     */
     private Optional<Damage> parse(List<String> inValues)
     {
       List<String> values = new ArrayList<>(inValues);
@@ -73,7 +82,7 @@ public class Damage extends Value.Arithmetic<DamageProto>
           return Optional.absent();
 
         Optional<Dice> dice = Dice.PARSER.parse(parts[0]);
-        if(dice == null)
+        if(!dice.isPresent())
           return Optional.absent();
 
         Optional<Type> type;
@@ -91,6 +100,14 @@ public class Damage extends Value.Arithmetic<DamageProto>
     }
   }
 
+  /**
+   * Create a damage value.
+   *
+   * @param inDice the dice for the damage
+   * @param inType the type of damage done
+   * @param inOther an optional further damage linked with this one
+   * @param inEffect an optional effect the damage has
+   */
   public Damage(Dice inDice, Optional<Type> inType,
                 Optional<Damage> inOther, Optional<String> inEffect)
   {
@@ -100,12 +117,23 @@ public class Damage extends Value.Arithmetic<DamageProto>
     m_effect = inEffect;
   }
 
+  /**
+   * Create a damage value with dice and type only.
+   *
+   * @param inDice the damage dice
+   * @param inType the damage type
+   */
   public Damage(Dice inDice, Type inType)
   {
     this(inDice, Optional.of(inType), Optional.<Damage>absent(),
          Optional.<String>absent());
   }
 
+  /**
+   * Create a damage with damage dice only.
+   *
+   * @param inDice the damage dice
+   */
   public Damage(Dice inDice)
   {
     this(inDice, Optional.<Type>absent(), Optional.<Damage>absent(),
@@ -212,6 +240,10 @@ public class Damage extends Value.Arithmetic<DamageProto>
         + inProto);
     }
 
+    /** All the possible names for damage types.
+     *
+     * @return the possible damage type names
+     */
     public static List<String> names()
     {
       List<String> names = new ArrayList<>();
@@ -222,6 +254,11 @@ public class Damage extends Value.Arithmetic<DamageProto>
       return names;
     }
 
+    /** Create a damage type from a string.
+     *
+     * @param inValue the value to convert from
+     * @return the damage type, if it could be parsed
+     */
     public static Optional<Type> fromString(String inValue)
     {
       for(Type type : values())
@@ -245,7 +282,7 @@ public class Damage extends Value.Arithmetic<DamageProto>
   protected final Optional<String> m_effect;
 
   /** The parser for parsing damages. */
-  public static Parser<Damage> PARSER = new DamageParser();
+  public static final Parser<Damage> PARSER = new DamageParser();
 
   /**
    * Get the number of base dices of damage.
@@ -369,8 +406,14 @@ public class Damage extends Value.Arithmetic<DamageProto>
     return result;
   }
 
+  /** Convert a damage proto into a damage value.
+   *
+   * @param inProto the proto to convert
+   * @param inNext  an optional next damage value
+   * @return the converted damage value
+   */
   private static Damage fromProto(DamageProto.Damage inProto,
-                                     Optional<Damage> inNext)
+                                  Optional<Damage> inNext)
   {
     Dice dice = Dice.fromProto(inProto.getBase());
 
@@ -453,28 +496,29 @@ public class Damage extends Value.Arithmetic<DamageProto>
     @org.junit.Test
     public void parse()
     {
-      assertEquals("parsing", "1d4", PARSER.parse("1d4").toString());
+      assertEquals("parsing", "1d4", PARSER.parse("1d4").get().toString());
       assertEquals("parsing", "1d4 +2",
-                   PARSER.parse(" 1d4   \n+ 2").toString());
-      assertEquals("parsing", "1d4 -3", PARSER.parse("  1d4  -  3").toString());
-      assertEquals("parsing", "5d12", PARSER.parse("5d12").toString());
-      assertEquals("parsing", "+3", PARSER.parse("  +3  ").toString());
+                   PARSER.parse(" 1d4   \n+ 2").get().toString());
+      assertEquals("parsing", "1d4 -3",
+                   PARSER.parse("  1d4  -  3").get().toString());
+      assertEquals("parsing", "5d12", PARSER.parse("5d12").get().toString());
+      assertEquals("parsing", "+3", PARSER.parse("  +3  ").get().toString());
       assertEquals("parsing", "+3 fire plus poison",
-                   PARSER.parse("  +3  fire plus poison").toString());
+                   PARSER.parse("  +3  fire plus poison").get().toString());
       assertEquals("parsing", "1d4, 1d6, 1d8",
-                   PARSER.parse("1d4,  1d6,  1d8").toString());
+                   PARSER.parse("1d4,  1d6,  1d8").get().toString());
       assertEquals("parsing", "1d4 fire, 1d6 electrical, 1d8 plus poison",
                    PARSER.parse("1d4 fire,  1d6 electrical,  1d8 plus poison")
-                   .toString());
-      assertNull("parsing", PARSER.parse("1d"));
-      assertNull("parsing", PARSER.parse("d5"));
-      assertNull("parsing", PARSER.parse("1 d 5 + 2"));
-      assertNull("parsing", PARSER.parse("1d4 ++3"));
-      assertNull("parsing", PARSER.parse("1d2 +"));
-      assertNull("parsing", PARSER.parse("2 - 3"));
-      assertNull("parsing", PARSER.parse("1d4,"));
-      assertNull("parsing", PARSER.parse("fire,"));
-      assertNull("parsing", PARSER.parse("1 plus poison,"));
+                   .get().toString());
+      assertFalse("parsing", PARSER.parse("1d").isPresent());
+      assertFalse("parsing", PARSER.parse("d5").isPresent());
+      assertFalse("parsing", PARSER.parse("1 d 5 + 2").isPresent());
+      assertFalse("parsing", PARSER.parse("1d4 ++3").isPresent());
+      assertFalse("parsing", PARSER.parse("1d2 +").isPresent());
+      assertFalse("parsing", PARSER.parse("2 - 3").isPresent());
+      assertFalse("parsing", PARSER.parse("1d4,").isPresent());
+      assertFalse("parsing", PARSER.parse("fire,").isPresent());
+      assertFalse("parsing", PARSER.parse("1 plus poison,").isPresent());
     }
   }
 }

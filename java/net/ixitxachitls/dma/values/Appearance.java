@@ -24,17 +24,35 @@ package net.ixitxachitls.dma.values;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.values.enums.Probability;
 
+/**
+ * The appearance of an item.
+ *
+ * @file Appearance.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public class Appearance implements Comparable<Appearance>
 {
+  /**
+   * Create the appearance.
+   *
+   * @param inProbability the probability for this specific description
+   * @param inText the description of how the item looks
+   */
   public Appearance(Probability inProbability, String inText)
   {
     m_probability = inProbability;
     m_text = inText;
   }
 
+  /** The probability for this appearance. */
   private final Probability m_probability;
+
+  /** The description of the item. */
   private final String m_text;
+
+  /** The parser for appearances. */
   public static final Parser<Appearance> PARSER =
     new Parser<Appearance>(2)
     {
@@ -53,11 +71,21 @@ public class Appearance implements Comparable<Appearance>
       }
     };
 
+  /**
+   * Get the probability of this appearance.
+   *
+   * @return the probability
+   */
   public Probability getProbability()
   {
     return m_probability;
   }
 
+  /**
+   * Get the description of the appearance.
+   *
+   * @return the description
+   */
   public String getText()
   {
     return m_text;

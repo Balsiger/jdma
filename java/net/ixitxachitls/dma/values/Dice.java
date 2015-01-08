@@ -38,8 +38,10 @@ import net.ixitxachitls.util.Strings;
  */
 public class Dice extends Value<DiceProto>
 {
+  /** The parser for dices. */
   public static class DiceParser extends Parser<Dice>
   {
+    /** Create the parser. */
     public DiceParser()
     {
       super(1);
@@ -73,6 +75,12 @@ public class Dice extends Value<DiceProto>
     }
   }
 
+  /** Create a dice value.
+   *
+   * @param inNumber   the number of dices
+   * @param inDice     the dice type (what dice)
+   * @param inModifier the modifier to the dice value
+   */
   public Dice(int inNumber, int inDice, int inModifier)
   {
     m_number = inNumber;
@@ -92,6 +100,7 @@ public class Dice extends Value<DiceProto>
   /** The random generator. */
   private static final Random s_random = new Random();
 
+  /** The default parser for dices. */
   public static final Parser<Dice> PARSER = new DiceParser();
 
   /**
@@ -196,6 +205,10 @@ public class Dice extends Value<DiceProto>
     return m_number + "d" + m_dice + " " + formatModifier();
   }
 
+  /** Format the modifier (with +).
+   *
+   * @return the formatted modifier
+   */
   private String formatModifier()
   {
     if(m_modifier >= 0)
@@ -224,6 +237,11 @@ public class Dice extends Value<DiceProto>
     return new Dice(number, dice, modifier);
   }
 
+  /** Multiply the dice into a new dice.
+   *
+   * @param inFactor the multiplicator for the dice
+   * @return the newly created dice as a multiplication of the current
+   */
   public Dice multiply(int inFactor)
   {
     return new Dice(m_number * inFactor, m_dice, m_modifier * inFactor);
@@ -277,17 +295,19 @@ public class Dice extends Value<DiceProto>
     @org.junit.Test
     public void parse()
     {
-      assertEquals("parsing", "1d4", PARSER.parse("1d4").toString());
-      assertEquals("parsing", "1d4 +2", PARSER.parse(" 1d4   \n+ 2").toString());
-      assertEquals("parsing", "1d4 -3", PARSER.parse("  1d4  -  3").toString());
-      assertEquals("parsing", "5d12", PARSER.parse("5d12").toString());
-      assertEquals("parsing", "+3", PARSER.parse("  +3  ").toString());
-      assertNull("parsing", PARSER.parse("1d"));
-      assertNull("parsing", PARSER.parse("d5"));
-      assertNull("parsing", PARSER.parse("1 d 5 + 2"));
-      assertNull("parsing", PARSER.parse("1d4 ++3"));
-      assertNull("parsing", PARSER.parse("1d2 +"));
-      assertNull("parsing", PARSER.parse("2 - 3"));
+      assertEquals("parsing", "1d4", PARSER.parse("1d4").get().toString());
+      assertEquals("parsing", "1d4 +2",
+                   PARSER.parse(" 1d4   \n+ 2").get().toString());
+      assertEquals("parsing", "1d4 -3",
+                   PARSER.parse("  1d4  -  3").get().toString());
+      assertEquals("parsing", "5d12", PARSER.parse("5d12").get().toString());
+      assertEquals("parsing", "+3", PARSER.parse("  +3  ").get().toString());
+      assertFalse("parsing", PARSER.parse("1d").isPresent());
+      assertFalse("parsing", PARSER.parse("d5").isPresent());
+      assertFalse("parsing", PARSER.parse("1 d 5 + 2").isPresent());
+      assertFalse("parsing", PARSER.parse("1d4 ++3").isPresent());
+      assertFalse("parsing", PARSER.parse("1d2 +").isPresent());
+      assertFalse("parsing", PARSER.parse("2 - 3").isPresent());
     }
   }
 }

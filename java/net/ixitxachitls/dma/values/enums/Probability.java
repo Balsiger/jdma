@@ -19,8 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-
-package net.ixitxachitls.dma.values;
+package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +27,14 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
-import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.dma.values.Parser;
 
-/** The possible probabilities for items. */
+/**
+ * The possible probabilities for items.
+ *
+ * @file Probability.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Probability implements Named
 {
   /**
@@ -183,6 +187,9 @@ public enum Probability implements Named
 
   /**
    * Get the layout matching the given text.
+   *
+   * @param inText the text to convert from
+   * @return the probability value, if any
    */
   public static Optional<Probability> fromString(String inText)
   {
@@ -206,11 +213,12 @@ public enum Probability implements Named
     @org.junit.Test
     public void probability()
     {
-      assertEquals("probability", 1, Probability.UNIQUE.getProbability());
-      assertEquals("probability", 5, Probability.VERY_RARE.getProbability());
-      assertEquals("probability", 25, Probability.RARE.getProbability());
-      assertEquals("probability", 125, Probability.UNCOMMON.getProbability());
-      assertEquals("probability", 625, Probability.COMMON.getProbability());
+      assertEquals("probability", 1, Probability.UNKNOWN.getProbability());
+      assertEquals("probability", 5, Probability.UNIQUE.getProbability());
+      assertEquals("probability", 25, Probability.VERY_RARE.getProbability());
+      assertEquals("probability", 125, Probability.RARE.getProbability());
+      assertEquals("probability", 625, Probability.UNCOMMON.getProbability());
+      assertEquals("probability", 3125, Probability.COMMON.getProbability());
     }
   }
 }

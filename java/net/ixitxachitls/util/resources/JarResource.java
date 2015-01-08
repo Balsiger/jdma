@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.util.resources;
 
 import java.io.ByteArrayOutputStream;
@@ -31,79 +29,46 @@ import java.util.List;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * A resource representing a jar file or directory.
  *
  * @file          JarResource.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
-@ParametersAreNonnullByDefault
 public class JarResource extends Resource
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------ JarResource ------------------------------
-
   /**
    * Create the jar resource.
    *
    * @param    inName the name of the file this resource represents
    * @param    inURL  the url to the resource
-   *
    */
-  JarResource(String inName, @Nullable URL inURL)
+  JarResource(String inName, Optional<URL> inURL)
   {
     super(inName, inURL);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //-------------------------------- files ---------------------------------
-
-  /**
-   * Determine and return the files represented by this resource.
-   *
-   * @return    a list of filenames inside this resource.
-   *
-   */
   @Override
   public List<String> files()
   {
     List<String> result = new ArrayList<String>();
 
-    if(m_url == null)
+    if(!m_url.isPresent())
       return result;
 
     JarFile jar = null;
     try
     {
-      jar = new JarFile(Strings.getPattern(m_url.getFile(), "^file:(.*)!"));
-      String dir = Strings.getPattern(m_url.getFile(), "^file:.*!/(.+)");
+      jar = new JarFile(Strings.getPattern(m_url.get().getFile(),
+                                           "^file:(.*)!"));
+      String dir = Strings.getPattern(m_url.get().getFile(), "^file:.*!/(.+)");
 
       for(java.util.Enumeration<?> i = jar.entries(); i.hasMoreElements(); )
       {
@@ -123,7 +88,7 @@ public class JarResource extends Resource
     catch(java.io.IOException e)
     {
       Log.warning("could not open jar file '"
-                  + Strings.getPattern(m_url.getFile(), ":(.*)!") + "'");
+                  + Strings.getPattern(m_url.get().getFile(), ":(.*)!") + "'");
 
       return result;
     }
@@ -136,41 +101,26 @@ public class JarResource extends Resource
       }
       catch(IOException e)
       {
-        Log.warning("could not close jar file '" + m_url.getFile() + "'");
+        Log.warning("could not close jar file '" + m_url.get().getFile() + "'");
       }
     }
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //........................................................................
 
   //------------------------------------------------------------------- test
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- directory ------------------------------------------------------
-
     /** directory Test. */
     @org.junit.Test
     public void directory()
     {
-      Resource resource =
-        new JarResource("/dir", FileResource.class.getResource("/dir"));
+      Resource resource = new JarResource
+          ("/dir",
+           Optional.fromNullable(FileResource.class.getResource("/dir")));
 
       assertContentAnyOrder("dir", resource.files(), "readme.txt", "NPCs.png");
     }
-
-    //......................................................................
-    //----- write ----------------------------------------------------------
 
     /**
      * The write Test.
@@ -180,9 +130,10 @@ public class JarResource extends Resource
     @org.junit.Test
     public void write() throws IOException
     {
-      Resource resource =
-        new FileResource("/dir/readme.txt",
-                         FileResource.class.getResource("/dir/readme.txt"));
+      Resource resource = new FileResource
+          ("/dir/readme.txt",
+           Optional.fromNullable(FileResource.class.getResource
+               ("/dir/readme.txt")));
 
       try (ByteArrayOutputStream output = new ByteArrayOutputStream())
       {
@@ -190,13 +141,5 @@ public class JarResource extends Resource
         assertPattern("content", ".*70x200 points.*", output.toString());
       }
     }
-
-    //......................................................................
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
-
-  //........................................................................
 }

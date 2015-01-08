@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.util.resources;
 
 import java.io.BufferedReader;
@@ -35,107 +33,63 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.common.base.Charsets;
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * A handler for generic resources. This abstracts away handling of resources
  * from the file system and jar files (or any other source).
  *
  * @file          ResourceHandler.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
-@ParametersAreNonnullByDefault
 public abstract class Resource
 {
-  //------------------------------------------------------------ constructor
-
-  //------------------------------- Resource -------------------------------
-
   /**
    * Create the resource.
    *
    * @param       inName the name of the resource
    * @param       inURL  the url to the resource
-   *
    */
-  protected Resource(String inName, @Nullable URL inURL)
+  protected Resource(String inName, Optional<URL> inURL)
   {
     m_name = inName;
     m_url = inURL;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The name of the resouce. */
   protected String m_name;
 
   /** The url of the resource. */
-  protected @Nullable URL m_url;
+  protected Optional<URL> m_url;
 
   /** The id for serialization. */
   @SuppressWarnings("unused")
   private static final long serialVersionUID = 1L;
 
   /** Special presets, mainly for testing. */
-  private static @Nullable Map<String, Resource> s_presets;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //-------------------------------- files ---------------------------------
+  private static final Map<String, Resource> s_presets = new HashMap<>();
 
   /**
    * Determine and return the files represented by this resource.
    *
    * @return    a list of filenames inside this resource.
-   *
    */
   public abstract List<String> files();
 
-  //........................................................................
-  //------------------------------- toString -------------------------------
-
-  /**
-   * Convert the resource into a human readable string.
-   *
-   * @return      the string representation
-   *
-   */
   @Override
   public String toString()
   {
-    if(m_url != null)
-      return m_url.toString();
+    if(m_url.isPresent())
+      return m_url.get().toString();
 
     return m_name + " (invalid)";
   }
-
-  //........................................................................
-
-  //--------------------------------- get ----------------------------------
 
   /**
    * Get the resource represented by the given name.
@@ -144,13 +98,12 @@ public abstract class Resource
    *                          classpath
    *
    * @return      the resource for this name
-   *
    */
   public static Resource get(String inName)
   {
     String name = inName;
 
-    if(s_presets != null)
+    if(!s_presets.isEmpty())
     {
       Resource preset = s_presets.get(name);
       if(preset != null)
@@ -161,17 +114,14 @@ public abstract class Resource
     String protocol = url != null ? url.getProtocol() : null;
 
     if(url == null)
-      Log.warning("Cannot find resource '/" + name + "'' in "
+      Log.warning("Cannot find resource '/" + name + "' in "
                       + System.getProperty("java.class.path"));
 
     if("jar".equals(protocol))
-      return new JarResource(name, url);
+      return new JarResource(name, Optional.fromNullable(url));
 
-    return new FileResource("/" + name, url);
+    return new FileResource("/" + name, Optional.fromNullable(url));
   }
-
-  //........................................................................
-  //--------------------------------- has ----------------------------------
 
   /**
    * Chbeck if the given resource is availabe in the system.
@@ -179,23 +129,18 @@ public abstract class Resource
    * @param       inName the name of the resource
    *
    * @return      true if found, false if not
-   *
    */
   public static boolean has(String inName)
   {
     return Files.class.getResource(Files.concatenate("/", inName)) != null;
   }
 
-  //........................................................................
-  //--------------------------------- has ----------------------------------
-
   /**
-   * Chbeck if the given resource is availabe as a thumbnail.
+   * Check if the given resource is available as a thumbnail.
    *
    * @param       inName the name of the resource
    *
    * @return      true if found, false if not
-   *
    */
   public static boolean hasThumbnail(String inName)
   {
@@ -203,24 +148,17 @@ public abstract class Resource
       (Files.concatenate("/", Files.asThumbnail(inName))) != null;
   }
 
-  //........................................................................
-  //---------------------------- hasResource -------------------------------
-
   /**
-   * Chbeck if the given resource contains the given sub resource.
+   * Check if the given resource contains the given sub resource.
    *
    * @param       inName the name of the sub resource
    *
    * @return      true if found, false if not
-   *
    */
   public boolean hasResource(String inName)
   {
     return Resource.has(inName);
   }
-
-  //........................................................................
-  //-------------------------------- asFile --------------------------------
 
   /**
    * Return the resource as a file in the file system.
@@ -228,47 +166,39 @@ public abstract class Resource
    * @return  the File, can be null
    *
    */
-  public @Nullable File asFile()
+  public Optional<File> asFile()
   {
-    if(m_url == null)
-      return null;
+    if(!m_url.isPresent())
+      return Optional.absent();
 
     // requires some replacements for windows...
-    return new File(m_url.getFile().replaceAll("%20", " "));
+    return Optional.of(new File(m_url.get().getFile().replaceAll("%20", " ")));
   }
-
-  //........................................................................
-  //------------------------------- getInput -------------------------------
 
   /**
    * Get the input stream to read the resource.
    *
    * @return      the input stream to read from
-   *
    */
-  public @Nullable InputStream getInput()
+  public Optional<InputStream> getInput()
   {
-    return Resource.class.getResourceAsStream(m_name);
+    return Optional.fromNullable(Resource.class.getResourceAsStream(m_name));
   }
-
-  //........................................................................
-  //--------------------------------- read ---------------------------------
 
   /**
    * Get the whole contents of the resource as a string. Line termination is
    * normalized to \n.
    *
    * @return      the contents as a string
-   *
    */
   public String read()
   {
-    InputStream input = getInput();
-    if(input == null)
+    Optional<InputStream> input = getInput();
+    if(!input.isPresent())
       return "(invalid resource for '" + m_name + "')\n";
 
     BufferedReader reader =
-      new BufferedReader(new InputStreamReader(input, Charsets.UTF_8));
+      new BufferedReader(new InputStreamReader(input.get(), Charsets.UTF_8));
 
     StringBuilder buffer = new StringBuilder();
 
@@ -300,28 +230,18 @@ public abstract class Resource
     return buffer.toString();
   }
 
-  //........................................................................
-
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //-------------------------------- write ---------------------------------
-
   /**
    * Write the resources to the given output.
    *
    * @param       inOutput the output stream to write to
    *
    * @return      true if writing ok, false if not
-   *
    */
   public boolean write(OutputStream inOutput)
   {
-    InputStream input = getInput();
+    Optional<InputStream> input = getInput();
 
-    if(input == null)
+    if(!input.isPresent())
     {
       Log.warning("cannot obtain input stream for " + m_name);
       return false;
@@ -330,8 +250,8 @@ public abstract class Resource
     try
     {
       byte []buffer = new byte[10000];
-      for(int read = input.read(buffer); read > 0;
-          read = input.read(buffer))
+      for(int read = input.get().read(buffer); read > 0;
+          read = input.get().read(buffer))
         inOutput.write(buffer, 0, read);
     }
     catch(java.io.IOException e)
@@ -343,7 +263,7 @@ public abstract class Resource
     {
       try
       {
-        input.close();
+        input.get().close();
       }
       catch(IOException e)
       {
@@ -354,16 +274,12 @@ public abstract class Resource
     return true;
   }
 
-  //........................................................................
-  //-------------------------------- write ---------------------------------
-
   /**
    * Write the resources to the given output.
    *
    * @param       inWriter the output writer to write to
    *
    * @return      true if writing ok, false if not
-   *
    */
   @Deprecated
   public boolean write(HTMLWriter inWriter)
@@ -413,10 +329,6 @@ public abstract class Resource
     return true;
   }
 
-  //........................................................................
-
-  //-------------------------------- preset --------------------------------
-
   /**
    * Add a preset resource.
    *
@@ -426,46 +338,24 @@ public abstract class Resource
    */
   public static synchronized void preset(String inName, Resource inResource)
   {
-    if(s_presets == null)
-      s_presets = new HashMap<String, Resource>();
-
     s_presets.put(inName, inResource);
   }
-
-  //........................................................................
-  //----------------------------- clearPreset ------------------------------
 
   /**
    * Clears the preset with the given name, if it is defined.
    *
    * @param       inName the name of the preset to clear
-   *
    */
   public static synchronized void clearPreset(String inName)
   {
-    if(s_presets == null)
-      return;
-
     s_presets.remove(inName);
-
-    if(s_presets.isEmpty())
-      s_presets = null;
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
 
   //------------------------------------------------------------------- test
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //--------------------------------------------------------------- nested
-
     /** A resource used for testing. */
     public static final class TestResource extends Resource
     {
@@ -510,16 +400,12 @@ public abstract class Resource
       }
     }
 
-    //......................................................................
-
-    //----- resources ------------------------------------------------------
-
     /** resources Test. */
     @org.junit.Test
     public void resources()
     {
       assertNotNull("unknown", Resource.get("guru/gugus"));
-      assertNull("unknown", Resource.get("guru/gugus").m_url);
+      assertFalse("unknown", Resource.get("guru/gugus").m_url.isPresent());
 
       // now for a directory
       assertPattern("file", "file:/.*/css/?",
@@ -531,11 +417,19 @@ public abstract class Resource
 
       // invalid protocol
       assertNotNull("http", Resource.get("http://www.ixitxachitls.net"));
-      assertNull("http", Resource.get("http://www.ixitxachitls.net").m_url);
-    }
+      assertFalse
+          ("http",
+           Resource.get("http://www.ixitxachitls.net").m_url.isPresent());
 
-    //......................................................................
-    //----- has ------------------------------------------------------------
+      m_logger.addExpectedPattern(
+          "WARNING: Cannot find resource '/guru/gugus' in .*");
+      m_logger.addExpectedPattern(
+          "WARNING: Cannot find resource '/guru/gugus' in .*");
+      m_logger.addExpectedPattern(
+          "WARNING: Cannot find resource '/http://www.ixitxachitls.net' in .*");
+      m_logger.addExpectedPattern(
+          "WARNING: Cannot find resource '/http://www.ixitxachitls.net' in .*");
+    }
 
     /** has Test. */
     @org.junit.Test
@@ -548,8 +442,5 @@ public abstract class Resource
       assertFalse("not in jar", Resource.has("dir/guru.gugus"));
     }
 
-    //......................................................................
   }
-
-  //........................................................................
 }

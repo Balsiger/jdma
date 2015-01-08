@@ -147,25 +147,25 @@ public class BaseEntry extends AbstractEntry
         .build();
 
   /** The world. */
-  public List<String> m_worlds = new ArrayList<>();
+  protected List<String> m_worlds = new ArrayList<>();
 
   /** The references for this entry. */
-  public List<ProductReference> m_references = new ArrayList<>();
+  protected List<ProductReference> m_references = new ArrayList<>();
 
   /** The descriptive text for this entry. */
-  public String m_description = UNDEFINED_STRING;
+  protected String m_description = UNDEFINED_STRING;
 
   /** The short description text for this entry. */
-  public String m_short = UNDEFINED_STRING;
+  protected String m_short = UNDEFINED_STRING;
 
   /** The synonyms for this entry. */
-  public List<String> m_synonyms = new ArrayList<>();
+  protected List<String> m_synonyms = new ArrayList<>();
 
   /** The categories. */
-  public List<String> m_categories = new ArrayList<>();
+  protected List<String> m_categories = new ArrayList<>();
 
   /** The information that is incomplete for the entry. */
-  public String m_incomplete = UNDEFINED_STRING;
+  protected String m_incomplete = UNDEFINED_STRING;
 
   /**
    * Get the entry description.
@@ -437,21 +437,25 @@ public class BaseEntry extends AbstractEntry
 
     m_description = inValues.use("description", m_description);
     m_short = inValues.use("short_description", m_short);
-    m_worlds = inValues.use("worlds", m_worlds, new Values.Checker()
-    {
-      @Override
-      public boolean check(String inCheck)
-      {
-        return WORLDS.contains(inCheck);
-      }
-    });
+    m_worlds = inValues.use("worlds", m_worlds,
+                            Optional.<Values.Checker>of(new Values.Checker()
+                            {
+                              @Override
+                              public boolean check(String inCheck)
+                              {
+                                return WORLDS.contains(inCheck);
+                              }
+                            }));
     m_references = inValues.use("references",  m_references,
                                 ProductReference.PARSER, "name", "pages");
-    m_synonyms = inValues.use("synonyms", m_synonyms, Values.NOT_EMPTY);
-    m_categories = inValues.use("categories", m_categories, Values.NOT_EMPTY);
+    m_synonyms =
+        inValues.use("synonyms", m_synonyms, Optional.of(Values.NOT_EMPTY));
+    m_categories =
+        inValues.use("categories", m_categories, Optional.of(Values.NOT_EMPTY));
     m_incomplete = inValues.use("incomplete", m_incomplete);
   }
 
+  @Override
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseEntryProto))
