@@ -202,6 +202,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     }
   }
 
+  /** The parser for modifiers. */
   public static final Parser<Modifier> PARSER = new Parser<Modifier>(0)
   {
     @Override
@@ -211,6 +212,12 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
                    (Strings.COMMA_JOINER.join(inValues)));
     }
 
+    /**
+     * Parse a list of values to a modifier.
+     *
+     * @param inValues the values to parse
+     * @return the parsed modifier, if any
+     */
     private Optional<Modifier> parse(List<String> inValues)
     {
       List<String> values = new ArrayList<>(inValues);
@@ -220,7 +227,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
       {
         String []parts =
           Strings.getPatterns(value,
-                              "^\\s*([+-]\\d+)\\s*(" + types + ")?\\s*"
+                              "^\\s*([+-]\\d+)\\s*(" + TYPES + ")?\\s*"
                               + "(?: if\\s+(.*))?$");
         if(parts == null || parts.length == 0)
           return Optional.absent();
@@ -249,12 +256,21 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     }
   };
 
+  /** Create a default modifier. */
   public Modifier()
   {
     this(0, Type.GENERAL, Optional.<String>absent(),
          Optional.<Modifier>absent());
   }
 
+  /**
+   * Create a modifier with a value.
+   *
+   * @param inModifier the base modifier
+   * @param inType the type of modifier
+   * @param inCondition the condition, if any
+   * @param inNext the next modifier in chain, if any
+   */
   public Modifier(int inModifier, Type inType, Optional<String> inCondition,
                   Optional<Modifier> inNext)
   {
@@ -264,7 +280,8 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     m_next = inNext;
   }
 
-  private static final String types = Strings.PIPE_JOINER.join(Type.names());
+  /** The types of modifiers available. */
+  private static final String TYPES = Strings.PIPE_JOINER.join(Type.names());
 
   /** The modifier value itself. */
   private final int m_modifier;
@@ -473,6 +490,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
       assertFalse("parse", PARSER.parse("+ 2 dodge").isPresent());
     }
 
+    /** Testing proto conversion. */
     @org.junit.Test
     public void proto()
     {
@@ -493,6 +511,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
       assertEquals("type", Type.RAGE, modifier.getType());
     }
 
+    /** Test adding. */
     @org.junit.Test
     public void add()
     {

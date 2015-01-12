@@ -31,7 +31,12 @@ import net.ixitxachitls.dma.proto.Entries.BaseArmorProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
 
-/** The possible armor types. */
+/**
+ * The possible armor types.
+ *
+ * @file ArmortType.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum ArmorType implements Named,
     Proto<BaseArmorProto.Type>
 {
@@ -84,6 +89,11 @@ public enum ArmorType implements Named,
     return m_name;
   }
 
+  /**
+   * Check whether tye armor represents a shield.
+   *
+   * @return true for a shield, false for everything else
+   */
   public boolean isShield()
   {
     return this == SHIELD || this == TOWER_SHIELD;

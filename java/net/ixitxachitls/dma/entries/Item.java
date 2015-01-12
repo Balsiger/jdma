@@ -41,6 +41,7 @@ import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.CountUnit;
 import net.ixitxachitls.dma.values.Critical;
 import net.ixitxachitls.dma.values.Damage;
+import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Duration;
 import net.ixitxachitls.dma.values.Modifier;

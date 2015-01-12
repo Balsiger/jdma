@@ -22,7 +22,6 @@
 package net.ixitxachitls.dma.values;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
@@ -31,20 +30,38 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 
-@ParametersAreNonnullByDefault
+/**
+ * A reference to an entry.
+ *
+ * @file Reference.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ * @param <T> the type of entry being referenced
+ */
 public class Reference<T extends AbstractEntry>
   extends Value<BaseEntryProto.Reference>
   implements Comparable<Reference>
 {
+  /** The parser for references. */
   public static class ReferenceParser<T extends AbstractEntry,
                                       C extends Reference<T>>
     extends Parser<C>
   {
+    /**
+     * Create the parser.
+     *
+     * @param inType the type of entries referenced
+     */
     public ReferenceParser(AbstractType<T> inType)
     {
       this(inType, 1);
     }
 
+    /**
+     * Create the parser.
+     *
+     * @param inType the type of entries referenced
+     * @param inArguments the number of arguments to parse
+     */
     protected ReferenceParser(AbstractType<T> inType, int inArguments)
     {
       super(inArguments);
@@ -52,6 +69,7 @@ public class Reference<T extends AbstractEntry>
       m_type = inType;
     }
 
+    /** The type of entry referenced. */
     private final AbstractType<T> m_type;
 
     @SuppressWarnings("unchecked")
@@ -62,15 +80,31 @@ public class Reference<T extends AbstractEntry>
     }
   }
 
+  /**
+   * Create a reference.
+   *
+   * @param inType the type of entry referenced
+   * @param inName the name (id) of the entry referenced
+   */
   public Reference(AbstractType<T> inType, String inName)
   {
     m_name = inName;
     m_type = inType;
   }
 
+  /** The id of the referenced entry. */
   protected final String m_name;
+
+  /** The type of entry referenced. */
   protected final AbstractType<T> m_type;
+
+  /** The actual entry referenced, if any. */
   protected Optional<T> m_entry = Optional.absent();
+
+  /**
+   * Whether the entry referenced was resolved. If this is true, then m_entry
+   * gives the entry referenced or absent if the entry is not available.
+   */
   private boolean m_resolved = false;
 
   /**
@@ -93,6 +127,11 @@ public class Reference<T extends AbstractEntry>
     return "/" + m_type.getLink() + "/" + m_name;
   }
 
+  /**
+   * Get the entry referenced, if available.
+   *
+   * @return the entry referenced or absent if not available
+   */
   public Optional<T> get()
   {
     resolve();
@@ -117,6 +156,7 @@ public class Reference<T extends AbstractEntry>
     return reference.build();
   }
 
+  /** Resolve the entry referenced. */
   @SuppressWarnings("unchecked")
   protected void resolve()
   {
@@ -131,9 +171,10 @@ public class Reference<T extends AbstractEntry>
   /**
    * Create a new reference from the given proto message.
    *
-   *
-   * @param inProto the proto message
-   * @return the newly create reference
+   * @param inType the type of entry referenced
+   * @param inProto the proto to create the reference
+   * @param <T> the type of entry referenced
+   * @return the new reference created for the proto
    */
   public static <T extends AbstractEntry> Reference<T>
   fromProto(AbstractType<T> inType, BaseEntryProto.Reference inProto)
@@ -146,6 +187,7 @@ public class Reference<T extends AbstractEntry>
    *
    * @param inType the type of entry to parse
    * @param inName the name of the reference
+   * @param <T> the type of entry to parse
    * @return the parsed reference
    */
   public static <T extends AbstractEntry>

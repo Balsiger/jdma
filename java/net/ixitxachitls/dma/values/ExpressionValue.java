@@ -45,9 +45,15 @@ import net.ixitxachitls.util.Strings;
  * @file   ExpressionValue.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  *
+ * @param <T> the type of value expressed
  */
 public class ExpressionValue<T> extends Value
 {
+  /**
+   * Create an expression value.
+   *
+   * @param inValue the value to create with
+   */
   public ExpressionValue(T inValue)
   {
     m_value = Optional.of(inValue);
@@ -56,6 +62,11 @@ public class ExpressionValue<T> extends Value
     m_operator = Operator.NONE;
   }
 
+  /**
+   * Create an expression value with a variable name.
+   *
+   * @param inVariable the name of the variable holding the value
+   */
   public ExpressionValue(String inVariable)
   {
     m_value = Optional.absent();
@@ -64,6 +75,11 @@ public class ExpressionValue<T> extends Value
     m_operator = Operator.NONE;
   }
 
+  /**
+   * Create a terminal expression value with a number.
+   *
+   * @param inValue the number
+   */
   public ExpressionValue(int inValue)
   {
     m_value = Optional.absent();
@@ -72,6 +88,12 @@ public class ExpressionValue<T> extends Value
     m_operator = Operator.NONE;
   }
 
+  /**
+   * Create an expression value with an operator and arguments.
+   *
+   * @param inOperator the operator
+   * @param inValues the arguments
+   */
   @SafeVarargs
   public ExpressionValue(Operator inOperator, ExpressionValue<T> ... inValues)
   {
@@ -82,6 +104,12 @@ public class ExpressionValue<T> extends Value
     m_operands.addAll(Arrays.asList(inValues));
   }
 
+  /**
+   * Create an expression value with an operator and arguments.
+   *
+   * @param inOperator the operator
+   * @param inValues the list of arguments
+   */
   public ExpressionValue(Operator inOperator, List<ExpressionValue<T>> inValues)
   {
     m_value = Optional.absent();
@@ -91,6 +119,10 @@ public class ExpressionValue<T> extends Value
     m_operands.addAll(inValues);
   }
 
+  /** Create an expression with another one. This is mainly used for brackets.
+   *
+   * @param inValue the other value
+   */
   public ExpressionValue(ExpressionValue<T> inValue)
   {
     m_value = Optional.absent();
@@ -100,12 +132,28 @@ public class ExpressionValue<T> extends Value
     m_operands.add(inValue);
   }
 
+  /** The terminal value, if any. */
   private final Optional<T> m_value;
+
+  /** The variable holding a value, if any. */
   private final Optional<String> m_variable;
+
+  /** A terminal number. */
   private final int m_integer;
+
+  /** The operator for an operating expression. NONE for no operation. */
   private final Operator m_operator;
+
+  /** The arguments to the operator. */
   private final List<ExpressionValue<T>> m_operands = new ArrayList<>();
 
+  /**
+   * The parser for expressions.
+   *
+   * @param inValueParser the parser for the basic values
+   * @param <V> the type of basic values
+   * @return a parser for expressions of the denoted values
+   */
   public static <V> Parser<ExpressionValue<V>>
     parser(final Parser<V> inValueParser)
   {
@@ -120,21 +168,30 @@ public class ExpressionValue<T> extends Value
         ParseReader reader =
           new ParseReader(new StringReader(inValue), "expression");
         Optional<ExpressionValue<V>> parsed =
-          ExpressionValue.parse(reader, false);
+          ExpressionValue.parse(reader);
         try
         {
           reader.readChar();
           return Optional.absent();
         }
-        catch(ReadException e) {}
+        catch(ReadException e)
+        {
+          // just ignored
+        }
 
         return parsed;
       }
     };
   }
 
-  private static <V> Optional<ExpressionValue<V>>
-    parse(ParseReader inReader, boolean bracketed)
+  /**
+   * Parse an expression.
+   *
+   * @param inReader the reader to read values from
+   * @param <V> the typeo of values parsed
+   * @return the expression value parsed, if any
+   */
+  private static <V> Optional<ExpressionValue<V>> parse(ParseReader inReader)
   {
     try
     {
@@ -143,7 +200,7 @@ public class ExpressionValue<T> extends Value
         first = Optional.of(new ExpressionValue<V>(inReader.readWord()));
       else if(inReader.expect('('))
       {
-        first = parse(inReader, true);
+        first = parse(inReader);
         if(!inReader.expect(')'))
           return Optional.absent();
         if(first.isPresent())
@@ -160,7 +217,7 @@ public class ExpressionValue<T> extends Value
           List<ExpressionValue<V>> operands = new ArrayList<>();
           do
           {
-            Optional<ExpressionValue<V>> operand = parse(inReader, false);
+            Optional<ExpressionValue<V>> operand = parse(inReader);
             if(operand.isPresent())
               operands.add(operand.get());
           } while(inReader.expect(','));
@@ -182,7 +239,7 @@ public class ExpressionValue<T> extends Value
       if (operator == null)
         return first;
 
-      Optional<ExpressionValue<V>> second = parse(inReader, false);
+      Optional<ExpressionValue<V>> second = parse(inReader);
 
       if(first.isPresent() && second.isPresent())
         return Optional.of(new ExpressionValue<V>
@@ -197,16 +254,33 @@ public class ExpressionValue<T> extends Value
     }
   }
 
+  /**
+   * Check whether theere is a value defined.
+   *
+   * @return true for a value, false for none
+   */
   public boolean hasValue()
   {
     return m_value.isPresent();
   }
 
+  /**
+   * Get the value of the expression.
+   *
+   * @return the value
+   */
   public Optional<T> getValue()
   {
     return m_value;
   }
 
+  /**
+   * Get the value given the map of parameters and the parser.
+   *
+   * @param inParameters the parameters defining variable values
+   * @param inParser the parser for values
+   * @return the value parsed, if any
+   */
   @SuppressWarnings("unchecked")
   public Optional<T> getValue(Map<String, String> inParameters,
                               Parser<T> inParser)
@@ -218,17 +292,36 @@ public class ExpressionValue<T> extends Value
     return (Optional<T>)value;
   }
 
+  /**
+   * Check whether the given value represents an integer.
+   *
+   * @param inValue the value to check
+   * @return true for integer, false if not
+   */
   private boolean isInteger(Optional<? extends Object> inValue)
   {
     return inValue.isPresent() && inValue.get() instanceof Integer;
   }
 
+  /**
+   * Check whether the given value is Arithmetic.
+   *
+   * @param inValue the value to check
+   * @return true if the value is arithmetic, false if not
+   */
   private boolean isArithmetic(Optional<? extends Object> inValue)
   {
     return inValue.isPresent()
       && inValue.get() instanceof Value.Arithmetic<?>;
   }
 
+  /**
+   * Evaluate the expression given the variable values.
+   *
+   * @param inParameters the values of variables
+   * @param inParser the parser for values
+   * @return the value evaluated or absent if none could be evaluate
+   */
   @SuppressWarnings("unchecked")
   private Optional<? extends Object> evaluate(Map<String, String> inParameters,
                                               Parser<T> inParser)
@@ -332,7 +425,7 @@ public class ExpressionValue<T> extends Value
         return Optional.fromNullable(max);
 
       case MIN:
-        Integer min= null;
+        Integer min = null;
         for(Optional<? extends Object> operand : operands)
           if(isInteger(operand) && min == null || min > (Integer) operand.get())
             min = (Integer) operand.get();
@@ -348,11 +441,17 @@ public class ExpressionValue<T> extends Value
                              % (Integer) operands.get(1).get());
 
         return Optional.absent();
-    }
 
-    return Optional.absent();
+      default:
+        return Optional.absent();
+    }
   }
 
+  /**
+   * Convert the expression to a proto.
+   *
+   * @return the proto representation
+   */
   @Override
   public ExpressionProto toProto()
   {
@@ -373,6 +472,13 @@ public class ExpressionValue<T> extends Value
     return builder.build();
   }
 
+  /**
+   * Convert the proto to an expression value.
+   *
+   * @param inProto the proto to convert
+   * @param <V> the value represented by the expression
+   * @return the expression
+   */
   @SuppressWarnings("unchecked")
   public static <V extends Value> ExpressionValue<V>
     fromProto(ExpressionProto inProto)
@@ -418,12 +524,10 @@ public class ExpressionValue<T> extends Value
 
   //---------------------------------------------------------------------------
 
-
-  //---------------------------------------------------------------------------
-
   /** The tests. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    /** Parsing test. */
     @org.junit.Test
     public void parse()
     {
@@ -454,6 +558,7 @@ public class ExpressionValue<T> extends Value
                      .toString());
     }
 
+    /** Evaluatio test. */
     @org.junit.Test
     public void evaluate()
     {
@@ -491,6 +596,12 @@ public class ExpressionValue<T> extends Value
                      .get().toString());
     }
 
+    /**
+     * Create a map out of string pairs.
+     *
+     * @param inValues the values paris to create the map
+     * @return the created map
+     */
     private Map<String, String> map(String ... inValues)
     {
       ImmutableMap.Builder<String, String> map = ImmutableMap.builder();

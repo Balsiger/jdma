@@ -23,15 +23,18 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible sizes in the game. */
-@ParametersAreNonnullByDefault
+/**
+ * The possible sizes in the game.
+ *
+ * @file Ability.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Ability implements Named, Short
 {
   /** Unknown.*/
@@ -168,6 +171,9 @@ public enum Ability implements Named, Short
 
   /**
    * Get the layout matching the given text.
+   *
+   * @param inText the text to get the ability for
+   * @return the ability for the text, if any
    */
   public static Optional<Ability> fromString(String inText)
   {

@@ -31,8 +31,14 @@ import net.ixitxachitls.dma.proto.Entries.BaseMagicProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
 
-/** The possible modifier types. */
-public enum ModifierType implements Named, net.ixitxachitls.dma.values.enums.Short,
+/**
+ * The possible modifier types.
+ *
+ * @file ModifierType.java
+ * @author balsiger@iitxachitls.net (Peter Balsiger)
+ */
+public enum ModifierType implements Named,
+    net.ixitxachitls.dma.values.enums.Short,
     Proto<BaseMagicProto.Type>
 {
   /** The unknown armor type. */

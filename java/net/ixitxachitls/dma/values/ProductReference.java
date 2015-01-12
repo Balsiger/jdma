@@ -25,8 +25,8 @@ package net.ixitxachitls.dma.values;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
@@ -36,12 +36,19 @@ import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Values.RangeProto;
 
-@ParametersAreNonnullByDefault
+/**
+ * A reference to a product.
+ *
+ * @file ProductReference.java
+ * @author balsiger@ixitixachitls.net (Peter Balsiger)
+ */
 public class ProductReference extends Reference<BaseProduct>
 {
+  /** The parser for product references. */
   public static class ProductReferenceParser
     extends ReferenceParser<BaseProduct, ProductReference>
   {
+    /** Create the parser. */
     public ProductReferenceParser()
     {
       super(BaseProduct.TYPE, 2);
@@ -54,12 +61,24 @@ public class ProductReference extends Reference<BaseProduct>
     }
   }
 
+  /**
+   * Create a product reference.
+   *
+   * @param inName the name (id) of the product
+   */
   public ProductReference(String inName)
   {
     super(BaseProduct.TYPE, inName);
   }
 
-  public ProductReference(String inName, Range... inPages)
+
+  /**
+   * Create a product reference with pages.
+   *
+   * @param inName the name (id) of the product
+   * @param inPages the pages within the product referenced
+   */
+  public ProductReference(String inName, Range ... inPages)
   {
     this(inName);
 
@@ -67,6 +86,12 @@ public class ProductReference extends Reference<BaseProduct>
       m_pages.add(page);
   }
 
+  /**
+   * Create a product reference with a page list.
+   *
+   * @param inName the name (id) of the product
+   * @param inPages the list of pages reference within the product
+   */
   public ProductReference(String inName, List<Range> inPages)
   {
     this(inName);
@@ -74,11 +99,17 @@ public class ProductReference extends Reference<BaseProduct>
     m_pages.addAll(inPages);
   }
 
+  /** A splitter for commas. */
   private static final Splitter COMMA_SPLITTER = Splitter.on(',').trimResults();
+
+  /** A joiner for commas. */
   private static final Joiner COMMA_JOINER = Joiner.on(", ");
+
+  /** The product reference parser. */
   public static final Parser<ProductReference> PARSER =
     new ProductReferenceParser();
 
+  /** The page ranges being referenced. */
   private final List<Range> m_pages = new ArrayList<>();
 
   /**
@@ -158,7 +189,7 @@ public class ProductReference extends Reference<BaseProduct>
    *
    * @param inName the name of the reference
    * @param inPages the pages of the reference
-   * @return
+   * @return the parsed product reference if parsing succeeded
    */
   public static Optional<ProductReference> parse(String inName, String inPages)
   {

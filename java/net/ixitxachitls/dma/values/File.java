@@ -28,6 +28,9 @@ import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 
 /**
  * A simple representation for a file associated with an entry.
+ *
+ * @file File.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
 @ParametersAreNonnullByDefault
 public class File extends Value<AbstractEntryProto.File>
@@ -49,7 +52,7 @@ public class File extends Value<AbstractEntryProto.File>
   }
 
   /** The name of the file. */
-  String m_name;
+  private String m_name;
 
   /** The mime type of the file. */
   private final String m_type;

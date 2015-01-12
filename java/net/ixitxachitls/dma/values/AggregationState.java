@@ -31,7 +31,12 @@ import net.ixitxachitls.dma.proto.Entries.BaseContainerProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
 
-/** The possible sizes in the game. */
+/**
+ * The possible sizes in the game.
+ *
+ * @file AggregationState.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum AggregationState implements Named,
     net.ixitxachitls.dma.values.enums.Short, Proto<BaseContainerProto.State>
 {
@@ -49,6 +54,8 @@ public enum AggregationState implements Named,
 
   /** Made of glass. */
   GASEOUS("gaseous", "gas", BaseContainerProto.State.GASEOUS);
+
+  /** The name of the enum value. */
   private final String m_name;
 
   /** The short name. */
@@ -68,9 +75,11 @@ public enum AggregationState implements Named,
       }
     };
 
-  /** Create the name.
+  /**
+   * Create the name.
    *
    * @param inName     the name of the value
+   * @param inShort    the short name of the value
    * @param inProto    the proto enum value
    */
   private AggregationState(String inName, String inShort,

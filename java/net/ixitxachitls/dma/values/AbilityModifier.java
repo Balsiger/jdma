@@ -36,15 +36,25 @@ import net.ixitxachitls.dma.values.enums.Ability;
  */
 public class AbilityModifier extends Value<BaseQualityProto.AbilityModifier>
 {
+  /**
+   * Create the ability modifier.
+   *
+   * @param inAbility the ability being modified
+   * @param inModifier the modifier to the ability
+   */
   public AbilityModifier(Ability inAbility, Modifier inModifier)
   {
     m_ability = inAbility;
     m_modifier = inModifier;
   }
 
+  /** The ability being modified. */
   private final Ability m_ability;
+
+  /** The modifier to the ability. */
   private final Modifier m_modifier;
 
+  /** The parser for ability modifiers. */
   public static final Parser<AbilityModifier> PARSER =
     new Parser<AbilityModifier>(2)
     {
@@ -61,11 +71,21 @@ public class AbilityModifier extends Value<BaseQualityProto.AbilityModifier>
       }
     };
 
+  /**
+   * Get the ability being modified.
+   *
+   * @return the ability
+   */
   public Ability getAbility()
   {
     return m_ability;
   }
 
+  /**
+   * Get the modifier to the ability.
+   *
+   * @return the modifier
+   */
   public Modifier getModifier()
   {
     return m_modifier;
@@ -86,6 +106,12 @@ public class AbilityModifier extends Value<BaseQualityProto.AbilityModifier>
       .build();
   }
 
+  /**
+   * Convert the given proto into its respective ability modifier.
+   *
+   * @param inProto the proto to convert
+   * @return the converted ability modifier
+   */
   public static AbilityModifier
   fromProto(BaseQualityProto.AbilityModifier inProto)
   {

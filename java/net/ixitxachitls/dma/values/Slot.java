@@ -31,7 +31,12 @@ import net.ixitxachitls.dma.proto.Entries.BaseWearableProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
 
-/** The available body slots (cf. ). */
+/**
+ * The available body slots (cf. ).
+ *
+ * @file Slot.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Slot implements Named, net.ixitxachitls.dma.values.enums.Short,
     Proto<BaseWearableProto.Slot>
 {

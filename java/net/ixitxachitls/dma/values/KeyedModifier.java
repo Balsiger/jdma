@@ -35,15 +35,24 @@ import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
  */
 public class KeyedModifier extends Value<BaseQualityProto.KeyedModifier>
 {
+  /** Create the modifier.
+   *
+   * @param inKey the key
+   * @param inModifier the modifier
+   */
   public KeyedModifier(String inKey, Modifier inModifier)
   {
     m_key = inKey;
     m_modifier = inModifier;
   }
 
+  /** The modifier key. */
   private final String m_key;
+
+  /** The modifier value. */
   private final Modifier m_modifier;
 
+  /** The parser for keyed modifier. */
   public static final Parser<KeyedModifier> PARSER =
     new Parser<KeyedModifier>(2)
     {
@@ -59,11 +68,21 @@ public class KeyedModifier extends Value<BaseQualityProto.KeyedModifier>
       }
     };
 
+  /**
+   * Get the key.
+   *
+   * @return the key
+   */
   public String getKey()
   {
     return m_key;
   }
 
+  /**
+   * Get the modifier.
+   *
+   * @return the modifier
+   */
   public Modifier getModifier()
   {
     return m_modifier;
@@ -84,6 +103,12 @@ public class KeyedModifier extends Value<BaseQualityProto.KeyedModifier>
       .build();
   }
 
+  /**
+   * Create the modifier from the given proto.
+   *
+   * @param inProto the proto to create from
+   * @return the created value
+   */
   public static KeyedModifier fromProto(BaseQualityProto.KeyedModifier inProto)
   {
     return new KeyedModifier(inProto.getKey(),

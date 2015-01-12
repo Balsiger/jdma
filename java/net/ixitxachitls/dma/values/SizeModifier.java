@@ -31,8 +31,14 @@ import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
 
-/** The special size modifiers for monsters. */
-public enum SizeModifier implements Named, net.ixitxachitls.dma.values.enums.Short,
+/**
+ * The special size modifiers for monsters.
+ *
+ * @file SizeModifier.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
+public enum SizeModifier implements Named,
+    net.ixitxachitls.dma.values.enums.Short,
     Proto<BaseItemProto.SizeModifier>
 {
   /** An unknown size modifier. */
@@ -135,6 +141,9 @@ public enum SizeModifier implements Named, net.ixitxachitls.dma.values.enums.Sho
 
   /**
    * Get the layout matching the given text.
+   *
+   * @param inText the text to convert to the size modifier
+   * @return the size modifier if the text could be converted
    */
   public static Optional<SizeModifier> fromString(String inText)
   {

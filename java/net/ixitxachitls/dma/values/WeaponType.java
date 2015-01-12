@@ -31,8 +31,14 @@ import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
 
-/** The possible weapon types. */
-public enum WeaponType implements Named, net.ixitxachitls.dma.values.enums.Short,
+/**
+ * The possible weapon types.
+ *
+ * @file WeaponType.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
+public enum WeaponType implements Named,
+    net.ixitxachitls.dma.values.enums.Short,
     Proto<BaseWeaponProto.Type>
 {
   /** An unknown type. */
@@ -95,7 +101,8 @@ public enum WeaponType implements Named, net.ixitxachitls.dma.values.enums.Short
    * @param inShort    the short name of the value
    * @param inProto    the proto enum value
    */
-  private WeaponType(String inName, String inShort, BaseWeaponProto.Type inProto)
+  private WeaponType(String inName, String inShort,
+                     BaseWeaponProto.Type inProto)
   {
     m_name = inName;
     m_short = inShort;

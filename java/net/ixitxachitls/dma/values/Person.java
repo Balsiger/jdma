@@ -27,12 +27,18 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 
-/** Small class to encapsulate person information with job. */
+/**
+ * Small class to encapsulate person information with job.
+ *
+ * @file Person.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public class Person extends Value<BaseProductProto.Person>
 {
-
+  /** The parser for persons. */
   public static class PersonParser extends Parser<Person>
   {
+    /** Create the parser. */
     public PersonParser()
     {
       super(2);
@@ -45,22 +51,41 @@ public class Person extends Value<BaseProductProto.Person>
     }
   }
 
+  /**
+   * Create a person.
+   * @param inName the person's name
+   * @param inJob the person's job
+   */
   public Person(String inName, @Nullable String inJob)
   {
     m_name = inName;
     m_job = inJob == null ? "" : inJob;
   }
 
+  /** The person parser. */
   public static final Parser<Person> PARSER = new PersonParser();
 
+  /** The person's name. */
   private final String m_name;
+
+  /** The person's job. */
   private final String m_job;
 
+  /**
+   * Get the name of the person.
+   *
+   * @return the name
+   */
   public String getName()
   {
     return m_name;
   }
 
+  /**
+   * Get the job of the person.
+   *
+   * @return the job
+   */
   public String getJob()
   {
     return m_job;
@@ -77,7 +102,8 @@ public class Person extends Value<BaseProductProto.Person>
   }
 
   @Override
-  public String toString() {
+  public String toString()
+  {
     if(hasJob())
       return m_name + " (" + m_job + ")";
 
@@ -97,6 +123,12 @@ public class Person extends Value<BaseProductProto.Person>
     return proto.build();
   }
 
+  /**
+   * Create a person from the given proto.
+   *
+   * @param inProto the proto to create from
+   * @return the newly created person
+   */
   public static Person fromProto(BaseProductProto.Person inProto)
   {
     return new Person(inProto.getName(), inProto.getJob());

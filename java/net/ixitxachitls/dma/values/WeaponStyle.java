@@ -31,8 +31,14 @@ import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
 
-/** The possible weapon styles. */
-public enum WeaponStyle implements Named, net.ixitxachitls.dma.values.enums.Short,
+/**
+ * The possible weapon styles.
+ *
+ * @file WeaponStyle.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
+public enum WeaponStyle implements Named,
+    net.ixitxachitls.dma.values.enums.Short,
     Proto<BaseWeaponProto.Style>
 {
   /** An unknown style value. */

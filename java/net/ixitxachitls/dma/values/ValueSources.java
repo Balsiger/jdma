@@ -34,22 +34,42 @@ import java.util.List;
  */
 public class ValueSources
 {
-  public class ValueSource
+  /** A single value and where it came from (source). */
+  public final static class ValueSource
   {
+    /**
+     * Create the value source.
+     *
+     * @param inValue the value
+     * @param inSource the source
+     */
     private ValueSource(String inValue, String inSource)
     {
       m_value = inValue;
       m_source = inSource;
     }
 
+    /** The value representation. */
     private final String m_value;
+
+    /** The source of the value. */
     private final String m_source;
 
+    /**
+     * Get the value representation.
+     *
+     * @return the value
+     */
    public String getValue()
    {
       return m_value;
     }
 
+    /**
+     * Get the source description for the value.
+     *
+     * @return the description
+     */
     public String getSource()
     {
       return m_source;
@@ -62,33 +82,61 @@ public class ValueSources
     }
   }
 
+  /** Create an empty value sources. */
   public ValueSources()
   {
   }
 
+  /**
+   * Create value sources with a single initial value.
+   *
+   * @param inValue the value representation
+   * @param inSource the source description
+   */
   public ValueSources(Object inValue, String inSource)
   {
     add(inValue.toString(), inSource);
   }
 
+  /** The list of value sources. */
   private final List<ValueSource> m_sources = new ArrayList<>();
 
+  /**
+   * Add a value with a source.
+   *
+   * @param inValue the value representation
+   * @param inSource the source description
+   */
   public void add(String inValue, String inSource)
   {
     add(new ValueSource(inValue, inSource));
   }
 
+  /** Add a value source.
+   *
+   * @param inSource the source and vaule
+   */
   public void add(ValueSource inSource)
   {
     m_sources.add(inSource);
   }
 
+  /**
+   * Add another set of value sources to this one.
+   *
+   * @param inSources the other sources
+   */
   public void add(ValueSources inSources)
   {
     for(ValueSource source : inSources.m_sources)
       add(source);
   }
 
+  /**
+   * Get all the value sources stored.
+   *
+   * @return the value sources.
+   */
   public List<ValueSource> getSources()
   {
     return Collections.unmodifiableList(m_sources);

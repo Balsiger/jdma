@@ -31,7 +31,12 @@ import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
 
-/** The possible weapon proficiencies. */
+/**
+ * The possible weapon proficiencies.
+ *
+ * @file Proficiency.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Proficiency implements Named,
     Proto<BaseWeaponProto.Proficiency>
 {

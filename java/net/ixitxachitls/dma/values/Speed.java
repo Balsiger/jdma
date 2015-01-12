@@ -28,8 +28,21 @@ import net.ixitxachitls.dma.values.enums.Maneuverability;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.util.Strings;
 
+/**
+ * A speed value.
+ *
+ * @file Speed.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public class Speed extends Value.Arithmetic<SpeedProto>
 {
+  /**
+   * Create the speed.
+   *
+   * @param inMode the movement mode
+   * @param inSpeed the distance covered per move action
+   * @param inManeuverability the maneuverability (for flying only)
+   */
   public Speed(MovementMode inMode, Distance inSpeed,
                Optional<Maneuverability> inManeuverability)
   {
@@ -41,8 +54,13 @@ public class Speed extends Value.Arithmetic<SpeedProto>
       m_mode = MovementMode.RUN;
   }
 
+  /** The movement mode. */
   private MovementMode m_mode;
+
+  /** The distance covered by a single move action. */
   private Distance m_speed;
+
+  /** The menouverability class when flying. */
   private Optional<Maneuverability> m_maneuverability;
 
   /** The parser for armor types. */
@@ -77,16 +95,31 @@ public class Speed extends Value.Arithmetic<SpeedProto>
       }
     };
 
+  /**
+   * Get the movement mode.
+   *
+   * @return the movement mode
+   */
   public MovementMode getMode()
   {
     return m_mode;
   }
 
+  /**
+   * Get the speed that can be maximally moved at this speed per move action.
+   *
+   * @return the distance per move action
+   */
   public Distance getSpeed()
   {
     return m_speed;
   }
 
+  /**
+   * The maneuverability class when flying.
+   *
+   * @return the maneuverability class (only for flying movement mode)
+   */
   public Optional<Maneuverability> getManeuverability()
   {
     return m_maneuverability;
@@ -118,6 +151,12 @@ public class Speed extends Value.Arithmetic<SpeedProto>
     return builder.build();
   }
 
+  /**
+   * Create a speed value from a proto.
+   *
+   * @param inProto the proto to create from
+   * @return the value created
+   */
   public static Speed fromProto(SpeedProto inProto)
   {
     return new Speed(MovementMode.fromProto(inProto.getMode()),
@@ -141,18 +180,27 @@ public class Speed extends Value.Arithmetic<SpeedProto>
                      min(speed.m_maneuverability, m_maneuverability));
   }
 
-  private Optional<Maneuverability> min(Optional<Maneuverability> first,
-                                        Optional<Maneuverability> second) {
-    if(!first.isPresent())
-      return second;
+  /**
+   * Compute the minimal of two optional speed values.
+   *
+   * @param inFirst the first speed
+   * @param inSecond the second speed
+   * @return the minimal of the two values given
+   */
+  private static
+  Optional<Maneuverability> min(Optional<Maneuverability> inFirst,
+                                Optional<Maneuverability> inSecond)
+  {
+    if(!inFirst.isPresent())
+      return inSecond;
 
-    if(!second.isPresent())
-      return first;
+    if(!inSecond.isPresent())
+      return inFirst;
 
-    if(first.get().ordinal() > second.get().ordinal())
-      return first;
+    if(inFirst.get().ordinal() > inSecond.get().ordinal())
+      return inFirst;
 
-    return second;
+    return inSecond;
   }
 
   @Override

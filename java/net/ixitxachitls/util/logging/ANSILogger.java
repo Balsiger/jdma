@@ -182,7 +182,7 @@ public class ANSILogger extends ASCIILogger
     BLUE + "%<%Y-%M-%D %h:%m:%s - %L: %>%T" + RESET;
 
   /** The format for tracing messages.. */
-  protected static final String def_trace=
+  protected static final String def_trace =
     MAGENTA + "%<%Y-%M-%D %h:%m:%s - %L: %>%T" + RESET;
 
   /** The character pattern to ignore for width. */

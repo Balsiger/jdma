@@ -31,7 +31,12 @@ import net.ixitxachitls.dma.proto.Entries.BaseCountedProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
 
-/** The possible counting unites in the game. */
+/**
+ * The possible counting unites in the game.
+ *
+ * @file CountUnit.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum CountUnit implements Named,
     Proto<BaseCountedProto.Unit>
 {

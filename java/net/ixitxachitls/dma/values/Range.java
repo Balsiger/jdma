@@ -37,21 +37,38 @@ import net.ixitxachitls.dma.proto.Values.RangeProto;
  */
 public class Range extends Value<RangeProto>
 {
+  /**
+   * Create the range with a single number.
+   *
+   * @param inNumber the low (and high) number of the range
+   */
   public Range(int inNumber)
   {
     this(inNumber, inNumber);
   }
 
+  /**
+   * Create a range.
+   *
+   * @param inLow the low value of the range (inclusive)
+   * @param inHigh the high value of the range (inclusive)
+   */
   public Range(long inLow, long inHigh)
   {
     m_low = inLow;
     m_high = inHigh;
   }
 
+  /** The low value of the range. */
   private final long m_low;
+
+  /** The high value of the range. */
   private final long m_high;
 
+  /** The splitter for dashes. */
   private static final Splitter DASH_SPLITTER = Splitter.on('-').trimResults();
+
+  /** The parser for ranges. */
   public static final Parser<Range> PARSER = new Parser<Range>(1)
   {
     @Override

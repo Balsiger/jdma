@@ -26,12 +26,18 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.proto.Entries.BaseProductProto;
 
-/** Small class to encapsulate person information with job. */
+/**
+ * Small class to encapsulate person information with job.
+ *
+ * @file Content.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public class Content extends Value<BaseProductProto.Content>
 {
-
+  /** The parser for content. */
   public static class ContentParser extends Parser<Content>
   {
+    /** Create the parser. */
     public ContentParser()
     {
       super(3);
@@ -59,6 +65,13 @@ public class Content extends Value<BaseProductProto.Content>
     }
   }
 
+  /**
+   * Create a cotent value.
+   *
+   * @param inPart the kid of content
+   * @param inDescription the description of the content
+   * @param inAmount the number of pieces of the content
+   */
   public Content(BaseProduct.Part inPart, String inDescription, int inAmount)
   {
     m_part = inPart;
@@ -66,29 +79,50 @@ public class Content extends Value<BaseProductProto.Content>
     m_amount = inAmount;
   }
 
+  /** The default content parser. */
   public static final Parser<Content> PARSER = new ContentParser();
 
+  /** The type of cotent. */
   private final BaseProduct.Part m_part;
+
+  /** The description of the content. */
   private final String m_description;
+
+  /** The number of pieces of the content. */
   private final int m_amount;
 
+  /** Get the type of content.
+   *
+   * @return the type
+   */
   public BaseProduct.Part getPart()
   {
     return m_part;
   }
 
+  /**
+   * Get the content description.
+   *
+   * @return the description
+   */
   public String getDescription()
   {
     return m_description;
   }
 
+  /**
+   * Get the number of content pieces.
+   *
+   * @return the amount
+   */
   public int getAmount()
   {
     return m_amount;
   }
 
   @Override
-  public String toString() {
+  public String toString()
+  {
     if(m_amount != 1)
       return m_amount + "x " + m_part + " " + m_description;
 
@@ -105,6 +139,12 @@ public class Content extends Value<BaseProductProto.Content>
       .build();
   }
 
+  /**
+   * Create a content from the given proto.
+   *
+   * @param inProto the proto to convert
+   * @return the content value representing the proto
+   */
   public static Content fromProto(BaseProductProto.Content inProto)
   {
     return new Content(BaseProduct.Part.fromProto(inProto.getPart()),

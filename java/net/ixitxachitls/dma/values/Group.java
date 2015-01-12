@@ -24,7 +24,7 @@ package net.ixitxachitls.dma.values;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
-import javax.annotation.Nullable;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
@@ -150,7 +150,7 @@ public class Group<T,
    * @return <0 if first is smaller, 0 if equal, >0 if first is bigger
    */
   @Override
-  public int compare(@Nullable U inFirst, @Nullable U inSecond)
+  public int compare(U inFirst, U inSecond)
   {
     return ordinal(inFirst) - ordinal(inSecond);
   }
@@ -163,11 +163,8 @@ public class Group<T,
    * @return      the index into the possible groups, can be higher in case of
    *              undefined or null
    */
-  public int ordinal(@Nullable U inGroup)
+  public int ordinal(U inGroup)
   {
-    if(inGroup == null)
-      return m_groups.length + 2;
-
     if(inGroup.equals(m_undefined))
       return m_groups.length + 1;
 

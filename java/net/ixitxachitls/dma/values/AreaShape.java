@@ -30,7 +30,12 @@ import net.ixitxachitls.dma.proto.Entries.BaseLightProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
 
-/** The possible areas to affect (cf. PHB 175). */
+/**
+ * The possible areas to affect (cf. PHB 175).
+ *
+ * @file AreaShape.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum AreaShape implements Named,
     Proto<BaseLightProto.Light.Shape>
 {
@@ -125,6 +130,9 @@ public enum AreaShape implements Named,
 
   /**
    * Get the layout matching the given text.
+   *
+   * @param inText the text to convert from
+   * @return the area shape representing the text, if any
    */
   public static Optional<AreaShape> fromString(String inText)
   {

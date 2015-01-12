@@ -26,17 +26,33 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMagicProto;
 
+/**
+ * A named modifier.
+ *
+ * @file NamedModifier.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public class NamedModifier extends Value.Arithmetic<BaseMagicProto.Modifier>
 {
+  /**
+   * Create the name modifier.
+   *
+   * @param inType the type of modifier
+   * @param inModifier the modifier itself
+   */
   public NamedModifier(ModifierType inType, Modifier inModifier)
   {
     m_type = inType;
     m_modifier = inModifier;
   }
 
+  /** The type of the modifier. */
   private final ModifierType m_type;
+
+  /** The modifier value. */
   private final Modifier m_modifier;
 
+  /** The parser for a named modifier. */
   public final static Parser<NamedModifier> PARSER =
     new Parser<NamedModifier>(2)
     {
@@ -61,11 +77,21 @@ public class NamedModifier extends Value.Arithmetic<BaseMagicProto.Modifier>
     return m_type + " " + m_modifier;
   }
 
+  /**
+   * Get the modifier type.
+   *
+   * @return the type
+   */
   public ModifierType getType()
   {
     return m_type;
   }
 
+  /**
+   * Get the modifier value.
+   *
+   * @return the value
+   */
   public Modifier getModifier()
   {
     return m_modifier;
