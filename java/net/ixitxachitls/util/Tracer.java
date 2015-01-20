@@ -23,8 +23,6 @@ package net.ixitxachitls.util;
 
 import java.util.Date;
 
-import javax.annotation.Nullable;
-
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -32,29 +30,42 @@ import net.ixitxachitls.util.logging.Log;
  *
  * @file   Tracer.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 public class Tracer
 {
+  /**
+   * Create the tracer.
+   *
+   * @param inName the name of the tracer.
+   */
   public Tracer(String inName)
   {
     m_name = inName;
     m_start = new Date().getTime();
   }
 
+  /** The tracer name. */
   private String m_name;
+
+  /** The starting time of the tracer. */
   private long m_start;
 
+  /** Mark the tracer as done. */
   public void done()
   {
-    done(null);
+    done("");
   }
 
-  public void done(@Nullable String inText)
+  /**
+   * Mark the tracer as done.
+   *
+   * @param inText the text used for logging
+   */
+  public void done(String inText)
   {
     long ms = new Date().getTime() - m_start;
     String text;
-    if(inText == null)
+    if(inText.isEmpty())
       text = "";
     else
       text = " (" + inText + ")";

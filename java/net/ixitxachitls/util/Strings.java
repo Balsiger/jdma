@@ -722,6 +722,14 @@ public final class Strings
     return " class=\"" + result + "\"";
   }
 
+  /**
+   * Concatenate the strings using the delimiter.
+   *
+   * @param inFirst the first string to concatenate
+   * @param inSecond the second string
+   * @param inDelimiter the delimiter between the strings
+   * @return the concatenated strings
+   */
   public static Optional<String> concatenate(Optional<String> inFirst,
                                              Optional<String> inSecond,
                                              String inDelimiter)
@@ -735,6 +743,12 @@ public final class Strings
     return Optional.of(inFirst.get() + inDelimiter + inSecond.get());
   }
 
+  /**
+   * Convert a list of strings all to lower case.
+   *
+   * @param inList the list to convert
+   * @return the converted list
+   */
   public static List<String> toLowerCase(List<String> inList)
   {
     List<String> result = new ArrayList<>();

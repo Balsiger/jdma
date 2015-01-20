@@ -26,8 +26,6 @@ package net.ixitxachitls.dma.server;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -43,8 +41,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -73,10 +69,6 @@ import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.ANSILogger;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * A utility to import dma entries into the app engine data store.
  *
@@ -89,26 +81,15 @@ import net.ixitxachitls.util.logging.Log;
  * (leave out host and port for local storage).
  *
  * @file          Importer.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
-@ParametersAreNonnullByDefault
 public final class Importer
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------- Importer -------------------------------
-
   /**
-   * Prevent instantiation.
+   * Create the importer.
    *
    * @param   inHost       the host to connect to
+   * @param   inWebHost    the host to connect to via web
    * @param   inPort       the port to use for the remove api
    * @param   inWebPort    the port to use for web access
    * @param   inUserName   the username to connect to the remote api
@@ -146,17 +127,12 @@ public final class Importer
     DMARequest.ensureTypes();
 }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  /** The data store */
-  DatastoreService m_store = DatastoreServiceFactory.getDatastoreService();
+  /** The data store. */
+  private DatastoreService m_store =
+      DatastoreServiceFactory.getDatastoreService();
 
   /** THe dma data store. */
-  DMADatastore m_dmaStore = new DMADatastore();
+  private DMADatastore m_dmaStore = new DMADatastore();
 
   /** The remove api installer. */
   private RemoteApiInstaller m_installer;
@@ -169,6 +145,8 @@ public final class Importer
 
   /** The hostname to connect to. */
   private String m_host;
+
+  /** THe host name for web connections. */
   private String m_webHost;
 
   /** The port of the web application. */
@@ -187,35 +165,21 @@ public final class Importer
   private boolean m_ascii;
 
   /** The list of entities to store in batch. */
-  List<Entity> m_entities = new ArrayList<>();
+  private List<Entity> m_entities = new ArrayList<>();
 
   /** The list of entries with errors to store later. */
-  List<AbstractEntry> m_errors = new ArrayList<>();
+  private List<AbstractEntry> m_errors = new ArrayList<>();
 
   /** Joiner for paths. */
   public static final Joiner PATH_JOINER = Joiner.on('/').skipNulls();
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //------------------------------ uninstall -------------------------------
-
   /**
    * Uninstall the remove api.
-   *
    */
   public void uninstall()
   {
     m_installer.uninstall();
   }
-
-  //........................................................................
-  //--------------------------------- add ----------------------------------
 
   /**
    * Add the given file or directory for import.
@@ -233,9 +197,6 @@ public final class Importer
         addFile(inFile);
   }
 
-  //........................................................................
-  //------------------------------- addFile --------------------------------
-
   /**
    * Add the given file for importing.
    *
@@ -247,9 +208,6 @@ public final class Importer
     m_protoFiles.add(inFile);
   }
 
-  //........................................................................
-  //--------------------------------- read ---------------------------------
-
   /**
    * Do the import of all the files.
    *
@@ -260,11 +218,11 @@ public final class Importer
     Collections.sort(m_protoFiles, new Comparator<String>() {
 
       @Override
-      public int compare(String in1, String in2)
+      public int compare(String inFirst, String inSecond)
       {
         // Do base products first.
-        boolean product1 = in1.contains("/product/");
-        boolean product2 = in2.contains("/product/");
+        boolean product1 = inFirst.contains("/product/");
+        boolean product2 = inSecond.contains("/product/");
         if(product1 && !product2)
           return -1;
         if(!product1 && product2)
@@ -272,8 +230,8 @@ public final class Importer
 
         if(product1 && product2)
         {
-          boolean user1 = in1.contains("/user/");
-          boolean user2 = in2.contains("/user/");
+          boolean user1 = inFirst.contains("/user/");
+          boolean user2 = inSecond.contains("/user/");
           if (user1 && !user2)
             return +1;
           if (!user1 && user2)
@@ -281,16 +239,16 @@ public final class Importer
         }
 
         // Do campaign files last.
-        boolean campaign1 = in1.contains("/campaign/");
-        boolean campaign2 = in2.contains("/campaign/");
+        boolean campaign1 = inFirst.contains("/campaign/");
+        boolean campaign2 = inSecond.contains("/campaign/");
         if(campaign1 && !campaign2)
           return +1;
         if(!campaign1 && campaign2)
           return -1;
 
         // Do base campaigns before campaign entries.
-        boolean base1 = in1.matches(".*/campaign/[^/]+");
-        boolean base2 = in2.matches("/campaign/[^/]+");
+        boolean base1 = inFirst.matches(".*/campaign/[^/]+");
+        boolean base2 = inSecond.matches("/campaign/[^/]+");
         if(base1 && !base2)
           return -1;
         if(!base1 && base2)
@@ -298,14 +256,14 @@ public final class Importer
 
 
         // Do campaigns before other entries.
-        boolean main1 = in1.matches(".*/campaign/[^/]+/[^/]+");
-        boolean main2 = in2.matches(".*/campaign/[^/]+/[^/]+");
+        boolean main1 = inFirst.matches(".*/campaign/[^/]+/[^/]+");
+        boolean main2 = inSecond.matches(".*/campaign/[^/]+/[^/]+");
         if(main1 && !main2)
           return -1;
         if(!main1 && main2)
           return +1;
 
-        return in1.compareTo(in2);
+        return inFirst.compareTo(inSecond);
       }
     });
 
@@ -396,19 +354,16 @@ public final class Importer
       importFile(image.getKey(), image.getValue());
   }
 
-  //........................................................................
-
   /**
    * Fill the proto with the values of the named file.
    *
    * @param inProto   the proto to fill
    * @param inFile    the name of the file with the proto values
    * @return The built message read
-   * @throws FileNotFoundException  if the file cannot be found
    * @throws IOException            when reading fails
    */
   private Message fill(Message.Builder inProto, String inFile)
-    throws FileNotFoundException, IOException
+    throws IOException
   {
     if(m_ascii)
     {
@@ -420,6 +375,13 @@ public final class Importer
       return inProto.mergeFrom(new FileInputStream(inFile)).build();
   }
 
+  /**
+   * Import the named file.
+   *
+   * @param inName the name of the file to import
+   * @param inEntry the entry to import to
+   * @throws IOException if reading the file fails
+   */
   private void importFile(String inName, AbstractEntry inEntry)
     throws IOException
   {
@@ -495,12 +457,6 @@ public final class Importer
     }
   }
 
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //------------------------------- complete -------------------------------
-
   /**
    * Complete the entry and do all necessary housekeeping.
    *
@@ -530,8 +486,12 @@ public final class Importer
 //    }
   }
 
-  //........................................................................
-
+  /**
+   * Add the entry to import.
+   *
+   * @param inEntry the entry to import
+   * @param inProto the proto representation of the entry
+   */
   private void add(AbstractEntry inEntry, Message inProto)
   {
     inEntry.fromProto(inProto);
@@ -552,19 +512,12 @@ public final class Importer
     }
   }
 
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
-
-  //--------------------------------- main ---------------------------------
-
   /**
    * Main routine for the importer utility.
    *
    * @param    inArguments the command line arguments
    *
    * @throws   Exception too lazy to handle
-   *
    */
   public static void main(String []inArguments) throws Exception
   {
@@ -629,8 +582,4 @@ public final class Importer
       importer.uninstall();
     }
   }
-
-  //........................................................................
-
-  //........................................................................
 }

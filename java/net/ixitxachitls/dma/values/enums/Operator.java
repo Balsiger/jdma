@@ -28,17 +28,45 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Values.ExpressionProto;
 
+/**
+ * An operator in an expression.
+ *
+ * @file Operator.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Operator implements Proto<ExpressionProto.Operator>
 {
+  /** No operator. */
   NONE("", ExpressionProto.Operator.NONE, false),
+
+  /** Addition. */
   ADD("+", ExpressionProto.Operator.ADD, false),
+
+  /** Subtraction. */
   SUBTRACT("-", ExpressionProto.Operator.SUBTRACT, false),
+
+  /** Multiplication. */
   MULTIPLY("*", ExpressionProto.Operator.MULTIPLY, false),
+
+  /** Division. */
   DIVIDE("/", ExpressionProto.Operator.DIVIDE, false),
+
+  /** Modulo compuation. */
   MODULO("%", ExpressionProto.Operator.MODULO, false),
+
+  /** Minimal value. */
   MIN("min", ExpressionProto.Operator.MIN, true),
+
+  /** Maximal value. */
   MAX("max", ExpressionProto.Operator.MAX, true);
 
+  /**
+   * Create the operator.
+   *
+   * @param inMarkup the text to print the operator
+   * @param inProto the proto representation
+   * @param inPrefix whether this is a prefix operator
+   */
   private Operator(String inMarkup, ExpressionProto.Operator inProto,
                    boolean inPrefix)
   {
@@ -47,22 +75,42 @@ public enum Operator implements Proto<ExpressionProto.Operator>
     m_prefix = inPrefix;
   }
 
+  /** The text to print the operator. */
   private final String m_markup;
+
+  /** The proto value to store the operator. */
   private final ExpressionProto.Operator m_proto;
+
+  /** Whether this is a prefix operator. */
   private final boolean m_prefix;
+
+  /** All the prefixed operators. */
   private static final List<String> s_prefixed = new ArrayList<>();
+
+  /** All the infix operators. */
   private static final List<String> s_infixed = new ArrayList<>();
 
+  /**
+   * Get the text used to print the operator.
+   *
+   * @return the text markup
+   */
   public String getMarkup()
   {
     return m_markup;
   }
 
+  /**
+   * Return whether this is a prefixed operator.
+   *
+   * @return true for prefix, false for infix
+   */
   public boolean isPrefixed()
   {
     return m_prefix;
   }
 
+  /** Initialize the operator values. */
   private static void init()
   {
     if(!s_prefixed.isEmpty() || !s_infixed.isEmpty())
@@ -75,12 +123,22 @@ public enum Operator implements Proto<ExpressionProto.Operator>
       s_infixed.add(operator.getMarkup());
   }
 
+  /**
+   * Get all the prefixed operators.
+   *
+   * @return the list of prefix operators
+   */
   public static List<String> prefixed()
   {
     init();
     return s_prefixed;
   }
 
+  /**
+   * Get all the infixed operators.
+   *
+   * @return the list of infix operators.
+   */
   public static List<String> infixed()
   {
     init();
@@ -93,6 +151,12 @@ public enum Operator implements Proto<ExpressionProto.Operator>
     return m_proto;
   }
 
+  /**
+   * Get the operator corresponding to the given proto value.
+   *
+   * @param inProto the proto representation
+   * @return the matching operator
+   */
   public static Operator fromProto(ExpressionProto.Operator inProto)
   {
     for(Operator operator : values())
@@ -103,6 +167,12 @@ public enum Operator implements Proto<ExpressionProto.Operator>
       + inProto);
   }
 
+  /**
+   * Convert the given string to the operator with the same markup.
+   *
+   * @param inValue the string representation
+   * @return the corresponding operator, if one matches
+   */
   public static Optional<Operator> fromString(String inValue)
   {
     String value = inValue.trim();

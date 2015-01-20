@@ -21,13 +21,7 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
-
-import com.google.common.base.Joiner;
 
 /**
  * Utility functions for entries.

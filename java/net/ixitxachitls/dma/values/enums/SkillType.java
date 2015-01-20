@@ -31,7 +31,12 @@ import net.ixitxachitls.dma.proto.Values.SharedProto;
 import net.ixitxachitls.dma.proto.Values.SharedProto.SkillSubtype;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible sizes in the game. */
+/**
+ * The possible sizes in the game.
+ *
+ * @file SkillType.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum SkillType implements Named,
     Proto<SkillSubtype>
 {

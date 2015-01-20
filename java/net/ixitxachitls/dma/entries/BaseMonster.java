@@ -55,7 +55,6 @@ import net.ixitxachitls.dma.values.enums.AttackStyle;
 import net.ixitxachitls.dma.values.enums.Climate;
 import net.ixitxachitls.dma.values.enums.Language;
 import net.ixitxachitls.dma.values.enums.LanguageModifier;
-import net.ixitxachitls.dma.values.enums.Maneuverability;
 import net.ixitxachitls.dma.values.enums.MonsterSubtype;
 import net.ixitxachitls.dma.values.enums.MonsterType;
 import net.ixitxachitls.dma.values.enums.MovementMode;
@@ -75,8 +74,17 @@ import net.ixitxachitls.util.logging.Log;
  */
 public class BaseMonster extends BaseEntry
 {
+  /** An attack value. */
   public static class Attack
   {
+    /**
+     * Create the attack.
+     *
+     * @param inNumber the number of attacks available (can be 1d4)
+     * @param inMode the mode of attacking
+     * @param inStyle the attack style
+     * @param inDamage the damage done by a successful attack
+     */
     public Attack(Dice inNumber, AttackMode inMode, AttackStyle inStyle,
                   Damage inDamage)
     {
@@ -86,11 +94,19 @@ public class BaseMonster extends BaseEntry
       m_damage = inDamage;
     }
 
+    /** The number of available attacks per full round. */
     private Dice m_number;
+
+    /** The mode of attacking, i.e. what is used for the attack. */
     private AttackMode m_mode;
+
+    /** The style for attacking, e.g. melee or ranged. */
     private AttackStyle m_style;
+
+    /** The damage done by a single attack. */
     private Damage m_damage;
 
+    /** The parser for attacks. */
     public static final Parser<Attack> PARSER =
       new Parser<Attack>(4)
       {
@@ -119,18 +135,41 @@ public class BaseMonster extends BaseEntry
         }
       };
 
+    /**
+     * Get the number of avaiable attacks.
+     *
+     * @return the number of attacks, a real dice for random numbers
+     */
     public Dice getNumber()
     {
       return m_number;
     }
+
+    /**
+     * Getn the mode used for attacking, e.g. Claw, Fist, Weapon etc.
+     *
+     * @return the attack mode
+     */
     public AttackMode getMode()
     {
       return m_mode;
     }
+
+    /**
+     * Get the attack style, whether ranged or melee.
+     *
+     * @return the attack style
+     */
     public AttackStyle getStyle()
     {
       return m_style;
     }
+
+    /**
+     * Get the damage inflicted by a single attack.
+     *
+     * @return the damage value
+     */
     public Damage getDamage()
     {
       return m_damage;
@@ -143,8 +182,16 @@ public class BaseMonster extends BaseEntry
     }
   }
 
+  /** A group value for organization of multiple monsters. */
   public static class Group
   {
+    /**
+     * Create the group.
+     *
+     * @param inOrganization how the group is organized
+     * @param inNumber the number of monsters in the group
+     * @param inPlus the additional monsters that are in the group
+     */
     public Group(Organization inOrganization, Dice inNumber,
                  Optional<String> inPlus)
     {
@@ -153,10 +200,16 @@ public class BaseMonster extends BaseEntry
       m_plus = inPlus;
     }
 
+    /** The organization of the group. */
     private Organization m_organization;
+
+    /** The number of monsters in the group with a dice for random. */
     private Dice m_number;
+
+    /** The additional members of the group, if any. */
     private Optional<String> m_plus;
 
+    /** The parser for groups. */
     public static final Parser<Group> PARSER =
       new Parser<Group>(3)
       {
@@ -180,16 +233,31 @@ public class BaseMonster extends BaseEntry
         }
       };
 
+    /**
+     * Get the origanizational type of the group.
+     *
+     * @return the origanization
+     */
     public Organization getOrganization()
     {
       return m_organization;
     }
 
+    /**
+     * Get the number of monsters in the group.
+     *
+     * @return the number of monsters, with a real dice for random values
+     */
     public Dice getNumber()
     {
       return m_number;
     }
 
+    /**
+     * Get a description about additional members of the group, if any.
+     *
+     * @return the additional group members
+     */
     public Optional<String> getPlus()
     {
       return m_plus;
@@ -205,17 +273,28 @@ public class BaseMonster extends BaseEntry
     }
   }
 
+  /** An description about how a monster can advance. */
   public static class Advancement
   {
+    /**
+     * Create the advancement value.
+     *
+     * @param inRange the hit die range for advancement
+     * @param inSize the new size when advancing
+     */
     public Advancement(Range inRange, Size inSize)
     {
       m_range = inRange;
       m_size = inSize;
     }
 
+    /** The hit die range for advancement. */
     private Range m_range;
+
+    /** The new sie of the monster after advancement. */
     private Size m_size;
 
+    /** The parser for the advancement value. */
     public static final Parser<Advancement> PARSER =
       new Parser<Advancement>(3)
       {
@@ -234,10 +313,21 @@ public class BaseMonster extends BaseEntry
         }
       };
 
+    /**
+     * Get the hit die (or level) range for this kind of advancement.
+     *
+     * @return the hit die range
+     */
     public Range getRange()
     {
       return m_range;
     }
+
+    /**
+     * Get the size the monster gets when advancing.
+     *
+     * @return the new size
+     */
     public Size getSize()
     {
       return m_size;
@@ -250,17 +340,28 @@ public class BaseMonster extends BaseEntry
     }
   }
 
+  /** A language option for the monster. */
   public static class LanguageOption
   {
+    /**
+     * Create the language option.
+     *
+     * @param inLanguage the language
+     * @param inModifier the modifier to the language
+     */
     public LanguageOption(Language inLanguage, LanguageModifier inModifier)
     {
       m_language = inLanguage;
       m_modifier = inModifier;
     }
 
+    /** The language. */
     private Language m_language;
+
+    /** The language modifier. */
     private LanguageModifier m_modifier;
 
+    /** The parser for the language option. */
     public static final Parser<LanguageOption> PARSER =
       new Parser<LanguageOption>(2)
       {
@@ -282,10 +383,21 @@ public class BaseMonster extends BaseEntry
         }
       };
 
+    /**
+     * Get the language of the language option.
+     *
+     * @return the language
+     */
     public Language getLanguage()
     {
       return m_language;
     }
+
+    /**
+     * Get the language modifier.
+     *
+     * @return the language modifier
+     */
     public LanguageModifier getModifier()
     {
       return m_modifier;
@@ -387,7 +499,7 @@ public class BaseMonster extends BaseEntry
   protected Optional<Distance> m_reach = Optional.absent();
 
   /** The special attacks. */
-  List<String> m_specialAttacks = new ArrayList<>();
+  protected List<String> m_specialAttacks = new ArrayList<>();
 
   /** The special qualities. */
   protected List<String> m_specialQualities = new ArrayList<>();
@@ -455,11 +567,21 @@ public class BaseMonster extends BaseEntry
   /** The monsters proficiencies. */
   protected List<String> m_proficiencies = new ArrayList<>();
 
+  /**
+   * Get the monster's size.
+   *
+   * @return the size
+   */
   public Size getSize()
   {
     return m_size;
   }
 
+  /**
+   * Get the monster's annotated and combined size.
+   *
+   * @return the annotated, combined size
+   */
   public Annotated<Optional<Size>> getCombinedSize()
   {
     if(m_size != Size.UNKNOWN)
@@ -472,11 +594,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the monster's size modifier.
+   *
+   * @return the size modifier
+   */
   public SizeModifier getSizeModifier()
   {
     return m_sizeModifier;
   }
 
+  /**
+   * Get the combined and annotated size modifier.
+   *
+   * @return the annotated size modifier
+   */
   public Annotated<Optional<SizeModifier>> getCombinedSizeModifier()
   {
     if(m_sizeModifier != SizeModifier.UNKNOWN)
@@ -489,11 +621,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the monster type.
+   *
+   * @return the type
+   */
   public MonsterType getMonsterType()
   {
     return m_monsterType;
   }
 
+  /**
+   * Get the annotated and combined monster type.
+   *
+   * @return the annotated type
+   */
   public Annotated<Optional<MonsterType>> getCombinedMonsterType()
   {
     if(m_monsterType != MonsterType.UNKNOWN)
@@ -506,11 +648,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the monster subtype.
+   *
+   * @return the monster's subtype
+   */
   public List<MonsterSubtype> getMonsterSubtypes()
   {
     return Collections.unmodifiableList(m_monsterSubtypes);
   }
 
+  /**
+   * Get the monster's annotated and combined subtype.
+   *
+   * @return the annotated subtype
+   */
   public Annotated<List<MonsterSubtype>> getCombinedMonsterSubtypes()
   {
     if(!m_monsterSubtypes.isEmpty())
@@ -524,16 +676,32 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the monster's hit dice.
+   *
+   * @return the hit dice
+   */
   public Optional<Dice> getHitDice()
   {
     return m_hitDice;
   }
 
+  /**
+   * Get all of the monster's available speeds.
+   *
+   * @return the speeds
+   */
   public List<Speed> getSpeeds()
   {
     return Collections.unmodifiableList(m_speeds);
   }
 
+  /**
+   * Get the monsters annotated and combined speed for the given movement mode.
+   *
+   * @param inMode the mode for which to get the speed
+   * @return the speed for the movement mode
+   */
   public Optional<Annotated.Arithmetic<Speed>>
     getSpeedAnnotated(MovementMode inMode)
   {
@@ -557,6 +725,11 @@ public class BaseMonster extends BaseEntry
     return Optional.fromNullable(speed);
   }
 
+  /**
+   * Get all the combined and annotated speeds.
+   *
+   * @return the annotated speeds
+   */
   public List<Annotated.Arithmetic<Speed>> getCombinedSpeeds()
   {
     List<Annotated.Arithmetic<Speed>> speeds = new ArrayList<>();
@@ -572,11 +745,21 @@ public class BaseMonster extends BaseEntry
     return speeds;
   }
 
+  /**
+   * Get the monster's natural armor.
+   *
+   * @return the natural armor
+   */
   public Optional<Modifier> getNaturalArmor()
   {
     return m_naturalArmor;
   }
 
+  /**
+   * Get the combined natural armor.
+   *
+   * @return the combined natural armor
+   */
   public Annotated.Arithmetic<Modifier> getCombinedNaturalArmor()
   {
     if(m_naturalArmor.isPresent())
@@ -590,11 +773,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the monster's base attack.
+   *
+   * @return the base attack
+   */
   public Optional<Integer> getBaseAttack()
   {
     return m_baseAttack;
   }
 
+  /**
+   * Get the combined and annotated base attack.
+   *
+   * @return the annotated base attack
+   */
   public Annotated<Optional<Integer>> getCombinedBaseAttack()
   {
     Optional<Integer> attack = getBaseAttack();
@@ -608,11 +801,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the monster's strenght score.
+   *
+   * @return the strength score
+   */
   public Optional<Integer> getStrength()
   {
     return m_strength;
   }
 
+  /**
+   * Get hte monster's annotated and combined strength score.
+   *
+   * @return the strength score
+   */
   public Annotated<Optional<Integer>> getCombinedStrength()
   {
     Optional<Integer> strength = getStrength();
@@ -626,11 +829,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the dexterity score.
+   *
+   * @return the dexterity score
+   */
   public Optional<Integer> getDexterity()
   {
     return m_dexterity;
   }
 
+  /**
+   * Get the annotated and combined dexterity score.
+   *
+   * @return the dexterity score
+   */
   public Annotated<Optional<Integer>> getCombinedDexterity()
   {
     Optional<Integer> dexterity = getDexterity();
@@ -644,11 +857,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the constitution score.
+   *
+   * @return the score
+   */
   public Optional<Integer> getConstitution()
   {
     return m_constitution;
   }
 
+  /**
+   * Get the annotated and combined constitution score.
+   *
+   * @return the annotated score
+   */
   public Annotated<Optional<Integer>> getCombinedConstitution()
   {
     Optional<Integer> constitution = getConstitution();
@@ -662,11 +885,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the intelligence score.
+   *
+   * @return the score
+   */
   public Optional<Integer> getIntelligence()
   {
     return m_intelligence;
   }
 
+  /**
+   * Get the annotated and combined intelligence score.
+   *
+   * @return the annotated and combined score
+   */
   public Annotated<Optional<Integer>> getCombinedIntelligence()
   {
     Optional<Integer> intelligence = getIntelligence();
@@ -680,11 +913,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the wisdom score.
+   *
+   * @return the score
+   */
   public Optional<Integer> getWisdom()
   {
     return m_wisdom;
   }
 
+  /**
+   * Get the annotated and combined wisdom score.
+   *
+   * @return the annotated and combined score
+   */
   public Annotated<Optional<Integer>> getCombinedWisdom()
   {
     Optional<Integer> wisdom = getWisdom();
@@ -698,11 +941,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the charisma score.
+   *
+   * @return the score
+   */
   public Optional<Integer> getCharisma()
   {
     return m_charisma;
   }
 
+  /**
+   * Get the annotated and combined charisma score.
+   *
+   * @return the annotated and combined score
+   */
   public Annotated<Optional<Integer>> getCombinedCharisma()
   {
     Optional<Integer> charisma = getCharisma();
@@ -716,11 +969,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the fortitude save.
+   *
+   * @return the fortitude save
+   */
   public Optional<Integer> getFortitudeSave()
   {
     return m_fortitudeSave;
   }
 
+  /**
+   * Get the combined and annotated fortitude save.
+   *
+   * @return the combined and annotated save
+   */
   public Annotated.Bonus getCombinedFortitudeSave()
   {
     if(m_fortitudeSave.isPresent())
@@ -733,11 +996,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the will save.
+   *
+   * @return the save
+   */
   public Optional<Integer> getWillSave()
   {
     return m_willSave;
   }
 
+  /**
+   * Get the combined and annotated will save.
+   *
+   * @return the annotated and combined save
+   */
   public Annotated.Bonus getCombinedWillSave()
   {
     if(m_willSave.isPresent())
@@ -750,11 +1023,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the relfex save.
+   *
+   * @return the save
+   */
   public Optional<Integer> getReflexSave()
   {
     return m_reflexSave;
   }
 
+  /**
+   * Get the combined and annotated relfex save.
+   *
+   * @return the annotated and combined save
+   */
   public Annotated.Bonus getCombinedReflexSave()
   {
     if(m_reflexSave.isPresent())
@@ -767,11 +1050,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the list primary attacks.
+   *
+   * @return the primary attacks
+   */
   public List<Attack> getPrimaryAttacks()
   {
     return Collections.unmodifiableList(m_primaryAttacks);
   }
 
+  /**
+   * Get all the combined and annotated primary attacks.
+   *
+   * @return all the primary attacks
+   */
   public Annotated<List<Attack>> getCombinedPrimaryAttacks()
   {
     if(!m_primaryAttacks.isEmpty())
@@ -784,11 +1077,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the secondary attacks.
+   *
+   * @return the secondary attacks
+   */
   public List<Attack> getSecondaryAttacks()
   {
     return Collections.unmodifiableList(m_secondaryAttacks);
   }
 
+  /**
+   * Get all of the combined and annotated secondary attacks.
+   *
+   * @return all the secondary attacks
+   */
   public Annotated<List<Attack>> getCombinedSecondaryAttacks()
   {
     if(!m_primaryAttacks.isEmpty())
@@ -801,11 +1104,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the space the monster occupies.
+   *
+   * @return the space
+   */
   public Optional<Distance> getSpace()
   {
     return m_space;
   }
 
+  /**
+   * Get the combined and annotated space.
+   *
+   * @return the annotated space
+   */
   public Annotated<Optional<Distance>> getCombinedSpace()
   {
     if(m_space.isPresent())
@@ -819,11 +1132,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get a monster's special attacks.
+   *
+   * @return the special attacks
+   */
   public List<String> getSpecialAttacks()
   {
     return Collections.unmodifiableList(m_specialAttacks);
   }
 
+  /**
+   * Get all of a monster's combined and annotated special attacks.
+   *
+   * @return the special attacks
+   */
   public Annotated<List<String>> getCombinedSpecialAttacks()
   {
     if(!m_specialAttacks.isEmpty())
@@ -836,11 +1159,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get a monster's special qualities.
+   *
+   * @return the special qualities
+   */
   public List<String> getSpecialQualities()
   {
     return Collections.unmodifiableList(m_specialQualities);
   }
 
+  /**
+   * Get all of a monster's annotated and combined special qualtities.
+   *
+   * @return the special qualities
+   */
   public Annotated<List<String>> getCombinedSpecialQualities()
   {
     if(!m_specialQualities.isEmpty())
@@ -853,11 +1186,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the class skills.
+   *
+   * @return a list of the class skills
+   */
   public List<String> getClassSkills()
   {
     return Collections.unmodifiableList(m_classSkills);
   }
 
+  /**
+   * Get all the combined and annotated class skills.
+   *
+   * @return the class skills
+   */
   public Annotated<List<String>> getCombinedClassSkills()
   {
     if(!m_classSkills.isEmpty())
@@ -870,11 +1213,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the monster's feats.
+   *
+   * @return the feats
+   */
   public List<String> getFeats()
   {
     return Collections.unmodifiableList(m_feats);
   }
 
+  /**
+   * Get all the combined and annotated feats.
+   *
+   * @return the feats
+   */
   public Annotated<List<String>> getCombinedFeats()
   {
     if(!m_feats.isEmpty())
@@ -887,11 +1240,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the terrain the monster can usually be found.
+   *
+   * @return the terrain
+   */
   public Terrain getTerrain()
   {
     return m_terrain;
   }
 
+  /**
+   * Get the annotated and combined terrain.
+   *
+   * @return the terrain
+   */
   public Annotated<Optional<Terrain>> getCombinedTerrain()
   {
     if(m_terrain != Terrain.UNKNOWN)
@@ -904,11 +1267,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the climate the monster usually can be found in.
+   *
+   * @return the climate
+   */
   public Climate getClimate()
   {
     return m_climate;
   }
 
+  /**
+   * Get the annotated and combined climate.
+   *
+   * @return the climate
+   */
   public Annotated<Optional<Climate>> getCombinedClimate()
   {
     if(m_climate != Climate.UNKNOWN)
@@ -921,11 +1294,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get all the organizations the monster can be in.
+   *
+   * @return the organizations
+   */
   public List<Group> getOrganizations()
   {
     return Collections.unmodifiableList(m_organizations);
   }
 
+  /**
+   * Get all the combined and annotated organizations.
+   *
+   * @return the organizations
+   */
   public Annotated<List<Group>> getCombinedOrganizations()
   {
     if(!m_organizations.isEmpty())
@@ -938,11 +1321,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the monster's challange rating.
+   *
+   * @return the CR
+   */
   public Optional<Rational> getCr()
   {
     return m_cr;
   }
 
+  /**
+   * Get the monster's combined and annotated challenge rating.
+   *
+   * @return the combined and annotated cr
+   */
   public Annotated<Optional<Rational>> getCombinedCr()
   {
     if(m_cr.isPresent())
@@ -955,11 +1348,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get a monster's usual treasure.
+   *
+   * @return the usual treasure
+   */
   public Treasure getTreasure()
   {
     return m_treasure;
   }
 
+  /**
+   * Get a monster's usual, combined and annotated treasure.
+   *
+   * @return the treasure
+   */
   public Annotated<Optional<Treasure>> getCombinedTreasure()
   {
     if(m_treasure != Treasure.UNKNOWN)
@@ -972,11 +1375,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the alignment.
+   *
+   * @return the alignment
+   */
   public Alignment getAlignment()
   {
     return m_alignment;
   }
 
+  /**
+   * The combined and annnotated alignment.
+   *
+   * @return the alignment
+   */
   public Annotated<Optional<Alignment>> getCombinedAlignment()
   {
     if(m_alignment != Alignment.UNKNOWN)
@@ -989,11 +1402,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the alignment status.
+   *
+   * @return the status
+   */
   public AlignmentStatus getAlignmentStatus()
   {
     return m_alignmentStatus;
   }
 
+  /**
+   * Get the combined alignment status.
+   *
+   * @return the status
+   */
   public Annotated<Optional<AlignmentStatus>> getCombinedAlignmentStatus()
   {
     if(m_alignmentStatus != AlignmentStatus.UNKNOWN)
@@ -1006,11 +1429,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the possible advvancements the monster can go through.
+   *
+   * @return the advancements
+   */
   public List<Advancement> getAdvancements()
   {
     return m_advancements;
   }
 
+  /**
+   * Get the combined and annotated advancements.
+   *
+   * @return the advancements
+   */
   public Annotated<List<Advancement>> getCombinedAdvancements()
   {
     if(!m_advancements.isEmpty())
@@ -1023,11 +1456,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the level adjustment for monster with classes.
+   *
+   * @return the level adjustment
+   */
   public Optional<Integer> getLevelAdjustment()
   {
     return m_levelAdjustment;
   }
 
+  /**
+   * Get the combined and annotated level adjustment.
+   *
+   * @return the level adjustment
+   */
   public Annotated<Optional<Integer>> getCombinedLevelAdjustment()
   {
     Optional<Integer> adjustment = getLevelAdjustment();
@@ -1041,11 +1484,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the languages available to the monster.
+   *
+   * @return the languages
+   */
   public List<LanguageOption> getLanguages()
   {
     return m_languages;
   }
 
+  /**
+   * Get the combined and annotated languages available to the monster.
+   *
+   * @return the languages
+   */
   public Annotated<List<LanguageOption>> getCombinedLanguages()
   {
     if(!m_languages.isEmpty())
@@ -1058,11 +1511,23 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get a description on how this monster is usually encountered.
+   *
+   * @return the description
+   */
   public Optional<String> getEncounter()
   {
     return m_encounter;
   }
 
+
+  /**
+   * Get a combined and annotated description on how this monster is usually
+   * encountered.
+   *
+   * @return the description, annotated and combined
+   */
   public Annotated<Optional<String>> getCombinedEncounter()
   {
     if(m_encounter.isPresent() && !m_encounter.get().isEmpty())
@@ -1075,11 +1540,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the monster's combat description.
+   *
+   * @return the description
+   */
   public Optional<String> getCombat()
   {
     return m_combat;
   }
 
+  /**
+   * Get a monsters combined and annotated combat description.
+   *
+   * @return the annotated description
+   */
   public Annotated<Optional<String>> getCombinedCombat()
   {
     if(m_combat.isPresent() && !m_combat.get().isEmpty())
@@ -1092,11 +1567,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get a description about the monster's tactics.
+   *
+   * @return the description
+   */
   public Optional<String> getTactics()
   {
     return m_tactics;
   }
 
+  /**
+   * Get an annotated and combined description about a monster's tactics.
+   *
+   * @return the tactics
+   */
   public Annotated<Optional<String>> getCombinedTactics()
   {
     if(m_tactics.isPresent() && !m_tactics.get().isEmpty())
@@ -1109,11 +1594,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get the monster's usual character description.
+   *
+   * @return the description
+   */
   public Optional<String> getCharacter()
   {
     return m_character;
   }
 
+  /**
+   * Get a monster's combined and annotated character description.
+   *
+   * @return the description, annotated and combined
+   */
   public Annotated<Optional<String>> getCombinedCharacter()
   {
     if(m_character.isPresent() && !m_character.get().isEmpty())
@@ -1126,11 +1621,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get a description how the monster usually reproduces.
+   *
+   * @return the reproduction description
+   */
   public Optional<String> getReproduction()
   {
     return m_reproduction;
   }
 
+  /**
+   * Get a combined and annotated description of reproduction.
+   *
+   * @return the description
+   */
   public Annotated<Optional<String>> getCombinedReproduction()
   {
     if(m_reproduction.isPresent() && !m_reproduction.get().isEmpty())
@@ -1143,11 +1648,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get a list of all standard possessions.
+   *
+   * @return the possesions
+   */
   public List<String> getPossessions()
   {
     return m_possessions;
   }
 
+  /**
+   * Get the combined and annotated list of possessions.
+   *
+   * @return the possessions
+   */
   public Annotated<List<String>> getCombinedPossessions()
   {
     if(!m_possessions.isEmpty())
@@ -1160,11 +1675,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  /**
+   * Get monster's good saves.
+   *
+   * @return the good saves
+   */
   public List<Save> getGoodSaves()
   {
     return m_goodSaves;
   }
 
+  /**
+   * Get all the entries for the monster's feats.
+   *
+   * @return the feat entries
+   */
   public Set<BaseFeat> getFeatEntries()
   {
     return m_featEntries;
@@ -1180,6 +1705,11 @@ public class BaseMonster extends BaseEntry
     return m_reach;
   }
 
+  /**
+   * Get the combined and annotated reach of the monster.
+   *
+   * @return the reach
+   */
   public Annotated<Optional<Distance>> getCombinedReach()
   {
     if(m_reach.isPresent())
@@ -1193,61 +1723,21 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
-  public List<String> getMonsterSubtypeNames()
-  {
-    return MonsterSubtype.names();
-  }
-
-  public List<String> getMovementModeNames()
-  {
-    return MovementMode.names();
-  }
-
-  public List<String> getManeuverabilityNames()
-  {
-    return Maneuverability.names();
-  }
-
-  public List<String> getAttackModeNames()
-  {
-    return AttackMode.names();
-  }
-
-  public List<String> getAttackStyleNames()
-  {
-    return AttackStyle.names();
-  }
-
-  public List<String> getOrganizationNames()
-  {
-    return Organization.names();
-  }
-
-  public List<String> getSizeNames()
-  {
-    return Size.names();
-  }
-
-  public List<String> getLanguageNames()
-  {
-    return Language.names();
-  }
-
-  public List<String> getLanguageModifierNames()
-  {
-    return LanguageModifier.names();
-  }
-
-  public List<String> getSaveNames()
-  {
-    return Save.names();
-  }
-
+  /**
+   * Get the proficiencies the monster has.
+   *
+   * @return the proficienceis
+   */
   public List<String> getProficiencies()
   {
     return m_proficiencies;
   }
 
+  /**
+   * Get the combined proficiencies.
+   *
+   * @return the combined proficiencies
+   */
   public Annotated.List<String> getCombinedProficiencies()
   {
     if(!m_proficiencies.isEmpty())
@@ -2771,7 +3261,7 @@ public class BaseMonster extends BaseEntry
    *
    * @ param       inHP the input value
    *
-   * @return      the grouped value (as a String)
+   * @ return      the grouped value (as a String)
    */
   // protected static String groupHP(long inHP)
   // {
@@ -2867,7 +3357,8 @@ public class BaseMonster extends BaseEntry
     m_terrain = inValues.use("terrain", m_terrain, Terrain.PARSER);
     m_climate = inValues.use("climate", m_climate, Climate.PARSER);
     m_cr = inValues.use("cr", m_cr, Rational.PARSER);
-    m_organizations = inValues.use("organization", m_organizations, Group.PARSER,
+    m_organizations = inValues.use("organization",
+                                   m_organizations, Group.PARSER,
                                    "organization", "number", "plus");
     m_treasure = inValues.use("treasure", m_treasure, Treasure.PARSER);
     m_alignment = inValues.use("alignment", m_alignment, Alignment.PARSER);
@@ -3085,6 +3576,11 @@ public class BaseMonster extends BaseEntry
     return proto;
   }
 
+  /**
+   * Set the value from the given proto.
+   *
+   * @param inProto the proto with the values
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseMonsterProto))

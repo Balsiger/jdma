@@ -23,19 +23,27 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible sizes in the game. */
-@ParametersAreNonnullByDefault
+/**
+ * The possible immunities in the game.
+ *
+ * @file Immunity.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Immunity implements Named
 {
+  /** The unknown value. */
   UNKNOWN("Unknown", BaseQualityProto.Immunity.UNKNOWN_IMMUNITY),
+
+  /** Immunity to sleep spells. */
   SLEEP_SPELLS("Sleep Spells", BaseQualityProto.Immunity.SLEEP_SPELLS),
+
+  /** Immunity to sleep effects. */
   SLEEP_EFFECTS("Sleep Effects", BaseQualityProto.Immunity.SLEEP_EFFECTS);
 
   /** The value's name. */
@@ -131,6 +139,9 @@ public enum Immunity implements Named
 
   /**
    * Get the layout matching the given text.
+   *
+   * @param inText the text to get the immunity for
+   * @return the immunity, if one matches
    */
   public static Optional<Immunity> fromString(String inText)
   {

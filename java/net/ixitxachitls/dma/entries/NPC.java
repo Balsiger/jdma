@@ -69,11 +69,22 @@ public class NPC extends Monster
     super(inName, TYPE);
   }
 
+  /**
+   * Create an npc of the given type.
+   *
+   * @param inType the type of the npc to create
+   */
   protected NPC(Type<? extends NPC> inType)
   {
     super(inType);
   }
 
+  /**
+   * Create an npc with type and name.
+   *
+   * @param inName the name of the npc
+   * @param inType the type of the npc
+   */
   protected NPC(String inName, Type<? extends NPC> inType)
   {
     super(inName, inType);
@@ -101,8 +112,13 @@ public class NPC extends Monster
   /** The religion or patron deity of the npc. */
   protected Optional<String> m_religion = Optional.absent();
 
+  /** The NPCs height description. */
   protected Optional<String> m_height = Optional.absent();
+
+  /** The NPC's weight description. */
   protected Optional<String> m_weight = Optional.absent();
+
+  /** The NPC's description of how it looks. */
   protected Optional<String> m_looks = Optional.absent();
 
   /*
@@ -116,11 +132,21 @@ public class NPC extends Monster
   }
   */
 
+  /**
+   * Get the class levels of the NPC.
+   *
+   * @return the levels
+   */
   public List<Level> getLevels()
   {
     return Collections.unmodifiableList(m_levels);
   }
 
+  /**
+   * Get the cumulated levels.
+   *
+   * @return the cumulated levels
+   */
   private SortedMultiset<String> cumulatedLevels()
   {
     SortedMultiset<String> levels = TreeMultiset.create();
@@ -133,6 +159,11 @@ public class NPC extends Monster
     return levels;
   }
 
+  /**
+   * Get the cumulated levels, i.e. classes plus levels in each.
+   *
+   * @return the cumulated classes and levels
+   */
   public List<String> getCumulatedLevels()
   {
     SortedMultiset<String> levels = cumulatedLevels();
@@ -144,6 +175,12 @@ public class NPC extends Monster
     return results;
   }
 
+  /**
+   * Get the effective character level. This is the total of all character
+   * levels plus the monster's level adjustments, if any.
+   *
+   * @return the effective character leve.
+   */
   public int getEffectiveCharacterLevel()
   {
     int levels = m_levels.size();
@@ -155,26 +192,51 @@ public class NPC extends Monster
     return levels;
   }
 
+  /**
+   * Get the NPC's gender.
+   *
+   * @return the gender
+   */
   public Gender getGender()
   {
     return m_gender;
   }
 
+  /**
+   * Get the NPC's religion description.
+   *
+   * @return the description of the religion
+   */
   public Optional<String> getReligion()
   {
     return m_religion;
   }
 
+  /**
+   * Get the NPC's weight description.
+   *
+   * @return the weight
+   */
   public Optional<String> getWeight()
   {
     return m_weight;
   }
 
+  /**
+   * Get the NPC's height description.
+   *
+   * @return the height
+   */
   public Optional<String> getHeight()
   {
     return m_height;
   }
 
+  /**
+   * Get the NPC's description of looks.
+   *
+   * @return how the NPC looks
+   */
   public Optional<String> getLooks()
   {
     return m_looks;
@@ -416,6 +478,11 @@ public class NPC extends Monster
     return proto;
   }
 
+  /**
+   * Set the NPC's value from the given proto.
+   *
+   * @param inProto the proto with the values
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof NPCProto))

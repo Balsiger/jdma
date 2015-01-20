@@ -83,11 +83,19 @@ public class Character extends NPC
   /** The state value. */
   protected CharacterState m_state = CharacterState.UNKNOWN;
 
+  /** TODO: not sure if and for what this is needed
   protected Optional<String> m_monsterName = Optional.absent();
   protected Optional<Optional<Monster>> m_monster = Optional.absent();
+   */
 
   /** The name of the player for this character. */
   protected Optional<String> m_playerName = Optional.absent();
+
+  /**
+   * The base character for this one. If this is absent, the resolving it was
+   * not tried. If the values present is optional, it means the base character
+   * could not be found.
+   */
   protected Optional<Optional<BaseCharacter>> m_player = Optional.absent();
 
   /** The possessions value. */
@@ -185,11 +193,21 @@ public class Character extends NPC
     return m_items;
   }
 
+  /**
+   * Get the name of the base character.
+   *
+   * @return the base character name
+   */
   public Optional<String> getBaseCharacterName()
   {
     return m_playerName;
   }
 
+  /**
+   * Get the player responsible for the character.
+   *
+   * @return the player
+   */
   public Optional<BaseCharacter> getPlayer()
   {
     if(!m_player.isPresent())
@@ -302,6 +320,11 @@ public class Character extends NPC
   }
   */
 
+  /**
+   * Get the icon to use as an overlay to the character image.
+   *
+   * @return the icon
+   */
   public String getIcon()
   {
     File main = getMainFile();
@@ -311,6 +334,7 @@ public class Character extends NPC
       return main.getIcon();
   }
 
+  /*
   public Optional<Monster> getMonster()
   {
     if(!m_monster.isPresent())
@@ -324,6 +348,7 @@ public class Character extends NPC
 
     return m_monster.get();
   }
+  */
 
   @Override
   public List<Item> getPossessions()
@@ -396,6 +421,11 @@ public class Character extends NPC
     return proto;
   }
 
+  /**
+   * Set the values of the character from the given proto.
+   *
+   * @param inProto the proto to get values from
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof CharacterProto))

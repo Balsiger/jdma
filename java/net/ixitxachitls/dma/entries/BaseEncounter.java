@@ -104,61 +104,121 @@ public class BaseEncounter extends BaseEntry
   /** The base skills relevant for this encounter. */
   protected List<String> m_skills = new ArrayList<>();
 
+  /**
+   * Get the name of the adventuer for this encounter.
+   *
+   * @return the adventure name (id)
+   */
   public Optional<String> getAdventure()
   {
     return m_adventure;
   }
 
+  /**
+   * Get a list of locations for this encounter.
+   *
+   * @return the list of locations
+   */
   public List<String> getLocations()
   {
     return m_locations;
   }
 
+  /**
+   * Get a description about the doors in the encounter.
+   *
+   * @return the door description
+   */
   public Optional<String> getDoors()
   {
     return m_doors;
   }
 
+  /**
+   * Get a description about the floor in the encounter.
+   *
+   * @return the floor description
+   */
   public Optional<String> getFloor()
   {
     return m_floor;
   }
 
+  /**
+   * Get a description about the ceiling in the encounter.
+   *
+   * @return the ceiling description
+   */
   public Optional<String> getCeiling()
   {
     return m_ceiling;
   }
 
+  /**
+   * Get a description about the walls in the encounter.
+   *
+   * @return the wall description
+   */
   public Optional<String> getWalls()
   {
     return m_walls;
   }
 
+  /**
+   * Get a description about how the encounter feels.
+   *
+   * @return the encounter feel
+   */
   public Optional<String> getFeel()
   {
     return m_feel;
   }
 
+  /**
+   * Get a description about the sounds in the encounter.
+   *
+   * @return the sounds in the encounter
+   */
   public Optional<String> getSound()
   {
     return m_sound;
   }
 
+  /**
+   * Get a description about the smells at and during the encounter.
+   *
+   * @return the smells
+   */
   public Optional<String> getSmell()
   {
     return m_smell;
   }
 
+  /**
+   * Get a description about the tasts at and during the encounter.
+   *
+   * @return the tastes
+   */
   public Optional<String> getTaste()
   {
     return m_taste;
   }
 
+  /**
+   * Get a description about the light conditions at and during the encounter.
+   *
+   * @return the lightning conditions
+   */
   public Optional<String> getLight()
   {
     return m_light;
   }
 
+  /**
+   * Get a list of skills relevant to the encounter.
+   *
+   * @return the list of relevant skill names
+   */
   public List<String> getSkills()
   {
     return m_skills;
@@ -242,6 +302,11 @@ public class BaseEncounter extends BaseEntry
     return proto;
   }
 
+  /**
+   * Read values for the entry from the given proto.
+   *
+   * @param inProto the proto to read from
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseEncounterProto))

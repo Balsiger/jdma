@@ -24,18 +24,22 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible sizes in the game. */
-@ParametersAreNonnullByDefault
+/**
+ * The possible sizes in the game.
+ *
+ * @file Treasure.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Treasure implements Named,
     Proto<BaseMonsterProto.Treasure>
 {
+  /** The unknown value. */
   UNKNOWN("unknown", 0, BaseMonsterProto.Treasure.UNKNOWN_TREADSURE),
 
   /** No treasure at all. */

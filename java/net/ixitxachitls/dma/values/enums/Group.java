@@ -1,3 +1,24 @@
+/******************************************************************************
+ * Copyright (c) 2002-2013 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
 package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
@@ -8,7 +29,12 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible groups for a character. */
+/**
+ * The possible groups for a character.
+ *
+ * @file Group.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Group implements Named, Proto<Entries.BaseCharacterProto.Group>
 {
   /** A guest user without any special permissions. */
@@ -26,6 +52,7 @@ public enum Group implements Named, Proto<Entries.BaseCharacterProto.Group>
   /** An administrator. */
   ADMIN("Admin", Entries.BaseCharacterProto.Group.ADMIN);
 
+  /** The parser for groups. */
   public static final Parser<Group> PARSER = new Parser<Group>(1) {
     @Override
     public Optional<Group> doParse(String inValue)
@@ -114,6 +141,9 @@ public enum Group implements Named, Proto<Entries.BaseCharacterProto.Group>
 
   /**
    * Get the group matching the given text.
+   *
+   * @param inText the text to get the group for
+   * @return the matching group, if any
    */
   public static Optional<Group> fromString(String inText)
   {

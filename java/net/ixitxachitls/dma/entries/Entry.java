@@ -25,8 +25,6 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.List;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
@@ -44,8 +42,6 @@ import net.ixitxachitls.util.logging.Log;
  * @file          Entry.java
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
-
-@ParametersAreNonnullByDefault
 public abstract class Entry extends AbstractEntry
 {
   /** The serial version id. */
@@ -146,6 +142,11 @@ public abstract class Entry extends AbstractEntry
     return combined;
   }
 
+  /**
+   * Get the base entry for this entry.
+   *
+   * @return the base entry for this
+   */
   public BaseEntry getBaseEntry()
   {
     List<BaseEntry> bases = getBaseEntries();
@@ -204,6 +205,11 @@ public abstract class Entry extends AbstractEntry
     return builder.build();
   }
 
+  /**
+   * Set all the value from the given proto.
+   *
+   * @param inProto the proto to set from
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof EntryProto))
@@ -232,6 +238,13 @@ public abstract class Entry extends AbstractEntry
     }
   }
 
+  /**
+   * Check whether the given user is the owner of the entry.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true if the user is the owner, false if not
+   */
   public boolean isOwner(BaseCharacter inUser)
   {
     // TODO: handle this properly.

@@ -49,13 +49,12 @@ import net.ixitxachitls.dma.values.Group;
 import net.ixitxachitls.dma.values.ISBN;
 import net.ixitxachitls.dma.values.ISBN13;
 import net.ixitxachitls.dma.values.Parser;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Person;
 import net.ixitxachitls.dma.values.Price;
 import net.ixitxachitls.dma.values.ProductReference;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -232,6 +231,9 @@ public class BaseProduct extends BaseEntry
 
     /**
      * Get the part matching the given text.
+     *
+     * @param inText the text to select the part for
+     * @return the part representing the text, if one matches
      */
     public static Optional<Part> fromString(String inText)
     {
@@ -334,6 +336,9 @@ public class BaseProduct extends BaseEntry
 
     /**
      * Get the layout matching the given text.
+     *
+     * @param inText the text representing the layout
+     * @return the layout value that matches the text, if any
      */
     public static Optional<Layout> fromString(String inText)
     {
@@ -573,6 +578,9 @@ public class BaseProduct extends BaseEntry
 
     /**
      * Get the system matching the given text.
+     *
+     * @param inText the text to get from
+     * @return the matching system, if any
      */
     public static Optional<System> fromString(String inText)
     {
@@ -736,6 +744,9 @@ public class BaseProduct extends BaseEntry
 
     /**
      * Get the product type matching the given text.
+     *
+     * @param inText the text to get the product type for
+     * @return the product type, if any
      */
     public static Optional<ProductType> fromString(String inText)
     {
@@ -862,6 +873,9 @@ public class BaseProduct extends BaseEntry
 
     /**
      * Get the style matching the given text.
+     *
+     * @param inText the text to get the style for
+     * @return the style for the text, if any matches
      */
     public static Optional<Style> fromString(String inText)
     {
@@ -963,6 +977,9 @@ public class BaseProduct extends BaseEntry
 
     /**
      * Get the audience matching the given text.
+     *
+     * @param inText the text to get the audience for
+     * @return the audience if any matches
      */
     public static Optional<Audience> fromString(String inText)
     {
@@ -1056,8 +1073,10 @@ public class BaseProduct extends BaseEntry
   /** The total number of pages of the product. */
   protected Optional<Integer> m_pages = Optional.absent();
 
+  /** How number of pages should be grouped. */
   protected static final Group<Integer, Integer, String> s_pageGroup =
-      new Group<Integer, Integer, String>(new Group.Extractor<Integer, Integer>()
+      new Group<Integer, Integer, String>(
+          new Group.Extractor<Integer, Integer>()
       {
         @Override
           public Integer extract(Integer inValue)
@@ -1067,8 +1086,8 @@ public class BaseProduct extends BaseEntry
       }, new Integer [] { 5, 10, 20, 25, 50, 100, 200, 250, 300, 400, 500, },
       new String []
           {
-            "5", "10", "20", "25", "50", "100", "200", "250", "300", "400", "500",
-            "500+",
+            "5", "10", "20", "25", "50", "100", "200", "250", "300", "400",
+            "500", "500+",
           }, "$undefined");
 
   /** The game system of the product. */
@@ -1098,6 +1117,7 @@ public class BaseProduct extends BaseEntry
   /** This is the price of the series. */
   protected Optional<Price> m_price = Optional.absent();
 
+  /** How prices should be grouped. */
   protected static final Group<Price, Double, String> s_priceGrouping =
       new Group<Price, Double, String>(new Group.Extractor<Price, Double>()
       {
@@ -1511,12 +1531,6 @@ public class BaseProduct extends BaseEntry
     return m_contents;
   }
 
-  public List<String> getPartNames()
-  {
-    return Part.names();
-  }
-
-
   /**
    * Get the isbn value.
    *
@@ -1704,8 +1718,10 @@ public class BaseProduct extends BaseEntry
     m_title = inValues.use("title", m_title);
     m_subtitle = inValues.use("subtitle", m_subtitle);
     m_notes = inValues.use("notes", m_notes);
-    m_authors = inValues.use("authors", m_authors, Person.PARSER, "name", "job");
-    m_editors = inValues.use("editors", m_editors, Person.PARSER, "name", "job");
+    m_authors = inValues.use("authors", m_authors, Person.PARSER,
+                             "name", "job");
+    m_editors = inValues.use("editors", m_editors, Person.PARSER,
+                             "name", "job");
     m_cover = inValues.use("cover", m_cover, Person.PARSER, "name", "job");
     m_illustrators = inValues.use("illustrators", m_illustrators, Person.PARSER,
                                   "name", "job");
@@ -1720,7 +1736,7 @@ public class BaseProduct extends BaseEntry
     m_isbn13 = inValues.use("isbn.13", m_isbn13, ISBN13.PARSER);
     m_pages = inValues.use("pages", m_pages, Value.INTEGER_PARSER);
     m_producer = inValues.use("producer", m_producer);
-    m_system= inValues.use("system", m_system, new Parser<System>(1) {
+    m_system = inValues.use("system", m_system, new Parser<System>(1) {
       @Override
       public Optional<System> doParse(String inValue)
       {
@@ -1847,6 +1863,11 @@ public class BaseProduct extends BaseEntry
     return proto;
   }
 
+  /**
+   * Read all the values from the given proto into the product.
+   *
+   * @param inProto the proto to read values from
+   */
   @SuppressWarnings("unchecked")
   public void fromProto(Message inProto)
   {
@@ -1909,7 +1930,7 @@ public class BaseProduct extends BaseEntry
       m_audience = Audience.fromProto(proto.getAudience());
 
     if(proto.hasType())
-      m_productType=ProductType.fromProto(proto.getType());
+      m_productType = ProductType.fromProto(proto.getType());
 
     if(proto.hasStyle())
       m_style = Style.fromProto(proto.getStyle());

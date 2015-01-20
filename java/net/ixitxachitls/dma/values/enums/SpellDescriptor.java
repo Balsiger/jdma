@@ -29,7 +29,12 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible spell descriptors. */
+/**
+ * The possible spell descriptors.
+ *
+ * @file SpellDescriptor.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum SpellDescriptor
   implements Named, Proto<BaseSpellProto.Descriptor>
 {

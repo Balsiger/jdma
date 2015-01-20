@@ -31,19 +31,28 @@ import net.ixitxachitls.dma.proto.Entries.ProductProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
 
-/** The product status. */
+/**
+ * The product status.
+ *
+ * @file ProductStatus.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum ProductStatus implements Named,
     Proto<ProductProto.Status>
 {
   /** The unknown status. */
   UNKNOWN("unknown", ProductProto.Status.UNKNOWN),
+
   /** The product is available in the library. */
   AVAILABLE("available", ProductProto.Status.AVAILABLE),
+
   /** A highly desired product. */
   DESIRED1("desired 1", ProductProto.Status.DESIRED_1),
+
   /** A desired product. */
   DESIRED2("desired 2", ProductProto.Status.DESIRED_2),
   /** A marginally desired product. */
+
   DESIRED3("desired 3", ProductProto.Status.DESIRED_3);
 
   /** The value's name. */
@@ -126,6 +135,9 @@ public enum ProductStatus implements Named,
 
   /**
    * Get the substance matching the given text.
+   *
+   * @param inText the text to get the status for
+   * @return the status if any matches
    */
   public static Optional<ProductStatus> fromString(String inText)
   {

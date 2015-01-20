@@ -106,6 +106,11 @@ public class BaseCampaign extends BaseEntry
     return proto;
   }
 
+  /**
+   * Read all values from a proto into this entry.
+   *
+   * @param inProto the proto with the values
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseCampaignProto))

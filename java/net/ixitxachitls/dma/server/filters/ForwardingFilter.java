@@ -39,11 +39,11 @@ import com.google.common.base.Optional;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 
-import net.ixitxachitls.dma.values.enums.Group;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.server.ServerUtils;
 import net.ixitxachitls.util.logging.Log;
 

@@ -19,7 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-
 package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
@@ -30,7 +29,12 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible gender types in the game. */
+/**
+ * The possible gender types in the game.
+ *
+ * @file Gender.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Gender implements Named,
     Proto<NPCProto.Gender>
 {
@@ -50,7 +54,7 @@ public enum Gender implements Named,
   private String m_name;
 
   /** The proto enum value. */
-  NPCProto.Gender m_proto;
+  private NPCProto.Gender m_proto;
 
   /** The parser for gender. */
   public static final Parser<Gender> PARSER =
@@ -93,6 +97,12 @@ public enum Gender implements Named,
     return m_proto;
   }
 
+  /**
+   * Get the gender associated with the given proto value.
+   *
+   * @param inProto the proto value
+   * @return the gender related to the proto value
+   */
   public static Gender fromProto(NPCProto.Gender inProto)
   {
     for(Gender gender : values())

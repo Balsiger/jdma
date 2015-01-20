@@ -85,13 +85,14 @@ public final class Exporter
   }
 
   /** The datastore service. */
-  DatastoreService m_store = DatastoreServiceFactory.getDatastoreService();
+  private DatastoreService m_store =
+      DatastoreServiceFactory.getDatastoreService();
 
   /** The image service. */
-  ImagesService m_image = ImagesServiceFactory.getImagesService();
+  private ImagesService m_image = ImagesServiceFactory.getImagesService();
 
   /** The DMA data store. */
-  DMADatastore m_dmaStore = new DMADatastore();
+  private DMADatastore m_dmaStore = new DMADatastore();
 
 
   static
@@ -205,7 +206,7 @@ public final class Exporter
    * @param inName the name of the entry this blob is for
    * @param inDir  the directory to export to
    *
-   * @thwos IOException if writing fails
+   * @throws IOException if writing fails
    */
   private void export(net.ixitxachitls.dma.values.File inFile, String inName,
                       String inDir)

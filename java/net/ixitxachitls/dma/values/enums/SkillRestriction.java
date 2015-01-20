@@ -30,7 +30,12 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible sizes in the game. */
+/**
+ * The possible sizes in the game.
+ *
+ * @file SkillRestriction.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum SkillRestriction implements Named,
     Proto<BaseSkillProto.Restriction>
 {

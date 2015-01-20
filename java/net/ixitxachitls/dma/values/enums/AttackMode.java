@@ -24,7 +24,6 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
@@ -32,11 +31,16 @@ import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Attack.Mode;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible attack styles in the game. */
-@ParametersAreNonnullByDefault
+/**
+ * The possible attack styles in the game.
+ *
+ * @file AttackMode.java
+ * @author balsiger@ixitxahitls.net (Peter Balsiger)
+ */
 public enum AttackMode implements Named,
     Proto<Mode>
 {
+  /** Unknown. */
   UNKNOWN("Unknown", false, BaseMonsterProto.Attack.Mode.UNKNOWN_MODE),
 
   /** A tentacle attack. */
@@ -115,8 +119,7 @@ public enum AttackMode implements Named,
   private AttackMode(String inName, boolean inDexterity,
                      BaseMonsterProto.Attack.Mode inProto)
   {
-    m_name = inName
-    ;
+    m_name = inName;
     m_dexterity = inDexterity;
     m_proto = inProto;
   }

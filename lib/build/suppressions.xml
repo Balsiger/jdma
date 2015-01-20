@@ -6,7 +6,7 @@
 
 <suppressions>
   <!-- this class has a dummy logger that we want to ignore -->
-  <suppress checks="VisibilityModifier"
-            files="Value.java"
-            lines="893"/>
+  <suppress checks="VisibilityModifier" files="Value.java" lines="893"/>
+  <suppress checks=".*" files="com/google/protobuf/.*"/>
+  <suppress checks=".*" files="net/ixitxachitls/dma/proto/.*"/>
 </suppressions>

@@ -155,6 +155,13 @@ public class TestCase extends org.junit.Assert
     assertSomeContent(inMessage, inActual, inExpected);
   }
 
+  /**
+   * Assert that the given map contains at least the expected values.
+   *
+   * @param inMessage the error message if not matching
+   * @param inActual the actual map to check
+   * @param inExpected the key value pairs that have to appear in the map
+   */
   public void assertSomeContent(String inMessage, Map<?, ?> inActual,
                                 Object ... inExpected)
   {

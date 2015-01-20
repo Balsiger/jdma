@@ -23,18 +23,22 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible terrains in the game. */
-@ParametersAreNonnullByDefault
+/**
+ * The possible terrains in the game.
+ *
+ * @file Organization.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Organization implements Named,
     Proto<BaseMonsterProto.Organization.Type>
 {
+  /** The unknown value. */
   UNKNOWN("Unknown", BaseMonsterProto.Organization.Type.UNKNOWN),
 
   /** Any organization. */
@@ -152,6 +156,12 @@ public enum Organization implements Named,
     return m_proto;
   }
 
+  /**
+   * Convert the given proto value into the corresponding organization value.
+   *
+   * @param inProto the proto value
+   * @return the organization
+   */
   public static Organization
     fromProto(BaseMonsterProto.Organization.Type inProto)
   {

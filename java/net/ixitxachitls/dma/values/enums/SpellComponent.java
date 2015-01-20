@@ -29,8 +29,13 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible spell components. */
-public enum SpellComponent implements Named, net.ixitxachitls.dma.values.enums.Short,
+/**
+ * The possible spell components.
+ *
+ * @file SpellComponent.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
+public enum SpellComponent implements Named, Short,
     Proto<BaseSpellProto.Components>
 {
   /** Unknown. */

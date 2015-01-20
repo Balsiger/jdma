@@ -40,12 +40,12 @@ import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Modifier;
-import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.dma.values.Speed;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.dma.values.enums.MovementMode;
+import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -566,7 +566,7 @@ public class Monster extends CampaignEntry
   /**
    * This is the normal constructor.
    *
-   * @ param       inName the name of the base item
+   * @param inCampaign the campaign this monster is in
    */
   public Monster(Campaign inCampaign)
   {
@@ -943,6 +943,11 @@ public class Monster extends CampaignEntry
     return (int) (inScore / 2) - 5;
   }
 
+  /**
+   * Get the monster's weapons.
+   *
+   * @return the list of weapons
+   */
   public List<Item> getWeapons()
   {
     List<Item> weapons = new ArrayList<>();
@@ -953,6 +958,10 @@ public class Monster extends CampaignEntry
     return weapons;
   }
 
+  /**
+   * Get the monster's armor.
+   * @return the armor
+   */
   public List<Item> getArmor()
   {
     List<Item> armor = new ArrayList<>();
@@ -963,6 +972,11 @@ public class Monster extends CampaignEntry
     return armor;
   }
 
+  /**
+   * Get all of the monsters possessions.
+   *
+   * @return the possesions
+   */
   public List<Item> getPossessions()
   {
     if(m_possessions == null)
@@ -973,16 +987,31 @@ public class Monster extends CampaignEntry
     return Collections.unmodifiableList(m_possessions);
   }
 
+  /**
+   * Get the feats the monster's has.
+   *
+   * @return the feats
+   */
   public List<Feat> getFeats()
   {
     return Collections.unmodifiableList(m_feats);
   }
 
+  /**
+   * Get all of the monster's qualities.
+   *
+   * @return the qualities
+   */
   public List<Quality> getQualities()
   {
     return Collections.unmodifiableList(m_qualities);
   }
 
+  /**
+   * Get the monster's strength, if it has any.
+   *
+   * @return the strength if the monster has any
+   */
   public Optional<Integer> getStrength()
   {
     return m_strength;
@@ -1004,6 +1033,12 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get the monster's strength modifier. If the monster does not have a
+   * strength, this returns 0.
+   *
+   * @return the the monsters strength modifier
+   */
   public int getStrengthModifier()
   {
     Optional<Integer> strength = getCombinedStrength().get();
@@ -1013,11 +1048,21 @@ public class Monster extends CampaignEntry
     return abilityModifier(strength.get());
   }
 
+  /**
+   * Get a monster's constitution value, if any.
+   *
+   * @return the constitution value
+   */
   public Optional<Integer> getConstitution()
   {
     return m_constitution;
   }
 
+  /**
+   * Get a monster's annotated and combined constitution score.
+   *
+   * @return the annotated constitution score
+   */
   public Annotated<Optional<Integer>> getCombinedConstitution()
   {
     Annotated.Integer combined = new Annotated.Integer();
@@ -1029,6 +1074,12 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get the monster's constitution modifier. This return 0 if the monster
+   * does not have a constitution score.
+   *
+   * @return the constition modifier
+   */
   public int getConstitutionModifier()
   {
     Optional<Integer> constitution = getCombinedCharisma().get();
@@ -1038,11 +1089,21 @@ public class Monster extends CampaignEntry
     return abilityModifier(constitution.get());
   }
 
+  /**
+   * Get a monsters dexterity score.
+   *
+   * @return the dexterity score, if it has any
+   */
   public Optional<Integer> getDexterity()
   {
     return m_dexterity;
   }
 
+  /**
+   * Get the annotated, combined dexterity score of the monster.
+   *
+   * @return the annotated dexterity score
+   */
   public Annotated<Optional<Integer>> getCombinedDexterity()
   {
     Annotated.Integer combined = new Annotated.Integer();
@@ -1054,6 +1115,12 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get the dexerity modifier of the monster. This returns 0 if the monster
+   * does not have a dexerity score.
+   *
+   * @return the dexterity modifier
+   */
   public int getDexterityModifier()
   {
     Optional<Integer> dexterity = getCombinedDexterity().get();
@@ -1063,11 +1130,22 @@ public class Monster extends CampaignEntry
     return abilityModifier(dexterity.get());
   }
 
+  /**
+   * Get a monster's intelligence score, if it has any.
+   *
+   * @return the intelligence score of the monster
+   */
   public Optional<Integer> getIntelligence()
   {
     return m_intelligence;
   }
 
+  /**
+   * Get the annotated and combined intelligence score of the monster and
+   * its bases.
+   *
+   * @return the annotated intelligence score
+   */
   public Annotated<Optional<Integer>> getCombinedIntelligence()
   {
     Annotated.Integer combined = new Annotated.Integer();
@@ -1079,6 +1157,12 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get a monster's intelligence modifier. This will return 0 if the monster
+   * does not have an intelligence score.
+   *
+   * @return the intelligence modifier
+   */
   public int getIntelligenceModifier()
   {
     Optional<Integer> intelligence = getCombinedBaseAttack().get();
@@ -1088,11 +1172,21 @@ public class Monster extends CampaignEntry
     return abilityModifier(intelligence.get());
   }
 
+  /**
+   * Get a monster's wisdom score, if it has any.
+   *
+   * @return the monster's wisdom score
+   */
   public Optional<Integer> getWisdom()
   {
     return m_wisdom;
   }
 
+  /**
+   * Get a monster's annotated and combined wisdom score.
+   *
+   * @return the annoated wisdom score
+   */
   public Annotated<Optional<Integer>> getCombinedWisdom()
   {
     Annotated.Integer combined = new Annotated.Integer();
@@ -1104,6 +1198,12 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get a monster's wisdom modifier. If the monster does not have a wisdom
+   * score, this return 0.
+   *
+   * @return the monster's wisdom modifier
+   */
   public int getWisdomModifier()
   {
     Optional<Integer> wisdom = getCombinedWisdom().get();
@@ -1113,11 +1213,21 @@ public class Monster extends CampaignEntry
     return abilityModifier(wisdom.get());
   }
 
+  /**
+   * Get a monsters charisma score, if it has any.
+   *
+   * @return the monster's charisma
+   */
   public Optional<Integer> getCharisma()
   {
     return m_charisma;
   }
 
+  /**
+   * Get a monsters annotated and combined charisma score.
+   *
+   * @return the annotated charisma score
+   */
   public Annotated<Optional<Integer>> getCombinedCharisma()
   {
     Annotated.Integer combined = new Annotated.Integer();
@@ -1129,6 +1239,12 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get a monster's charisma modifier. This return 0 if the monster does not
+   * have a charisma score.
+   *
+   * @return the charisma modifier
+   */
   public int getCharismaModifier()
   {
     Optional<Integer> charisma = getCombinedCharisma().get();
@@ -1138,6 +1254,11 @@ public class Monster extends CampaignEntry
     return abilityModifier(charisma.get());
   }
 
+  /**
+   * Get a monster's annotated and combined level adjustment.
+   *
+   * @return the level adjustment
+   */
   public Annotated<Optional<Integer>> getCombinedLevelAdjustment()
   {
     Annotated.Integer combined = new Annotated.Integer();
@@ -1147,6 +1268,11 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get a monster's annotated and combined size.
+   *
+   * @return the monster's size
+   */
   public Annotated<Optional<Size>> getCombinedSize()
   {
     Annotated<Optional<Size>> combined = new Annotated.Max<>();
@@ -1156,6 +1282,11 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get a monsters combined base attack bonus.
+   *
+   * @return the combined base attack bonus
+   */
   public Annotated.Bonus getCombinedBaseAttack()
   {
     Annotated.Bonus combined = new Annotated.Bonus();
@@ -1165,21 +1296,42 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get a monster's alignment.
+   *
+   * @return the alignment
+   */
   public Alignment getAlignment()
   {
     return m_alignment;
   }
 
+  /**
+   * Get a monster's maximal hit points.
+   *
+   * @return the maximal hit points
+   */
   public int getMaxHP()
   {
     return m_maxHP;
   }
 
+  /**
+   * Get a monster's current hit points.
+   *
+   * @return the current hit points
+   */
   public int getHP()
   {
     return m_hp;
   }
 
+  /**
+   * Get a monsters annotated and combined speed.
+   *
+   * @param inMode the movement mode to get the speed for
+   * @return the speed for the given movement mode, if any
+   */
   public Optional<Annotated.Arithmetic<Speed>>
     getSpeedAnnotated(MovementMode inMode)
   {
@@ -1209,6 +1361,11 @@ public class Monster extends CampaignEntry
     return Optional.fromNullable(speed);
   }
 
+  /**
+   * Get all of a monsters annoated and combined speeds.
+   *
+   * @return a list of all the available speeds
+   */
   public List<Annotated.Arithmetic<Speed>> getSpeedsAnnotated()
   {
     List<Annotated.Arithmetic<Speed>> speeds = new ArrayList<>();
@@ -1224,11 +1381,21 @@ public class Monster extends CampaignEntry
 
   }
 
+  /**
+   * Get a monster's initiative value.
+   *
+   * @return the initiative
+   */
   public int getInitiative()
   {
     return getDexterityModifier();
   }
 
+  /**
+   * Get a monster's grapple bonus.
+   *
+   * @return the grapple bonus
+   */
   public int getGrappleBonus()
   {
     Optional<Integer> base = getCombinedBaseAttack().get();
@@ -1238,11 +1405,21 @@ public class Monster extends CampaignEntry
     return base.get() + getStrengthModifier();
   }
 
+  /**
+   * Get a monster's fortitude save.
+   *
+   * @return the fortitude save
+   */
   public Optional<Integer> getFortitudeSave()
   {
     return m_fortitudeSave;
   }
 
+  /**
+   * Get a monster's combined and annotated base fortitude save.
+   *
+   * @return the annotated base fortitude save
+   */
   public Annotated.Bonus getCombinedBaseFortitudeSave()
   {
     if(m_fortitudeSave.isPresent())
@@ -1255,6 +1432,11 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get a monster's combined fortitude save.
+   *
+   * @return the annotated fortitude save
+   */
   public Annotated.Bonus getCombinedFortitudeSave()
   {
     Annotated.Bonus save = getCombinedBaseFortitudeSave();
@@ -1263,6 +1445,11 @@ public class Monster extends CampaignEntry
     return save;
   }
 
+  /**
+   * Get a monster's combined and annotated base reflex save.
+   *
+   * @return the annotated base relflex save
+   */
   public Annotated.Bonus getCombinedBaseReflexSave()
   {
     if(m_reflexSave.isPresent())
@@ -1275,6 +1462,12 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get a monsters combined and annoated relfex save. Includes the dexterity
+   * bonus.
+   *
+   * @return the annotated reflex save
+   */
   public Annotated.Bonus getCombinedReflexSave()
   {
     Annotated.Bonus save = getCombinedBaseReflexSave();
@@ -1283,6 +1476,11 @@ public class Monster extends CampaignEntry
     return save;
   }
 
+  /**
+   * Get a monster's annotated and combined base will save.
+   *
+   * @return the annotated base will save
+   */
   public Annotated.Bonus getCombinedBaseWillSave()
   {
     if(m_willSave.isPresent())
@@ -1295,6 +1493,12 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get a monster's combined and annotated will save. Includes the wisdom
+   * modifier.
+   *
+   * @return the annotated will save
+   */
   public Annotated.Bonus getCombinedWillSave()
   {
     Annotated.Bonus save = getCombinedBaseWillSave();
@@ -1303,6 +1507,11 @@ public class Monster extends CampaignEntry
     return save;
   }
 
+  /**
+   * Get a monster's annotated and combined natural armor.
+   *
+   * @return the annotated natural armor
+   */
   public Annotated.Arithmetic<Modifier> getCombinedNaturalArmor()
   {
     Annotated.Arithmetic<Modifier> combined = new Annotated.Arithmetic<>();
@@ -1312,6 +1521,11 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Get the monter's armor bonus.
+   *
+   * @return the armor bonus
+   */
   public Modifier getArmorBonus()
   {
     Modifier bonus = null;
@@ -1334,6 +1548,11 @@ public class Monster extends CampaignEntry
     return bonus;
   }
 
+  /**
+   * Get a monster's shield bonus.
+   *
+   * @return the shield bonus
+   */
   public Modifier getShieldBonus()
   {
     Modifier bonus = null;
@@ -1356,6 +1575,11 @@ public class Monster extends CampaignEntry
     return bonus;
   }
 
+  /**
+   * Get a monster's total armor class.
+   *
+   * @return the armor class value
+   */
   public int getArmorClass()
   {
     Modifier armor = getArmorBonus();
@@ -1365,6 +1589,11 @@ public class Monster extends CampaignEntry
     return 10 + armor.getModifier() + shield.getModifier() + dexterity;
   }
 
+  /**
+   * Get a monster's armor class against touch attacks.
+   *
+   * @return the monster's touch AC
+   */
   public int getTouchArmorClass()
   {
     int dexterity = getDexterityModifier();
@@ -1372,6 +1601,11 @@ public class Monster extends CampaignEntry
     return 10 + dexterity;
   }
 
+  /**
+   * Get a monster's armor class when it's flat footed.
+   *
+   * @return the flat footed AC
+   */
   public int getFlatFootedArmorClass()
   {
     Modifier armor = getArmorBonus();
@@ -1380,6 +1614,11 @@ public class Monster extends CampaignEntry
     return 10 + armor.getModifier() + shield.getModifier();
   }
 
+  /**
+   * Get all the armor items a monster is wearing.
+   *
+   * @return the armor worn
+   */
   public Optional<Item> getArmorWorn()
   {
     List<Item> armor = getArmor();
@@ -1390,6 +1629,11 @@ public class Monster extends CampaignEntry
     return Optional.absent();
   }
 
+  /**
+   * Get the shield worn by the monster, if any.
+   *
+   * @return the shield worn
+   */
   public Optional<Item> getShieldWorn()
   {
     List<Item> armor = getArmor();
@@ -2401,6 +2645,12 @@ public class Monster extends CampaignEntry
     return false;
   }
 
+  /**
+   * Get a monster's feat with the given name.
+   *
+   * @param inName the name (id) of the feat
+   * @return the feat or absent if the monster does not have the feat
+   */
   public Optional<Feat> getFeat(String inName)
   {
     for(Feat feat : m_feats)
@@ -2410,6 +2660,12 @@ public class Monster extends CampaignEntry
     return Optional.absent();
   }
 
+  /**
+   * Check whether the monster has a quality with the given name.
+   *
+   * @param inName the name (id) of the quality
+   * @return true if the monster has the quality, false if not
+   */
   public boolean hasQuality(String inName)
   {
     for(Quality quality : m_qualities)
@@ -2419,6 +2675,12 @@ public class Monster extends CampaignEntry
     return false;
   }
 
+  /**
+   * Get a named quality the monster has.
+   *
+   * @param inName the name (id) of the quality
+   * @return the quality or absent if the monster does not have it
+   */
   public Optional<Quality> getQuality(String inName)
   {
     for(Quality quality : m_qualities)
@@ -3519,6 +3781,11 @@ public class Monster extends CampaignEntry
     return proto;
   }
 
+  /**
+   * Set all the values from the given proto.
+   *
+   * @param inProto the proto with the values
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof MonsterProto))

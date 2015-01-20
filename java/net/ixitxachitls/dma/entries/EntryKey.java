@@ -21,8 +21,6 @@
 
 package net.ixitxachitls.dma.entries;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -30,6 +28,9 @@ import net.ixitxachitls.dma.values.enums.Group;
 
 /**
  * The key for an entry for storage.
+ *
+ * @file EntryKey.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
 public class EntryKey
 {
@@ -100,6 +101,12 @@ public class EntryKey
     return m_parent;
   }
 
+  /**
+   * Check whether the entry is editable by the given user.
+   *
+   * @param inUser the user checking for edits
+   * @return true if editable, false if not
+   */
   public boolean editableBy(BaseCharacter inUser)
   {
     // ADMINs can edit anything.
@@ -119,6 +126,12 @@ public class EntryKey
     return inUser.hasAccess(Group.PLAYER) && isOwner(inUser);
   }
 
+  /**
+   * Check whether the given user is the owner of the entry denoted by this key.
+   *
+   * @param inUser the user to check ownership for
+   * @return true if the user is the owner, false if not
+   */
   public boolean isOwner(BaseCharacter inUser)
   {
     Optional<Entry> entry = DMADataFactory.get().getEntry(this);
@@ -128,6 +141,11 @@ public class EntryKey
     return entry.get().isOwner(inUser);
   }
 
+  /**
+   * Get the campaign for the entry for this key, if any.
+   *
+   * @return the campaign
+   */
   public Optional<Campaign> getCampaign()
   {
     if(getType().equals(Campaign.TYPE))

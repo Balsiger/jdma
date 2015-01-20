@@ -24,18 +24,22 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible sizes in the game. */
-@ParametersAreNonnullByDefault
+/**
+ * The possible languages in the game.
+ *
+ * @file Language.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Language implements Named,
     Proto<BaseMonsterProto.Language.Name>
 {
+  /** The unknown value. */
   UNKNOWN("Unknown", BaseMonsterProto.Language.Name.UNKNOWN_LANGUAGE),
 
   /** Aboleth. */
@@ -110,8 +114,10 @@ public enum Language implements Named,
   /** None. */
   NONE("-", BaseMonsterProto.Language.Name.NONE),
 
-  // Forgotten Realms language.
+  /** Chondathan (Forgotten Realms). */
   CHONDATHAN("Chondathan", BaseMonsterProto.Language.Name.CHONDATHAN),
+
+  /** Illuskan (Forgotten Realms). */
   ILLUSKAN("Illuskan", BaseMonsterProto.Language.Name.ILLUSKAN);
 
   /** The value's name. */

@@ -22,7 +22,6 @@
 package net.ixitxachitls.dma.output.soy;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,11 +30,9 @@ import java.util.regex.Pattern;
 
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
 import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyMapData;
 
-import net.ixitxachitls.dma.server.servlets.SoyServlet;
 import net.ixitxachitls.util.configuration.Config;
 
 /**
@@ -64,10 +61,17 @@ public class SoyRenderer
     m_template = inTemplate;
   }
 
-  public static synchronized SoyTemplate getDefaultTemplate() {
-    if(TEMPLATE == null)
+  /**
+   * Get the default template to use. This is a static method to prevent some
+   * intialization syncing issues.
+   *
+   * @return the default template
+   */
+  public static synchronized SoyTemplate getDefaultTemplate()
+  {
+    if(s_defaultTemplate == null)
     {
-      TEMPLATE = new SoyTemplate("page", "errors", "about", "main",
+      s_defaultTemplate = new SoyTemplate("page", "errors", "about", "main",
                                  "navigation", "entry", "commands", "value",
                                  "admin", "cards", "edit",
 
@@ -85,11 +89,11 @@ public class SoyRenderer
                                  "entries/basemonsters");
     }
 
-    return TEMPLATE;
+    return s_defaultTemplate;
   }
 
   /** The template to render a page. */
-  public static SoyTemplate TEMPLATE;
+  private static SoyTemplate s_defaultTemplate;
 
   /** The template to use for rendering. */
   private final SoyTemplate m_template;

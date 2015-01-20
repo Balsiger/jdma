@@ -24,19 +24,24 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible alignment modifiers in the game. */
-@ParametersAreNonnullByDefault
+/**
+ * The possible alignment modifiers in the game.
+ *
+ * @file AlignmentStatus.java
+ * @author balsiger@ixitixachitls.net (Peter Balsiger)
+ */
 public enum AlignmentStatus implements Named,
     Proto<BaseMonsterProto.AlignmentStatus>
 {
+  /** Unknown. */
   UNKNOWN("Unknown", BaseMonsterProto.AlignmentStatus.UNKNOWN_ALIGNMENT_STATU),
+
   /** Always. */
   ALWAYS("Always", BaseMonsterProto.AlignmentStatus.ALWAYS),
 
@@ -94,8 +99,14 @@ public enum AlignmentStatus implements Named,
     return m_proto;
   }
 
-  public static AlignmentStatus
-    fromProto(BaseMonsterProto.AlignmentStatus inProto)
+  /**
+   * Create the status from a proto value.
+   *
+   * @param inProto the proto to create from
+   * @return the associated alignment status
+   */
+  public static
+  AlignmentStatus fromProto(BaseMonsterProto.AlignmentStatus inProto)
   {
     for(AlignmentStatus status : values())
       if(status.m_proto == inProto)

@@ -19,77 +19,33 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.input;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is the exception that is risen whenever a exception occurs when
  * not able to parse the desired information.
  *
  * @file          ReadException.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
-@ParametersAreNonnullByDefault
 public class ReadException extends Exception
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //--------------------------- ReadException ---------------------------
-
-  /**
-   * Empty constructor.
-   *
-   */
+  /** Empty constructor. */
   public ReadException()
   {
     // nothing to do
   }
 
-  //........................................................................
-  //--------------------------- ReadException ---------------------------
-
   /**
    * Constructor with an additional string for a message.
    *
    * @param       inMessage the message describing the exception
-   *
    */
   public ReadException(String inMessage)
   {
     super(inMessage);
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
 }

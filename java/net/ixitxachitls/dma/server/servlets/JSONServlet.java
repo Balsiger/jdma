@@ -26,8 +26,6 @@ package net.ixitxachitls.dma.server.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -39,58 +37,23 @@ import org.easymock.EasyMock;
 
 import net.ixitxachitls.output.html.JsonWriter;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * The base servlet for json requests.
  *
- *
  * @file          JSONServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
 @Immutable
-@ParametersAreNonnullByDefault
 public abstract class JSONServlet extends DMAServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- JSONServlet ------------------------------
-
-  /**
-   * Create the servlet.
-   *
-   */
+  /** Create the servlet. */
   protected JSONServlet()
   {
     // nothing to do
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //-------------------------------- handle --------------------------------
 
   /**
    * Handle the request.
@@ -102,7 +65,6 @@ public abstract class JSONServlet extends DMAServlet
    *
    * @throws      ServletException general error when processing the page
    * @throws      IOException      writing to the page failed
-   *
    */
   @Override
   protected Optional<? extends SpecialResult>
@@ -123,9 +85,6 @@ public abstract class JSONServlet extends DMAServlet
     return Optional.absent();
   }
 
-  //........................................................................
-  //------------------------------ writeJson -------------------------------
-
   /**
    * Write the json output to the given writer.
    *
@@ -137,15 +96,7 @@ public abstract class JSONServlet extends DMAServlet
   protected abstract void writeJson(DMARequest inRequest, String inPath,
                                     JsonWriter inWriter);
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------- test
 
   /** The test. */
   public static class Test extends net.ixitxachitls.server.ServerUtils.Test
@@ -193,6 +144,4 @@ public abstract class JSONServlet extends DMAServlet
 
     //......................................................................
   }
-
-  //........................................................................
 }

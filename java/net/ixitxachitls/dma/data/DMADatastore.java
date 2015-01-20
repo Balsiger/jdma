@@ -30,17 +30,10 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.common.base.Optional;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -54,8 +47,6 @@ import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
-import net.ixitxachitls.dma.values.File;
-import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 
@@ -65,8 +56,6 @@ import net.ixitxachitls.util.logging.Log;
  * @file          DMADatastore.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
-@ParametersAreNonnullByDefault
 public class DMADatastore
 {
   /**
@@ -79,7 +68,8 @@ public class DMADatastore
   /** The access to the datastore. Don't use this except in the AdminServlet! */
   private DataStore m_data = new DataStore();
 
-  private static ThreadLocal<Map<EntryKey, AbstractEntry>> m_cache =
+  /** The cache of entries. */
+  private static ThreadLocal<Map<EntryKey, AbstractEntry>> s_cache =
       new ThreadLocal<Map<EntryKey, AbstractEntry>>()
       {
         @Override
@@ -93,25 +83,40 @@ public class DMADatastore
   @SuppressWarnings("unused")
   private static final long serialVersionUID = 1L;
 
+  /**
+   * Cache the entry for later use. The cache is only per thread and is used
+   * for a single request only.
+   *
+   * @param inKey the key of the entry
+   * @param inEntry the entry to cache
+   */
   private static void cache(EntryKey inKey, AbstractEntry inEntry)
   {
-    m_cache.get().put(inKey, inEntry);
+    s_cache.get().put(inKey, inEntry);
   }
 
+  /**
+   * Get the cached entry with the given key.
+   *
+   * @param inKey the key of the entry to get
+   * @return the cached entry, optional if it is not cached
+   */
   private static Optional<AbstractEntry> cached(EntryKey inKey)
   {
-    return Optional.fromNullable(m_cache.get().get(inKey));
+    return Optional.fromNullable(s_cache.get().get(inKey));
   }
 
+  /** Clear the cache to prevent inconsistent states. */
   public static void clearCache()
   {
-    m_cache.get().clear();
+    s_cache.get().clear();
   }
 
   /**
    * Get an entry denoted by type and id and their respective parents.
    *
    * @param      inKey  the key to the entry to get
+   * @param      <T>    the type of entry to get
    *
    * @return     the entry found, if any
    */
@@ -184,16 +189,17 @@ public class DMADatastore
   /**
    * Get the entry denoted by a key value pair.
    *
-   * @param      inType  the type of entry to get
-   * @param      inKey   the key to look for
-   * @param      inValue the value for the key to look for
+   * @param      inType   the type of entry to get
+   * @param      inParent the key of the parent entry
+   * @param      inKey    the key to look for
+   * @param      inValue  the value for the key to look for
    *
    * @param      <T>    the type of the entry to get
    *
    * @return     the entries found
    */
   @SuppressWarnings("unchecked") // casting return
-  public @Nullable <T extends AbstractEntry>
+  public <T extends AbstractEntry>
   List<T> getEntries(AbstractType<T> inType, Optional<EntryKey> inParent,
                      String inKey, String inValue)
   {
@@ -561,7 +567,14 @@ public class DMADatastore
     return Optional.of(convert(inKey.get()));
   }
 
-  public Key convert(EntryKey inKey) {
+  /**
+   * Convert the given key to an datastore key.
+   *
+   * @param inKey the entry key to convert
+   * @return the converted entity key
+   */
+  public Key convert(EntryKey inKey)
+  {
     Optional<EntryKey> parent = inKey.getParent();
     if(parent.isPresent())
       return KeyFactory.createKey(
@@ -615,11 +628,8 @@ public class DMADatastore
    */
   @SuppressWarnings("unchecked")
   public <T extends AbstractEntry> Optional<T>
-    convert(String inID, AbstractType<T> inType, @Nullable Entity inEntity)
+    convert(String inID, AbstractType<T> inType, Entity inEntity)
   {
-    if(inEntity == null)
-      return Optional.absent();
-
     Tracer tracer = new Tracer("converting " + inID);
 
     Log.debug("converting entity " + inID + " to " + inType);
@@ -653,14 +663,15 @@ public class DMADatastore
    * Convert the given datastore entity into a dma entry.
    *
    * @param      inEntity the entity to convert
+   * @param      <T>      the type of entry converted
    *
    * @return     the entry found, if any
    */
   public <T extends AbstractEntry> Optional<T>
-    convert(@Nullable Entity inEntity)
+    convert(Entity inEntity)
   {
     if(inEntity == null)
-      return null;
+      return Optional.absent();
 
     Key key = inEntity.getKey();
     String id = key.getName();
@@ -682,12 +693,12 @@ public class DMADatastore
    * Convert the given datastore entities into a dma entries.
    *
    * @param      inEntities the entities to convert
+   * @param      <T>         the type of entries converted to
    *
    * @return     the entries found, if any
    */
   @SuppressWarnings("unchecked")
-  public @Nullable <T extends AbstractEntry>
-  List<T> convert(List<Entity> inEntities)
+  public <T extends AbstractEntry> List<T> convert(List<Entity> inEntities)
   {
     List<T> entries = new ArrayList<>();
 
@@ -715,8 +726,8 @@ public class DMADatastore
 
     // Save searchable values as distinct properties to be able to search
     // for them in the datastore.
-    for(Map.Entry<String, Object> entry :
-      inEntry.collectSearchables().entrySet())
+    for(Map.Entry<String, Object> entry
+        : inEntry.collectSearchables().entrySet())
       entity.setProperty(entry.getKey(), entry.getValue());
 
     // Save the index information to make it searchable afterwards.

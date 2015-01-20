@@ -106,6 +106,11 @@ public abstract class CampaignEntry extends Entry
   /** The cached parent entry, if any. */
   private Optional<CampaignEntry> m_cachedParent = Optional.absent();
 
+  /**
+   * Get the key of the campaign entry.
+   *
+   * @return the key
+   */
   public EntryKey getKey()
   {
     Optional<Campaign> campaign = getCampaign();
@@ -154,6 +159,11 @@ public abstract class CampaignEntry extends Entry
     return m_cachedCampaign;
   }
 
+  /**
+   * Get the id of the parent entry, if any.
+   *
+   * @return the id of the parent entry
+   */
   public Optional<String> getParent()
   {
     return m_parentName;
@@ -346,6 +356,11 @@ public abstract class CampaignEntry extends Entry
     return builder.build();
   }
 
+  /**
+   * Set all the value from the given proto to this entry.
+   *
+   * @param inProto the proto with the values
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof CampaignEntryProto))

@@ -31,117 +31,82 @@ import net.ixitxachitls.dma.values.Parser;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.SizeModifier;
 
-/** The possible sizes in the game. */
+/**
+ * The possible sizes in the game.
+ *
+ * @file Size.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
 {
-  /**
-   * This is an unknown size.
-   */
+  /** This is an unknown size. */
   UNKNOWN("Unknown", "U", 0, 0, Rational.ZERO, 0, 0, 0,
           BaseItemProto.Size.UNKNOWN_SIZE),
 
-  /**
-   * The smallest size.
-   */
+  /** The smallest size. */
   FINE("Fine", "F", 0, 0, new Rational(0, 1, 2), 0, 8, -16,
        BaseItemProto.Size.FINE),
 
-  /**
-   * A very small size.
-   */
+  /** A very small size. */
   DIMINUTIVE("Diminutive", "D", 0, 0, Rational.ONE, 0, 4, -12,
              BaseItemProto.Size.DIMINUTIVE),
 
-  /**
-   * Smaller than small.
-   */
+  /** Smaller than small. */
   TINY("Tiny", "T", 0, 0, new Rational(2, 1, 2), 0, 2, -8,
        BaseItemProto.Size.TINY),
 
-  /**
-   * Just small.
-   */
+  /** Just small. */
   SMALL("Small", "S", 0, 5, Rational.FIVE, 10, 1, -4,
         BaseItemProto.Size.SMALL),
 
-  /**
-   * This is the medium size.
-   */
+  /** This is the medium size. */
   MEDIUM("Medium-size", "M", 5, 5, Rational.FIVE, 20, 0, 0,
          BaseItemProto.Size.MEDIUM),
 
-  /**
-   * Simply large.
-   */
+  /** Simply large. */
   LARGE("Large", "L", 5, 10, Rational.TEN, 30, -1, 4,
         BaseItemProto.Size.LARGE),
 
-  /**
-   * Larger than large.
-   */
+  /** Larger than large. */
   HUGE("Huge", "H", 10, 15, Rational.FIFTEEN, 40, -2, 8,
        BaseItemProto.Size.HUGE),
 
-  /**
-   * Really large.
-   */
+  /** Really large. */
   GARGANTUAN("Gargantuan", "G", 15, 20, Rational.TWENTY, 60, -4, 12,
              BaseItemProto.Size.GARGANTUAN),
 
-  /**
-   * This is the biggest size.
-   */
+  /** This is the biggest size. */
   COLOSSAL("Colossal", "C", 20, 30, Rational.THIRTY, 80, -8, 16,
            BaseItemProto.Size.COLOSSAL);
 
-  /**
-   * The value's name.
-   */
+  /** The value's name. */
   private String m_name;
 
-  /**
-   * The value's short name.
-   */
+  /**The value's short name. */
   private String m_short;
 
-  /**
-   * The reach for a long creature.
-   */
+  /** The reach for a long creature. */
   private int m_reachLong;
 
-  /**
-   * The reach for a tall creature.
-   */
+  /** The reach for a tall creature. */
   private int m_reachTall;
 
-  /**
-   * The space required for this size.
-   */
+  /** The space required for this size. */
   private Rational m_space;
 
-  /**
-   * The bonus hit points for a construct of this size.
-   */
+  /** The bonus hit points for a construct of this size. */
   private int m_construct;
 
-  /**
-   * The size modifier for armor class and attacks.
-   */
+  /** The size modifier for armor class and attacks. */
   private int m_modifier;
 
-  /**
-   * The size modifier for grappling.
-   */
+  /** The size modifier for grappling. */
   private int m_grapple;
 
-  /**
-   * The proto enum value.
-   */
+  /** The proto enum value. */
   private BaseItemProto.Size m_proto;
 
-  /**
-   * The parser for item sizes.
-   */
+  /** The parser for item sizes. */
   public static final Parser<Size> PARSER =
       new Parser<Size>(1)
       {
@@ -166,8 +131,8 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
    * @param inProto     the proto enum value
    */
   private Size(String inName, String inShort, int inReachLong,
-               int inReachTall, Rational inSpace, int inConstruct, int inModifier,
-               int inGrapple, BaseItemProto.Size inProto)
+               int inReachTall, Rational inSpace, int inConstruct,
+               int inModifier, int inGrapple, BaseItemProto.Size inProto)
   {
     m_name = inName;
     m_short = inShort;
@@ -363,6 +328,9 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
 
   /**
    * Get the layout matching the given text.
+   *
+   * @param inText the text to get the size for
+   * @return the size of a matching one could be found
    */
   public static Optional<Size> fromString(String inText)
   {

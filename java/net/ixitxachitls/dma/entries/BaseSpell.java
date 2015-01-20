@@ -44,7 +44,6 @@ import net.ixitxachitls.dma.values.enums.SpellDescriptor;
 import net.ixitxachitls.dma.values.enums.SpellEffect;
 import net.ixitxachitls.dma.values.enums.SpellRange;
 import net.ixitxachitls.dma.values.enums.Subschool;
-import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -59,16 +58,28 @@ import net.ixitxachitls.util.logging.Log;
 @ParametersAreNonnullByDefault
 public class BaseSpell extends BaseEntry
 {
+  /** The level of a spell. */
   public static class Level
   {
+    /**
+     * Create the spell level.
+     *
+     * @param inClass the spell class
+     * @param inLevel the level
+     */
     public Level(SpellClass inClass, int inLevel)
     {
       m_class = inClass;
       m_level = inLevel;
     }
 
+    /** The spell class. */
     private final SpellClass m_class;
+
+    /** The spell level. */
     private final int m_level;
+
+    /** The parser for spell levels. */
     public static final Parser<Level> PARSER = new Parser<Level>(2)
     {
       @Override
@@ -89,11 +100,21 @@ public class BaseSpell extends BaseEntry
       }
     };
 
+    /**
+     * Get the spellcasting class.
+     *
+     * @return the spell class
+     */
     public SpellClass getSpellClass()
     {
       return m_class;
     }
 
+    /**
+     * Get the level of the spell.
+     *
+     * @return the spell level
+     */
     public int getLevel()
     {
       return m_level;
@@ -106,16 +127,28 @@ public class BaseSpell extends BaseEntry
     }
   }
 
+  /** The material components for a spell. */
   public static class Material
   {
+    /**
+     * Create the material components.
+     *
+     * @param inUse how the components are used
+     * @param inComponents the components needed
+     */
     public Material(String inUse, List<String> inComponents)
     {
       m_use = inUse;
       m_components = inComponents;
     }
 
+    /** How the components have to be used. */
     private final String m_use;
+
+    /** What components need to be used for casting the spall. */
     private final List<String> m_components;
+
+    /** The parser for material components. */
     public static final Parser<Material> PARSER =
       new Parser<Material>(2)
       {
@@ -128,16 +161,31 @@ public class BaseSpell extends BaseEntry
         }
       };
 
+    /**
+     * Get the use of the material.
+     *
+     * @return how the material is to be used
+     */
     public String getUse()
     {
       return m_use;
     }
 
+    /**
+     * Get what components have to be used.
+     *
+     * @return the list of components
+     */
     public List<String> getComponents()
     {
       return Collections.unmodifiableList(m_components);
     }
 
+    /**
+     * Get the components as a single, comma separated string.
+     *
+     * @return the comma spearated string of components.
+     */
     public String getComponentsString()
     {
       return Strings.COMMA_JOINER.join(m_components);
@@ -150,8 +198,16 @@ public class BaseSpell extends BaseEntry
     }
   }
 
+  /** The effect of a spell. */
   public static class Effect
   {
+    /**
+     * Create the spell effect.
+     *
+     * @param inDistance the distance to where the effect can take place
+     * @param inEffect the effect itself
+     * @param inText some text describing the effect
+     */
     public Effect(Optional<Distance> inDistance,
                   Optional<SpellEffect> inEffect, String inText)
     {
@@ -160,9 +216,16 @@ public class BaseSpell extends BaseEntry
       m_text = inText;
     }
 
+    /** The distance up to which the effect can happen. */
     private final Optional<Distance> m_distance;
+
+    /** The actual effect. */
     private final Optional<SpellEffect> m_effect;
+
+    /** The description of the effect. */
     private final String m_text;
+
+    /** The parser for spell effects. */
     public static final Parser<Effect> PARSER =
       new Parser<Effect>(3)
       {
@@ -176,16 +239,31 @@ public class BaseSpell extends BaseEntry
         }
       };
 
+    /**
+     * Get the distance for the effect.
+     *
+     * @return the distance
+     */
     public Optional<Distance> getDistance()
     {
       return m_distance;
     }
 
+    /**
+     * Get the actual spell effect.
+     *
+     * @return the spell effect
+     */
     public Optional<SpellEffect> getEffect()
     {
       return m_effect;
     }
 
+    /**
+     * Get the effect description.
+     *
+     * @return the text
+     */
     public String getText()
     {
       return m_text;
@@ -199,8 +277,16 @@ public class BaseSpell extends BaseEntry
     }
   }
 
+  /** A spell's duration. */
   public static class Duration
   {
+    /**
+     * Create the spell duration.
+     *
+     * @param inDuration the duration description
+     * @param inDismissable whether the spell is dismissable
+     * @param inText other comments on the spell duration
+     */
     public Duration(String inDuration, boolean inDismissable,
                     Optional<String> inText)
     {
@@ -212,9 +298,20 @@ public class BaseSpell extends BaseEntry
       m_text = inText;
     }
 
-    public Duration(net.ixitxachitls.dma.values.Duration inDuration, Optional<String> inLevels,
-                    Optional<net.ixitxachitls.dma.values.Duration> inPlusDuration,
-                    boolean inDismissable, Optional<String> inText)
+    /**
+     * Create a spell duration with a proper duration.
+     *
+     * @param inDuration the base duration of the effect
+     * @param inLevels the number of levels per duration
+     * @param inPlusDuration some additional duration, if avaiable
+     * @param inDismissable whether the spell is dismissable
+     * @param inText additional descriptions for the duration
+     */
+    public Duration(
+        net.ixitxachitls.dma.values.Duration inDuration,
+        Optional<String> inLevels,
+        Optional<net.ixitxachitls.dma.values.Duration> inPlusDuration,
+        boolean inDismissable, Optional<String> inText)
     {
       m_durationText = Optional.absent();
       m_duration = Optional.of(inDuration);
@@ -224,12 +321,25 @@ public class BaseSpell extends BaseEntry
       m_text = inText;
     }
 
+    /** The duration text. */
     private final Optional<String> m_durationText;
+
+    /** The time duration. */
     private final Optional<net.ixitxachitls.dma.values.Duration> m_duration;
+
+    /** The levels per duration. */
     private final Optional<String> m_levels;
+
+    /** Some additional timed duration, if needed. */
     private final Optional<net.ixitxachitls.dma.values.Duration> m_plusDuration;
+
+    /** Whether the spell is dismissable. */
     private final boolean m_dismissable;
+
+    /** Additional text descripiton for the duration. */
     private final Optional<String> m_text;
+
+    /** The parser for the duration. */
     public static final Parser<Duration> PARSER =
       new Parser<Duration>(5)
       {
@@ -239,7 +349,8 @@ public class BaseSpell extends BaseEntry
                                           String inDismissable,
                                           String inText)
         {
-          Optional<net.ixitxachitls.dma.values.Duration> duration = net.ixitxachitls.dma.values.Duration.PARSER.parse(inDuration);
+          Optional<net.ixitxachitls.dma.values.Duration> duration =
+              net.ixitxachitls.dma.values.Duration.PARSER.parse(inDuration);
           if(!duration.isPresent())
           {
             return Optional.of(new Duration
@@ -254,37 +365,68 @@ public class BaseSpell extends BaseEntry
           return Optional.of(new Duration
                              (duration.get(),
                               Optional.of(inLevels),
-                              net.ixitxachitls.dma.values.Duration.PARSER.parse(inPlusDuration),
+                              net.ixitxachitls.dma.values.Duration.PARSER.parse(
+                                  inPlusDuration),
                               !inDismissable.isEmpty(), Optional.of(inText)));
 
         }
       };
 
+    /**
+     * Get the text used for the duration.
+     *
+     * @return the text
+     */
     public Optional<String> getDurationText()
     {
       return m_durationText;
     }
 
+    /**
+     * Get the duration time for the spell.
+     *
+     * @return the duration as time
+     */
     public Optional<net.ixitxachitls.dma.values.Duration> getDuration()
     {
       return m_duration;
     }
 
+    /**
+     * Get the description on how much the duration changes per level.
+     *
+     * @return the levels
+     */
     public Optional<String> getLevels()
     {
       return m_levels;
     }
 
+    /**
+     * Get the additional duration.
+     *
+     * @return the additional duration
+     */
     public Optional<net.ixitxachitls.dma.values.Duration> getPlusDuration()
     {
       return m_plusDuration;
     }
 
+    /**
+     * Get whether the spell is dismissable or not.
+     *
+     * @return true of dismissable, false if not
+     */
     public boolean getDismissable()
     {
       return m_dismissable;
     }
 
+    /**
+     * Get the descriptive text for the duration.
+     *
+     * @return the text
+     */
     public Optional<String> getText()
     {
       return m_text;
@@ -515,7 +657,8 @@ public class BaseSpell extends BaseEntry
   protected Optional<Material> m_focus = Optional.absent();
 
   /** The casting time required for this spell. */
-  protected Optional<net.ixitxachitls.dma.values.Duration> m_castingTime = Optional.absent();
+  protected Optional<net.ixitxachitls.dma.values.Duration> m_castingTime =
+      Optional.absent();
 
   /** The range of the spell. */
   protected SpellRange m_range = SpellRange.UNKNOWN;
@@ -541,114 +684,174 @@ public class BaseSpell extends BaseEntry
   /** The spell resistance for the spell. */
   protected Optional<String> m_resistance = Optional.absent();
 
+  /**
+   * Get the school of the spell.
+   *
+   * @return the school
+   */
   public School getSchool()
   {
     return m_school;
   }
 
+  /**
+   * Get all the subschools of the spell.
+   *
+   * @return the sub schools
+   */
   public List<Subschool> getSubschools()
   {
     return m_subschools;
   }
 
+  /**
+   * Get the spell summary.
+   *
+   * @return the summary
+   */
   public Optional<String> getSummary()
   {
     return m_summary;
   }
 
+  /**
+   * Get all the spell descriptors.
+   *
+   * @return the spell descriptors
+   */
   public List<SpellDescriptor> getDescriptors()
   {
     return m_descriptors;
   }
 
+  /**
+   * Get all the levels the spell has.
+   *
+   * @return all the levels
+   */
   public List<Level> getLevels()
   {
     return m_levels;
   }
 
+  /**
+   * Get all the components for the spell.
+   *
+   * @return the spell components
+   */
   public List<SpellComponent> getComponents()
   {
     return m_components;
   }
 
+  /**
+   * Get all the materials needed for casting the spell.
+   *
+   * @return the material components
+   */
   public List<Material> getMaterials()
   {
     return m_materials;
   }
 
+  /**
+   * Get all the foci needed for casting the spell.
+   *
+   * @return the material focus
+   */
   public Optional<Material> getFocus()
   {
     return m_focus;
   }
 
+  /**
+   * Get the casting time for the spell.
+   *
+   * @return the casting time
+   */
   public Optional<net.ixitxachitls.dma.values.Duration> getCastingTime()
   {
     return m_castingTime;
   }
 
+  /**
+   * Get the spell's range.
+   *
+   * @return the spell range
+   */
   public SpellRange getRange()
   {
     return m_range;
   }
 
+  /**
+   * Get the distance the spell can be cast to.
+   *
+   * @return the spell distance
+   */
   public Optional<Distance> getDistance()
   {
     return m_distance;
   }
 
+  /**
+   * Get the effect of the spell.
+   *
+   * @return the spell effect.
+   */
   public Optional<Effect> getEffect()
   {
     return m_effect;
   }
 
+  /**
+   * Get the spell target.
+   *
+   * @return the spell target
+   */
   public Optional<String> getTarget()
   {
     return m_target;
   }
 
+  /**
+   * Get the area of the spell effect.
+   *
+   * @return the spell area
+   */
   public Optional<String> getArea()
   {
     return m_area;
   }
 
+  /**
+   * Get the duration of the spell.
+   *
+   * @return the spell duration
+   */
   public Optional<Duration> getDuration()
   {
     return m_duration;
   }
 
+  /**
+   * Get the saving throw for the spell.
+   *
+   * @return the saving throw
+   */
   public Optional<String> getSavingThrow()
   {
     return m_savingThrow;
   }
 
+  /**
+   * Get the resistance information about the spell.
+   *
+   * @return the spell resistance information
+   */
   public Optional<String> getResistance()
   {
     return m_resistance;
-  }
-
-  public List<String> getDescriptorNames()
-  {
-    return SpellDescriptor.names();
-  }
-
-  public List<String> getSpellEffectNames()
-  {
-    return SpellEffect.names();
-  }
-
-  public List<String> getSpellClassNames()
-  {
-    return SpellClass.names();
-  }
-
-  public List<String> getSubschoolNames()
-  {
-    return Subschool.names();
-  }
-
-  public List<String> getComponentNames()
-  {
-    return SpellComponent.names();
   }
 
   /**
@@ -1301,6 +1504,11 @@ public class BaseSpell extends BaseEntry
     return proto;
   }
 
+  /**
+   * Set all the values from the given proto to this entry.
+   *
+   * @param inProto the proto to read from
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseSpellProto))
@@ -1342,7 +1550,8 @@ public class BaseSpell extends BaseEntry
 
     if(proto.hasCastingTime())
       m_castingTime =
-        Optional.of(net.ixitxachitls.dma.values.Duration.fromProto(proto.getCastingTime()));
+        Optional.of(net.ixitxachitls.dma.values.Duration.fromProto(
+            proto.getCastingTime()));
 
     if(proto.hasSpecialRange())
       m_range = SpellRange.fromProto(proto.getSpecialRange());
@@ -1378,19 +1587,21 @@ public class BaseSpell extends BaseEntry
                         : Optional.<String>absent()));
       else
         m_duration = Optional.of
-          (new Duration(net.ixitxachitls.dma.values.Duration.fromProto(proto.getDuration().getDuration()),
+          (new Duration(net.ixitxachitls.dma.values.Duration.fromProto(
+              proto.getDuration().getDuration()),
                         proto.getDuration().hasLevels()
-                        ? Optional.of(proto.getDuration().getLevels())
-                        : Optional.<String>absent(),
+                            ? Optional.of(proto.getDuration().getLevels())
+                            : Optional.<String>absent(),
                         proto.getDuration().hasAdditionalDuration()
-                        ? Optional.of
-                          (net.ixitxachitls.dma.values.Duration.fromProto(proto.getDuration()
-                                                                               .getAdditionalDuration()))
-                        : Optional.<net.ixitxachitls.dma.values.Duration>absent(),
+                            ? Optional.of
+                            (net.ixitxachitls.dma.values.Duration.fromProto(
+                                proto.getDuration().getAdditionalDuration()))
+                            : Optional.<net.ixitxachitls.dma.values.Duration>
+                            absent(),
                         proto.getDuration().hasFlags(),
                         proto.getDuration().hasDescription()
-                        ? Optional.of(proto.getDuration().getDescription())
-                        : Optional.<String>absent()));
+                            ? Optional.of(proto.getDuration().getDescription())
+                            : Optional.<String>absent()));
 
     if(proto.hasSavingThrow())
       m_savingThrow = Optional.of(proto.getSavingThrow());

@@ -43,7 +43,6 @@ import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSortedSet;
 
-import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.dma.server.servlets.DMAServlet;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
@@ -146,7 +145,8 @@ public class DataStore
         tracer.done("not found");
         return null;
       }
-    } else
+    }
+    else
       tracer.done("cached");
 
     return entity;
@@ -327,7 +327,8 @@ public class DataStore
         entities.add(entity);
 
       s_cacheListByValue.put(key, entities, s_expiration);
-    } else
+    }
+    else
       Log.debug("gae: getting multiple " + inType + " with "
                 + Arrays.toString(inFilters) + " (cached)");
 

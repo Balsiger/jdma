@@ -30,7 +30,12 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible spell ranges. */
+/**
+ * The possible spell effects.
+ *
+ * @file SpellEffect.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum SpellEffect implements Named,
     Proto<BaseSpellProto.Effect.Type>
 {

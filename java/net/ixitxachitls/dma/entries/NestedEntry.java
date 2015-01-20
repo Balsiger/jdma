@@ -23,6 +23,7 @@
 package net.ixitxachitls.dma.entries;
 
 import com.google.common.base.Optional;
+
 import net.ixitxachitls.dma.values.Values;
 
 /**
@@ -34,14 +35,28 @@ import net.ixitxachitls.dma.values.Values;
  */
 public abstract class NestedEntry
 {
+  /**
+   * A functor interface for creating a nested entry.
+   *
+   * @param <E> the type of entry to create
+   */
   public interface Creator<E extends NestedEntry>
   {
+    /**
+     * Create the entry.
+     * @return the created entry
+     */
     public E create();
   }
 
   /** The name of the nested entry. */
   protected Optional<String> m_name = Optional.absent();
 
+  /**
+   * Get the name of the nested entry.
+   *
+   * @return the name
+   */
   public String getName()
   {
     if(m_name.isPresent())
@@ -50,6 +65,10 @@ public abstract class NestedEntry
     return "";
   }
 
-
+  /**
+   * Set the values of the nested entry.
+   *
+   * @param inValues the values to set
+   */
   public abstract void set(Values inValues);
 }

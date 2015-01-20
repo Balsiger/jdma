@@ -24,18 +24,22 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible terrains in the game. */
-@ParametersAreNonnullByDefault
+/**
+ * The possible terrains in the game.
+ *
+ * @file Terrain.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Terrain implements Named,
     Proto<BaseMonsterProto.Terrain>
 {
+  /** The Unknown value. */
   UNKNOWN("Unknown", BaseMonsterProto.Terrain.UNKNOWN_TERRAIN),
 
   /** Forest terrain. */

@@ -49,6 +49,7 @@ public final class Classes
     // nothing to do here, never called
   }
 
+  /** The known prefixes for methods. */
   private static final List<String> METHOD_PREFIXES =
     ImmutableList.of("get", "is", "has", "to");
 

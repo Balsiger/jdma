@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -101,9 +99,9 @@ public class Autocomplete extends JSONServlet
 
       if(type.isPresent() && field != null)
       {
-        Collection<String> items;
+        Optional<? extends Collection<String>> items;
         if("name".equals(field))
-          items = DMADataFactory.get().getIDs(type.get(), null);
+          items = Optional.of(DMADataFactory.get().getIDs(type.get(), null));
         else
         {
           ensureCached(type.get(), field);
@@ -111,9 +109,9 @@ public class Autocomplete extends JSONServlet
         }
 
         List<String> names = Lists.newArrayList();
-        if(items != null)
+        if(items.isPresent())
         {
-          for(String name : items)
+          for(String name : items.get())
           {
             if(match(name, term))
               names.add(name);
@@ -140,7 +138,7 @@ public class Autocomplete extends JSONServlet
    * @return   true if the values match, false if not
    *
    */
-  private boolean match(String inName, @Nullable String inAuto)
+  private boolean match(String inName, String inAuto)
   {
     if(inAuto == null || inAuto.isEmpty())
       return true;
@@ -182,12 +180,13 @@ public class Autocomplete extends JSONServlet
                            String inField)
   {
     // Check if already cached.
-    SortedSet<String> values = cached(inType.toString(), inField);
-    if(values != null)
+    Optional<SortedSet<String>> values = cached(inType.toString(), inField);
+    if(values.isPresent())
       return;
 
-    values = DMADataFactory.get().getValues(inType, inField);
-    cache(values, inType.toString(), inField);
+    SortedSet<String> newValues =
+        DMADataFactory.get().getValues(inType, inField);
+    cache(newValues, inType.toString(), inField);
   }
 
   /**
@@ -206,13 +205,11 @@ public class Autocomplete extends JSONServlet
    * Get the cached value for the given keys.
    *
    * @param   inKeys the key parts for the cached value
-   *
    * @return  the cached value or null if not cached
-   *
    */
-  public @Nullable SortedSet<String> cached(String ... inKeys)
+  private Optional<SortedSet<String>> cached(String ... inKeys)
   {
-    return s_cache.get(s_keyJoiner.join(inKeys));
+    return Optional.fromNullable(s_cache.get(s_keyJoiner.join(inKeys)));
   }
 
   //----------------------------------------------------------------------------

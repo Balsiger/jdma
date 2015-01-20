@@ -26,8 +26,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
@@ -44,20 +42,43 @@ import com.google.common.base.Optional;
 @Immutable
 public class BaseType<T extends BaseEntry> extends AbstractType<T>
 {
+  /**
+   * The builder for the base type.
+   *
+   * @param <T> the type of type
+   */
   public static class Builder<T extends BaseEntry>
       extends AbstractType.Builder<T, Builder<T>>
   {
+    /** Create the builder.
+     *
+     * @param inClass the class of the real type built
+     */
     public Builder(Class<T> inClass)
     {
       super(inClass);
     }
 
+    /**
+     * Build the type.
+     *
+     * @return the type built
+     */
     public BaseType<T> build()
     {
       return new BaseType(m_class, m_multiple, m_link, m_multipleLink, m_sort);
     }
   }
 
+  /**
+   * Create a base type.
+   *
+   * @param inClass the class of the entry the type is for
+   * @param inMultiple the name for multiple entries
+   * @param inLink the link to the entry
+   * @param inMultipleLink the link to multiple entries
+   * @param inSort the text to use for sorting the type
+   */
   protected BaseType(Class<T> inClass, Optional<String> inMultiple,
                      Optional<String> inLink,
                      Optional<String> inMultipleLink,
@@ -77,6 +98,7 @@ public class BaseType<T extends BaseEntry> extends AbstractType<T>
    * Get the base entry type for the given name.
    *
    * @param       inName the name of the type to get
+   * @param       <T>    the type of the entry to get the type for
    *
    * @return      the base entry type with the given name or null if not
    *              found.

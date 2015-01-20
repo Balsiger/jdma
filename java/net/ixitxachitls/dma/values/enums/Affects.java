@@ -30,7 +30,12 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible affects in the game. */
+/**
+ * The possible affects in the game.
+ *
+ * @file Affects.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Affects implements Named, net.ixitxachitls.dma.values.enums.Short
 {
   /** Unknown. */

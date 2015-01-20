@@ -127,73 +127,108 @@ public class BaseQuality extends BaseEntry
   /** The bonus feats (or-ed). */
   private List<String> m_bonusFeats = new ArrayList<>();
 
+  /**
+   * Get the type of the quality.
+   *
+   * @return the type
+   */
   public EffectType getQualityType()
   {
     return m_qualityType;
   }
 
-  public List<Effect> getEffects()
-  {
-    return Collections.unmodifiableList(m_effects);
-  }
-
-  public Optional<String> getQualifier()
-  {
-    return m_qualifier;
-  }
-
-  public List<String> getAffectNames()
-  {
-    return Affects.names();
-  }
-
+  /**
+   * Get the speed modification of the quality, if any.
+   *
+   * @return the speed
+   */
   public Optional<ExpressionValue<Speed>> getSpeed()
   {
     return m_speed;
   }
 
+  /**
+   * Get all the ability modifiers provided by the quality.
+   *
+   * @return the list of modifiers
+   */
   public List<AbilityModifier> getAbilityModifiers()
   {
     return Collections.unmodifiableList(m_abilityModifiers);
   }
 
+  /**
+   * Get the list of immunities provided by the quality.
+   *
+   * @return the list of immunities.
+   */
   public List<Immunity> getImmunities()
   {
     return Collections.unmodifiableList(m_immunities);
   }
 
+  /**
+   * Get the reflex modifier provided by the quality, if any.
+   *
+   * @return the reflex modifier
+   */
   public Optional<Modifier> getReflexModifier()
   {
     return m_reflexModifier;
   }
 
+  /**
+   * Get the will modifier provided by the quality, if any.
+   *
+   * @return thw will modifier
+   */
   public Optional<Modifier> getWillModifier()
   {
     return m_willModifier;
   }
 
+  /**
+   * Get the fortitude modifier provided by the quality, if any.
+   *
+   * @return the fortitude modifier
+   */
   public Optional<Modifier> getFortitudeModifier()
   {
     return m_fortitudeModifier;
   }
 
+  /**
+   * Get the modifiers to skill provided by this qualit.
+   *
+   * @return the list of skill modifiers
+   */
   public List<KeyedModifier> getSkillModifiers()
   {
     return Collections.unmodifiableList(m_skillModifiers);
   }
 
+  /**
+   * Get the attack modifier provided by this quality.
+   *
+   * @return the attack modifier
+   */
   public Optional<Modifier> getAttackModifier()
   {
     return m_attackModifier;
   }
 
+  /**
+   * Get the damage modifier provided by this quality.
+   *
+   * @return the damage modifier
+   */
   public Optional<Modifier> getDamageModifier()
   {
     return m_damageModifier;
   }
 
   /**
-   * Simple getter for bonus feats
+   * Simple getter for bonus feats.
    *
    * @return the bonusFeats
    */
@@ -445,6 +480,11 @@ public class BaseQuality extends BaseEntry
     return proto;
   }
 
+  /**
+   * Set values of the quality from the given proto.
+   *
+   * @param inProto the proto with the values
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseQualityProto))

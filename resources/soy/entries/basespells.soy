@@ -414,7 +414,7 @@
                       'name': 'subschool',
                       'value': '',
                       'type': 'selection',
-                      'choices': $entry.subschool_names
+                      'choices': $ij.Subschool.names
                     ]
                   ] /}
                 {/call}
@@ -449,7 +449,7 @@
                       'name': 'descriptor',
                       'value': '',
                       'type': 'selection',
-                      'choices': $entry.descriptor_names
+                      'choices': $ij.SpellDescriptor.names
                     ]
                   ] /}
                 {/call}
@@ -489,7 +489,7 @@
                       'name': 'level',
                       'value': '',
                       'type': 'selection',
-                      'choices': $entry.spell_class_names
+                      'choices': $ij.SpellClass.names
                     ],
                     [
                       'name': 'level',
@@ -660,7 +660,7 @@
                              and $entry.effect.get.effect.present 
                       ? $entry.effect.get.effect.get : '',
                     'type': 'selection',
-                    'choices': $entry.spell_effect_names
+                    'choices': $ij.SpellEeffect.names
                   ],
                   [
                     'name': 'effect.text',

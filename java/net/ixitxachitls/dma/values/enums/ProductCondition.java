@@ -19,7 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-
 package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
@@ -30,7 +29,12 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.ProductProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The product condition. */
+/**
+ * The product condition.
+ *
+ * @file ProductCondition.java
+ * @author balisger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum ProductCondition implements Named,
     Proto<ProductProto.Condition>
 {
@@ -100,6 +104,12 @@ public enum ProductCondition implements Named,
     return m_proto;
   }
 
+  /**
+   * Create the product condition from the given proto.
+   *
+   * @param inProto the proto with the data
+   * @return the newly created product condition
+   */
   public static ProductCondition fromProto(ProductProto.Condition inProto)
   {
     for(ProductCondition condition : values())
@@ -127,6 +137,9 @@ public enum ProductCondition implements Named,
 
   /**
    * Get the substance matching the given text.
+   *
+   * @param inText the text to get the product condition for
+   * @return the condition, if any matches
    */
   public static Optional<ProductCondition> fromString(String inText)
   {

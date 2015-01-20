@@ -43,10 +43,17 @@ public class Feat extends NestedEntry
   {
   }
 
+  /** The qualifier for the feat. */
   private Optional<String> m_qualifier = Optional.absent();
 
+  /** The base feat to this feat. */
   private Optional<Optional<BaseFeat>> m_base = Optional.absent();
 
+  /**
+   * Get the base feat.
+   *
+   * @return the base feat, if found
+   */
   public Optional<BaseFeat> getBase()
   {
     if(!m_base.isPresent())
@@ -61,6 +68,11 @@ public class Feat extends NestedEntry
     return m_base.get();
   }
 
+  /**
+   * Get the feat qualifier.
+   *
+   * @return the qualitier
+   */
   public Optional<String> getQualifier()
   {
     return m_qualifier;
@@ -82,6 +94,11 @@ public class Feat extends NestedEntry
     m_qualifier = inValues.use("qualifier", m_qualifier);
   }
 
+  /**
+   * Convert the feat into a proto.
+   *
+   * @return the proto representing the feat
+   */
   public FeatProto toProto()
   {
     FeatProto.Builder builder = FeatProto.newBuilder();
@@ -98,6 +115,12 @@ public class Feat extends NestedEntry
     return proto;
   }
 
+  /**
+   * Convert the proto to a feat.
+   *
+   * @param inProto the proto to convert
+   * @return the newly created feat
+   */
   public static Feat fromProto(FeatProto inProto)
   {
     Feat feat = new Feat();

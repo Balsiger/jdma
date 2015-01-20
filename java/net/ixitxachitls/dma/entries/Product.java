@@ -103,26 +103,51 @@ public class Product extends Entry
     return m_edition;
   }
 
+  /**
+   * Get the printing value.
+   *
+   * @return the printing
+   */
   public Optional<String> getPrinting()
   {
     return m_printing;
   }
 
+  /**
+   * Get the owner of the product.
+   *
+   * @return the owner id
+   */
   public Optional<String> getOwner()
   {
     return m_owner;
   }
 
+  /**
+   * Get the status of the product.
+   *
+   * @return the status
+   */
   public ProductStatus getStatus()
   {
     return m_status;
   }
 
+  /**
+   * Get the condition the product has.
+   *
+   * @return the condition
+   */
   public ProductCondition getCondition()
   {
     return m_condition;
   }
 
+  /**
+   * Get the comment on the condition.
+   *
+   * @return the condition comment
+   */
   public Optional<String> getConditionComment()
   {
     return m_conditionComment;
@@ -191,6 +216,11 @@ public class Product extends Entry
     return getName();
   }
 
+  /**
+   * Get the key of the product.
+   *
+   * @return the key
+   */
   @SuppressWarnings("unchecked")
   public EntryKey getKey()
   {
@@ -286,6 +316,11 @@ public class Product extends Entry
     return builder.build();
   }
 
+  /**
+   * Set the values from the given proto.
+   *
+   * @param inProto the proto to set from
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof ProductProto))

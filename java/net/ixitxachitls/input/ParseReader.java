@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2015 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.input;
 
 import java.io.BufferedReader;
@@ -31,21 +29,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Iterators;
 
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.errors.BaseError;
 import net.ixitxachitls.util.logging.Log;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * This is a class used for parsing streams (mainly files).
@@ -54,26 +47,15 @@ import net.ixitxachitls.util.logging.Log;
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @NotThreadSafe
-@ParametersAreNonnullByDefault
 public class ParseReader implements AutoCloseable
 {
-  //----------------------------------------------------------------- nested
-
-  //----- Position ---------------------------------------------------------
-
   /**
    * This is an auxiliary class to store the position in the reader.
    */
   @Immutable
   public static class Position
   {
-    //------------------------------ Position ------------------------------
-
     /**
      * Private constructor, only for the reader itself. Positions can only
      * be obtained through ParseReader.getPosition().
@@ -81,7 +63,6 @@ public class ParseReader implements AutoCloseable
      * @param       inPosition the character position
      * @param       inLine     the line number
      * @param       inBuffer   the back buffer at the position
-     *
      */
     protected Position(long inPosition, long inLine, String inBuffer)
     {
@@ -93,10 +74,6 @@ public class ParseReader implements AutoCloseable
       m_buffer   = inBuffer;
     }
 
-    //......................................................................
-
-    //------------------------------------------------------------ variables
-
     /** The number of characters read so far. */
     private long m_position;
 
@@ -106,37 +83,25 @@ public class ParseReader implements AutoCloseable
     /** The text in the back buffer at the current position. */
     private String m_buffer;
 
-    //......................................................................
-
-    //---------------------------- getPosition -----------------------------
-
     /**
      * Get the character position of the position.
      *
      * @return      the numbers of characters from the beginning
-     *
      */
     public long getPosition()
     {
       return m_position;
     }
 
-    //......................................................................
-    //------------------------------ getLine -------------------------------
-
     /**
      * Get the line number of the position.
      *
      * @return      the line number of the position
-     *
      */
     public long getLine()
     {
       return m_line;
     }
-
-    //......................................................................
-    //----------------------------- getBuffer ------------------------------
 
     /**
      * Get the back buffer at the position. This is used to ensure that
@@ -145,61 +110,34 @@ public class ParseReader implements AutoCloseable
      * main text itself, but can be arbitrary).
      *
      * @return      the back buffer at the position
-     *
      */
     private String getBuffer()
     {
       return m_buffer;
     }
 
-    //......................................................................
-
-    //------------------------------ toString ------------------------------
-
-    /**
-     * Create a String representation of the object, mainly for debugging
-     * reasons.
-     *
-     * @return      the string representation
-     *
-     */
     @Override
     public String toString()
     {
       return "(pos = " + m_position + ", line = " + m_line + ", back = '"
         + m_buffer + "')";
     }
-
-    //......................................................................
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- ParseReader ------------------------------
-
   /**
-    *
-    * Create the stream from a String, meaning a file with the corresponding
-    * name.
-    *
-    * @param       inName the name of the file to use for the stream
-    *
-    * @throws      java.io.FileNotFoundException thrown when the file to be
-    *                                            opened cannot be found
-    *
-    */
+   * Create the stream from a String, meaning a file with the corresponding
+   * name.
+   *
+   * @param       inName the name of the file to use for the stream
+   *
+   * @throws      java.io.FileNotFoundException thrown when the file to be
+   *                                            opened cannot be found
+   */
   public ParseReader(String inName)
     throws java.io.FileNotFoundException
   {
     open(inName);
   }
-
-  //........................................................................
-  //----------------------------- ParseReader ------------------------------
 
   /**
    * Create the parse reader from a given reader and a name of the document
@@ -208,18 +146,11 @@ public class ParseReader implements AutoCloseable
    * @param       inReader the reader to read from (use a BufferedReader
    *                       for faster input, if required)
    * @param       inName   the name of the document to parse
-   *
    */
   public ParseReader(Reader inReader, String inName)
   {
     open(inReader, inName);
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The current position in the stream. */
   protected long m_position = 0;
@@ -228,10 +159,10 @@ public class ParseReader implements AutoCloseable
   protected long m_newlines = 0;
 
   /** The name of the current stream. */
-  protected @Nullable String m_name;
+  protected Optional<String> m_name;
 
   /** The stream to read from. */
-  protected @Nullable Reader m_buffer;
+  protected Optional<Reader> m_buffer;
 
   /** A flag if currently logging errors or warnings. */
   private boolean m_logErrors = true;
@@ -264,25 +195,16 @@ public class ParseReader implements AutoCloseable
   private static final int s_maxBufferSize =
     Config.get("resource:parser/buffer.size", 5 * 1024 * 1024);
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //-------------------------------- isOpen --------------------------------
-
   /**
    * Check if the 'file' is currently open or initialized.
    *
    * @return      true if open, false else
-   *
    */
   public boolean isOpen()
   {
     // it's open when buffer and name are set
     return m_buffer != null && m_name != null;
   }
-
-  //........................................................................
 
   /**
    * Check if the reader is at the end.
@@ -295,34 +217,25 @@ public class ParseReader implements AutoCloseable
     return peek() == -1;
   }
 
-  //------------------------------- hadError -------------------------------
-
   /**
    * Check if there was an error issued on the reader.
    *
    * @return      true if there was an error, false if not
-   *
    */
   public boolean hadError()
   {
     return m_error;
   }
 
-  //........................................................................
-  //------------------------------ hadWarning ------------------------------
-
   /**
    * Check if there was a warning issued on the reader.
    *
    * @return      true if there was a warning, false if not
-   *
    */
   public boolean hadWarning()
   {
     return m_warning;
   }
-
-  //........................................................................
 
   /**
    * Read a character from the reader. White spaces are not returned and are
@@ -350,9 +263,6 @@ public class ParseReader implements AutoCloseable
     return (char)result;
   }
 
-  //........................................................................
-  //------------------------------- readWord -------------------------------
-
   /**
    * Read a word from the reader. A word is some characters followed by a
    * white space. The white space is not returned with the word.
@@ -360,15 +270,11 @@ public class ParseReader implements AutoCloseable
    * @return      the next word in the stream
    *
    * @throws      ReadException a word could not be read
-   *
    */
   public String readWord() throws ReadException
   {
     return readWord(s_boundaries);
   }
-
-  //........................................................................
-  //------------------------------- readWord -------------------------------
 
   /**
    * Read a word from the reader. A word is some characters followed by a
@@ -379,7 +285,6 @@ public class ParseReader implements AutoCloseable
    * @return      the next word in the stream
    *
    * @throws      ReadException a word could not be read
-   *
    */
   public String readWord(String inBoundaries)
     throws ReadException
@@ -417,16 +322,12 @@ public class ParseReader implements AutoCloseable
     return result.toString();
   }
 
-  //........................................................................
-  //----------------------------- readBoolean ------------------------------
-
   /**
    * Read boolean from the stream. White spaces are over read.
    *
    * @return      the int from the stream (if any)
    *
    * @throws      ReadException raised, when no integer could be read
-   *
    */
   public boolean readBoolean() throws ReadException
   {
@@ -442,16 +343,12 @@ public class ParseReader implements AutoCloseable
     throw new ReadException("no boolean found: " + (char)peek());
   }
 
-  //........................................................................
-  //------------------------------- readInt --------------------------------
-
   /**
    * Read an int from the stream. White spaces are over read.
    *
    * @return      the int from the stream (if any)
    *
    * @throws      ReadException raised, when no integer could be read
-   *
    */
   public int readInt() throws ReadException
   {
@@ -496,16 +393,12 @@ public class ParseReader implements AutoCloseable
     }
   }
 
-  //........................................................................
-  //------------------------------- readLong -------------------------------
-
   /**
    * Read a long value from the stream. White spaces are over read.
    *
    * @return      the next long value found.
    *
    * @throws      ReadException raised when no long could be read
-   *
    */
   public long readLong() throws ReadException
   {
@@ -552,16 +445,12 @@ public class ParseReader implements AutoCloseable
     }
   }
 
-  //........................................................................
-  //------------------------------- readFloat ------------------------------
-
   /**
    * Read a float value from the stream, white spaces are over read.
    *
    * @return      the next floating value read from the stream
    *
    * @throws      ReadException raised when a float could not be read
-   *
    */
   public float readFloat() throws ReadException
   {
@@ -619,16 +508,12 @@ public class ParseReader implements AutoCloseable
     }
   }
 
-  //........................................................................
-  //------------------------------ readDouble ------------------------------
-
   /**
    * Read a double value from the stream. White spaces are over read.
    *
    * @return      the next double value found
    *
    * @throws      ReadException raised when no value could be read
-   *
    */
   public double readDouble() throws ReadException
   {
@@ -686,59 +571,41 @@ public class ParseReader implements AutoCloseable
     }
   }
 
-  //........................................................................
-
-  //---------------------------- getLineNumber -----------------------------
-
   /**
    * Get the current line number.
    *
    * @return      the current line number
-   *
    */
   public long getLineNumber()
   {
     return m_newlines;
   }
 
-  //........................................................................
-  //------------------------------- getName --------------------------------
-
   /**
    * Get the name of the currently parsed document.
    *
    * @return      the name of the document
-   *
    */
-  public @Nullable String getName()
+  public Optional<String> getName()
   {
     return m_name;
   }
-
-  //........................................................................
-  //----------------------------- getPosition ------------------------------
 
   /**
    * Get the current position in the stream.
    *
    * @return      the position as Position object
-   *
    */
   public Position getPosition()
   {
     return new Position(m_position, m_newlines, m_back.toString());
   }
 
-  //........................................................................
-
-  //--------------------------------- read ---------------------------------
-
   /**
    * This is the basic read method, used for reading <STRONG>ANY</STRONG>
    * text from the stream.
    *
    * @return      the read character or -1 if at end of buffer
-   *
    */
   public int read()
   {
@@ -753,14 +620,14 @@ public class ParseReader implements AutoCloseable
     }
 
     // if no buffer at all, we are at the end
-    if(m_buffer == null)
+    if(!m_buffer.isPresent())
       return -1;
 
     // try to read normally
     int result = -1;
     try
     {
-      result = m_buffer.read();
+      result = m_buffer.get().read();
     }
     catch(java.io.IOException e)
     {
@@ -779,9 +646,6 @@ public class ParseReader implements AutoCloseable
     return result;
   }
 
-  //........................................................................
-  //--------------------------------- read ---------------------------------
-
   /**
    * Read all characters up to a special delimiter, this delimiter is
    * <STRONG>NOT</STRONG> read.
@@ -789,7 +653,6 @@ public class ParseReader implements AutoCloseable
    * @param       inDelimiter up to which character to read
    *
    * @return      the characters up to the delimiter (or up to the end)
-   *
    */
   public String read(char inDelimiter)
   {
@@ -804,9 +667,6 @@ public class ParseReader implements AutoCloseable
     return result.toString();
   }
 
-  //........................................................................
-  //--------------------------------- read ---------------------------------
-
   /**
    * Read characters up to one of the given delimiters. The delimiter is
    * <STRONG>NOT</STRONG> read.
@@ -814,15 +674,11 @@ public class ParseReader implements AutoCloseable
    * @param       inDelimiters the delimiters to read up to
    *
    * @return      the text read
-   *
    */
   public String read(String inDelimiters)
   {
     return read(inDelimiters, null);
   }
-
-  //........................................................................
-  //--------------------------------- read ---------------------------------
 
   /**
    * Read characters up to one of the given delimiters. The delimiter is
@@ -834,15 +690,15 @@ public class ParseReader implements AutoCloseable
    *
    * @return      the text read
    */
-  public String read(String inDelimiters, @Nullable String inSpaceDelimiters)
+  public String read(String inDelimiters, Optional<String> inSpaceDelimiters)
   {
     StringBuilder result = new StringBuilder();
 
     boolean empty = true;
     for(int c = peek(), old = -1; c != -1; old = c, c = peek())
       if((inDelimiters.indexOf((char)c) >= 0 && (char)old != '\\')
-         || (inSpaceDelimiters != null
-             && inSpaceDelimiters.indexOf((char)c) >= 0
+         || (inSpaceDelimiters.isPresent()
+             && inSpaceDelimiters.get().indexOf((char)c) >= 0
              && Character.isSpaceChar((char)old)
              && !empty))
         return result.toString();
@@ -858,9 +714,6 @@ public class ParseReader implements AutoCloseable
     return result.toString();
   }
 
-  //........................................................................
-  //--------------------------------- read ---------------------------------
-
   /**
    * Read the given number of characters.
    *
@@ -868,7 +721,6 @@ public class ParseReader implements AutoCloseable
    *                    at least one (if there is one)
    *
    * @return      the characters read
-   *
    */
   public String read(long inMax)
   {
@@ -885,15 +737,11 @@ public class ParseReader implements AutoCloseable
     return result.toString();
   }
 
-  //........................................................................
-  //------------------------------- readLine -------------------------------
-
   /**
    * Read a complete line from the stream. The end of line character is not
    * returned!
    *
    * @return      the complete line
-   *
    */
   public String readLine()
   {
@@ -929,14 +777,10 @@ public class ParseReader implements AutoCloseable
     return line.toString();
   }
 
-  //........................................................................
-  //--------------------------------- peek ---------------------------------
-
   /**
    * Peek at the next character in the stream without actually reading it.
    *
    * @return      the next character or -1 if no more characters follow
-   *
    */
   public int peek()
   {
@@ -957,10 +801,6 @@ public class ParseReader implements AutoCloseable
     return result;
   }
 
-  //........................................................................
-
-  //-------------------------------- ignore --------------------------------
-
   /**
    * Ignore all characters up to the given one. The delimiter is ignored
    * as well.
@@ -968,7 +808,6 @@ public class ParseReader implements AutoCloseable
    * @param       inDelimiter the delimiter to ignore to
    *
    * @return      the delimiter ignored, or -1 if at end of stream
-   *
    */
   public char ignore(char inDelimiter)
   {
@@ -979,9 +818,6 @@ public class ParseReader implements AutoCloseable
     return (char)-1;
   }
 
-  //........................................................................
-  //-------------------------------- ignore --------------------------------
-
   /**
    * Ignore all characters up to and including one of the delimiters given
    * as a String.
@@ -990,7 +826,6 @@ public class ParseReader implements AutoCloseable
    *
    * @return      the character actually encountered as delimiter, or -1
    *              if none was found
-   *
    */
   public char ignore(String inDelimiters)
   {
@@ -1001,10 +836,6 @@ public class ParseReader implements AutoCloseable
     return (char)-1;
   }
 
-  //........................................................................
-
-  //-------------------------------- expect --------------------------------
-
   /**
    * Expect a specific text in the reader, check (and over read) that
    * the given text follows in the stream. White spaces in the text to
@@ -1013,15 +844,11 @@ public class ParseReader implements AutoCloseable
    * @param       inText the text to check for
    *
    * @return      true if text was found and read, false otherwise
-   *
    */
   public boolean expect(String inText)
   {
     return expectCase(inText, false);
   }
-
-  //........................................................................
-  //-------------------------------- expect --------------------------------
 
   /**
    * Check for and over read one of many strings given. Again, white
@@ -1030,15 +857,11 @@ public class ParseReader implements AutoCloseable
    * @param       inTexts the texts to try to find
    *
    * @return      the number of the text found, or -1 if none was found
-   *
    */
   public int expect(String []inTexts)
   {
     return expectCase(inTexts, false);
   }
-
-  //........................................................................
-  //-------------------------------- expect --------------------------------
 
   /**
    * Check for and over read one of many string arrays given. Again, white
@@ -1050,15 +873,11 @@ public class ParseReader implements AutoCloseable
    * @param       inTexts the texts to try to find
    *
    * @return      the number of the array found in, or -1 if none was found
-   *
    */
   public int expect(String [][]inTexts)
   {
     return expectCase(inTexts, false);
   }
-
-  //........................................................................
-  //-------------------------------- expect --------------------------------
 
   /**
    * Check for and over read one of the objects given in the Iterator.
@@ -1070,13 +889,10 @@ public class ParseReader implements AutoCloseable
    * @return      the object found, or null if none was found
    *
    */
-  public @Nullable <T> T expect(Iterator<T> inTexts)
+  public <T> Optional<T> expect(Iterator<T> inTexts)
   {
     return expectCase(inTexts, false);
   }
-
-  //........................................................................
-  //-------------------------------- expect --------------------------------
 
   /**
    * Expect a single character from the stream. White spaces are over read.
@@ -1084,16 +900,11 @@ public class ParseReader implements AutoCloseable
    * @param       inExpected the character to look for
    *
    * @return      true if the character was found, false else
-   *
    */
   public boolean expect(char inExpected)
   {
     return expectCase(inExpected, false);
   }
-
-  //........................................................................
-
-  //------------------------------ expectCase ------------------------------
 
   /**
    * Expect a specific text in the reader, check (and over read) that
@@ -1104,11 +915,10 @@ public class ParseReader implements AutoCloseable
    * @param       inIgnoreCase a flag if casing should be ignored or not
    *
    * @return      true if text was found and read, false otherwise
-   *
    */
-  public boolean expectCase(@Nullable String inText, boolean inIgnoreCase)
+  public boolean expectCase(String inText, boolean inIgnoreCase)
   {
-    if(inText == null || inText.length() == 0)
+    if(inText.length() == 0)
       return false;
 
     String text = inText.trim();
@@ -1175,9 +985,6 @@ public class ParseReader implements AutoCloseable
     return true;
   }
 
-  //........................................................................
-  //------------------------------ expectCase ------------------------------
-
   /**
    * Check for and over read one of many strings given. Again, white
    * spaces in the text and in the stream are compacted.
@@ -1186,22 +993,15 @@ public class ParseReader implements AutoCloseable
    * @param       inIgnoreCase a flag denoting if case should be ignored
    *
    * @return      the number of the text found, or -1 if none was found
-   *
    */
-  public int expectCase(@Nullable String []inTexts, boolean inIgnoreCase)
+  public int expectCase(String []inTexts, boolean inIgnoreCase)
   {
-    if(inTexts == null)
-      return -1;
-
     for(int i = 0; i < inTexts.length; i++)
       if(expectCase(inTexts[i], inIgnoreCase))
         return i;
 
     return -1;
   }
-
-  //........................................................................
-  //------------------------------ expectCase ------------------------------
 
   /**
    * Check for and over read one of many string arrays given. Again, white
@@ -1215,7 +1015,6 @@ public class ParseReader implements AutoCloseable
    *                           not
    *
    * @return      the number of the array found in, or -1 if none was found
-   *
    */
   public int expectCase(String [][]inTexts, boolean inIgnoreCase)
   {
@@ -1233,9 +1032,6 @@ public class ParseReader implements AutoCloseable
     return -1;
   }
 
-  //........................................................................
-  //------------------------------ expectCase ------------------------------
-
   /**
    * Check for and over read one of the objects given in the Iterator.
    * Again, white spaces in the text and in the stream are compacted.
@@ -1245,23 +1041,19 @@ public class ParseReader implements AutoCloseable
    * @param       inIgnoreCase a flag if casing should be ignored or not
    *
    * @return      the object found, or null if none was found
-   *
    */
-  public @Nullable <T> T expectCase(Iterator<T> inTexts, boolean inIgnoreCase)
+  public <T> Optional<T> expectCase(Iterator<T> inTexts, boolean inIgnoreCase)
   {
     while(inTexts.hasNext())
     {
       T element = inTexts.next();
 
       if(expectCase(element.toString(), inIgnoreCase))
-        return element;
+        return Optional.of(element);
     }
 
-    return null;
+    return Optional.absent();
   }
-
-  //........................................................................
-  //------------------------------ expectCase ------------------------------
 
   /**
    * Check for and over read one of the objects given in the Iterator.
@@ -1272,20 +1064,16 @@ public class ParseReader implements AutoCloseable
    * @param       inIgnoreCase a flag if casing should be ignored or not
    *
    * @return      the object found, or null if none was found
-   *
    */
-  public @Nullable <T> T expectCase(Iterable<T> inTexts,
+  public <T> Optional<T> expectCase(Iterable<T> inTexts,
                                     boolean inIgnoreCase)
   {
     for(T element : inTexts)
       if(expectCase(element.toString(), inIgnoreCase))
-        return element;
+        return Optional.of(element);
 
-    return null;
+    return Optional.absent();
   }
-
-  //........................................................................
-  //------------------------------ expectCase ------------------------------
 
   /**
    * Expect a single character from the stream. White spaces are over read.
@@ -1320,10 +1108,6 @@ public class ParseReader implements AutoCloseable
     return false;
   }
 
-  //........................................................................
-
-  //-------------------------------- error ---------------------------------
-
   /**
    * Create an error from the given stream at the given position.
    *
@@ -1332,14 +1116,10 @@ public class ParseReader implements AutoCloseable
    * @param       inText        some additional, context specific message
    *
    * @return      the error containing all information about the error
-   *
    */
   public ParseError error(Position inPosition, String inErrorNumber,
-                          @Nullable String inText)
+                          Optional<String> inText)
   {
-    if(inText == null)
-      inText = "";
-
     // save the starting position to put back later
     Position current = getPosition();
 
@@ -1383,12 +1163,9 @@ public class ParseReader implements AutoCloseable
     seek(current);
 
     // create and return the Error
-    return new ParseError(inErrorNumber, inText, inPosition.getLine(), m_name,
-                          pre, post);
+    return new ParseError(inErrorNumber, inText, inPosition.getLine(),
+                          m_name, Optional.of(pre), Optional.of(post));
   }
-
-  //........................................................................
-  //------------------------------- logError -------------------------------
 
   /**
    * Log an parsing error to the log file.
@@ -1396,10 +1173,9 @@ public class ParseReader implements AutoCloseable
    * @param       inPosition     the position where the error occured
    * @param       inErrorNumber the number of ID of the error
    * @param       inText        an context specific error text
-   *
    */
   public void logError(Position inPosition, String inErrorNumber,
-                       @Nullable String inText)
+                       Optional<String> inText)
   {
     if(!m_logErrors)
       return;
@@ -1411,19 +1187,15 @@ public class ParseReader implements AutoCloseable
     Log.error(error);
   }
 
-  //........................................................................
-  //------------------------------ logWarning ------------------------------
-
   /**
    * Log an parsing warning to the log file.
    *
    * @param       inPosition     the position where the error occured
    * @param       inErrorNumber the number of ID of the error
    * @param       inText        an context specific error text
-   *
    */
   public void logWarning(Position inPosition, String inErrorNumber,
-                         @Nullable String inText)
+                         Optional<String> inText)
   {
     if(!m_logErrors)
       return;
@@ -1435,14 +1207,10 @@ public class ParseReader implements AutoCloseable
     Log.warning(error);
   }
 
-  //........................................................................
-  //----------------------------- fetchErrors ------------------------------
-
   /**
    * Fetch and clear all errors encountred.
    *
    * @return all the errors since the last fetch.
-   *
    */
   public List<BaseError> fetchErrors()
   {
@@ -1452,21 +1220,12 @@ public class ParseReader implements AutoCloseable
     return errors;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //--------------------------------- open ---------------------------------
-
   /**
    * Open the reader to a new file with the given file name.
    *
    * @param       inName the name of the file to open (including path)
    *
    * @throws      java.io.FileNotFoundException if the file could not be found
-   *
    */
   public void open(String inName) throws java.io.FileNotFoundException
   {
@@ -1478,16 +1237,12 @@ public class ParseReader implements AutoCloseable
     // $codepro.audit.enable
   }
 
-  //........................................................................
-  //--------------------------------- open ---------------------------------
-
   /**
    * The reader must be marked at the beginning for some classes
    * (e.g. BufferedReader)
    *
    * @param       inReader the reader to read from (buffered is possible)
    * @param       inName   the name of the buffer read
-   *
    */
   public void open(Reader inReader, String inName)
   {
@@ -1496,8 +1251,8 @@ public class ParseReader implements AutoCloseable
       close(); // $codepro.audit.disable closeInFinally
 
     // store the given values
-    m_buffer   = inReader;
-    m_name     = inName;
+    m_buffer = Optional.of(inReader);
+    m_name = Optional.of(inName);
 
     // reset the position
     m_position = 1;
@@ -1506,7 +1261,7 @@ public class ParseReader implements AutoCloseable
     // mark the stream
     try
     {
-      m_buffer.mark(s_maxBufferSize);
+      m_buffer.get().mark(s_maxBufferSize);
     }
     catch(java.io.IOException e)
     {
@@ -1515,32 +1270,22 @@ public class ParseReader implements AutoCloseable
     }
   }
 
-  //........................................................................
-  //-------------------------------- close ---------------------------------
-
-  /**
-   * Close the buffer and prepare the reader for another opening.
-   *
-   */
   @Override
   public void close()
   {
     try
     {
-      m_buffer.close(); // $codepro.audit.disable closeInFinally
+      if(m_buffer.isPresent())
+        m_buffer.get().close(); // $codepro.audit.disable closeInFinally
     }
     catch(java.io.IOException e)
     {
       Log.error("Could not close buffer '" + m_name + "': " + e);
     }
 
-    m_buffer = null;
-    m_name   = null;
+    m_buffer = Optional.absent();
+    m_name = Optional.absent();
   }
-
-  //........................................................................
-
-  //--------------------------------- put ----------------------------------
 
   /**
    * Put a character back into the stream to be read next.
@@ -1552,102 +1297,73 @@ public class ParseReader implements AutoCloseable
     m_back.insert(0, inChar);
   }
 
-  //........................................................................
-  //--------------------------------- put ----------------------------------
-
   /**
    * Put a String back into the stream to be read next.
    *
    * @param       inString the String to put back
-   *
    */
-  public void put(@Nullable String inString)
+  public void put(String inString)
   {
-    if(inString == null || inString.length() == 0)
+    if(inString.length() == 0)
       return;
 
     m_back.insert(0, inString);
   }
 
-  //........................................................................
-  //--------------------------------- put ----------------------------------
-
   /**
    * Put a integer back into the stream to be read next.
    *
    * @param       inInteger the integer to put back
-   *
    */
   public void put(int inInteger)
   {
     m_back.insert(0, inInteger);
   }
 
-  //........................................................................
-  //--------------------------------- put ----------------------------------
-
   /**
    * Put a long value back into the stream to be read next.
    *
    * @param       inLong the long value to put back
-   *
    */
   public void put(long inLong)
   {
     m_back.insert(0, inLong);
   }
 
-  //........................................................................
-  //--------------------------------- put ----------------------------------
-
   /**
    * Put a float back into the stream to be read next.
    *
    * @param       inFloat the float to put back
-   *
    */
   public void put(float inFloat)
   {
     m_back.insert(0, inFloat);
   }
 
-  //........................................................................
-  //--------------------------------- put ----------------------------------
-
   /**
    * Put a double back into the stream to be read next.
    *
    * @param       inDouble the double to put back
-   *
    */
   public void put(double inDouble)
   {
     m_back.insert(0, inDouble);
   }
 
-  //........................................................................
-  //--------------------------------- put ----------------------------------
-
   /**
    * Put a boolean back into the stream to be read next.
    *
    * @param       inBoolean the boolean to put back
-   *
    */
   public void put(boolean inBoolean)
   {
     m_back.insert(0, inBoolean);
   }
 
-  //........................................................................
-
-  //------------------------------ skipWhites ------------------------------
-
   /**
    * Skip all white spaces following the current position.
    *
    * @return      the white spaces skipped
-   *
    */
   protected String skipWhites()
   {
@@ -1662,15 +1378,11 @@ public class ParseReader implements AutoCloseable
     return result.toString();
   }
 
-  //........................................................................
-  //--------------------------------- seek ---------------------------------
-
   /**
    * Go to a specific, preliminary obtained (through getPosition()),
    * position in the stream.
    *
    * @param       inPosition the position to go to
-   *
    */
   public void seek(Position inPosition)
   {
@@ -1682,9 +1394,12 @@ public class ParseReader implements AutoCloseable
     // go to the buffer position
     try
     {
-      m_buffer.reset();
-      if(m_buffer.skip(m_position - 1) != m_position - 1)
-        Log.warning("could not skip the correct amount of characters");
+      if(m_buffer.isPresent())
+      {
+        m_buffer.get().reset();
+        if(m_buffer.get().skip(m_position - 1) != m_position - 1)
+          Log.warning("could not skip the correct amount of characters");
+      }
     }
     catch(java.io.IOException e)
     {
@@ -1692,14 +1407,10 @@ public class ParseReader implements AutoCloseable
     }
   }
 
-  //........................................................................
-  //------------------------------- toString -------------------------------
-
   /**
    * Create a string representing the current status of the reader.
    *
    * @return      the created String
-   *
    */
   @Override
   public String toString()
@@ -1710,58 +1421,35 @@ public class ParseReader implements AutoCloseable
 
     seek(pos);
 
-    return m_name + " is on line " + m_newlines + ":\n" + current + '\n'
-      + "back: '" + m_back + "'\n";
+    return (m_name.isPresent() ? m_name.get() : "(no name)")
+        + " is on line " + m_newlines + ":\n" + current + '\n'
+        + "back: '" + m_back + "'\n";
   }
-
-  //........................................................................
-  //----------------------------- setLogErrors -----------------------------
 
   /**
    * Set if errors are currently logged or not.
    *
    * @param       inLogErrors true for logging errors, false for not logging
    *                          them
-   *
    */
   public void setLogErrors(boolean inLogErrors)
   {
     m_logErrors = inLogErrors;
   }
 
-  //........................................................................
-
-  //------------------------------ preprocess ------------------------------
-
-  /**
-   * This is the preprocessing step done before any reading operation.
-   *
-   */
+  /** This is the preprocessing step done before any reading operation. */
   protected void preprocess()
   {
     skipWhites();
   }
 
-  //........................................................................
-  //----------------------------- postprocess ------------------------------
-
-  /**
-   * Do the processing steps after a reading operation.
-   *
-   */
+  /** Do the processing steps after a reading operation. */
   protected void postprocess()
   {
     // nothing done currently
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------- test
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
@@ -1771,8 +1459,6 @@ public class ParseReader implements AutoCloseable
 
     /** The number of characters to read maximally when testing. */
     private static final int s_maxRead = 1000;
-
-    //----- init -----------------------------------------------------------
 
     /** Test of initialization. */
     @org.junit.Test
@@ -1797,9 +1483,6 @@ public class ParseReader implements AutoCloseable
         assertEquals(-1, reader.read());
       }
     }
-
-    //......................................................................
-    //----- read -----------------------------------------------------------
 
     /** Test reading. */
     @org.junit.Test
@@ -1857,9 +1540,6 @@ public class ParseReader implements AutoCloseable
       }
     }
 
-    //......................................................................
-    //----- positioning ----------------------------------------------------
-
     /** Test positioning in a file. */
     @org.junit.Test
     public void positioning()
@@ -1903,9 +1583,6 @@ public class ParseReader implements AutoCloseable
       }
     }
 
-    //......................................................................
-    //----- basic read -----------------------------------------------------
-
     /** Test with basic reading. */
     @org.junit.Test
     public void basicRead()
@@ -1926,9 +1603,6 @@ public class ParseReader implements AutoCloseable
       }
     }
 
-    //......................................................................
-    //----- ignore ---------------------------------------------------------
-
     /** Text ignoring text. */
     @org.junit.Test
     public void ignore()
@@ -1944,9 +1618,6 @@ public class ParseReader implements AutoCloseable
         assertEquals((char)-1,   reader.ignore("d"));
       }
     }
-
-    //......................................................................
-    //----- expect ---------------------------------------------------------
 
     /** Testing expecting of text. */
     @org.junit.Test
@@ -1987,9 +1658,6 @@ public class ParseReader implements AutoCloseable
       }
     }
 
-    //......................................................................
-    //----- open and close -------------------------------------------------
-
     /** Testing open and close. */
     @org.junit.Test
     public void openClose()
@@ -2001,9 +1669,6 @@ public class ParseReader implements AutoCloseable
       catch(java.io.FileNotFoundException e)
       { /* nothing to do */ }
     }
-
-    //......................................................................
-    //----- error ----------------------------------------------------------
 
     /** Testing error handling. */
     @org.junit.Test
@@ -2017,7 +1682,8 @@ public class ParseReader implements AutoCloseable
         reader.read('#');
         Position pos = reader.getPosition();
 
-        ParseError error = reader.error(pos, "test", "just some text");
+        ParseError error = reader.error(pos, "test",
+                                        Optional.of("just some text"));
 
         assertEquals("test", error.getErrorNumber());
         assertEquals("just some text", error.getParseMessage());
@@ -2036,7 +1702,7 @@ public class ParseReader implements AutoCloseable
             + "on line 4 in document 'test'\n...\njust some "
             + "test text\n\n with #>>> an \nerror position...");
 
-        reader.logError(pos, "test", "just some text");
+        reader.logError(pos, "test", Optional.of("just some text"));
 
         m_logger.addExpected
         ("WARNING: test: [test] no definition found for this "
@@ -2044,15 +1710,12 @@ public class ParseReader implements AutoCloseable
           + "on line 4 in document 'test'\n...\njust some "
           + "test text\n\n with #>>> an \nerror position...");
 
-        reader.logWarning(pos, "test", "some other text");
+        reader.logWarning(pos, "test", Optional.of("some other text"));
 
 
         m_logger.verify();
       }
     }
-
-    //......................................................................
-    //----- put ------------------------------------------------------------
 
     /** Test for putting back characters. */
     @org.junit.Test
@@ -2088,9 +1751,6 @@ public class ParseReader implements AutoCloseable
       }
     }
 
-    //......................................................................
-    //----- misc -----------------------------------------------------------
-
     /** Miscellaneous test. */
     @org.junit.Test
     public void misc()
@@ -2116,9 +1776,6 @@ public class ParseReader implements AutoCloseable
         fail("misc test should not have failed");
       }
     }
-
-    //......................................................................
-    //----- file -----------------------------------------------------------
 
     /** Test for file reading. */
     @org.junit.Test
@@ -2155,9 +1812,6 @@ public class ParseReader implements AutoCloseable
       }
     }
 
-    //......................................................................
-    //----- empty ----------------------------------------------------------
-
     /** Test for empty files. */
     @org.junit.Test
     public void empty()
@@ -2188,9 +1842,5 @@ public class ParseReader implements AutoCloseable
       if(file != null)
         assertTrue(file.delete());
     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

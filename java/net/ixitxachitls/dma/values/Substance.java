@@ -30,7 +30,12 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.BaseItemProto;
 import net.ixitxachitls.dma.values.enums.Named;
 
-/** The possible sizes in the game. */
+/**
+ * The possible sizes in the game.
+ *
+ * @file Substance.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Substance implements Named
 {
   /** Unknown substance,. */
@@ -205,6 +210,9 @@ public enum Substance implements Named
 
   /**
    * Get the substance matching the given text.
+   *
+   * @param inText the text to match
+   * @return the matching substance, if any does
    */
   public static Optional<Substance> fromString(String inText)
   {

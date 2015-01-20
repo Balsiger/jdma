@@ -68,6 +68,11 @@ public class SoyValue extends SoyMapData
   /** The entry with the data. */
   protected final Object m_object;
 
+  /**
+   * Get the value represented by this soy value.
+   *
+   * @return the value
+   */
   public Object getValue()
   {
     return m_object;

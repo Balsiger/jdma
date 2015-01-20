@@ -27,7 +27,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.ParametersAreNonnullByDefault;
+
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
@@ -42,13 +42,10 @@ import net.ixitxachitls.util.Files;
 /**
  * The servlet for the library of base entries.
  *
- *
  * @file          LibraryServlet.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
 @Immutable
-@ParametersAreNonnullByDefault
 public class LibraryServlet extends PageServlet
 {
   /**

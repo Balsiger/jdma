@@ -23,18 +23,22 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Values.SpeedProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible movement modes in the game. */
-@ParametersAreNonnullByDefault
+/**
+ * The possible movement modes in the game.
+ *
+ * @file MovementMode.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum MovementMode implements Named,
     Proto<SpeedProto.Mode>
 {
+  /** The unknown value. */
   UNKNOWN("Unknown", SpeedProto.Mode.UNKNONW_MODE),
 
   /** Burrowing movement. */

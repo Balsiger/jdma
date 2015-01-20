@@ -26,8 +26,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
@@ -43,11 +41,19 @@ import com.google.common.base.Optional;
 @Immutable
 public class Type<T extends Entry> extends AbstractType<T>
 {
+  /** A builder for types. */
   public static class Builder<T extends Entry>
       extends AbstractType.Builder<T, Builder<T>>
   {
+    /** The base type associated with this type. */
     private final BaseType<? extends BaseEntry> m_base;
 
+    /**
+     * Create the builder.
+     *
+     * @param inClass the class for the type
+     * @param inBase the base type
+     */
     public Builder(Class<T> inClass, BaseType<? extends BaseEntry> inBase)
     {
       super(inClass);
@@ -55,6 +61,11 @@ public class Type<T extends Entry> extends AbstractType<T>
       m_base = inBase;
     }
 
+    /**
+     * Build the type.
+     *
+     * @return the built type
+     */
     public Type<T> build()
     {
       return new Type(m_class, m_base, m_multiple, m_link, m_multipleLink,
@@ -62,6 +73,16 @@ public class Type<T extends Entry> extends AbstractType<T>
     }
   }
 
+  /**
+   * Create a type.
+   *
+   * @param inClass the class for the type
+   * @param inBase the base type
+   * @param inMultiple the text to use to describe multiple types
+   * @param inLink the text to link to the type
+   * @param inMultipleLink the text to link to multiple of the types
+   * @param inSort the text to use to sort the type
+   */
   protected Type(Class<T> inClass, BaseType<? extends BaseEntry> inBase,
                  Optional<String> inMultiple,
                  Optional<String> inLink,
@@ -73,7 +94,7 @@ public class Type<T extends Entry> extends AbstractType<T>
     m_base = inBase;
   }
 
-  /** the type of the corresponding base entry. */
+  /** The type of the corresponding base entry. */
   private final BaseType<? extends BaseEntry> m_base;
 
   /** All the non-base types available. */
@@ -122,6 +143,7 @@ public class Type<T extends Entry> extends AbstractType<T>
    * Get the base entry type for the given name.
    *
    * @param       inName the name of the type to get
+   * @param       <E>    the type of entry the type is for
    *
    * @return      the base entry type with the given name or null if not
    *              found.

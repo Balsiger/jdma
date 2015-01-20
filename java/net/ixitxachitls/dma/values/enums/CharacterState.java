@@ -29,17 +29,27 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.CharacterProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The character state. */
+/**
+ * The character state.
+ *
+ * @file CharacterState.jav
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum CharacterState implements Named,
     Proto<CharacterProto.State>
 {
+  /** The unknown value. */
   UNKNOWN("unknown", CharacterProto.State.UNKNOWN),
+
   /** A normal character going on adventures. */
   ADVENTURING("adventuring", CharacterProto.State.ADVENTURING),
+
   /** The character is currently incapable of adventuring. */
   INCAPACITATED("incapacitated", CharacterProto.State.INCAPACITATED),
+
   /** The character has been retired by the player or the DM. */
   RETIRED("retired", CharacterProto.State.RETIRED),
+
   /** The character died. */
   DEAD("dead", CharacterProto.State.DEAD);
 
@@ -90,6 +100,12 @@ public enum CharacterState implements Named,
     return m_proto;
   }
 
+  /**
+   * Obtain the character state matching the given proto value.
+   *
+   * @param inProto the proto state
+   * @return the matching character state
+   */
   public static CharacterState fromProto(CharacterProto.State inProto)
   {
     for(CharacterState state : values())

@@ -29,7 +29,12 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible spell schools (cf. PHB 172/173). */
+/**
+ * The possible spell schools (cf. PHB 172/173).
+ *
+ * @file Subschool.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Subschool
   implements Named, Proto<BaseSpellProto.Subschool>
 {

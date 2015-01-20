@@ -40,7 +40,6 @@ import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.dma.values.enums.SkillModifier;
 import net.ixitxachitls.dma.values.enums.SkillRestriction;
-import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -53,17 +52,28 @@ import net.ixitxachitls.util.logging.Log;
 @ParametersAreNonnullByDefault
 public class BaseSkill extends BaseEntry
 {
+  /** A difficulty class.  */
   public static class DC
   {
+    /**
+     * Create the difficulty class.
+     *
+     * @param inDC the difficulty class
+     * @param inDescription the description
+     */
     public DC(int inDC, String inDescription)
     {
       m_dc = inDC;
       m_description = inDescription;
     }
 
+    /** The difficulty to surpass. */
     private final int m_dc;
+
+    /** The description of the class. */
     private final String m_description;
 
+    /** The parser for the dc. */
     public static final Parser<DC> PARSER =
       new Parser<DC>(2)
       {
@@ -82,11 +92,21 @@ public class BaseSkill extends BaseEntry
         }
       };
 
+    /**
+     * Get the difficulty.
+     *
+     * @return the dc value
+     */
     public int getDC()
     {
       return m_dc;
     }
 
+    /**
+     * Get the description.
+     *
+     * @return the description
+     */
     public String getDescription()
     {
       return m_description;
@@ -119,37 +139,37 @@ public class BaseSkill extends BaseEntry
     new BaseType.Builder<>(BaseSkill.class).build();
 
   /** The base ability for this skill. */
-  public Ability m_ability = Ability.UNKNOWN;
+  private Ability m_ability = Ability.UNKNOWN;
 
   /** The check to make. */
-  public Optional<String> m_check = Optional.absent();
+  private Optional<String> m_check = Optional.absent();
 
   /** The action that can be done. */
-  public Optional<String> m_action = Optional.absent();
+  private Optional<String> m_action = Optional.absent();
 
   /** Can it be tried again. */
-  public Optional<String> m_retry = Optional.absent();
+  private Optional<String> m_retry = Optional.absent();
 
   /** The special remarks. */
-  public Optional<String> m_special = Optional.absent();
+  private Optional<String> m_special = Optional.absent();
 
   /** The synergies to other skills. */
-  public List<String> m_synergies = new ArrayList<String>();
+  private List<String> m_synergies = new ArrayList<String>();
 
   /** The restrictions. */
-  public Optional<String> m_restriction = Optional.absent();
+  private Optional<String> m_restriction = Optional.absent();
 
   /** What can be done untrained. */
-  public Optional<String> m_untrained = Optional.absent();
+  private Optional<String> m_untrained = Optional.absent();
 
   /** Restrictions when using the skill. */
-  public List<SkillRestriction> m_restrictions = new ArrayList<>();
+  private List<SkillRestriction> m_restrictions = new ArrayList<>();
 
   /** A list of special modifiers to recognize. */
-  public List<SkillModifier> m_modifiers = new ArrayList<>();
+  private List<SkillModifier> m_modifiers = new ArrayList<>();
 
   /** Various DCs for this skill. */
-  public List<DC> m_dcs = new ArrayList<>();
+  private List<DC> m_dcs = new ArrayList<>();
 
   /**
    * Get the index of the skills base ability.
@@ -161,59 +181,104 @@ public class BaseSkill extends BaseEntry
     return m_ability;
   }
 
+  /**
+   * Get the description about how to do the skill check.
+   *
+   * @return the check description
+   */
   public Optional<String> getCheck()
   {
     return m_check;
   }
 
+  /**
+   * Get the description about the action needed for the skill check.
+   *
+   * @return the action description
+   */
   public Optional<String> getAction()
   {
     return m_action;
   }
 
+  /**
+   * Get the description explaining if retrying is possible or not.
+   *
+   * @return the description about retrying
+   */
   public Optional<String> getRetry()
   {
     return m_retry;
   }
 
+  /**
+   * Get the special comments about the skill.
+   *
+   * @return the special comments
+   */
   public Optional<String> getSpecial()
   {
     return m_special;
   }
 
+  /**
+   * Get the skill synergy description.
+   *
+   * @return the skill synergies
+   */
   public List<String> getSynergies()
   {
     return m_synergies;
   }
 
+  /**
+   * Get the description about restrictions for the skill.
+   *
+   * @return the restrictions
+   */
   public Optional<String> getRestriction()
   {
     return m_restriction;
   }
 
+  /**
+   * Get the explanation how the skill can be used untrained.
+   *
+   * @return the untrained text
+   */
   public Optional<String> getUntrained()
   {
     return m_untrained;
   }
 
+  /**
+   * Get the restrictions for the skill.
+   *
+   * @return the restrictions
+   */
   public List<SkillRestriction> getRestrictions()
   {
     return m_restrictions;
   }
 
+  /**
+   * Get the skill modifiers.
+   *
+   * @return the skill modifiers
+   */
   public List<SkillModifier> getModifiers()
   {
     return m_modifiers;
   }
 
+  /**
+   * Get the relevant DCs for the skill.
+   *
+   * @return the dcs
+   */
   public List<DC> getDCs()
   {
     return m_dcs;
-  }
-
-  public List<String> getModifierNames()
-  {
-    return SkillModifier.names();
   }
 
   @Override
@@ -265,12 +330,12 @@ public class BaseSkill extends BaseEntry
     m_ability = inValues.use("ability", m_ability, Ability.PARSER);
     m_check = inValues.use("check", m_check);
     m_action = inValues.use("action", m_action);
-    m_retry= inValues.use("retry", m_retry);
+    m_retry = inValues.use("retry", m_retry);
     m_special = inValues.use("special", m_special);
     m_synergies = inValues.use("synergies", m_synergies);
     m_restriction = inValues.use("restriction", m_restriction);
     m_untrained = inValues.use("untrained", m_untrained);
-    m_restrictions= inValues.use("restrictions", m_restrictions,
+    m_restrictions = inValues.use("restrictions", m_restrictions,
                                  SkillRestriction.PARSER);
     m_modifiers = inValues.use("modifier", m_modifiers, SkillModifier.PARSER);
     m_dcs = inValues.use("dcs", m_dcs, DC.PARSER, "dc", "text");
@@ -323,6 +388,11 @@ public class BaseSkill extends BaseEntry
     return proto;
   }
 
+  /**
+   * Set all the values of the entry from the given proto.
+   *
+   * @param inProto the proto with the values
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseSkillProto))

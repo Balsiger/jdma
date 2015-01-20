@@ -29,7 +29,12 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible sizes in the game. */
+/**
+ * The possible sizes in the game.
+ *
+ * @file SkillModifier.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum SkillModifier
   implements Named, Proto<BaseSkillProto.Modifier>
 {

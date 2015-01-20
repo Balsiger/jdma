@@ -26,11 +26,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableSet;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -50,7 +48,6 @@ import net.ixitxachitls.util.logging.Log;
  */
 
 @Immutable
-@ParametersAreNonnullByDefault
 public class EntryListServlet extends PageServlet
 {
   /**

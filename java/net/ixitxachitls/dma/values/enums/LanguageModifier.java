@@ -19,24 +19,28 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-
 package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible sizes in the game. */
-@ParametersAreNonnullByDefault
+/**
+ * The possible sizes in the game.
+ *
+ * @file LanguageModifier.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum LanguageModifier implements Named,
     Proto<BaseMonsterProto.Language.Modifier>
 {
+  /** The unknown value. */
   UNKNOWN("Unknown", BaseMonsterProto.Language.Modifier.UNKNOWN_MODIFIER),
+
   /** Automatic. */
   AUTOMATIC("Automatic", BaseMonsterProto.Language.Modifier.AUTOMATIC),
 

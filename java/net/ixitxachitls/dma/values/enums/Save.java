@@ -19,23 +19,26 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-
 package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible saves in the game. */
-@ParametersAreNonnullByDefault
+/**
+ * The possible saves in the game.
+ *
+ * @file Save.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum Save implements Named, net.ixitxachitls.dma.values.enums.Short,
     Proto<BaseMonsterProto.Save>
 {
+  /** The unknown value. */
   UNKNOWN("Unknown", "Unk", BaseMonsterProto.Save.UNKNOWN_SAVE),
 
   /** Fortitude. */
@@ -105,6 +108,12 @@ public enum Save implements Named, net.ixitxachitls.dma.values.enums.Short,
     return m_proto;
   }
 
+  /**
+   * Get the save for the given proto.
+   *
+   * @param inProto the proto to get the save for
+   * @return the save for the proto
+   */
   public static Save fromProto(BaseMonsterProto.Save inProto)
   {
     for(Save save : values())

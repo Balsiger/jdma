@@ -22,10 +22,10 @@
 
 package net.ixitxachitls.dma.entries;
 
-import com.google.common.base.Optional;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
@@ -391,6 +391,11 @@ public class Encounter extends CampaignEntry
     return proto;
   }
 
+  /**
+   * Set the value from the given proto.
+   *
+   * @param inProto the proto with the values
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof EncounterProto))

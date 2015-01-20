@@ -27,9 +27,23 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Parser;
 
+/**
+ * An effect.
+ *
+ * @file Effect.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public class Effect
 {
-  public Effect(Affects inAffects,Optional<String> inName,
+  /**
+   * Create the effect.
+   *
+   * @param inAffects what is affected
+   * @param inName the name of the effect
+   * @param inModifier the modifier of what is affected
+   * @param inText a description of the effect
+   */
+  public Effect(Affects inAffects, Optional<String> inName,
                 Optional<Modifier> inModifier, Optional<String> inText)
   {
     m_affects = inAffects;
@@ -38,11 +52,19 @@ public class Effect
     m_text = inText;
   }
 
+  /** What is affected by the effect. */
   private final Affects m_affects;
+
+  /** The name of the effect. */
   private final Optional<String> m_name;
+
+  /** The modifier of the effect. */
   private final Optional<Modifier> m_modifier;
+
+  /** The effect description. */
   private final Optional<String> m_text;
 
+  /** The parser for effects. */
   public static final Parser<Effect> PARSER =
     new Parser<Effect>(4)
     {
@@ -65,21 +87,41 @@ public class Effect
       }
     };
 
+  /**
+   * Get what is affected by the effect.
+   *
+   * @return what's affected
+   */
   public Affects getAffects()
   {
     return m_affects;
   }
 
+  /**
+   * Get the effect name.
+   *
+   * @return the name
+   */
   public Optional<String> getName()
   {
     return m_name;
   }
 
+  /**
+   * Get the modifier.
+   *
+   * @return the modifier
+   */
   public Optional<Modifier> getModifier()
   {
     return m_modifier;
   }
 
+  /**
+   * Get the effect description.
+   *
+   * @return the description
+   */
   public Optional<String> getText()
   {
     return m_text;

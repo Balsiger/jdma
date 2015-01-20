@@ -106,7 +106,7 @@ public abstract class BaseServlet extends HttpServlet
     @Override
     public void send(HttpServletResponse inResponse) throws IOException
     {
-      System.out.println(m_code +": " + m_message);
+      System.out.println(m_code + ": " + m_message);
       inResponse.sendError(m_code, m_message);
     }
 

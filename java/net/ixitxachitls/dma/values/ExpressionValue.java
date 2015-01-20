@@ -208,8 +208,9 @@ public class ExpressionValue<T> extends Value
       }
       else
       {
-        String operator = inReader.expect(Operator.prefixed().iterator());
-        if(operator != null)
+        Optional<String> operator =
+            inReader.expect(Operator.prefixed().iterator());
+        if(operator.isPresent())
         {
           if(!inReader.expect('('))
             return Optional.absent();
@@ -226,7 +227,7 @@ public class ExpressionValue<T> extends Value
             return Optional.absent();
 
           first = Optional.of(new ExpressionValue<V>
-            (Operator.fromString(operator).get(), operands));
+            (Operator.fromString(operator.get()).get(), operands));
         }
         else
           first = Optional.of(new ExpressionValue<V>(inReader.readInt()));
@@ -235,15 +236,16 @@ public class ExpressionValue<T> extends Value
       if(inReader.isAtEnd())
         return first;
 
-      String operator = inReader.expect(Operator.infixed().iterator());
-      if (operator == null)
+      Optional<String> operator =
+          inReader.expect(Operator.infixed().iterator());
+      if (!operator.isPresent())
         return first;
 
       Optional<ExpressionValue<V>> second = parse(inReader);
 
       if(first.isPresent() && second.isPresent())
         return Optional.of(new ExpressionValue<V>
-                           (Operator.fromString(operator).get(),
+                           (Operator.fromString(operator.get()).get(),
                             first.get(), second.get()));
 
       return Optional.absent();

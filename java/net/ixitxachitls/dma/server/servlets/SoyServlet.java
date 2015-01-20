@@ -22,12 +22,9 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.nio.charset.Charset;
 import java.util.Map;
 
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -37,19 +34,36 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.common.base.Optional;
 import com.google.template.soy.data.SoyData;
 
-import net.ixitxachitls.dma.output.soy.SoyValue;
-import net.ixitxachitls.dma.values.enums.Affects;
-import net.ixitxachitls.dma.values.enums.Group;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.Level;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
+import net.ixitxachitls.dma.output.soy.SoyValue;
+import net.ixitxachitls.dma.values.ArmorType;
+import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.enums.Ability;
+import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Alignment;
+import net.ixitxachitls.dma.values.enums.AttackMode;
+import net.ixitxachitls.dma.values.enums.AttackStyle;
 import net.ixitxachitls.dma.values.enums.Gender;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.dma.values.enums.Immunity;
+import net.ixitxachitls.dma.values.enums.Language;
+import net.ixitxachitls.dma.values.enums.LanguageModifier;
+import net.ixitxachitls.dma.values.enums.Maneuverability;
+import net.ixitxachitls.dma.values.enums.MonsterSubtype;
+import net.ixitxachitls.dma.values.enums.MovementMode;
+import net.ixitxachitls.dma.values.enums.Organization;
+import net.ixitxachitls.dma.values.enums.Save;
+import net.ixitxachitls.dma.values.enums.SkillModifier;
+import net.ixitxachitls.dma.values.enums.SpellClass;
+import net.ixitxachitls.dma.values.enums.SpellComponent;
+import net.ixitxachitls.dma.values.enums.SpellDescriptor;
+import net.ixitxachitls.dma.values.enums.SpellEffect;
+import net.ixitxachitls.dma.values.enums.Subschool;
 import net.ixitxachitls.util.Tracer;
 
 /**
@@ -77,8 +91,7 @@ public class SoyServlet extends DMAServlet
    * Get the name of the template to render the page.
    *
    * @param     inRequest the request for the page
-   *
-   * @param inData
+   * @param     inData the soy data for rendering
    * @return    the name of the template
    */
   protected String getTemplateName(DMARequest inRequest,
@@ -106,6 +119,12 @@ public class SoyServlet extends DMAServlet
     return "soy servlet with";
   }
 
+  /**
+   * Create the renderer for the given request.
+   *
+   * @param inRequest the request for the page
+   * @return the renderer
+   */
   protected SoyRenderer createRenderer(DMARequest inRequest)
   {
     Tracer tracer = new Tracer("creating renderer");
@@ -126,6 +145,13 @@ public class SoyServlet extends DMAServlet
     return renderer;
   }
 
+  /**
+   * Render the page for the request.
+   *
+   * @param inRequest the request to render for
+   * @param inWriter the writer to write to
+   * @param inRenderer the soy renderer to render the page
+   */
   protected void render(DMARequest inRequest, PrintWriter inWriter,
                         SoyRenderer inRenderer)
   {
@@ -215,6 +241,28 @@ public class SoyServlet extends DMAServlet
        "Alignment", new SoyValue("Alignment", Alignment.class),
        "Ability", new SoyValue("Ability", Ability.class),
        "Affects", new SoyValue("Affects", Affects.class),
+       "WeaponProficiency",
+       new SoyValue("WeaponProficiency", Proficiency.class),
+       "ArmorProficiency",
+       new SoyValue("ArmorProficiency", ArmorType.class),
+       "SpellDescriptor",
+       new SoyValue("SpellDescriptor", SpellDescriptor.class),
+       "SpellEffect", new SoyValue("SpellEffect", SpellEffect.class),
+       "SpellClass", new SoyValue("SpellClass", SpellClass.class),
+       "Subschool", new SoyValue("Subschool", Subschool.class),
+       "SpellComponent", new SoyValue("SpellComponent", SpellComponent.class),
+       "MonsterSubtype", new SoyValue("MonsterSubtype", MonsterSubtype.class),
+       "MovementMode", new SoyValue("MovementMode", MovementMode.class),
+       "AttackMode", new SoyValue("AttackMode", AttackMode.class),
+       "AttackStyle", new SoyValue("AttackStyle", AttackStyle.class),
+       "Organization", new SoyValue("Organization", Organization.class),
+       "Language", new SoyValue("Language", Language.class),
+       "LanguageModifier",
+       new SoyValue("LanguageModifier", LanguageModifier.class),
+       "Maneuverability",
+       "Save", new SoyValue("Save", Save.class),
+       "SkillModifier", new SoyValue("SkillModifier", SkillModifier.class),
+       new SoyValue("Maneuverability", Maneuverability.class),
        "Immunity", new SoyValue("Immunity", Immunity.class));
 
     tracer.done();

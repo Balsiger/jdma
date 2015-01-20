@@ -234,8 +234,8 @@ public class Rational extends Value.Arithmetic<RationalProto>
     int denominator = m_denominator;
 
     int common = BigInteger.valueOf(nominator)
-      				     .gcd(BigInteger.valueOf(m_denominator))
-      				     .intValue();
+        .gcd(BigInteger.valueOf(m_denominator))
+        .intValue();
 
     nominator /= common;
     denominator /= common;

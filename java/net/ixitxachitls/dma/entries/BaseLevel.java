@@ -39,9 +39,9 @@ import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Parser;
+import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.dma.values.enums.Group;
@@ -56,8 +56,17 @@ import net.ixitxachitls.util.logging.Log;
 @ParametersAreNonnullByDefault
 public class BaseLevel extends BaseEntry
 {
+  /** A reference to a quality per level with name, uses and conditions. */
   public static class QualityReference
   {
+    /**
+     * Create the quality reference.
+     *
+     * @param inName the name of the quality
+     * @param inLevel the level for which this reference is relevant
+     * @param inUsesPerDay the number of uses per day
+     * @param inCondition the condition for the quality to be used
+     */
     public QualityReference(String inName, int inLevel, int inUsesPerDay,
                             Optional<String> inCondition)
     {
@@ -67,11 +76,19 @@ public class BaseLevel extends BaseEntry
       m_condition = inCondition;
     }
 
+    /** The reference to the actualy quality. */
     private final Reference<BaseQuality> m_reference;
+
+    /** The level the quality comes into play as described. */
     private final int m_level;
+
+    /** The number of times the quality can be used per day. */
     private final int m_usesPerDay;
+
+    /** The condition that allows the usage of the quality. */
     private final Optional<String> m_condition;
 
+    /** The parser for the quality reference. */
     public static final Parser<QualityReference> PARSER =
       new Parser<QualityReference>(4)
       {
@@ -90,26 +107,51 @@ public class BaseLevel extends BaseEntry
         }
       };
 
+    /**
+     * Get the quality name.
+     *
+     * @return the name (id) of the quality
+     */
     public String getName()
     {
       return m_reference.getName();
     }
 
+    /**
+     * Get the full quality referenced, if found.
+     *
+     * @return the quality or absent if not found
+     */
     public Reference<BaseQuality> getReference()
     {
       return m_reference;
     }
 
+    /**
+     * Get the level this quality comes into play.
+     *
+     * @return the level
+     */
     public int getLevel()
     {
       return m_level;
     }
 
+    /**
+     * Get the number of times the quality can be used per day.
+     *
+     * @return the number of usages per day
+     */
     public int getUsesPerDay()
     {
       return m_usesPerDay;
     }
 
+    /**
+     * Get the condition restricting useage of this quality.
+     *
+     * @return the condition
+     */
     public Optional<String> getCondition()
     {
       return m_condition;
@@ -292,51 +334,102 @@ public class BaseLevel extends BaseEntry
     return m_abbreviation;
   }
 
+  /**
+   * Get a description how a character of this class behaves on adventures.
+   *
+   * @return the adventures description
+   */
   public Optional<String> getAdventures()
   {
     return m_adventures;
   }
 
+  /**
+   * Get a description about the characteristics of this class.
+   *
+   * @return the class characteristics
+   */
   public Optional<String> getCharacteristics()
   {
     return m_characteristics;
   }
 
+  /**
+   * Get the options describing what aligments are open to a character of
+   * this class and what these mean.
+   *
+   * @return the alignment options
+   */
   public Optional<String> getAlignmentOptions()
   {
     return m_alignmentOptions;
   }
 
+  /**
+   * Get a description how this class stands to religions.
+   *
+   * @return the religion behavior
+   */
   public Optional<String> getReligion()
   {
     return m_religion;
   }
 
+  /**
+   * Get a description about the races and their interaction with this class.
+   *
+   * @return descriptions about races and this class
+   */
   public Optional<String> getRaces()
   {
     return m_races;
   }
 
+  /**
+   * Get a description how other classes react to characters with this level.
+   *
+   * @return the description for other classes
+   */
   public Optional<String> getOtherClasses()
   {
     return m_otherClasses;
   }
 
+  /**
+   * Get a description about the role of a character of this class in the party.
+   *
+   * @return the role description
+   */
   public Optional<String> getRole()
   {
     return m_role;
   }
 
+  /**
+   * Get a description about possible backgrounds for characters of this class.
+   *
+   * @return the background description
+   */
   public Optional<String> getBackground()
   {
     return m_background;
   }
 
+  /**
+   * Get a summary about important abilities for this class.
+   *
+   * @return the important abilities
+   */
   public Optional<String> getImportantAbilities()
   {
     return m_importantAbilities;
   }
 
+  /**
+   * Get the list of alignments this class is allowed to have.
+   *
+   * @return the alignments allowed
+   */
   public List<Alignment> getAllowedAlignments()
   {
     return Collections.unmodifiableList(m_allowedAlignments);
@@ -352,69 +445,104 @@ public class BaseLevel extends BaseEntry
     return m_hitDie;
   }
 
+  /**
+   * Get the skills points per level of this class.
+   *
+   * @return the number of skill points gained per level
+   */
   public Optional<Integer> getSkillPoints()
   {
     return m_skillPoints;
   }
 
+  /**
+   * Get the list of class skills for this class.
+   *
+   * @return the references to class skills
+   */
   public List<Reference<BaseSkill>> getClassSkills()
   {
     return Collections.unmodifiableList(m_classSkills);
   }
 
+  /**
+   * Get the list of proficiencies this class grants.
+   *
+   * @return the class proficiencies
+   */
   public List<Proficiency> getWeaponProficiencies()
   {
     return Collections.unmodifiableList(m_weaponProficiencies);
   }
 
+  /**
+   * Get the list of armor proficiencies this class grants.
+   *
+   * @return the armor proficiencies
+   */
   public List<ArmorType> getArmorProficiencies()
   {
     return Collections.unmodifiableList(m_armorProficiencies);
   }
 
+  /**
+   * Get the special attacks available for the class.
+   *
+   * @return the list of quality references representing special attacks
+   */
   public List<QualityReference> getSpecialAttacks()
   {
     return Collections.unmodifiableList(m_specialAttacks);
   }
 
+  /**
+   * Get the special qualities of the class.
+   *
+   * @return the list of quality references representig special qualities.
+   */
   public List<QualityReference> getSpecialQualities()
   {
     return Collections.unmodifiableList(m_specialQualities);
   }
 
+  /**
+   * Get the base attack bonuses per level in this class.
+   *
+   * @return the base attack bonus per level
+   */
   public List<Integer> getBaseAttacks()
   {
     return Collections.unmodifiableList(m_baseAttacks);
   }
 
+  /**
+   * Get the fortitude saves per level for this class.
+   *
+   * @return the fortitude save per level
+   */
   public List<Integer> getFortitudeSaves()
   {
     return Collections.unmodifiableList(m_fortitudeSaves);
   }
 
+  /**
+   * Get the relfex saves per level for this class.
+   *
+   * @return the reflex saves per level
+   */
   public List<Integer> getReflexSaves()
   {
     return Collections.unmodifiableList(m_reflexSaves);
   }
 
+  /**
+   * Get the will saves per level for this class.
+   *
+   * @return the will saves per level
+   */
   public List<Integer> getWillSaves()
   {
     return Collections.unmodifiableList(m_willSaves);
-  }
-
-  public List<String> getAlignmentNames()
-  {
-    return Alignment.names();
-  }
-
-  public List<String> getWeaponProficiencyNames()
-  {
-    return Proficiency.names();
-  }
-
-  public List<String> getArmorProficiencyNames()
-  {
-    return ArmorType.names();
   }
 
   /**
@@ -687,6 +815,11 @@ public class BaseLevel extends BaseEntry
     return proto;
   }
 
+  /**
+   * Read the values for the base level (class) from the given proto.
+   *
+   * @param inProto the proto to read from
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof BaseLevelProto))

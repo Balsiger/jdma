@@ -31,10 +31,10 @@ import java.util.Map;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.values.ExpressionValue;
 import net.ixitxachitls.dma.values.Speed;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 
 /**
@@ -45,16 +45,22 @@ import net.ixitxachitls.dma.values.enums.MovementMode;
  */
 public class Quality extends NestedEntry
 {
+  /** Create a default quality. */
   public Quality()
   {
-
   }
 
   /** The parameters defined for this quality to parameterize the base value. */
   private final Map<String, String> m_parameters = new HashMap<>();
 
+  /** The base quality, if found. */
   private Optional<Optional<BaseQuality>> m_base = Optional.absent();
 
+  /**
+   * Get the base quality, if it can be found.
+   *
+   * @return the base quality, if found
+   */
   public Optional<BaseQuality> getBase()
   {
     if(!m_base.isPresent())
@@ -69,11 +75,22 @@ public class Quality extends NestedEntry
     return m_base.get();
   }
 
+  /**
+   * Get the parameters for the quality.
+   *
+   * @return a map of key to value parameters
+   */
   public Map<String, String> getParameters()
   {
     return Collections.unmodifiableMap(m_parameters);
   }
 
+  /**
+   * Get the speed modification for the given movement mode.
+   *
+   * @param inMode the movement mode for which to get the speed modification
+   * @return the speed modification, if any
+   */
   public Optional<Speed> getSpeed(MovementMode inMode)
   {
     if(!getBase().isPresent())
@@ -116,6 +133,11 @@ public class Quality extends NestedEntry
       m_parameters.put(names.get(i), values.get(i));
   }
 
+  /**
+   * Convert the quality to a proto.
+   *
+   * @return the qualities value in a proto
+   */
   public QualityProto toProto()
   {
     QualityProto.Builder builder = QualityProto.newBuilder();
@@ -135,6 +157,12 @@ public class Quality extends NestedEntry
     return proto;
   }
 
+  /**
+   * Create a quality from the given proto.
+   *
+   * @param inProto the proto values
+   * @return the newly created quality
+   */
   public static Quality fromProto(QualityProto inProto)
   {
     Quality quality = new Quality();

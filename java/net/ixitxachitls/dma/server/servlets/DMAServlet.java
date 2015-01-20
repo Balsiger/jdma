@@ -109,6 +109,11 @@ public abstract class DMAServlet extends BaseServlet
       == SystemProperty.Environment.Value.Development;
   }
 
+  /**
+   * Check whether the servlet is in testing mode.
+   *
+   * @return true if testing, false if not
+   */
   public static boolean isTesting()
   {
     return Config.get("web.data.testing", false);

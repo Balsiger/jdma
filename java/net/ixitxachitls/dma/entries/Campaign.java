@@ -23,9 +23,6 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -44,8 +41,6 @@ import net.ixitxachitls.util.logging.Log;
  * @file          Campaign.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
-@ParametersAreNonnullByDefault
 public class Campaign extends CampaignEntry
 {
   /** The serial version id. */
@@ -80,6 +75,11 @@ public class Campaign extends CampaignEntry
   /** The dm for this campaign. */
   protected Optional<String> m_dm = Optional.absent();
 
+  /**
+   * Get the key for the campaign.
+   *
+   * @return the key
+   */
   public EntryKey getKey()
   {
     List<String> names = getBaseNames();
@@ -322,6 +322,11 @@ public class Campaign extends CampaignEntry
     return proto;
   }
 
+  /**
+   * Set all the values from the given proto to this campaign.
+   *
+   * @param inProto the proto to read values from
+   */
   public void fromProto(Message inProto)
   {
     if(!(inProto instanceof CampaignProto))

@@ -488,7 +488,7 @@
         {param name: 'monster_type' /}
         {param label: 'Type' /}
         {param value: $entry.monster_type.string /}
-        {param choices: $entry.monster_type.names /}
+        {param choices: $ij.MonsterType.names /}
         {param color: '#080' /}
       {/call}    
       {call dma.edit.generic_value}
@@ -503,7 +503,7 @@
                     'name': 'subtype',
                     'value': $subtype.string,
                     'type': 'selection',
-                    'choices': $entry.monster_subtype_names
+                    'choices': $ij.MonsterSubtype.names
                   ]] /}
                 {/call}
               {ifempty}
@@ -512,7 +512,7 @@
                     'name': 'subtype',
                     'value': '',
                     'type': 'selection',
-                    'choices': $entry.monster_subtype_names
+                    'choices': $ij.MonsterSubtype.names
                   ]] /}
                 {/call}
               {/foreach}          
@@ -540,7 +540,7 @@
                     'name': 'speed.mode',
                     'value': $speed.mode.string,
                     'type': 'selection',
-                    'choices': $entry.movement_mode_names
+                    'choices': $ij.MovementMode,names
                   ], [
                     'name': 'speed.speed',
                     'value': $speed.speed,
@@ -549,7 +549,7 @@
                     'name': 'speed.maneuverability',
                     'value': $speed.maneuverability.string,
                     'type': 'selection',
-                    'choices': $entry.maneuverability_names
+                    'choices': $ij.Maneuverability.names
                   ]] /}
                 {/call}
               {ifempty}
@@ -558,7 +558,7 @@
                     'name': 'speed.mode',
                     'value': '',
                     'type': 'selection',
-                    'choices': $entry.movement_mode_names
+                    'choices': $ij.MovementMode.names
                   ], [
                     'name': 'speed.speed',
                     'value': '',
@@ -567,7 +567,7 @@
                     'name': 'speed.maneuverability',
                     'value': '',
                     'type': 'selection',
-                    'choices': $entry.maneuverability_names
+                    'choices': $ij.Maneuverability.names
                   ]] /}
                 {/call}
               {/foreach}          
@@ -686,12 +686,12 @@
                     'name': 'primary_attack.mode',
                     'value': $attack.mode.string,
                     'type': 'selection',
-                    'choices': $entry.attack_mode_names 
+                    'choices': $ij.AttackMode.names
                   ], [
                     'name': 'primary_attack.style',
                     'value': $attack.style.string,
                     'type': 'selection',
-                    'choices': $entry.attack_style_names 
+                    'choices': $ij.AttackStyle.names
                   ], [
                     'name': 'primary_attack.damage',
                     'value': $attack.damage,
@@ -708,12 +708,12 @@
                     'name': 'primary_attack.mode',
                     'value': '',
                     'type': 'selection',
-                    'choices': $entry.attack_mode_names 
+                    'choices': $ij.AttackMode.names
                   ], [
                     'name': 'primary_attack.style',
                     'value': '',
                     'type': 'selection',
-                    'choices': $entry.attack_style_names 
+                    'choices': $ij.AttackStyle.names
                   ], [
                     'name': 'primary_attack.damage',
                     'value': '',
@@ -742,12 +742,12 @@
                     'name': 'secondary_attack.mode',
                     'value': $attack.mode.string,
                     'type': 'selection',
-                    'choices': $entry.attack_mode_names 
+                    'choices': $ij.AttackMode.names
                   ], [
                     'name': 'secondary_attack.style',
                     'value': $attack.style.string,
                     'type': 'selection',
-                    'choices': $entry.attack_style_names 
+                    'choices': $ij.AttackStyle.names
                   ], [
                     'name': 'secondary_attack.damage',
                     'value': $attack.damage,
@@ -764,12 +764,12 @@
                     'name': 'secondary_attack.mode',
                     'value': '',
                     'type': 'selection',
-                    'choices': $entry.attack_mode_names 
+                    'choices': $ij.AttackMode.names
                   ], [
                     'name': 'secondary_attack.style',
                     'value': '',
                     'type': 'selection',
-                    'choices': $entry.attack_style_names 
+                    'choices': $ij.AttackAtyle.names
                   ], [
                     'name': 'secondary_attack.damage',
                     'value': '',
@@ -860,7 +860,7 @@
                     'name': 'organization.organization',
                     'value': $group.organization.string,
                     'type': 'selection',
-                    'choices': $entry.organization_names
+                    'choices': $ij.Organization.names
                   ], [
                     'name': 'organization.number',
                     'value': $group.number,
@@ -879,7 +879,7 @@
                     'name': 'organization.organization',
                     'value': '',
                     'type': 'selection',
-                    'choices': $entry.organization_names
+                    'choices': $ij.Organization.names
                   ], [
                     'name': 'organization.number',
                     'value': '',
@@ -950,7 +950,7 @@
                     'name': 'advancement.size',
                     'value': $advancement.size,
                     'type': 'selection',
-                    'choices': $entry.size_names
+                    'choices': $ij.Size.names
                   ]] /}
                 {/call}
               {ifempty}
@@ -963,7 +963,7 @@
                     'name': 'advancement.size',
                     'value': '',
                     'type': 'selection',
-                    'choices': $entry.size_names
+                    'choices': $ij.Size.names
                   ]] /}
                 {/call}
               {/foreach}          
@@ -992,12 +992,12 @@
                     'name': 'language.language',
                     'value': $language.language.string,
                     'type': 'selection',
-                    'choices': $entry.language_names
+                    'choices': $ij.Language.names
                   ], [
                     'name': 'language.modifier',
                     'value': $language.modifier.string, 
                     'type': 'selection',
-                    'choices': $entry.language_modifier_names
+                    'choices': $ij.LanguageModifier.names
                   ]] /}
                 {/call}
               {ifempty}
@@ -1006,12 +1006,12 @@
                     'name': 'language.language',
                     'value': '',
                     'type': 'selection',
-                    'choices': $entry.language_names
+                    'choices': $ij.Language.names
                   ], [
                     'name': 'language.modifier',
                     'value': '', 
                     'type': 'selection',
-                    'choices': $entry.language_modifier_names
+                    'choices': $ij.LanguageModifier.names
                   ]] /}
                 {/call}
               {/foreach}          
@@ -1082,7 +1082,7 @@
                     'name': 'good_save',
                     'value': $save.string,
                     'type': 'selection',
-                    'choices': $entry.save_names
+                    'choices': $ij.Save.names
                   ]] /}
                 {/call}
               {ifempty}
@@ -1091,7 +1091,7 @@
                     'name': 'good_save',
                     'value': '',
                     'type': 'selection',
-                    'choices': $entry.save_names
+                    'choices': $ij.Save.names
                   ]] /}
                 {/call}
               {/foreach}          

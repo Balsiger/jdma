@@ -23,7 +23,6 @@ package net.ixitxachitls.dma.values.enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 
@@ -31,11 +30,16 @@ import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto.Type;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible monster types in the game. */
-@ParametersAreNonnullByDefault
+/**
+ * The possible monster types in the game.
+ *
+ * @file MonsterType.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum MonsterType implements Named,
     Proto<Type>
 {
+  /** The unknown value. */
   UNKNOWN("Unknown", BaseMonsterProto.Type.UNKNOWN_TYPE),
 
   /** Aberration. */

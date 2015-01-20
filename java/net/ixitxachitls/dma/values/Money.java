@@ -39,8 +39,10 @@ import net.ixitxachitls.util.Strings;
  */
 public class Money extends Value.Arithmetic<MoneyProto>
 {
+  /** The parser for money values. */
   public static class MoneyParser extends Parser<Money>
   {
+    /** Create the parser. */
     public MoneyParser()
     {
       super(1);
@@ -93,6 +95,10 @@ public class Money extends Value.Arithmetic<MoneyProto>
             case "weapon":
               weapon += number;
               break;
+
+            default:
+              // just ignore it
+              break;
           }
         }
         catch(NumberFormatException e)
@@ -106,6 +112,16 @@ public class Money extends Value.Arithmetic<MoneyProto>
     }
   }
 
+  /**
+   * Create a money value.
+   *
+   * @param inPlatinum the number of platinum coins
+   * @param inGold the number of gold coins
+   * @param inSilver the number of silver coins
+   * @param inCopper the number of copper coins
+   * @param inArmor the number of armot + values
+   * @param inWeapon the number of weapon + values
+   */
   public Money(int inPlatinum, int inGold, int inSilver, int inCopper,
                int inArmor, int inWeapon)
   {
@@ -117,50 +133,104 @@ public class Money extends Value.Arithmetic<MoneyProto>
     m_weapon = inWeapon;
   }
 
+  /** The unit for platinum pieces. */
   public static final String PP = "pp";
+
+  /** The unit for gold pieces. */
   public static final String GP = "gp";
+
+  /** The unit for silver pieces. */
   public static final String SP = "sp";
+
+  /** The unit for copper pieces. */
   public static final String CP = "cp";
 
-  public static Parser<Money> PARSER = new MoneyParser();
+  /** The parser for money values. */
+  public static final Parser<Money> PARSER = new MoneyParser();
 
+  /** The number of platinum pieces. */
   private final int m_platinum;
+
+  /** The number of gold pieces. */
   private final int m_gold;
+
+  /** The number of silver pieces. */
   private final int m_silver;
+
+  /** The number of copper pieces. */
   private final int m_copper;
+
+  /** The number of armor + values. */
   private final int m_armor;
+
+  /** The number of weapon + values. */
   private final int m_weapon;
 
+  /**
+   * Get the number of platinum pieces.
+   *
+   * @return the number of platinum pieces
+   */
   public int getPlatinum()
   {
     return m_platinum;
   }
 
+  /**
+   * Get the number of gold pieces.
+   *
+   * @return the gold pieces
+   */
   public int getGold()
   {
     return m_gold;
   }
 
+  /**
+   * Get the number of silver pieces.
+   *
+   * @return the silver pieces
+   */
   public int getSilver()
   {
     return m_silver;
   }
 
+  /**
+   * Get the number of copper pieces.
+   *
+   * @return the copper pieces
+   */
   public int getCopper()
   {
     return m_copper;
   }
 
+  /**
+   * Get the number of + bonuses for armor.
+   *
+   * @return the armor +
+   */
   public int getArmor()
   {
     return m_armor;
   }
 
+  /**
+   * Get the number of + bonuses for weapon.
+   *
+   * @return the weapon +
+   */
   public int getWeapon()
   {
     return m_weapon;
   }
 
+  /**
+   * Convert the money to a gold value.
+   *
+   * @return the money in gold pieces or fractions thereof.
+   */
   public double asGold()
   {
     return m_platinum * 10 + m_gold + m_silver / 10.0 + m_copper / 100.0
@@ -191,6 +261,11 @@ public class Money extends Value.Arithmetic<MoneyProto>
     return Strings.SPACE_JOINER.join(parts);
   }
 
+  /**
+   * Get a money values as pure money, without armor and weapon.
+   *
+   * @return the pure string
+   */
   public String toPureString()
   {
     List<String> parts = new ArrayList<>();
@@ -289,6 +364,12 @@ public class Money extends Value.Arithmetic<MoneyProto>
     return builder.build();
   }
 
+  /**
+   * Convert the given proto to a money value.
+   *
+   * @param inProto the proto to convert
+   * @return the new money value with the proto values
+   */
   public static Money fromProto(MoneyProto inProto)
   {
     return new Money(inProto.getPlatinum(), inProto.getGold(),

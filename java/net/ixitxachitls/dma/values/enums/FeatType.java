@@ -30,7 +30,12 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible feat types to affect (cf. PHB 175). */
+/**
+ * The possible feat types to affect (cf. PHB 175).
+ *
+ * @file FeatType.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum FeatType
   implements Named, Proto<BaseFeatProto.Type>
 {

@@ -29,7 +29,12 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.BaseQualityProto;
 import net.ixitxachitls.dma.values.Parser;
 
-/** The possible spell components (cf. PHB 174). */
+/**
+ * The possible spell components (cf. PHB 174).
+ *
+ * @file EffectType.java
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
+ */
 public enum EffectType implements Named, net.ixitxachitls.dma.values.enums.Short
 {
   /** Unknown. */
