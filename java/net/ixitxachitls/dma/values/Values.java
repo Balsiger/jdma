@@ -133,7 +133,7 @@ public class Values
   public Optional<String> use(String inKey, Optional<String> inDefault)
   {
     Optional<String> value = getFirst(inKey);
-    if(value.isPresent())
+    if(!value.isPresent())
       return inDefault;
 
     if(!inDefault.equals(value))
@@ -170,7 +170,7 @@ public class Values
   public String use(String inKey, String inDefault, Optional<Checker> inChecker)
   {
     Optional<String> value = getFirst(inKey);
-    if(value.isPresent())
+    if(!value.isPresent())
       return inDefault;
 
     if(!inDefault.equals(value))

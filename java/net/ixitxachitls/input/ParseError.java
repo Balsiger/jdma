@@ -170,12 +170,13 @@ public class ParseError extends BaseError
   public String toString()
   {
     return m_errorNumber + ": " + m_error
-      + (m_parseMessage != null ? " (" + m_parseMessage + ")" : "")
+      + (m_parseMessage.isPresent() ? " (" + m_parseMessage.get() + ")" : "")
       + (m_line > 0 ? " on line " + m_line : "")
-      + (m_document != null ? " in document '" + m_document + "'" : "")
-      + (m_pre != null || m_post != null ? "\n"
-         + (m_pre != null ? s_dots + m_pre : "") + s_mark
-         + (m_post != null ? m_post + s_dots : "") : "");
+      + (m_document.isPresent()
+        ? " in document '" + m_document.get() + "'" : "")
+      + (m_pre.isPresent() || m_post.isPresent() ? "\n"
+         + (m_pre.isPresent() ? s_dots + m_pre.get() : "") + s_mark
+         + (m_post.isPresent() ? m_post.get() + s_dots : "") : "");
   }
 
   @Override
@@ -214,11 +215,11 @@ public class ParseError extends BaseError
       assertEquals("name", "[id] no definition found for this error",
                    error.getError());
       assertEquals("id", "id", error.getErrorNumber());
-      assertEquals("message", "message", error.getParseMessage());
+      assertEquals("message", "message", error.getParseMessage().get());
       assertEquals("line", 42, error.getLine());
-      assertEquals("document", "document", error.getDocument());
-      assertEquals("pre", "pre", error.getPre());
-      assertEquals("post", "post", error.getPost());
+      assertEquals("document", "document", error.getDocument().get());
+      assertEquals("pre", "pre", error.getPre().get());
+      assertEquals("post", "post", error.getPost().get());
 
       assertEquals("string",
                    "id: [id] no definition found for this error (message) "
@@ -228,7 +229,10 @@ public class ParseError extends BaseError
                    error.toString());
 
       // minimal definition
-      error = new ParseError("id", null, -1, null, null, null);
+      error = new ParseError("id", Optional.<String>absent(), -1,
+                             Optional.<String>absent(),
+                             Optional.<String>absent(),
+                             Optional.<String>absent());
 
       assertEquals("minimal", "id: [id] no definition found for this error",
                    error.toString());

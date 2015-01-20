@@ -71,7 +71,7 @@ public class RecompileActionServlet extends ActionServlet
 
     Tracer tracer = new Tracer("compiling soy templates");
     Log.important("recompiling soy templates on dev");
-    SoyRenderer.TEMPLATE.recompile();
+    SoyRenderer.getDefaultTemplate().recompile();
     SoyTemplate.COMMAND_RENDERER.recompile();
     tracer.done();
 

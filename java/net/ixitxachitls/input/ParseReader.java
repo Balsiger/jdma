@@ -677,7 +677,7 @@ public class ParseReader implements AutoCloseable
    */
   public String read(String inDelimiters)
   {
-    return read(inDelimiters, null);
+    return read(inDelimiters, Optional.<String>absent());
   }
 
   /**
@@ -1476,7 +1476,7 @@ public class ParseReader implements AutoCloseable
       try (ParseReader reader =
         new ParseReader(new java.io.StringReader(""), "test"))
       {
-        assertEquals("test", reader.getName());
+        assertEquals("test", reader.getName().get());
         assertEquals(true, reader.isOpen());
         assertEquals(true, reader.isAtEnd());
         assertEquals(true, reader.isAtEnd());
@@ -1648,7 +1648,7 @@ public class ParseReader implements AutoCloseable
         assertEquals(-1,    reader.expect(new String[]{"a", "b", "c"}));
         assertEquals("word",
                      reader.expect(Iterators.forArray("one", "two", "tree",
-                                                      "word", "four")));
+                                                      "word", "four")).get());
 
         // try expecting white spaces
         assertTrue("space", reader.expect("guru"));
@@ -1686,13 +1686,13 @@ public class ParseReader implements AutoCloseable
                                         Optional.of("just some text"));
 
         assertEquals("test", error.getErrorNumber());
-        assertEquals("just some text", error.getParseMessage());
+        assertEquals("just some text", error.getParseMessage().get());
         assertEquals("[test] no definition found for this error",
                      error.getError());
-        assertEquals("test", error.getDocument());
+        assertEquals("test", error.getDocument().get());
         assertEquals(4, error.getLine());
-        assertEquals("\njust some test text\n\n with #", error.getPre());
-        assertEquals(" an \nerror position", error.getPost());
+        assertEquals("\njust some test text\n\n with #", error.getPre().get());
+        assertEquals(" an \nerror position", error.getPost().get());
         assertFalse("error", reader.hadError());
         assertFalse("warning", reader.hadWarning());
 
