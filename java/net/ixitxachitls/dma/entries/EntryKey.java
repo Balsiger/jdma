@@ -199,7 +199,7 @@ public class EntryKey
     if(inPaths.length <= inIndex || inIndex < 1)
       return Optional.absent();
 
-    String id = inPaths[inIndex--].replace("%20", " ");
+    String id = inPaths[inIndex--].replace("%20", " ").replace("\\.\\w+$", "");
     Optional<? extends AbstractType<? extends AbstractEntry>> type =
       AbstractType.getTyped(inPaths[inIndex].replace("%20", " "));
 

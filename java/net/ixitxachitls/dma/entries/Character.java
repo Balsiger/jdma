@@ -23,9 +23,8 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -35,6 +34,7 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CharacterProto;
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
 import net.ixitxachitls.dma.values.File;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.CharacterState;
 import net.ixitxachitls.util.logging.Log;
@@ -49,15 +49,10 @@ import net.ixitxachitls.util.logging.Log;
  * @file          Character.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
-@ParametersAreNonnullByDefault
 public class Character extends NPC
                        //extends CampaignEntry
                        //implements Storage<Item>
 {
-  /** The serial version id. */
-  private static final long serialVersionUID = 1L;
-
   /**
    * Create the character.
    */
@@ -80,8 +75,14 @@ public class Character extends NPC
   public static final Type<Character> TYPE =
     new Type.Builder<>(Character.class, BaseMonster.TYPE).build();
 
+  /** The serial version id. */
+  private static final long serialVersionUID = 1L;
+
   /** The state value. */
   protected CharacterState m_state = CharacterState.UNKNOWN;
+
+  /** The current experience poins. */
+  protected int m_xp = 0;
 
   /** TODO: not sure if and for what this is needed
   protected Optional<String> m_monsterName = Optional.absent();
@@ -241,6 +242,38 @@ public class Character extends NPC
   }
 
   /**
+   * Get the current number of experience points.
+   *
+   * @return the current xp level
+   */
+  public int getXP()
+  {
+    return m_xp;
+  }
+
+  /**
+   * Get the experience points necessary to achieve the next level.
+   *
+   * @return the xp needed for the next level
+   */
+  public int nextLevelXP()
+  {
+    return minXP(getEffectiveCharacterLevel() + 1);
+  }
+
+  /**
+   * Compute the minimal number of xp for the given character level.
+   *
+   * @param level the level to compute xp for
+   * @return the minimal number of xp
+   */
+  public static int minXP(int level)
+  {
+    // xp per level = sum 1..n-1 * 1000 = n * (n-1)/2 * 1000
+    return level * (level - 1) * 500;
+  }
+
+  /**
    * The total wealth in gp of the character.
    *
    * @return      the gp value of all items
@@ -361,6 +394,20 @@ public class Character extends NPC
     return Collections.unmodifiableList(m_possessions);
   }
 
+  public List<Item> getAllPossessions()
+  {
+    List<Item> possessions = getPossessions();
+    List<Item> items = new ArrayList<>();
+
+    for(Item item : possessions)
+    {
+      items.add(item);
+      items.addAll(item.getAllContents());
+    }
+
+    return items;
+  }
+
   /**
    * Add the given entry to the character entry.
    *
@@ -399,6 +446,7 @@ public class Character extends NPC
 
     m_state = inValues.use("state", m_state, CharacterState.PARSER);
     m_playerName = inValues.use("player", m_playerName);
+    m_xp = inValues.use("xp", m_xp, Value.INTEGER_PARSER);
   }
 
   @Override
@@ -416,6 +464,8 @@ public class Character extends NPC
 
     if(m_playerName.isPresent())
       builder.setPlayerName(m_playerName.get());
+
+    builder.setXp(m_xp);
 
     CharacterProto proto = builder.build();
     return proto;
@@ -444,6 +494,8 @@ public class Character extends NPC
 
     if(proto.hasPlayerName())
       m_playerName = Optional.of(proto.getPlayerName());
+
+    m_xp = proto.getXp();
 
     super.fromProto(proto.getBase());
   }

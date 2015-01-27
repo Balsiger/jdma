@@ -63,6 +63,11 @@
         {param color: '#39f' /}
       {/call}
       {call dma.entry.value}
+        {param label: 'XP' /}
+        {param value: $entry.XP /}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
         {param label: 'Alignment' /}
         {param value: $entry.alignment /}
         {param color: '#39f' /}
@@ -117,6 +122,7 @@
       {call dma.entry.value}
         {param label: 'Feats' /}
         {param value}
+          {$entry.get_feats}
           {foreach $feat in $entry.feats}
             {call dma.entries.feats.tiny}
               {param entry: $feat /}
@@ -311,8 +317,8 @@
     
       <div class="group ruler" style="height: 420px"></div>
     
-      <div class="group" style="width: 38%">    
-    
+      <div class="group" style="width: 38%">
+
         {call .sheet_subtitle}
           {param title: 'Combat Options' /}
         {/call}
@@ -350,7 +356,7 @@
           {param title: 'Hit Points' /}
         {/call}
 
-        <div class="values boxed" style="height: 450px">        
+        <div class="values boxed" style="height: 450px">
           <div class="hps temporary">
             Temporary<br/>
             {for $i in range(20)}
@@ -1024,8 +1030,96 @@
       </div>
 
     </div>
-        
-  </div>   
+
+    /* Second page. */
+    <div class="group" style="width: 19%">
+
+      {call .sheet_subtitle}
+        {param title: 'XP' /}
+      {/call}
+
+      <div class="values boxed" style="height: 450px; background-color: #eee">
+
+        <div class="xp">
+          {$entry.XP}
+        </div>
+
+        <div class="xp-next">
+          Level {$entry.effectiveCharacterLevel + 1}: {$entry.nextLevelXP}
+        </div>
+      </div>
+
+     </div>
+
+    <div class="group gear" style="width: 80%; margin-left: 5px">
+
+      {call .sheet_subtitle}
+        {param title: 'Gear' /}
+      {/call}
+
+      <div class="gear-title">Possessions on person</div>
+
+      <div class="gear-name">Item</div>
+      <div class="gear-spacer"></div>
+      <div class="gear-location">Location</div>
+      <div class="gear-weight">Weight</div>
+
+    {foreach $item in $entry.all_possessions}
+      {if not $item.weapon and not $item.armor}
+        <div class="gear-line">
+          <div class="gear-name">
+            {call dma.entries.items.reference}
+              {param entry: $item /}
+            {/call}
+
+            {if $item.multiuse.present and $item.multiuse > 1}
+              {sp}{$item.multiuse} {annotate($item.combined_count_unit)}
+            {/if}
+            {if $item.multiple.present and $item.multiple}
+              {sp}x {$item.multiple}
+            {/if}
+          </div>
+          <div class="gear-spacer"></div>
+          <div class="gear-location">
+            {if $item.container.present}
+              {call dma.entries.items.reference}
+                {param entry: $item.container /}
+              {/call}
+            {/if}
+          </div>
+          <div class="gear-spacer"></div>
+          <div class="gear-weight">
+            {annotate($item.combined_weight)}
+          </div>
+        </div>
+      {/if}
+    {/foreach}
+
+    {for $i in range(20)}
+      <div class="gear-line">
+        <div class="gear-name gear-empty"></div>
+        <div class="gear-spacer"></div>
+        <div class="gear-location gear-empty"></div>
+        <div class="gear-spacer"></div>
+        <div class="gear-weight gear-empty"></div>
+      </div>
+    {/for}
+
+    </div>
+
+  </div>
+
+{/template}
+
+/**
+ * Print a gear line.
+ *
+ * @param? item
+ */
+{template .sheet_gear}
+  {if $item}
+  {else}
+  {/if}
 {/template}
 
 /**
@@ -1204,15 +1298,6 @@
       {param boxed: true /}
       {param value: $modifier /}
     {/call}
-
-    <div class="group" style="width: 19%; margin-left: 5px">
-
-      {call .sheet_subtitle}
-        {param title: 'Experience Points' /}
-      {/call}
-
-     </div>
-
   </div>
 {/template}
 
@@ -1349,12 +1434,19 @@
         {param color: '#39f' /}
       {/call}
       {call dma.edit.value}
+        {param name: 'xp' /}
+        {param label: 'XP' /}
+        {param value: $entry.XP /}
+        {param validate: 'number' /}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.edit.value}
         {param name: 'hp' /}
         {param label: 'Hit Points' /}
         {param value: $entry.HP /}
         {param validate: 'number' /}
         {param color: '#39f' /}
-      {/call}    
+      {/call}
       {call dma.edit.generic_value}
         {param label: 'Abilites' /}
         {param color: '#39f' /}
@@ -1462,7 +1554,7 @@
         {param name: 'state' /}
         {param label: 'State' /}
         {param value: $entry.state.string /}
-        {param choices: $entry.state.names /}
+        {param choices: $ij.CharacterState.names /}
         {param color: '#39f' /}
       {/call}
       {call dma.edit.generic_value}

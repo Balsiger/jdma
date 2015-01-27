@@ -100,11 +100,6 @@
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>config</servlet-name>
-    <url-pattern>/configuration</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
     <servlet-name>register</servlet-name>
     <url-pattern>/actions/register</url-pattern>
   </servlet-mapping>

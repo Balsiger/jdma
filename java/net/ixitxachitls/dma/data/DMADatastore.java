@@ -126,8 +126,12 @@ public class DMADatastore
     if(!entry.isPresent())
     {
       Log.debug("getting entry for " + inKey);
-      entry = (Optional<T>) convert(inKey.getID(), inKey.getType(),
-                      m_data.getEntity(convert(Optional.of(inKey)).get()));
+      Optional<Entity> entity =
+          m_data.getEntity(convert(Optional.of(inKey)).get());
+      if (entity.isPresent())
+        entry = (Optional<T>) convert(inKey.getID(), inKey.getType(),
+                                      entity.get());
+
       if(entry.isPresent())
         cache(inKey, entry.get());
     }
@@ -182,8 +186,12 @@ public class DMADatastore
                                                         String inValue)
   {
     Log.debug("Getting entry for " + inKey + "=" + inValue);
-    return convert(m_data.getEntity(escapeType(inType.toString()),
-                                    inKey, inValue));
+    Optional<Entity> entity = m_data.getEntity(escapeType(inType.toString()),
+                                               inKey, inValue);
+    if(entity.isPresent())
+      return convert(entity.get());
+
+    return Optional.absent();
   }
 
   /**
@@ -320,7 +328,8 @@ public class DMADatastore
   {
     SortedSet<String> names = new TreeSet<String>();
 
-    for(Entity entity : m_data.getEntities(escapeType(inType.toString()), null,
+    for(Entity entity : m_data.getEntities(escapeType(inType.toString()),
+                                           Optional.<Key>absent(),
                                            0, 10000, inFilters))
 
     {
@@ -349,7 +358,8 @@ public class DMADatastore
   public List<List<String>> getMultiValues
   (AbstractType<? extends AbstractEntry> inType, String ... inFields)
   {
-    return m_data.getMultiValues(escapeType(inType.toString()), null, inFields);
+    return m_data.getMultiValues(escapeType(inType.toString()),
+                                 Optional.<Key>absent(), inFields);
   }
 
   /**
@@ -364,7 +374,8 @@ public class DMADatastore
   public SortedSet<String> getValues
   (AbstractType<? extends AbstractEntry> inType, String inField)
   {
-    return m_data.getValues(escapeType(inType.toString()), null, inField);
+    return m_data.getValues(escapeType(inType.toString()),
+                            Optional.<Key>absent(), inField);
   }
 
   /**
@@ -437,7 +448,9 @@ public class DMADatastore
     Log.debug("rebuilding data for " + inType);
 
     int count = 0;
-    for(Entity entity : m_data.getEntities(inType.toString(), null, null,
+    for(Entity entity : m_data.getEntities(inType.toString(),
+                                           Optional.<Key>absent(),
+                                           Optional.<String>absent(),
                                            0, 10000))
     {
       Optional<AbstractEntry> entry = convert(entity);
@@ -473,7 +486,9 @@ public class DMADatastore
         break;
 
       List<Entity> entities =
-        m_data.getEntitiesList(escapeType(inType.toString()), null, null,
+        m_data.getEntitiesList(escapeType(inType.toString()),
+                               Optional.<Key>absent(),
+                               Optional.<String>absent(),
                                start, chunk);
 
       for(Entity entity : entities)

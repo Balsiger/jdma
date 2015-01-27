@@ -166,7 +166,7 @@ DIV.subtitletext, DIV.subtitletext A
   font-size:        14px;
   padding:          5px 10px;
   box-shadow:       0 1px 3px #777;
-  z-index:          1;
+  z-index:          2;
   line-height:      20px;
 }
 
@@ -3174,6 +3174,49 @@ BODY.print
   padding: 20px 10px 10px 20px;
 }
 
+.character-sheet .xp
+{
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+.character-sheet .gear-title {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.character-sheet .gear-line {
+  width: 100%;
+  position: relative;
+  padding: 5px 0;
+}
+
+.character-sheet .gear-name {
+  display: inline-block;
+  width: 50%;
+}
+
+.character-sheet .gear-location {
+  display: inline-block;
+  width: 28%;
+}
+
+.character-sheet .gear-weight {
+  display: inline-block;
+  width: 18%;
+}
+
+.character-sheet .gear-spacer {
+  display: inline-block;
+  width: 2%;
+}
+
+.character-sheet .gear-empty {
+  border-bottom: 1px solid black;
+  height: 30px;
+}
+
 @media print
 {
   .character-sheet .title-text 
@@ -3239,10 +3282,10 @@ BODY.print
     padding: 2px 0 !important;
   }
    
-   .character-sheet .boxed 
-   {
-     padding: 4px !important;
-   }
+  .character-sheet .boxed
+  {
+    padding: 4px !important;
+  }
    
    .character-sheet .two-line-label 
    {

@@ -108,7 +108,8 @@ public class Level extends NestedEntry
    */
   public static List<String> getAvailableLevels()
   {
-    return DMADataFactory.get().getIDs(BaseLevel.TYPE, null);
+    return DMADataFactory.get().getIDs(BaseLevel.TYPE,
+                                       Optional.<EntryKey>absent());
   }
 
   @Override

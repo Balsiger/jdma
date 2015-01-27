@@ -48,6 +48,7 @@ import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.dma.values.enums.AttackMode;
 import net.ixitxachitls.dma.values.enums.AttackStyle;
+import net.ixitxachitls.dma.values.enums.CharacterState;
 import net.ixitxachitls.dma.values.enums.Gender;
 import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.dma.values.enums.Immunity;
@@ -255,6 +256,7 @@ public class SoyServlet extends DMAServlet
        "MovementMode", new SoyValue("MovementMode", MovementMode.class),
        "AttackMode", new SoyValue("AttackMode", AttackMode.class),
        "AttackStyle", new SoyValue("AttackStyle", AttackStyle.class),
+       "CharacterState", new SoyValue("CharacterState", CharacterState.class),
        "Organization", new SoyValue("Organization", Organization.class),
        "Language", new SoyValue("Language", Language.class),
        "LanguageModifier",

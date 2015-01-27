@@ -133,7 +133,8 @@ public class Values
   public Optional<String> use(String inKey, Optional<String> inDefault)
   {
     Optional<String> value = getFirst(inKey);
-    if(!value.isPresent())
+    if(!value.isPresent()
+        && (!inDefault.isPresent() || inDefault.get().isEmpty()))
       return inDefault;
 
     if(!inDefault.equals(value))
@@ -195,7 +196,7 @@ public class Values
    */
   public List<String> use(String inKey, List<String> inDefault)
   {
-    return use(inKey, inDefault, null);
+    return use(inKey, inDefault, Optional.<Checker>absent());
   }
 
   /**

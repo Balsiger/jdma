@@ -73,7 +73,12 @@
       {if $entry.parent.present}
         {call dma.entry.value}
           {param label: 'Parent' /}
-          {param value: $entry.parent /}
+          {param value}
+            {call dma.page.link}
+              {param url: $entry.campaign.path + '/' + $entry.parent /}
+              {param text: $entry.parent /}
+            {/call}
+          {/param}
           {param color: '#008' /}
         {/call}
       {/if} 
@@ -276,7 +281,7 @@
         {param name: 'player_notes' /}
         {param label: 'Player Notes' /}
         {param value: $entry.player_notes.present 
-          ? $entry.player_notes.get : '' /}
+          ? $entry.player_notes : '' /}
         {param validate: 'any' /}
         {param color: '#008' /}
       {/call}    
@@ -284,7 +289,7 @@
         {param name: 'dm_notes' /}
         {param label: 'DM Notes' /}
         {param value: $entry.DM_notes.present 
-          ? $entry.DM_notes.get : '' /}
+          ? $entry.DM_notes : '' /}
         {param validate: 'non-empty' /}
         {param color: '#008' /}
       {/call}

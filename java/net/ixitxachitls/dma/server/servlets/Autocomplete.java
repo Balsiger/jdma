@@ -42,6 +42,7 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.output.html.JsonWriter;
 
 /**
@@ -101,7 +102,8 @@ public class Autocomplete extends JSONServlet
       {
         Optional<? extends Collection<String>> items;
         if("name".equals(field))
-          items = Optional.of(DMADataFactory.get().getIDs(type.get(), null));
+          items = Optional.of(DMADataFactory.get().getIDs(
+              type.get(), Optional.<EntryKey>absent()));
         else
         {
           ensureCached(type.get(), field);

@@ -83,7 +83,7 @@ public class SaveActionServlet extends ActionServlet
     Optional<BaseCharacter> user = inRequest.getUser();
     if(!user.isPresent() || !user.get().hasAccess(Group.PLAYER))
     {
-      return "gui.alert('You don't have the rights to change the entry!');";
+      return "gui.alert('You don\\'t have the rights to change the entry!');";
     }
 
     Optional<String> keyParam = inRequest.getParam("_key_");

@@ -177,7 +177,7 @@ public class NPC extends Monster
 
   /**
    * Get the effective character level. This is the total of all character
-   * levels plus the monster's level adjustments, if any.
+   * levels plus the monster's level adjustments,jv if any.
    *
    * @return the effective character leve.
    */

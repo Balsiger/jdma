@@ -128,11 +128,11 @@ public abstract class DMAServlet extends BaseServlet
    * @param    inPath a path denoting an entry
    *
    * @return   the entry key for the path, if any
-\   */
+   */
   public static
   Optional<EntryKey> extractKey(String inPath)
   {
-    return EntryKey.fromString(inPath);
+    return EntryKey.fromString(inPath.replaceAll("(\\.edit$|\\.print$)", ""));
   }
 
   /**

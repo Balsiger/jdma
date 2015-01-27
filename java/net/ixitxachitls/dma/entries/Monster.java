@@ -25,9 +25,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.common.base.Optional;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
@@ -54,8 +51,6 @@ import net.ixitxachitls.util.logging.Log;
  * @file          Monster.java
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
-
-@ParametersAreNonnullByDefault
 public class Monster extends CampaignEntry
 {
   /** The serial version id. */
@@ -508,14 +503,14 @@ public class Monster extends CampaignEntry
      * @return the coins line determining what treasures a creature will get
      *
      */
-    public @Nullable Coins coins(int inRandom)
+    public Optional<Coins> coins(int inRandom)
     {
       // determine the matching coin value
       for(Coins coins : m_coins)
         if(coins.matches(inRandom))
-          return coins;
+          return Optional.of(coins);
 
-      return null;
+      return Optional.absent();
     }
 
     /** Determine the items value to the given random value.
@@ -526,14 +521,14 @@ public class Monster extends CampaignEntry
      * @return the items line determining what treasures a creature will get
      *
      */
-    public @Nullable Items items(int inRandom)
+    public Optional<Items> items(int inRandom)
     {
       // determine the matching item value
       for(Items items : m_items)
         if(items.matches(inRandom))
-          return items;
+          return Optional.of(items);
 
-      return null;
+      return Optional.absent();
     }
 
     /** Determine the goods value to the given random value.
@@ -544,14 +539,14 @@ public class Monster extends CampaignEntry
      * @return the goods line determining what treasures a creature will get
      *
      */
-    public @Nullable Goods goods(int inRandom)
+    public Optional<Goods> goods(int inRandom)
     {
       // determine the matching item value
       for(Goods goods : m_goods)
         if(goods.matches(inRandom))
-          return goods;
+          return Optional.of(goods);
 
-      return null;
+      return Optional.absent();
     }
   }
 

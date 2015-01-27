@@ -24,7 +24,6 @@ package net.ixitxachitls.dma.output.soy;
 import java.util.Map;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
@@ -45,9 +44,7 @@ import net.ixitxachitls.util.Pair;
  * @file          SoyAbstract.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-
 @Immutable
-@ParametersAreNonnullByDefault
 public class SoyValue extends SoyMapData
 {
   /**

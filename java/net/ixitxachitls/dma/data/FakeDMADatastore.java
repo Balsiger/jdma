@@ -29,9 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
-import javax.annotation.Nullable;
-
-import com.google.appengine.labs.repackaged.com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.LinkedListMultimap;
 import com.google.common.base.Optional;
 import com.google.common.collect.ListMultimap;
 import com.google.protobuf.Message;
@@ -140,7 +138,7 @@ public class FakeDMADatastore extends DMADatastore
   }
 
   @Override
-  public @Nullable <T extends AbstractEntry>
+  public <T extends AbstractEntry>
   List<T> getEntries(AbstractType<T> inType, Optional<EntryKey> inParent,
                      String inKey, String inValue)
   {

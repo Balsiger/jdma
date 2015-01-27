@@ -27,9 +27,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedSet;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -52,10 +49,7 @@ import net.ixitxachitls.util.logging.Log;
  *
  * @file          DataStore.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-@ParametersAreNonnullByDefault
 public class DataStore
 {
   /**
@@ -122,7 +116,7 @@ public class DataStore
    * @return      the entity found, if any
    *
    */
-  public @Nullable Entity getEntity(Key inKey)
+  public Optional<Entity> getEntity(Key inKey)
   {
     Tracer tracer = new Tracer("getting entity " + inKey);
     Entity entity = DMAServlet.isDev()
@@ -143,13 +137,13 @@ public class DataStore
         Log.warning("could not get entity for " + inKey + ": " + e);
 
         tracer.done("not found");
-        return null;
+        return Optional.absent();
       }
     }
     else
       tracer.done("cached");
 
-    return entity;
+    return Optional.fromNullable(entity);
   }
 
   /**
@@ -161,7 +155,7 @@ public class DataStore
    *
    * @return      the entity found, if any
    */
-  public @Nullable Entity getEntity(String inType, String inKey, String inValue)
+  public Optional<Entity> getEntity(String inType, String inKey, String inValue)
   {
     Tracer tracer = new Tracer
       ("getting " + inType + " entity with " + inKey + " = " + inValue);
@@ -181,7 +175,7 @@ public class DataStore
       if(entity == null)
       {
         tracer.done("none found");
-        return null;
+        return Optional.absent();
       }
 
       // TODO: this fails when the entity is already otherwise cached!
@@ -192,7 +186,7 @@ public class DataStore
     else
       tracer.done("cached");
 
-    return entity;
+    return Optional.fromNullable(entity);
   }
 
   /**
@@ -227,8 +221,8 @@ public class DataStore
       FetchOptions.Builder.withOffset(inStart).limit(inSize);
 
     Log.important("gae: getting entities for " + inType
-                  + (inParent != null ? " (" + inParent + ")" : "")
-                  + (inSortField != null ? " sorted by " + inSortField : "")
+                  + (inParent.isPresent() ? " (" + inParent + ")" : "")
+                  + (inSortField.isPresent() ? " sorted by " + inSortField : "")
                   + " from " + inStart + " size " + inSize);
 
     tracer.done();
@@ -249,25 +243,25 @@ public class DataStore
    *
    */
   public List<Entity> getEntitiesList(String inType,
-                                      @Nullable Key inParent,
-                                      @Nullable String inSortField,
+                                      Optional<Key> inParent,
+                                      Optional<String> inSortField,
                                       int inStart, int inSize)
   {
     Query query;
-    if(inParent == null)
-      query = new Query(inType);
+    if(inParent.isPresent())
+      query = new Query(inType, inParent.get());
     else
-      query = new Query(inType, inParent);
+      query = new Query(inType);
 
-    if(inSortField != null)
-      query.addSort(inSortField, Query.SortDirection.ASCENDING);
+    if(inSortField.isPresent())
+      query.addSort(inSortField.get(), Query.SortDirection.ASCENDING);
 
     FetchOptions options =
       FetchOptions.Builder.withOffset(inStart).limit(inSize);
 
     Log.important("gae: getting entities for " + inType
-                  + (inParent != null ? " (" + inParent + ")" : "")
-                  + (inSortField != null ? " sorted by " + inSortField : "")
+                  + (inParent.isPresent() ? " (" + inParent + ")" : "")
+                  + (inSortField.isPresent() ? " sorted by " + inSortField : "")
                   + " from " + inStart + " size " + inSize);
 
     return m_store.prepare(query).asList(options);
@@ -434,7 +428,7 @@ public class DataStore
     if(entities == null)
     {
       Log.important("gae: getting recent " + inType + " entities"
-                    + (inParent != null ? " with parent " + inParent : ""));
+                    + (inParent.isPresent() ? " with parent " + inParent : ""));
 
       Query query;
       if(inParent.isPresent())
@@ -466,7 +460,7 @@ public class DataStore
    */
   @SuppressWarnings("unchecked")
   public List<List<String>> getMultiValues(String inType,
-                                           @Nullable Key inParent,
+                                           Optional<Key> inParent,
                                            String ... inFields)
   {
     List<List<String>> records = (List<List<String>>)s_cacheMultiValues.get
@@ -477,10 +471,10 @@ public class DataStore
       Log.important("gae: get multi values for " + inType + " ("
                     + inParent + ") " + Arrays.toString(inFields));
       Query query;
-      if(inParent == null)
-        query = new Query(inType);
+      if(inParent.isPresent())
+        query = new Query(inType, inParent.get());
       else
-        query = new Query(inType, inParent);
+        query = new Query(inType);
 
       for(String field : inFields)
         query.addProjection(new PropertyProjection(field, String.class));
@@ -515,7 +509,7 @@ public class DataStore
    *
    */
   @SuppressWarnings("unchecked")
-  public SortedSet<String> getValues(String inType, @Nullable Key inParent,
+  public SortedSet<String> getValues(String inType, Optional<Key> inParent,
                                      String inField)
   {
     SortedSet<String> values =
@@ -526,10 +520,10 @@ public class DataStore
       Log.important("gae: getting values for " + inType + " (" + inParent
                     + ") " + " for field " + inField);
       Query query;
-      if(inParent == null)
-        query = new Query(inType);
+      if(inParent.isPresent())
+      query = new Query(inType, inParent.get());
       else
-        query = new Query(inType, inParent);
+        query = new Query(inType);
 
       query.addProjection(new PropertyProjection(inField, String.class));
 

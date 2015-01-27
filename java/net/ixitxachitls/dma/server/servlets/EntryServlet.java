@@ -157,7 +157,7 @@ public class EntryServlet extends PageServlet
 
     String action = Strings.getPattern(inPath, "\\.(.*)$");
     if(action != null && !action.isEmpty())
-      return inPath.substring(0, inPath.length() - action.length() - 1);
+      return action;
 
     return "show";
   }
@@ -325,7 +325,7 @@ public class EntryServlet extends PageServlet
       if(inRequest.getParam(param).get().isEmpty())
         params.put(param, true);
       else
-        params.put(param, inRequest.getParam(param));
+        params.put(param, new SoyValue("params", inRequest.getParam(param)));
 
     data.put("params", params);
     tracer2.done();

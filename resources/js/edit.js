@@ -136,6 +136,7 @@ edit.removeImage = function(inID)
  */
 edit.save = function(inKey, inID, inCreate)
 {
+  window.console.log("save", inKey, inID, inCreate);
   var values = { '_key_': inKey };
   $('#' + inID + " :input").each(function ()
     {

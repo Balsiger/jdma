@@ -1348,6 +1348,7 @@ message CharacterProto
   optional State state = 2;
   repeated string item = 3;
   optional string player_name = 4;
+  optional int32 xp = 5;
 }
 
 message ItemProto
