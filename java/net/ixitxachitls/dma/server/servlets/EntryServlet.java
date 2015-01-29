@@ -244,9 +244,6 @@ public class EntryServlet extends PageServlet
               if(!base.isEmpty())
                 entry.get().addBase(base);
 
-          if(inRequest.hasParam("identified") && entry.get() instanceof Item)
-            ((Item) entry.get()).identify();
-
           if(entry.get() instanceof Entry)
             ((Entry) entry.get()).complete();
         }

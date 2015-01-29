@@ -732,7 +732,6 @@ public class BaseItem extends BaseEntry
       return new Annotated.String(m_playerName.get(), getName());
 
     Annotated.String combined = new Annotated.String();
-    combined.add(getName(), getName());
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedPlayerName());
 

@@ -92,71 +92,48 @@ public class Item extends CampaignEntry
     super(inName, TYPE);
   }
 
-  /**
-   * The type of this entry.
-   */
+  /** The type of this entry. */
   public static final Type<Item> TYPE =
       new Type.Builder<>(Item.class, BaseItem.TYPE).build();
 
-  /**
-   * The type of the base entry to this entry.
-   */
+  /** The type of the base entry to this entry. */
   public static final BaseType<BaseItem> BASE_TYPE = BaseItem.TYPE;
 
-  /**
-   * The actual number of hit points the item currently has.
-   */
+  /** The actual number of hit points the item currently has. */
   protected int m_hp = Integer.MIN_VALUE;
 
-  /**
-   * The total value of the item.
-   */
+  /** The total value of the item. */
   protected Optional<Money> m_value = Optional.absent();
 
-  /**
-   * The appearance text for this entry.
-   */
+  /** The appearance text for this entry. */
   protected Optional<String> m_appearance = Optional.absent();
 
-  /**
-   * The player notes of the item.
-   */
+  /** The player notes of the item. */
   protected Optional<String> m_playerNotes = Optional.absent();
 
-  /**
-   * The name from the player for the item.
-   */
+  /** The name from the player for the item. */
   protected Optional<String> m_playerName = Optional.absent();
 
-  /**
-   * The DM notes of the item.
-   */
+  /** The DM notes of the item. */
   protected Optional<String> m_dmNotes = Optional.absent();
 
-  /**
-   * The count for multiple, similar items.
-   */
+  /** The count for multiple, similar items. */
   protected Optional<Integer> m_multiple = Optional.absent();
 
-  /**
-   * The count for a multiuse item.
-   */
+  /** The count for a multiuse item. */
   protected Optional<Integer> m_multiuse = Optional.absent();
 
-  /**
-   * The time remaining for a timed item.
-   */
+  /** The time remaining for a timed item. */
   protected Optional<Duration> m_timeLeft = Optional.absent();
 
-  /**
-   * The cached contents.
-   */
+  /** The cached contents. */
   private Optional<List<Item>> m_contents = Optional.absent();
 
-  /**
-   * The possessor of the item, if any.
-   */
+  /** The possessor of the item, if any. */
   private Optional<Monster> m_possessor = null;
+
+  /** Whether the item has been identified or not. */
+  private boolean m_identified = false;
 
   /**
    * Get the hit points of the base item.
@@ -921,6 +898,16 @@ public class Item extends CampaignEntry
     return combined;
   }
 
+  /**
+   * Check whether the item has been identified.
+   *
+   * @return true for complete idenfitication, false if not.
+   */
+  public boolean isIdentified()
+  {
+    return m_identified;
+  }
+
   @Override
   public String getPlayerName()
   {
@@ -1383,6 +1370,8 @@ public class Item extends CampaignEntry
     m_multiple = inValues.use("multiple", m_multiple, Value.INTEGER_PARSER);
     m_multiuse = inValues.use("multiuse", m_multiuse, Value.INTEGER_PARSER);
     m_timeLeft = inValues.use("time_left", m_timeLeft, Duration.PARSER);
+    m_identified = inValues.use("identified", m_identified,
+                                Value.BOOLEAN_PARSER);
 
     if(m_parentName.isPresent() && !m_parentName.get().contains("/"))
       m_parentName = Optional.of("item/" + m_parentName.get());
@@ -1521,16 +1510,6 @@ public class Item extends CampaignEntry
     super.complete();
   }
 
-  /**
-   * Identify the item by filling out the player name (and maybe notes?).
-   */
-  public void identify()
-  {
-    m_playerName = Optional.of(fullName());
-    changed();
-    save();
-  }
-
   @Override
   public Message toProto()
   {
@@ -1564,6 +1543,8 @@ public class Item extends CampaignEntry
 
     if(m_timeLeft.isPresent())
       builder.setTimeLeft(m_timeLeft.get().toProto());
+
+    builder.setIdentified(m_identified);
 
     ItemProto proto = builder.build();
     return proto;
@@ -1606,6 +1587,8 @@ public class Item extends CampaignEntry
 
     if(proto.hasTimeLeft())
       m_timeLeft = Optional.of(Duration.fromProto(proto.getTimeLeft()));
+
+    m_identified = proto.getIdentified();
 
     super.fromProto(proto.getBase());
   }

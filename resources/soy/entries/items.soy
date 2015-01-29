@@ -269,14 +269,20 @@
         {param validate: 'non-empty' /}
         {param color: '#008' /}
       {/call}    
+      {call dma.edit.value_flag}
+        {param name: 'identified' /}
+        {param label: 'Identified' /}
+        {param value: $entry.identified /}
+        {param color: '#008' /}
+      {/call}
       {call dma.edit.value}
         {param name: 'player_name' /}
         {param label: 'Player Name' /}
-        {param value: $entry.player_name.present 
+        {param value: $entry.player_name.present
           ? $entry.player_name.get : '' /}
         {param validate: 'any' /}
         {param color: '#008' /}
-      {/call}    
+      {/call}
       {call dma.edit.value}
         {param name: 'player_notes' /}
         {param label: 'Player Notes' /}
@@ -729,7 +735,7 @@
  * @param entry the item to format for
  */
 {template .name}
-  {if $ij.isDM}
+  {if $ij.isDM or $entry.identified}
     {$entry.DM_name}
     {if $entry.player_name and $entry.DM_name != $entry.player_name}
       {sp}[{$entry.player_name}]
