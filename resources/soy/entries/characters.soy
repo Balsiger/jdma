@@ -1229,13 +1229,31 @@
           {param value: $weapon.player_notes /}
         {/call}
       {else}
-        {call .sheet_value}
-          {param label: 'Notes' /}
-          {param width: '50%' /}
-          {param size: '12px' /}
-          {param vSize: '20px' /}
-          {param value: '' /}
-        {/call}
+        {if $weapon.available_ammunition}
+          {call .sheet_value}
+            {param label: 'Ammunition' /}
+            {param width: '50%' /}
+            {param size: '12px' /}
+            {param vSize: '12px' /}
+            {param value}
+              {foreach $ammunition in $weapon.available_ammunition}
+                {call dma.entries.items.reference}
+                  {param entry: $ammunition /}
+                {/call}
+                {sp}x {$ammunition.multiple}
+                {if not isLast($ammunition)}, {/if}
+              {/foreach}
+            {/param}
+          {/call}
+        {else}
+          {call .sheet_value}
+            {param label: 'Notes' /}
+            {param width: '50%' /}
+            {param size: '12px' /}
+            {param vSize: '20px' /}
+            {param value: '' /}
+          {/call}
+        {/if}
       {/if}
     </div>
   </div>  

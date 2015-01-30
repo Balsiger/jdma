@@ -211,6 +211,9 @@ public class BaseItem extends BaseEntry
   /** The names of the ammunition that can be used. */
   protected boolean m_ammunition = false;
 
+  /** The names of possible ammunition items. */
+  protected List<String> m_ammunitionNeeded = new ArrayList<>();
+
   /** The bonus of the armor. */
   protected Optional<Modifier> m_armorBonus = Optional.absent();
 
@@ -1308,6 +1311,23 @@ public class BaseItem extends BaseEntry
     return false;
   }
 
+  public List<String> getAmmunitionNeeded()
+  {
+    return m_ammunitionNeeded;
+  }
+
+  public Annotated<List<String>> getCombinedAmmunitionNeeded()
+  {
+    if(!m_ammunitionNeeded.isEmpty())
+      return new Annotated.List<String>(m_ammunitionNeeded, getName());
+
+    Annotated.List<String> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseItem)entry).getCombinedAmmunitionNeeded());
+
+    return combined;
+  }
+
   /**
    * Get the ac bonus value.
    *
@@ -1968,6 +1988,7 @@ public class BaseItem extends BaseEntry
       if(m_finesse)
         weaponBuilder.setFinesse(true);
       weaponBuilder.setAmmunition(m_ammunition);
+      weaponBuilder.addAllAmmunitionNeeded(m_ammunitionNeeded);
 
       builder.setWeapon(weaponBuilder.build());
     }
@@ -2143,6 +2164,8 @@ public class BaseItem extends BaseEntry
                              Value.BOOLEAN_PARSER);
     m_ammunition = inValues.use("weapon.ammunition", m_ammunition,
                                 Value.BOOLEAN_PARSER);
+    m_ammunitionNeeded = inValues.use("weapon.ammunition_needed",
+                                      m_ammunitionNeeded);
 
     m_armorBonus = inValues.use("armor.bonus", m_armorBonus,
                                 Modifier.PARSER);
@@ -2271,6 +2294,7 @@ public class BaseItem extends BaseEntry
       if(weaponProto.hasFinesse())
         m_finesse = weaponProto.getFinesse();
       m_ammunition = weaponProto.getAmmunition();
+      m_ammunitionNeeded = weaponProto.getAmmunitionNeededList();
     }
 
     if(proto.hasWearable())

@@ -982,6 +982,18 @@ public class Monster extends CampaignEntry
     return Collections.unmodifiableList(m_possessions);
   }
 
+  public List<Item> getPossessions(List<String> inNames)
+  {
+    List<Item> matching = new ArrayList<>();
+
+    for(Item item : getPossessions())
+      for(String name : inNames)
+        if(item.hasBaseName(name))
+          matching.add(item);
+
+    return matching;
+  }
+
   /**
    * Get the feats the monster's has.
    *

@@ -210,6 +210,9 @@
             {if $entry.ammunition}
               , ammunition
             {/if}
+            {if $entry.combined_ammunition_needed.get}
+              , ammunition: {annotate($entry.combined_ammunition_needed)}
+            {/if}
           {/param}
           {param color: '#008' /}
         {/call}
@@ -713,6 +716,14 @@
         {param label: 'Ammunition' /}
         {param value: $entry.ammunition /}
         {param color: '#008' /}
+        {param autocomplete: 'base item/name' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'weapon.ammunition_needed' /}
+        {param label: 'Amm. Needed' /}
+        {param values: $entry.ammunition_needed /}
+        {param color: '#008' /}
+        {param validate: 'any' /}
         {param autocomplete: 'base item/name' /}
       {/call}
       {call dma.edit.generic_value}

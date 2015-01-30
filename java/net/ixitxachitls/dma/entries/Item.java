@@ -861,6 +861,28 @@ public class Item extends CampaignEntry
     return m_playerNotes;
   }
 
+  public List<Item> availableAmmunition()
+  {
+    List<String> ammunition = getCombinedAmmunitionNeeded().get();
+    if(ammunition.isEmpty())
+      return new ArrayList<>();
+
+    Optional<Monster> possessor = getPossessor();
+    if(!possessor.isPresent())
+      return new ArrayList<>();
+
+    return possessor.get().getPossessions(ammunition);
+  }
+
+  public Annotated<List<String>> getCombinedAmmunitionNeeded()
+  {
+    Annotated.List<String> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseItem)entry).getCombinedAmmunitionNeeded());
+
+    return combined;
+  }
+
   /**
    * Get the dm notes of the item.
    *
