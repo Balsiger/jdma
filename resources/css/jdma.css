@@ -3180,6 +3180,11 @@ BODY.print
   margin-bottom: 20px;
 }
 
+.character-sheet .limited
+{
+  overflow: hidden;
+}
+
 .character-sheet .gear-title {
   text-transform: uppercase;
   font-weight: bold;
@@ -3332,7 +3337,7 @@ BODY.print
    {
      height: 280px !important;
    }
-   
+
    #footer-spacer {
      display: none;
    }

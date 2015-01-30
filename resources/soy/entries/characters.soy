@@ -1038,7 +1038,7 @@
         {param title: 'XP' /}
       {/call}
 
-      <div class="values boxed" style="height: 450px; background-color: #eee">
+      <div class="values boxed" style="height: 800px; background-color: #eee">
 
         <div class="xp">
           {$entry.XP}
@@ -1057,53 +1057,50 @@
         {param title: 'Gear' /}
       {/call}
 
-      <div class="gear-title">Possessions on person</div>
+      <div class="limited" style="height: 500px">
+        <div class="gear-title">Possessions on person</div>
 
-      <div class="gear-name">Item</div>
-      <div class="gear-spacer"></div>
-      <div class="gear-location">Location</div>
-      <div class="gear-weight">Weight</div>
+        <div class="gear-name">Item</div>
+        <div class="gear-spacer"></div>
+        <div class="gear-location">Location</div>
+        <div class="gear-spacer"></div>
+        <div class="gear-weight">Weight</div>
 
-    {foreach $item in $entry.all_possessions}
-      {if not $item.weapon and not $item.armor}
-        <div class="gear-line">
-          <div class="gear-name">
-            {call dma.entries.items.reference}
-              {param entry: $item /}
+        {foreach $item in $entry.possessions_on_person}
+          {if not $item.weapon and not $item.armor}
+            {call .sheet_gear}
+              {param item: $item /}
             {/call}
+          {/if}
+        {/foreach}
 
-            {if $item.multiuse.present and $item.multiuse > 1}
-              {sp}{$item.multiuse} {annotate($item.combined_count_unit)}
-            {/if}
-            {if $item.multiple.present and $item.multiple}
-              {sp}x {$item.multiple}
-            {/if}
-          </div>
-          <div class="gear-spacer"></div>
-          <div class="gear-location">
-            {if $item.container.present}
-              {call dma.entries.items.reference}
-                {param entry: $item.container /}
-              {/call}
-            {/if}
-          </div>
-          <div class="gear-spacer"></div>
-          <div class="gear-weight">
-            {annotate($item.combined_weight)}
-          </div>
-        </div>
-      {/if}
-    {/foreach}
+        {for $i in range(20)}
+          {call .sheet_gear /}
+        {/for}
 
-    {for $i in range(20)}
-      <div class="gear-line">
-        <div class="gear-name gear-empty"></div>
-        <div class="gear-spacer"></div>
-        <div class="gear-location gear-empty"></div>
-        <div class="gear-spacer"></div>
-        <div class="gear-weight gear-empty"></div>
       </div>
-    {/for}
+
+      <div class="limited" style="height: 320px">
+        <div class="gear-title">Possessions not on person</div>
+
+        <div class="gear-name">Item</div>
+        <div class="gear-spacer"></div>
+        <div class="gear-location">Location</div>
+        <div class="gear-weight">Weight</div>
+        <div class="gear-spacer"></div>
+
+        {foreach $item in $entry.possessions_not_on_person}
+          {if not $item.weapon and not $item.armor}
+            {call .sheet_gear}
+              {param item: $item /}
+            {/call}
+          {/if}
+        {/foreach}
+
+        {for $i in range(20)}
+          {call .sheet_gear /}
+        {/for}
+      </div>
 
     </div>
 
@@ -1118,7 +1115,40 @@
  */
 {template .sheet_gear}
   {if $item}
+    <div class="gear-line">
+      <div class="gear-name">
+        {call dma.entries.items.reference}
+          {param entry: $item /}
+        {/call}
+
+        {if $item.multiuse.present and $item.multiuse > 1}
+          {sp}{$item.multiuse} {annotate($item.combined_count_unit)}
+        {/if}
+        {if $item.multiple.present and $item.multiple}
+          {sp}x {$item.multiple}
+        {/if}
+      </div>
+      <div class="gear-spacer"></div>
+      <div class="gear-location">
+        {if $item.container.present}
+          {call dma.entries.items.reference}
+            {param entry: $item.container /}
+          {/call}
+        {/if}
+      </div>
+      <div class="gear-spacer"></div>
+      <div class="gear-weight">
+        {annotate($item.combined_weight)}
+      </div>
+    </div>
   {else}
+    <div class="gear-line">
+      <div class="gear-name gear-empty"></div>
+      <div class="gear-spacer"></div>
+      <div class="gear-location gear-empty"></div>
+      <div class="gear-spacer"></div>
+      <div class="gear-weight gear-empty"></div>
+    </div>
   {/if}
 {/template}
 
