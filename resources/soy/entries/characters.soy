@@ -1067,7 +1067,7 @@
         <div class="gear-weight">Weight</div>
 
         {foreach $item in $entry.possessions_on_person}
-          {if not $item.weapon and not $item.armor}
+          {if not $item.shownAsWorn}
             {call .sheet_gear}
               {param item: $item /}
             {/call}
@@ -1121,10 +1121,10 @@
           {param entry: $item /}
         {/call}
 
-        {if $item.multiuse.present and $item.multiuse > 1}
+        {if $item.multiuse.present and $item.multiuse.integer > 1}
           {sp}{$item.multiuse} {annotate($item.combined_count_unit)}
         {/if}
-        {if $item.multiple.present and $item.multiple}
+        {if $item.multiple.present and $item.multiple.integer > 1}
           {sp}x {$item.multiple}
         {/if}
       </div>

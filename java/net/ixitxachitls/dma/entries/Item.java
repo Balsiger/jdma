@@ -1011,6 +1011,15 @@ public class Item extends CampaignEntry
     return m_timeLeft.isPresent();
   }
 
+  public boolean shownAsWorn()
+  {
+    Optional<Monster> possessor = getPossessor();
+    if(possessor.isPresent())
+      return possessor.get().shownAsWorn(this);
+
+    return false;
+  }
+
   /**
    * Check whether the item can be worn.
    *

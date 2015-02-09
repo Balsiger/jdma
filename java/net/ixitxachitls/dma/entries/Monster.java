@@ -3860,4 +3860,35 @@ public class Monster extends CampaignEntry
       Log.warning("could not properly parse proto: " + e);
     }
   }
+
+  public boolean shownAsWorn(Item inItem)
+  {
+    if(inItem.isArmor())
+      return inList(inItem, getArmor(), 2);
+
+    if(inItem.isAmmunition())
+    {
+      List<Item> weapons = getWeapons();
+      for(int i = 0; i < weapons.size() && i < 4; i++)
+        if(inList(inItem, weapons.get(i).availableAmmunition(),
+                  Integer.MAX_VALUE))
+          return true;
+
+      return false;
+    }
+
+    if(inItem.isWeapon())
+      return inList(inItem, getWeapons(), 4);
+
+    return false;
+  }
+
+  private boolean inList(Item inItem, List<Item> inItems, int inMaxIndex)
+  {
+    for(int i = 0; i < inItems.size() && i < inMaxIndex; i++)
+      if(inItems.get(i).getName().equals(inItem.getName()))
+        return true;
+
+    return false;
+  }
 }
