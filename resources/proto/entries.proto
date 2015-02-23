@@ -1225,6 +1225,7 @@ message BaseMonsterProto
   }
   
   repeated string proficiency = 44;
+  optional bool quadruped = 45 [default=false];
 }
 
 message BaseEncounterProto

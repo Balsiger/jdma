@@ -175,937 +175,1015 @@
 
 /**
  * Print a character sheet.
- * 
+ *
  * @param entry the entry to print
  */
 {template .sheet}
   <div class="character-sheet">
-    <div class="title">
-      <div class="title-logo"></div>
-      <div class="title-text"></div>
-      <div class="subtitle">
-        Suitable for characters of any race or class 
-        (including multiclass characters)
+    <div class="sheet-page">
+      {call .sheet_page_1}
+        {param entry: $entry /}
+      {/call}
+    </div>
+
+    <div class="sheet-page">
+      {call .sheet_page_2}
+        {param entry: $entry /}
+      {/call}
+    </div>
+  </div>
+{/template}
+
+/**
+ * Contents of the first page of the character sheet.
+ *
+ * @param entry the entry to print
+ */
+{template .sheet_page_1}
+  {call .sheet_title /}
+
+  <div class="block">
+    {call .sheet_general}
+      {param entry: $entry /}
+    {/call}
+  </div>
+
+  <div class="sheet-row">
+    <div class="sheet-column" style="flex: 5; margin-right: 5px;">
+      <div class="sheet-row block">
+        <div class="sheet-column vruler">
+          {call .sheet_abilities}
+            {param entry: $entry /}
+          {/call}
+        </div>
+
+        <div class="sheet-column">
+          {call .sheet_combat_options}
+            {param entry: $entry /}
+          {/call}
+        </div>
+      </div>
+
+      <div class="block">
+        {call .sheet_speed}
+          {param entry: $entry /}
+        {/call}
+      </div>
+
+      <div class="block">
+        {call .sheet_saves}
+          {param entry: $entry /}
+        {/call}
+      </div>
+
+      {call .sheet_ac}
+        {param entry: $entry /}
+      {/call}
+    </div>
+
+    <div class="sheet-column" style="display: flex; flex-direction: column;">
+      {call .sheet_hit_points}
+        {param entry: $entry /}
+      {/call}
+
+      {call .sheet_special_defenses}
+        {param entry: $entry /}
+      {/call}
+    </div>
+  </div>
+{/template}
+
+/** The title of the character sheet. */
+{template .sheet_title}
+  <div class="title">
+    <div class="title-logo"></div>
+    <div class="title-text"></div>
+    <div class="subtitle">
+      Suitable for characters of any race or class
+      (including multiclass characters)
+    </div>
+  </div>
+{/template}
+
+/**
+ * The general section of the character sheet.
+ *
+ * @param entry
+ */
+{template .sheet_general}
+  {call .sheet_value}
+    {param label: 'Character Name' /}
+    {param width: '50%' /}
+    {param value: $entry.name /}
+  {/call}
+  {call .sheet_value}
+    {param label: 'Player Name' /}
+    {param width: '50%' /}
+    {param value}
+     {$entry.base_character_name} ({$entry.player.real_name})
+    {/param}
+  {/call}
+
+  {call .sheet_value}
+    {param label: 'Class and Level' /}
+    {param width: '50%' /}
+    {param value}
+      {foreach $level in $entry.get_cumulated_levels}
+        {$level}
+        {if not isLast($level)}, {/if}
+      {/foreach}
+    {/param}
+  {/call}
+  {call .sheet_value}
+    {param label: 'ECL' /}
+    {param width: '5%' /}
+    {param value: $entry.effective_character_level /}
+  {/call}
+  {call .sheet_value}
+    {param label: 'Race/Template' /}
+    {param width: '15%' /}
+    {param value}
+      {foreach $monster in $entry.base_entries}
+        {$monster.name}
+        {if not isLast($monster)}, {/if}
+      {/foreach}
+    {/param}
+  {/call}
+  {call .sheet_value}
+    {param label: 'Size' /}
+    {param width: '15%' /}
+    {param value: annotate($entry.combined_size) /}
+  {/call}
+  {call .sheet_value}
+    {param label: 'Gender' /}
+    {param width: '15%' /}
+    {param value: $entry.gender /}
+  {/call}
+  {call .sheet_value}
+    {param label: 'Alignment' /}
+    {param width: '10%' /}
+    {param value: $entry.alignment /}
+  {/call}
+  {call .sheet_value}
+    {param label: 'Religion/Patron Deity' /}
+    {param width: '40%' /}
+    {param value: $entry.religion.present ? $entry.religion : '' /}
+  {/call}
+  {call .sheet_value}
+    {param label: 'Height' /}
+    {param width: '10%' /}
+    {param value: $entry.height.present ? $entry.height : '' /}
+  {/call}
+  {call .sheet_value}
+    {param label: 'Weight' /}
+    {param width: '10%' /}
+    {param value: $entry.weight.present ? $entry.weight : '' /}
+  {/call}
+  {call .sheet_value}
+    {param label: 'Looks' /}
+    {param width: '30%' /}
+    {param value: $entry.looks.present ? $entry.looks : '' /}
+  {/call}
+{/template}
+
+/**
+ * The abilities box.
+ *
+ * @param entry
+ */
+{template .sheet_abilities}
+  <div class="sheet-part">
+    {call .sheet_subtitle}
+      {param title: 'Ability Scores' /}
+    {/call}
+
+    {call .ability}
+      {param name: 'Strength' /}
+      {param abbreviation: 'STR' /}
+      {param ability: annotate($entry.combined_strength) /}
+      {param modifier: bonus($entry.strength_modifier) /}
+    {/call}
+    {call .ability}
+      {param name: 'Dexterity' /}
+      {param abbreviation: 'DEX' /}
+      {param ability: annotate($entry.combined_dexterity) /}
+      {param modifier: bonus($entry.dexterity_modifier) /}
+    {/call}
+    {call .ability}
+      {param name: 'Constitution' /}
+      {param abbreviation: 'CON' /}
+      {param ability: annotate($entry.combined_constitution) /}
+      {param modifier: bonus($entry.constitution_modifier) /}
+    {/call}
+    {call .ability}
+      {param name: 'Intelligence' /}
+      {param abbreviation: 'INT' /}
+      {param ability: annotate($entry.combined_intelligence) /}
+      {param modifier: bonus($entry.intelligence_modifier) /}
+    {/call}
+    {call .ability}
+      {param name: 'Wisdom' /}
+      {param abbreviation: 'WIS' /}
+      {param ability: annotate($entry.combined_wisdom) /}
+      {param modifier: bonus($entry.wisdom_modifier) /}
+    {/call}
+    {call .ability}
+      {param name: 'Charisma' /}
+      {param abbreviation: 'CHA' /}
+      {param ability: annotate($entry.combined_charisma) /}
+      {param modifier: bonus($entry.charisma_modifier) /}
+    {/call}
+  </div>
+{/template}
+
+/**
+ * The combat options box.
+ *
+ * @param entry
+ */
+{template .sheet_combat_options}
+  {call .sheet_subtitle}
+     {param title: 'Combat Options' /}
+   {/call}
+
+   {call .sheet_value}
+     {param label: 'Base Attack Bonus' /}
+     {param width: '100%' /}
+     {param size: '14px' /}
+     {param vSize: '20px' /}
+     {param value: annotate($entry.combined_base_attack) /}
+     {param prefix: true /}
+     {param center: true /}
+   {/call}
+
+   {foreach $weapon in $entry.weapons}
+     {if index($weapon) < 4}
+       {call .sheet_weapon}
+         {param gray: index($weapon) == 0 or index($weapon) == 2 /}
+         {param weapon: $weapon /}
+       {/call}
+     {/if}
+   {/foreach}
+   {for $i in range(length($entry.weapons), 4)}
+     {call .sheet_weapon}
+       {param gray: $i == 0 or $i == 2 /}
+     {/call}
+   {/for}
+{/template}
+
+/**
+ * The hit points box.
+ *
+ * @param entry
+ */
+{template .sheet_hit_points}
+  {call .sheet_subtitle}
+    {param title: 'Hit Points' /}
+    {param nologo: true /}
+  {/call}
+
+  <div class="values boxed" style="flex: 5;">
+    <div class="hps temporary">
+      Temporary<br/>
+      {for $i in range(20)}
+        <div class="count">{20 - $i}</div>
+      {/for}
+    </div>
+    <div class="hps">
+      Hit Points<br/>
+      {for $i in range($entry.maxHP - $entry.HP)}
+        <div class="count crossed">{$entry.maxHP - $i}</div>
+        {if ($entry.maxHP - $i) % 10 == 0}
+          <br/>
+        {/if}
+      {/for}
+      {for $i in range($entry.HP + 1)}
+        <div class="count">{$entry.HP - $i}</div>
+        {if ($entry.HP - $i) % 10 == 0}
+          <br/>
+        {/if}
+      {/for}
+    </div>
+    <div class="hps negative">
+      {for $i in range(1, 11)}
+        <div class="count">{-$i}</div>
+      {/for}
+    </div>
+  </div>
+{/template}
+
+/** The special defenses box. */
+{template .sheet_special_defenses}
+  {call .sheet_subtitle}
+    {param title: 'Special Defenses' /}
+    {param nologo: true /}
+  {/call}
+
+  <div class="values boxed" style="flex: 1;"></div>
+{/template}
+
+/**
+ * The hit points box.
+ *
+ * @param entry
+ */
+{template .sheet_speed}
+  <div class="inline" style="width: 50%">
+    {call .sheet_value}
+      {param label: 'Speed' /}
+      {param width: '100%' /}
+      {param size: '14px' /}
+      {param vSize: '20px' /}
+      {param value}
+        {if isList($entry.speeds_annotated)}
+          {foreach $speed in $entry.speeds_annotated}
+            {annotate($speed)|noescape}
+            {if not isLast($speed)}, {/if}
+          {/foreach}
+        {/if}
+      {/param}
+      {param prefix: true /}
+      {param center: true /}
+    {/call}
+  </div>
+
+  <div class="inline" style="width: 50%">
+    {call .sheet_value}
+      {param label: 'Initiative Modifier' /}
+      {param width: '100%' /}
+      {param size: '14px' /}
+      {param vSize: '20px' /}
+      {param value: bonus($entry.initiative) /}
+      {param prefix: true /}
+      {param center: true /}
+    {/call}
+  </div>
+
+  <div class="value-container" style="width:100%">
+    <div class="value-label prefixed inline"
+         style="font-size: 14px; vertical-align:top; padding-top: 3px">
+      Grapple Modifier
+    </div>
+
+    {call .sheet_value}
+      {param label: 'Total<br/>&nbsp;' /}
+      {param width: '13.5%' /}
+      {param size: '9px' /}
+      {param center: true /}
+      {param value: bonus($entry.grapple_bonus) /}
+    {/call}
+
+    <div class="operator" style="padding-top: 15px">=</div>
+
+    {call .sheet_value}
+      {param label}
+        Base Attack <br/>
+        Bonus
+      {/param}
+      {param width: '13.5%' /}
+      {param size: '9px' /}
+      {param center: true /}
+      {param value: annotate($entry.combined_base_attack) /}
+    {/call}
+
+    <div class="operator" style="padding-top: 15px">+</div>
+
+    {call .sheet_value}
+      {param label}
+        Strength<br/>
+        Modifier
+      {/param}
+      {param width: '13.5%' /}
+      {param size: '9px' /}
+      {param center: true /}
+      {param value: bonus($entry.strength_modifier) /}
+    {/call}
+    <div class="operator" style="padding-top: 15px">+</div>
+
+    {call .sheet_value}
+      {param label}
+        Size<br/>
+        Modifier
+      {/param}
+      {param width: '13.5%' /}
+      {param size: '9px' /}
+      {param center: true /}
+      {param value: '+0' /}
+    {/call}
+
+    <div class="operator" style="padding-top: 15px">+</div>
+
+    {call .sheet_value}
+      {param label}
+        Misc<br/>
+        Modifier
+      {/param}
+      {param width: '13.5%' /}
+      {param size: '9px' /}
+      {param center: true /}
+      {param value: '' /}
+    {/call}
+  </div>
+{/template}
+
+/**
+ * The hit saving throws box.
+ *
+ * @param entry
+ */
+{template .sheet_saves}
+  {call .sheet_subtitle}
+    {param title: 'Saving Throws' /}
+  {/call}
+
+  <div class="sheet-row">
+    <div class="saves sheet-column" style="flex: 4">
+      {call .sheet_saves_value}
+        {param name: 'Fortitude' /}
+        {param ability: 'Constitution' /}
+        {param value: annotate($entry.combined_fortitude_save) /}
+        {param ability_modifier: bonus($entry.constitution_modifier) /}
+      {/call}
+
+      {call .sheet_saves_value}
+        {param name: 'Reflex' /}
+        {param ability: 'Dexterity' /}
+        {param value: annotate($entry.combined_reflex_save) /}
+        {param ability_modifier: bonus($entry.dexterity_modifier) /}
+      {/call}
+
+      {call .sheet_saves_value}
+        {param name: 'Will' /}
+        {param ability: 'Wisdom' /}
+        {param value: annotate($entry.combined_will_save) /}
+        {param ability_modifier: bonus($entry.wisdom_modifier) /}
+      {/call}
+    </div>
+
+    <div class="box sheet-column"
+         style="display: flex; flex-direction: column;">
+      <div style="flex: 1;">
+        Conditional Modifiers
       </div>
     </div>
-    
+  </div>
+
+{/template}
+
+/**
+ * A single saving throw value.
+ *
+ * @param name the name of the save
+ * @param ability the ability for the save
+ * @param value the base save value
+ * @param ability_modifier the ability modifier
+ */
+{template .sheet_saves_value}
+  <div class="two-line-label" style="width: 15%; padding-top: 30px">
+    <div class="top" style="font-size: 12px">{$name}</div>
+    <div class="bottom">({$ability})</div>
+  </div>
+
+  {call .sheet_value}
+    {param label: 'Total' /}
+    {param width: '12.5%' /}
+    {param size: '8px' /}
+    {param center: true /}
+    {param white: true /}
+    {param top: true /}
+    {param value: $value /}
+  {/call}
+
+  <div class="operator" style="padding-top: 30px">=</div>
+
+  {call .sheet_value}
+    {param label}
+      Base <br/>
+      Save
+    {/param}
+    {param width: '12.5%' /}
+    {param size: '8px' /}
+    {param center: true /}
+    {param white: true /}
+    {param top: true /}
+    {param value: $value /}
+  {/call}
+
+  <div class="operator" style="padding-top: 30px">+</div>
+
+  {call .sheet_value}
+    {param label}
+      Ability <br/>
+      Modifier
+    {/param}
+    {param width: '12.5%' /}
+    {param size: '8px' /}
+    {param center: true /}
+    {param white: true /}
+    {param top: true /}
+    {param value: $ability_modifier /}
+  {/call}
+
+  <div class="operator" style="padding-top: 30px">+</div>
+
+  {call .sheet_value}
+    {param label}
+      Magic <br/>
+      Modifier
+    {/param}
+    {param width: '12.5%' /}
+    {param size: '8px' /}
+    {param center: true /}
+    {param white: true /}
+    {param top: true /}
+    {param value: '&nbsp;' /}
+  {/call}
+
+  <div class="operator" style="padding-top: 30px">+</div>
+
+  {call .sheet_value}
+    {param label}
+      Misc. <br/>
+      Modifier
+    {/param}
+    {param width: '12.5%' /}
+    {param size: '8px' /}
+    {param center: true /}
+    {param white: true /}
+    {param top: true /}
+    {param value: '&nbsp;' /}
+  {/call}
+
+  <div class="operator" style="padding-top: 30px">+</div>
+
+  {call .sheet_value}
+    {param label}
+      Temporary <br/>
+      Modifier
+    {/param}
+    {param width: '12.5%' /}
+    {param size: '8px' /}
+    {param center: true /}
+    {param white: true /}
+    {param top: true /}
+    {param value: '&nbsp;' /}
+  {/call}
+
+{/template}
+
+/**
+ * The armor class section of the character sheet.
+ *
+ * @param entry
+ */
+{template .sheet_ac}
+  {call .sheet_subtitle}
+    {param title: 'Armor Class' /}
+  {/call}
+
+  <div class="value-container" style="width:100%">
+    <div class="value-label prefixed inline"
+         style="font-size: 14px; vertical-align:top; padding-top: 3px">
+      AC
+    </div>
+
     {call .sheet_value}
-      {param label: 'Character Name' /}
-      {param width: '50%' /}
-      {param value: $entry.name /}
+      {param label: 'Total<br/>&nbsp;' /}
+      {param width: '11%' /}
+      {param size: '8px' /}
+      {param vSize: '20px' /}
+      {param center: true /}
+      {param value: $entry.armor_class /}
     {/call}
+
+    <div class="operator" style="padding-top: 15px">= 10 +</div>
+
     {call .sheet_value}
-      {param label: 'Player Name' /}
-      {param width: '50%' /}
+      {param label}
+        Armor <br/>
+        Bonus
+      {/param}
+      {param width: '11%' /}
+      {param size: '8px' /}
+      {param vSize: '14px' /}
+      {param center: true /}
+      {param value: $entry.armor_bonus /}
+    {/call}
+
+    <div class="operator" style="padding-top: 15px">+</div>
+
+    {call .sheet_value}
+      {param label}
+        Shield<br/>
+        Bonus
+      {/param}
+      {param width: '11%' /}
+      {param size: '8px' /}
+      {param vSize: '14px' /}
+      {param center: true /}
+      {param value: $entry.shield_bonus /}
+    {/call}
+
+    <div class="operator" style="padding-top: 15px">+</div>
+
+    {call .sheet_value}
+      {param label}
+        Dex<br/>
+        Modifier
+      {/param}
+      {param width: '11%' /}
+      {param size: '8px' /}
+      {param vSize: '14px' /}
+      {param center: true /}
+      {param value: bonus($entry.dexterity_modifier) /}
+    {/call}
+
+    <div class="operator" style="padding-top: 15px">+</div>
+
+    {call .sheet_value}
+      {param label}
+        Size<br/>
+        Modifier
+      {/param}
+      {param width: '11%' /}
+      {param size: '8px' /}
+      {param vSize: '14px' /}
+      {param center: true /}
+      {param value: '+0' /}
+    {/call}
+
+    <div class="operator" style="padding-top: 15px">+</div>
+
+    {call .sheet_value}
+      {param label}
+        Natural <br/>
+        Armor
+      {/param}
+      {param width: '11%' /}
+      {param size: '8px' /}
+      {param vSize: '14px' /}
+      {param center: true /}
+      {param value: annotate($entry.combined_natural_armor) /}
+    {/call}
+
+    <div class="operator" style="padding-top: 15px">+</div>
+
+    {call .sheet_value}
+      {param label}
+        Deflection <br/>
+        Modifier
+      {/param}
+      {param width: '11%' /}
+      {param size: '8px' /}
+      {param vSize: '14px' /}
+      {param center: true /}
+      {param value: '' /}
+    {/call}
+
+    <div class="operator" style="padding-top: 15px">+</div>
+
+    {call .sheet_value}
+      {param label}
+        Miscellaneous <br/>
+        Modifiers
+      {/param}
+      {param width: '11%' /}
+      {param size: '8px' /}
+      {param vSize: '14px' /}
+      {param center: true /}
+      {param value: '' /}
+    {/call}
+  </div>
+
+  <div class="inline" style="width: 50%">
+    {call .sheet_value}
+      {param label: 'Touch AC' /}
+      {param width: '100%' /}
+      {param size: '14px' /}
+      {param vSize: '20px' /}
+      {param value: $entry.touch_armor_class /}
+      {param prefix: true /}
+      {param center: true /}
+    {/call}
+  </div>
+
+  <div class="inline" style="width: 50%">
+    {call .sheet_value}
+      {param label: 'Flat-Footed AC' /}
+      {param width: '100%' /}
+      {param size: '14px' /}
+      {param vSize: '20px' /}
+      {param value: $entry.flat_footed_armor_class /}
+      {param prefix: true /}
+      {param center: true /}
+    {/call}
+  </div>
+
+  <div class="armors" style="margin-top: 10px">
+    <div class="armor">
+      {call .sheet_value}
+        {param label: 'Armor Worn' /}
+        {param width: '50%' /}
+        {param size: '7px' /}
+        {param white: true /}
+        {param top: true /}
+        {param inside: true /}
+        {param value}
+          {if $entry.armor_worn.present}
+            {call dma.entries.items.name}
+              {param entry: $entry.armor_worn /}
+            {/call}
+          {/if}
+        {/param}
+      {/call}
+      {call .sheet_value}
+        {param label: 'Max Dex' /}
+        {param width: '20%' /}
+        {param size: '7px' /}
+        {param white: true /}
+        {param top: true /}
+        {param inside: true /}
+        {param value: $entry.armor_worn.present
+          ? annotate($entry.armor_worn.combined_max_dex) : '' /}
+      {/call}
+      {call .sheet_value}
+        {param label: 'Armor Check Penalty' /}
+        {param width: '20%' /}
+        {param size: '7px' /}
+        {param white: true /}
+        {param top: true /}
+        {param inside: true /}
+        {param value: $entry.armor_worn.present
+          ? annotate($entry.armor_worn.combined_check_penalty) : '' /}
+      {/call}
+      {call .sheet_value}
+        {param label: 'Weight' /}
+        {param width: '10%' /}
+        {param size: '7px' /}
+        {param white: true /}
+        {param top: true /}
+        {param inside: true /}
+        {param value: $entry.armor_worn.present
+          ? annotate($entry.armor_worn.combined_weight) : '' /}
+      {/call}
+    </div>
+    <div class="armor">
+      {call .sheet_value}
+        {param label: 'Shield Carried' /}
+        {param width: '50%' /}
+        {param size: '7px' /}
+        {param white: true /}
+        {param top: true /}
+        {param inside: true /}
+        {param value}
+          {if $entry.shield_worn.present}
+            {call dma.entries.items.name}
+              {param entry: $entry.shield_worn /}
+            {/call}
+          {/if}
+        {/param}
+      {/call}
+      {call .sheet_value}
+        {param label: 'Max Dex' /}
+        {param width: '20%' /}
+        {param size: '7px' /}
+        {param white: true /}
+        {param top: true /}
+        {param inside: true /}
+        {param value: $entry.shield_worn.present
+          ? annotate($entry.shield_worn.combined_max_dex) : '' /}
+      {/call}
+      {call .sheet_value}
+        {param label: 'Armor Check Penalty' /}
+        {param width: '20%' /}
+        {param size: '7px' /}
+        {param white: true /}
+        {param top: true /}
+        {param inside: true /}
+        {param value: $entry.shield_worn.present
+          ? annotate($entry.shield_worn.combined_check_penalty) : '' /}
+      {/call}
+      {call .sheet_value}
+        {param label: 'Weight' /}
+        {param width: '10%' /}
+        {param size: '7px' /}
+        {param white: true /}
+        {param top: true /}
+        {param inside: true /}
+        {param value: $entry.shield_worn.present
+          ? annotate($entry.shield_worn.combined_weight) : '' /}
+      {/call}
+    </div>
+  </div>
+{/template}
+
+/**
+ * Contents of the second page of the character sheet.
+ *
+ * @param entry the entry to print
+ */
+{template .sheet_page_2}
+  <div class="sheet-row" style="height: 100%;">
+    <div class="sheet-column" style="height: 100%; margin-right: 5px;">
+      <div class="sheet-row" style="flex-direction: column; height: 100%;">
+        <div class="sheet-column"
+             style="display: flex; flex-direction: column; flex: 1;">
+          {call .sheet_xp}
+            {param entry: $entry /}
+          {/call}
+        </div>
+
+        {call .sheet_carrying_capacity}
+          {param entry: $entry /}
+        {/call}
+      </div>
+    </div>
+    <div class="sheet-column" style="flex: 4;">
+      {call .sheet_gear}
+        {param entry: $entry /}
+      {/call}
+    </div>
+  </div>
+{/template}
+
+/**
+ * The experience point box.
+ *
+ * @param entry the entry to print
+ */
+{template .sheet_xp}
+  {call .sheet_subtitle}
+    {param title: 'XP' /}
+    {param nologo: true /}
+  {/call}
+
+  <div class="values boxed" style="background-color: #eee; flex: 1;">
+    <div class="xp">
+      {$entry.XP}
+    </div>
+    <div class="xp-next">
+      Level {$entry.effectiveCharacterLevel + 1}: {$entry.nextLevelXP}
+    </div>
+  </div>
+{/template}
+
+/**
+ * The carrying capacity box.
+ *
+ * @param entry the entry to print
+ */
+{template .sheet_carrying_capacity}
+  {call .sheet_subtitle}
+    {param title: 'Carrying Capacity' /}
+    {param nologo: true /}
+  {/call}
+
+  <div class="values boxed carrying-capacity"
+       style="background-color: #eee;">
+    {call .sheet_value}
+      {param label}
+        Light<br />
+        Load
+      {/param}
+      {param width: '100%' /}
+      {param size: '9px' /}
+      {param prefix: true /}
+      {param center: true /}
       {param value}
-       {$entry.base_character_name} ({$entry.player.real_name})
-      {/param}        
-    {/call}
-    
-    {call .sheet_value}
-      {param label: 'Class and Level' /}
-      {param width: '50%' /}
-      {param value}
-        {foreach $level in $entry.get_cumulated_levels}
-          {$level}
-          {if not isLast($level)}, {/if}
-        {/foreach}
-      {/param}        
-    {/call}
-    {call .sheet_value}
-      {param label: 'ECL' /}
-      {param width: '5%' /}
-      {param value: $entry.effective_character_level /}
-    {/call}
-    {call .sheet_value}
-      {param label: 'Race/Template' /}
-      {param width: '15%' /}
-      {param value}
-        {foreach $monster in $entry.base_entries}
-          {$monster.name}
-          {if not isLast($monster)}, {/if}
-        {/foreach}
+        up to {$entry.light_load} lb
       {/param}
     {/call}
     {call .sheet_value}
-      {param label: 'Size' /}
-      {param width: '15%' /}
-      {param value: annotate($entry.combined_size) /}
+      {param label}
+        Medium<br />
+        Load
+      {/param}
+      {param width: '100%' /}
+      {param size: '9px' /}
+      {param prefix: true /}
+      {param center: true /}
+      {param value}
+        up to {$entry.medium_load} lb
+      {/param}
     {/call}
     {call .sheet_value}
-      {param label: 'Gender' /}
-      {param width: '15%' /}
-      {param value: $entry.gender /}
-    {/call}
-
-    {call .sheet_value}
-      {param label: 'Alignment' /}
-      {param width: '10%' /}
-      {param value: $entry.alignment /}
-    {/call}
-    {call .sheet_value}
-      {param label: 'Religion/Patron Deity' /}
-      {param width: '40%' /}
-      {param value: $entry.religion.present ? $entry.religion : '' /}
+      {param label}
+        Heavy<br />
+        Load
+      {/param}
+      {param width: '100%' /}
+      {param size: '9px' /}
+      {param prefix: true /}
+      {param center: true /}
+      {param value}
+        up to {$entry.heavy_load} lb
+      {/param}
     {/call}
     {call .sheet_value}
-      {param label: 'Height' /}
-      {param width: '10%' /}
-      {param value: $entry.height.present ? $entry.height : '' /}
+      {param label}
+        Lift
+      {/param}
+      {param width: '100%' /}
+      {param size: '9px' /}
+      {param prefix: true /}
+      {param center: true /}
+      {param value}
+        up to {$entry.lift_load}
+      {/param}
     {/call}
     {call .sheet_value}
-      {param label: 'Weight' /}
-      {param width: '10%' /}
-      {param value: $entry.weight.present ? $entry.weight : '' /}
+      {param label}
+        Drag
+      {/param}
+      {param width: '100%' /}
+      {param size: '9px' /}
+      {param prefix: true /}
+      {param center: true /}
+      {param value}
+        up to {$entry.drag_load}
+      {/param}
     {/call}
     {call .sheet_value}
-      {param label: 'Looks' /}
-      {param width: '30%' /}
-      {param value: $entry.looks.present ? $entry.looks : '' /}
-    {/call}
-    
-    <div class="groups">
-      <div class="group" style="width: 39%">
-  
-        {call .sheet_subtitle}
-          {param title: 'Ability Scores' /}
-        {/call}
-        
-        {call .ability}
-          {param name: 'Strength' /}
-          {param abbreviation: 'STR' /}
-          {param ability: annotate($entry.combined_strength) /}
-          {param modifier: bonus($entry.strength_modifier) /}
-        {/call}
-        
-        {call .ability}
-          {param name: 'Dexterity' /}
-          {param abbreviation: 'DEX' /}
-          {param ability: annotate($entry.combined_dexterity) /}
-          {param modifier: bonus($entry.dexterity_modifier) /}
-        {/call}
-        
-        {call .ability}
-          {param name: 'Constitution' /}
-          {param abbreviation: 'CON' /}
-          {param ability: annotate($entry.combined_constitution) /}
-          {param modifier: bonus($entry.constitution_modifier) /}
-        {/call}
-        
-        {call .ability}
-          {param name: 'Intelligence' /}
-          {param abbreviation: 'INT' /}
-          {param ability: annotate($entry.combined_intelligence) /}
-          {param modifier: bonus($entry.intelligence_modifier) /}
-        {/call}
-        
-        {call .ability}
-          {param name: 'Wisdom' /}
-          {param abbreviation: 'WIS' /}
-          {param ability: annotate($entry.combined_wisdom) /}
-          {param modifier: bonus($entry.wisdom_modifier) /}
-        {/call}
-        
-        {call .ability}
-          {param name: 'Charisma' /}
-          {param abbreviation: 'CHA' /}
-          {param ability: annotate($entry.combined_charisma) /}
-          {param modifier: bonus($entry.charisma_modifier) /}
-        {/call}
-        
-      </div>
-    
-      <div class="group ruler" style="height: 420px"></div>
-    
-      <div class="group" style="width: 38%">
-
-        {call .sheet_subtitle}
-          {param title: 'Combat Options' /}
-        {/call}
-        
-        {call .sheet_value}
-          {param label: 'Base Attack Bonus' /}
-          {param width: '100%' /}
-          {param size: '27px' /}
-          {param vSize: '30px' /}
-          {param value: annotate($entry.combined_base_attack) /}
-          {param prefix: true /}
-          {param center: true /}
-        {/call}
-      
-        {foreach $weapon in $entry.weapons}
-          {if index($weapon) < 4}
-            {call .sheet_weapon}
-              {param gray: index($weapon) == 0 or index($weapon) == 2 /}
-              {param weapon: $weapon /}
-            {/call}
-          {/if}
-        {/foreach}
-        
-        {for $i in range(length($entry.weapons), 4)}
-          {call .sheet_weapon}
-            {param gray: $i == 0 or $i == 2 /}
-          {/call}
-        {/for}  
-      
-      </div>          
-      
-      <div class="group" style="width: 19%; margin-left: 5px">
-
-        {call .sheet_subtitle}
-          {param title: 'Hit Points' /}
-        {/call}
-
-        <div class="values boxed" style="height: 450px">
-          <div class="hps temporary">
-            Temporary<br/>
-            {for $i in range(20)}
-              <div class="count">{20 - $i}</div>
-            {/for}
-          </div>
-  
-          <div class="hps">
-            Hit Points<br/>
-            {for $i in range($entry.maxHP - $entry.HP)}
-              <div class="count crossed">{$entry.maxHP - $i}</div>
-              {if ($entry.maxHP - $i) % 10 == 0}
-                <br/>
-              {/if}
-            {/for}
-            {for $i in range($entry.HP + 1)}
-              <div class="count">{$entry.HP - $i}</div>
-              {if ($entry.HP - $i) % 10 == 0}
-                <br/>
-              {/if}
-            {/for}
-          </div> 
-
-          <div class="hps negative">
-            {for $i in range(1, 11)}
-              <div class="count">{-$i}</div>
-            {/for}
-          </div> 
-
-        </div>
-      
-      </div>
- 
-      <div class="inline" style="width: 50%">
-        {call .sheet_value}
-          {param label: 'Speed' /}
-          {param width: '100%' /}
-          {param size: '27px' /}
-          {param vSize: '30px' /}
-          {param value}
-            {if isList($entry.speeds_annotated)}
-              {foreach $speed in $entry.speeds_annotated}
-                {annotate($speed)|noescape}
-                {if not isLast($speed)}, {/if}
-              {/foreach}
+      {param label}
+        Current<br />
+        Load
+      {/param}
+      {param width: '100%' /}
+      {param size: '9px' /}
+      {param prefix: true /}
+      {param center: true /}
+      {param value}
+        {$entry.current_load}
+        {if $entry.current_load.as_pounds.float > $entry.light_load}
+          {sp}<span style="font-size: 8px">(
+            {if $entry.current_load.as_pounds.float <= $entry.medium_load}
+              medium load: max dex +3, speed from 30/20 ft to 20/15 ft, run x4
+            {elseif $entry.current_load.as_pounds.float <= $entry.heavy_load}
+              heavy load: max dex +1, speed from 30/20 ft to 20/15 ft, run x3
+            {else}
+              too much load
             {/if}
-          {/param}
-          {param prefix: true /}
-          {param center: true /}
+          )</span>
+        {/if}
+      {/param}
+    {/call}
+  </div>
+{/template}
+
+/**
+ * The gear box.
+ *
+ * @param entry the entry to print
+ */
+{template .sheet_gear}
+  {call .sheet_subtitle}
+    {param title: 'Gear' /}
+  {/call}
+
+  <div class="limited" style="height: 500px">
+    <div class="gear-title">Possessions on person</div>
+
+    <div class="gear-name">Item</div>
+    <div class="gear-spacer"></div>
+    <div class="gear-location">Location</div>
+    <div class="gear-spacer"></div>
+    <div class="gear-weight">Weight</div>
+
+    {foreach $item in $entry.possessions_on_person}
+      {if not $item.shownAsWorn}
+        {call .sheet_gear_line}
+          {param item: $item /}
         {/call}
-      </div>
-      
-      <div class="inline" style="width: 50%">
-        {call .sheet_value}
-          {param label: 'Initiative Modifier' /}
-          {param width: '100%' /}
-          {param size: '27px' /}
-          {param vSize: '30px' /}
-          {param value: bonus($entry.initiative) /}
-          {param prefix: true /}
-          {param center: true /}
-        {/call}
-      </div>         
-    
-      <div class="value-container" style="width:100%">
-        <div class="value-label prefixed inline" 
-             style="font-size: 27px; vertical-align:top; padding-top: 3px">
-          Grapple Modifier
-        </div>
-    
-        {call .sheet_value}
-          {param label: 'Total<br/>&nbsp;' /}
-          {param width: '13.5%' /}
-          {param size: '9px' /}
-          {param center: true /}
-          {param value: bonus($entry.grapple_bonus) /}
-        {/call}
-        
-        <div class="operator" style="padding-top: 15px">=</div>
-        
-        {call .sheet_value}
-          {param label}
-            Base Attack <br/>
-            Bonus
-          {/param}
-          {param width: '13.5%' /}
-          {param size: '9px' /}
-          {param center: true /}
-          {param value: annotate($entry.combined_base_attack) /}
-        {/call}
-        
-        <div class="operator" style="padding-top: 15px">+</div>
-        
-        {call .sheet_value}
-          {param label}
-            Strength<br/>
-            Modifier
-          {/param}
-          {param width: '13.5%' /}
-          {param size: '9px' /}
-          {param center: true /}
-          {param value: bonus($entry.strength_modifier) /}
-        {/call}
-      
-        <div class="operator" style="padding-top: 15px">+</div>
-        
-        {call .sheet_value}
-          {param label}
-            Size<br/>
-            Modifier
-          {/param}
-          {param width: '13.5%' /}
-          {param size: '9px' /}
-          {param center: true /}
-          {param value: '+0' /}
-        {/call}
-      
-        <div class="operator" style="padding-top: 15px">+</div>
-        
-        {call .sheet_value}
-          {param label}
-            Misc<br/>
-            Modifier
-          {/param}
-          {param width: '13.5%' /}
-          {param size: '9px' /}
-          {param center: true /}
-          {param value: '' /}
-        {/call}
-    
-      </div>
+      {/if}
+    {/foreach}
 
-    </div>    
-    
-    <div class="groups">
-      {call .sheet_subtitle}
-        {param title: 'Saving Throws' /}
-      {/call}
-
-      <div>
-      <div class="inline saves">
-
-        <div>
-        
-          <div class="two-line-label" style="width: 15%; padding-top: 50px">
-            <div class="top">Fortitude</div>
-            <div class="bottom">(Constitution)</div>
-          </div>
-  
-          {call .sheet_value}
-            {param label: 'Total' /}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: annotate($entry.combined_fortitude_save) /} 
-          {/call}
-          
-          <div class="operator" style="padding-top: 52px">=</div>
-        
-          {call .sheet_value}
-            {param label}
-              Base <br/>
-              Save
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: annotate($entry.combined_base_fortitude_save) /}
-          {/call}
-  
-          <div class="operator" style="padding-top: 52px">+</div>
-        
-          {call .sheet_value}
-            {param label}
-              Ability <br/>
-              Modifier
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: bonus($entry.constitution_modifier) /}
-          {/call}
-  
-          <div class="operator" style="padding-top: 52px">+</div>
-  
-          {call .sheet_value}
-            {param label}
-              Magic <br/>
-              Modifier
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: '&nbsp;' /}
-          {/call}
-  
-          <div class="operator" style="padding-top: 52px">+</div>
-  
-          {call .sheet_value}
-            {param label}
-              Misc. <br/>
-              Modifier
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: '&nbsp;' /}
-          {/call}
-  
-          <div class="operator" style="padding-top: 52px">+</div>
-  
-          {call .sheet_value}
-            {param label}
-              Temporary <br/>
-              Modifier
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: '&nbsp;' /}
-          {/call}
-  
-        </div>
-  
-        <div>
-        
-          <div class="two-line-label" style="width: 15%; padding-top: 50px">
-            <div class="top">Reflex</div>
-            <div class="bottom">(Dexterity)</div>
-          </div>
-  
-          {call .sheet_value}
-            {param label: 'Total' /}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: annotate($entry.combined_reflex_save) /}
-          {/call}
-          
-          <div class="operator" style="padding-top: 52px">=</div>
-        
-          {call .sheet_value}
-            {param label}
-              Base <br/>
-              Save
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: annotate($entry.combined_base_reflex_save) /}
-          {/call}
-  
-          <div class="operator" style="padding-top: 52px">+</div>
-        
-          {call .sheet_value}
-            {param label}
-              Ability <br/>
-              Modifier
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: $entry.dexterity_modifier /}
-          {/call}
-  
-          <div class="operator" style="padding-top: 52px">+</div>
-  
-          {call .sheet_value}
-            {param label}
-              Magic <br/>
-              Modifier
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: '&nbsp;' /}
-          {/call}
-  
-          <div class="operator" style="padding-top: 52px">+</div>
-  
-          {call .sheet_value}
-            {param label}
-              Misc. <br/>
-              Modifier
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: '&nbsp;' /}
-          {/call}
-  
-          <div class="operator" style="padding-top: 52px">+</div>
-  
-          {call .sheet_value}
-            {param label}
-              Temporary <br/>
-              Modifier
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: '&nbsp;' /}
-          {/call}
-  
-        </div>
-
-        <div>
-        
-          <div class="two-line-label" style="width: 15%; padding-top: 50px">
-            <div class="top">Will</div>
-            <div class="bottom">(Wisdom)</div>
-          </div>
-  
-          {call .sheet_value}
-            {param label: 'Total' /}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: annotate($entry.combined_will_save) /}
-          {/call}
-          
-          <div class="operator" style="padding-top: 52px">=</div>
-        
-          {call .sheet_value}
-            {param label}
-              Base <br/>
-              Save
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: annotate($entry.combined_base_will_save) /}
-          {/call}
-  
-          <div class="operator" style="padding-top: 52px">+</div>
-        
-          {call .sheet_value}
-            {param label}
-              Ability <br/>
-              Modifier
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: $entry.wisdom_modifier /}
-          {/call}
-  
-          <div class="operator" style="padding-top: 52px">+</div>
-  
-          {call .sheet_value}
-            {param label}
-              Magic <br/>
-              Modifier
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: '&nbsp;' /}
-          {/call}
-  
-          <div class="operator" style="padding-top: 52px">+</div>
-  
-          {call .sheet_value}
-            {param label}
-              Misc. <br/>
-              Modifier
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: '&nbsp;' /}
-          {/call}
-  
-          <div class="operator" style="padding-top: 52px">+</div>
-  
-          {call .sheet_value}
-            {param label}
-              Temporary <br/>
-              Modifier
-            {/param}
-            {param width: '13%' /}
-            {param size: '14px' /}
-            {param center: true /}
-            {param white: true /}
-            {param top: true /}
-            {param value: '&nbsp;' /}
-          {/call}
-  
-        </div>
-      </div>
-        
-      <div class="box inline">
-        Conditional Modifiers
-      </div>
-
-    </div>
-    </div>
-
-    <div class="groups">
-      {call .sheet_subtitle}
-        {param title: 'Armor Class' /}
-      {/call}
-
-      <div class="value-container" style="width:100%">
-        <div class="value-label prefixed inline" 
-             style="font-size: 27px; vertical-align:top; padding-top: 3px">
-          AC
-        </div>
-    
-        {call .sheet_value}
-          {param label: 'Total<br/>&nbsp;' /}
-          {param width: '11%' /}
-          {param size: '9px' /}
-          {param center: true /}
-          {param value: $entry.armor_class /}
-        {/call}
-        
-        <div class="operator" style="padding-top: 15px">= 10 +</div>
-        
-        {call .sheet_value}
-          {param label}
-            Armor <br/>
-            Bonus
-          {/param}
-          {param width: '11%' /}
-          {param size: '9px' /}
-          {param center: true /}
-          {param value: $entry.armor_bonus /}
-        {/call}
-        
-        <div class="operator" style="padding-top: 15px">+</div>
-        
-        {call .sheet_value}
-          {param label}
-            Shield<br/>
-            Bonus
-          {/param}
-          {param width: '11%' /}
-          {param size: '9px' /}
-          {param center: true /}
-          {param value: $entry.shield_bonus /}
-        {/call}
-      
-        <div class="operator" style="padding-top: 15px">+</div>
-        
-        {call .sheet_value}
-          {param label}
-            Dex<br/>
-            Modifier
-          {/param}
-          {param width: '11%' /}
-          {param size: '9px' /}
-          {param center: true /}
-          {param value: bonus($entry.dexterity_modifier) /}
-        {/call}
-      
-        <div class="operator" style="padding-top: 15px">+</div>
-        
-        {call .sheet_value}
-          {param label}
-            Size<br/>
-            Modifier
-          {/param}
-          {param width: '11%' /}
-          {param size: '9px' /}
-          {param center: true /}
-          {param value: '+0' /}
-        {/call}
-    
-        <div class="operator" style="padding-top: 15px">+</div>
-        
-        {call .sheet_value}
-          {param label}
-            Natural <br/>
-            Armor
-          {/param}
-          {param width: '11%' /}
-          {param size: '9px' /}
-          {param center: true /}
-          {param value: annotate($entry.combined_natural_armor) /}
-        {/call}
-    
-        <div class="operator" style="padding-top: 15px">+</div>
-        
-        {call .sheet_value}
-          {param label}
-            Deflection <br/>
-            Modifier
-          {/param}
-          {param width: '11%' /}
-          {param size: '9px' /}
-          {param center: true /}
-          {param value: '' /}
-        {/call}
-    
-        <div class="operator" style="padding-top: 15px">+</div>
-        
-        {call .sheet_value}
-          {param label}
-            Miscellaneous <br/>
-            Modifiers
-          {/param}
-          {param width: '11%' /}
-          {param size: '9px' /}
-          {param center: true /}
-          {param value: '' /}
-        {/call}
-    
-      </div>
-
-      <div class="inline" style="width: 50%">
-        {call .sheet_value}
-          {param label: 'Touch AC' /}
-          {param width: '100%' /}
-          {param size: '27px' /}
-          {param vSize: '30px' /}
-          {param value: $entry.touch_armor_class /}
-          {param prefix: true /}
-          {param center: true /}
-        {/call}
-      </div>
-      
-      <div class="inline" style="width: 50%">
-        {call .sheet_value}
-          {param label: 'Flat-Footed AC' /}
-          {param width: '100%' /}
-          {param size: '27px' /}
-          {param vSize: '30px' /}
-          {param value: $entry.flat_footed_armor_class /}
-          {param prefix: true /}
-          {param center: true /}
-        {/call}
-      </div>         
-
-      <div class="armors" style="margin-top: 10px">
-        <div class="armor">
-          {call .sheet_value}
-            {param label: 'Armor Worn' /}
-            {param width: '50%' /}
-            {param size: '9px' /}
-            {param white: true /}
-            {param top: true /}
-            {param inside: true /}
-            {param value}
-              {if $entry.armor_worn.present}
-                {call dma.entries.items.name}
-                  {param entry: $entry.armor_worn /}
-                {/call}
-              {/if}
-            {/param} 
-          {/call}          
-
-          {call .sheet_value}
-            {param label: 'Max Dex' /}
-            {param width: '20%' /}
-            {param size: '9px' /}
-            {param white: true /}
-            {param top: true /}
-            {param inside: true /}
-            {param value: $entry.armor_worn.present 
-              ? annotate($entry.armor_worn.combined_max_dex) : '' /}
-          {/call}          
-
-          {call .sheet_value}
-            {param label: 'Armor Check Penalty' /}
-            {param width: '20%' /}
-            {param size: '9px' /}
-            {param white: true /}
-            {param top: true /}
-            {param inside: true /}
-            {param value: $entry.armor_worn.present 
-              ? annotate($entry.armor_worn.combined_check_penalty) : '' /}
-          {/call}          
-
-          {call .sheet_value}
-            {param label: 'Weight' /}
-            {param width: '10%' /}
-            {param size: '9px' /}
-            {param white: true /}
-            {param top: true /}
-            {param inside: true /}
-            {param value: $entry.armor_worn.present 
-              ? annotate($entry.armor_worn.combined_weight) : '' /}
-          {/call}          
-        </div>
-
-        <div class="armor">
-          {call .sheet_value}
-            {param label: 'Shield Carried' /}
-            {param width: '50%' /}
-            {param size: '9px' /}
-            {param white: true /}
-            {param top: true /}
-            {param inside: true /}
-            {param value}
-              {if $entry.shield_worn.present}
-                {call dma.entries.items.name}
-                  {param entry: $entry.shield_worn /}
-                {/call}
-              {/if}
-            {/param} 
-          {/call}          
-
-          {call .sheet_value}
-            {param label: 'Max Dex' /}
-            {param width: '20%' /}
-            {param size: '9px' /}
-            {param white: true /}
-            {param top: true /}
-            {param inside: true /}
-            {param value: $entry.shield_worn.present 
-              ? annotate($entry.shield_worn.combined_max_dex) : '' /}
-          {/call}          
-
-          {call .sheet_value}
-            {param label: 'Armor Check Penalty' /}
-            {param width: '20%' /}
-            {param size: '9px' /}
-            {param white: true /}
-            {param top: true /}
-            {param inside: true /}
-            {param value: $entry.shield_worn.present 
-              ? annotate($entry.shield_worn.combined_check_penalty) : '' /}
-          {/call}          
-
-          {call .sheet_value}
-            {param label: 'Weight' /}
-            {param width: '10%' /}
-            {param size: '9px' /}
-            {param white: true /}
-            {param top: true /}
-            {param inside: true /}
-            {param value: $entry.shield_worn.present 
-              ? annotate($entry.shield_worn.combined_weight) : '' /}
-          {/call}          
-        </div>
-      </div>
-
-    </div>
-
-    /* Second page. */
-    <div class="group" style="width: 19%">
-
-      {call .sheet_subtitle}
-        {param title: 'XP' /}
-      {/call}
-
-      <div class="values boxed" style="height: 800px; background-color: #eee">
-
-        <div class="xp">
-          {$entry.XP}
-        </div>
-
-        <div class="xp-next">
-          Level {$entry.effectiveCharacterLevel + 1}: {$entry.nextLevelXP}
-        </div>
-      </div>
-
-     </div>
-
-    <div class="group gear" style="width: 80%; margin-left: 5px">
-
-      {call .sheet_subtitle}
-        {param title: 'Gear' /}
-      {/call}
-
-      <div class="limited" style="height: 500px">
-        <div class="gear-title">Possessions on person</div>
-
-        <div class="gear-name">Item</div>
-        <div class="gear-spacer"></div>
-        <div class="gear-location">Location</div>
-        <div class="gear-spacer"></div>
-        <div class="gear-weight">Weight</div>
-
-        {foreach $item in $entry.possessions_on_person}
-          {if not $item.shownAsWorn}
-            {call .sheet_gear}
-              {param item: $item /}
-            {/call}
-          {/if}
-        {/foreach}
-
-        {for $i in range(20)}
-          {call .sheet_gear /}
-        {/for}
-
-      </div>
-
-      <div class="limited" style="height: 320px">
-        <div class="gear-title">Possessions not on person</div>
-
-        <div class="gear-name">Item</div>
-        <div class="gear-spacer"></div>
-        <div class="gear-location">Location</div>
-        <div class="gear-weight">Weight</div>
-        <div class="gear-spacer"></div>
-
-        {foreach $item in $entry.possessions_not_on_person}
-          {if not $item.weapon and not $item.armor}
-            {call .sheet_gear}
-              {param item: $item /}
-            {/call}
-          {/if}
-        {/foreach}
-
-        {for $i in range(20)}
-          {call .sheet_gear /}
-        {/for}
-      </div>
-
-    </div>
+    {for $i in range(20)}
+      {call .sheet_gear_line /}
+    {/for}
 
   </div>
 
+  <div class="limited" style="height: 320px">
+    <div class="gear-title">Possessions not on person</div>
+
+    <div class="gear-name">Item</div>
+    <div class="gear-spacer"></div>
+    <div class="gear-location">Location</div>
+    <div class="gear-weight">Weight</div>
+    <div class="gear-spacer"></div>
+
+    {foreach $item in $entry.possessions_not_on_person}
+      {if not $item.weapon and not $item.armor}
+        {call .sheet_gear_line}
+          {param item: $item /}
+        {/call}
+      {/if}
+    {/foreach}
+
+    {for $i in range(20)}
+      {call .sheet_gear_line /}
+    {/for}
+  </div>
 {/template}
 
 /**
@@ -1113,7 +1191,7 @@
  *
  * @param? item
  */
-{template .sheet_gear}
+{template .sheet_gear_line}
   {if $item}
     <div class="gear-line">
       <div class="gear-name">
@@ -1164,8 +1242,8 @@
       {call .sheet_value}
         {param label: 'Weapon' /}
         {param width: '30%' /}
-        {param size: '12px' /}
-        {param vSize: '18px' /}
+        {param size: '8px' /}
+        {param vSize: '12px' /}
         {param value}
           {if $weapon}
             {call dma.entries.items.reference}
@@ -1180,24 +1258,24 @@
       {call .sheet_value}
         {param label: 'Attack Bonus' /}
         {param width: '30%' /}
-        {param size: '12px' /}
-        {param vSize: '20px' /}
+        {param size: '8px' /}
+        {param vSize: '12px' /}
         {param value: $weapon ? bonus($weapon.attack_bonus) : '&nbsp;' /}
       {/call}
   
       {call .sheet_value}
         {param label: 'Damage' /}
         {param width: '20%' /}
-        {param size: '12px' /}
-        {param vSize: '20px' /}
+        {param size: '8px' /}
+        {param vSize: '12px' /}
         {param value: $weapon ? $weapon.damage : '&nbsp;' /}
       {/call}
     
       {call .sheet_value}
         {param label: 'Critical' /}
         {param width: '20%' /}
-        {param size: '12px' /}
-        {param vSize: '20px' /}
+        {param size: '8px' /}
+        {param vSize: '12px' /}
         {param value: $weapon ? $weapon.critical : '&nbsp;' /}
       {/call}
     </div>
@@ -1205,8 +1283,8 @@
       {call .sheet_value}
         {param label: 'Range Increment' /}
         {param width: '30%' /}
-        {param size: '12px' /}
-        {param vSize: '20px' /}
+        {param size: '8px' /}
+        {param vSize: '12px' /}
         {param value: $weapon 
           ? (def($weapon.range) ? $weapon.range : '&mdash;') 
           : '&nbsp;' /}
@@ -1215,8 +1293,8 @@
       {call .sheet_value}
         {param label: 'Type' /}
         {param width: '20%' /}
-        {param size: '12px' /}
-        {param vSize: '20px' /}
+        {param size: '8px' /}
+        {param vSize: '12px' /}
         {param value: $weapon ? $weapon.weapon_type.short : '&nbsp;' /}
       {/call}
 
@@ -1224,8 +1302,8 @@
         {call .sheet_value}
           {param label: 'Notes' /}
           {param width: '50%' /}
-          {param size: '12px' /}
-          {param vSize: '20px' /}
+          {param size: '8px' /}
+          {param vSize: '12px' /}
           {param value: $weapon.player_notes /}
         {/call}
       {else}
@@ -1233,8 +1311,8 @@
           {call .sheet_value}
             {param label: 'Ammunition' /}
             {param width: '50%' /}
-            {param size: '12px' /}
-            {param vSize: '12px' /}
+            {param size: '8px' /}
+            {param vSize: '10px' /}
             {param value}
               {foreach $ammunition in $weapon.available_ammunition}
                 {call dma.entries.items.reference}
@@ -1249,8 +1327,8 @@
           {call .sheet_value}
             {param label: 'Notes' /}
             {param width: '50%' /}
-            {param size: '12px' /}
-            {param vSize: '20px' /}
+            {param size: '8px' /}
+            {param vSize: '12px' /}
             {param value: '' /}
           {/call}
         {/if}
@@ -1277,8 +1355,9 @@
 
     {call .sheet_value}
       {param label: 'Total<br/>&nbsp;' /}
-      {param width: '13.5%' /}
-      {param size: '9px' /}
+      {param width: '12%' /}
+      {param size: '6px' /}
+      {param vSize: '14px' /}
       {param center: true /}
       {param value: $ability /}
     {/call}
@@ -1291,7 +1370,8 @@
         Racial Mod.
       {/param}
       {param width: '13.5%' /}
-      {param size: '9px' /}
+      {param size: '6px' /}
+      {param vSize: '14px' /}
       {param center: true /}
       {param value: $ability /}
     {/call}
@@ -1300,11 +1380,12 @@
     
     {call .sheet_value}
       {param label}
-        Enhancement<br/>
+        Enhcmnt<br/>
         Bonuses
       {/param}
       {param width: '13.5%' /}
-      {param size: '9px' /}
+      {param size: '6px' /}
+      {param vSize: '14px' /}
       {param center: true /}
       {param value: '' /}
     {/call}
@@ -1317,7 +1398,8 @@
         Bonuses
       {/param}
       {param width: '13.5%' /}
-      {param size: '9px' /}
+      {param size: '6px' /}
+      {param vSize: '14px' /}
       {param center: true /}
       {param value: '' /}
     {/call}
@@ -1330,7 +1412,8 @@
         Penalties
       {/param}
       {param width: '13.5%' /}
-      {param size: '9px' /}
+      {param size: '6px' /}
+      {param vSize: '14px' /}
       {param center: true /}
       {param value: '' /}
     {/call}
@@ -1341,7 +1424,8 @@
         Modifier
       {/param}
       {param width: '13.5%' /}
-      {param size: '9px' /}
+      {param size: '6px' /}
+      {param vSize: '14px' /}
       {param center: true /}
       {param boxed: true /}
       {param value: $modifier /}
@@ -1402,11 +1486,12 @@
  * 
  * @param title  The subtitle text
  * @param? width The width of the subtitle
+ * @param? nologo Whether to show the logo
  */
 {template .sheet_subtitle}
   <div class="subtitle" {if $width}style="width:{$width}"{/if}>
-    <div class="subtitle-logo"></div>
-    <div class="subtitle-text">{$title}</div>
+    {if not $nologo}<div class="subtitle-logo"></div>{/if}
+    <div class="subtitle-text{if $nologo} nologo{/if}">{$title}</div>
   </div>
 {/template}
 

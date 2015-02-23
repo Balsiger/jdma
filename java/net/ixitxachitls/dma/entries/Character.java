@@ -394,54 +394,6 @@ public class Character extends NPC
     return Collections.unmodifiableList(m_possessions);
   }
 
-  public List<Item> getPossessionsOnPerson()
-  {
-    List<Item> possessions = getPossessions();
-    List<Item> items = new ArrayList<>();
-
-    for(Item item : possessions)
-    {
-      if(!item.hasBaseName("Storage"))
-      {
-        items.add(item);
-        items.addAll(item.getAllContents());
-      }
-    }
-
-    return items;
-  }
-
-  public List<Item> getPossessionsNotOnPerson()
-  {
-    List<Item> possessions = getPossessions();
-    List<Item> items = new ArrayList<>();
-
-    for(Item item : possessions)
-    {
-      if(item.hasBaseName("Storage"))
-      {
-        items.add(item);
-        items.addAll(item.getAllContents());
-      }
-    }
-
-    return items;
-  }
-
-  public List<Item> getAllPossessions()
-  {
-    List<Item> possessions = getPossessions();
-    List<Item> items = new ArrayList<>();
-
-    for(Item item : possessions)
-    {
-      items.add(item);
-      items.addAll(item.getAllContents());
-    }
-
-    return items;
-  }
-
   /**
    * Add the given entry to the character entry.
    *

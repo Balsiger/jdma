@@ -32,6 +32,7 @@ import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
 import com.google.template.soy.data.restricted.BooleanData;
+import com.google.template.soy.data.restricted.FloatData;
 import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
 
@@ -106,6 +107,22 @@ public class SoyValue extends SoyMapData
         && ((Optional<?>)value).isPresent()
         && ((Optional<?>)value).get() instanceof Integer)
       return IntegerData.forValue(((Optional<Integer>)value).get());
+
+    if("float".equals(inName) && value instanceof Float)
+      return FloatData.forValue((float) value);
+
+    if("float".equals(inName) && value instanceof Double)
+      return FloatData.forValue((double) value);
+
+    if("float".equals(inName) && value instanceof Optional
+        && ((Optional<?>)value).isPresent())
+    {
+      if(((Optional<?>)value).get() instanceof Float)
+        return FloatData.forValue(((Optional<Float>)value).get());
+
+      if(((Optional<?>)value).get() instanceof Double)
+        return FloatData.forValue(((Optional<Double>)value).get());
+    }
 
     value = Classes.callMethod(inName, value);
     if(value != null)

@@ -35,11 +35,14 @@ import net.ixitxachitls.dma.proto.Entries.FeatProto;
 import net.ixitxachitls.dma.proto.Entries.MonsterProto;
 import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
+import net.ixitxachitls.dma.rules.CarryingCapacity;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Modifier;
+import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.dma.values.enums.Size;
@@ -1333,6 +1336,101 @@ public class Monster extends CampaignEntry
     return m_hp;
   }
 
+  public Annotated.Boolean isCombinedQuadruped()
+  {
+    Annotated.Boolean combined = new Annotated.Boolean();
+    for (BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).isCombinedQuadruped());
+
+    return combined;
+  }
+
+  public int lightLoad()
+  {
+    Optional<Integer> strength = getCombinedStrength().get();
+    Optional<Size> size = getCombinedSize().get();
+    Optional<Boolean> quadruped = isCombinedQuadruped().get();
+
+    if(!strength.isPresent() || !size.isPresent())
+      return 0;
+
+    return CarryingCapacity.lightLoad(
+        strength.get(), size.get(),
+        quadruped.isPresent() ? quadruped.get() : false);
+  }
+
+  public int mediumLoad()
+  {
+    Optional<Integer> strength = getCombinedStrength().get();
+    Optional<Size> size = getCombinedSize().get();
+    Optional<Boolean> quadruped = isCombinedQuadruped().get();
+
+    if(!strength.isPresent() || !size.isPresent())
+      return 0;
+
+    return CarryingCapacity.mediumLoad(
+        strength.get(), size.get(),
+        quadruped.isPresent() ? quadruped.get() : false);
+  }
+
+  public int heavyLoad()
+  {
+    Optional<Integer> strength = getCombinedStrength().get();
+    Optional<Size> size = getCombinedSize().get();
+    Optional<Boolean> quadruped = isCombinedQuadruped().get();
+
+    if(!strength.isPresent() || !size.isPresent())
+      return 0;
+
+    return CarryingCapacity.heavyLoad(
+        strength.get(), size.get(),
+        quadruped.isPresent() ? quadruped.get() : false);
+  }
+
+  public int liftLoad()
+  {
+    Optional<Integer> strength = getCombinedStrength().get();
+    Optional<Size> size = getCombinedSize().get();
+    Optional<Boolean> quadruped = isCombinedQuadruped().get();
+
+    if(!strength.isPresent() || !size.isPresent())
+      return 0;
+
+    return CarryingCapacity.liftLoad(
+            strength.get(), size.get(),
+            quadruped.isPresent() ? quadruped.get() : false);
+  }
+
+  public int dragLoad()
+  {
+    Optional<Integer> strength = getCombinedStrength().get();
+    Optional<Size> size = getCombinedSize().get();
+    Optional<Boolean> quadruped = isCombinedQuadruped().get();
+
+    if(!strength.isPresent() || !size.isPresent())
+      return 0;
+
+    return CarryingCapacity.dragLoad(
+            strength.get(), size.get(),
+            quadruped.isPresent() ? quadruped.get() : false);
+  }
+
+  public Weight currentLoad()
+  {
+    Weight load = new Weight(Optional.<Rational>absent(),
+                             Optional.<Rational>absent());
+
+    for(Item item : getPossessions())
+      if(!item.hasBaseName("Storage"))
+      {
+        Optional<Weight> weight = item.getCombinedWeight().get();
+        if(weight.isPresent())
+          load = (Weight) load.add(weight.get());
+      }
+
+    return load;
+  }
+
   /**
    * Get a monsters annotated and combined speed.
    *
@@ -1649,6 +1747,54 @@ public class Monster extends CampaignEntry
         return Optional.of(item);
 
     return Optional.absent();
+  }
+
+  public List<Item> getPossessionsOnPerson()
+  {
+    List<Item> possessions = getPossessions();
+    List<Item> items = new ArrayList<>();
+
+    for(Item item : possessions)
+    {
+      if(!item.hasBaseName("Storage"))
+      {
+        items.add(item);
+        items.addAll(item.getAllContents());
+      }
+    }
+
+    return items;
+  }
+
+  public List<Item> getPossessionsNotOnPerson()
+  {
+    List<Item> possessions = getPossessions();
+    List<Item> items = new ArrayList<>();
+
+    for(Item item : possessions)
+    {
+      if(item.hasBaseName("Storage"))
+      {
+        items.add(item);
+        items.addAll(item.getAllContents());
+      }
+    }
+
+    return items;
+  }
+
+  public List<Item> getAllPossessions()
+  {
+    List<Item> possessions = getPossessions();
+    List<Item> items = new ArrayList<>();
+
+    for(Item item : possessions)
+    {
+      items.add(item);
+      items.addAll(item.getAllContents());
+    }
+
+    return items;
   }
 
   @Override

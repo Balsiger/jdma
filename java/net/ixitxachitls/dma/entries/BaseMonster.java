@@ -562,10 +562,13 @@ public class BaseMonster extends BaseEntry
   protected List<Save> m_goodSaves = new ArrayList<>();
 
   /** The feats entries. */
-  protected Set<BaseFeat> m_featEntries = new HashSet<BaseFeat>();
+  protected Set<BaseFeat> m_featEntries = new HashSet<>();
 
   /** The monsters proficiencies. */
   protected List<String> m_proficiencies = new ArrayList<>();
+
+  /** Whether this is a quadruped. */
+  private boolean m_quadruped = false;
 
   /**
    * Get the monster's size.
@@ -585,7 +588,7 @@ public class BaseMonster extends BaseEntry
   public Annotated<Optional<Size>> getCombinedSize()
   {
     if(m_size != Size.UNKNOWN)
-      return new Annotated.Max<Size>(m_size, getName());
+      return new Annotated.Max<>(m_size, getName());
 
     Annotated<Optional<Size>> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
@@ -612,7 +615,7 @@ public class BaseMonster extends BaseEntry
   public Annotated<Optional<SizeModifier>> getCombinedSizeModifier()
   {
     if(m_sizeModifier != SizeModifier.UNKNOWN)
-      return new Annotated.Max<SizeModifier>(m_sizeModifier, getName());
+      return new Annotated.Max<>(m_sizeModifier, getName());
 
     Annotated<Optional<SizeModifier>> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
@@ -639,9 +642,9 @@ public class BaseMonster extends BaseEntry
   public Annotated<Optional<MonsterType>> getCombinedMonsterType()
   {
     if(m_monsterType != MonsterType.UNKNOWN)
-      return new Annotated.Max<MonsterType>(m_monsterType, getName());
+      return new Annotated.Max<>(m_monsterType, getName());
 
-    Annotated.Max<MonsterType> combined = new Annotated.Max<MonsterType>();
+    Annotated.Max<MonsterType> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedMonsterType());
 
@@ -666,10 +669,9 @@ public class BaseMonster extends BaseEntry
   public Annotated<List<MonsterSubtype>> getCombinedMonsterSubtypes()
   {
     if(!m_monsterSubtypes.isEmpty())
-      return new Annotated.List<MonsterSubtype>(m_monsterSubtypes, getName());
+      return new Annotated.List<>(m_monsterSubtypes, getName());
 
-    Annotated.List<MonsterSubtype> combined =
-      new Annotated.List<MonsterSubtype>();
+    Annotated.List<MonsterSubtype> combined = new Annotated.List<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedMonsterSubtypes());
 
@@ -1746,6 +1748,23 @@ public class BaseMonster extends BaseEntry
     Annotated.List<String> combined = new Annotated.List<>();
     for (BaseEntry base : getBaseEntries())
       combined.add(((BaseMonster)base).getCombinedProficiencies());
+
+    return combined;
+  }
+
+  public boolean isQuadruped()
+  {
+    return m_quadruped;
+  }
+
+  public Annotated.Boolean isCombinedQuadruped()
+  {
+    if(m_quadruped)
+      return new Annotated.Boolean(true, getName());
+
+    Annotated.Boolean combined = new Annotated.Boolean();
+    for (BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).isCombinedQuadruped());
 
     return combined;
   }
@@ -3379,6 +3398,7 @@ public class BaseMonster extends BaseEntry
     m_possessions = inValues.use("possessions", m_possessions);
     m_goodSaves = inValues.use("good_saves", m_goodSaves, Save.PARSER);
     m_proficiencies = inValues.use("proficiency", m_proficiencies);
+    m_quadruped = inValues.use("quadruped", m_quadruped, Value.BOOLEAN_PARSER);
   }
 
   @Override
@@ -3572,6 +3592,9 @@ public class BaseMonster extends BaseEntry
     for(String proficiency : m_proficiencies)
       builder.addProficiency(proficiency);
 
+    if(m_quadruped)
+      builder.setQuadruped(true);
+
     BaseMonsterProto proto = builder.build();
     return proto;
   }
@@ -3743,6 +3766,9 @@ public class BaseMonster extends BaseEntry
 
     for(String proficiency : proto.getProficiencyList())
       m_proficiencies.add(proficiency);
+
+    if(proto.hasQuadruped())
+      m_quadruped = proto.getQuadruped();
 
     super.fromProto(proto.getBase());
   }

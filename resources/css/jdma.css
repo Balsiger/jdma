@@ -2877,13 +2877,33 @@ BODY.print
   font-family: celestia;
 }
 
-.character-sheet .title 
+.character-sheet .sheet-page
+{
+  width: 100%;
+  position: relative;
+}
+
+.character-sheet .sheet-row
+{
+  display: flex;
+  width: 100%;
+  position: relative;
+}
+
+.character-sheet .sheet-column
+{
+  flex: 1;
+  position: relative;
+}
+
+.character-sheet .title
 {
   background-color: black;
   width: 100%;
   color: white;
   padding: 10px 10px 2px 10px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
+  box-sizing: border-box;
 }
 
 .character-sheet .title .title-text
@@ -2919,7 +2939,7 @@ BODY.print
   width: 100%;
   color: white;
   padding: 10px 10px 2px 10px;
-  margin: 20px 0 20px 0;
+  margin: 0 0 10px 0;
   box-sizing: border-box;
 }
 
@@ -2944,7 +2964,12 @@ BODY.print
   margin-top: -19px;
 }
 
-.character-sheet .value-container 
+.character-sheet .block
+{
+  margin-bottom: 20px;
+}
+
+.character-sheet .value-container
 { 
   display: inline-block;
   padding: 0 5px;
@@ -2954,8 +2979,8 @@ BODY.print
 
 .character-sheet .value-container .value 
 {
-  font-size: 20px;
-  padding: 0 10px;
+  font-size: 12px;
+  padding: 5px 0 0 0;
   width: auto;
 }
 
@@ -2964,7 +2989,13 @@ BODY.print
   margin-top: 5px;
   border-top: 1px solid black;
   text-transform: uppercase; 
-  font-size: 12px;
+  font-size: 8px;
+  padding: 1px 0 0 0;
+}
+
+.character-sheet .ability .value-container .value-label
+{
+  font-size: 8px;
 }
 
 .character-sheet .value-container .center
@@ -2975,7 +3006,7 @@ BODY.print
 .character-sheet .value-container .value.boxed
 {
   border: 2px solid black;
-  padding: 15px;  
+  padding: 5px;
 }
 
 .character-sheet .value-container .value-label.boxed
@@ -2993,6 +3024,7 @@ BODY.print
 .character-sheet .value-container.prefixed 
 {
   display: flex;
+  padding-bottom: 5px;
 }
 
 .character-sheet .value-container .value-label.top
@@ -3003,6 +3035,7 @@ BODY.print
 .character-sheet .value-container .value-label.inside
 {
   top: 0;
+  margin-top: 0;
   position: absolute;
   z-index: 1;
 }
@@ -3021,8 +3054,9 @@ BODY.print
 
 .character-sheet .value-container .value-label.prefixed
 {
-  transform: uppercase;
   border: none;
+  font-weight: bold;
+  font-size: 10px;
 }
 
 .character-sheet .value-container .value.prefixed
@@ -3034,6 +3068,7 @@ BODY.print
 .character-sheet .ability
 {  
   vertical-align: baseline;
+  margin-bottom: 15px;
 }
 
 .character-sheet .two-line-label 
@@ -3042,24 +3077,24 @@ BODY.print
   display: inline-block;
   margin-right: 15px;
   vertical-align: top;
-  padding-top: 34px;
+  padding-top: 14px;
   width: 10%;
 }
 
 .character-sheet .two-line-label .top 
 {
-  font-size: 27px;
+  font-size: 17px;
   font-weight: bold;
 }
 
 .character-sheet .two-line-label .bottom
 {
-  font-size: 9px;
+  font-size: 7px;
 }
 
 .character-sheet .operator
 {
-  padding-top: 42px;
+  padding-top: 20px;
   display: inline-block;
   vertical-align: top;
 }
@@ -3075,12 +3110,31 @@ BODY.print
   vertical-align: top;
 }
 
-.character-sheet .group.ruler
+.character-sheet .group.boxed
 {
-  margin: 80px 10px 20px 10px;
-  border-left: 2px solid black;
-  height: 100%;
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.character-sheet .group.box .values.boxed
+{
+  flex: 1;
   box-sizing: border-box;
+}
+
+.character-sheet .sheet-column.vruler
+{
+  margin-right: 20px;
+}
+
+.character-sheet .sheet-column.vruler:after
+{
+  content: '';
+  position: absolute;
+  top: 60px;
+  right: -10px;
+  bottom: 30px;
+  border-right: 2px solid black;
 }
 
 .character-sheet .weapon
@@ -3098,8 +3152,8 @@ BODY.print
   border-left: 2px solid black;
   border-right: 2px solid black;
   border-bottom: 2px solid black;
-  padding: 20px;
-  margin-top: -20px;
+  padding: 10px 5px;
+  margin: -10px 0 0 0;
 }
 
 .character-sheet .hps
@@ -3112,7 +3166,7 @@ BODY.print
 {
   border: 1px solid black;
   border-radius: 3px;
-  padding: 3px;
+  padding: 2px;
   display: inline-block;
   margin: 2px;
   min-width: 15px;
@@ -3146,21 +3200,15 @@ BODY.print
 .character-sheet .saves
 {
   background-color: #eee;
-  width: 75%;
-  vertical-align: top;
   padding: 10px;
-  margin-right: 1%;
+  margin-right: 5px;
 }
 
 .character-sheet .box
 {
-  width: 21%;
-  height: 100%; 
   border: 2px solid black;
   padding: 5px;
   text-align: center;
-  box-sizing: border-box;
-  min-height: 263px;
 }
 
 .character-sheet .armors 
@@ -3171,7 +3219,8 @@ BODY.print
 
 .character-sheet .armors .armor .value-container .value.white
 {
-  padding: 20px 10px 10px 20px;
+  padding: 15px 10px 5px 10px;
+  margin-bottom: 3px;
 }
 
 .character-sheet .xp
@@ -3224,7 +3273,15 @@ BODY.print
 
 @media print
 {
-  .character-sheet .title-text 
+  .character-sheet .sheet-page
+  {
+    -webkit-print-color-adjust: exact;
+    width: 210mm;
+    height: 297mm;
+    outline: 1px solid orange;
+  }
+
+  .character-sheet .title-text
   {
     width: 325px !important;
     height: 40px !important;
@@ -3241,6 +3298,12 @@ BODY.print
     font-size: 10px !important;
     margin-left: 44px !important;
   }
+
+  .character-sheet .subtitle .subtitle-text.nologo {
+    text-align: center;
+    margin-left: 0 !important;
+    width: 100%;
+  }
   
   .character-sheet .subtitle .subtitle-logo
   {
@@ -3249,95 +3312,6 @@ BODY.print
     margin-top: -16px !important;
   }    
   
-  .character-sheet .ability .two-line-label
-  {
-    padding-top: 17px !important;
-  }
-  
-  .character-sheet .saves .two-line-label 
-  {
-    padding-top: 35px !important;
-  }
-   
-  .character-sheet .ability .top, 
-  .character-sheet .saves .top 
-  {
-    font-size: 13px !important;
-  }
-  
-  .character-sheet .operator 
-  {
-    padding-top: 23px;
-  }
-  
-  .character-sheet .value-label, 
-  .character-sheet .ability .bottom 
-  {
-    font-size: 4px !important;
-  }
-  
-  .character-sheet .value-label
-  {
-    margin-top: 2px !important;
-  }
-   
-  .character-sheet .value 
-  {
-    font-size: 10px !important;
-    padding: 2px 0 !important;
-  }
-   
-  .character-sheet .boxed
-  {
-    padding: 4px !important;
-  }
-   
-   .character-sheet .two-line-label 
-   {
-     margin-right: 5px !important;
-   }
-   
-   .character-sheet .value-label.top.center 
-   {
-     font-size: 8px !important;
-   }
-   
-   .character-sheet .saves .operator 
-   {
-     padding-top: 34px !important;
-   }
-   
-   .character-sheet .saves .value.center.white 
-   {
-     padding: 5px 10px !important;
-   }
-   
-   .character-sheet .box.inline
-   {
-     min-height: 188px !important;
-   }
-   
-   .character-sheet .count
-   {
-     min-width: 10px !important;
-     font-size: 7px;
-   }
-   
-   .character-sheet .weapon
-   {
-     padding: 0 !important;
-   }
-   
-   .character-sheet .group.ruler
-   {
-     height: 250px !important;
-   }
-   
-   .character-sheet .group .values.boxed 
-   {
-     height: 280px !important;
-   }
-
    #footer-spacer {
      display: none;
    }

@@ -265,6 +265,76 @@ public abstract class Annotated<V>
     }
   }
 
+  /** An annotated boolean value. */
+  public static class Boolean extends Annotated<Optional<java.lang.Boolean>>
+  {
+    /** Create an undefined annotated boolean. */
+    public Boolean()
+    {
+      m_value = Optional.absent();
+    }
+
+    /**
+     * Create the annotated integer with an intial value.
+     *
+     * @param inValue the initial value
+     * @param inSource the source of the value
+     */
+    public Boolean(boolean inValue, java.lang.String inSource)
+    {
+      add(inValue, inSource);
+
+      m_value = Optional.of(inValue);
+    }
+
+    /**
+     * Create an annotated integer from existing sourced values.
+     *
+     * @param inValue the final value
+     * @param inSources the values and source that contributed the final value
+     */
+    public Boolean(boolean inValue, ValueSources inSources)
+    {
+      super(inSources);
+
+      m_value = Optional.of(inValue);
+    }
+
+    /** The annotated value, if any. */
+    private Optional<java.lang.Boolean> m_value = Optional.absent();
+
+    @Override
+    protected void add(Optional<java.lang.Boolean> inValue)
+    {
+      if(!inValue.isPresent())
+        return;
+
+      if(m_value.isPresent())
+        m_value = Optional.of(m_value.get() || inValue.get());
+      else
+        m_value = inValue;
+    }
+
+    /**
+     * Add a new value.
+     *
+     * @param inValue the value to add
+     * @param inSource the source of the value
+     */
+    public void add(boolean inValue, java.lang.String inSource)
+    {
+      add(Optional.of(inValue));
+
+      super.add("" + inValue, inSource);
+    }
+
+    @Override
+    public Optional<java.lang.Boolean> get()
+    {
+      return m_value;
+    }
+  }
+
   /** An annotated Integer value. */
   public static class Integer extends Annotated<Optional<java.lang.Integer>>
   {
