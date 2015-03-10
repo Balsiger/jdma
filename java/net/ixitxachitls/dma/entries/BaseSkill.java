@@ -31,6 +31,8 @@ import com.google.common.collect.Multimap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
@@ -451,6 +453,13 @@ public class BaseSkill extends BaseEntry
     {
       Log.warning("could not properly parse proto: " + e);
     }
+  }
+
+  public static List<BaseSkill> allSkills()
+  {
+    return DMADataFactory.get().getEntries(BaseSkill.TYPE,
+                                           Optional.<EntryKey>absent(),
+                                           0, 1000);
   }
 
   //---------------------------------------------------------------------------

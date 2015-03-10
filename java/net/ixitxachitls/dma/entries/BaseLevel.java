@@ -926,5 +926,14 @@ public class BaseLevel extends BaseEntry
       Log.warning("could not properly parse proto: " + e);
     }
   }
+
+  public boolean isClassSkill(String inName)
+  {
+    for(Reference<BaseSkill> skill : m_classSkills)
+      if(skill.getName().equalsIgnoreCase(inName))
+        return true;
+
+    return false;
+  }
 }
 

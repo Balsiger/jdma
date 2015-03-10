@@ -544,6 +544,12 @@
           {/call}
         {/param}
       {/call}
+      {call dma.edit.value_flag}
+        {param name: 'monetary' /}
+        {param label: 'Monetary' /}
+        {param value: $entry.monetary /}
+        {param color: '#008' /}
+      {/call}
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Wear' /}
@@ -716,7 +722,6 @@
         {param label: 'Ammunition' /}
         {param value: $entry.ammunition /}
         {param color: '#008' /}
-        {param autocomplete: 'base item/name' /}
       {/call}
       {call dma.edit.value_list}
         {param name: 'weapon.ammunition_needed' /}

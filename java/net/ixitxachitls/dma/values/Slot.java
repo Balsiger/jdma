@@ -59,11 +59,13 @@ public enum Slot implements Named, net.ixitxachitls.dma.values.enums.Short,
   /** On a hand. */
   HAND("Hand", "Ha", BaseWearableProto.Slot.HAND),
   /** On a finger. */
-  FINGER("Finger", "F", BaseWearableProto.Slot.FINGER),
+  FINGER("Finger", "Fi", BaseWearableProto.Slot.FINGER),
   /** On one or both wrists. */
   WRISTS("Wrists", "Wr", BaseWearableProto.Slot.WRISTS),
   /** One one or both of the feet. */
-  FEET("Feet", "F", BaseWearableProto.Slot.FEET);
+  FEET("Feet", "Fe", BaseWearableProto.Slot.FEET),
+  /** Over the eyes. */
+  EYES("Eyes", "E", BaseWearableProto.Slot.EYES);
 
   /** The value's name. */
   private String m_name;

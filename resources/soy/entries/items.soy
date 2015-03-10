@@ -22,7 +22,7 @@
 /*
  * Templates for products
  */
-{namespace dma.entries.items autoescape="deprecated-contextual"}
+{namespace dma.entries.items}
 
 /**
  * Show the given entry in standard format.
@@ -44,9 +44,9 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#008' /}
-    {param title}
+    {param title kind="html"}
       {call dma.entry._new_title}
-        {param title}
+        {param title kind="html"}
           {call .name}
             {param entry: $entry /}
           {/call}
@@ -54,11 +54,11 @@
         {param color: '#008' /}
       {/call}      
     {/param}
-    {param values}            
+    {param values kind="html"}
       {if length($entry.baseNames)}
         {call dma.entry.value}
           {param label: 'Base' /}
-          {param value}
+          {param value kind="html"}
             {foreach $base in $entry.baseNames}
               {call dma.page.link}
                 {param text: $base /}
@@ -73,7 +73,7 @@
       {if $entry.parent.present}
         {call dma.entry.value}
           {param label: 'Parent' /}
-          {param value}
+          {param value kind="html"}
             {call dma.page.link}
               {param url: $entry.campaign.path + '/' + $entry.parent /}
               {param text: $entry.parent /}
@@ -84,7 +84,7 @@
       {/if} 
       {call dma.entry.value}
         {param label: 'HP' /}
-        {param value}
+        {param value kind="html"}
          {$entry.HP} (max {annotate($entry.combined_max_HP)})
         {/param}
         {param color: '#008' /}
@@ -116,7 +116,7 @@
       {if $entry.multiple.present}
         {call dma.entry.value}
           {param label: 'Multiple' /}
-          {param value}
+          {param value kind="html"}
             {$entry.multiple} {annotate($entry.combined_count_unit)}
           {/param}
           {param color: '#008' /}
@@ -132,7 +132,7 @@
       {if $entry.timed}
         {call dma.entry.value}
           {param label: 'Timed' /}
-          {param value}
+          {param value kind="html"}
             {$entry.time_left} of {annotate($entry.combined_timed)}
           {/param}
           {param color: '#008' /}
@@ -142,7 +142,7 @@
           {call dma.entry.value}
             {param label: 'Contents' /}
             {param color: '#008' /}
-            {param value}
+            {param value kind="html"}
               {foreach $item in $entry.contents}
                 {call .reference}
                   {param entry: $item /}
@@ -197,7 +197,7 @@
     {param pagesize: $pagesize /}
     {param size: $entries ? length($entries) : 0 /}
     {param titles: [ 'Name', 'DM'] /}
-    {param entries}
+    {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
           {call dma.entry.newListEntry}
@@ -225,7 +225,7 @@
     {param type: 'product' /}
     {param id: $id /}
     {param create: $create /}
-    {param values}
+    {param values kind="html"}
       {call dma.edit.value}
         {param name: 'name' /}
         {param label: 'Name' /}
@@ -302,7 +302,7 @@
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Count' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_input}
             {param name: 'multiuse' /}
             {param value: $entry.counted ? $entry.multiuse : '' /}
@@ -322,7 +322,7 @@
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Time Left' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_input}
             {param name: 'time_left' /}
             {param value: $entry.time_left.present ? $entry.time_left : '' /}
@@ -759,4 +759,21 @@
   </a>
 {/template}
 
+/**
+ * Format the item as a name with a link.
+ *
+ * @param item the item to format
+ */
+{template .counted_reference}
+  {call dma.entries.items.reference}
+    {param entry: $item /}
+  {/call}
+
+  {if $item.multiuse.present and $item.multiuse.integer > 1}
+    {sp}{$item.multiuse} {annotate($item.combined_count_unit)}
+  {/if}
+  {if $item.multiple.present and $item.multiple.integer > 1}
+    {sp}x {$item.multiple}
+  {/if}
+{/template}
 

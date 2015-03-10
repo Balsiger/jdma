@@ -22,8 +22,11 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.List;
+
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
 import net.ixitxachitls.dma.values.Values;
 
@@ -46,6 +49,43 @@ public class Skill extends NestedEntry
 
   /** The number of ranks in the skill .*/
   protected int m_ranks;
+
+  /** The base level to this level. */
+  private Optional<Optional<BaseSkill>> m_base = Optional.absent();
+
+  public boolean isUntrained()
+  {
+    Optional<BaseSkill> base = getBase();
+    if(!base.isPresent())
+      return false;
+
+    return base.get().isUntrained();
+  }
+
+  public List<String> getAvailableSkills()
+  {
+    return DMADataFactory.get().getIDs(BaseSkill.TYPE,
+                                       Optional.<EntryKey>absent());
+  }
+
+  /**
+   * Get the base level to this level.
+   *
+   * @return the base skill
+   */
+  public Optional<BaseSkill> getBase()
+  {
+    if(!m_base.isPresent())
+      m_base = Optional.of(DMADataFactory.get().<BaseSkill>getEntry
+            (new EntryKey(m_name, BaseLevel.TYPE)));
+
+    return m_base.get();
+  }
+
+  public int getRanks()
+  {
+    return m_ranks;
+  }
 
   @Override
   public void set(Values inValues)

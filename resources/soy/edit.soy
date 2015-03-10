@@ -22,22 +22,19 @@
 /*
  * The templates for editing values.
  */
-{namespace dma.edit autoescape="deprecated-contextual"}
+{namespace dma.edit}
 
-/** 
- * The editable card for an entry.
- * 
- * @param entry  The entry to edit
- * @param type   The type of entry edited
- * @param id     The id of the card.
- * @param values The editable value content
- * @param create Whether to create a new entry.
- */
+/** The editable card for an entry. */
 {template .entry}
+  {@param entry: [key: string]}
+  {@param type: string}
+  {@param id: string}
+  {@param values: html}
+  {@param create: bool}
   <div class="edit {$type}" id="{escape($id)}">
     <div class="scroll">
       <div class="values">
-        {$values |noescape}
+        {$values}
       </div>
     
       <div class="actions-spacer"></div>
@@ -52,39 +49,33 @@
   </div>  
 {/template}
 
-/**
- * An editable value.
- * 
- * @param label    The label text.
- * @param value    The value contents.
- * @param color    The decoration color.
- */
+/** An editable value. */
 {template .generic_value}
+  {@param label: string}
+  {@param value: any}
+  {@param color: string}
   <div class="value">
     {call .label}
       {param text: $label /}
       {param color: $color /}
     {/call}
-    {$value |noescape}
+    {$value}
   </div>
 {/template}
 
-/**
- * An editable value.
- * 
- * @param name     The name of the value.
- * @param label    The label text.
- * @param value    The value contents.
- * @param validate The type of validation to be done.
- * @param color    The decoration color.
- */
+/** An editable value. */
 {template .value}
+  {@param name: string}
+  {@param label: string}
+  {@param value: any}
+  {@param validate: string}
+  {@param color: string}
   {call .generic_value}
     {param label: $label /}
     {param color: $color /}
-    {param value}
+    {param value kind="html"}
       {call .field}
-        {param markup}
+        {param markup kind="html"}
           {call .field_input}
             {param name: $name /}
             {param value: $value /}
@@ -96,20 +87,17 @@
   {/call}
 {/template}
 
-/**
- * An editable multiline text value.
- * 
- * @param name     The name of the value.
- * @param label    The label text.
- * @param value    The value contents.
- * @param validate The type of validation to be done.
- * @param color    The decoration color.
- */
+/** An editable multiline text value. */
 {template .value_text}
+  {@param name: string}
+  {@param label: string}
+  {@param value: any}
+  {@param validate: string}
+  {@param color: string}
   {call .generic_value}
     {param label: $label /}
     {param color: $color /}
-    {param value}
+    {param value kind="html"}
       {call .field_text}
         {param name: $name /}
         {param value: $value /}
@@ -119,20 +107,17 @@
     {/call}
 {/template}
 
-/**
- * An editable selection value.
- *
- * @param name     The name of the value.
- * @param label    The label text.
- * @param value    The value contents.
- * @param choices  The possible chocies.
- * @param color    The decoration color.
- */
+/** An editable selection value. */
 {template .value_selection}
+  {@param name: string}
+  {@param label: string}
+  {@param value: any}
+  {@param choices: list<string>}
+  {@param color: string}
   {call .generic_value}
     {param label: $label /}
     {param color: $color /}
-    {param value}
+    {param value kind="html"}
       {call .field_selection}
         {param name: $name /}
         {param value: $value /}
@@ -142,19 +127,16 @@
   {/call}
 {/template}
 
-/**
- * An editable flag value.
- *
- * @param name     The name of the value.
- * @param label    The label text.
- * @param value    The value contents.
- * @param color    The decoration color.
- */
+/** An editable flag value. */
 {template .value_flag}
+  {@param name: string}
+  {@param label: string}
+  {@param value: any}
+  {@param color: string}
   {call .generic_value}
     {param label: $label /}
     {param color: $color /}
-    {param value}
+    {param value kind="html"}
       {call .field_flag}
         {param name: $name /}
         {param value: $value /}
@@ -163,21 +145,18 @@
   {/call}
 {/template}
 
-/**
- * An editable list value.
- * 
- * @param name     The name of the value.
- * @param label    The label text.
- * @param values   The value contents.
- * @param validate The validation for values.
- * @param color    The decoration color.
- * @param? autocomplete the url for autocompleting this field
- */
+/** An editable list value. */
 {template .value_list}
+  {@param name: string}
+  {@param label: string}
+  {@param values: list<html>}
+  {@param validate: string}
+  {@param color: string}
+  {@param? autocomplete: string}
   {call .generic_value}
     {param label: $label /}
     {param color: $color /}
-    {param value}
+    {param value kind="html"}
       {call .field_list}
         {param name: $name /}
         {param values: $values /}
@@ -188,13 +167,10 @@
   {/call}
 {/template}
 
-/**
- * The name for an editable value.
- * 
- * @param text The label text.
- * @param color The color of the decoration
- */
+/** The name for an editable value. */
 {template .label}
+  {@param text: string}
+  {@param color: string}
   <div class="label">
     <div class="label-text">
       {$text}:
@@ -206,31 +182,25 @@
   </div>
 {/template}
 
-/**
- * Format a field for editing.
- * 
- * @param markup the markup for the field
- * @param? class  the class for the field, if any
- */
+/** Format a field for editing. */
 {template .field}
+  {@param markup: html}
+  {@param? class: string}
   <div class="field{if $class} {$class}{/if}">
-    {$markup |noescape}
+    {$markup}
   </div>
 {/template}
 
-/**
- * The field for editing a simple value.
- * 
- * @param name     The name of the value.
- * @param value    The value contents.
- * @param validate The type of validation to be done.
- * @param? inList  Is the value part of a list of values
- * @param? class   special classes to set 
- * @param? caption special label to set
- * @param? autocomplete the url for autocompleting this field
- * @param? width        the width style of the field
- */
+/** The field for editing a simple value. */
 {template .field_input}
+  {@param name: string}
+  {@param value: any}
+  {@param validate: string}
+  {@param? inList: bool}
+  {@param? class: string}
+  {@param? caption: string}
+  {@param? autocomplete: string}
+  {@param? width: string}
   <div class="input-wrapper field{if $class} {$class}{/if}
               {if $width} width{/if}"
        {if $width} style="width: {$width} !important;"{/if}>
@@ -247,16 +217,13 @@
   </div>
 {/template}
 
-/**
- * The field for editing a multiline text value.
- * 
- * @param name     The name of the value.
- * @param value    The value contents.
- * @param validate The type of validation to be done.
- */
+/** The field for editing a multiline text value. */
 {template .field_text}
+  {@param name: string}
+  {@param value: any}
+  {@param validate: string}
   {call .field}
-    {param markup}
+    {param markup kind="html"}
       <textarea class='field' name='{$name}' rows="10" 
                 validate='{$validate}' 
                 onkeyup='window.form.validate(this)'>
@@ -266,20 +233,17 @@
   {/call}
 {/template}
 
-/**
- * The field for editing a selection value.
- *
- * @param name     The name of the value.
- * @param value    The value contents.
- * @param choices  The possible chocies to select from.
- * @param? class   The class to use for this field
- * @param? width   the width of the field
- */
+/** The field for editing a selection value. */
 {template .field_selection}
+  {@param name: string}
+  {@param value: any}
+  {@param choices: list<string>}
+  {@param? class: string}
+  {@param? width: string}
   {call .field}
     {param class: $class /}
     {param width: $width /}
-    {param markup}
+    {param markup kind="html"}
       <select name="{$name}" onkeyup="window.form.validate(this)">
         {foreach $choice in $choices}
           <option value="{$choice}"{if $choice == $value} selected{/if}>
@@ -291,19 +255,16 @@
   {/call}
 {/template}
 
-/**
- * The field for editing a flag value.
- *
- * @param name     The name of the value.
- * @param value    The value contents.
- * @param? class   The class to use for this field
- * @param? width   the width of the field
- */
+/** The field for editing a flag value. */
 {template .field_flag}
+  {@param name: string}
+  {@param value: any}
+  {@param? class: string}
+  {@param? width: string}
   {call .field}
     {param class: $class /}
     {param width: $width /}
-    {param markup}
+    {param markup kind="html"}
       <input name="{$name}"
         onclick="this.checked ? this.value='true' : this.value='false'"
         type="checkbox" {if $value}checked{/if}/>
@@ -311,17 +272,14 @@
   {/call}
 {/template}
 
-/**
- * The field for editing a list value.
- * 
- * @param name     The name of the value.
- * @param values   The value contents.
- * @param validate How the values are validated
- * @param? autocomplete the url for autocompleting this field
- */
+/** The field for editing a list value. */
 {template .field_list}
+  {@param name: string}
+  {@param values: list<html>}
+  {@param validate: string}
+  {@param? autocomplete: string}
   {call .field}
-    {param markup}
+    {param markup kind="html"}
       {foreach $value in $values}
         {call .field_list_input_line}
           {param name: $name /}
@@ -341,14 +299,11 @@
   {/call}
 {/template}
 
-/**
- * A list field value.
- * 
- * @param field the markup for the edit field
- */
+/** A list field value. */
 {template .field_list_line}
+  {@param field: html}
   <div class="line">
-    {$field |noescape}
+    {$field}
     <div class="sprite edit-list-add" title="Add"
          onclick="edit.insertLine(this.parentNode)"></div>
     <div class="sprite edit-list-remove" title="Remove"
@@ -356,17 +311,14 @@
   </div>  
 {/template}
 
-/**
- * A list field value.
- * 
- * @param name the name of the field
- * @param value the value of the field
- * @param validate how to validate the field 
- * @param? autocomplete the url for autocompleting this field
- */
+/** A list field value. */
 {template .field_list_input_line}
+  {@param name: string}
+  {@param value: any}
+  {@param validate: string}
+  {@param? autocomplete: string}
   {call .field_list_line}
-    {param field}
+    {param field kind="html"}
       {call .field_input}
         {param name: $name /}
         {param value: $value /}
@@ -378,15 +330,12 @@
   {/call}
 {/template}
 
-/**
- * Format a list line with multiple values.
- * 
- * @param values the information about the values to edit 
- * @param? class  the class to use for the fields
- */
+/** Format a list line with multiple values. */
 {template .field_list_multiple}
+  {@param values: ?}
+  {@param? class: string}
   {call dma.edit.field_list_line}
-    {param field}
+    {param field kind="html"}
       {foreach $value in $values}
         {if $value.type and $value.type == 'selection'}
           {call .field_selection}
@@ -411,14 +360,11 @@
   {/call}
 {/template}
 
-/**
- * The actions when editing.
- * 
- * @param id      the id of the element with all the fields.
- * @param key     the key to the entry to save
- * @param create  whether to create a new entry or not
- */
+/** The actions when editing. */
 {template .actions}
+  {@param id: string}
+  {@param key: string}
+  {@param create: bool}
   <div class="actions">
     <div class="buttons">
       <div class="move">
@@ -426,7 +372,7 @@
              onclick="edit.save
                         ('{$key}'.replace(/\/[^\/]*$/, '/' + 
                                           $('#{$id} input[name=name]').val()), 
-                         '{$id}', {$create})">
+                         '{$id}', {if $create}true{else}false{/if})">
         </div>
         <div class="action sprite large revert" title="Revert"
              onclick="edit.cancel('{$id}')">

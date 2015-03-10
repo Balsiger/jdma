@@ -164,4 +164,12 @@ public class Level extends NestedEntry
 
     return level;
   }
+
+  public boolean isClassSkill(String inName)
+  {
+    if(!getBase().isPresent())
+      return false;
+
+    return getBase().get().isClassSkill(inName);
+  }
 }

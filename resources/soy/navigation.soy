@@ -19,7 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-{namespace dma.navigation autoescape="deprecated-contextual"}
+{namespace dma.navigation}
 
 // @function isList 1
 
@@ -33,9 +33,10 @@
     $('#subnavigation').html('
     {foreach $entry in $entries}
       &raquo;{sp}
-      <a href="{$entry.url|escapeJs}" class="navigation-link"
-         onclick="util.link(event, \'{$entry.url|escapeJs}\')">
-        {$entry.label|escapeJs}
+      <a href="{let $foo kind="text"}{$entry.url |escapeJs}{/let}{$foo}"
+         class="navigation-link"
+         onclick="util.link(event, \'{let $foo2 kind="text"}{$entry.url |escapeJs}{/let}{$foo2}\')">
+        {let $foo3 kind="text"}{$entry.label |escapeJs}{/let}{$foo3}
       </a>{sp}
     {/foreach}
     ');
@@ -53,20 +54,21 @@
     $('#subnavigation').html('
     {foreach $navEntry in $entry.navigation}
       &raquo;{sp}
-      <a href="{$navEntry.path|escapeJs}" class="navigation-link"
-         onclick="util.link(event, \'{$navEntry.path|escapeJs}\')">
+      <a href="{let $foo kind="text"}{$navEntry.path |escapeJs}{/let}{$foo}"
+         class="navigation-link"
+         onclick="util.link(event, \'{let $foo2 kind="text"}{$navEntry.path |escapeJs}{/let}{$foo2}\')">
         {if def($navEntry.dmName)}
           {if $ij.isDM}
             {if $navEntry.dmName}
-              {$navEntry.dmName|escapeJs} ({$navEntry.name|escapeJs})
+              {$navEntry.dmName} ({$navEntry.name})
             {else}
-              {$navEntry.name|escapeJs}
+              {$navEntry.name}
             {/if}
           {else}
             {if $navEntry.playerName}
-              {$navEntry.playerName|escapeJs} ({$navEntry.name|escapeJs})
+              {$navEntry.playerName} ({$navEntry.name})
             {else}
-              {$navEntry.name|escapeJs}
+              {$navEntry.name}
             {/if}
           {/if}
         {else}

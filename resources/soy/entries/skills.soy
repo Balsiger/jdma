@@ -20,27 +20,27 @@
  *****************************************************************************/
 
 /*
- * Templates for levels.
+ * Templates for skills.
  */
-{namespace dma.entries.levels}
+{namespace dma.entries.skills}
 
 /**
- * Editiing the base level.
+ * Editing the skill.
  *
- * @param? entry The level to edit.
+ * @param? entry The skill to edit.
  */
 {template .edit}
   {call dma.edit.field_selection}
-    {param name: 'level.name' /}
+    {param name: 'skill.name' /}
     {param caption: 'Name' /}
     {param value: $entry ? $entry.name : '' /}
-    {param choices: $ij.Level.available_levels /}
+    {param choices: $ij.Level.available_skill /}
     {param class: 'narrow' /}
   {/call}
   {call dma.edit.field_input}
-    {param name: 'level.hp' /}
-    {param caption: 'HP' /}
-    {param value: $entry ? $entry.HP : '' /}
+    {param name: 'level.ranks' /}
+    {param caption: 'Ranks' /}
+    {param value: $entry ? $entry.ranks : '' /}
     {param validate: 'number' /}
     {param width: '25%' /}
   {/call}

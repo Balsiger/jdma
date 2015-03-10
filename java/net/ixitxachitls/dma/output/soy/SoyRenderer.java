@@ -83,7 +83,7 @@ public class SoyRenderer
                                  "entries/baselevels", "entries/levels",
                                  "entries/basefeats", "entries/feats",
 
-                                 "entries/baseskills",
+                                 "entries/baseskills", "entries/skills",
                                  "entries/baseencounters",
                                  "entries/basespells",
                                  "entries/basemonsters");

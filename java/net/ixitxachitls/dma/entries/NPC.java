@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.SortedMultiset;
 import com.google.common.collect.TreeMultiset;
@@ -369,61 +370,19 @@ public class NPC extends Monster
     return hp;
   }
 
-  /*
-  @SuppressWarnings("unchecked")
-  @Override
-  protected <T extends Value<T>> void collect(String inName,
-                                              Combined<T> ioCombined)
+  public int maxSkillRanks()
   {
-    super.collect(inName, ioCombined);
-
-    Multiset<String> levels = HashMultiset.create();
-    for(Reference<BaseLevel> level : m_levels)
-    {
-      / *
-      levels.add(level.getName());
-      if(level.hasEntry())
-         level.getEntry().collect(levels.count(level.getName()), inName,
-                                  ioCombined,
-                                  level.getName() + " "
-                                  + levels.count(level.getName()));
-                                  * /
-    }
-
-    switch(inName)
-    {
-      case "hit dice":
-        / *
-        for(Reference<BaseLevel> level : m_levels)
-          if(level.hasEntry())
-          {
-            BaseLevel baseLevel = level.getEntry();
-            ioCombined.addValue((T)baseLevel.getHitDie(), baseLevel,
-                                baseLevel.getAbbreviation());
-          }
-          * /
-
-        break;
-
-      default:
-        break;
-    }
+    return BaseLevel.maxSkillRanks(getEffectiveCharacterLevel());
   }
-  */
 
-  /*
-  @Override
-  public int getLevel()
+  public boolean isClassSkill(String inName)
   {
-    int totalAdjustment = 0;
-    Combined<Union> adjustments = collect("level adjustment");
-    for (Union adjustment : adjustments.valuesOnly())
-      if(adjustment.get() instanceof Number)
-        totalAdjustment += ((Number)adjustment.get()).get();
+    for(Level level : m_levels)
+      if(level.isClassSkill(inName))
+        return true;
 
-    return m_levels.size() + totalAdjustment;
+    return false;
   }
-  */
 
   @Override
   public void set(Values inValues)
@@ -437,13 +396,13 @@ public class NPC extends Monster
     m_looks = inValues.use("looks", m_looks);
     m_levels = inValues.useEntries("level", m_levels,
                                    new NestedEntry.Creator<Level>()
-    {
-      @Override
-      public Level create()
-      {
-        return new Level();
-      }
-    });
+                                   {
+                                     @Override
+                                     public Level create()
+                                     {
+                                       return new Level();
+                                     }
+                                   });
   }
 
   @Override

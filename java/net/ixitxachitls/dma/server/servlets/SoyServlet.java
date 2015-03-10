@@ -37,6 +37,7 @@ import com.google.template.soy.data.SoyData;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.BaseSkill;
 import net.ixitxachitls.dma.entries.Level;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
@@ -60,6 +61,7 @@ import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.dma.values.enums.Organization;
 import net.ixitxachitls.dma.values.enums.Save;
 import net.ixitxachitls.dma.values.enums.SkillModifier;
+import net.ixitxachitls.dma.values.enums.SkillRestriction;
 import net.ixitxachitls.dma.values.enums.SpellClass;
 import net.ixitxachitls.dma.values.enums.SpellComponent;
 import net.ixitxachitls.dma.values.enums.SpellDescriptor;
@@ -262,10 +264,13 @@ public class SoyServlet extends DMAServlet
        "LanguageModifier",
        new SoyValue("LanguageModifier", LanguageModifier.class),
        "Maneuverability",
+       new SoyValue("Maneuverability", Maneuverability.class),
        "Save", new SoyValue("Save", Save.class),
        "SkillModifier", new SoyValue("SkillModifier", SkillModifier.class),
-       new SoyValue("Maneuverability", Maneuverability.class),
-       "Immunity", new SoyValue("Immunity", Immunity.class));
+       "SkillRestriction",
+       new SoyValue("SkillRestriction", SkillRestriction.class),
+       "Immunity", new SoyValue("Immunity", Immunity.class),
+       "BaseSkill", new SoyValue("BaseSkill", BaseSkill.class));
 
     tracer.done();
     return map;

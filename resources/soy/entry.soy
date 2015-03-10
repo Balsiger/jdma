@@ -23,7 +23,7 @@
  * The basic templates for rendering entries.
  */
 
-{namespace dma.entry autoescape="deprecated-noautoescape"}
+{namespace dma.entry}
 
 // @function def 1 0
 // @function entry 1 0
@@ -148,14 +148,14 @@
   <div class="toolbar">
     <div class="actions">
       <div class="action sprite large edit"
-           onclick="edit.show('{$entry.name|escapeJsString}', 
-                              '{$entry.path|escapeJsString}', 
-                'edit-{$entry.type|css}-{escape($entry.name)|escapeJsString}')">
+           onclick="edit.show('{$entry.name}',
+                              '{$entry.path}',
+                'edit-{let $foo3 kind="text"}{$entry.type |css}{/let}{$foo3}-{escape($entry.name)}')">
       </div>
       <div class="action sprite large delete"
            onclick="if(confirm('Do you really want to delete this?'))
                       util.ajax('/actions/remove',
-                               {lb} key: '{$entry.key |escapeJs}' {rb},
+                               {lb} key: '{let $foo5 kind="text"}{$entry.key |escapeJsString}{/let}{$foo5}' {rb},
                                null, true);">
       </div> 
     </div>
@@ -200,7 +200,7 @@
       {param url: $entry.main_file.path /}
       {param tooltip: 'Main' /}
       {param class: 'image-link' /}
-      {param text}
+      {param text kind="html"}
         <img src="{$entry.main_file.icon}" alt="Main" 
           class="_new_ _new_image _new_main" />
       {/param}
@@ -210,7 +210,7 @@
       {param url: '#' /}
       {param tooltip: 'Main' /}
       {param class: 'image-link' /}
-      {param text}
+      {param text kind="html"}
         <img src="/icons/{$entry.type.multilink}-dummy.png" alt="Main"
         class="_new_ _new_image _new_main"
         {if $size}
@@ -233,7 +233,7 @@
     {param url: $file.path /}
     {param tooltip: $file.name /}
     {param class: 'image-link' /}
-    {param text}
+    {param text kind="html"}
       <img src="{$file.icon}"
         alt="{$file.name}" class="_new_ _new_image other" id="file=-other" />
     {/param}
@@ -554,28 +554,6 @@
 {/template}
 
 /**
- * The container for printing entries.
- *
- * @param entry the entry to format
- * @param first the first entry available, if any
- * @param previous the previous entry, if any
- * @param list the overview of all entries
- * @param next the next entry, if any
- * @param last the last entry, if any
- *
- */
-{template .printcontainer}
-  {delcall dma.entry.print}
-    {param entry: $entry /}
-    {param first: $first /}
-    {param previous: $previous /}
-    {param list: $list /}
-    {param next: $next /}
-    {param last: $last /}
-  {/delcall}
-{/template}
-
-/**
  * The container for entry summaries.
  *
  * @param entry the entry to format
@@ -586,28 +564,6 @@
     {param entry: $entry /}
   {/delcall}
 {/template}
-
-/**
- * The template for printing entries.
- *
- * @param entry the entry to format
- * @param first the first entry available, if any
- * @param previous the previous entry, if any
- * @param list the overview of all entries
- * @param next the next entry, if any
- * @param last the last entry, if any
- *
- */
-{deltemplate dma.entry.print}
-  {call .container}
-    {param entry: $entry /}
-    {param first: $first /}
-    {param previous: $previous /}
-    {param list: $list /}
-    {param next: $next /}
-    {param last: $last /}
-  {/call}
-{/deltemplate}
 
 /**
  * The template for an entry summary.
@@ -672,7 +628,7 @@
   {call dma.page.link}
     {param url: $url /}
     {param tooltip: $tooltip /}
-    {param text}
+    {param text kind="html"}
       <div class="{$style} sprite{if not $url} disabled{/if}"></div>
     {/param}
   {/call}
@@ -686,10 +642,10 @@
  */
 {template .create}
   {call dma.errors.error}
-    {param title}
+    {param title kind="html"}
       Entry Not Found
     {/param}
-    {param message}
+    {param message kind="html"}
       The entry '{$id}' typed '{$type}' could not be found.
     {/param}
   {/call}
@@ -714,172 +670,12 @@
 {/deltemplate}
 
 /**
- * The default contents part of the page.
- *
- * @param entry The entry rendered.
- */
-{template .default_page}
-  {if $entry.isBase}
-    {call dma.navigation.navigation}
-      {param entries:
-          [[ 'label': $entry.type.link, 'url': '/' + $entry.type.multilink ],
-          [ 'label': $entry.name, 'url': $entry.path ]] /}
-    {/call}
-  {else}
-    {call dma.navigation.entryNavigation}
-      {param entry: $entry /}
-    {/call}
-  {/if}
-  <div class="leading">
-    {delcall dma.entry.files.main}
-      {param entry: $entry /}
-    {/delcall}
-    <div class="entrytitle">
-      <div class="title-actions">
-        {if $ij.isDM}
-          <script>
-            gui.addAction('delete', 'Delete',
-                           function() {lb}
-                               if(confirm('Do you really want to delete this?'))
-                                 util.ajax('/actions/remove',
-                                   {lb} key: '{$entry.key |escapeJs}' {rb},
-                                   null,
-                                   true);
-                           {rb});
-            gui.addAction('edit', 'Edit', 
-                          function() {lb}
-                            edit.show('{$entry.name}', '{$entry.path}', 
-                                      'edit-{$entry.type.css}-{escape($entry.name)}');
-                          {rb});
-          </script>
-          {call dma.page.link}
-            {param url: $entry.name + '.summary' /}
-            {param text}
-              <div class="caption-container">
-                <div class="summary sprite large"></div>
-                <div>summary</div>
-              </div>
-            {/param}
-          {/call}
-          {call dma.page.link}
-            {param url: $entry.name + '.dma' /}
-            {param text}
-              <div class="caption-container">
-                <div class="document sprite large"></div>
-                <div>dma</div>
-              </div>
-            {/param}
-          {/call}
-        {/if}
-        {call dma.page.link}
-          {param url: $entry.name + '.print' /}
-          {param text}
-            <div class="caption-container">
-              <div class="print sprite large"></div>
-              <div>print</div>
-            </div>
-          {/param}
-        {/call}
-      </div>
-      {delcall dma.entry.title}
-        {param entry: $entry /}
-      {/delcall}
-      <div class="description">
-        {call dma.value.withbase}
-          {param canEdit: $ij.isDM /}
-          {param entry: $entry /}
-          {param value: $entry.description /}
-          {param ifempty: '(no description)' /}
-        {/call}
-      </div>
-      <div class="short-description">
-        {call dma.value.withbase}
-          {param canEdit: $ij.isDM /}
-          {param entry: $entry /}
-          {param value: $entry.short_description /}
-          {param ifempty: '(no short description)' /}
-        {/call}
-      </div>
-    </div>
-  </div>
-  <div id="files" class="files">
-    {call dma.value.editable}
-      {param canEdit: $ij.isDM /}
-      {param name: 'files' /}
-      {param value: 'files' /}
-      {param key: $entry.key /}
-      {param type: 'files' /}
-      {param content}
-        <div id="files" class="files">
-          {foreach $file in $entry.files.other}
-            <div class="file">
-              <img src="{if $file.type == 'application/pdf'}/icons/pdf.png
-                        {else}{$file.icon}=s50{/if}" alt="{$file.name}"
-                   class="image file"
-                   onclick="util.link(event, '{$file.icon}')" />
-            </div>
-          {ifempty}
-            <div class="nofiles"></div>
-          {/foreach}
-        </div>
-      {/param}
-    {/call}
-  </div>
-  <div class="values clear">
-    {delcall dma.entry.values}
-      {param entry: $entry /}
-    {/delcall}
-  </div>
-{/template}
-
-/**
  * The values for the entry.
  *
  * @param entry The entry rendered
  */
 {deltemplate dma.entry.values}
   No values in this entry ({$entry.name}).
-{/deltemplate}
-
-/**
- * The main image of an entry.
- *
- * @param entry The entry formatted.
- * @param? size The size of the image
- */
-{deltemplate dma.entry.files.main_deprecated}
-  {call dma.value.editable}
-    {param canEdit: $ij.isDM or $ij.isOwner /}
-    {param name: 'image'/}
-    {param value: 'main'/}
-    {param key: $entry.key /}
-    {param type: 'image'/}
-    {param content}
-      {if def($entry.files.main)}
-        {call dma.page.link}
-          {param url: $entry.files.main.path /}
-          {param tooltip: 'Main' /}
-          {param text}
-            <img src="{$entry.files.main.icon}"
-              alt="Main" class="image main" id="file=-main"
-              style="width:{if $size}{$size}{else}300{/if}px/>
-          {/param}
-        {/call}
-      {else}
-        {call dma.page.link}
-          {param url: '' /}
-          {param tooltip: 'Main' /}
-          {param text}
-            <img src="/icons/{$entry.type.multilink}-dummy.png" alt="Main"
-            class="image main" id="file=-main"
-            {if $size}
-              {sp}style="max-width: {$size}px; max-height: {$size}px;"
-            {/if} />
-          {/param}
-        {/call}
-      {/if}
-    {/param}
-  {/call}
 {/deltemplate}
 
 /**
@@ -1155,7 +951,7 @@
       {if length($indexes[$key]) == 1}
         {call dma.page.link}
           {param url : $name + '/' + $key /}
-          {param text}
+          {param text kind="html"}
             <div class="index-overview">
               {$key}
             </div>
@@ -1172,7 +968,7 @@
             {call dma.page.link}
               {param url : $name + '/'
                   + ($index ? $key + '::' + $index : $key) /}
-              {param text}
+              {param text kind="html"}
                 <div class="index-overview">
                   {$index}
                 </div>
@@ -1188,7 +984,7 @@
     {foreach $index in $indexes}
       {call dma.page.link}
         {param url : $name + '/' + $index /}
-        {param text}
+        {param text kind="html"}
           <div class="index-overview">
             {$index}
           </div>
@@ -1253,7 +1049,7 @@
   {if $item.name}
     {call dma.page.link}
       {param url: $item.path /}
-      {param text}
+      {param text kind="html"}
         <div class="item-reference"
             title="{if $ij.isDM}{$item.dmName}{else}{$item.playerName}{/if}">
           <img class="item-image"

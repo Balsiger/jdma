@@ -173,7 +173,7 @@ public final class Classes
   {
     Class<?> []arguments = new Class<?>[inArguments.length];
     for(int i = 0; i < inArguments.length; i++)
-      arguments[i] = inArguments.getClass();
+      arguments[i] = inArguments[i].getClass();
 
     String name = Encodings.toCamelCase(inName);
 

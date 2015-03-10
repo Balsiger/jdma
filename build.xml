@@ -112,7 +112,9 @@
     <pathelement location="${lib.test.dir}/appengine-api-stubs.jar" />
     <pathelement location="${lib.test.dir}/appengine-testing.jar" />
     <!-- soy -->
-    <pathelement location="${lib.dir}/soy-excluding-deps.jar" />
+    <pathelement location="${lib.dir}/soy-2.5.0-SNAPSHOT.jar" />
+    <pathelement location="${lib.dir}/javax.inject-1.jar" />
+    <pathelement location="${lib.dir}/guice-assistedinject-snapshot.jar" />
     <pathelement location="${lib.dir}/guice-snapshot.jar" />
     <pathelement location="${lib.dir}/guice-multibindings-snapshot.jar" />
     <pathelement location="${lib.dir}/servlet-api-3.0.jar" />

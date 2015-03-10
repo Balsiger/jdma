@@ -131,6 +131,16 @@ public class SoyValue extends SoyMapData
     return new SoyUndefined(m_name + "." + inName);
   }
 
+  public SoyData call(String inMethod, String inArgument)
+  {
+    Object value = Classes.callMethod(inMethod, m_object, inArgument);
+    if(value != null)
+      return convert(inMethod, value);
+
+    return new SoyUndefined(m_name + ".call(" + inMethod + ", " + inArgument
+                            + ")");
+  }
+
   @Override
   public boolean equals(Object inOther) // $codepro.audit.disable
   {

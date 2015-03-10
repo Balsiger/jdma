@@ -651,6 +651,7 @@ message BaseItemProto
   optional Substance substance = 9;
   optional int32 break_dc = 10;
   optional string player_name = 11;
+  optional bool monetary = 26;
 
   optional BaseWeaponProto weapon = 12;
   optional BaseWearableProto wearable = 13;
@@ -738,6 +739,7 @@ message BaseWearableProto
     FINGER = 9;
     WRISTS = 10;
     FEET = 11;
+    EYES = 12;
   }
   optional Slot slot = 1;
   optional DurationProto wear = 2;

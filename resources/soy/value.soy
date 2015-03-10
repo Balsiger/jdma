@@ -22,7 +22,7 @@
 /*
  * Templates for values.
  */
-{namespace dma.value autoescape="deprecated-noautoescape"}
+{namespace dma.value}
 
 // @function def 1 0
 // @function entry 1 0
@@ -32,12 +32,9 @@
 // @printDirective print 0 0 
 // @printDirective raw 0 0 
 
-/**
- * Formatting a list of values, comma separated.
- * 
- * @param values the values to format
- */
+/** Formatting a list of values, comma separated. */
 {template .list}
+  {@param values: list<html>}
   {if isList($values)}
     {foreach $value in $values}
       {$value}{if not isLast($value)}, {/if}
@@ -71,7 +68,7 @@
       {param choices: $value.choices /}
       {param note: $note /}
       {param ifempty: $ifempty /}
-      {param content}
+      {param content kind="html"}
         {if $content}
           {if $prefix}{$prefix}{/if}
           {$content}
@@ -110,35 +107,31 @@
   {/if}
 {/template}
 
-/**
- * An editable value.
- *
- * @param? canEdit If the value can be edited at all
- * @param name The name of the value
- * @param value The value as it can be edited
- * @param key The key of the entry being edited
- * @param type The type of value edited
- * @param? related The related values, if any
- * @param? choices The possible choices for the value, if any
- * @param? content The formatted value edited as it is displayed
- * @param? note Text to be displayed when editing
- * @param? ifempty The text to print if empty
- *
- */
+/** An editable value. */
 {template .editable}
+  {@param? canEdit: bool}
+  {@param name: string}
+  {@param value: html}
+  {@param key: string}
+  {@param type: string}
+  {@param? related: string}
+  {@param? choices: list<string>}
+  {@param? content: html}
+  {@param? note: html}
+  {@param? ifempty: html}
   {if $canEdit}
-    <dmaeditable name="{$name}" value="{$value|noAutoescape}" key="{$key}"
+    <dmaeditable name="{$name}" value="{$value}" key="{$key}"
       class="editable" type="{$type}"{if $related} related="{$related}"{/if}
       {if $choices} values="{$choices}"{/if}{if $note} note="{$note}"{/if}>
       {if $content or not $ifempty}
-        {$content|noAutoescape}
+        {$content}
       {else}
         {$ifempty}
       {/if}
     </dmaeditable>
   {else}
     {if $content or not $ifempty}
-      {$content|noAutoescape}
+      {$content}
     {else}
       {$ifempty}
     {/if}
@@ -155,7 +148,7 @@
  */
 {template .remark}
   {if $remarkType}
-    <span class="remark {$remarkType |css}">
+    <span class="remark {let $foo kind="text"}{$remarkType |css}{/let}{$foo}">
       {$value}
       <div class="remark-window">
         {$remarkComment}
@@ -175,7 +168,7 @@
  */
 {template .link}
   {call dma.page.link}
-    {param url: '/' + $entry.type.multilink + '/' + $args.0 + '/'
+    {param url: '/' + $entry.type.multilink + '/' + $args[0] + '/'
         + $value.group /}
     {param text: $value.raw /}
   {/call}
@@ -189,7 +182,7 @@
  */
 {template .reference}
   {call dma.page.link}
-    {param url: $args.0 + $value.group /}
+    {param url: $args[0] + $value.group /}
     {param text: $value.raw /}
   {/call}
 {/template}
@@ -235,9 +228,9 @@
  */
 {template .campaign}
   {call dma.page.link}
-    {param url: '/campaign/' + $value.multi.0.print + '/'
-        + $value.multi.1.print /}
-    {param text: $value.multi.1.print /}
+    {param url: '/campaign/' + $value.multi[0].print + '/'
+        + $value.multi[1].print /}
+    {param text: $value.multi[1].print /}
   {/call}
 {/template}
 
@@ -250,15 +243,15 @@
 {template .person}
   {call dma.page.link}
     {param url: '/' + $entry.type.multilink + '/persons/'
-        + $value.multi.0.print /}
-    {param text: $value.multi.0.print /}
+        + $value.multi[0].print /}
+    {param text: $value.multi[0].print /}
   {/call}
-  {if $value.multi.1}
+  {if $value.multi[1]}
     {sp}(
     {call dma.page.link}
       {param url: '/' + $entry.type.multilink + '/jobs/'
-          + $value.multi.1.print /}
-      {param text: $value.multi.1.print /}
+          + $value.multi[1].print /}
+      {param text: $value.multi[1].print /}
     {/call}
     )
   {/if}
@@ -273,13 +266,13 @@
 {template .content}
   {call dma.page.link}
     {param url: '/' + $entry.type.multilink + '/parts/'
-        + $value.multi.0.print /}
-    {param text: $value.multi.0.print /}
+        + $value.multi[0].print /}
+    {param text: $value.multi[0].print /}
   {/call}
-  {if $value.multi.1}
-    {sp}{$value.multi.1.print}
+  {if $value.multi[1]}
+    {sp}{$value.multi[1].print}
   {/if}
-  {sp}{$value.multi.2.print}
+  {sp}{$value.multi[2].print}
 {/template}
 
 /**
@@ -289,11 +282,11 @@
  * @param value The value rendered
  */
 {template .requirements}
-  {$value.multi.0.print}
-  {if length($value.multi.1.list) > 0}
+  {$value.multi[0].print}
+  {if length($value.multi[1].list) > 0}
     <br />
     optional{sp}
-    {$value.multi.1.print}
+    {$value.multi[1].print}
   {/if}
 {/template}
 
@@ -415,9 +408,9 @@
   <table>
     {foreach $appearance in $value.list}
       <tr>
-        <td>{$appearance.multi.0}</td>
+        <td>{$appearance.multi[0]}</td>
         <td>-{sp}</td>
-        <td>{$appearance.multi.1}</td>
+        <td>{$appearance.multi[1]}</td>
       </tr>
     {/foreach}
   </table>
@@ -743,11 +736,11 @@
  * @param value The value rendered.
  */
 {template .damages}
-  {if $value.multi.0.isDefined}
-    {$value.multi.0.print}
+  {if $value.multi[0].isDefined}
+    {$value.multi[0].print}
   {/if}
-  {if $value.multi.1.isDefined}
-    {sp}/ {$value.multi.1.print}
+  {if $value.multi[1].isDefined}
+    {sp}/ {$value.multi[1].print}
   {/if}
 {/template}
 
@@ -868,11 +861,11 @@
  */
 {template .dailyreferences}
   {foreach $ref in $value.list}
-    {$ref.multi.0}
-    {if $ref.multi.1.isDefined and $ref.multi.1.print != '1'}
-      {sp}{$ref.multi.1} times per day
+    {$ref.multi[0]}
+    {if $ref.multi[1].isDefined and $ref.multi[1].print != '1'}
+      {sp}{$ref.multi[1]} times per day
     {/if}
-    : {entry($ref.multi.0.print)}
+    : {entry($ref.multi[0].print)}
   {if not isLast($ref)}<br/>{/if}
   {/foreach}
 {/template}
@@ -904,7 +897,7 @@
       {param choices: $value.isEditable ? $value.choices : ''/}
       {param note: $note /}
       {param ifempty: $ifempty /}
-      {param content}
+      {param content kind="html"}
         {if $content}
           {if $prefix}{$prefix}{/if}
           {$content}

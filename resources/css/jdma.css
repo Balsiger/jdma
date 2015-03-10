@@ -3234,41 +3234,110 @@ BODY.print
   overflow: hidden;
 }
 
-.character-sheet .gear-title {
+.character-sheet .gear-title
+{
   text-transform: uppercase;
   font-weight: bold;
   font-size: 20px;
 }
 
-.character-sheet .gear-line {
+.character-sheet .gear-line
+{
   width: 100%;
   position: relative;
   padding: 5px 0;
 }
 
-.character-sheet .gear-name {
+.character-sheet .gear-name
+{
   display: inline-block;
   width: 50%;
 }
 
-.character-sheet .gear-location {
+.character-sheet .gear-location
+{
   display: inline-block;
   width: 28%;
 }
 
-.character-sheet .gear-weight {
+.character-sheet .gear-weight
+{
   display: inline-block;
   width: 18%;
 }
 
-.character-sheet .gear-spacer {
+.character-sheet .gear-spacer
+{
   display: inline-block;
   width: 2%;
 }
 
-.character-sheet .gear-empty {
+.character-sheet .gear-empty
+{
   border-bottom: 1px solid black;
   height: 30px;
+}
+
+.character-sheet .gear-money
+{
+  background-color: #ccc;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.character-sheet .skill-line
+{
+  font-size: 18px;
+  width: 100%;
+  display: flex;
+}
+
+.character-sheet .skill-line.skill-title
+{
+  font-size: 10px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.character-sheet .skill-line.skill-title .skill-modifier,
+.character-sheet .skill-line.skill-title .skill-ranks,
+.character-sheet .skill-line.skill-title .skill-ability,
+.character-sheet .skill-line.skill-title .skill-misc
+{
+  border-bottom: none;
+}
+
+.character-sheet .skill-line .class-skill
+{
+  width: 20px;
+}
+
+.character-sheet .skill-line .skill-name
+{
+  flex: 5;
+  margin-right: 5px;
+}
+
+.character-sheet .skill-line .skill-key
+{
+  width: 40px;
+  text-transform: uppercase;
+  margin-right: 5px;
+}
+
+.character-sheet .skill-line .skill-modifier,
+.character-sheet .skill-line .skill-ranks,
+.character-sheet .skill-line .skill-ability,
+.character-sheet .skill-line .skill-misc
+{
+  flex: 1;
+  border-bottom: 1px solid black;
+  margin: 0 5px;
+}
+
+.character-sheet .magical-subtitle
+{
+  font-size: 8px;
 }
 
 @media print

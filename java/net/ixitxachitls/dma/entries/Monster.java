@@ -39,6 +39,7 @@ import net.ixitxachitls.dma.rules.CarryingCapacity;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Rational;
+import net.ixitxachitls.dma.values.Slot;
 import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
@@ -1397,8 +1398,8 @@ public class Monster extends CampaignEntry
       return 0;
 
     return CarryingCapacity.liftLoad(
-            strength.get(), size.get(),
-            quadruped.isPresent() ? quadruped.get() : false);
+        strength.get(), size.get(),
+        quadruped.isPresent() ? quadruped.get() : false);
   }
 
   public int dragLoad()
@@ -1411,8 +1412,8 @@ public class Monster extends CampaignEntry
       return 0;
 
     return CarryingCapacity.dragLoad(
-            strength.get(), size.get(),
-            quadruped.isPresent() ? quadruped.get() : false);
+        strength.get(), size.get(),
+        quadruped.isPresent() ? quadruped.get() : false);
   }
 
   public Weight currentLoad()
@@ -1766,6 +1767,118 @@ public class Monster extends CampaignEntry
     return items;
   }
 
+  public List<Item> magicalItemsOnPerson()
+  {
+    List<Item> possessions = getPossessions();
+    List<Item> items = new ArrayList<>();
+
+    for(Item item : possessions)
+    {
+      if(item.hasBaseName("Storage"))
+        continue;
+
+      if(item.isMagical())
+        items.add(item);
+    }
+
+    return items;
+  }
+
+  public List<Item> magicalItemsOnPerson(Slot inSlot)
+  {
+    List<Item> items = new ArrayList<>();
+    for(Item item : magicalItemsOnPerson())
+      if(item.getCombinedSlot().get().isPresent()
+          && item.getCombinedSlot().get().get() == inSlot)
+        items.add(item);
+
+    return items;
+  }
+
+  public Optional<Item> magicalItemOnHead()
+  {
+    return Entries.first(magicalItemsOnPerson(Slot.HEAD));
+  }
+
+  public Optional<Item> magicalItemOnHands()
+  {
+    return Entries.first(magicalItemsOnPerson(Slot.HANDS));
+  }
+
+  public Optional<Item> magicalItemOnEyes()
+  {
+    return Entries.first(magicalItemsOnPerson(Slot.EYES));
+  }
+
+  public Optional<Item> magicalItemOnWrists()
+  {
+    return Entries.first(magicalItemsOnPerson(Slot.WRISTS));
+  }
+
+  public Optional<Item> magicalItemOnNeck()
+  {
+    return Entries.first(magicalItemsOnPerson(Slot.NECK));
+  }
+
+  public Optional<Item> magicalItemOnBody()
+  {
+    return Entries.first(magicalItemsOnPerson(Slot.BODY));
+  }
+
+  public Optional<Item> magicalItemOnSchoulders()
+  {
+    return Entries.first(magicalItemsOnPerson(Slot.SHOULDERS));
+  }
+
+  public Optional<Item> magicalItemOnTorso()
+  {
+    return Entries.first(magicalItemsOnPerson(Slot.TORSO));
+  }
+
+  public Optional<Item> magicalItemOnRing1()
+  {
+    return Entries.first(magicalItemsOnPerson(Slot.FINGER));
+  }
+
+  public Optional<Item> magicalItemOnRing2()
+  {
+    return Entries.second(magicalItemsOnPerson(Slot.FINGER));
+  }
+
+  public Optional<Item> magicalItemOnWaist()
+  {
+    return Entries.first(magicalItemsOnPerson(Slot.WAIST));
+  }
+
+  public Optional<Item> magicalItemOnFeet()
+  {
+    return Entries.first(magicalItemsOnPerson(Slot.FEET));
+  }
+
+  public List<Item> moneyOnPerson()
+  {
+    List<Item> items = new ArrayList<>();
+    for(Item item : getPossessionsOnPerson()) {
+      if(item.isMonetary())
+        items.add(item);
+    }
+
+    Item.sortByValue(items);
+    return items;
+  }
+
+  public List<Item> moneyNotOnPerson()
+  {
+    List<Item> items = new ArrayList<>();
+    for(Item item : getPossessionsNotOnPerson()) {
+      if(item.isMonetary())
+        items.add(item);
+    }
+
+    Item.sortByValue(items);
+    return items;
+  }
+
   public List<Item> getPossessionsNotOnPerson()
   {
     List<Item> possessions = getPossessions();
@@ -1795,6 +1908,11 @@ public class Monster extends CampaignEntry
     }
 
     return items;
+  }
+
+  public List<Skill> getSkills()
+  {
+    return Collections.unmodifiableList(m_skills);
   }
 
   @Override
@@ -1831,6 +1949,15 @@ public class Monster extends CampaignEntry
                                           return new Quality();
                                         }
                                       });
+    m_skills = inValues.useEntries("skill", m_skills,
+                                   new NestedEntry.Creator<Skill>()
+                                   {
+                                     @Override
+                                     public Skill create()
+                                     {
+                                       return new Skill();
+                                     }
+                                   });
   }
 
   /**

@@ -78,8 +78,8 @@
           {param color: '#aaf' /}
         {/call}
       {/if}      
-      {if length($entry.categories) or 
-          length($entry.combined_categories.annotate)}
+      {if length($entry.categories) or
+          length($entry.combined_categories.get)}
         {call dma.entry.value}
           {param label: 'Categories' /}
           {param value}
@@ -89,7 +89,7 @@
                 {if not isLast($category)}, {/if}
               {/foreach}
             {/if}
-            {if length($entry.combined_categories.annotate)}
+            {if length($entry.combined_categories.get)}
               {if length($entry.categories)},{sp}{/if}
               {call dma.entry.concatenated_list}
                 {param values: [] /}
@@ -110,7 +110,7 @@
         {/param}
         {param color: '#aaf' /}
       {/call}
-      {if $entry.incomplete or length($entry.combined_incomplete.annotate) > 0}
+      {if $entry.incomplete or $entry.combined_incomplete.get.present}
         {call dma.entry.value}
           {param label: 'Incomplete' /}
           {param value}
@@ -332,10 +332,7 @@
       {call dma.entry.value}
         {param label: 'References' /}
         {param value}
-          {call dma.entry.concatenated_list}
-            {param values: [] /}
-            {param concatenate: $entry.combined_references /}
-          {/call}
+          {annotate($entry.combined_references)}
         {/param}
         {param color: '#aaf' /}
       {/call}

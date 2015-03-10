@@ -21,7 +21,11 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.List;
+
 import javax.annotation.concurrent.Immutable;
+
+import com.google.common.base.Optional;
 
 /**
  * Utility functions for entries.
@@ -40,6 +44,22 @@ public final class Entries
   private Entries()
   {
     // don't construct
+  }
+
+  public static <T> Optional<T> first(List<T> inList)
+  {
+    if(inList.isEmpty())
+      return Optional.absent();
+
+    return Optional.of(inList.get(0));
+  }
+
+  public static <T> Optional<T> second(List<T> inList)
+  {
+    if(inList.size() < 2)
+      return Optional.absent();
+
+    return Optional.of(inList.get(1));
   }
 
   //-------------------------------------------------------------- variables

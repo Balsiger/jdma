@@ -19,7 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-{namespace dma.errors autoescape="deprecated-contextual"}
+{namespace dma.errors}
 
 /**
  * The error for an invalid page.
@@ -28,10 +28,10 @@
  */
 {template .invalidPage}
   {call .error}
-    {param title}
+    {param title kind="html"}
       Page Not Found
     {/param}
-    {param message}
+    {param message kind="html"}
       {if $path}
         The requested page '{$path}' does not exist.
       {else}
@@ -48,10 +48,10 @@
  */
 {template .extract}
   {call .error}
-    {param title}
+    {param title kind="html"}
       Could Not Determine Entry Key
     {/param}
-    {param message}
+    {param message kind="html"}
       The key to the entry could not be extracted from '{$path}'.
     {/param}
   {/call}
@@ -63,10 +63,10 @@
  */
 {template .noEntry}
   {call .error}
-    {param title}
+    {param title kind="html"}
       No entry
     {/param}
-    {param message}
+    {param message kind="html"}
       No entry was requested.
     {/param}
   {/call}
@@ -80,7 +80,7 @@
 {template .invalidType}
   {call .error}
     {param title: 'Invalid type' /}
-    {param message}
+    {param message kind="html"}
       The type '{$type}' is invalid.
     {/param}
   {/call}

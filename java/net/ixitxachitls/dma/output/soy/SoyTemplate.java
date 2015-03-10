@@ -114,11 +114,43 @@ public class SoyTemplate
       if(!entry.isPresent())
       {
         Log.warning("unknown entry for entry soy function for "
-                    + inArgs.get(0));
+                        + inArgs.get(0));
         return StringData.forValue("unknown entry '" + inArgs.get(0) + "'");
       }
 
       return new SoyValue(key.toString(), entry.get());
+    }
+  }
+
+  /** A plugin function to return an entry for a given key. */
+  public static class CallFunction extends SoyAbstractTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "call";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(3);
+    }
+
+    @Override
+    public SoyData compute(List<SoyData> inArgs)
+    {
+      if(!(inArgs.get(0) instanceof SoyValue)
+          || !(inArgs.get(1) instanceof StringData))
+        return new SoyUndefined("call");
+
+      SoyValue object = (SoyValue)inArgs.get(0);
+      String method = inArgs.get(1).stringValue();
+
+      if(inArgs.get(2) instanceof StringData)
+        return object.call(method, inArgs.get(2).stringValue());
+
+      return new SoyUndefined("unsupported argument");
     }
   }
 
@@ -286,8 +318,9 @@ public class SoyTemplate
     @Override
     public SoyData computeForTofu(List<SoyData> inArgs)
     {
-      return StringData.forValue
-          (COMMAND_RENDERER.renderCommands(inArgs.get(0).toString()));
+      return UnsafeSanitizedContentOrdainer.ordainAsSafe
+          (COMMAND_RENDERER.renderCommands(inArgs.get(0).toString()),
+           SanitizedContent.ContentKind.HTML);
     }
   }
 
@@ -369,12 +402,12 @@ public class SoyTemplate
       {
         SoyMapData data = (SoyMapData)inArgs.get(0);
         return UnsafeSanitizedContentOrdainer.ordainAsSafe
-          (COMMAND_RENDERER.renderSoy
-               ("dma.value.annotated",
-                Optional.of(map(
-                    "value", data,
-                    "link", inArgs.size() > 1 ? inArgs.get(1) : ""))),
-           SanitizedContent.ContentKind.HTML);
+            (COMMAND_RENDERER.renderSoy
+                 ("dma.value.annotated",
+                  Optional.of(map(
+                      "value", data,
+                      "link", inArgs.size() > 1 ? inArgs.get(1) : ""))),
+             SanitizedContent.ContentKind.HTML);
       }
 
       return inArgs.get(0);
@@ -607,6 +640,7 @@ public class SoyTemplate
         Multibinder.newSetBinder(binder(), SoyFunction.class);
 
       soyFunctionsSetBinder.addBinding().to(EntryFunction.class);
+      soyFunctionsSetBinder.addBinding().to(CallFunction.class);
       soyFunctionsSetBinder.addBinding().to(IntegerFunction.class);
       soyFunctionsSetBinder.addBinding().to(LengthFunction.class);
       soyFunctionsSetBinder.addBinding().to(DefFunction.class);

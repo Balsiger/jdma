@@ -22,7 +22,7 @@
 /*
  * Templates for characters.
  */
-{namespace dma.entries.characters autoescape="deprecated-contextual"}
+{namespace dma.entries.characters}
 
 /**
  * Show the given entry in standard format.
@@ -45,13 +45,13 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#39f' /}
-    {param title}
+    {param title kind="html"}
       {call dma.entry._new_title}
         {param title: $entry.name /}
         {param color: '#39f' /}
       {/call}      
     {/param}
-    {param values}            
+    {param values kind="html"}
       {call dma.entry.value}
         {param label: 'Player' /}
         {param value: $entry.base_character_name /}
@@ -83,17 +83,17 @@
         or $entry.looks.present}
         {call dma.entry.value}
           {param label: 'Looks' /}
-          {param value}
-           {$entry.height.present ? $entry.height : '' }{sp}
-           {$entry.weight.present ? $entry.weight : '' }{sp}
-           {$entry.looks.present ? $entry.looks : '' }
+          {param value kind="html"}
+            {$entry.height.present ? $entry.height : '' }{sp}
+            {$entry.weight.present ? $entry.weight : '' }{sp}
+            {$entry.looks.present ? $entry.looks : '' }
           {/param}           
           {param color: '#39f' /}
         {/call}
       {/if}
       {call dma.entry.value}
         {param label: 'Race' /}
-        {param value}
+        {param value kind="html"}
           {foreach $monster in $entry.base_entries}
             {call dma.page.link}
               {param text: $monster.name /}
@@ -111,7 +111,7 @@
       {/call}
       {call dma.entry.value}
         {param label: 'Levels' /}
-        {param value}
+        {param value kind="html"}
           {foreach $level in $entry.get_cumulated_levels}
             {$level}
             {if not isLast($level)}, {/if}
@@ -120,8 +120,18 @@
         {param color: '#39f' /}
       {/call}
       {call dma.entry.value}
+        {param label: 'Skills' /}
+        {param value kind="html"}
+          {foreach $skill in $entry.skills}
+            {$skill}
+            {if not isLast($skill)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
         {param label: 'Feats' /}
-        {param value}
+        {param value kind="html"}
           {$entry.get_feats}
           {foreach $feat in $entry.feats}
             {call dma.entries.feats.tiny}
@@ -134,7 +144,7 @@
       {/call}
       {call dma.entry.value}
         {param label: 'Qualities' /}
-        {param value}
+        {param value kind="html"}
           {foreach $quality in $entry.qualities}
             {call dma.entries.qualities.tiny}
               {param entry: $quality /}
@@ -146,7 +156,7 @@
       {/call}
       {call dma.entry.value}
         {param label: 'Possessions' /}
-        {param value}
+        {param value kind="html"}
           {foreach $item in $entry.possessions}
             {call dma.entries.items.reference}
               {param entry: $item /}
@@ -188,6 +198,12 @@
 
     <div class="sheet-page">
       {call .sheet_page_2}
+        {param entry: $entry /}
+      {/call}
+    </div>
+
+    <div class="sheet-page">
+      {call .sheet_page_3}
         {param entry: $entry /}
       {/call}
     </div>
@@ -279,15 +295,15 @@
   {call .sheet_value}
     {param label: 'Player Name' /}
     {param width: '50%' /}
-    {param value}
-     {$entry.base_character_name} ({$entry.player.real_name})
+    {param value kind="html"}
+      {$entry.base_character_name} ({$entry.player.real_name})
     {/param}
   {/call}
 
   {call .sheet_value}
     {param label: 'Class and Level' /}
     {param width: '50%' /}
-    {param value}
+    {param value kind="html"}
       {foreach $level in $entry.get_cumulated_levels}
         {$level}
         {if not isLast($level)}, {/if}
@@ -302,7 +318,7 @@
   {call .sheet_value}
     {param label: 'Race/Template' /}
     {param width: '15%' /}
-    {param value}
+    {param value kind="html"}
       {foreach $monster in $entry.base_entries}
         {$monster.name}
         {if not isLast($monster)}, {/if}
@@ -494,10 +510,10 @@
       {param width: '100%' /}
       {param size: '14px' /}
       {param vSize: '20px' /}
-      {param value}
+      {param value kind="html"}
         {if isList($entry.speeds_annotated)}
           {foreach $speed in $entry.speeds_annotated}
-            {annotate($speed)|noescape}
+            {annotate($speed)}
             {if not isLast($speed)}, {/if}
           {/foreach}
         {/if}
@@ -536,7 +552,7 @@
     <div class="operator" style="padding-top: 15px">=</div>
 
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Base Attack <br/>
         Bonus
       {/param}
@@ -549,7 +565,7 @@
     <div class="operator" style="padding-top: 15px">+</div>
 
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Strength<br/>
         Modifier
       {/param}
@@ -561,7 +577,7 @@
     <div class="operator" style="padding-top: 15px">+</div>
 
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Size<br/>
         Modifier
       {/param}
@@ -574,7 +590,7 @@
     <div class="operator" style="padding-top: 15px">+</div>
 
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Misc<br/>
         Modifier
       {/param}
@@ -657,7 +673,7 @@
   <div class="operator" style="padding-top: 30px">=</div>
 
   {call .sheet_value}
-    {param label}
+    {param label kind="html"}
       Base <br/>
       Save
     {/param}
@@ -672,7 +688,7 @@
   <div class="operator" style="padding-top: 30px">+</div>
 
   {call .sheet_value}
-    {param label}
+    {param label kind="html"}
       Ability <br/>
       Modifier
     {/param}
@@ -687,7 +703,7 @@
   <div class="operator" style="padding-top: 30px">+</div>
 
   {call .sheet_value}
-    {param label}
+    {param label kind="html"}
       Magic <br/>
       Modifier
     {/param}
@@ -702,7 +718,7 @@
   <div class="operator" style="padding-top: 30px">+</div>
 
   {call .sheet_value}
-    {param label}
+    {param label kind="html"}
       Misc. <br/>
       Modifier
     {/param}
@@ -717,7 +733,7 @@
   <div class="operator" style="padding-top: 30px">+</div>
 
   {call .sheet_value}
-    {param label}
+    {param label kind="html"}
       Temporary <br/>
       Modifier
     {/param}
@@ -759,7 +775,7 @@
     <div class="operator" style="padding-top: 15px">= 10 +</div>
 
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Armor <br/>
         Bonus
       {/param}
@@ -773,7 +789,7 @@
     <div class="operator" style="padding-top: 15px">+</div>
 
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Shield<br/>
         Bonus
       {/param}
@@ -787,7 +803,7 @@
     <div class="operator" style="padding-top: 15px">+</div>
 
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Dex<br/>
         Modifier
       {/param}
@@ -801,7 +817,7 @@
     <div class="operator" style="padding-top: 15px">+</div>
 
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Size<br/>
         Modifier
       {/param}
@@ -815,7 +831,7 @@
     <div class="operator" style="padding-top: 15px">+</div>
 
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Natural <br/>
         Armor
       {/param}
@@ -829,7 +845,7 @@
     <div class="operator" style="padding-top: 15px">+</div>
 
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Deflection <br/>
         Modifier
       {/param}
@@ -843,7 +859,7 @@
     <div class="operator" style="padding-top: 15px">+</div>
 
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Miscellaneous <br/>
         Modifiers
       {/param}
@@ -888,7 +904,7 @@
         {param white: true /}
         {param top: true /}
         {param inside: true /}
-        {param value}
+        {param value kind="html"}
           {if $entry.armor_worn.present}
             {call dma.entries.items.name}
               {param entry: $entry.armor_worn /}
@@ -935,7 +951,7 @@
         {param white: true /}
         {param top: true /}
         {param inside: true /}
-        {param value}
+        {param value kind="html"}
           {if $entry.shield_worn.present}
             {call dma.entries.items.name}
               {param entry: $entry.shield_worn /}
@@ -999,11 +1015,139 @@
       </div>
     </div>
     <div class="sheet-column" style="flex: 4;">
-      {call .sheet_gear}
+      <div class="sheet-row" style="flex-direction: column; height: 29.7cm">
+        {call .sheet_subtitle}
+          {param title: 'Gear' /}
+        {/call}
+
+        {call .sheet_gear}
+          {param entry: $entry /}
+        {/call}
+
+        {call .sheet_magical_items}
+          {param entry: $entry /}
+        {/call}
+
+        {call .sheet_money}
+          {param entry: $entry /}
+        {/call}
+      </div>
+    </div>
+  </div>
+{/template}
+
+/**
+ * Contents of the second page of the character sheet.
+ *
+ * @param entry the entry to print
+ */
+{template .sheet_page_3}
+  <div class="sheet-row" style="height: 100%;">
+    <div class="sheet-column" style="height: 100%; margin-right: 5px;">
+      {call .sheet_skills}
         {param entry: $entry /}
       {/call}
     </div>
   </div>
+{/template}
+
+/**
+ * The skills box.
+ *
+ * @param entry
+ */
+{template .sheet_skills}
+  {call .sheet_subtitle}
+    {param title: 'Skills' /}
+  {/call}
+
+  <div class="skill-line skill-title">
+    <span class="class-skill">
+      CS?
+    </span>
+    <span class="skill-name">
+      Skill Name
+    </span>
+    <span class="skill-key">
+      Key<br/>Ability
+    </span>
+    <span class="skill-modifier">
+      Skill<br/>Modifier
+    </span>
+    &nbsp;
+    <span class="skill-ranks">
+      Ranks<br/>(max {$entry.max_skill_ranks})
+    </span>
+    &nbsp;
+    <span class="skill-ability">
+      Ability<br/>Modifier
+    </span>
+    &nbsp;
+    <span class="skill-misc">
+      Misc<br/>Modifier
+    </span>
+  </div>
+
+  {foreach $skill in $ij.BaseSkill.all_skills}
+    {call .sheet_skill}
+      {param skill: $skill /}
+      {param classSkill: call($entry, 'isClassSkill', $skill.name) /}
+    {/call}
+  {/foreach}
+{/template}
+
+/**
+ * A single skill line.
+ *
+ * @param skill
+ * @param? classSkill
+ * @param? total
+ * @param? ranks
+ * @param? ability
+ * @param? misc
+ */
+{template .sheet_skill}
+  <div class="skill-line">
+    <span class="class-skill">
+      {if $classSkill}
+        &#x2612{sp}
+      {else}
+        &#x2610{sp}
+      {/if}
+    </span>
+    <a class="skill-name" href="{$skill.path}">
+      {$skill.name}
+      {if $skill.is_untrained}
+        {sp}&diams;
+      {/if}
+    </a>
+    <span class="skill-key">
+      {$skill.ability.short}
+    </span>
+    <span class="skill-modifier">
+      {if $total}
+        {$total}
+      {/if}
+    </span>
+    =
+    <span class="skill-ranks">
+      {if $ranks}
+        {$ranks}
+      {/if}
+    </span>
+    +
+    <span class="skill-ability">
+      {if $ability}
+        {$ability}
+      {/if}
+    </span>
+    +
+    <span class="skill-misc">
+      {if $misc}
+        {$misc}
+      {/if}
+    </span>
+ </div>
 {/template}
 
 /**
@@ -1041,7 +1185,7 @@
   <div class="values boxed carrying-capacity"
        style="background-color: #eee;">
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Light<br />
         Load
       {/param}
@@ -1049,12 +1193,12 @@
       {param size: '9px' /}
       {param prefix: true /}
       {param center: true /}
-      {param value}
+      {param value kind="html"}
         up to {$entry.light_load} lb
       {/param}
     {/call}
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Medium<br />
         Load
       {/param}
@@ -1062,12 +1206,12 @@
       {param size: '9px' /}
       {param prefix: true /}
       {param center: true /}
-      {param value}
+      {param value kind="html"}
         up to {$entry.medium_load} lb
       {/param}
     {/call}
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Heavy<br />
         Load
       {/param}
@@ -1075,36 +1219,36 @@
       {param size: '9px' /}
       {param prefix: true /}
       {param center: true /}
-      {param value}
+      {param value kind="html"}
         up to {$entry.heavy_load} lb
       {/param}
     {/call}
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Lift
       {/param}
       {param width: '100%' /}
       {param size: '9px' /}
       {param prefix: true /}
       {param center: true /}
-      {param value}
+      {param value kind="html"}
         up to {$entry.lift_load}
       {/param}
     {/call}
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Drag
       {/param}
       {param width: '100%' /}
       {param size: '9px' /}
       {param prefix: true /}
       {param center: true /}
-      {param value}
+      {param value kind="html"}
         up to {$entry.drag_load}
       {/param}
     {/call}
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Current<br />
         Load
       {/param}
@@ -1112,10 +1256,10 @@
       {param size: '9px' /}
       {param prefix: true /}
       {param center: true /}
-      {param value}
+      {param value kind="html"}
         {$entry.current_load}
         {if $entry.current_load.as_pounds.float > $entry.light_load}
-          {sp}<span style="font-size: 8px">(
+          <br/><span style="font-size: 8px">(
             {if $entry.current_load.as_pounds.float <= $entry.medium_load}
               medium load: max dex +3, speed from 30/20 ft to 20/15 ft, run x4
             {elseif $entry.current_load.as_pounds.float <= $entry.heavy_load}
@@ -1136,11 +1280,7 @@
  * @param entry the entry to print
  */
 {template .sheet_gear}
-  {call .sheet_subtitle}
-    {param title: 'Gear' /}
-  {/call}
-
-  <div class="limited" style="height: 500px">
+  <div class="limited sheet-column" style="flex: 3 3 60%;">
     <div class="gear-title">Possessions on person</div>
 
     <div class="gear-name">Item</div>
@@ -1160,10 +1300,9 @@
     {for $i in range(20)}
       {call .sheet_gear_line /}
     {/for}
-
   </div>
 
-  <div class="limited" style="height: 320px">
+  <div class="limited sheet-column" style="flex: 2 2 40%;">
     <div class="gear-title">Possessions not on person</div>
 
     <div class="gear-name">Item</div>
@@ -1184,6 +1323,155 @@
       {call .sheet_gear_line /}
     {/for}
   </div>
+{/template}
+
+/**
+ * The magical items per slot.
+ *
+ * @param entry the entry to print
+ */
+{template .sheet_magical_items}
+  <div class="gear-title">Magic Items Worn</div>
+
+  <div>
+    {call .sheet_magical_item}
+      {param title: 'Head' /}
+      {param subtitle: 'Headband, Hat, Helment, or Pylactery' /}
+      {param item: $entry.magical_item_on_head /}
+    {/call}
+    {call .sheet_magical_item}
+      {param title: 'Hands' /}
+      {param subtitle: 'Gloves or Gauntlets' /}
+      {param item: $entry.magical_item_on_hands /}
+    {/call}
+  </div>
+
+  <div>
+    {call .sheet_magical_item}
+      {param title: 'Eyes' /}
+      {param subtitle: 'Eye Lenses or Goggles' /}
+      {param item: $entry.magical_item_on_eyes /}
+    {/call}
+    {call .sheet_magical_item}
+      {param title: 'Arms/Wrists' /}
+      {param subtitle: 'Bracers or Bracelets' /}
+      {param item: $entry.magical_item_on_wrists /}
+    {/call}
+  </div>
+
+  <div>
+    {call .sheet_magical_item}
+      {param title: 'Neck' /}
+      {param subtitle: 'Amulet, Brooch, Medallion, Periapt, or Scarab' /}
+      {param item: $entry.magical_item_on_neck /}
+    {/call}
+    {call .sheet_magical_item}
+      {param title: 'Body' /}
+      {param subtitle: 'Robe or Suit of Armor' /}
+      {param item: $entry.magical_item_on_body /}
+    {/call}
+  </div>
+
+  <div>
+    {call .sheet_magical_item}
+      {param title: 'Shoulders' /}
+      {param subtitle: 'Cloak, Cape, or Mantle' /}
+      {param item: $entry.magical_item_on_houlders /}
+    {/call}
+    {call .sheet_magical_item}
+      {param title: 'Torso' /}
+      {param subtitle: 'Vest, Vestment, or Shirt' /}
+      {param item: $entry.magical_item_on_torso /}
+    {/call}
+  </div>
+
+  <div>
+    {call .sheet_magical_item}
+      {param title: 'Ring #1' /}
+      {param subtitle: '' /}
+      {param item: $entry.magical_item_on_ring_1 /}
+    {/call}
+    {call .sheet_magical_item}
+      {param title: 'Waist' /}
+      {param subtitle: 'Belt or Girdle' /}
+      {param item: $entry.magical_item_on_waist /}
+    {/call}
+  </div>
+
+  <div>
+    {call .sheet_magical_item}
+      {param title: 'Ring #2' /}
+      {param subtitle: '' /}
+      {param item: $entry.magical_item_on_ring_2 /}
+    {/call}
+    {call .sheet_magical_item}
+      {param title: 'Feet' /}
+      {param subtitle: 'Boots, Shoes, or Slippers' /}
+      {param item: $entry.magical_item_on_feet /}
+    {/call}
+  </div>
+{/template}
+
+/**
+ * The magical items per slot.
+ *
+ * @param entry the entry to print
+ */
+{template .sheet_money}
+  <div class="gear-money">
+    <div class="gear-title" style="text-align: center;">
+      Money
+    </div>
+
+    <div style="margin-top: 5px;">
+      On person:{sp}
+      {foreach $item in $entry.moneyOnPerson}
+        {call dma.entries.items.counted_reference}
+          {param item: $item /}
+        {/call}
+        {if not isLast($item)}, {/if}
+      {/foreach}
+    </div>
+
+    <div style="margin-top: 5px;">
+      Not on person:{sp}
+      {foreach $item in $entry.moneyNotOnPerson}
+        {call dma.entries.items.counted_reference}
+          {param item: $item /}
+        {/call}
+        {if not isLast($item)}, {/if}
+      {/foreach}
+    </div>
+  </div>
+{/template}
+
+/**
+ * Format a single magial item
+ *
+ * @param title
+ * @param subtitle
+ * @param item
+ */
+{template .sheet_magical_item}
+    {call .sheet_value}
+      {param label kind="html"}
+        {$title}
+        {if $subtitle}
+          {sp}<span class="magical-subtitle">({$subtitle})</span>
+        {/if}
+      {/param}
+      {param width: '50%' /}
+      {param size: '10px' /}
+      {param value kind="html"}
+        {if $item.present}
+          {call dma.entries.items.reference}
+            {param entry: $item /}
+          {/call}
+        {else}
+          &nbsp;
+        {/if}
+      {/param}
+    {/call}
 {/template}
 
 /**
@@ -1244,7 +1532,7 @@
         {param width: '30%' /}
         {param size: '8px' /}
         {param vSize: '12px' /}
-        {param value}
+        {param value kind="html"}
           {if $weapon}
             {call dma.entries.items.reference}
               {param entry: $weapon /}
@@ -1313,7 +1601,7 @@
             {param width: '50%' /}
             {param size: '8px' /}
             {param vSize: '10px' /}
-            {param value}
+            {param value kind="html"}
               {foreach $ammunition in $weapon.available_ammunition}
                 {call dma.entries.items.reference}
                   {param entry: $ammunition /}
@@ -1365,7 +1653,7 @@
     <div class="operator">=</div>
     
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Base Score +<br/>
         Racial Mod.
       {/param}
@@ -1379,7 +1667,7 @@
     <div class="operator">+</div>
     
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Enhcmnt<br/>
         Bonuses
       {/param}
@@ -1393,7 +1681,7 @@
     <div class="operator">+</div>
     
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Misc<br/>
         Bonuses
       {/param}
@@ -1407,7 +1695,7 @@
     <div class="operator">-</div>
     
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         Misc<br/>
         Penalties
       {/param}
@@ -1419,7 +1707,7 @@
     {/call}
 
     {call .sheet_value}
-      {param label}
+      {param label kind="html"}
         {$name}<br/>
         Modifier
       {/param}
@@ -1433,35 +1721,32 @@
   </div>
 {/template}
 
-/**
- * Print a character sheet value.
- * 
- * @param label    the value label
- * @param width    the width of the value
- * @param value    the value to print
- * @param? center  whether to center the label and value
- * @param? boxed   whether to draw a box around the value
- * @param? size    font size of the label
- * @param? vSize   the font size of the value
- * @param? prefix  prefix the label instead of having it below
- * @param? white   whether to format value in a white box
- * @param? top     whether to show label on top
- * @param? inside  whether to show the label inside the box
- */
+/** Print a character sheet value. */
 {template .sheet_value}
+  {@param label: html|string}
+  {@param width: string}
+  {@param value: html|string}
+  {@param? center: bool}
+  {@param? boxed: bool}
+  {@param? size: string}
+  {@param? vSize: string}
+  {@param? prefix: bool}
+  {@param? white: bool}
+  {@param? top: bool}
+  {@param? inside: bool}
   <div class="value-container{if $prefix} prefixed{/if}" 
        style="width: {$width}">
     {if $prefix}
       <div class="value-label prefixed"
            {if $size} style="font-size: {$size}"{/if}>
-        {$label|noescape}
+        {$label}
       </div>
     {/if}      
     {if $top}
       <div class="value-label top 
                   {if $center} center{/if}{if $inside} inside{/if}"
            {if $size} style="font-size: {$size}"{/if}>
-        {$label|noescape}
+        {$label}
       </div>
     {/if}      
     <div class="value{if $center} center{/if}
@@ -1469,13 +1754,13 @@
                 {if $white} white{/if}
                 {if $prefix} prefixed{/if}"
                 {if $vSize} style="font-size: {$vSize}"{/if}>
-      {$value|noescape}
+      {$value}
     </div>
     {if not $prefix and not $top}
       <div class="value-label{if $center} center{/if}
                   {if $boxed} boxed{/if}"
            {if $size} style="font-size: {$size}"{/if}>
-         {$label|noescape}
+         {$label}
       </div>
     {/if}
   </div>
@@ -1515,7 +1800,7 @@
     {param pagesize: $pagesize /}
     {param size: $entries ? length($entries) : 0 /}
     {param titles: [ 'Name', 'Player'] /}
-    {param entries}
+    {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
           {call dma.entry.newListEntry}
@@ -1543,7 +1828,7 @@
     {param type: 'product' /}
     {param id: $id /}
     {param create: $create /}
-    {param values}
+    {param values kind="html"}
       {call dma.edit.value}
         {param name: 'name' /}
         {param label: 'Name' /}
@@ -1583,7 +1868,7 @@
       {call dma.edit.generic_value}
         {param label: 'Abilites' /}
         {param color: '#39f' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_input}
             {param name: 'strength' /}
             {param value: $entry.strength.present ? $entry.strength : '' /}
@@ -1646,9 +1931,9 @@
       {/call}
       {call dma.edit.generic_value}
         {param label: 'Looks' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {call dma.edit.field_input}              
                 {param name: 'height' /}
                 {param value: $entry.height.present ? $entry.height : '' /}
@@ -1692,10 +1977,10 @@
       {/call}
       {call dma.edit.generic_value}
         {param label: 'Levels' /}
-        {param value}
+        {param value kind="html"}
           {foreach $level in $entry.levels}
             {call dma.edit.field_list_line}
-              {param field}
+              {param field kind="html"}
                 {call dma.entries.levels.edit}
                   {param entry: $level /}
                 {/call}
@@ -1703,7 +1988,7 @@
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
-              {param field}
+              {param field kind="html"}
                 {call dma.entries.levels.edit /}
               {/param}
             {/call}
@@ -1712,12 +1997,33 @@
         {param color: '#39f' /}
       {/call}
       {call dma.edit.generic_value}
+        {param label: 'Skills' /}
+        {param value kind="html"}
+          {foreach $skill in $entry.skills}
+            {call dma.edit.field_list_line}
+              {param field kind="html"}
+                {call dma.entries.skills.edit}
+                  {param entry: $skill /}
+                {/call}
+              {/param}
+            {/call}
+          {ifempty}
+            {call dma.edit.field_list_line}
+              {param field kind="html"}
+                {call dma.entries.skills.edit /}
+              {/param}
+            {/call}
+          {/foreach}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.edit.generic_value}
         {param label: 'Feats' /}
-        {param value}
+        {param value kind="html"}
           {foreach $feat in $entry.feats}
             feat: {$feat}
             {call dma.edit.field_list_line}
-              {param field}
+              {param field kind="html"}
                 {call dma.entries.feats.edit}
                   {param entry: $feat /}
                 {/call}
@@ -1725,7 +2031,7 @@
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
-              {param field}
+              {param field kind="html"}
                 {call dma.entries.feats.edit /}
               {/param}
             {/call}
@@ -1735,10 +2041,10 @@
       {/call}
       {call dma.edit.generic_value}
         {param label: 'Qualities' /}
-        {param value}
+        {param value kind="html"}
           {foreach $quality in $entry.qualities}
             {call dma.edit.field_list_line}
-              {param field}
+              {param field kind="html"}
                 {call dma.entries.qualities.edit}
                   {param entry: $quality /}
                 {/call}
@@ -1746,7 +2052,7 @@
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
-              {param field}
+              {param field kind="html"}
                 {call dma.entries.qualities.edit /}
               {/param}
             {/call}
@@ -1768,7 +2074,7 @@
     {call dma.page.link}
       {param url: $character.path /}
       {param class: 'overlayicon-link' /}
-      {param text}
+      {param text kind="html"}
         <div class="overlay">
           {if strContains($character.icon, 'http')}
             <img src="{$character.icon}" alt="{$character.name}"

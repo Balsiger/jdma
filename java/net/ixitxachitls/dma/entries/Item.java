@@ -22,6 +22,8 @@
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -1102,6 +1104,53 @@ public class Item extends CampaignEntry
         return true;
 
     return false;
+  }
+
+  /**
+   * Check whether this item has magical properties.
+   *
+   * @return true if the item has magical properties.
+   */
+  public boolean isMagical()
+  {
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseItem)base).isMagical())
+        return true;
+
+    return false;
+  }
+
+  public boolean isMonetary()
+  {
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseItem)base).isMonetary())
+        return true;
+
+    return false;
+  }
+
+  public static void sortByValue(List<Item> inItems)
+  {
+    Collections.sort(inItems, new Comparator<Item>()
+    {
+      @Override
+      public int compare(Item inFirst, Item inSecond)
+      {
+        Optional<Money> first = inSecond.getCombinedValue().get();
+        Optional<Money> second = inSecond.getCombinedValue().get();
+
+        if(!first.isPresent() && !second.isPresent())
+          return 0;
+
+        if(!first.isPresent())
+          return -1;
+
+        if(!second.isPresent())
+          return +1;
+
+        return Double.compare(first.get().asGold(), second.get().asGold());
+      }
+    });
   }
 
   /**

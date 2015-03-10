@@ -208,8 +208,11 @@ public class BaseItem extends BaseEntry
   /** Whether the weapon can be used with finesse. */
   protected boolean m_finesse = false;
 
-  /** The names of the ammunition that can be used. */
+  /** Whether the weapon is ammunition. */
   protected boolean m_ammunition = false;
+
+  /** Whether the item is monetary. */
+  protected boolean m_monetary = false;
 
   /** The names of possible ammunition items. */
   protected List<String> m_ammunitionNeeded = new ArrayList<>();
@@ -488,7 +491,7 @@ public class BaseItem extends BaseEntry
   public Annotated<Optional<Integer>> getCombinedHardness()
   {
     if(m_hardness.isPresent())
-      return new Annotated.Max<Integer>(m_hardness.get(), getName());
+      return new Annotated.Max<>(m_hardness.get(), getName());
 
     Annotated.Max<Integer> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
@@ -515,7 +518,7 @@ public class BaseItem extends BaseEntry
   public Annotated<Optional<Integer>> getCombinedBreakDC()
   {
     if(m_break.isPresent())
-      return new Annotated.Max<Integer>(m_break.get(), getName());
+      return new Annotated.Max<>(m_break.get(), getName());
 
     Annotated.Max<Integer> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
@@ -542,7 +545,7 @@ public class BaseItem extends BaseEntry
   public Annotated<Optional<Weight>> getCombinedWeight()
   {
     if(m_weight.isPresent())
-      return new Annotated.Arithmetic<Weight>(m_weight.get(), getName());
+      return new Annotated.Arithmetic<>(m_weight.get(), getName());
 
     Annotated.Arithmetic<Weight> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
@@ -569,7 +572,7 @@ public class BaseItem extends BaseEntry
   public Annotated<Optional<Money>> getCombinedValue()
   {
     if(m_value.isPresent())
-      return new Annotated.Arithmetic<Money>(m_value.get(), getName());
+      return new Annotated.Arithmetic<>(m_value.get(), getName());
 
     Annotated<Optional<Money>> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())
@@ -596,7 +599,7 @@ public class BaseItem extends BaseEntry
   public Annotated<Optional<Size>> getCombinedSize()
   {
     if(m_size != Size.UNKNOWN)
-      return new Annotated.Max<Size>(m_size, getName());
+      return new Annotated.Max<>(m_size, getName());
 
     Annotated.Max<Size> combined = new Annotated.Max<>();
     for(BaseEntry entry : getBaseEntries())
@@ -1301,11 +1304,23 @@ public class BaseItem extends BaseEntry
    */
   public boolean isAmmunition()
   {
-    if (m_ammunition)
+    if(m_ammunition)
       return true;
 
     for(BaseEntry entry : getBaseEntries())
       if(((BaseItem)entry).isAmmunition())
+        return true;
+
+    return false;
+  }
+
+  public boolean isMonetary()
+  {
+    if(m_monetary)
+      return true;
+
+    for(BaseEntry entry : getBaseEntries())
+      if(((BaseItem)entry).isMonetary())
         return true;
 
     return false;
@@ -1961,6 +1976,9 @@ public class BaseItem extends BaseEntry
     if(m_playerName.isPresent())
       builder.setPlayerName(m_playerName.get());
 
+    if(m_monetary)
+      builder.setMonetary(m_monetary);
+
     if(isWeapon())
     {
       BaseWeaponProto.Builder weaponBuilder = BaseWeaponProto.newBuilder();
@@ -2133,6 +2151,7 @@ public class BaseItem extends BaseEntry
     m_substance = inValues.use("substance", m_substance, Substance.PARSER);
     m_appearances = inValues.use("appearances", m_appearances,
                                  Appearance.PARSER, "probability", "text");
+    m_monetary = inValues.use("monetary", m_monetary, Value.BOOLEAN_PARSER);
     m_multiple = inValues.use("multiple", m_multiple, Value.INTEGER_PARSER);
     m_multiuse = inValues.use("multiuse", m_multiuse, Value.INTEGER_PARSER);
     m_countUnit = inValues.use("count_unit", m_countUnit, CountUnit.PARSER);
@@ -2236,6 +2255,9 @@ public class BaseItem extends BaseEntry
       m_appearances.add(new Appearance(Probability.fromProto
                                        (appearance.getProbability()),
                                        appearance.getAppearance()));
+
+    if(proto.hasMonetary())
+      m_monetary = proto.getMonetary();
 
     if(proto.hasSubstance())
     {
