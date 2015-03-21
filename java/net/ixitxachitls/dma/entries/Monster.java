@@ -44,6 +44,7 @@ import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.Weight;
+import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.dma.values.enums.Size;
@@ -942,6 +943,44 @@ public class Monster extends CampaignEntry
     return (int) (inScore / 2) - 5;
   }
 
+  public int abilityModifier(String inAbility)
+  {
+    Optional<Ability> ability = Ability.fromString(inAbility);
+    if(!ability.isPresent())
+      return 0;
+
+    return abilityModifier(ability.get());
+  }
+
+  public int abilityModifier(Ability inAbility)
+  {
+    switch(inAbility)
+    {
+      case UNKNOWN:
+      case NONE:
+      default:
+        return 0;
+
+      case STRENGTH:
+        return getStrengthModifier();
+
+      case DEXTERITY:
+        return getDexterityModifier();
+
+      case CONSTITUTION:
+        return getConstitutionModifier();
+
+      case INTELLIGENCE:
+        return getIntelligenceModifier();
+
+      case WISDOM:
+        return getWisdomModifier();
+
+      case CHARISMA:
+        return getCharismaModifier();
+    }
+  }
+
   /**
    * Get the monster's weapons.
    *
@@ -1176,7 +1215,7 @@ public class Monster extends CampaignEntry
    */
   public int getIntelligenceModifier()
   {
-    Optional<Integer> intelligence = getCombinedBaseAttack().get();
+    Optional<Integer> intelligence = getCombinedIntelligence().get();
     if(!intelligence.isPresent())
       return 0;
 
@@ -1913,6 +1952,15 @@ public class Monster extends CampaignEntry
   public List<Skill> getSkills()
   {
     return Collections.unmodifiableList(m_skills);
+  }
+
+  public int skillRanks(String inSkill)
+  {
+    for(Skill skill : m_skills)
+      if(skill.getName().equalsIgnoreCase(inSkill))
+        return skill.getRanks();
+
+    return 0;
   }
 
   @Override

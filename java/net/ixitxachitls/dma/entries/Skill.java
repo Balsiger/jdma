@@ -29,6 +29,7 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Ability;
 
 /**
  * An actual skill a monster or character has.
@@ -45,7 +46,7 @@ public class Skill extends NestedEntry
   }
 
   /** The skill name. */
-  protected String m_name;
+  protected Optional<String> m_name = Optional.absent();
 
   /** The number of ranks in the skill .*/
   protected int m_ranks;
@@ -62,7 +63,7 @@ public class Skill extends NestedEntry
     return base.get().isUntrained();
   }
 
-  public List<String> getAvailableSkills()
+  public static List<String> getAvailableSkills()
   {
     return DMADataFactory.get().getIDs(BaseSkill.TYPE,
                                        Optional.<EntryKey>absent());
@@ -75,9 +76,9 @@ public class Skill extends NestedEntry
    */
   public Optional<BaseSkill> getBase()
   {
-    if(!m_base.isPresent())
+    if(!m_base.isPresent() && m_name.isPresent())
       m_base = Optional.of(DMADataFactory.get().<BaseSkill>getEntry
-            (new EntryKey(m_name, BaseLevel.TYPE)));
+            (new EntryKey(m_name.get(), BaseLevel.TYPE)));
 
     return m_base.get();
   }
@@ -87,11 +88,28 @@ public class Skill extends NestedEntry
     return m_ranks;
   }
 
+  public Ability getAbility()
+  {
+    Optional<BaseSkill> base = getBase();
+    if(!base.isPresent())
+      return Ability.UNKNOWN;
+
+    return base.get().getAbility();
+  }
+
+  public String getName()
+  {
+    if(m_name.isPresent())
+      return m_name.get();
+
+    return "<unknown>";
+  }
+
   @Override
   public void set(Values inValues)
   {
-    m_name = inValues.use("skill.name", m_name);
-    Optional<Integer> ranks = inValues.use("skill.ranks", m_ranks);
+    m_name = inValues.use("name", m_name);
+    Optional<Integer> ranks = inValues.use("ranks", m_ranks);
     if(ranks.isPresent())
       m_ranks = ranks.get();
   }
@@ -110,7 +128,7 @@ public class Skill extends NestedEntry
       ranks = inProto.getRanks();
 
     Skill skill = new Skill();
-    skill.m_name = name;
+    skill.m_name = Optional.of(name);
     skill.m_ranks = ranks;
 
     return skill;
@@ -125,7 +143,7 @@ public class Skill extends NestedEntry
   {
     SkillProto.Builder builder = SkillProto.newBuilder();
 
-    builder.setName(m_name);
+    builder.setName(m_name.get());
     builder.setRanks(m_ranks);
 
     return builder.build();

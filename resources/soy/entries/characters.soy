@@ -123,7 +123,9 @@
         {param label: 'Skills' /}
         {param value kind="html"}
           {foreach $skill in $entry.skills}
-            {$skill}
+            {call dma.entries.skills.show}
+              {param entry: $skill /}
+            {/call}
             {if not isLast($skill)}, {/if}
           {/foreach}
         {/param}
@@ -542,7 +544,10 @@
     </div>
 
     {call .sheet_value}
-      {param label: 'Total<br/>&nbsp;' /}
+      {param label kind="html"}
+       Total <br/>
+       &nbsp;
+      {/param}
       {param width: '13.5%' /}
       {param size: '9px' /}
       {param center: true /}
@@ -712,7 +717,7 @@
     {param center: true /}
     {param white: true /}
     {param top: true /}
-    {param value: '&nbsp;' /}
+    {param value: '' /}
   {/call}
 
   <div class="operator" style="padding-top: 30px">+</div>
@@ -727,7 +732,7 @@
     {param center: true /}
     {param white: true /}
     {param top: true /}
-    {param value: '&nbsp;' /}
+    {param value: ' ' /}
   {/call}
 
   <div class="operator" style="padding-top: 30px">+</div>
@@ -742,7 +747,7 @@
     {param center: true /}
     {param white: true /}
     {param top: true /}
-    {param value: '&nbsp;' /}
+    {param value: ' ' /}
   {/call}
 
 {/template}
@@ -764,7 +769,10 @@
     </div>
 
     {call .sheet_value}
-      {param label: 'Total<br/>&nbsp;' /}
+      {param label kind="html"}
+        Total <br/>
+        &nbsp;
+      {/param}
       {param width: '11%' /}
       {param size: '8px' /}
       {param vSize: '20px' /}
@@ -1051,12 +1059,9 @@
   </div>
 {/template}
 
-/**
- * The skills box.
- *
- * @param entry
- */
+/** The skills box. */
 {template .sheet_skills}
+  {@param entry: ?}
   {call .sheet_subtitle}
     {param title: 'Skills' /}
   {/call}
@@ -1092,21 +1097,20 @@
     {call .sheet_skill}
       {param skill: $skill /}
       {param classSkill: call($entry, 'isClassSkill', $skill.name) /}
+      {param ability: bonus(call($entry, 'abilityModifier', $skill.ability)) /}
+      {param ranks: call($entry, 'skillRanks', $skill.name) /}
     {/call}
   {/foreach}
 {/template}
 
-/**
- * A single skill line.
- *
- * @param skill
- * @param? classSkill
- * @param? total
- * @param? ranks
- * @param? ability
- * @param? misc
- */
+/** A single skill line. */
 {template .sheet_skill}
+  {@param skill: ?}
+  {@param? classSkill: bool}
+  {@param? total: string}
+  {@param? ranks: string}
+  {@param? ability: any}
+  {@param? misc: string}
   <div class="skill-line">
     <span class="class-skill">
       {if $classSkill}
@@ -1548,7 +1552,7 @@
         {param width: '30%' /}
         {param size: '8px' /}
         {param vSize: '12px' /}
-        {param value: $weapon ? bonus($weapon.attack_bonus) : '&nbsp;' /}
+        {param value: $weapon ? bonus($weapon.attack_bonus) : ' ' /}
       {/call}
   
       {call .sheet_value}
@@ -1556,7 +1560,7 @@
         {param width: '20%' /}
         {param size: '8px' /}
         {param vSize: '12px' /}
-        {param value: $weapon ? $weapon.damage : '&nbsp;' /}
+        {param value: $weapon ? $weapon.damage : ' ' /}
       {/call}
     
       {call .sheet_value}
@@ -1564,7 +1568,7 @@
         {param width: '20%' /}
         {param size: '8px' /}
         {param vSize: '12px' /}
-        {param value: $weapon ? $weapon.critical : '&nbsp;' /}
+        {param value: $weapon ? $weapon.critical : ' ' /}
       {/call}
     </div>
     <div>
@@ -1575,7 +1579,7 @@
         {param vSize: '12px' /}
         {param value: $weapon 
           ? (def($weapon.range) ? $weapon.range : '&mdash;') 
-          : '&nbsp;' /}
+          : ' ' /}
       {/call}
       
       {call .sheet_value}
@@ -1583,7 +1587,7 @@
         {param width: '20%' /}
         {param size: '8px' /}
         {param vSize: '12px' /}
-        {param value: $weapon ? $weapon.weapon_type.short : '&nbsp;' /}
+        {param value: $weapon ? $weapon.weapon_type.short : ' ' /}
       {/call}
 
       {if $weapon.player_notes.present}
@@ -1642,7 +1646,10 @@
     </div>
 
     {call .sheet_value}
-      {param label: 'Total<br/>&nbsp;' /}
+      {param label kind="html"}
+        Total <br/>
+        &nbsp;
+      {/param}
       {param width: '12%' /}
       {param size: '6px' /}
       {param vSize: '14px' /}

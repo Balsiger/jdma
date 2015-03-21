@@ -22,7 +22,7 @@
  /*
  * Templates for base products.
  */
-{namespace dma.entries.baseitems autoescape="deprecated-contextual"}
+{namespace dma.entries.baseitems}
 
 /**
  * Show the given entry in standard format.
@@ -44,17 +44,17 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#008' /}
-    {param title}
+    {param title kind="html"}
       {call dma.entry._new_title}
         {param title: $entry.name /}
         {param color: '#008' /}
       {/call}
     {/param}
-    {param values}            
+    {param values kind="html"}
       {if length($entry.baseNames)}
         {call dma.entry.value}
           {param label: 'Base' /}
-          {param value}
+          {param value kind="html"}
             {foreach $base in $entry.baseNames}
               {call dma.page.link}
                 {param text: $base /}
@@ -69,7 +69,7 @@
       {if $entry.player_name.present}
         {call dma.entry.value}
           {param label: 'Player Name' /}
-          {param value}
+          {param value kind="html"}
             {annotate($entry.combined_player_name)}
           {/param}
           {param color: '#008' /}
@@ -78,7 +78,7 @@
       {if length($entry.synonyms)}
         {call dma.entry.value}
           {param label: 'Synonyms' /}
-          {param value}
+          {param value kind="html"}
             {foreach $synonym in $entry.synonyms}
               {$synonym}
               {if not isLast($synonym)}; {/if}
@@ -90,7 +90,7 @@
       {if $entry.categories.present or $entry.combined_categories.get.present}
         {call dma.entry.value}
           {param label: 'Categories' /}
-          {param value}
+          {param value kind="html"}
             {if length($entry.categories)}
               {foreach $category in $entry.categories}
                 {$category}
@@ -104,7 +104,7 @@
       {/if}
       {call dma.entry.value}
         {param label: 'Worlds' /}        
-        {param value}
+        {param value kind="html"}
           {annotate($entry.combined_worlds)}
         {/param}
         {param color: '#008' /}
@@ -112,7 +112,7 @@
       {if $entry.incomplete.present or $entry.combined_incomplete.get.present}
         {call dma.entry.value}
           {param label: 'Incomplete' /}
-          {param value}
+          {param value kind="html"}
             {if $entry.incomplete}
               {$entry.incomplete}{sp}
             {/if}
@@ -138,7 +138,7 @@
       {/call}
       {call dma.entry.value}
         {param label: 'Size' /}
-        {param value}
+        {param value kind="html"}
           {annotate($entry.combined_size)}{sp}
           {annotate($entry.combined_size_modifier)}
         {/param}
@@ -146,7 +146,7 @@
       {/call}
       {call dma.entry.value}
         {param label: 'Substance' /}
-        {param value}
+        {param value kind="html"}
           {annotate($entry.combined_substance)}
           {sp}{annotate($entry.combined_thickness)}
           , hardness {annotate($entry.combined_hardness)}
@@ -167,7 +167,7 @@
       {if $entry.isWearable}
         {call dma.entry.value}
           {param label: 'Wear' /}        
-          {param value}
+          {param value kind="html"}
             {annotate($entry.combined_slot)}
             , don {annotate($entry.combined_don)}
             {sp}(hastily {annotate($entry.combined_hastily)}
@@ -179,7 +179,7 @@
       {if $entry.isArmor}
         {call dma.entry.value}
           {param label: 'Armor' /}
-          {param value}
+          {param value kind="html"}
             {annotate($entry.combined_armor_type)},
             max dexterity {annotate($entry.combined_max_dex)},{sp}
             {annotate($entry.combined_check_penalty)} check penalty,{sp}
@@ -189,7 +189,7 @@
         {/call}
         {call dma.entry.value}
           {param label: 'AC Bonus' /}        
-          {param value}
+          {param value kind="html"}
             {annotate($entry.combined_armor_bonus)}
           {/param}
           {param color: '#008' /}          
@@ -198,7 +198,7 @@
       {if $entry.isWeapon}
         {call dma.entry.value}
           {param label: 'Weapon' /}
-          {param value}
+          {param value kind="html"}
             {annotate($entry.combined_weapon_type)}
             {sp}
             {annotate($entry.combined_weapon_style)}
@@ -218,7 +218,7 @@
         {/call}
         {call dma.entry.value}
           {param label: 'Damage' /}
-          {param value}
+          {param value kind="html"}
             {annotate($entry.combined_damage)}
             {if $entry.combined_secondary_damage.get.present}
               /{annotate($entry.combined_secondary_damage)}
@@ -235,7 +235,7 @@
         {call dma.entry.value}
           {param label: 'Commodity' /}        
           {param color: '#008' /}
-          {param value}
+          {param value kind="html"}
             {annotate($entry.combined_area)}
             {annotate($entry.combined_length)}
           {/param}
@@ -245,7 +245,7 @@
         {call dma.entry.value}
           {param label: 'Container' /}        
           {param color: '#008' /}
-          {param value}
+          {param value kind="html"}
             {annotate($entry.combined_state)}{sp}
             {annotate($entry.combined_capacity)}
           {/param}
@@ -256,7 +256,7 @@
           {call dma.entry.value}
             {param label: 'Multiple' /}        
             {param color: '#008' /}
-            {param value}
+            {param value kind="html"}
               {annotate($entry.combined_multiple)}{sp}
               {annotate($entry.combined_count_unit)}
             {/param}
@@ -273,7 +273,7 @@
         {call dma.entry.value}
           {param label: 'Light' /}        
           {param color: '#008' /}
-          {param value}
+          {param value kind="html"}
             {annotate($entry.light_shape)}{sp}
             bright {annotate($entry.combined_bright_light)} bright{sp}
             shadowy {annotate($entry.combined_shadowy_light)}
@@ -291,14 +291,14 @@
         {call dma.entry.value}
           {param label: 'Magic' /}        
           {param color: '#008' /}
-          {param value}
+          {param value kind="html"}
             {annotate($entry.combined_magical_modifiers)}
           {/param}
         {/call}
       {/if}
       {call dma.entry.value}
         {param label: 'References' /}
-        {param value}
+        {param value kind="html"}
           {annotate($entry.combined_references)}
         {/param}
         {param color: '#008' /}
@@ -327,7 +327,7 @@
     {param pagesize: $pagesize /}
     {param size: $entries ? length($entries) : 0 /}
     {param titles: [ 'Name', 'Worlds', 'Short Descriptoion'] /}
-    {param entries}
+    {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
           {call dma.entry.newListEntry}
@@ -355,7 +355,7 @@
     {param type: 'item' /}
     {param id: $id /}
     {param create: $create /}
-    {param values}
+    {param values kind="html"}
       {call dma.edit.value}
         {param name: 'name' /}
         {param label: 'Name' /}
@@ -438,7 +438,7 @@
       {call dma.edit.generic_value}
         {param label: 'Size' /}
         {param color: '#008' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_selection}
             {param name: 'size' /}
             {param value: $entry.size.string /}
@@ -456,7 +456,7 @@
       {call dma.edit.generic_value}
         {param label: 'Substance' /}
         {param color: '#008' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_selection}
             {param name: 'substance' /}
             {param value: $entry.substance.string /}
@@ -498,9 +498,9 @@
         {param name: 'appearances' /}
         {param color: '#008' /}
         {param label: 'Appearances' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $appearance in $entry.appearances}
                 {call dma.edit.field_list_multiple}
                   {param class: 'narrow' /}
@@ -553,7 +553,7 @@
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Wear' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_selection}
             {param name: 'wearable.slot' /}
             {param value: $entry.slot.string /}
@@ -589,7 +589,7 @@
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Armor' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_selection}
             {param name: 'armor.type' /}
             {param value: $entry.armor_type.string /}
@@ -633,7 +633,7 @@
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Damage' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_input}
             {param name: 'weapon.damage.first' /}
             {param value: $entry.damage.isPresent 
@@ -672,7 +672,7 @@
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Weappon' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_selection}
             {param name: 'weapon.type' /}
             {param value: $entry.weapon_type.string /}
@@ -734,7 +734,7 @@
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Commodity' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_input}
             {param name: 'commodity.area' /}
             {param value: $entry.area.isPresent
@@ -756,7 +756,7 @@
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Container' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_selection}
             {param name: 'container.state' /}
             {param value: $entry.state.string /}
@@ -776,7 +776,7 @@
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Count' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_input}
             {param name: 'multiuse' /}
             {param value: $entry.multiuse.isPresent 
@@ -804,7 +804,7 @@
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Light' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_selection}
             {param name: 'light.shape' /}
             {param value: $entry.light_shape.string /}
@@ -832,7 +832,7 @@
       {call dma.edit.generic_value}
         {param color: '#008' /}
         {param label: 'Timed' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_input}
             {param name: 'timed' /}
             {param value: $entry.timed.isPresent 
@@ -846,9 +846,9 @@
         {param name: 'magical' /}
         {param color: '#008' /}
         {param label: 'Magic' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $modifier in $entry.magical_modifiers}  
                 {call dma.edit.field_list_multiple}
                   {param values: [
@@ -894,9 +894,9 @@
         {param name: 'references' /}
         {param color: '#008' /}
         {param label: 'References' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $reference in $entry.references}  
                 {call dma.edit.field_list_multiple}
                   {param values: [

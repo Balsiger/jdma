@@ -19,10 +19,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-/*
- * Templates for skills.
- */
+/* Templates for skills. */
 {namespace dma.entries.skills}
+
+/** Show a skill. */
+{template .show}
+  {@param entry: ?}
+  {$entry.name} {$entry.ranks}
+{/template}
 
 /**
  * Editing the skill.
@@ -34,11 +38,11 @@
     {param name: 'skill.name' /}
     {param caption: 'Name' /}
     {param value: $entry ? $entry.name : '' /}
-    {param choices: $ij.Level.available_skill /}
+    {param choices: $ij.Skill.available_skills /}
     {param class: 'narrow' /}
   {/call}
   {call dma.edit.field_input}
-    {param name: 'level.ranks' /}
+    {param name: 'skill.ranks' /}
     {param caption: 'Ranks' /}
     {param value: $entry ? $entry.ranks : '' /}
     {param validate: 'number' /}

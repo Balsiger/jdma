@@ -147,10 +147,10 @@ public class SoyTemplate
       SoyValue object = (SoyValue)inArgs.get(0);
       String method = inArgs.get(1).stringValue();
 
-      if(inArgs.get(2) instanceof StringData)
-        return object.call(method, inArgs.get(2).stringValue());
+      if(inArgs.get(2) instanceof SoyValue)
+        return object.call(method, ((SoyValue)inArgs.get(2)).getValue());
 
-      return new SoyUndefined("unsupported argument");
+      return object.call(method, inArgs.get(2).stringValue());
     }
   }
 

@@ -39,6 +39,7 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseSkill;
 import net.ixitxachitls.dma.entries.Level;
+import net.ixitxachitls.dma.entries.Skill;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.output.soy.SoyValue;
@@ -240,6 +241,7 @@ public class SoyServlet extends DMAServlet
 
        // classes with static access
        "Level", new SoyValue("Level", Level.class),
+       "Skill", new SoyValue("Skill", Skill.class),
        "Gender", new SoyValue("Gender", Gender.class),
        "Alignment", new SoyValue("Alignment", Alignment.class),
        "Ability", new SoyValue("Ability", Ability.class),

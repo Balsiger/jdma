@@ -21,6 +21,7 @@
 
 package net.ixitxachitls.dma.output.soy;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -131,14 +132,14 @@ public class SoyValue extends SoyMapData
     return new SoyUndefined(m_name + "." + inName);
   }
 
-  public SoyData call(String inMethod, String inArgument)
+  public SoyData call(String inMethod, Object ... inArguments)
   {
-    Object value = Classes.callMethod(inMethod, m_object, inArgument);
+    Object value = Classes.callMethod(inMethod, m_object, inArguments);
     if(value != null)
       return convert(inMethod, value);
 
-    return new SoyUndefined(m_name + ".call(" + inMethod + ", " + inArgument
-                            + ")");
+    return new SoyUndefined(m_name + ".call(" + inMethod + ", "
+                            + Arrays.toString(inArguments) + ")");
   }
 
   @Override
