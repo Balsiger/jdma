@@ -732,7 +732,7 @@
     {param center: true /}
     {param white: true /}
     {param top: true /}
-    {param value: ' ' /}
+    {param value: '' /}
   {/call}
 
   <div class="operator" style="padding-top: 30px">+</div>
@@ -747,7 +747,7 @@
     {param center: true /}
     {param white: true /}
     {param top: true /}
-    {param value: ' ' /}
+    {param value: '' /}
   {/call}
 
 {/template}
@@ -1112,7 +1112,7 @@
     <span class="skill-modifier">
     </span>
     &nbsp;
-    <span class="skill-ranks">
+    <span class="skill-ranks skill-total">
       ({$entry.total_used_skill_points} of {$entry.total_skill_points} points)
     </span>
     &nbsp;
@@ -1783,7 +1783,7 @@
                 {if $white} white{/if}
                 {if $prefix} prefixed{/if}"
                 {if $vSize} style="font-size: {$vSize}"{/if}>
-      {$value}
+      {if $value}{$value}{else}&nbsp;{/if}
     </div>
     {if not $prefix and not $top}
       <div class="value-label{if $center} center{/if}
