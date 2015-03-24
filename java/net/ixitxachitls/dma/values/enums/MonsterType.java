@@ -40,56 +40,59 @@ public enum MonsterType implements Named,
     Proto<Type>
 {
   /** The unknown value. */
-  UNKNOWN("Unknown", BaseMonsterProto.Type.UNKNOWN_TYPE),
+  UNKNOWN("Unknown", 2, BaseMonsterProto.Type.UNKNOWN_TYPE),
 
   /** Aberration. */
-  ABERRATION("Aberration", BaseMonsterProto.Type.ABERRATION),
+  ABERRATION("Aberration", 2, BaseMonsterProto.Type.ABERRATION),
 
   /** Animal. */
-  ANIMAL("Animal", BaseMonsterProto.Type.ANIMAL),
+  ANIMAL("Animal", 2, BaseMonsterProto.Type.ANIMAL),
 
   /** Construct. */
-  CONSTRUCT("Construct", BaseMonsterProto.Type.CONSTRUCT),
+  CONSTRUCT("Construct", 2, BaseMonsterProto.Type.CONSTRUCT),
 
   /** Dragon. */
-  DRAGON("Dragon", BaseMonsterProto.Type.DRAGON),
+  DRAGON("Dragon", 6, BaseMonsterProto.Type.DRAGON),
 
   /** Elemental. */
-  ELEMENTAL("Elemental", BaseMonsterProto.Type.ELEMENTAL),
+  ELEMENTAL("Elemental", 2, BaseMonsterProto.Type.ELEMENTAL),
 
   /** Fey. */
-  FEY("Fey", BaseMonsterProto.Type.FEY),
+  FEY("Fey", 6, BaseMonsterProto.Type.FEY),
 
   /** Giant. */
-  GIANT("Giant", BaseMonsterProto.Type.GIANT),
+  GIANT("Giant", 2, BaseMonsterProto.Type.GIANT),
 
   /** Humanoid. */
-  HUMANOID("Humanoid", BaseMonsterProto.Type.HUMANOID),
+  HUMANOID("Humanoid", 2, BaseMonsterProto.Type.HUMANOID),
 
   /** Magical Beast. */
-  MAGICAL_BEAST("Magical Beast", BaseMonsterProto.Type.MAGICAL_BEAST),
+  MAGICAL_BEAST("Magical Beast", 2, BaseMonsterProto.Type.MAGICAL_BEAST),
 
   /** Monstrous Humanoid. */
-  MONSTROUS_HUMANOID("Monstrous Humanoid",
+  MONSTROUS_HUMANOID("Monstrous Humanoid", 2,
                      BaseMonsterProto.Type.MONSTROUS_HUMANOID),
 
   /** Ooze. */
-  OOZE("Ooze", BaseMonsterProto.Type.OOZE),
+  OOZE("Ooze", 2, BaseMonsterProto.Type.OOZE),
 
   /** Outsider. */
-  OUTSIDER("Outsider", BaseMonsterProto.Type.OUTSIDER),
+  OUTSIDER("Outsider", 8, BaseMonsterProto.Type.OUTSIDER),
 
   /** Plant. */
-  PLANT("Plant", BaseMonsterProto.Type.PLANT),
+  PLANT("Plant", 2, BaseMonsterProto.Type.PLANT),
 
   /** Undead. */
-  UNDEAD("Undead", BaseMonsterProto.Type.UNDEAD),
+  UNDEAD("Undead", 4, BaseMonsterProto.Type.UNDEAD),
 
   /** Vermin. */
-  VERMIN("Vermin", BaseMonsterProto.Type.VERMIN);
+  VERMIN("Vermin", 2, BaseMonsterProto.Type.VERMIN);
 
   /** The value's name. */
   private String m_name;
+
+  /** The skill ranks per level, without HD and Int modifier. */
+  private int m_skillRanks;
 
   /** The proto enum value. */
   private BaseMonsterProto.Type m_proto;
@@ -109,18 +112,25 @@ public enum MonsterType implements Named,
    * Create the enum value.
    *
    * @param inName  the name of the value
+   * @param inRanks base skill ranks per level (without HD, Int)
    * @param inProto the proto enum value
    */
-  private MonsterType(String inName, BaseMonsterProto.Type inProto)
+  private MonsterType(String inName, int inRanks, BaseMonsterProto.Type inProto)
   {
     m_name = inName;
     m_proto = inProto;
+    m_skillRanks = inRanks;
   }
 
   @Override
   public String getName()
   {
     return m_name;
+  }
+
+  public int getSkillRanks()
+  {
+    return m_skillRanks;
   }
 
   @Override

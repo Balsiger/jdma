@@ -40,6 +40,7 @@ import net.ixitxachitls.dma.proto.Entries.MonsterProto;
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Gender;
 import net.ixitxachitls.util.logging.Log;
 
@@ -373,6 +374,24 @@ public class NPC extends Monster
   public int maxSkillRanks()
   {
     return BaseLevel.maxSkillRanks(getEffectiveCharacterLevel());
+  }
+
+  @Override
+  public int totalSkillPoints()
+  {
+    int points = 0;
+    int intModifier = Math.max(1, abilityModifier(Ability.INTELLIGENCE));
+    boolean first = true;
+
+    for(Level level : m_levels)
+      if (first)
+      {
+        points += 4 * (level.getSkillPoints() + intModifier);
+        first = false;
+      } else
+        points += level.getSkillPoints() + intModifier;
+
+    return points;
   }
 
   public boolean isClassSkill(String inName)

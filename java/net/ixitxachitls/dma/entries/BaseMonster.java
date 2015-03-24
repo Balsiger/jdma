@@ -688,6 +688,18 @@ public class BaseMonster extends BaseEntry
     return m_hitDice;
   }
 
+  public Annotated.Integer getCombinedHitDie()
+  {
+    if(m_hitDice.isPresent())
+      return new Annotated.Integer(m_hitDice.get().getNumber(), getName());
+
+    Annotated.Integer combined = new Annotated.Integer();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseMonster)entry).getCombinedHitDie());
+
+    return combined;
+  }
+
   /**
    * Get all of the monster's available speeds.
    *

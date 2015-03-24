@@ -46,6 +46,7 @@ import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Alignment;
+import net.ixitxachitls.dma.values.enums.MonsterType;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.util.logging.Log;
@@ -1666,6 +1667,25 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  public Annotated<Optional<MonsterType>> getCombinedMonsterType()
+  {
+    Annotated<Optional<MonsterType>> combined =
+        new Annotated.Max<>(MonsterType.UNKNOWN, getName());
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedMonsterType());
+
+    return combined;
+  }
+
+  public Annotated.Integer getCombinedHitDie()
+  {
+    Annotated.Integer combined = new Annotated.Integer();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseMonster)entry).getCombinedHitDie());
+
+    return combined;
+  }
+
   /**
    * Get the monter's armor bonus.
    *
@@ -1961,6 +1981,34 @@ public class Monster extends CampaignEntry
         return skill.getRanks();
 
     return 0;
+  }
+
+  public int totalSkillPoints()
+  {
+    int ranks = 0;
+
+    // According to MM p. 301
+    Optional<MonsterType> type = getCombinedMonsterType().get();
+    if(type.isPresent())
+      ranks = type.get().getSkillRanks();
+    else
+      ranks = MonsterType.UNKNOWN.getSkillRanks();
+
+    ranks += Math.max(1, abilityModifier(Ability.INTELLIGENCE));
+
+    if(getCombinedHitDie().get().isPresent())
+      ranks *= getCombinedHitDie().get().get() + 3;
+
+    return ranks;
+  }
+
+  public int totalUsedSkillPoints()
+  {
+    int ranks = 0;
+    for(Skill skill : m_skills)
+      ranks += skill.getRanks();
+
+    return ranks;
   }
 
   @Override

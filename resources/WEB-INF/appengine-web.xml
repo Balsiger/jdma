@@ -23,6 +23,7 @@
 
   <class-loader-config>
     <priority-specifier filename="guava-18.0.jar"/>
+    <priority-specifier filename="soy-2.5.0-SNAPSHOT.jar"/>
   </class-loader-config>
 
   <precompilation-enabled>

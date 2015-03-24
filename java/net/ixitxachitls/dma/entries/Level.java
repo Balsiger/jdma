@@ -61,6 +61,19 @@ public class Level extends NestedEntry
     return m_hp;
   }
 
+  public int getSkillPoints()
+  {
+    Optional<BaseLevel> level = getBase();
+    if(!level.isPresent())
+      return 0;
+
+    Optional<Integer> points = level.get().getSkillPoints();
+    if(points.isPresent())
+      return points.get();
+
+    return 0;
+  }
+
   /**
    * Get the base level to this level.
    *

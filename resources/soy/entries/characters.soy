@@ -1101,6 +1101,28 @@
       {param ranks: call($entry, 'skillRanks', $skill.name) /}
     {/call}
   {/foreach}
+
+  <div class="skill-line skill-title">
+    <span class="class-skill">
+    </span>
+    <span class="skill-name">
+    </span>
+    <span class="skill-key">
+    </span>
+    <span class="skill-modifier">
+    </span>
+    &nbsp;
+    <span class="skill-ranks">
+      ({$entry.total_used_skill_points} of {$entry.total_skill_points} points)
+    </span>
+    &nbsp;
+    <span class="skill-ability">
+    </span>
+    &nbsp;
+    <span class="skill-misc">
+    </span>
+  </div>
+
 {/template}
 
 /** A single skill line. */
