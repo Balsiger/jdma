@@ -45,7 +45,7 @@
     {param last: $last /}
     {param color: '#444' /}
     {param title}
-      {call dma.entry._new_title}
+      {call dma.entry.title}
         {param title}
           {if $entry.leader.present}{$entry.leader} {/if}
           {$entry.title}
@@ -54,7 +54,7 @@
       {/call}
       
       {if $entry.subtitle.present}
-        {call dma.entry._new_subtitle}
+        {call dma.entry.subtitle}
           {param title: $entry.subtitle /}
         {/call}
       {/if}

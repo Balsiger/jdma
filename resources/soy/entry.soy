@@ -28,25 +28,22 @@
 // @function def 1 0
 // @function entry 1 0
 
-/**
- * Show the entry.
- * 
- * @param entry The entry to show
- * @param type The entry type to use
- * @param values The values to show
- * @param first the first entry available, if any
- * @param previous the previous entry, if any
- * @param list the overview of all entries
- * @param next the next entry, if any
- * @param last the last entry, if any
- * @param color the color for highlights
- * @param? title the special title, if any
- * @param? noprint whether to print this or not
- */
+/** Show the entry. */
 {template .show}
+  {@param entry: ?}
+  {@param type: string}
+  {@param values: html}
+  {@param first: ?}
+  {@param previous: ?}
+  {@param list: ?}
+  {@param next: ?}
+  {@param last: ?}
+  {@param color: string}
+  {@param? title: html}
+  {@param? noprint: bool}
   <div class="show entry {$type}{if $noprint} no-print{/if}">
 
-    {call dma.entry.toolbar}
+    {call .toolbar}
       {param entry: $entry /}
     {/call}
 
@@ -86,7 +83,7 @@
        {if $title}
          {$title}
        {else}
-         {call dma.entry._new_title}
+         {call dma.entry.title}
            {param title: $entry.name /}
            {param color: $color /}
          {/call}
@@ -139,35 +136,30 @@
   </div>
 {/template}
 
-/**
- * Show the toolbar with the avaialable actions.
- * 
- * @param entry The entry to show the toolbar for
- */
+/** Show the toolbar with the avaialable actions. */
 {template .toolbar}
+  {@param entry: ?}
   <div class="toolbar">
     <div class="actions">
       <div class="action sprite large edit"
            onclick="edit.show('{$entry.name}',
                               '{$entry.path}',
-                'edit-{let $foo3 kind="text"}{$entry.type |css}{/let}{$foo3}-{escape($entry.name)}')">
+                   'edit-{escape($entry.type)}-{escape($entry.name)}')">
       </div>
       <div class="action sprite large delete"
            onclick="if(confirm('Do you really want to delete this?'))
                       util.ajax('/actions/remove',
-                               {lb} key: '{let $foo5 kind="text"}{$entry.key |escapeJsString}{/let}{$foo5}' {rb},
-                               null, true);">
+                                {lb} key: '{escape($entry.key)}' {rb},
+                                null, true);">
       </div> 
     </div>
   </div>
 {/template}
 
-/** The main title.
- * 
- * @param title The text of the title
- * @param color The color of the title
- */
-{template ._new_title}
+/** The main title. */
+{template .title}
+  {@param title: html|string}
+  {@param color: string}
   <div class="title-container">
   <span class="title" style="color: {$color}">
     {$title}
@@ -178,23 +170,18 @@
   </div>
 {/template}
 
-/** The sub title.
- * 
- * @param title The text of the title
- */
-{template ._new_subtitle}
+/** The sub title. */
+{template .subtitle}
+  {@param title: html|string}
   <div class="subtitle">
     {$title}
   </div>
 {/template}
 
-/**
- * The main image of an entry.
- *
- * @param entry The entry formatted.
- * @param? size The size of the image
- */
+/** The main image of an entry. */
 {template .mainImage}
+  {@param entry: ?}
+  {@param? size: number}
   {if def($entry.main_file)}
     {call dma.page.link}
       {param url: $entry.main_file.path /}
@@ -223,12 +210,9 @@
   {/if}
 {/template}
 
-/**
- * An image for the entry.
- * 
- * @param file The image shown
- */
+/** An image for the entry. */
 {template .file}
+  {@param file: ?}
   {call dma.page.link}
     {param url: $file.path /}
     {param tooltip: $file.name /}
@@ -240,13 +224,11 @@
   {/call}
 {/template}
 
-/** An entry value.
- * 
- * @param label The value label.
- * @param value The value's value.'
- * @param color The color for display.
- */
+/** An entry value. */
 {template .value}
+  {@param label: string|html}
+  {@param value: html}
+  {@param color: string}
   <div class="_new_value">
     <div class="_new_value-label" style="color:{$color}">
       {$label}:
@@ -257,20 +239,16 @@
   </div>
 {/template}
 
-/**
- * Formatting a list of entries.
- *
- * @param title The list title.
- * @param start The start index
- * @param pagesize The size of the page
- * @param size The number of entries shown
- * @param titles An array with the list title names
- * @param entries The entries printed
- * @param label The navigation label for this page
- * @param path The path to this page
- *
- */
-{template .newlist}
+/** Formatting a list of entries. */
+{template .list}
+  {@param title: html|string}
+  {@param start: number}
+  {@param pagesize: number}
+  {@param size: number}
+  {@param titles: list<html|string>}
+  {@param entries: html}
+  {@param label: string}
+  {@param path: string}
   <h1>{$title}</h1>
   {call dma.page.title}
     {param title: $title /}
@@ -698,27 +676,6 @@
 {/template}
 
 /**
- * The entry title.
- *
- * @param entry The entry rendered.
- */
-{deltemplate dma.entry.title}
-  <h1>
-    {call dma.value.editable}
-      {param canEdit: $ij.isDM or $ij.isOwner /}
-      {param name: 'name' /}
-      {param value: $entry.name /}
-      {param key: $entry.key /}
-      {param type: 'name' /}
-      {param content: $entry.name /}
-    {/call}
-  </h1>
-  {call dma.page.title}
-    {param title: $entry.name /}
-  {/call}
-{/deltemplate}
-
-/**
  * Printing a descriptive key value pair.
  *
  * @param entry The entry rendered.
@@ -787,75 +744,6 @@
     </div>
   </div>
 {/template}
-
-/**
- * Formatting a list of entries.
- *
- * @param title The list title.
- * @param start The start index
- * @param pagesize The size of the page
- * @param entries The entries printed
- * @param label The navigation label for this page
- * @param path The path to this page
- *
- */
-{template .list}
-  <h1>{$title}</h1>
-  {call dma.page.title}
-    {param title: $title /}
-  {/call}
-  {call dma.navigation.navigation}
-    {param entries: [[ 'label': $label, 'url': $path ]] /}
-  {/call}
-  {call .listnav}
-    {param start: $start /}
-    {param pagesize: $pagesize /}
-    {param size: length($entries) /}
-  {/call}
-  {if $entries}
-    <table class="entrylist">
-      <tr class="title">
-        {delcall dma.entry.listtitles /}
-      </tr>
-      {foreach $entry in $entries}
-        <tr onclick="util.link(event, '{$entry.path}')">
-          {delcall dma.entry.listentry}
-            {param entry: $entry /}
-          {/delcall}
-        </tr>
-      {/foreach}
-    </table>
-    {call .listnav}
-      {param start: $start /}
-      {param pagesize: $pagesize /}
-      {param size: length($entries) /}
-    {/call}
-  {else}
-    <div class="error">No entries found!</div>
-  {/if}
-{/template}
-
-/**
- * Template for a single list entry.
- *
- * @param entry The entry to render.
- */
-{deltemplate dma.entry.listentry}
-  {call dma.entry.listentryvalue}
-    {param style: 'name' /}
-    {param entry: $entry /}
-    {param content: $entry.name /}
-  {/call}
-  {call dma.entry.listentryvalue}
-    {param style: 'worlds' /}
-    {param entry: $entry /}
-  {/call}
-  {call dma.entry.listentryvalue}
-    {param style: 'short' /}
-    {param entry: $entry /}
-    {param value: $entry.short_description /}
-  {/call}
-{/deltemplate}
 
 /**
  * Template for a list entry value.

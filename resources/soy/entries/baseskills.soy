@@ -24,17 +24,14 @@
  */
 {namespace dma.entries.baseskills}
 
-/**
- * Show the given entry in standard format.
- * 
- * @param entry The entry to show.
- * @param first the first entry available, if any
- * @param previous the previous entry, if any
- * @param list the overview of all entries
- * @param next the next entry, if any
- * @param last the last entry, if any
- */
+/** Show the given entry in standard format. */
 {template .show}
+  {@param entry: ?}
+  {@param first: ?}
+  {@param previous: ?}
+  {@param list: ?}
+  {@param next: ?}
+  {@param last: ?}
   {call dma.entry.show}
     {param entry: $entry /}
     {param type: 'base-level' /}
@@ -45,7 +42,7 @@
     {param last: $last /}
     {param color: '#808' /}
     {param title kind="html"}
-      {call dma.entry._new_title}
+      {call dma.entry.title}
         {param title: $entry.name /}
         {param color: '#808' /}
       {/call}
@@ -234,7 +231,7 @@
  *
  */
 {template .list}
-  {call dma.entry.newlist}
+  {call dma.entry.list}
     {param title: $title /}
     {param label: $label /}
     {param path: $path /}
