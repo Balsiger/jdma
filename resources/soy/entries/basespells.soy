@@ -91,10 +91,7 @@
             {/if}
             {if length($entry.combined_categories.annotate)}
               {if length($entry.categories)},{sp}{/if}
-              {call dma.entry.concatenated_list}
-                {param values: [] /}
-                {param concatenate: $entry.combined_categories /}
-              {/call}
+              {annotate($entry.combined_categories)}
             {/if}
           {/param}
           {param color: '#aaf' /}
@@ -102,12 +99,7 @@
       {/if}
       {call dma.entry.value}
         {param label: 'Worlds' /}        
-        {param value}
-          {call dma.entry.concatenated_list}
-            {param values: $entry.worlds /}
-            {param concatenate: $entry.combined_worlds /}
-          {/call}
-        {/param}
+        {param value: annotate($entry.combined_worlds) /}
         {param color: '#aaf' /}
       {/call}
       {if $entry.incomplete or length($entry.combined_incomplete.annotate) > 0}
@@ -117,10 +109,7 @@
             {if $entry.incomplete}
               {$entry.incomplete}{sp}
             {/if}
-            {call dma.entry.concatenated}
-              {param value: '' /}
-              {param concatenate: $entry.combined_incomplete /}
-            {/call}
+            {annotate($entry.combined_incomplete)}
           {/param}
           {param color: '#aaf' /}
         {/call}
@@ -264,12 +253,7 @@
       {/if}
       {call dma.entry.value}
         {param label: 'References' /}
-        {param value}
-          {call dma.entry.concatenated_list}
-            {param values: [] /}
-            {param concatenate: $entry.combined_references /}
-          {/call}
-        {/param}
+        {param value: annotate($entry.combined_references) /}
         {param color: '#aaf' /}
       {/call}
     {/param}
@@ -299,7 +283,7 @@
     {param entries}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
-          {call dma.entry.newListEntry}
+          {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
               $entry.name, $entry.worldsString, $entry.short_description

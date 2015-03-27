@@ -22,7 +22,7 @@
  /*
  * Templates for base products.
  */
-{namespace dma.entries.baselevels autoescape="deprecated-contextual"}
+{namespace dma.entries.baselevels}
 
 /**
  * Show the given entry in standard format.
@@ -44,17 +44,17 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#aaf' /}
-    {param title}
+    {param title kind="html"}
       {call dma.entry.title}
         {param title: $entry.name /}
         {param color: '#aaf' /}
       {/call}
     {/param}
-    {param values}            
+    {param values kind="html"}
       {if length($entry.baseNames)}
         {call dma.entry.value}
           {param label: 'Base' /}
-          {param value}
+          {param value kind="html"}
             {foreach $base in $entry.baseNames}
               {call dma.page.link}
                 {param text: $base /}
@@ -69,7 +69,7 @@
       {if length($entry.synonyms)}
         {call dma.entry.value}
           {param label: 'Synonyms' /}
-          {param value}
+          {param value kind="html"}
             {foreach $synonym in $entry.synonyms}
               {$synonym}
               {if not isLast($synonym)}; {/if}
@@ -82,7 +82,7 @@
           length($entry.combined_categories.get)}
         {call dma.entry.value}
           {param label: 'Categories' /}
-          {param value}
+          {param value kind="html"}
             {if length($entry.categories)}
               {foreach $category in $entry.categories}
                 {$category}
@@ -91,10 +91,7 @@
             {/if}
             {if length($entry.combined_categories.get)}
               {if length($entry.categories)},{sp}{/if}
-              {call dma.entry.concatenated_list}
-                {param values: [] /}
-                {param concatenate: $entry.combined_categories /}
-              {/call}
+              {annotate($entry.combined_categories)}
             {/if}
           {/param}
           {param color: '#aaf' /}
@@ -102,25 +99,17 @@
       {/if}
       {call dma.entry.value}
         {param label: 'Worlds' /}        
-        {param value}
-          {call dma.entry.concatenated_list}
-            {param values: $entry.worlds /}
-            {param concatenate: $entry.combined_worlds /}
-          {/call}
-        {/param}
+        {param value: annotate($entry.combined_worlds) /}
         {param color: '#aaf' /}
       {/call}
       {if $entry.incomplete or $entry.combined_incomplete.get.present}
         {call dma.entry.value}
           {param label: 'Incomplete' /}
-          {param value}
+          {param value kind="html"}
             {if $entry.incomplete}
               {$entry.incomplete}{sp}
             {/if}
-            {call dma.entry.concatenated}
-              {param value: '' /}
-              {param concatenate: $entry.combined_incomplete /}
-            {/call}
+            {annotate($entry.combined_incomplete)}
           {/param}
           {param color: '#aaf' /}
         {/call}
@@ -198,7 +187,7 @@
       {if $entry.allowed_alignments}
         {call dma.entry.value}
           {param label: 'Alignments' /}
-          {param value}
+          {param value kind="html"}
             {foreach $alignment in $entry.allowed_alignments}
               {$alignment}
               {if not isLast($alignment)}, {/if}
@@ -224,7 +213,7 @@
       {if $entry.class_skills}
         {call dma.entry.value}
           {param label: 'Class Skills' /}
-          {param value}
+          {param value kind="html"}
             {foreach $skill in $entry.class_skills}
               {$skill}
               {if not isLast($skill)}, {/if}
@@ -236,7 +225,7 @@
       {if $entry.weapon_proficiencies}
         {call dma.entry.value}
           {param label: 'Weapon Prof.' /}
-          {param value}
+          {param value kind="html"}
             {foreach $proficiency in $entry.weapon_proficiencies}
               {$proficiency}
               {if not isLast($proficiency)}, {/if}
@@ -248,7 +237,7 @@
       {if $entry.armor_proficiencies}
         {call dma.entry.value}
           {param label: 'Armor Prof.' /}
-          {param value}
+          {param value kind="html"}
             {foreach $proficiency in $entry.armor_proficiencies}
               {$proficiency}
               {if not isLast($proficiency)}, {/if}
@@ -260,7 +249,7 @@
       {if $entry.special_attacks}
         {call dma.entry.value}
           {param label: 'Special Attacks' /}
-          {param value}
+          {param value kind="html"}
             {foreach $attack in $entry.special_attacks}              
               {$attack}
               {if not isLast($attack)}; {/if}
@@ -270,9 +259,9 @@
         {/call}
       {/if}
       {if $entry.special_attacks}
-        {call dma.entry.value}
+        {call dma.entry.valuew}
           {param label: 'Special Qualities' /}
-          {param value}
+          {param value kind="html"}
             {foreach $quality in $entry.special_qualities}              
               {$quality}
               {if not isLast($quality)}; {/if}
@@ -284,7 +273,7 @@
       {if $entry.base_attacks}
         {call dma.entry.value}
           {param label: 'Base Attacks' /}
-          {param value}
+          {param value kind="html"}
             {foreach $attack in $entry.base_attacks}              
               {$attack}
               {if not isLast($attack)}, {/if}
@@ -296,7 +285,7 @@
       {if $entry.fortitude_saves}
         {call dma.entry.value}
           {param label: 'For Saves' /}
-          {param value}
+          {param value kind="html"}
             {foreach $save in $entry.fortitude_saves}              
               {$save}
               {if not isLast($save)}, {/if}
@@ -308,7 +297,7 @@
       {if $entry.reflex_saves}
         {call dma.entry.value}
           {param label: 'Ref Saves' /}
-          {param value}
+          {param value kind="html"}
             {foreach $save in $entry.reflex_saves}              
               {$save}
               {if not isLast($save)}, {/if}
@@ -320,7 +309,7 @@
       {if $entry.will_saves}
         {call dma.entry.value}
           {param label: 'Will Saves' /}
-          {param value}
+          {param value kind="html"}
             {foreach $save in $entry.will_saves}              
               {$save}
               {if not isLast($save)}, {/if}
@@ -331,9 +320,7 @@
       {/if}
       {call dma.entry.value}
         {param label: 'References' /}
-        {param value}
-          {annotate($entry.combined_references)}
-        {/param}
+        {param value: annotate($entry.combined_references) /}
         {param color: '#aaf' /}
       {/call}
     {/param}
@@ -360,10 +347,10 @@
     {param pagesize: $pagesize /}
     {param size: $entries ? length($entries) : 0 /}
     {param titles: [ 'Name', 'Worlds', 'Short Descriptoion'] /}
-    {param entries}
+    {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
-          {call dma.entry.newListEntry}
+          {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
               $entry.name, $entry.worldsString, $entry.short_description
@@ -388,7 +375,7 @@
     {param type: 'base-level' /}
     {param id: $id /}
     {param create: $create /}
-    {param values}
+    {param values kind="html"}
       {call dma.edit.value}
         {param name: 'name' /}
         {param label: 'Name' /}
@@ -530,9 +517,9 @@
         {param name: 'allowed_alignment' /}
         {param color: '#aaf' /}
         {param label: 'Alignments' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $alignment in $entry.allowed_alignments}
                 {call dma.edit.field_list_multiple}
                   {param values: [
@@ -588,9 +575,9 @@
         {param name: 'weapon_proficiency' /}
         {param color: '#aaf' /}
         {param label: 'Weapon Prof.' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $proficiency in $entry.weapon_proficiencies}
                 {call dma.edit.field_list_multiple}
                   {param values: [
@@ -623,9 +610,9 @@
         {param name: 'armor_proficiency' /}
         {param color: '#aaf' /}
         {param label: 'Armor Prof.' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $proficiency in $entry.armor_proficiencies}
                 {call dma.edit.field_list_multiple}
                   {param values: [
@@ -658,9 +645,9 @@
         {param name: 'special_attack' /}
         {param color: '#aaf' /}
         {param label: 'Special Attacks' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $attack in $entry.special_attacks}
                 {call dma.edit.field_list_multiple}
                   {param class: 'narrow' /}
@@ -732,9 +719,9 @@
         {param name: 'special_quality' /}
         {param color: '#aaf' /}
         {param label: 'Special Quality' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $quality in $entry.special_qualities}
                 {call dma.edit.field_list_multiple}
                   {param class: 'narrow' /}
@@ -834,9 +821,9 @@
         {param name: 'references' /}
         {param color: '#aaf' /}
         {param label: 'References' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $reference in $entry.references}  
                 {call dma.edit.field_list_multiple}
                   {param values: [
