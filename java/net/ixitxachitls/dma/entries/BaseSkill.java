@@ -36,6 +36,7 @@ import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
+import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Parser;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Ability;
@@ -183,6 +184,19 @@ public class BaseSkill extends BaseEntry
     return m_ability;
   }
 
+  public Annotated<Optional<Ability>> getCombinedAbility()
+  {
+    if(m_ability != Ability.UNKNOWN)
+      return new Annotated.Max<Ability>(m_ability, getName());
+
+    Annotated<Optional<Ability>> combined = new Annotated.Max<Ability>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedAbility());
+
+    return combined;
+  }
+
+
   /**
    * Get the description about how to do the skill check.
    *
@@ -191,6 +205,18 @@ public class BaseSkill extends BaseEntry
   public Optional<String> getCheck()
   {
     return m_check;
+  }
+
+  public Annotated<Optional<String>> getCombinedCheck()
+  {
+    if(m_check.isPresent())
+      return new Annotated.String(m_check.get(), getName());
+
+    Annotated<Optional<String>> combined = new Annotated.String();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedCheck());
+
+    return combined;
   }
 
   /**
@@ -203,6 +229,18 @@ public class BaseSkill extends BaseEntry
     return m_action;
   }
 
+  public Annotated<Optional<String>> getCombinedAction()
+  {
+    if(m_action.isPresent())
+      return new Annotated.String(m_action.get(), getName());
+
+    Annotated<Optional<String>> combined = new Annotated.String();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedAction());
+
+    return combined;
+  }
+
   /**
    * Get the description explaining if retrying is possible or not.
    *
@@ -211,6 +249,18 @@ public class BaseSkill extends BaseEntry
   public Optional<String> getRetry()
   {
     return m_retry;
+  }
+
+  public Annotated<Optional<String>> getCombinedRetry()
+  {
+    if(m_retry.isPresent())
+      return new Annotated.String(m_retry.get(), getName());
+
+    Annotated<Optional<String>> combined = new Annotated.String();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedRetry());
+
+    return combined;
   }
 
   /**
@@ -223,6 +273,18 @@ public class BaseSkill extends BaseEntry
     return m_special;
   }
 
+  public Annotated<Optional<String>> getCombinedSpecial()
+  {
+    if(m_special.isPresent())
+      return new Annotated.String(m_special.get(), getName());
+
+    Annotated<Optional<String>> combined = new Annotated.String();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedSpecial());
+
+    return combined;
+  }
+
   /**
    * Get the skill synergy description.
    *
@@ -231,6 +293,18 @@ public class BaseSkill extends BaseEntry
   public List<String> getSynergies()
   {
     return m_synergies;
+  }
+
+  public Annotated<List<String>> getCombinedSynergies()
+  {
+    if(!m_synergies.isEmpty())
+      return new Annotated.List(m_synergies, getName());
+
+    Annotated<List<String>> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedSynergies());
+
+    return combined;
   }
 
   /**
@@ -243,6 +317,18 @@ public class BaseSkill extends BaseEntry
     return m_restriction;
   }
 
+  public Annotated<Optional<String>> getCombinedRestriction()
+  {
+    if(m_restriction.isPresent())
+      return new Annotated.String(m_restriction.get(), getName());
+
+    Annotated<Optional<String>> combined = new Annotated.String();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedRestriction());
+
+    return combined;
+  }
+
   /**
    * Get the explanation how the skill can be used untrained.
    *
@@ -251,6 +337,18 @@ public class BaseSkill extends BaseEntry
   public Optional<String> getUntrained()
   {
     return m_untrained;
+  }
+
+  public Annotated<Optional<String>> getCombinedUntrained()
+  {
+    if(m_untrained.isPresent())
+      return new Annotated.String(m_untrained.get(), getName());
+
+    Annotated<Optional<String>> combined = new Annotated.String();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedUntrained());
+
+    return combined;
   }
 
   /**
@@ -263,6 +361,18 @@ public class BaseSkill extends BaseEntry
     return m_restrictions;
   }
 
+  public Annotated<List<SkillRestriction>> getCombinedRestrictions()
+  {
+    if(!m_restrictions.isEmpty())
+      return new Annotated.List(m_restrictions, getName());
+
+    Annotated<List<SkillRestriction>> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedRestrictions());
+
+    return combined;
+  }
+
   /**
    * Get the skill modifiers.
    *
@@ -273,6 +383,18 @@ public class BaseSkill extends BaseEntry
     return m_modifiers;
   }
 
+  public Annotated<List<SkillModifier>> getCombinedModifiers()
+  {
+    if(!m_modifiers.isEmpty())
+      return new Annotated.List<>(m_modifiers, getName());
+
+    Annotated<List<SkillModifier>> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedModifiers());
+
+    return combined;
+  }
+
   /**
    * Get the relevant DCs for the skill.
    *
@@ -281,6 +403,18 @@ public class BaseSkill extends BaseEntry
   public List<DC> getDCs()
   {
     return m_dcs;
+  }
+
+  public Annotated<List<DC>> getCombinedDCs()
+  {
+    if(!m_dcs.isEmpty())
+      return new Annotated.List<>(m_dcs, getName());
+
+    Annotated<List<DC>> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedDCs());
+
+    return combined;
   }
 
   @Override
@@ -300,7 +434,8 @@ public class BaseSkill extends BaseEntry
    */
   public boolean isUntrained()
   {
-    return !m_restrictions.contains(SkillRestriction.TRAINED_ONLY);
+    return !getCombinedRestrictions().get()
+        .contains(SkillRestriction.TRAINED_ONLY);
   }
 
   /**

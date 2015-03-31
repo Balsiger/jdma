@@ -164,7 +164,8 @@
   <span class="title" style="color: {$color}">
     {$title}
    <div class="decoration"
-        style="background: -webkit-linear-gradient(right, transparent 0%, {$color} 100%);">
+        style="background: -webkit-linear-gradient(right, transparent 0%,
+               {$color} 100%);">
     </div>
   </span>
   </div>
@@ -176,6 +177,112 @@
   <div class="subtitle">
     {$title}
   </div>
+{/template}
+
+/** The base names of an entry. */
+{template .bases}
+  {@param entry: ?}
+  {@param color: string}
+  {@param type: string}
+  {if length($entry.baseNames)}
+    {call dma.entry.value}
+      {param label: 'Base' /}
+      {param value kind="html"}
+        {foreach $base in $entry.baseNames}
+          {call dma.page.link}
+            {param text: $base /}
+            {param url: '/' + $type + '/'  + $base /}
+
+          {/call}
+          {if not isLast($base)}; {/if}
+        {/foreach}
+      {/param}
+      {param color: $color /}
+    {/call}
+  {/if}
+{/template}
+
+/** The synonyms of an entry. */
+{template .synonyms}
+  {@param entry: ?}
+  {@param color: string}
+  {if length($entry.synonyms)}
+    {call dma.entry.value}
+      {param label: 'Synonyms' /}
+      {param value kind="html"}
+        {foreach $synonym in $entry.synonyms}
+          {$synonym}
+          {if not isLast($synonym)}; {/if}
+        {/foreach}
+      {/param}
+      {param color: $color /}
+    {/call}
+  {/if}
+{/template}
+
+/** The categories of an entry. */
+{template .categories}
+  {@param entry: ?}
+  {@param color: string}
+  {if length($entry.categories) or
+      $entry.combined_categories.get.present}
+    {call dma.entry.value}
+      {param label: 'Categories' /}
+      {param value kind="html"}
+        {if length($entry.categories)}
+          {foreach $category in $entry.categories}
+            {$category}
+            {if not isLast($category)}, {/if}
+          {/foreach}
+        {/if}
+        {if $entry.combined_categories.get.present}
+          {if length($entry.categories)},{sp}{/if}
+          {annotate($entry.combined_categories)}
+        {/if}
+      {/param}
+      {param color: $color /}
+    {/call}
+  {/if}
+{/template}
+
+/** The worlds of an entry. */
+{template .worlds}
+  {@param entry: ?}
+  {@param color: string}
+  {call dma.entry.value}
+    {param label: 'Worlds' /}
+    {param value: annotate($entry.combined_worlds) /}
+    {param color: $color /}
+  {/call}
+{/template}
+
+/** The references of an entry. */
+{template .references}
+  {@param entry: ?}
+  {@param color: string}
+  {call dma.entry.value}
+    {param label: 'References' /}
+    {param value: annotate($entry.combined_references) /}
+    {param color: $color /}
+  {/call}
+{/template}
+
+/** The incomplete value of an entry. */
+{template .incomplete}
+  {@param entry: ?}
+  {@param color: string}
+  {if $entry.incomplete or $entry.combined_incomplete.get.present}
+    {call dma.entry.value}
+      {param label: 'Incomplete' /}
+      {param value kind="html"}
+        {if $entry.incomplete}
+          {$entry.incomplete}{sp}
+        {/if}
+        {annotate($entry.combined_incomplete)}
+      {/param}
+       {param color: $color /}
+    {/call}
+  {/if}
 {/template}
 
 /** The main image of an entry. */

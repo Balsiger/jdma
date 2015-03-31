@@ -107,37 +107,6 @@
   {/if}
 {/template}
 
-/** An editable value. */
-{template .editable}
-  {@param? canEdit: bool}
-  {@param name: string}
-  {@param value: html}
-  {@param key: string}
-  {@param type: string}
-  {@param? related: string}
-  {@param? choices: list<string>}
-  {@param? content: html}
-  {@param? note: html}
-  {@param? ifempty: html}
-  {if $canEdit}
-    <dmaeditable name="{$name}" value="{$value}" key="{$key}"
-      class="editable" type="{$type}"{if $related} related="{$related}"{/if}
-      {if $choices} values="{$choices}"{/if}{if $note} note="{$note}"{/if}>
-      {if $content or not $ifempty}
-        {$content}
-      {else}
-        {$ifempty}
-      {/if}
-    </dmaeditable>
-  {else}
-    {if $content or not $ifempty}
-      {$content}
-    {else}
-      {$ifempty}
-    {/if}
-  {/if}
-{/template}
-
 /**
  * A value with a remark.
  *

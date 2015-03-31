@@ -434,15 +434,16 @@ public class Values
     if(values == null || values.isEmpty())
       return Optional.absent();
 
-    // TODO: don't know why this was here before???
-    if(values.isEmpty())
-      return Optional.of("");
-
     if(values.size() > 1)
     {
       m_messages.add("Found multiple values for " + inKey
                          + ", expected single value.");
     }
+
+    // Specially treat the empty case when setting a value from something to
+    // empty.
+    if(values.iterator().next().trim().isEmpty())
+      return Optional.of("");
 
     return Optional.fromNullable(values.iterator().next());
   }

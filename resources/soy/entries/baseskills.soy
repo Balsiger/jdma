@@ -19,9 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, Ma  02111-1307  Usa
  *****************************************************************************/
 
- /*
- * Templates for base skills.
- */
+ /* Templates for base skills. */
 {namespace dma.entries.baseskills}
 
 /** Show the given entry in standard format. */
@@ -32,6 +30,7 @@
   {@param list: ?}
   {@param next: ?}
   {@param last: ?}
+  {let $color: '#808' /}
   {call dma.entry.show}
     {param entry: $entry /}
     {param type: 'base-level' /}
@@ -40,180 +39,93 @@
     {param list: $list /}
     {param next: $next /}
     {param last: $last /}
-    {param color: '#808' /}
+    {param color: $color /}
     {param title kind="html"}
       {call dma.entry.title}
         {param title: $entry.name /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}
     {/param}
     {param values kind="html"}
-      {if length($entry.baseNames)}
-        {call dma.entry.value}
-          {param label: 'Base' /}
-          {param value kind="html"}
-            {foreach $base in $entry.baseNames}
-              {call dma.page.link}
-                {param text: $base /}
-                {param url: '/quality/'  + $base /}
-              {/call}
-              {if not isLast($base)}; {/if}
-            {/foreach}
-          {/param}
-          {param color: '#808' /}
-        {/call} 
-      {/if}      
-      {if length($entry.synonyms)}
-        {call dma.entry.value}
-          {param label: 'Synonyms' /}
-          {param value kind="html"}
-            {foreach $synonym in $entry.synonyms}
-              {$synonym}
-              {if not isLast($synonym)}; {/if}
-            {/foreach}
-          {/param}
-          {param color: '#808' /}
-        {/call}
-      {/if}      
-      {if length($entry.categories) or 
-          $entry.combined_categories.get.present}
-        {call dma.entry.value}
-          {param label: 'Categories' /}
-          {param value kind="html"}
-            {if length($entry.categories)}
-              {foreach $category in $entry.categories}
-                {$category}
-                {if not isLast($category)}, {/if}
-              {/foreach}
-            {/if}
-            {if $entry.combined_categories.get.present}
-              {if length($entry.categories)},{sp}{/if}
-              {annotate($entry.combined_categories)}
-            {/if}
-          {/param}
-          {param color: '#808' /}
-        {/call}
-      {/if}
-      {call dma.entry.value}
-        {param label: 'Worlds' /}        
-        {param value kind="html"}
-          {annotate($entry.combined_worlds)}
-        {/param}
-        {param color: '#808' /}
+      {call dma.entry.bases}
+        {param entry: $entry /}
+        {param color: $color /}
+        {param type: 'level' /}
       {/call}
-      {if $entry.incomplete or $entry.combined_incomplete.get.present}
-        {call dma.entry.value}
-          {param label: 'Incomplete' /}
-          {param value kind="html"}
-            {if $entry.incomplete}
-              {$entry.incomplete}{sp}
-            {/if}
-            {annotate($entry.combined_incomplete)}
-          {/param}
-          {param color: '#808' /}
-        {/call}
-      {/if}
+      {call dma.entry.synonyms}
+        {param entry: $entry /}
+        {param color: $color /}
+      {/call}
+      {call dma.entry.categories}
+        {param entry: $entry /}
+        {param color: $color /}
+      {/call}
+      {call dma.entry.worlds}
+        {param entry: $entry /}
+        {param color: $color /}
+      {/call}
+      {call dma.entry.incomplete}
+        {param entry: $entry /}
+        {param color: $color /}
+      {/call}
       {call dma.entry.value}
         {param label: 'Ability' /}
-        {param value: $entry.ability /}
-        {param color: '#808' /}
+        {param value: annotate($entry.combined_ability) /}
+        {param color: $color /}
       {/call}
-      {if $entry.check.present}
-        {call dma.entry.value}
-          {param label: 'Check' /}
-          {param value: $entry.check /}
-          {param color: '#808' /}
-        {/call}
-      {/if}
-      {if $entry.action.present}
-        {call dma.entry.value}
-          {param label: 'Action' /}
-          {param value: $entry.action /}
-          {param color: '#808' /}
-        {/call}
-      {/if}
-      {if $entry.retry.present}
-        {call dma.entry.value}
-          {param label: 'Retry' /}
-          {param value: $entry.retry /}
-          {param color: '#808' /}
-        {/call}
-      {/if}
-      {if $entry.special.present}
-        {call dma.entry.value}
-          {param label: 'Special' /}
-          {param value: $entry.special /}
-          {param color: '#808' /}
-        {/call}
-      {/if}
-      {if $entry.synergies}
-        {call dma.entry.value}
-          {param label: 'Synergies' /}
-          {param value kind="html"}
-            {foreach $synergy in $entry.synergies}
-              {$synergy}
-              {if not isLast($synergy)}, {/if}
-            {/foreach}
-          {/param}
-          {param color: '#808' /}
-        {/call}
-      {/if}
-      {if $entry.restriction.present}
-        {call dma.entry.value}
-          {param label: 'Restrictions' /}
-          {param value: $entry.restriction /}
-          {param color: '#808' /}
-        {/call}
-      {/if}
-      {if $entry.untrained.present}
-        {call dma.entry.value}
-          {param label: 'Untrained' /}
-          {param value: $entry.untrained /}
-          {param color: '#808' /}
-        {/call}
-      {/if}
-      {if $entry.restrictions}
-        {call dma.entry.value}
-          {param label: 'Restrictions' /}
-          {param value kind="html"}
-            {foreach $restriction in $entry.restrictions}
-              {$restriction}
-              {if not isLast($restriction)}, {/if}
-            {/foreach}
-          {/param}
-          {param color: '#808' /}
-        {/call}
-      {/if}
-      {if $entry.modifiers}
-        {call dma.entry.value}
-          {param label: 'Modifiers' /}
-          {param value kind="html"}
-            {foreach $modifier in $entry.modifiers}
-              {$modifier.name}
-              {if not isLast($modifier)}, {/if}
-            {/foreach}
-          {/param}
-          {param color: '#808' /}
-        {/call}
-      {/if}
-      {if $entry.DCs}
-        {call dma.entry.value}
-          {param label: 'DCs' /}
-          {param value kind="html"}
-            {foreach $dc in $entry.DCs}
-              {$dc}
-              {if not isLast($dc)}, {/if}
-            {/foreach}
-          {/param}
-          {param color: '#808' /}
-        {/call}
-      {/if}
       {call dma.entry.value}
-        {param label: 'References' /}
-        {param value kind="html"}
-          {annotate($entry.combined_references)}
-        {/param}
-        {param color: '#808' /}
+        {param label: 'Check' /}
+        {param value: annotate($entry.combined_check) /}
+        {param color: $color /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Action' /}
+        {param value: annotate($entry.combined_action) /}
+        {param color: $color /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Retry' /}
+        {param value: annotate($entry.combined_retry) /}
+        {param color: $color /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Special' /}
+        {param value: annotate($entry.combined_special) /}
+        {param color: $color /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Synergies' /}
+        {param value: annotate($entry.combined_synergies) /}
+        {param color: $color /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Restriction' /}
+        {param value: annotate($entry.combined_restriction) /}
+        {param color: $color /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Untrained' /}
+        {param value: annotate($entry.combined_untrained) /}
+        {param color: $color /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Restrictions' /}
+        {param value: annotate($entry.combined_restrictions) /}
+        {param color: $color /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Modifiers' /}
+        {param value: annotate($entry.combined_modifiers) /}
+        {param color: $color /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'DCs' /}
+        {param value: annotate($entry.combined_DCs) /}
+        {param color: $color /}
+      {/call}
+      {call dma.entry.references}
+        {param entry: $entry /}
+        {param color: $color /}
       {/call}
     {/param}
   {/call}
@@ -262,6 +174,7 @@
  * @param create  Whether to create a new entry
  */
 {template .edit}
+  {let $color: '#808' /}
   {call dma.edit.entry}
     {param entry: $entry /}
     {param type: 'base-level' /}
@@ -273,28 +186,28 @@
         {param label: 'Name' /}
         {param value: $entry.name /}
         {param validate: 'non-empty' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}    
       {call dma.edit.value_text}
         {param name: 'description' /}
         {param label: 'Description' /}
         {param value: $entry.description /}
         {param validate: 'any' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}
       {call dma.edit.value}
         {param name: 'short-description' /}
         {param label: 'Short Description' /}
         {param value: $entry.short_description /}
         {param validate: 'any' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}
       {call dma.edit.value_list}
         {param name: 'base' /}
         {param label: 'Base' /}
         {param values: $entry.base_names /}
         {param validate: 'non-empty' /}
-        {param color: '#808' /}
+        {param color: $color /}
         {param autocomplete: 'base item/name' /}
       {/call}
       {call dma.edit.value_list}
@@ -302,70 +215,70 @@
         {param label: 'Synonyms' /}
         {param values: $entry.synonyms /}
         {param validate: 'non-empty' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}    
       {call dma.edit.value_list}
         {param name: 'categories' /}
         {param label: 'Categories' /}
         {param values: $entry.categories /}
         {param validate: 'non-empty' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}
       {call dma.edit.value_list}
         {param name: 'worlds' /}
         {param label: 'Worlds' /}
         {param values: $entry.worlds/}
         {param validate: 'non-empty' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}    
       {call dma.edit.value}
         {param name: 'incomplete' /}
         {param label: 'Incomplete' /}
         {param value: $entry.incomplete /}
         {param validate: 'any' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}
       {call dma.edit.value_selection}
         {param name: 'ability' /}
         {param label: 'Ability' /}
         {param value: $entry.ability.string /}
         {param choices: $ij.Ability.names /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}    
       {call dma.edit.value}
         {param name: 'check' /}
         {param label: 'Check' /}
         {param value: $entry.check.present ? $entry.check : '' /}
         {param validate: 'any' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}    
       {call dma.edit.value}
         {param name: 'action' /}
         {param label: 'Action' /}
         {param value: $entry.action.present ? $entry.action : '' /}
         {param validate: 'any' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}    
       {call dma.edit.value}
         {param name: 'retry' /}
         {param label: 'Retry' /}
         {param value: $entry.retry.present ? $entry.retry : '' /}
         {param validate: 'any' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}    
       {call dma.edit.value}
         {param name: 'special' /}
         {param label: 'Special' /}
         {param value: $entry.special.present ? $entry.special : '' /}
         {param validate: 'any' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}    
       {call dma.edit.value_list}
         {param name: 'synergies' /}
         {param label: 'Synergies' /}
         {param values: $entry.synergies /}
         {param validate: 'non-empty' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}    
       {call dma.edit.value}
         {param name: 'restriction' /}
@@ -373,7 +286,7 @@
         {param value: $entry.restriction.present 
           ? $entry.restriction : '' /}
         {param validate: 'any' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}    
       {call dma.edit.value}
         {param name: 'untrained' /}
@@ -381,7 +294,7 @@
         {param value: $entry.untrained.present 
           ? $entry.untrained : '' /}
         {param validate: 'any' /}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}    
       {call dma.edit.generic_value}
         {param name: 'restrictions' /}
@@ -411,11 +324,11 @@
             {/param}
           {/call}
         {/param}
-        {param color: '#808' /}
+        {param color: $color /}
       {/call}    
       {call dma.edit.generic_value}
         {param name: 'modifier' /}
-        {param color: '#808' /}
+        {param color: $color /}
         {param label: 'Modifiers' /}
         {param value kind="html"}
           {call dma.edit.field}
@@ -450,7 +363,7 @@
       {/call}
       {call dma.edit.generic_value}
         {param name: 'dc' /}
-        {param color: '#808' /}
+        {param color: $color /}
         {param label: 'DCs' /}
         {param value kind="html"}
           {call dma.edit.field}
@@ -499,7 +412,7 @@
       {/call}
       {call dma.edit.generic_value}
         {param name: 'references' /}
-        {param color: '#808' /}
+        {param color: $color /}
         {param label: 'References' /}
         {param value kind="html"}
           {call dma.edit.field}
