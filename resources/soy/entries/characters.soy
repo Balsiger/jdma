@@ -1094,13 +1094,15 @@
   </div>
 
   {foreach $skill in $ij.BaseSkill.all_skills}
-    {call .sheet_skill}
-      {param skill: $skill /}
-      {param classSkill: call($entry, 'isClassSkill', $skill.name) /}
-      {param ability: bonus(call($entry, 'abilityModifier', $skill.ability)) /}
-      {param ranks: call($entry, 'skillRanks', $skill.name) /}
-      {param total: call($entry, 'skillModifier', $skill.name, $skill.ability) /}
-    {/call}
+    {if not $skill.subtype_only}
+      {call .sheet_skill}
+        {param skill: $skill /}
+        {param classSkill: call($entry, 'isClassSkill', $skill.name) /}
+        {param ability: bonus(call($entry, 'abilityModifier', $skill.ability)) /}
+        {param ranks: call($entry, 'skillRanks', $skill.name) /}
+        {param total: call($entry, 'skillModifier', $skill.name, $skill.ability) /}
+      {/call}
+    {/if}
   {/foreach}
 
   <div class="skill-line skill-title">

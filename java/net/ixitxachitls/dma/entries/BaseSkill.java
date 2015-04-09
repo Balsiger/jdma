@@ -438,9 +438,14 @@ public class BaseSkill extends BaseEntry
         .contains(SkillRestriction.TRAINED_ONLY);
   }
 
+  public boolean isSubtypeOnly()
+  {
+    return m_restrictions.contains(SkillRestriction.SUBTYPE_ONLY);
+  }
+
   public boolean hasArmorCheckPenalty()
   {
-    return !getCombinedRestrictions().get()
+    return getCombinedRestrictions().get()
         .contains(SkillRestriction.ARMOR_CHECK_PENALTY);
   }
 
