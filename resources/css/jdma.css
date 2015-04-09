@@ -3299,6 +3299,12 @@ BODY.print
   text-align: center;
 }
 
+.character-sheet .skill-line.unavailable,
+.character-sheet .skill-line.unavailable A
+{
+  color: #ccc;
+}
+
 .character-sheet .skill-line.skill-title .skill-modifier,
 .character-sheet .skill-line.skill-title .skill-ranks,
 .character-sheet .skill-line.skill-title .skill-ability,

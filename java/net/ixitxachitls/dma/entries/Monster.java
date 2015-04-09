@@ -1983,6 +1983,11 @@ public class Monster extends CampaignEntry
     return 0;
   }
 
+  public int skillModifier(String inSkill, Ability inAbility)
+  {
+    return skillRanks(inSkill) + abilityModifier(inAbility);
+  }
+
   public int totalSkillPoints()
   {
     int ranks = 0;

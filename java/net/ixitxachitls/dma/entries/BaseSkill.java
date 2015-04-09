@@ -438,6 +438,12 @@ public class BaseSkill extends BaseEntry
         .contains(SkillRestriction.TRAINED_ONLY);
   }
 
+  public boolean hasArmorCheckPenalty()
+  {
+    return !getCombinedRestrictions().get()
+        .contains(SkillRestriction.ARMOR_CHECK_PENALTY);
+  }
+
   /**
    * Get all the values for all the indexes.
    *

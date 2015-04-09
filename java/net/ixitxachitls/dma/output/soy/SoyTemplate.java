@@ -134,7 +134,7 @@ public class SoyTemplate
     @Override
     public Set<Integer> getValidArgsSizes()
     {
-      return ImmutableSet.of(3);
+      return ImmutableSet.of(3, 4, 5, 6, 7, 8, 9, 10);
     }
 
     @Override
@@ -147,10 +147,14 @@ public class SoyTemplate
       SoyValue object = (SoyValue)inArgs.get(0);
       String method = inArgs.get(1).stringValue();
 
-      if(inArgs.get(2) instanceof SoyValue)
-        return object.call(method, ((SoyValue)inArgs.get(2)).getValue());
+      Object []arguments = new Object[inArgs.size() - 2];
+      for (int i = 0; i < arguments.length; i++)
+        if((inArgs.get(i + 2) instanceof SoyValue))
+          arguments[i] = ((SoyValue)inArgs.get(i + 2)).getValue();
+        else
+          arguments[i] = inArgs.get(i + 2).stringValue();
 
-      return object.call(method, inArgs.get(2).stringValue());
+      return object.call(method, arguments);
     }
   }
 
