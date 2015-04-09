@@ -554,6 +554,7 @@ message BaseSkillProto
     TRAINED_ONLY = 1;
     ARMOR_CHECK_PENALTY = 2;
     SUBTYPE_ONLY = 3;
+    DOUBLE_ARMOR_CHECK_PENALTY = 4;
   }
   repeated Restriction restriction = 11;
 

@@ -446,7 +446,15 @@ public class BaseSkill extends BaseEntry
   public boolean hasArmorCheckPenalty()
   {
     return getCombinedRestrictions().get()
-        .contains(SkillRestriction.ARMOR_CHECK_PENALTY);
+        .contains(SkillRestriction.ARMOR_CHECK_PENALTY)
+        || getCombinedRestrictions().get()
+        .contains(SkillRestriction.DOUBLE_ARMOR_CHECK_PENALTY);
+  }
+
+  public boolean hasDoubleArmorCheckPenalty()
+  {
+    return getCombinedRestrictions().get()
+        .contains(SkillRestriction.DOUBLE_ARMOR_CHECK_PENALTY);
   }
 
   /**
@@ -606,6 +614,16 @@ public class BaseSkill extends BaseEntry
     return DMADataFactory.get().getEntries(BaseSkill.TYPE,
                                            Optional.<EntryKey>absent(),
                                            0, 1000);
+  }
+
+  public static Optional<BaseSkill> get(String inName)
+  {
+    for(BaseSkill skill : allSkills()) {
+      if(skill.getName().equalsIgnoreCase(inName))
+        return Optional.of(skill);
+    }
+
+    return Optional.absent();
   }
 
   //---------------------------------------------------------------------------

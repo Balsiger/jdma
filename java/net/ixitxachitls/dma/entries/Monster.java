@@ -1985,7 +1985,36 @@ public class Monster extends CampaignEntry
 
   public int skillModifier(String inSkill, Ability inAbility)
   {
-    return skillRanks(inSkill) + abilityModifier(inAbility);
+    return skillRanks(inSkill) + abilityModifier(inAbility)
+        + miscModifier(inSkill).totalModifier();
+  }
+
+  public Modifier miscModifier(String inSkill)
+  {
+    Optional<BaseSkill> skill = BaseSkill.get(inSkill);
+    if(skill.isPresent())
+    {
+      // Armor check penalty, if relevant.
+      if(skill.get().hasArmorCheckPenalty())
+      {
+        int penalty = 0;
+        for(Item armor : getArmor())
+        {
+          Optional<Integer> checkPenalty = armor.getCombinedCheckPenalty().get();
+          if(checkPenalty.isPresent())
+            penalty += checkPenalty.get();
+        }
+
+        if(skill.get().hasDoubleArmorCheckPenalty())
+          penalty *= 2;
+
+        return new Modifier(penalty, Modifier.Type.ARMOR,
+                            Optional.<String>absent(),
+                            Optional.<Modifier>absent());
+      }
+    }
+
+    return new Modifier();
   }
 
   public int totalSkillPoints()
@@ -2616,70 +2645,6 @@ public class Monster extends CampaignEntry
       }
 
     return summaries;
-  }
-  */
-
-  /**
-   * Get information about the current skills of the monster. Skills that can
-   * only be used trained for which the monster has no ranks are not returned.
-   *
-   * @return      the skills information
-   */
-  /*
-  public List<Map<String, Object>> allSkills()
-  {
-    List<Map<String, Object>> skills = Lists.newArrayList();
-    Map<String, Map<Value<?>, ModifiedNumber>> ranks = skillRanks();
-
-    for(BaseSkill skill
-          : DMADataFactory.get().getEntries(BaseSkill.TYPE, null, 0, 1000))
-    {
-      Map<Value<?>, ModifiedNumber> perName = ranks.get(skill.getName());
-      if(perName == null)
-      {
-        perName = Maps.newHashMap();
-        perName.put(null, null);
-      }
-
-      for(Map.Entry<Value<?>, ModifiedNumber> entry : perName.entrySet())
-      {
-        ModifiedNumber modifier = entry.getValue();
-
-        if((modifier == null || modifier.isZero()) && !skill.isUntrained())
-          continue;
-
-        if(modifier == null)
-          modifier = new ModifiedNumber(0, true);
-
-        // Ability modifiers
-        Ability ability = skill.getAbility();
-        if(ability != null)
-          if(ability == Ability.DEXTERITY)
-            modifier.withModifier
-              (new Modifier(dexterityModifierForAC()), "Dexterity");
-          else
-            modifier.withModifier
-              (new Modifier(abilityModifier(ability(ability)
-                                            .getMinValue()),
-                            Modifier.Type.ABILITY),
-               skill.getAbility().toString());
-
-        // Skill penalty from armor
-        // TODO: must be implemented
-
-        // Skill modifiers from items (and other modifiers)
-        modifier.with(collect(skill.getName()).modifier());
-
-        Map<String, Object> values = Maps.newHashMap();
-        values.put("entry", skill);
-        values.put("subtype", entry.getKey());
-        values.put("modifier", modifier);
-
-        skills.add(values);
-      }
-    }
-
-    return skills;
   }
   */
 

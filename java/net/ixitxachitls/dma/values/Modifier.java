@@ -37,7 +37,6 @@ import net.ixitxachitls.util.Strings;
  *
  * @file   NewModifier.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 public class Modifier extends Value.Arithmetic<ModifierProto>
 {
@@ -306,6 +305,12 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   public int getModifier()
   {
     return m_modifier;
+  }
+
+  public int totalModifier()
+  {
+    return m_modifier
+        + (m_next.isPresent() ? m_next.get().totalModifier() : 0);
   }
 
   /**

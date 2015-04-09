@@ -1101,6 +1101,7 @@
         {param ability: bonus(call($entry, 'abilityModifier', $skill.ability)) /}
         {param ranks: call($entry, 'skillRanks', $skill.name) /}
         {param total: call($entry, 'skillModifier', $skill.name, $skill.ability) /}
+        {param misc: call($entry, 'miscModifier', $skill.name) /}
       {/call}
     {/if}
   {/foreach}
@@ -1135,7 +1136,7 @@
   {@param? total: string}
   {@param? ranks: string}
   {@param? ability: any}
-  {@param? misc: string}
+  {@param? misc: ?}
   <div class="skill-line
     {if not $skill.is_untrained and not $ranks} unavailable{/if}">
     <span class="class-skill">
@@ -1174,7 +1175,7 @@
     </span>
     +
     <span class="skill-misc">
-      {if $misc}
+      {if $misc and $misc.modifier}
         {$misc}
       {/if}
     </span>
