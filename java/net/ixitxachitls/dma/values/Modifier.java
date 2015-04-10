@@ -89,7 +89,9 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     RAGE("rage", false, ModifierProto.Type.RAGE),
 
     /** A competence modifier against attacks. */
-    COMPETENCE("competence", false, ModifierProto.Type.COMPETENCE);
+    COMPETENCE("competence", false, ModifierProto.Type.COMPETENCE),
+
+    SYNERGY("synergy", false, ModifierProto.Type.SYNERGY);
 
     /** The value's name. */
     private final String m_name;
@@ -401,6 +403,18 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     if(!(inValue instanceof Modifier))
       return this;
 
+    if(m_modifier == 0)
+      if(m_next.isPresent())
+        return m_next.get().add(inValue);
+      else
+        return inValue;
+
+    if(((Modifier) inValue).m_modifier == 0)
+      if(((Modifier) inValue).m_next.isPresent())
+        return ((Modifier) inValue).m_next.get().add(this);
+      else
+        return this;
+
     Modifier value = (Modifier)inValue;
     if(m_type == value.m_type && m_condition.equals(value.m_condition))
     {
@@ -421,8 +435,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     }
 
     if(!m_next.isPresent())
-      return new Modifier(m_modifier, m_type, m_condition,
-                             Optional.of(value));
+      return new Modifier(m_modifier, m_type, m_condition, Optional.of(value));
 
     return new Modifier(m_modifier, m_type, m_condition,
                              Optional.of((Modifier)m_next.get().add(value)));

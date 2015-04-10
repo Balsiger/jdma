@@ -144,6 +144,7 @@ message ModifierProto
     DEFLECTION = 12;
     RAGE = 13;
     COMPETENCE = 14;
+    SYNERGY = 15;
   }
 
   message Modifier

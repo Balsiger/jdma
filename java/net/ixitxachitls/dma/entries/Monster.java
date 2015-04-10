@@ -62,6 +62,9 @@ public class Monster extends CampaignEntry
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
+  private static final int MIN_SYNERGY_RANKS = 5;
+  private static final int SYNERGY_BONUS = 2;
+
   /** The class represents a single line in the treasure table (DMG 52/53). */
   private static class Line
   {
@@ -1992,6 +1995,7 @@ public class Monster extends CampaignEntry
   public Modifier miscModifier(String inSkill)
   {
     Optional<BaseSkill> skill = BaseSkill.get(inSkill);
+    Modifier modifier = new Modifier();
     if(skill.isPresent())
     {
       // Armor check penalty, if relevant.
@@ -2008,13 +2012,21 @@ public class Monster extends CampaignEntry
         if(skill.get().hasDoubleArmorCheckPenalty())
           penalty *= 2;
 
-        return new Modifier(penalty, Modifier.Type.ARMOR,
-                            Optional.<String>absent(),
-                            Optional.<Modifier>absent());
+        modifier = (Modifier)
+            modifier.add(new Modifier(penalty, Modifier.Type.ARMOR,
+                                      Optional.<String>absent(),
+                                      Optional.<Modifier>absent()));
       }
+
+      for(String synergy : skill.get().getCombinedSynergies().get())
+        if(skillRanks(synergy) >= MIN_SYNERGY_RANKS)
+          modifier = (Modifier)
+              modifier.add(new Modifier(SYNERGY_BONUS, Modifier.Type.SYNERGY,
+                                        Optional.<String>absent(),
+                                        Optional.<Modifier>absent()));
     }
 
-    return new Modifier();
+    return modifier;
   }
 
   public int totalSkillPoints()

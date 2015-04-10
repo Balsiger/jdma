@@ -3342,6 +3342,11 @@ BODY.print
   text-align: center;
 }
 
+.character-sheet .skill-line .skill-misc
+{
+  flex: 2;
+}
+
 .character-sheet .skill-line .skill-ranks.skill-total
 {
   text-transform: none;
