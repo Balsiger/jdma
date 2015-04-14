@@ -148,6 +148,11 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
       return m_stacks;
     }
 
+    public boolean isGeneral()
+    {
+      return this == GENERAL;
+    }
+
     /**
      * Get the proto value for this value.
      *

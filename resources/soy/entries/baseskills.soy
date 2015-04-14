@@ -273,14 +273,58 @@
         {param validate: 'any' /}
         {param color: $color /}
       {/call}    
-      {call dma.edit.value_list}
-        {param name: 'synergies' /}
-        {param label: 'Synergies' /}
-        {param values: $entry.synergies /}
-        {param validate: 'non-empty' /}
+      {call dma.edit.generic_value}
+        {param name: 'synergy' /}
         {param color: $color /}
-        {param autocomplete: 'base skill/name' /}
-      {/call}    
+        {param label: 'Synergiess' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $synergy in $entry.synergies}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'synergy.name',
+                      'value': $synergy.name,
+                      'validate': 'any',
+                      'caption': 'name',
+                      'autocomplete': 'base skill/name'
+                    ],
+                    [
+                      'name': 'synergy.condition',
+                      'value': $synergy.condition.present
+                               ? $synergy.condition : '',
+                      'validate': 'any',
+                      'caption': 'condition'
+                    ],
+                  ] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'synergy.name',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'name',
+                      'autocomplete': 'base skill/name'
+                    ],
+                    [
+                      'name': 'synergy.condition',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'condition'
+                    ],
+                  ] /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+        {param validate: 'non-empty' /}
+      {/call}
       {call dma.edit.value}
         {param name: 'restriction' /}
         {param label: 'Restriction' /}
@@ -377,7 +421,7 @@
                       'name': 'dc.dc',
                       'value': $dc.DC,
                       'validate': 'number',
-                      'caption': 'DC'                 
+                      'caption': 'DC'
                     ],
                     [
                       'name': 'dc.text',
@@ -395,7 +439,7 @@
                       'name': 'dc.dc',
                       'value': '',
                       'validate': 'number',
-                      'caption': 'DC'                 
+                      'caption': 'DC'
                     ],
                     [
                       'name': 'dc.text',

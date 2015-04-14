@@ -792,14 +792,21 @@
   <em>{$value}</em>
 {/template}
 
-/**
- * Print a modifier value.
- *
- * @param value the value to print
- * @ param args arguments to the template
- */
+/** Print a modifier value. */
 {template .modifier}
-  {$value}
+  {@param modifier: ?}
+  {bonus($modifier.modifier)}
+  {if not $modifier.type.general}
+    {sp}{$modifier.type}
+  {/if}
+  {if $modifier.condition.present}
+    <span class="size-tiny"> if {$modifier.condition}</span>
+  {/if}
+  {if $modifier.next.present}
+    {call .modifier}
+      {param modifier: $modifier.next /}
+    {/call}
+  {/if}
 {/template}
 
 /**

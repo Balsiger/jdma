@@ -1176,7 +1176,9 @@
     +
     <span class="skill-misc">
       {if $misc and $misc.modifier}
-        {$misc}
+        {call dma.value.modifier}
+          {param modifier: $misc /}
+        {/call}
       {/if}
     </span>
  </div>

@@ -34,6 +34,7 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.*;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
 import net.ixitxachitls.dma.values.Annotated;
@@ -78,11 +79,11 @@ public class BaseSkill extends BaseEntry
 
     /** The parser for the dc. */
     public static final Parser<DC> PARSER =
-      new Parser<DC>(2)
-      {
-        @Override
-        public Optional<DC> doParse(String inValue, String inText)
+        new Parser<DC>(2)
         {
+          @Override
+          public Optional<DC> doParse(String inValue, String inText)
+          {
           try
           {
             int value = Integer.parseInt(inValue);
@@ -113,6 +114,72 @@ public class BaseSkill extends BaseEntry
     public String getDescription()
     {
       return m_description;
+    }
+  }
+
+  public static class Synergy
+  {
+    public Synergy(String inName) {
+      m_name = inName;
+      m_condition = Optional.absent();
+    }
+
+    public Synergy(String inName, String inCondition) {
+      m_name = inName;
+      m_condition = Optional.of(inCondition);
+    }
+
+    private String m_name;
+    private Optional<String> m_condition;
+
+    public static final Parser<Synergy> PARSER =
+        new Parser<Synergy>(2)
+        {
+          @Override
+          public Optional<Synergy> doParse(String inName, String inCondition)
+          {
+            if(inCondition != null && !inCondition.isEmpty())
+              return Optional.of(new Synergy(inName, inCondition));
+
+            return Optional.of(new Synergy(inName));
+          }
+        };
+
+    public String getName()
+    {
+      return m_name;
+    }
+
+    public Optional<String> getCondition()
+    {
+      return m_condition;
+    }
+
+    public String toString()
+    {
+      if(m_condition.isPresent())
+        return m_name + " if " + m_condition.get();
+
+      return m_name;
+    }
+
+    public BaseSkillProto.Synergy toProto()
+    {
+      if(m_condition.isPresent())
+        return BaseSkillProto.Synergy.newBuilder()
+            .setName(m_name)
+            .setCondition(m_condition.get())
+            .build();
+
+      return BaseSkillProto.Synergy.newBuilder().setName(m_name).build();
+    }
+
+    public static Synergy fromProto(BaseSkillProto.Synergy inSynergy)
+    {
+      if(inSynergy.hasCondition())
+        return new Synergy(inSynergy.getName(), inSynergy.getCondition());
+
+      return new Synergy(inSynergy.getName());
     }
   }
 
@@ -157,7 +224,10 @@ public class BaseSkill extends BaseEntry
   private Optional<String> m_special = Optional.absent();
 
   /** The synergies to other skills. */
-  private List<String> m_synergies = new ArrayList<String>();
+  private List<String> m_synergies_deprecated = new ArrayList<>();
+
+  /** The synergies from other skills. */
+  private List<Synergy> m_synergies = new ArrayList<>();
 
   /** The restrictions. */
   private Optional<String> m_restriction = Optional.absent();
@@ -290,17 +360,17 @@ public class BaseSkill extends BaseEntry
    *
    * @return the skill synergies
    */
-  public List<String> getSynergies()
+  public List<Synergy> getSynergies()
   {
     return m_synergies;
   }
 
-  public Annotated<List<String>> getCombinedSynergies()
+  public Annotated<List<Synergy>> getCombinedSynergies()
   {
     if(!m_synergies.isEmpty())
       return new Annotated.List(m_synergies, getName());
 
-    Annotated<List<String>> combined = new Annotated.List<>();
+    Annotated<List<Synergy>> combined = new Annotated.List<>();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseSkill)entry).getCombinedSynergies());
 
@@ -488,13 +558,21 @@ public class BaseSkill extends BaseEntry
     m_action = inValues.use("action", m_action);
     m_retry = inValues.use("retry", m_retry);
     m_special = inValues.use("special", m_special);
-    m_synergies = inValues.use("synergies", m_synergies);
+    m_synergies_deprecated = inValues.use("synergies", m_synergies_deprecated);
+    m_synergies = inValues.use("synergy", m_synergies, Synergy.PARSER,
+                               "name", "condition");
     m_restriction = inValues.use("restriction", m_restriction);
     m_untrained = inValues.use("untrained", m_untrained);
     m_restrictions = inValues.use("restrictions", m_restrictions,
                                  SkillRestriction.PARSER);
     m_modifiers = inValues.use("modifier", m_modifiers, SkillModifier.PARSER);
-    m_dcs = inValues.use("dcs", m_dcs, DC.PARSER, "dc", "text");
+    m_dcs = inValues.use("dc", m_dcs, DC.PARSER, "dc", "text");
+
+    // Temporary update.
+    if(m_synergies.isEmpty() && !m_synergies_deprecated.isEmpty()) {
+      for(String synergy : m_synergies_deprecated)
+        m_synergies.add(new Synergy(synergy));
+    }
   }
 
   @Override
@@ -519,8 +597,8 @@ public class BaseSkill extends BaseEntry
     if(m_special.isPresent())
       builder.setSpecial(m_special.get());
 
-    for(String synergy : m_synergies)
-      builder.addSynergy(synergy);
+    for(Synergy synergy : m_synergies)
+      builder.addSynergy(synergy.toProto());
 
     if(m_restriction.isPresent())
       builder.setRestrictionText(m_restriction.get());
@@ -576,9 +654,11 @@ public class BaseSkill extends BaseEntry
     if(proto.hasSpecial())
       m_special = Optional.of(proto.getSpecial());
 
+    for(String synergy : proto.getSynergyDeprecatedList())
+      m_synergies_deprecated.add(synergy);
 
-    for(String synergy : proto.getSynergyList())
-      m_synergies.add(synergy);
+    for(BaseSkillProto.Synergy synergy : proto.getSynergyList())
+      m_synergies.add(Synergy.fromProto(synergy));
 
     if(proto.hasRestrictionText())
       m_restriction = Optional.of(proto.getRestrictionText());

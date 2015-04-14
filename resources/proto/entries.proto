@@ -543,7 +543,7 @@ message BaseSkillProto
   optional string action = 4;
   optional string retry = 5;
   optional string special = 6;
-  repeated string synergy = 7;
+  repeated string synergy_deprecated = 7 [deprecated=true];
   optional string synergy_text = 8;
   optional string restriction_text = 9;
   optional string untrained = 10;
@@ -572,6 +572,13 @@ message BaseSkillProto
     required string text = 2;
   }
   repeated DC dc = 13;
+
+  message Synergy
+  {
+    optional string name = 1;
+    optional string condition = 2;
+  }
+  repeated Synergy synergy = 14;
 }
 
 message BaseItemProto

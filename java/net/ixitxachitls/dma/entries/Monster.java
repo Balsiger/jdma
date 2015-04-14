@@ -2018,11 +2018,11 @@ public class Monster extends CampaignEntry
                                       Optional.<Modifier>absent()));
       }
 
-      for(String synergy : skill.get().getCombinedSynergies().get())
-        if(skillRanks(synergy) >= MIN_SYNERGY_RANKS)
+      for(BaseSkill.Synergy synergy : skill.get().getCombinedSynergies().get())
+        if(skillRanks(synergy.getName()) >= MIN_SYNERGY_RANKS)
           modifier = (Modifier)
               modifier.add(new Modifier(SYNERGY_BONUS, Modifier.Type.SYNERGY,
-                                        Optional.<String>absent(),
+                                        synergy.getCondition(),
                                         Optional.<Modifier>absent()));
     }
 
