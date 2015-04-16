@@ -1098,7 +1098,10 @@
       {call .sheet_skill}
         {param skill: $skill /}
         {param classSkill: call($entry, 'isClassSkill', $skill.name) /}
-        {param ability: bonus(call($entry, 'abilityModifier', $skill.ability)) /}
+        {param ability: $skill.combined_ability.get.present
+          ? bonus(call($entry, 'abilityModifier',
+                       $skill.combined_ability.get))
+          : '+0' /}
         {param ranks: call($entry, 'skillRanks', $skill.name) /}
         {param total: call($entry, 'skillModifier', $skill.name, $skill.ability) /}
         {param misc: call($entry, 'miscModifier', $skill.name) /}
@@ -1156,7 +1159,7 @@
       {/if}
     </a>
     <span class="skill-key">
-      {$skill.ability.short}
+      {$skill.combined_ability.get.short}
     </span>
     <span class="skill-modifier">
       {bonus($total)}

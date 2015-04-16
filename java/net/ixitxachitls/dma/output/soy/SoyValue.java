@@ -222,6 +222,12 @@ public class SoyValue extends SoyMapData
     if(inObject instanceof String)
       return StringData.forValue(inObject.toString());
 
+    if(inObject instanceof Optional)
+      if(((Optional) inObject).isPresent())
+        return convert(inName, ((Optional) inObject).get());
+      else
+        return new SoyUndefined(m_name + "." + inName + "(optional)");
+
     if(inObject == null)
       return new SoyUndefined(m_name + "." + inName);
 

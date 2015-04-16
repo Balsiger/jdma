@@ -567,12 +567,6 @@ public class BaseSkill extends BaseEntry
                                  SkillRestriction.PARSER);
     m_modifiers = inValues.use("modifier", m_modifiers, SkillModifier.PARSER);
     m_dcs = inValues.use("dc", m_dcs, DC.PARSER, "dc", "text");
-
-    // Temporary update.
-    if(m_synergies.isEmpty() && !m_synergies_deprecated.isEmpty()) {
-      for(String synergy : m_synergies_deprecated)
-        m_synergies.add(new Synergy(synergy));
-    }
   }
 
   @Override
