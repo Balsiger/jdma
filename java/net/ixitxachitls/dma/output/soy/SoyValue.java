@@ -90,7 +90,7 @@ public class SoyValue extends SoyMapData
   public SoyData getSingle(String inName)
   {
     Object value = m_object;
-    if(value instanceof Optional)
+    if(value instanceof Optional && !inName.equals("get"))
     {
       if("isPresent".equals(inName) || "present".equals(inName))
         return BooleanData.forValue(((Optional) value).isPresent());
@@ -98,7 +98,7 @@ public class SoyValue extends SoyMapData
       if(((Optional)value).isPresent())
         value = ((Optional)value).get();
       else
-        return new SoyUndefined(m_name + "." + inName);
+        return new SoyUndefined(m_name + "." + inName + "(optional)");
     }
 
     if("integer".equals(inName) && value instanceof Integer)
@@ -222,7 +222,7 @@ public class SoyValue extends SoyMapData
     if(inObject instanceof String)
       return StringData.forValue(inObject.toString());
 
-    if(inObject instanceof Optional)
+    if(false && inObject instanceof Optional)
       if(((Optional) inObject).isPresent())
         return convert(inName, ((Optional) inObject).get());
       else

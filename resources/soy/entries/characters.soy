@@ -1100,7 +1100,7 @@
         {param classSkill: call($entry, 'isClassSkill', $skill.name) /}
         {param ability: $skill.combined_ability.get.present
           ? bonus(call($entry, 'abilityModifier',
-                       $skill.combined_ability.get))
+                       $skill.combined_ability.get.get))
           : '+0' /}
         {param ranks: call($entry, 'skillRanks', $skill.name) /}
         {param total: call($entry, 'skillModifier', $skill.name, $skill.ability) /}
