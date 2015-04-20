@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Optional;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.proto.Entries.BaseEncounterProto;
@@ -234,9 +233,9 @@ public class BaseEncounter extends BaseEntry
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_adventure = inValues.use("adventure", m_adventure);
     m_locations = inValues.use("location", m_locations);
@@ -359,15 +358,8 @@ public class BaseEncounter extends BaseEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(BaseEncounterProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return BaseEncounterProto.getDefaultInstance();
   }
 }

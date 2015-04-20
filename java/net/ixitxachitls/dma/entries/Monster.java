@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Optional;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -2058,9 +2057,9 @@ public class Monster extends CampaignEntry
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_alignment = inValues.use("alignment", m_alignment, Alignment.PARSER);
     m_strength = inValues.use("strength", m_strength, Value.INTEGER_PARSER);
@@ -4200,16 +4199,9 @@ public class Monster extends CampaignEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(MonsterProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return MonsterProto.getDefaultInstance();
   }
 
   public boolean shownAsWorn(Item inItem)

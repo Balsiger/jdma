@@ -25,7 +25,6 @@ import java.util.Map;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSetMultimap;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.proto.Entries;
@@ -192,7 +191,7 @@ public class BaseCharacter extends BaseEntry
   {
     BaseCharacterProto.Builder builder = BaseCharacterProto.newBuilder();
 
-    builder.setBase((BaseEntryProto)super.toProto());
+    builder.setBase((BaseEntryProto) super.toProto());
     builder.setGroup(m_group.toProto());
     if(m_lastAction.isPresent())
       builder.setLastAction(m_lastAction.get());
@@ -205,9 +204,9 @@ public class BaseCharacter extends BaseEntry
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_realName = inValues.use("real_name", m_realName);
     m_email = inValues.use("email", m_email);
@@ -246,16 +245,9 @@ public class BaseCharacter extends BaseEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(BaseCharacterProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return BaseCharacterProto.getDefaultInstance();
   }
 
   /**

@@ -30,7 +30,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
@@ -412,7 +411,7 @@ public class BaseEntry extends AbstractEntry
   {
     BaseEntryProto.Builder builder = BaseEntryProto.newBuilder();
 
-    builder.setAbstract((AbstractEntryProto)super.toProto());
+    builder.setAbstract((AbstractEntryProto) super.toProto());
 
     if(!m_description.isEmpty())
       builder.setDescription(m_description);
@@ -431,9 +430,9 @@ public class BaseEntry extends AbstractEntry
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_description = inValues.use("description", m_description);
     m_short = inValues.use("short_description", m_short);
@@ -446,7 +445,7 @@ public class BaseEntry extends AbstractEntry
                                 return WORLDS.contains(inCheck);
                               }
                             }));
-    m_references = inValues.use("references",  m_references,
+    m_references = inValues.use("references", m_references,
                                 ProductReference.PARSER, "name", "pages");
     m_synonyms =
         inValues.use("synonyms", m_synonyms, Optional.of(Values.NOT_EMPTY));
@@ -483,16 +482,9 @@ public class BaseEntry extends AbstractEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(BaseEntryProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return BaseEntryProto.getDefaultInstance();
   }
 }
 

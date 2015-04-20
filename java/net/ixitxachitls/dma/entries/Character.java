@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Optional;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -425,9 +424,9 @@ public class Character extends NPC
   */
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_state = inValues.use("state", m_state, CharacterState.PARSER);
     m_playerName = inValues.use("player", m_playerName);
@@ -486,15 +485,8 @@ public class Character extends NPC
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(CharacterProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return CharacterProto.getDefaultInstance();
   }
 }

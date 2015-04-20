@@ -28,7 +28,6 @@ import java.util.List;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.proto.Entries.BaseArmorProto;
@@ -653,9 +652,9 @@ public class BaseLevel extends BaseEntry
   */
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_abbreviation = inValues.use("abbreviation", m_abbreviation);
     m_adventures = inValues.use("adventures", m_adventures);
@@ -915,16 +914,9 @@ public class BaseLevel extends BaseEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(BaseLevelProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return BaseLevelProto.getDefaultInstance();
   }
 
   public boolean isClassSkill(String inName)

@@ -28,7 +28,6 @@ import java.util.List;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
@@ -1365,9 +1364,9 @@ public class BaseSpell extends BaseEntry
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_school = inValues.use("school", m_school, School.PARSER);
     m_subschools = inValues.use("subschool", m_subschools, Subschool.PARSER);
@@ -1611,16 +1610,9 @@ public class BaseSpell extends BaseEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(BaseSpellProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return BaseSpellProto.getDefaultInstance();
   }
 
   //---------------------------------------------------------------------------

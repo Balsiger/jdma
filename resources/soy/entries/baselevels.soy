@@ -259,7 +259,7 @@
         {/call}
       {/if}
       {if $entry.special_attacks}
-        {call dma.entry.valuew}
+        {call dma.entry.value}
           {param label: 'Special Qualities' /}
           {param value kind="html"}
             {foreach $quality in $entry.special_qualities}              

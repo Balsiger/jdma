@@ -55,6 +55,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
+import com.google.protobuf.TextFormat;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
@@ -796,12 +797,26 @@ public abstract class AbstractEntry
     }
   }
 
+
+  public void set(Values inValues) {
+    String proto = inValues.use("proto", "");
+    if(!proto.isEmpty() && !proto.equals(toProto().toString()))
+    {
+      parseFrom(proto);
+      return;
+    }
+
+    setValues(inValues);
+  }
+
   /**
    * Set the values in this entries.
    *
    * @param inValues the values to set
+   *
+   * @return true if setting should continue, false if not
    */
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
     m_name = inValues.use("name", m_name, Optional.of(Values.NOT_EMPTY));
     m_base = inValues.use("base", m_base, Optional.of(Values.NOT_EMPTY));
@@ -1307,12 +1322,31 @@ public abstract class AbstractEntry
   {
     try
     {
-      fromProto(AbstractEntryProto.parseFrom(inBytes));
+      fromProto(defaultProto().getParserForType().parseFrom(inBytes));
     }
     catch(InvalidProtocolBufferException e)
     {
       Log.warning("could not properly parse proto: " + e);
     }
+  }
+
+  public void parseFrom(String inText)
+  {
+    try
+    {
+      Message.Builder builder = defaultProto().toBuilder();
+      TextFormat.merge(inText, builder);
+      fromProto(builder.build());
+    }
+    catch(TextFormat.ParseException e)
+    {
+      Log.warning("could not properly parse proto: " + e);
+    }
+  }
+
+  protected Message defaultProto()
+  {
+    return AbstractEntryProto.getDefaultInstance();
   }
 
   //........................................................................

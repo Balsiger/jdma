@@ -27,11 +27,9 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.SortedMultiset;
 import com.google.common.collect.TreeMultiset;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -404,9 +402,9 @@ public class NPC extends Monster
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_gender = inValues.use("gender", m_gender, Gender.PARSER);
     m_religion = inValues.use("religion", m_religion);
@@ -496,15 +494,8 @@ public class NPC extends Monster
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(NPCProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return NPCProto.getDefaultInstance();
   }
 }

@@ -29,7 +29,6 @@ import java.util.Set;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
@@ -3341,9 +3340,9 @@ public class BaseMonster extends BaseEntry
   //........................................................................
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_size = inValues.use("size", m_size, Size.PARSER);
     m_sizeModifier = inValues.use("size_modifier", m_sizeModifier,
@@ -3786,16 +3785,9 @@ public class BaseMonster extends BaseEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(BaseMonsterProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return BaseMonsterProto.getDefaultInstance();
   }
 
   //---------------------------------------------------------------------------

@@ -248,7 +248,7 @@
       {call dma.edit.value}
         {param name: 'check' /}
         {param label: 'Check' /}
-        {param value: $entry.check.present ? $entry.check : '' /}
+        {param value: $entry.get_check.present ? $entry.get_check : '' /}
         {param validate: 'any' /}
         {param color: $color /}
       {/call}    
@@ -502,6 +502,13 @@
             {/param}
           {/call}
         {/param}            
+      {/call}
+      {call dma.edit.value_text}
+        {param name: 'proto' /}
+        {param label: 'Proto' /}
+        {param value: $entry.proto /}
+        {param validate: 'any' /}
+        {param color: $color /}
       {/call}
     {/param}
   {/call}

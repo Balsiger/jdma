@@ -563,4 +563,9 @@ public class Values
     m_changed = true;
     return entries;
   }
+
+  public void clear()
+  {
+    m_values.clear();
+  }
 }
