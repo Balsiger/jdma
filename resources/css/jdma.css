@@ -2580,6 +2580,11 @@ BODY.print
   right: 100%;
 }
 
+.entry.tiny
+{
+  display: inline-block;
+}
+
 /******************************************************************************
  * Edit pages
  *****************************************************************************/
@@ -3287,14 +3292,14 @@ BODY.print
 
 .character-sheet .skill-line
 {
-  font-size: 16px;
+  font-size: 12px;
   width: 100%;
   display: flex;
 }
 
 .character-sheet .skill-line.skill-title
 {
-  font-size: 10px;
+  font-size: 8px;
   text-transform: uppercase;
   text-align: center;
 }
@@ -3311,6 +3316,16 @@ BODY.print
 .character-sheet .skill-line.skill-title .skill-misc
 {
   border-bottom: none;
+}
+
+.character-sheet .modifier-condition
+{
+  font-size: 6px;
+}
+
+.character-sheet .modifier-hide-condition
+{
+  font-size: 50%;
 }
 
 .character-sheet .skill-line .class-skill
@@ -3356,6 +3371,12 @@ BODY.print
 .character-sheet .magical-subtitle
 {
   font-size: 8px;
+}
+
+.character-sheet .quality
+{
+  font-size: 12px;
+  padding-bottom: 4px;
 }
 
 @media print

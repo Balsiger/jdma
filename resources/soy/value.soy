@@ -795,12 +795,29 @@
 /** Print a modifier value. */
 {template .modifier}
   {@param modifier: ?}
-  {bonus($modifier.modifier)}
-  {if not $modifier.type.general}
-    {sp}{$modifier.type}
-  {/if}
-  {if $modifier.condition.present}
-    <span class="size-tiny"> if {$modifier.condition}</span>
+  {@param? hide_condition: bool}
+  {if $modifier.has_condition}
+    {if $hide_condition}
+      <span class="modifier-hide-condition">
+        ({bonus($modifier.modifier)}
+        {if not $modifier.type.general}
+          {sp}{$modifier.type}
+        {/if})
+      </span>
+    {else}
+      {bonus($modifier.modifier)}
+      {if not $modifier.type.general}
+        {sp}{$modifier.type}
+      {/if}
+      {if $modifier.condition.present}
+        <span class="modifier-condition"> {$modifier.condition}</span>
+      {/if}
+    {/if}
+  {else}
+    {bonus($modifier.modifier)}
+    {if not $modifier.type.general}
+      {sp}{$modifier.type}
+    {/if}
   {/if}
   {if $modifier.next.present}
     {call .modifier}

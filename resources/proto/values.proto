@@ -382,3 +382,8 @@ message SpeedProto
   }
   optional Maneuverability maneuverability = 3;
 }
+
+message ConditionProto
+{
+  optional string description = 1;
+}

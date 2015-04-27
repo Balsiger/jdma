@@ -37,42 +37,45 @@
     {param class: 'narrow' /}
     {param validate: 'any' /}
     {param autocomplete: 'base quality/name' /} 
-  {/call}    
-  {if $entry}    
+  {/call}
+  {if $entry}
     {foreach $name in keys($entry.parameters)}
       {call dma.edit.field_list_multiple}
         {param values:  [
           [ 
             'name' : 'quality.parameter.name',
             'value': $name,
-            'validate': 'any'
+            'validate': 'any',
+            'caption': 'param name'
           ],
           [
             'name': 'quality.parameter.value',
             'value': $entry.parameters[$name],
-            'validate': 'any'          
+            'validate': 'any',
+            'caption': 'param value'
           ]
         ]/}    
         {param class: 'narrow' /} 
       {/call}
     {/foreach}
-  {else}
-    {call dma.edit.field_list_multiple}
-      {param values:  [
-        [ 
-          'name' : 'quality.parameter.name',
-          'value': '',
-          'validate': 'any'
-        ],
-        [
-          'name': 'quality.parameter.value',
-          'value': '',
-          'validate': 'any'          
-        ]
-      ]/}    
-      {param class: 'narrow' /} 
-    {/call}    
-  {/if}    
+  {/if}
+  {call dma.edit.field_list_multiple}
+    {param values:  [
+      [
+        'name' : 'quality.parameter.name',
+        'value': '',
+        'validate': 'any',
+        'caption': 'param name'
+      ],
+      [
+        'name': 'quality.parameter.value',
+        'value': '',
+        'validate': 'any',
+        'caption': 'param value'
+      ]
+    ]/}
+    {param class: 'narrow' /}
+  {/call}
 {/template}
 
 /**

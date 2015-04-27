@@ -43,8 +43,10 @@ import net.ixitxachitls.dma.entries.Skill;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.output.soy.SoyValue;
+import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.Proficiency;
+import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Alignment;
@@ -58,9 +60,11 @@ import net.ixitxachitls.dma.values.enums.Language;
 import net.ixitxachitls.dma.values.enums.LanguageModifier;
 import net.ixitxachitls.dma.values.enums.Maneuverability;
 import net.ixitxachitls.dma.values.enums.MonsterSubtype;
+import net.ixitxachitls.dma.values.enums.MonsterType;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.dma.values.enums.Organization;
 import net.ixitxachitls.dma.values.enums.Save;
+import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.dma.values.enums.SkillModifier;
 import net.ixitxachitls.dma.values.enums.SkillRestriction;
 import net.ixitxachitls.dma.values.enums.SpellClass;
@@ -241,6 +245,8 @@ public class SoyServlet extends DMAServlet
 
        // classes with static access
        "Level", new SoyValue("Level", Level.class),
+       "Size", new SoyValue("Size", Size.class),
+       "SizeModifier", new SoyValue("SizeModifier", SizeModifier.class),
        "Skill", new SoyValue("Skill", Skill.class),
        "Gender", new SoyValue("Gender", Gender.class),
        "Alignment", new SoyValue("Alignment", Alignment.class),
@@ -256,6 +262,7 @@ public class SoyServlet extends DMAServlet
        "SpellClass", new SoyValue("SpellClass", SpellClass.class),
        "Subschool", new SoyValue("Subschool", Subschool.class),
        "SpellComponent", new SoyValue("SpellComponent", SpellComponent.class),
+       "MonsterType", new SoyValue("MonsterType", MonsterType.class),
        "MonsterSubtype", new SoyValue("MonsterSubtype", MonsterSubtype.class),
        "MovementMode", new SoyValue("MovementMode", MovementMode.class),
        "AttackMode", new SoyValue("AttackMode", AttackMode.class),

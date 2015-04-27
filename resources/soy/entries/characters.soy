@@ -378,37 +378,49 @@
     {call .ability}
       {param name: 'Strength' /}
       {param abbreviation: 'STR' /}
+      {param total: $entry.total_strength /}
       {param ability: annotate($entry.combined_strength) /}
+      {param racial: $entry.racial_strength_modifier /}
       {param modifier: bonus($entry.strength_modifier) /}
     {/call}
     {call .ability}
       {param name: 'Dexterity' /}
       {param abbreviation: 'DEX' /}
+      {param total: $entry.total_dexterity /}
       {param ability: annotate($entry.combined_dexterity) /}
+      {param racial: $entry.racial_dexterity_modifier /}
       {param modifier: bonus($entry.dexterity_modifier) /}
     {/call}
     {call .ability}
       {param name: 'Constitution' /}
       {param abbreviation: 'CON' /}
+      {param total: $entry.total_constitution /}
       {param ability: annotate($entry.combined_constitution) /}
+      {param racial: $entry.racial_constitution_modifier /}
       {param modifier: bonus($entry.constitution_modifier) /}
     {/call}
     {call .ability}
       {param name: 'Intelligence' /}
       {param abbreviation: 'INT' /}
+      {param total: $entry.total_intelligence /}
       {param ability: annotate($entry.combined_intelligence) /}
+      {param racial: $entry.racial_intelligence_modifier /}
       {param modifier: bonus($entry.intelligence_modifier) /}
     {/call}
     {call .ability}
       {param name: 'Wisdom' /}
       {param abbreviation: 'WIS' /}
+      {param total: $entry.total_wisdom /}
       {param ability: annotate($entry.combined_wisdom) /}
+      {param racial: $entry.racial_wisdom_modifier /}
       {param modifier: bonus($entry.wisdom_modifier) /}
     {/call}
     {call .ability}
       {param name: 'Charisma' /}
       {param abbreviation: 'CHA' /}
+      {param total: $entry.total_charisma /}
       {param ability: annotate($entry.combined_charisma) /}
+      {param racial: $entry.racial_charisma_modifier /}
       {param modifier: bonus($entry.charisma_modifier) /}
     {/call}
   </div>
@@ -623,12 +635,14 @@
         {param name: 'Fortitude' /}
         {param ability: 'Constitution' /}
         {param value: annotate($entry.combined_fortitude_save) /}
+        {param racial: $entry.racial_fortitude_modifier /}
         {param ability_modifier: bonus($entry.constitution_modifier) /}
       {/call}
 
       {call .sheet_saves_value}
         {param name: 'Reflex' /}
         {param ability: 'Dexterity' /}
+        {param racial: $entry.racial_reflex_modifier /}
         {param value: annotate($entry.combined_reflex_save) /}
         {param ability_modifier: bonus($entry.dexterity_modifier) /}
       {/call}
@@ -636,6 +650,7 @@
       {call .sheet_saves_value}
         {param name: 'Will' /}
         {param ability: 'Wisdom' /}
+        {param racial: $entry.racial_will_modifier /}
         {param value: annotate($entry.combined_will_save) /}
         {param ability_modifier: bonus($entry.wisdom_modifier) /}
       {/call}
@@ -643,23 +658,48 @@
 
     <div class="box sheet-column"
          style="display: flex; flex-direction: column;">
-      <div style="flex: 1;">
+      <div>
         Conditional Modifiers
+      </div>
+      <div style="flex: 1;">
+        {if $entry.racial_reflex_modifier.has_value and
+            $entry.racial_reflex_modifier.has_any_condition}
+          Reflex:{sp}
+          {call dma.value.modifier}
+            {param modifier: $entry.racial_reflex_modifier /}
+          {/call}
+        {/if}
+      </div>
+      <div style="flex: 1;">
+        {if $entry.racial_fortitude_modifier.has_value and
+            $entry.racial_fortitude_modifier.has_any_condition}
+          Fortitude:{sp}
+          {call dma.value.modifier}
+            {param modifier: $entry.racial_fortitude_modifier /}
+          {/call}
+        {/if}
+        </div>
+        <div style="flex: 1;">
+        {if $entry.racial_will_modifier.has_value and
+            $entry.racial_will_modifier.has_any_condition}
+          Will:{sp}
+          {call dma.value.modifier}
+            {param modifier: $entry.racial_will_modifier /}
+          {/call}
+        {/if}
       </div>
     </div>
   </div>
 
 {/template}
 
-/**
- * A single saving throw value.
- *
- * @param name the name of the save
- * @param ability the ability for the save
- * @param value the base save value
- * @param ability_modifier the ability modifier
- */
+/** A single saving throw value. */
 {template .sheet_saves_value}
+  {@param name: string}
+  {@param ability: string}
+  {@param value: string}
+  {@param ability_modifier: string}
+  {@param racial: ?}
   <div class="two-line-label" style="width: 15%; padding-top: 30px">
     <div class="top" style="font-size: 12px">{$name}</div>
     <div class="bottom">({$ability})</div>
@@ -732,7 +772,14 @@
     {param center: true /}
     {param white: true /}
     {param top: true /}
-    {param value: '' /}
+    {param value kind="html"}
+       {if $racial.has_value}
+           {call dma.value.modifier}
+             {param modifier: $racial /}
+             {param hide_condition: true /}
+           {/call}
+        {/if}
+    {/param}
   {/call}
 
   <div class="operator" style="padding-top: 30px">+</div>
@@ -1056,7 +1103,29 @@
         {param entry: $entry /}
       {/call}
     </div>
+    <div class="sheet-column">
+      {call .sheet_racial}
+        {param entry: $entry /}
+      {/call}
+    </div>
   </div>
+{/template}
+
+/** The skills box. */
+{template .sheet_racial}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Racial Traits' /}
+  {/call}
+
+  {foreach $quality in $entry.racial_qualities.get}
+    <div class="quality">
+      {call dma.entries.basequalities.summary}
+        {param entry: entry('base quality/' + $quality) /}
+      {/call}
+    </div>
+  {/foreach}
+
 {/template}
 
 /** The skills box. */
@@ -1109,26 +1178,28 @@
     {/if}
   {/foreach}
 
-  <div class="skill-line skill-title">
-    <span class="class-skill">
-    </span>
-    <span class="skill-name">
-    </span>
-    <span class="skill-key">
-    </span>
-    <span class="skill-modifier">
-    </span>
-    &nbsp;
-    <span class="skill-ranks skill-total">
-      ({$entry.total_used_skill_points} of {$entry.total_skill_points} points)
-    </span>
-    &nbsp;
-    <span class="skill-ability">
-    </span>
-    &nbsp;
-    <span class="skill-misc">
-    </span>
-  </div>
+  {if not $entry.total_used_skill_ppints == $entry.total_skill_points}
+    <div class="skill-line skill-title">
+      <span class="class-skill">
+      </span>
+      <span class="skill-name">
+      </span>
+      <span class="skill-key">
+      </span>
+      <span class="skill-modifier">
+      </span>
+      &nbsp;
+      <span class="skill-ranks skill-total">
+        {$entry.total_used_skill_points}/{$entry.total_skill_points}
+      </span>
+      &nbsp;
+      <span class="skill-ability">
+      </span>
+      &nbsp;
+      <span class="skill-misc">
+      </span>
+    </div>
+  {/if}
 
 {/template}
 
@@ -1663,15 +1734,14 @@
 
 {/template}
 
-/**
- * Format the ability with all modifiers.
- * 
- * @param name         the name of hte ability
- * @param abbreviation the abbreviated name of the ability
- * @param ability      the ability value
- * @param modifier     the ability modifier
- */
+/** Format the ability with all modifiers. */
 {template .ability}
+  {@param name: string}
+  {@param abbreviation: string}
+  {@param total: string}
+  {@param ability: html|string}
+  {@param modifier: html|string}
+  {@param racial: ?}
   <div class="ability">
     <div class="two-line-label">
       <div class="top">{$abbreviation}</div>
@@ -1687,7 +1757,7 @@
       {param size: '6px' /}
       {param vSize: '14px' /}
       {param center: true /}
-      {param value: $ability /}
+      {param value: $total /}
     {/call}
     
     <div class="operator">=</div>
@@ -1701,7 +1771,9 @@
       {param size: '6px' /}
       {param vSize: '14px' /}
       {param center: true /}
-      {param value: $ability /}
+      {param value kind="html"}
+        {$ability}{if $racial.has_value} {$racial}{/if}
+      {/param}
     {/call}
     
     <div class="operator">+</div>

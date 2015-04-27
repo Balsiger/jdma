@@ -31,10 +31,16 @@ import java.util.Map;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.proto.*;
+import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.QualityProto;
+import net.ixitxachitls.dma.values.AbilityModifier;
 import net.ixitxachitls.dma.values.ExpressionValue;
+import net.ixitxachitls.dma.values.KeyedModifier;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 
 /**
@@ -55,6 +61,16 @@ public class Quality extends NestedEntry
 
   /** The base quality, if found. */
   private Optional<Optional<BaseQuality>> m_base = Optional.absent();
+
+  public static final Creator<Quality> CREATOR =
+      new NestedEntry.Creator<Quality>()
+      {
+        @Override
+        public Quality create()
+        {
+          return new Quality();
+        }
+      };
 
   /**
    * Get the base quality, if it can be found.
@@ -149,9 +165,9 @@ public class Quality extends NestedEntry
 
     for(Map.Entry<String, String> parameter : m_parameters.entrySet())
       builder.addParameter(QualityProto.Parameter.newBuilder()
-                             .setName(parameter.getKey())
-                             .setValue(parameter.getValue())
-                             .build());
+                               .setName(parameter.getKey())
+                               .setValue(parameter.getValue())
+                               .build());
 
     QualityProto proto = builder.build();
     return proto;
@@ -171,5 +187,67 @@ public class Quality extends NestedEntry
       quality.m_parameters.put(parameter.getName(), parameter.getValue());
 
     return quality;
+  }
+
+  public String toString()
+  {
+    if(m_name.isPresent())
+      return m_name.get();
+
+    return "(unknown)";
+  }
+
+  public Modifier abilityModifier(Ability inAbility)
+  {
+    Modifier modifier = new Modifier();
+
+    if(!getBase().isPresent())
+      return modifier;
+
+    for(AbilityModifier abilityMod : getBase().get().getAbilityModifiers())
+      if(abilityMod.getAbility() == inAbility)
+        modifier = (Modifier)modifier.add(abilityMod.getModifier());
+
+    return modifier;
+  }
+
+  public Modifier reflexModifier()
+  {
+    if(getBase().isPresent())
+      if(getBase().get().getReflexModifier().isPresent())
+        return getBase().get().getReflexModifier().get();
+
+    return new Modifier();
+  }
+
+  public Modifier willModifier()
+  {
+    if(getBase().isPresent())
+      if(getBase().get().getWillModifier().isPresent())
+        return getBase().get().getWillModifier().get();
+
+    return new Modifier();
+  }
+
+  public Modifier fortitudeModifier()
+  {
+    if(getBase().isPresent())
+      if(getBase().get().getFortitudeModifier().isPresent())
+        return getBase().get().getFortitudeModifier().get();
+
+    return new Modifier();
+  }
+
+  public Modifier skillModifier(String inSkill)
+  {
+    Modifier result = new Modifier();
+
+    if(getBase().isPresent())
+      for(KeyedModifier modifier
+          : getBase().get().getSkillModifiers())
+        if(modifier.getKey().equalsIgnoreCase(inSkill))
+          result = (Modifier)result.add(modifier.getModifier());
+
+    return result;
   }
 }

@@ -320,6 +320,17 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
         + (m_next.isPresent() ? m_next.get().totalModifier() : 0);
   }
 
+  public boolean hasValue()
+  {
+    if(m_modifier != 0)
+      return true;
+
+    if(m_next.isPresent())
+      return m_next.get().hasValue();
+
+    return false;
+  }
+
   /**
    * Get the type of the modifier.
    *
@@ -338,6 +349,22 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   public Optional<String> getCondition()
   {
     return m_condition;
+  }
+
+  public boolean hasCondition()
+  {
+    return m_condition.isPresent();
+  }
+
+  public boolean hasAnyCondition()
+  {
+    if(hasCondition())
+      return true;
+
+    if(m_next.isPresent())
+      return m_next.get().hasAnyCondition();
+
+    return false;
   }
 
   /**

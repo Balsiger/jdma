@@ -32,6 +32,7 @@ import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Values.SpeedProto;
@@ -498,10 +499,15 @@ public class BaseMonster extends BaseEntry
   protected Optional<Distance> m_reach = Optional.absent();
 
   /** The special attacks. */
+  @Deprecated
   protected List<String> m_specialAttacks = new ArrayList<>();
 
   /** The special qualities. */
+  @Deprecated
   protected List<String> m_specialQualities = new ArrayList<>();
+
+  /** The monster's qualities. */
+  protected List<Quality> m_qualities = new ArrayList<>();
 
   /** The class skills. */
   protected List<String> m_classSkills = new ArrayList<>();
@@ -1171,6 +1177,23 @@ public class BaseMonster extends BaseEntry
 
     return combined;
   }
+
+  public List<Quality> getQualities()
+  {
+    return Collections.unmodifiableList(m_qualities);
+  }
+
+  public Annotated<List<Quality>> getCombinedQualities()
+  {
+    Annotated.List<Quality> combined = new Annotated.List<>();
+    combined.add(m_qualities, getName());
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseMonster)entry).getCombinedQualities());
+
+    return combined;
+  }
+
+
 
   /**
    * Get a monster's special qualities.
@@ -3382,6 +3405,7 @@ public class BaseMonster extends BaseEntry
     m_reach = inValues.use("reach", m_reach, Distance.PARSER);
     m_specialAttacks = inValues.use("special_attack", m_specialAttacks);
     m_specialQualities = inValues.use("special_quality", m_specialQualities);
+    m_qualities = inValues.useEntries("quality", m_qualities, Quality.CREATOR);
     m_classSkills = inValues.use("class_skill", m_classSkills);
     m_feats = inValues.use("feats", m_feats);
     m_terrain = inValues.use("terrain", m_terrain, Terrain.PARSER);
@@ -3502,19 +3526,22 @@ public class BaseMonster extends BaseEntry
 
     for(String special : m_specialAttacks)
       builder.addSpecialAttack
-        (BaseMonsterProto.QualityReference.newBuilder()
-         .setReference(BaseMonsterProto.Reference.newBuilder()
-                       .setName(special)
-                       .build())
-                       .build());
+          (BaseMonsterProto.QualityReference.newBuilder()
+               .setReference(BaseMonsterProto.Reference.newBuilder()
+                                 .setName(special)
+                                 .build())
+               .build());
 
     for(String special : m_specialQualities)
       builder.addSpecialQuality
-        (BaseMonsterProto.QualityReference.newBuilder()
-         .setReference(BaseMonsterProto.Reference.newBuilder()
-                       .setName(special)
-                       .build())
-                       .build());
+          (BaseMonsterProto.QualityReference.newBuilder()
+               .setReference(BaseMonsterProto.Reference.newBuilder()
+                                 .setName(special)
+                                 .build())
+               .build());
+
+    for(Quality quality : m_qualities)
+      builder.addQualities(quality.toProto());
 
     for(String skill : m_classSkills)
       builder.addClassSkill
@@ -3701,6 +3728,10 @@ public class BaseMonster extends BaseEntry
     for(BaseMonsterProto.QualityReference reference
       : proto.getSpecialQualityList())
       m_specialQualities.add(reference.getReference().getName());
+
+    for(Entries.QualityProto quality : proto.getQualitiesList())
+      m_qualities.add(Quality.fromProto(quality));
+
     for(BaseMonsterProto.SkillReference reference
       : proto.getClassSkillList())
       m_classSkills.add(reference.getReference().getName());

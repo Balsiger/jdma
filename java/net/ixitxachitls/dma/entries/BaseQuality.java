@@ -236,6 +236,12 @@ public class BaseQuality extends BaseEntry
     return Collections.unmodifiableList(m_bonusFeats);
   }
 
+  @Deprecated
+  public List<Effect> getEffects()
+  {
+    return m_effects;
+  }
+
   @Override
   public void setValues(Values inValues)
   {

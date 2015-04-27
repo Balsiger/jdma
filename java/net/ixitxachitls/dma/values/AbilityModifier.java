@@ -97,6 +97,11 @@ public class AbilityModifier extends Value<BaseQualityProto.AbilityModifier>
     return m_ability + " " + m_modifier;
   }
 
+  public String toShort()
+  {
+    return m_ability.getShort() + " " + m_modifier;
+  }
+
   @Override
   public BaseQualityProto.AbilityModifier toProto()
   {
