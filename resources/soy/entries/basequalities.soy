@@ -693,7 +693,7 @@
 /** Printing a summary. */
 {template .summary}
   {@param entry: ?}
-  {$entry.name}
+  <b>{$entry.name}</b>
   {if length($entry.ability_modifiers) > 0}
     (1),{sp}
     {foreach $modifier in $entry.ability_modifiers}

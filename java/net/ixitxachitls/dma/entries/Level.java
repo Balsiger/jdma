@@ -22,11 +22,15 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.proto.*;
+import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.LevelProto;
 import net.ixitxachitls.dma.values.Values;
 
@@ -47,6 +51,9 @@ public class Level extends NestedEntry
 
   /** The hit points rolled for this level. */
   private int m_hp = 0;
+
+  /** The qualities chosen at this level. */
+  private List<Quality> m_qualities = new ArrayList<>();
 
   /** The base level to this level. */
   private Optional<Optional<BaseLevel>> m_base = Optional.absent();
@@ -125,6 +132,11 @@ public class Level extends NestedEntry
                                        Optional.<EntryKey>absent());
   }
 
+  public List<Quality> getQualities()
+  {
+    return Collections.unmodifiableList(m_qualities);
+  }
+
   @Override
   public String toString()
   {
@@ -138,6 +150,8 @@ public class Level extends NestedEntry
   public void set(Values inValues)
   {
     m_name = inValues.use("name", m_name);
+    m_qualities = inValues.useEntries("quality", m_qualities,
+                                      Quality.CREATOR);
 
     Optional<Integer> hp = inValues.use("hp", m_hp);
     if(hp.isPresent())
@@ -159,6 +173,9 @@ public class Level extends NestedEntry
       builder.setName("unknown");
     builder.setHp(m_hp);
 
+    for (Quality quality : m_qualities)
+      builder.addQuality(quality.toProto());
+
     LevelProto proto = builder.build();
     return proto;
   }
@@ -174,6 +191,9 @@ public class Level extends NestedEntry
     Level level = new Level();
     level.m_name = Optional.of(inProto.getName());
     level.m_hp = inProto.getHp();
+
+    for (Entries.QualityProto quality : inProto.getQualityList())
+      level.m_qualities.add(Quality.fromProto(quality));
 
     return level;
   }

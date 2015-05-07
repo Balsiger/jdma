@@ -814,13 +814,16 @@
               {param field kind="html"}
                 {call dma.entries.qualities.edit}
                   {param entry: $quality /}
+                  {param index: index($quality) /}
                 {/call}
               {/param}
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
               {param field kind="html"}
-                {call dma.entries.qualities.edit /}
+                {call dma.entries.qualities.edit}
+                  {param index: 0 /}
+                {/call}
               {/param}
             {/call}
           {/foreach}

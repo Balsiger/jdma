@@ -24,32 +24,31 @@
  */
 {namespace dma.entries.qualities}
 
-/**
- * Editiing the base character.
- * 
- * @param? entry The character to edit. 
- */
+/** Editiing the base character. */
 {template .edit}
+  {@param? entry: ?}
+  {@param? prefix: any}
+  {@param index: number}
   {call dma.edit.field_input}
-    {param name: 'quality.name' /}
-    {param caption: 'Name' /}
+    {param name: ($prefix ? $prefix : '') + 'quality@' + $index + '.name' /}
+    {param caption: 'Quality' /}
     {param value: $entry ? lower($entry.name) : '' /}
     {param class: 'narrow' /}
     {param validate: 'any' /}
-    {param autocomplete: 'base quality/name' /} 
+    {param autocomplete: 'base quality/name' /}
   {/call}
   {if $entry}
     {foreach $name in keys($entry.parameters)}
       {call dma.edit.field_list_multiple}
         {param values:  [
           [ 
-            'name' : 'quality.parameter.name',
+            'name' : $prefix + 'quality@' + $index + '.parameter.name',
             'value': $name,
             'validate': 'any',
             'caption': 'param name'
           ],
           [
-            'name': 'quality.parameter.value',
+            'name': $prefix + 'quality@' + $index + '.parameter.value',
             'value': $entry.parameters[$name],
             'validate': 'any',
             'caption': 'param value'
@@ -62,13 +61,13 @@
   {call dma.edit.field_list_multiple}
     {param values:  [
       [
-        'name' : 'quality.parameter.name',
+        'name' : $prefix + 'quality@' + $index + '.parameter.name',
         'value': '',
         'validate': 'any',
         'caption': 'param name'
       ],
       [
-        'name': 'quality.parameter.value',
+        'name': $prefix + 'quality@' + $index + '.parameter.value',
         'value': '',
         'validate': 'any',
         'caption': 'param value'
@@ -84,7 +83,7 @@
  * @param entry      The entry rendered.
  */
 {template .tiny}
-  <div class="entry level tiny" onclick="details('{$entry.path}')">
+  <div class="entry quality tiny" onclick="details('{$entry.path}')">
     {$entry.name}
     {if length(keys($entry.parameters)) > 0}
       {sp}[
@@ -280,4 +279,56 @@
         {annotate($entry.combined_max_HP)}
       </div>
   </div>
+{/template}
+
+/** Printing a summary. */
+{template .summary}
+  {@param entry: ?}
+  <b>{$entry.base_name}</b>
+  {if length($entry.ability_modifiers) > 0}
+    ,{sp}
+    {foreach $modifier in $entry.ability_modifiers}
+      {$modifier.short}
+      {if not isLast($modifier)}, {/if}
+    {/foreach}
+  {/if}
+  {if length($entry.immunities) > 0}
+    ; immune {sp}
+    {foreach $immunity in $entry.immunities}
+      {$immunity}
+      {if not isLast($immunity)}, {/if}
+    {/foreach}
+  {/if}
+  {if $entry.reflex_modifier.has_value}
+    ; Ref {$entry.reflex_modifier}
+  {/if}
+  {if $entry.will_modifier.has_value}
+    ; Wil {$entry.will_modifier}
+  {/if}
+  {if $entry.fortitude_modifier.has_value}
+    ; For {$entry.fortitude_modifier}
+  {/if}
+  {if $entry.attack_modifier.has_value}
+    ; attack {$entry.attack_modifier}
+  {/if}
+  {if $entry.damage_modifier.has_value}
+    ; damage {$entry.damage_modifier}
+  {/if}
+  {if $entry.speed.present}
+    ; damage {$entry.speed}
+  {/if}
+  {if length($entry.skill_modifiers)}
+    ;{sp}
+    {foreach $skill in $entry.skill_modifiers}
+      {$skill}
+      {if not isLast($skill)}, {/if}
+    {/foreach}
+  {/if}
+  {if length($entry.bonus_feats)}
+    ;{sp}
+    {foreach $feat in $entry.bonus_feats}
+      {$feat}
+      {if not isLast($feat)}, {/if}
+    {/foreach}
+  {/if}
 {/template}

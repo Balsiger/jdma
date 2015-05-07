@@ -153,6 +153,17 @@
             {/call}
             {if not isLast($quality)}, {/if}
           {/foreach}
+          // unused qualities
+          <div>
+            {if length($entry.unused_qualities)}
+              (unused{sp}
+              {foreach $quality in $entry.unused_qualities}
+                {$quality}
+                {if not isLast($quality)}, {/if}
+              {/foreach}
+              )
+            {/if}
+          </div>
         {/param}
         {param color: '#39f' /}
       {/call}
@@ -260,6 +271,10 @@
     </div>
 
     <div class="sheet-column" style="display: flex; flex-direction: column;">
+      {call .sheet_special_attacks}
+        {param entry: $entry /}
+      {/call}
+
       {call .sheet_hit_points}
         {param entry: $entry /}
       {/call}
@@ -499,6 +514,26 @@
         <div class="count">{-$i}</div>
       {/for}
     </div>
+  </div>
+{/template}
+
+/** The special attacks box. */
+{template .sheet_special_attacks}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Special Attacks' /}
+    {param nologo: true /}
+  {/call}
+
+  <div class="values boxed" style="flex: 1;">
+     {if $entry.attackModifier.get.present
+         and $entry.attackModifier.get.get.has_value}
+       <div><b>Attack</b> <br />{annotate($entry.attackModifier)}</div>
+    {/if}
+    {if $entry.damageModifier.get.present
+        and $entry.damageModifier.get.get.has_value}
+       <div><b>Damage</b> </br> {annotate($entry.damageModifier)}</div>
+    {/if}
   </div>
 {/template}
 
@@ -1103,16 +1138,41 @@
         {param entry: $entry /}
       {/call}
     </div>
-    <div class="sheet-column">
-      {call .sheet_racial}
-        {param entry: $entry /}
-      {/call}
+    <div class="sheet-column"
+         style="height: 100%; display: flex; flex-direction: column; flex: 1;">
+      <div style="flex: 1">
+        {call .sheet_racial_traits}
+          {param entry: $entry /}
+        {/call}
+      </div>
+
+      <div style="flex: 1">
+        {call .sheet_class_features}
+          {param entry: $entry /}
+        {/call}
+      </div>
     </div>
   </div>
 {/template}
 
-/** The skills box. */
-{template .sheet_racial}
+/** The racial traits box. */
+{template .sheet_class_features}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Class Features' /}
+  {/call}
+
+  {foreach $quality in $entry.class_qualities.get}
+    <div class="quality">
+      {call dma.entries.qualities.summary}
+        {param entry: $quality /}
+      {/call}
+    </div>
+  {/foreach}
+{/template}
+
+/** The racial traits box. */
+{template .sheet_racial_traits}
   {@param entry: ?}
   {call .sheet_subtitle}
     {param title: 'Racial Traits' /}
@@ -1120,11 +1180,22 @@
 
   {foreach $quality in $entry.racial_qualities.get}
     <div class="quality">
-      {call dma.entries.basequalities.summary}
-        {param entry: entry('base quality/' + $quality) /}
+      {call dma.entries.qualities.summary}
+        {param entry: $quality /}
       {/call}
     </div>
   {/foreach}
+
+  <div style="margin-bottom: 10px;">
+    // unused qualities
+    {if length($entry.unused_qualities)}
+      (unused{sp}
+      {foreach $quality in $entry.unused_qualities}
+        {$quality}
+        {if not isLast($quality)}, {/if}
+      {/foreach})
+    {/if}
+  </div>
 
 {/template}
 
@@ -2095,13 +2166,16 @@
               {param field kind="html"}
                 {call dma.entries.levels.edit}
                   {param entry: $level /}
+                  {param index: index($level) /}
                 {/call}
               {/param}
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
               {param field kind="html"}
-                {call dma.entries.levels.edit /}
+                {call dma.entries.levels.edit}
+                  {param index: 0 /}
+                {/call}
               {/param}
             {/call}
           {/foreach}
@@ -2159,13 +2233,18 @@
               {param field kind="html"}
                 {call dma.entries.qualities.edit}
                   {param entry: $quality /}
+                  {param prefix: 'class' /}
+                  {param index: index($quality) /}
                 {/call}
               {/param}
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
               {param field kind="html"}
-                {call dma.entries.qualities.edit /}
+                {call dma.entries.qualities.edit}
+                  {param prefix: 'class' /}
+                  {param index: 0 /}
+                {/call}
               {/param}
             {/call}
           {/foreach}

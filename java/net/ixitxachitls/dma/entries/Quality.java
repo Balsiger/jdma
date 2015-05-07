@@ -41,6 +41,7 @@ import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Ability;
+import net.ixitxachitls.dma.values.enums.Immunity;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 
 /**
@@ -99,6 +100,14 @@ public class Quality extends NestedEntry
   public Map<String, String> getParameters()
   {
     return Collections.unmodifiableMap(m_parameters);
+  }
+
+  public String baseName()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getName();
+
+    return getName();
   }
 
   /**
@@ -197,6 +206,43 @@ public class Quality extends NestedEntry
     return "(unknown)";
   }
 
+  public List<AbilityModifier> abilityModifiers()
+  {
+    List<AbilityModifier> modifiers = new ArrayList<>();
+    if(getBase().isPresent())
+      for(AbilityModifier modifier : getBase().get().getAbilityModifiers())
+        modifiers.add(parametrize(modifier));
+
+    return modifiers;
+  }
+
+  public List<Immunity> immunities()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getImmunities();
+
+    return new ArrayList<>();
+  }
+
+  public List<KeyedModifier> skillModifiers()
+  {
+    List<KeyedModifier> modifiers = new ArrayList<>();
+
+    if(getBase().isPresent())
+      for(KeyedModifier modifier : getBase().get().getSkillModifiers())
+        modifiers.add(parametrize(modifier));
+
+    return modifiers;
+  }
+
+  public List<String> bonusFeats()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getBonusFeats();
+
+    return new ArrayList<>();
+  }
+
   public Modifier abilityModifier(Ability inAbility)
   {
     Modifier modifier = new Modifier();
@@ -208,14 +254,14 @@ public class Quality extends NestedEntry
       if(abilityMod.getAbility() == inAbility)
         modifier = (Modifier)modifier.add(abilityMod.getModifier());
 
-    return modifier;
+    return parametrize(modifier);
   }
 
   public Modifier reflexModifier()
   {
     if(getBase().isPresent())
       if(getBase().get().getReflexModifier().isPresent())
-        return getBase().get().getReflexModifier().get();
+        return parametrize(getBase().get().getReflexModifier().get());
 
     return new Modifier();
   }
@@ -224,7 +270,7 @@ public class Quality extends NestedEntry
   {
     if(getBase().isPresent())
       if(getBase().get().getWillModifier().isPresent())
-        return getBase().get().getWillModifier().get();
+        return parametrize(getBase().get().getWillModifier().get());
 
     return new Modifier();
   }
@@ -233,7 +279,7 @@ public class Quality extends NestedEntry
   {
     if(getBase().isPresent())
       if(getBase().get().getFortitudeModifier().isPresent())
-        return getBase().get().getFortitudeModifier().get();
+        return parametrize(getBase().get().getFortitudeModifier().get());
 
     return new Modifier();
   }
@@ -246,8 +292,71 @@ public class Quality extends NestedEntry
       for(KeyedModifier modifier
           : getBase().get().getSkillModifiers())
         if(modifier.getKey().equalsIgnoreCase(inSkill))
-          result = (Modifier)result.add(modifier.getModifier());
+          result = (Modifier)result.add(parametrize(modifier.getModifier()));
 
-    return result;
+    return parametrize(result);
+  }
+
+  public Modifier attackModifier()
+  {
+    if(getBase().isPresent() && getBase().get().getAttackModifier().isPresent())
+      return parametrize(getBase().get().getAttackModifier().get());
+
+    return new Modifier();
+  }
+
+  public Modifier damageModifier()
+  {
+    if(getBase().isPresent() && getBase().get().getDamageModifier().isPresent())
+      return parametrize(getBase().get().getDamageModifier().get());
+
+    return new Modifier();
+  }
+
+  private Modifier parametrize(Modifier inModifier) {
+    if(!inModifier.hasAnyCondition())
+      return inModifier;
+
+    return new Modifier(inModifier.getModifier(),
+                        inModifier.getType(),
+                        parametrizeText(inModifier.getCondition()),
+                        parametrize(inModifier.getNext()));
+  }
+
+  private AbilityModifier parametrize(AbilityModifier inModifier) {
+    return new AbilityModifier(inModifier.getAbility(),
+                               parametrize(inModifier.getModifier()));
+  }
+
+  private KeyedModifier parametrize(KeyedModifier inModifier)
+  {
+    return new KeyedModifier(inModifier.getKey(),
+                             parametrize(inModifier.getModifier()));
+  }
+
+  private Optional<Modifier> parametrize(Optional<Modifier> inModifier) {
+    if(!inModifier.isPresent())
+      return inModifier;
+
+    if(!inModifier.get().hasAnyCondition())
+      return inModifier;
+
+    return Optional.of(parametrize(inModifier.get()));
+  }
+
+  private Optional<String> parametrizeText(Optional<String> inText)
+  {
+    if(inText.isPresent())
+      return Optional.of(parametrizeText(inText.get()));
+
+    return inText;
+  }
+
+  private String parametrizeText(String inText) {
+    String text = inText;
+    for(Map.Entry<String, String> entry : m_parameters.entrySet())
+      text = text.replace("$" + entry.getKey(), entry.getValue());
+
+    return text;
   }
 }

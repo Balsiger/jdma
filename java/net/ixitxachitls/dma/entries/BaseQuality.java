@@ -292,9 +292,6 @@ public class BaseQuality extends BaseEntry
     return values;
   }
 
-  //........................................................................
-  //------------------------- computeSkillModifier -------------------------
-
   /**
    * Get a modifier for a skill.
    *

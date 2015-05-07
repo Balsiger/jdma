@@ -193,7 +193,7 @@
 
 /** The field for editing a simple value. */
 {template .field_input}
-  {@param name: string}
+  {@param name: any}
   {@param value: any}
   {@param validate: string}
   {@param? inList: bool}
@@ -235,7 +235,7 @@
 
 /** The field for editing a selection value. */
 {template .field_selection}
-  {@param name: string}
+  {@param name: any}
   {@param value: any}
   {@param choices: list<string>}
   {@param? class: string}

@@ -1443,6 +1443,7 @@ message LevelProto
 {
   required string name = 1;
   optional int32 hp = 2;
+  repeated QualityProto quality = 3;
 }
 
 message FeatProto

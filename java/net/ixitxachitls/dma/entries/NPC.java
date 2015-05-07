@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.SortedMultiset;
 import com.google.common.collect.TreeMultiset;
@@ -37,6 +38,7 @@ import net.ixitxachitls.dma.proto.Entries.LevelProto;
 import net.ixitxachitls.dma.proto.Entries.MonsterProto;
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
 import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Gender;
@@ -374,6 +376,35 @@ public class NPC extends Monster
     return BaseLevel.maxSkillRanks(getEffectiveCharacterLevel());
   }
 
+  public Annotated.Arithmetic<Modifier> attackModifier() {
+    Annotated.Arithmetic<Modifier> modifier = new Annotated.Arithmetic<>();
+
+    for (Level level : m_levels)
+      for(Quality quality : level.getQualities())
+        modifier.add(quality.attackModifier(), quality.baseName());
+
+    return modifier;
+  }
+
+  public Annotated.Arithmetic<Modifier> damageModifier() {
+    Annotated.Arithmetic<Modifier> modifier = new Annotated.Arithmetic<>();
+
+    for (Level level : m_levels)
+      for(Quality quality : level.getQualities())
+        modifier.add(quality.damageModifier(), quality.baseName());
+
+    return modifier;
+  }
+
+  public Annotated.List<Quality> getClassQualities()
+  {
+    Annotated.List<Quality> combined = new Annotated.List<>();
+    for(Level level : m_levels)
+      combined.add(level.getQualities(), level.getName());
+
+    return combined;
+  }
+
   @Override
   public int totalSkillPoints()
   {
@@ -390,6 +421,60 @@ public class NPC extends Monster
         points += level.getSkillPoints() + intModifier;
 
     return points;
+  }
+
+  protected List<Quality> allQualities()
+  {
+    List<Quality> qualities = super.allQualities();
+
+    for(Level level : m_levels)
+      qualities.addAll(level.getQualities());
+
+    return qualities;
+  }
+
+  private Multiset<String> qualityNames()
+  {
+    Multiset<String> names = HashMultiset.create();
+
+    for(Quality quality : allQualities())
+      names.add(quality.getName());
+
+    return names;
+  }
+
+  public List<String> unusedQualities()
+  {
+    List<String> qualities = new ArrayList<>();
+    Multiset<String> names = qualityNames();
+
+    Multiset<String> levels = HashMultiset.create();
+    for (Multiset.Entry<String> entry : cumulatedLevels().entrySet())
+      levels.add(entry.getElement().toLowerCase(), entry.getCount());
+
+    for(Level level : m_levels)
+    {
+      if(!levels.contains(level.getName()))
+        // Already handled
+        continue;
+
+      if(level.getBase().isPresent())
+      {
+        for(BaseLevel.QualityReference quality
+            : level.getBase().get().getSpecialAttacks())
+          if(quality.getLevel() <= levels.count(level.getName())
+              && !names.remove(quality.getName()))
+            qualities.add(quality.getName());
+
+        for(BaseLevel.QualityReference quality
+            : level.getBase().get().getSpecialQualities())
+          if(quality.getLevel() <= levels.count(level.getName())
+              && !names.remove(quality.getName()))
+            qualities.add(quality.getName());
+      }
+    }
+
+    return qualities;
   }
 
   public boolean isClassSkill(String inName)
