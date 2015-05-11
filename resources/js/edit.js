@@ -45,8 +45,7 @@ edit.all = [];
  */
 edit.show = function(inName, inPath, inID, inBases, inValues)
 {
-  window.console.log(inName, inPath, inID, inBases, inValues);
-  var contents = util.ajax(inPath + '.edit?body&id=' + inID 
+  var contents = util.ajax(inPath + '.edit?body&id=' + inID
       + '&bases=' + inBases + '&values=' + inValues);
   var dialog = $('<div id="dialog-' + inID.replace(/ /g, "_") + '"/>')
     .html(contents)
@@ -72,7 +71,6 @@ edit.show = function(inName, inPath, inID, inBases, inValues)
 edit.setupAutocomplete = function(inElements)
 {
   inElements.each(function(inIndex, inElement) {
-  window.console.log("setting up autocomplete", inElement, $(inElement).attr("dma-autocomplete"));
     $(inElement).autocomplete({
       source: '/autocomplete/' + $(inElement).attr("dma-autocomplete"),
       autoFocus: true,
@@ -193,22 +191,27 @@ edit.cancel = function(inID)
  * @param inEvent the key up event
  * @param inElement the element to duplicate
  */
-edit.maybeInsertLine = function(inEvent, inElement)
+edit.maybeInsertLine = function(inID, inEvent, inElement)
 {
   if(inEvent.which != 13 || !inEvent.shiftKey)
     return;
 
-  edit.insertLine(inElement);
+  edit.insertLine(inID, inElement);
 };
 
-edit.insertLine = function(inElement)
+edit.insertLine = function(inID, inElement)
 {
   var element = $(inElement);
   var clone = element.clone(false);
   element.parent().append(clone);
   clone.find(":input").val("");
   clone.find(":input")[0].focus();
-  
+  clone.find("[name*='" + inID + "@']").each(function(inIndex, inElement) {
+    console.log("before", inElement.name);
+    inElement.name =
+      inElement.name.replace(new RegExp("(" + inID + "@\\d+)"), "$10");
+  });
+
   edit.setupAutocomplete(clone.find(":input[dma-autocomplete]"));
 };
 

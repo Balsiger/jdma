@@ -2163,6 +2163,7 @@
         {param value kind="html"}
           {foreach $level in $entry.levels}
             {call dma.edit.field_list_line}
+              {param id: 'level' /}
               {param field kind="html"}
                 {call dma.entries.levels.edit}
                   {param entry: $level /}
@@ -2172,6 +2173,7 @@
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
+              {param id: 'level' /}
               {param field kind="html"}
                 {call dma.entries.levels.edit}
                   {param index: 0 /}
@@ -2187,6 +2189,7 @@
         {param value kind="html"}
           {foreach $skill in $entry.skills}
             {call dma.edit.field_list_line}
+              {param id: 'skill' /}
               {param field kind="html"}
                 {call dma.entries.skills.edit}
                   {param entry: $skill /}
@@ -2195,6 +2198,7 @@
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
+              {param id: 'skill' /}
               {param field kind="html"}
                 {call dma.entries.skills.edit /}
               {/param}
@@ -2209,6 +2213,7 @@
           {foreach $feat in $entry.feats}
             feat: {$feat}
             {call dma.edit.field_list_line}
+              {param id: 'feat' /}
               {param field kind="html"}
                 {call dma.entries.feats.edit}
                   {param entry: $feat /}
@@ -2217,6 +2222,7 @@
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
+              {param id: 'feat' /}
               {param field kind="html"}
                 {call dma.entries.feats.edit /}
               {/param}
@@ -2230,6 +2236,7 @@
         {param value kind="html"}
           {foreach $quality in $entry.qualities}
             {call dma.edit.field_list_line}
+              {param id: 'quality' /}
               {param field kind="html"}
                 {call dma.entries.qualities.edit}
                   {param entry: $quality /}
@@ -2240,6 +2247,7 @@
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
+              {param id: 'quality' /}
               {param field kind="html"}
                 {call dma.entries.qualities.edit}
                   {param prefix: 'class' /}

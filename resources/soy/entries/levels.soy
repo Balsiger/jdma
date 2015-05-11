@@ -45,6 +45,7 @@
   {if $entry and length($entry.qualities)}
     {foreach $quality in $entry.qualities}
       {call dma.edit.field_list_line}
+        {param id: 'quality' /}
         {param field kind="html"}
           {call dma.entries.qualities.edit}
             {param entry: $quality /}
@@ -56,6 +57,7 @@
     {/foreach}
   {else}
     {call dma.edit.field_list_line}
+      {param id: 'quality' /}
       {param field kind="html"}
         {call dma.entries.qualities.edit}
           {param prefix: 'level@' + $index + '.' /}

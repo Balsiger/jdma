@@ -25,10 +25,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ArrayListMultimap;
@@ -536,9 +536,11 @@ public class Values
   List<E> useEntries(String inKey, List<E> inDefault,
                      NestedEntry.Creator<E> inCreator)
   {
-    // create sub values list
+    // create sub values list; we use insertion order, not the order of the
+    // indexes, as indexes are nor properly ordered when entries are added on
+    // the client
     String prefix = inKey + "@";
-    Map<Integer, ListMultimap<String, String>> values = new TreeMap<>();
+    Map<String, ListMultimap<String, String>> values = new LinkedHashMap<>();
     for (String key : m_values.keySet())
       if (key.startsWith(prefix))
       {
@@ -546,23 +548,23 @@ public class Values
         if (sub.length != 3)
           continue;
 
-        int index = Integer.valueOf(sub[1]);
+        String id = sub[1];
         String subkey = sub[2];
 
         for (String value : m_values.get(key))
         {
-          ListMultimap<String, String> subvalues = values.get(index);
+          ListMultimap<String, String> subvalues = values.get(id);
           if(subvalues == null)
           {
-            subvalues = ArrayListMultimap.<String, String>create();
-            values.put(index, subvalues);
+            subvalues = ArrayListMultimap.create();
+            values.put(id, subvalues);
           }
 
           subvalues.put(subkey, value);
         }
       }
 
-    List<E> entries = new ArrayList<E>();
+    List<E> entries = new ArrayList<>();
     for (ListMultimap<String, String> submap : values.values())
     {
       E entry = inCreator.create();

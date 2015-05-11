@@ -201,13 +201,14 @@
   {@param? caption: string}
   {@param? autocomplete: string}
   {@param? width: string}
+  {@param? id: string}
   <div class="input-wrapper field{if $class} {$class}{/if}
               {if $width} width{/if}"
        {if $width} style="width: {$width} !important;"{/if}>
     <input value="{$value}" name="{$name}" validate="{$validate}" 
            {if $autocomplete} dma-autocomplete="{$autocomplete}"{/if}
            onkeyup="window.form.validate(this);
-               {if $inList}edit.maybeInsertLine(event, 
+               {if $inList}edit.maybeInsertLine('{$id}', event,
                                                 this.parentNode.parentNode);
                {/if}">
     </input>
@@ -302,10 +303,11 @@
 /** A list field value. */
 {template .field_list_line}
   {@param field: html}
+  {@param? id: string}
   <div class="line">
     {$field}
     <div class="sprite edit-list-add" title="Add"
-         onclick="edit.insertLine(this.parentNode)"></div>
+         onclick="edit.insertLine('{$id}', this.parentNode)"></div>
     <div class="sprite edit-list-remove" title="Remove"
          onclick="edit.removeLine(this.parentNode)"></div>
   </div>  
@@ -318,6 +320,7 @@
   {@param validate: string}
   {@param? autocomplete: string}
   {call .field_list_line}
+    {param id: $name /}
     {param field kind="html"}
       {call .field_input}
         {param name: $name /}
@@ -334,7 +337,9 @@
 {template .field_list_multiple}
   {@param values: ?}
   {@param? class: string}
+  {@param? id: string}
   {call dma.edit.field_list_line}
+    {param id: $id /}
     {param field kind="html"}
       {foreach $value in $values}
         {if $value.type and $value.type == 'selection'}

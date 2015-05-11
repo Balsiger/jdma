@@ -50,6 +50,7 @@ import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
 import com.google.template.soy.shared.restricted.SoyFunction;
 import com.google.template.soy.shared.restricted.SoyPrintDirective;
+import com.google.template.soy.soytree.TemplateRegistry;
 import com.google.template.soy.tofu.SoyTofu;
 import com.google.template.soy.tofu.restricted.SoyAbstractTofuFunction;
 import com.google.template.soy.tofu.restricted.SoyAbstractTofuPrintDirective;
@@ -199,7 +200,32 @@ public class SoyTemplate
     public SoyData computeForTofu(List<SoyData> inArgs)
     {
       if(inArgs.get(0) == null
-         || inArgs.get(0) instanceof SoyUndefined)
+          || inArgs.get(0) instanceof SoyUndefined)
+        return BooleanData.forValue(false);
+
+      return BooleanData.forValue(true);
+    }
+  }
+
+  /** A plugin function to convert the argument into an integer. */
+  public static class ValFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "val";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public SoyData computeForTofu(List<SoyData> inArgs)
+    {
+      if(inArgs.get(0) == null || !(inArgs.get(0) instanceof SoyValue))
         return BooleanData.forValue(false);
 
       return BooleanData.forValue(true);
@@ -648,6 +674,7 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(IntegerFunction.class);
       soyFunctionsSetBinder.addBinding().to(LengthFunction.class);
       soyFunctionsSetBinder.addBinding().to(DefFunction.class);
+      soyFunctionsSetBinder.addBinding().to(ValFunction.class);
       soyFunctionsSetBinder.addBinding().to(EscapeFunction.class);
       soyFunctionsSetBinder.addBinding().to(JsEscapeFunction.class);
       soyFunctionsSetBinder.addBinding().to(FormatNumberFunction.class);
@@ -689,9 +716,12 @@ public class SoyTemplate
   /** The injector with our own plugins. */
   private Injector m_injector = createInjector();
 
-  /** The command renderer for rendering values. */
-  public static final SoyRenderer COMMAND_RENDERER = new SoyRenderer();
+  /** The renderer for rendering commands. */
+  public static final SoyRenderer COMMAND_RENDERER =
+      new SoyRenderer("commands", "value");
 
+  /** The renderer for rendering values. */
+  public static final SoyRenderer VALUE_RENDERER = new SoyRenderer("value");
 
   /**
    * Render the template named.

@@ -503,6 +503,7 @@
             {param markup kind="html"}
               {foreach $appearance in $entry.appearances}
                 {call dma.edit.field_list_multiple}
+                  {param id: 'appearance' /}
                   {param class: 'narrow' /}
                   {param values: [
                     [
@@ -522,6 +523,7 @@
                 {/call}          
               {ifempty}
                 {call dma.edit.field_list_multiple}
+                  {param id: 'appearance' /}
                   {param class: 'narrow' /}
                   {param values: [
                     [
@@ -851,6 +853,7 @@
             {param markup kind="html"}
               {foreach $modifier in $entry.magical_modifiers}  
                 {call dma.edit.field_list_multiple}
+                  {param id: 'magic' /}
                   {param values: [
                     [
                       'name': 'magical.type',
@@ -869,6 +872,7 @@
                 {/call}          
               {ifempty}
                 {call dma.edit.field_list_multiple}
+                  {param id: 'magic' /}
                   {param values: [
                     [
                       'name': 'magical.type',
@@ -899,6 +903,7 @@
             {param markup kind="html"}
               {foreach $reference in $entry.references}  
                 {call dma.edit.field_list_multiple}
+                  {param id: 'reference' /}
                   {param values: [
                     [
                       'name': 'references.name',
@@ -917,6 +922,7 @@
                 {/call}          
               {ifempty}
                 {call dma.edit.field_list_multiple}
+                  {param id: 'reference' /}
                   {param values: [
                     [
                       'name': 'references.name',

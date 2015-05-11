@@ -29,6 +29,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
+import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
@@ -125,6 +126,14 @@ public class SoyValue extends SoyMapData
         return FloatData.forValue(((Optional<Double>)value).get());
     }
 
+    if("formatted".equals(inName)) {
+      Object formatted = Classes.callMethod("formatted", value);
+      if (formatted != null)
+        return convert(inName, formatted);
+
+      return convert(inName, value);
+    }
+
     value = Classes.callMethod(inName, value);
     if(value != null)
       return convert(inName, value);
@@ -182,6 +191,9 @@ public class SoyValue extends SoyMapData
    */
   protected SoyData convert(String inName, Object inObject)
   {
+    if(inObject instanceof SanitizedContent)
+      return (SanitizedContent)inObject;
+
     if(inObject instanceof Iterable)
     {
       SoyListData list = new SoyListData();

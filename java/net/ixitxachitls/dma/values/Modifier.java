@@ -27,7 +27,11 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Optional;
+import com.google.template.soy.data.SanitizedContent;
+import com.google.template.soy.data.UnsafeSanitizedContentOrdainer;
 
+import net.ixitxachitls.dma.output.soy.SoyTemplate;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.proto.Values.ModifierProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.util.Strings;
@@ -375,6 +379,17 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   public Optional<Modifier> getNext()
   {
     return m_next;
+  }
+
+  public SanitizedContent formatted()
+  {
+    return UnsafeSanitizedContentOrdainer.ordainAsSafe(
+        SoyTemplate.VALUE_RENDERER
+            .renderSoy("dma.value.modifier",
+                       Optional.of(SoyTemplate.map
+                           ("modifier", new SoyValue("(render Modifier)",
+                                                     this)))),
+        SanitizedContent.ContentKind.HTML);
   }
 
   @Override

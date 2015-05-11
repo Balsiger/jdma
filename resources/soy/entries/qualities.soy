@@ -285,6 +285,19 @@
 {template .summary}
   {@param entry: ?}
   <b>{$entry.base_name}</b>
+  {if length(keys($entry.parameters)) > 0}
+    {sp}(
+    {if length(keys($entry.parameters)) == 1}
+      {foreach $key in keys($entry.parameters)}
+        {$entry.parameters[$key]}
+      {/foreach}
+    {else}
+      {foreach $key in keys($entry.parameters)}
+        {$key}: {$entry.parameters[$key]}
+      {/foreach}
+    {/if}
+    )
+  {/if}
   {if length($entry.ability_modifiers) > 0}
     ,{sp}
     {foreach $modifier in $entry.ability_modifiers}

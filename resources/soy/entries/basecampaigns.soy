@@ -238,6 +238,7 @@
             {param markup}
               {foreach $reference in $entry.references}  
                 {call dma.edit.field_list_multiple}
+                  {param id: 'reference' /}
                   {param values: [
                     [
                       'name': 'references.name',
@@ -256,6 +257,7 @@
                 {/call}          
               {ifempty}
                 {call dma.edit.field_list_multiple}
+                  {param id: 'reference' /}
                   {param values: [
                     [
                       'name': 'references.name',

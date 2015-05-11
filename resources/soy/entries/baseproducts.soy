@@ -629,6 +629,7 @@
             {param markup}
               {foreach $content in $entry.contents}  
                 {call dma.edit.field_list_multiple}
+                  {param id: 'content' /}
                   {param values: [
                     [
                       'name': 'contents.part',
@@ -654,6 +655,7 @@
                 {/call}          
               {ifempty}
                 {call dma.edit.field_list_multiple}
+                  {param id: 'content' /}
                   {param values: [
                     [
                       'name': 'contents.part',
@@ -705,6 +707,7 @@
             {param markup}
               {foreach $reference in $entry.references}  
                 {call dma.edit.field_list_multiple}
+                  {param id: 'reference' /}
                   {param values: [
                     [
                       'name': 'references.name',
@@ -723,6 +726,7 @@
                 {/call}          
               {ifempty}
                 {call dma.edit.field_list_multiple}
+                  {param id: 'reference' /}
                   {param values: [
                     [
                       'name': 'references.name',
@@ -765,6 +769,7 @@
         {param markup}
           {foreach $person in $persons}
             {call dma.edit.field_list_multiple}
+              {param id: 'person' /}
               {param values: [
                 [
                   'name': $name + '.name',
@@ -785,6 +790,7 @@
             {/call}          
           {ifempty}
             {call dma.edit.field_list_multiple}
+              {param id: 'person' /}
               {param values: [
                 [
                   'name': $name + '.name',

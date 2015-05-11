@@ -950,20 +950,19 @@
   {/if}
 {/template}
 
-/**
- * Format an annotated value.
- * 
- * @param value the value to annotate 
- * @param? link the link values point to 
- */
+/** Format an annotated value. */
 {template .annotated}
+  {@param value: ?}
+  {@param? link: string}
   <span class="annotated">
     {if isList($value.get)}
       {foreach $single in $value.get}
         {if $link}
-          <a href="{$link}{$single}">{$single}</a>
+          <a href="{$link}{$single}">
+            {if val($single)}{$single.formatted}{else}{$single}{/if}
+          </a>
         {else}
-          {$single}
+          {if val($single)}{$single.formatted}{else}{$single}{/if}
         {/if}
         {if not isLast($single)}, {/if}
       {/foreach}
@@ -971,7 +970,7 @@
       {if $value.show_sign and $value.get.present}
         {bonus($value.get.integer)}
       {else}
-        {$value.get}
+        {$value.get.formatted}
       {/if}
     {/if}
     <div class="annotations">

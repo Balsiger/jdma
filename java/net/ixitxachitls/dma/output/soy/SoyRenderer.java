@@ -51,6 +51,12 @@ public class SoyRenderer
     m_template = getDefaultTemplate();
   }
 
+  public SoyRenderer(String ... inTemplates)
+  {
+    m_template = new SoyTemplate(inTemplates);
+  }
+
+
   /**
    * Create the renderer.
    *
@@ -101,7 +107,7 @@ public class SoyRenderer
   /** The data to be used when rendering, if any. */
   private Optional<SoyMapData> m_data = Optional.absent();
 
-  /** The injected data to be used when rendering, if any. */
+  /** The injected data to be used when rndering, if any. */
   private Optional<SoyMapData> m_injected = Optional.absent();
 
   /** Command starter character. */
