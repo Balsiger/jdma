@@ -29,9 +29,10 @@ import java.util.List;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.proto.*;
 import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.LevelProto;
+import net.ixitxachitls.dma.values.ArmorType;
+import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Values;
 
 /**
@@ -204,5 +205,21 @@ public class Level extends NestedEntry
       return false;
 
     return getBase().get().isClassSkill(inName);
+  }
+
+  public List<Proficiency> weaponProficiencies()
+  {
+    if (getBase().isPresent())
+      return getBase().get().getWeaponProficiencies();
+
+    return new ArrayList<>();
+  }
+
+  public List<ArmorType> armorProficiencies()
+  {
+    if (getBase().isPresent())
+      return getBase().get().getArmorProficiencies();
+
+    return new ArrayList<>();
   }
 }

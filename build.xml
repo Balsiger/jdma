@@ -376,7 +376,11 @@
     <replaceregexp file="${war.dir}/WEB-INF/appengine-web.xml"
              match="&lt;version&gt;.*&lt;/version&gt;"
              replace="&lt;version&gt;${version}&lt;/version&gt;" />
-    <appcfg action="update" war="${war.dir}" />
+    <appcfg action="update" war="${war.dir}">
+      <options>
+        <arg value="--oauth2" />
+      </options>
+    </appcfg>
   </target>
 
   <target name="gae-update-dev" depends="compile"

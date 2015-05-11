@@ -24,7 +24,9 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.HashMultiset;
@@ -38,7 +40,9 @@ import net.ixitxachitls.dma.proto.Entries.LevelProto;
 import net.ixitxachitls.dma.proto.Entries.MonsterProto;
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
 import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.Modifier;
+import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Gender;
@@ -484,6 +488,30 @@ public class NPC extends Monster
         return true;
 
     return false;
+  }
+
+  public List<Proficiency> weaponProficiencies()
+  {
+    List<Proficiency> proficiencies = new ArrayList<>();
+
+    for(Level level : m_levels)
+      for(Proficiency proficiency : level.weaponProficiencies())
+        if(!proficiencies.contains(proficiency))
+          proficiencies.add(proficiency);
+
+    return proficiencies;
+  }
+
+  public List<ArmorType> armorProficiencies()
+  {
+    List<ArmorType> proficiencies = new ArrayList<>();
+
+    for(Level level : m_levels)
+      for(ArmorType proficiency : level.armorProficiencies())
+        if(!proficiencies.contains(proficiency))
+          proficiencies.add(proficiency);
+
+    return proficiencies;
   }
 
   @Override

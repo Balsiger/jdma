@@ -1162,6 +1162,19 @@
     {param title: 'Class Features' /}
   {/call}
 
+  <div class="quality">
+    <b>Weapon proficiencies: </b>
+    {foreach $prof in $entry.weapon_proficiencies}
+      {$prof}{if not isLast($prof)}, {/if}
+    {/foreach}
+  </div>
+  <div class="quality">
+    <b>Armor proficiencies: </b>
+    {foreach $prof in $entry.armor_proficiencies}
+      {$prof}{if not isLast($prof)}, {/if}
+    {/foreach}
+  </div>
+
   {foreach $quality in $entry.class_qualities.get}
     <div class="quality">
       {call dma.entries.qualities.summary}
