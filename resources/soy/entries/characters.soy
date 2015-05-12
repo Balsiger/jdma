@@ -1164,15 +1164,11 @@
 
   <div class="quality">
     <b>Weapon proficiencies: </b>
-    {foreach $prof in $entry.weapon_proficiencies}
-      {$prof}{if not isLast($prof)}, {/if}
-    {/foreach}
+    {annotate($entry.weapon_proficiencies)}
   </div>
   <div class="quality">
     <b>Armor proficiencies: </b>
-    {foreach $prof in $entry.armor_proficiencies}
-      {$prof}{if not isLast($prof)}, {/if}
-    {/foreach}
+    {annotate($entry.armor_proficiencies)}
   </div>
 
   {foreach $quality in $entry.class_qualities.get}

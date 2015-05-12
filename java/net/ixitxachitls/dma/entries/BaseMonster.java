@@ -1193,8 +1193,6 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
-
-
   /**
    * Get a monster's special qualities.
    *

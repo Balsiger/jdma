@@ -30,6 +30,7 @@ import java.util.Set;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.SortedMultiset;
 import com.google.common.collect.TreeMultiset;
@@ -490,26 +491,27 @@ public class NPC extends Monster
     return false;
   }
 
-  public List<Proficiency> weaponProficiencies()
+  @Override
+  public Annotated<List<String>> weaponProficiencies()
   {
-    List<Proficiency> proficiencies = new ArrayList<>();
+    Annotated.List<String> proficiencies =
+        (Annotated.List<String>)super.weaponProficiencies();
 
     for(Level level : m_levels)
       for(Proficiency proficiency : level.weaponProficiencies())
-        if(!proficiencies.contains(proficiency))
-          proficiencies.add(proficiency);
+        proficiencies.addSingle(proficiency.toString(),
+                                level.getAbbreviation());
 
     return proficiencies;
   }
 
-  public List<ArmorType> armorProficiencies()
+  public Annotated.List<ArmorType> armorProficiencies()
   {
-    List<ArmorType> proficiencies = new ArrayList<>();
+    Annotated.List<ArmorType> proficiencies = new Annotated.List<>();
 
     for(Level level : m_levels)
-      for(ArmorType proficiency : level.armorProficiencies())
-        if(!proficiencies.contains(proficiency))
-          proficiencies.add(proficiency);
+      for(ArmorType type : level.armorProficiencies())
+        proficiencies.addSingle(type, level.getAbbreviation());
 
     return proficiencies;
   }

@@ -73,6 +73,7 @@ import net.ixitxachitls.dma.values.enums.SpellDescriptor;
 import net.ixitxachitls.dma.values.enums.SpellEffect;
 import net.ixitxachitls.dma.values.enums.Subschool;
 import net.ixitxachitls.util.Tracer;
+import net.ixitxachitls.util.logging.Log;
 
 /**
  * The base servlet for all soy rendered pages.

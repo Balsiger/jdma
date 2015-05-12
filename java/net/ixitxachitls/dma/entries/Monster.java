@@ -37,6 +37,7 @@ import net.ixitxachitls.dma.proto.Entries.SkillProto;
 import net.ixitxachitls.dma.rules.CarryingCapacity;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Modifier;
+import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Slot;
 import net.ixitxachitls.dma.values.Speed;
@@ -2210,6 +2211,20 @@ public class Monster extends CampaignEntry
       ranks += skill.getRanks();
 
     return ranks;
+  }
+
+  public Annotated<List<String>> getCombinedProficiencies()
+  {
+    Annotated.List<String> proficiencies = new Annotated.List<>();
+    for(BaseEntry base : getBaseEntries())
+      proficiencies.add(((BaseMonster)base).getCombinedProficiencies());
+
+    return proficiencies;
+  }
+
+  public Annotated<List<String>> weaponProficiencies()
+  {
+    return getCombinedProficiencies();
   }
 
   @Override

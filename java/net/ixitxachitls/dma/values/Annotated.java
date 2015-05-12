@@ -617,7 +617,7 @@ public abstract class Annotated<V>
      * @param inValue the value to add
      * @param inSource the source of the value
      */
-    public void add(V inValue, java.lang.String inSource)
+    public void addSingle(V inValue, java.lang.String inSource)
     {
       addValue(inValue);
 

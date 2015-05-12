@@ -156,6 +156,8 @@ public class DMADatastore
              int inStart, int inSize)
   {
     List<T> entries = new ArrayList<>();
+    try
+    {
     Iterable<Entity> entities =
       m_data.getEntities(escapeType(inType.toString()), convert(inParent),
                          inType.getSortField(), inStart, inSize);
@@ -165,6 +167,10 @@ public class DMADatastore
       Optional<T> entry = convert(entity);
       if(entry.isPresent())
         entries.add(entry.get());
+    }
+    } catch(Exception e)
+    {
+      Log.error("Cannot get entries: " + e);
     }
 
     return entries;
