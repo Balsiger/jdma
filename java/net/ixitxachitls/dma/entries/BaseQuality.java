@@ -249,9 +249,6 @@ public class BaseQuality extends BaseEntry
 
     m_qualityType = inValues.use("quality_type", m_qualityType,
                                  EffectType.PARSER);
-    m_effects = inValues.use("effect", m_effects, Effect.PARSER,
-                             "affects", "name", "modifier", "text");
-    m_qualifier = inValues.use("qualifier", m_qualifier);
     m_speed = inValues.use("speed", m_speed,
                            ExpressionValue.parser(Speed.PARSER));
     m_abilityModifiers = inValues.use("ability_modifier", m_abilityModifiers,
@@ -273,6 +270,10 @@ public class BaseQuality extends BaseEntry
     m_damageModifier = inValues.use("damage_modifier", m_damageModifier,
                                     Modifier.PARSER);
     m_bonusFeats = inValues.use("bonus_feat", m_bonusFeats);
+
+    m_effects = inValues.use("effect", m_effects, Effect.PARSER,
+                             "affects", "name", "modifier", "text");
+    m_qualifier = inValues.use("qualifier", m_qualifier);
   }
 
  /**
@@ -547,11 +548,11 @@ public class BaseQuality extends BaseEntry
 
     if(proto.hasAttackModifier())
       m_attackModifier =
-        Optional.of(Modifier.fromProto(proto.getAttackModifier()));
+          Optional.of(Modifier.fromProto(proto.getAttackModifier()));
 
     if(proto.hasDamageModifier())
       m_damageModifier =
-        Optional.of(Modifier.fromProto(proto.getDamageModifier()));
+          Optional.of(Modifier.fromProto(proto.getDamageModifier()));
 
     for(BaseQualityProto.KeyedModifier skillModifeir
           : proto.getSkillModifierList())

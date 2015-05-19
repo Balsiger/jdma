@@ -134,7 +134,6 @@
       {call dma.entry.value}
         {param label: 'Feats' /}
         {param value kind="html"}
-          {$entry.get_feats}
           {foreach $feat in $entry.feats}
             {call dma.entries.feats.tiny}
               {param entry: $feat /}
@@ -532,7 +531,9 @@
     {/if}
     {if $entry.damageModifier.get.present
         and $entry.damageModifier.get.get.has_value}
-       <div><b>Damage</b> </br> {annotate($entry.damageModifier)}</div>
+       <div style="margin-top:10px">
+         <b>Damage</b> </br> {annotate($entry.damageModifier)}
+       </div>
     {/if}
   </div>
 {/template}
@@ -1146,8 +1147,14 @@
         {/call}
       </div>
 
-      <div style="flex: 1">
+      <div style="flex: 1; margin-top: 20px">
         {call .sheet_class_features}
+          {param entry: $entry /}
+        {/call}
+      </div>
+
+      <div style="flex: 1; margin-top: 20px">
+        {call .sheet_feats}
           {param entry: $entry /}
         {/call}
       </div>
@@ -1155,7 +1162,23 @@
   </div>
 {/template}
 
-/** The racial traits box. */
+/** The class features box. */
+{template .sheet_feats}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Feats' /}
+  {/call}
+
+  {foreach $feat in $entry.combined_feats.get}
+    <div class="feat">
+      {call dma.entries.feats.summary}
+        {param entry: $feat /}
+      {/call}
+    </div>
+  {/foreach}
+{/template}
+
+/** The class features box. */
 {template .sheet_class_features}
   {@param entry: ?}
   {call .sheet_subtitle}
@@ -1195,7 +1218,7 @@
     </div>
   {/foreach}
 
-  <div style="margin-bottom: 10px;">
+  <div class="unused">
     // unused qualities
     {if length($entry.unused_qualities)}
       (unused{sp}
@@ -1205,7 +1228,6 @@
       {/foreach})
     {/if}
   </div>
-
 {/template}
 
 /** The skills box. */
@@ -2226,6 +2248,7 @@
               {param field kind="html"}
                 {call dma.entries.feats.edit}
                   {param entry: $feat /}
+                  {param index: 0 /}
                 {/call}
               {/param}
             {/call}
@@ -2233,7 +2256,9 @@
             {call dma.edit.field_list_line}
               {param id: 'feat' /}
               {param field kind="html"}
-                {call dma.entries.feats.edit /}
+                {call dma.entries.feats.edit}
+                  {param index: 0 /}
+                {/call}
               {/param}
             {/call}
           {/foreach}

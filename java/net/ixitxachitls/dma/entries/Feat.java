@@ -26,7 +26,9 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.FeatProto;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.FeatType;
 
 /**
  * An actual feat.
@@ -43,11 +45,25 @@ public class Feat extends NestedEntry
   {
   }
 
+  public Feat(String inName)
+  {
+    m_name = Optional.of(inName);
+  }
+
   /** The qualifier for the feat. */
   private Optional<String> m_qualifier = Optional.absent();
 
   /** The base feat to this feat. */
   private Optional<Optional<BaseFeat>> m_base = Optional.absent();
+
+  public static final Creator<Feat> CREATOR = new NestedEntry.Creator<Feat>()
+  {
+    @Override
+    public Feat create()
+    {
+      return new Feat();
+    }
+  };
 
   /**
    * Get the base feat.
@@ -76,6 +92,64 @@ public class Feat extends NestedEntry
   public Optional<String> getQualifier()
   {
     return m_qualifier;
+  }
+
+  public String baseName()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getName();
+
+    return getName();
+  }
+
+  public String getShortDescription()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getShortDescription();
+
+    return "";
+  }
+
+  public FeatType getType()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getFeatType();
+
+    return FeatType.UNKNOWN;
+  }
+
+  public Optional<String> getBenefit()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getBenefit();
+
+    return Optional.absent();
+  }
+
+  /**
+   * Get the attack modifier provided by this quality.
+   *
+   * @return the attack modifier
+   */
+  public Modifier attackModifier()
+  {
+    if(getBase().isPresent() && getBase().get().getAttackModifier().isPresent())
+      return getBase().get().getAttackModifier().get();
+
+    return new Modifier();
+  }
+
+  /**
+   * Get the damage modifier provided by this quality.
+   *
+   * @return the damage modifier
+   */
+  public Modifier damageModifier()
+  {
+    if(getBase().isPresent() && getBase().get().getDamageModifier().isPresent())
+      return getBase().get().getDamageModifier().get();
+
+    return new Modifier();
   }
 
   @Override
@@ -129,5 +203,10 @@ public class Feat extends NestedEntry
       feat.m_qualifier = Optional.of(inProto.getQualifier());
 
     return feat;
+  }
+
+  // PHB p. 87
+  public static int availableFeats(int inLevel) {
+    return inLevel / 3 + 1;
   }
 }

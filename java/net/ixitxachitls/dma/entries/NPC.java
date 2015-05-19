@@ -385,8 +385,12 @@ public class NPC extends Monster
     Annotated.Arithmetic<Modifier> modifier = new Annotated.Arithmetic<>();
 
     for (Level level : m_levels)
+    {
       for(Quality quality : level.getQualities())
         modifier.add(quality.attackModifier(), quality.baseName());
+      for(Feat feat : level.getFeats())
+        modifier.add(feat.attackModifier(), feat.baseName());
+    }
 
     return modifier;
   }
@@ -395,8 +399,12 @@ public class NPC extends Monster
     Annotated.Arithmetic<Modifier> modifier = new Annotated.Arithmetic<>();
 
     for (Level level : m_levels)
+    {
       for(Quality quality : level.getQualities())
         modifier.add(quality.damageModifier(), quality.baseName());
+      for(Feat feat : level.getFeats())
+        modifier.add(feat.damageModifier(), feat.baseName());
+    }
 
     return modifier;
   }
@@ -510,10 +518,30 @@ public class NPC extends Monster
     Annotated.List<ArmorType> proficiencies = new Annotated.List<>();
 
     for(Level level : m_levels)
-      for(ArmorType type : level.armorProficiencies())
-        proficiencies.addSingle(type, level.getAbbreviation());
+      proficiencies.add(level.armorProficiencies(), level.getAbbreviation());
 
     return proficiencies;
+  }
+
+  public Annotated<List<Feat>> getCombinedFeats()
+  {
+    Annotated.List<Feat> feats = new Annotated.List<>();
+
+    Multiset<String> levels = HashMultiset.create();
+    for(Level level : m_levels)
+    {
+      levels.add(level.getAbbreviation());
+
+      feats.add(level.getFeats(), level.getAbbreviation());
+
+      // Bonus feats.
+      feats.add(level.getBonusFeats(levels.count(level.getAbbreviation())),
+                level.getAbbreviation()
+                    + levels.count(level.getAbbreviation()));
+    }
+
+
+    return feats;
   }
 
   @Override

@@ -24,15 +24,14 @@
  */
 {namespace dma.entries.feats}
 
-/**
- * Editiing the base feat.
- * 
- * @param? entry The feat to edit. 
- */
+/** Editiing the base feat. */
 {template .edit}
+  {@param? entry: ?}
+  {@param? prefix: any}
+  {@param index: number}
   {call dma.edit.field_input}
-    {param name: 'feat.name' /}
-    {param caption: 'Name' /}
+    {param name: ($prefix ? $prefix : '') + 'feat@' + $index + '.name' /}
+    {param caption: 'feat name' /}
     {param value: $entry and $entry.base.pesent 
       ? lower($entry.base.name) : '' /}
     {param class: 'narrow' /}
@@ -40,8 +39,8 @@
     {param autocomplete: 'base feat/name' /} 
   {/call}    
   {call dma.edit.field_input}
-    {param name: 'feat.qualifier' /}
-    {param caption: 'Qualifier' /}
+    {param name: ($prefix ? $prefix : '') + 'feat@' + $index + '.qualifier' /}
+    {param caption: 'feat qualifier' /}
     {param value: $entry.qualifier.present ? $entry.qualifier : '' /}
     {param validate: 'number' /}
     {param width: '50%' /}
@@ -414,4 +413,21 @@
       </div>
     {/if}
   </div>
+{/template}
+
+/** Feat summary. */
+{template .summary}
+  {@param entry: ?}
+  <b>{$entry.base_name}</b>
+  {if $entry.qualifier.present}
+    ({$entry.qualitier})
+  {/if}
+  , {$entry.short_description}
+  , {$entry.type}
+  {if $entry.attack_modifier.value}
+    , attack {$entry.attack_modifier}
+  {/if}
+  {if $entry.damage_modifier.value}
+    , damage {$entry.damage_modifier}
+  {/if}
 {/template}

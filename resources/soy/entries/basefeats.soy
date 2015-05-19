@@ -22,7 +22,7 @@
  /*
  * Templates for base products.
  */
-{namespace dma.entries.basefeats autoescape="deprecated-contextual"}
+{namespace dma.entries.basefeats}
 
 /**
  * Show the given entry in standard format.
@@ -44,17 +44,17 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#0aa' /}
-    {param title}
+    {param title kind="html"}
       {call dma.entry.title}
         {param title: $entry.name /}
         {param color: '#0aa' /}
       {/call}
     {/param}
-    {param values}            
+    {param values kind="html"}
       {if length($entry.baseNames)}
         {call dma.entry.value}
           {param label: 'Base' /}
-          {param value}
+          {param value kind="html"}
             {foreach $base in $entry.baseNames}
               {call dma.page.link}
                 {param text: $base /}
@@ -69,7 +69,7 @@
       {if length($entry.synonyms)}
         {call dma.entry.value}
           {param label: 'Synonyms' /}
-          {param value}
+          {param value kind="html"}
             {foreach $synonym in $entry.synonyms}
               {$synonym}
               {if not isLast($synonym)}; {/if}
@@ -79,17 +79,17 @@
         {/call}
       {/if}      
       {if length($entry.categories) or 
-          length($entry.combined_categories.annotate)}
+          length($entry.combined_categories.get)}
         {call dma.entry.value}
           {param label: 'Categories' /}
-          {param value}
+          {param value kind="html"}
             {if length($entry.categories)}
               {foreach $category in $entry.categories}
                 {$category}
                 {if not isLast($category)}, {/if}
               {/foreach}
             {/if}
-            {if length($entry.combined_categories.annotate)}
+            {if length($entry.combined_categories.get)}
               {if length($entry.categories)},{sp}{/if}
               {annotate($entry.combined_categories)}
             {/if}
@@ -102,10 +102,10 @@
         {param value: annotate($entry.combined_worlds) /}
         {param color: '#0aa' /}
       {/call}
-      {if $entry.incomplete or length($entry.combined_incomplete.annotate) > 0}
+      {if $entry.incomplete}
         {call dma.entry.value}
           {param label: 'Incomplete' /}
-          {param value}
+          {param value kind="html"}
             {if $entry.incomplete}
               {$entry.incomplete}{sp}
             {/if}
@@ -147,10 +147,24 @@
           {param color: '#0aa' /}
         {/call}
       {/if}
+      {if $entry.attack_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Attack' /}
+          {param value: $entry.attack_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.damage_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Damage' /}
+          {param value: $entry.damage_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
       {if $entry.effects}
         {call dma.entry.value}
           {param label: 'Effects' /}
-          {param value}
+          {param value kind="html"}
             {foreach $effect in $entry.effects}
               {$effect}
               {if not isLast($effect)}; {/if}
@@ -188,7 +202,7 @@
     {param pagesize: $pagesize /}
     {param size: $entries ? length($entries) : 0 /}
     {param titles: [ 'Name', 'Worlds', 'Short Descriptoion'] /}
-    {param entries}
+    {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
           {call dma.entry.listEntry}
@@ -216,7 +230,7 @@
     {param type: 'base-level' /}
     {param id: $id /}
     {param create: $create /}
-    {param values}
+    {param values kind="html"}
       {call dma.edit.value}
         {param name: 'name' /}
         {param label: 'Name' /}
@@ -309,13 +323,29 @@
         {param validate: 'any' /}
         {param color: '#0aa' /}
       {/call}    
+      {call dma.edit.value}
+        {param name: 'attack_modifier' /}
+        {param label: 'Attack' /}
+        {param value: $entry.attack_modifier.present
+          ? $entry.attack_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'damage_modifier' /}
+        {param label: 'Damage' /}
+        {param value: $entry.damage_modifier.present
+          ? $entry.damage_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
       {call dma.edit.generic_value}
         {param name: 'effect' /}
         {param color: '#0aa' /}
         {param label: 'Effects' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $effect in $entry.effects}
                 {call dma.edit.field_list_multiple}
                   {param class: 'narrow' /}
@@ -389,9 +419,9 @@
         {param name: 'references' /}
         {param color: '#0aa' /}
         {param label: 'References' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $reference in $entry.references}  
                 {call dma.edit.field_list_multiple}
                   {param values: [

@@ -91,7 +91,14 @@ public class BaseFeat extends BaseEntry
   /** The prerequisites. */
   protected Optional<String> m_prerequisites = Optional.absent();
 
+  /** The attack modifier provided by the feat, if any. */
+  protected Optional<Modifier> m_attackModifier = Optional.absent();
+
+  /** The damage modifier provided by the feat, if any. */
+  protected Optional<Modifier> m_damageModifier = Optional.absent();
+
   /** The effects of the feat. */
+  @Deprecated
   protected List<Effect> m_effects = new ArrayList<>();
 
   /**
@@ -146,6 +153,26 @@ public class BaseFeat extends BaseEntry
   }
 
   /**
+   * Get the attack modifier provided by this quality.
+   *
+   * @return the attack modifier
+   */
+  public Optional<Modifier> getAttackModifier()
+  {
+    return m_attackModifier;
+  }
+
+  /**
+   * Get the damage modifier provided by this quality.
+   *
+   * @return the damage modifier
+   */
+  public Optional<Modifier> getDamageModifier()
+  {
+    return m_damageModifier;
+  }
+
+  /**
    * Get the effects the feat has on values.
    *
    * @return a list with all the effects
@@ -196,6 +223,11 @@ public class BaseFeat extends BaseEntry
     m_special = inValues.use("special", m_special);
     m_normal = inValues.use("normal", m_normal);
     m_prerequisites = inValues.use("prerequisites", m_prerequisites);
+    m_attackModifier = inValues.use("attack_modifier", m_attackModifier,
+                                    Modifier.PARSER);
+    m_damageModifier = inValues.use("damage_modifier", m_damageModifier,
+                                    Modifier.PARSER);
+
     m_effects = inValues.use("effect", m_effects, Effect.PARSER,
                              "affects", "name", "modifier", "text");
   }
@@ -221,6 +253,12 @@ public class BaseFeat extends BaseEntry
 
     if(m_prerequisites.isPresent())
       builder.setPrerequisites(m_prerequisites.get());
+
+    if(m_attackModifier.isPresent())
+      builder.setAttackModifier(m_attackModifier.get().toProto());
+
+    if(m_damageModifier.isPresent())
+      builder.setDamageModifier(m_damageModifier.get().toProto());
 
     for(Effect effect : m_effects)
     {
@@ -271,6 +309,14 @@ public class BaseFeat extends BaseEntry
 
     if(proto.hasPrerequisites())
       m_prerequisites = Optional.of(proto.getPrerequisites());
+
+    if(proto.hasAttackModifier())
+      m_attackModifier =
+          Optional.of(Modifier.fromProto(proto.getAttackModifier()));
+
+    if(proto.hasDamageModifier())
+      m_damageModifier =
+          Optional.of(Modifier.fromProto(proto.getDamageModifier()));
 
     for(BaseFeatProto.Effect effect : proto.getEffectList())
       m_effects.add(new Effect(Affects.fromProto(effect.getAffects()),

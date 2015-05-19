@@ -110,6 +110,14 @@ public class Quality extends NestedEntry
     return getName();
   }
 
+  public String getShortDescription()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getShortDescription();
+
+    return "";
+  }
+
   /**
    * Get the speed modification for the given movement mode.
    *

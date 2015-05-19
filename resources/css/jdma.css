@@ -3374,10 +3374,16 @@ BODY.print
   font-size: 8px;
 }
 
-.character-sheet .quality
+.character-sheet .quality,
+.character-sheet .feat
 {
   font-size: 12px;
   padding-bottom: 4px;
+}
+
+.character-sheet .unused
+{
+  color: #a44;
 }
 
 @media print

@@ -262,9 +262,21 @@
         {call dma.entry.value}
           {param label: 'Special Qualities' /}
           {param value kind="html"}
-            {foreach $quality in $entry.special_qualities}              
+            {foreach $quality in $entry.special_qualities}
               {$quality}
               {if not isLast($quality)}; {/if}
+            {/foreach}
+          {/param}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if $entry.special_attacks}
+        {call dma.entry.value}
+          {param label: 'Bonus Feats' /}
+          {param value kind="html"}
+            {foreach $feat in $entry.bonus_feats}
+              {$feat}
+              {if not isLast($feat)}; {/if}
             {/foreach}
           {/param}
           {param color: '#aaf' /}
@@ -656,7 +668,8 @@
                       'name': 'special_attack.name',
                       'value': $attack.name,
                       'validate': 'non-empty',  
-                      'caption': 'name'                 
+                      'caption': 'name',
+                      'autocomplete': 'base quality/name'
                     ],
                     [
                       'name': 'special_attack.level',
@@ -687,7 +700,8 @@
                       'name': 'special_attack.name',
                       'value': '',
                       'validate': 'non-empty',
-                      'caption': 'name'                   
+                      'caption': 'name',
+                      'autocomplete': 'base quality/name'
                     ],
                     [
                       'name': 'special_attack.level',
@@ -730,7 +744,8 @@
                       'name': 'special_quality.name',
                       'value': $quality.name,
                       'validate': 'non-empty',
-                      'caption': 'name'                   
+                      'caption': 'name',
+                      'autocomplete': 'base quality/name'
                     ],
                     [
                       'name': 'special_quality.level',
@@ -746,7 +761,7 @@
                     ],
                     [
                       'name': 'special_quality.condition',
-                      'value': $quality.condition.present 
+                      'value': $quality.condition.present
                         ? $quality.condition : '',
                       'validate': 'any',
                       'caption': 'condition'
@@ -761,7 +776,8 @@
                       'name': 'special_quality.name',
                       'value': '',
                       'validate': 'non-empty',
-                      'caption': 'name'                   
+                      'caption': 'name',
+                      'autocomplete': 'base quality/name'
                     ],
                     [
                       'name': 'special_quality.level',
@@ -788,7 +804,71 @@
           {/call}
         {/param}
         {param validate: 'non-empty' /}
-      {/call}    
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'bonus_feat' /}
+        {param color: '#aaf' /}
+        {param label: 'Bonus Feat' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $feat in $entry.bonus_feats}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'bonus_feat.name',
+                      'value': $feat.name,
+                      'validate': 'non-empty',
+                      'caption': 'name',
+                      'autocomplete': 'base feat/name'
+                    ],
+                    [
+                      'name': 'bonus_feat.level',
+                      'value': $feat.level,
+                      'validate': 'number',
+                      'caption': 'level'
+                    ],
+                    [
+                      'name': 'special_quality.condition',
+                      'value': $feat.condition.present
+                        ? $feat.condition : '',
+                      'validate': 'any',
+                      'caption': 'condition'
+                    ]
+                  ] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'bonus_feat.name',
+                      'value': '',
+                      'validate': 'non-empty',
+                      'caption': 'name',
+                      'autocomplete': 'base feat/name'
+                    ],
+                    [
+                      'name': 'bonus_feat.level',
+                      'value': '',
+                      'validate': 'number',
+                      'caption': 'level'
+                    ],
+                    [
+                      'name': 'bonus_feat.condition',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'condition'
+                    ]
+                  ] /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+        {param validate: 'non-empty' /}
+      {/call}
       {call dma.edit.value_list}
         {param name: 'base_attack' /}
         {param label: 'Base Attacks' /}

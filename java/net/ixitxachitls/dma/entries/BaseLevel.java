@@ -245,6 +245,9 @@ public class BaseLevel extends BaseEntry
   /** Special qualities. */
   protected List<QualityReference> m_specialQualities = new ArrayList<>();
 
+  /** The bonus feats. */
+  protected List<QualityReference> m_bonusFeats = new ArrayList<>();
+
   /** The base attack bonuses per level. */
   protected List<Integer> m_baseAttacks = new ArrayList<>();
 
@@ -504,6 +507,21 @@ public class BaseLevel extends BaseEntry
     return Collections.unmodifiableList(m_specialQualities);
   }
 
+  public List<QualityReference> getBonusFeats()
+  {
+    return Collections.unmodifiableList(m_bonusFeats);
+  }
+
+  public List<Feat> getBonusFeats(int inLevel) {
+    List<Feat> feats = new ArrayList<>();
+    for(QualityReference feat : m_bonusFeats)
+      if (feat.getLevel() == inLevel) {
+        feats.add(new Feat(feat.getName()));
+      }
+
+    return feats;
+  }
+
   /**
    * Get the base attack bonuses per level in this class.
    *
@@ -686,9 +704,13 @@ public class BaseLevel extends BaseEntry
       inValues.use("special_attack", m_specialAttacks, QualityReference.PARSER,
                    "name", "level", "per_day", "condition");
     m_specialQualities =
-      inValues.use("special_quality",
-                   m_specialQualities, QualityReference.PARSER,
-                   "name", "level", "per_day", "condition");
+        inValues.use("special_quality",
+                     m_specialQualities, QualityReference.PARSER,
+                     "name", "level", "per_day", "condition");
+    m_bonusFeats =
+        inValues.use("bonus_feat",
+                     m_bonusFeats, QualityReference.PARSER,
+                     "name", "level", "per_day", "condition");
     m_baseAttacks =
       inValues.use("base_attack", m_baseAttacks, Value.INTEGER_PARSER);
     m_fortitudeSaves =
@@ -771,20 +793,20 @@ public class BaseLevel extends BaseEntry
         reference.setCondition(special.getCondition().get());
 
       builder.addSpecialAttack(BaseLevelProto.LeveledQuality.newBuilder()
-                               .setLevel(special.getLevel())
-                               .setQuality(reference.build())
-                               .build());
+                                   .setLevel(special.getLevel())
+                                   .setQuality(reference.build())
+                                   .build());
     }
 
     for(QualityReference special : m_specialQualities)
     {
       BaseMonsterProto.QualityReference.Builder reference =
-        BaseMonsterProto.QualityReference.newBuilder();
+          BaseMonsterProto.QualityReference.newBuilder();
 
       Reference<BaseQuality> ref = special.getReference();
       reference.setReference(BaseMonsterProto.Reference.newBuilder()
-                             .setName(ref.getName())
-                             .build());
+                                 .setName(ref.getName())
+                                 .build());
 
       if(special.getUsesPerDay() > 0)
         reference.setPerDay(special.getUsesPerDay());
@@ -793,9 +815,28 @@ public class BaseLevel extends BaseEntry
         reference.setCondition(special.getCondition().get());
 
       builder.addSpecialQuality(BaseLevelProto.LeveledQuality.newBuilder()
-                                .setLevel(special.getLevel())
-                                .setQuality(reference.build())
-                                .build());
+                                    .setLevel(special.getLevel())
+                                    .setQuality(reference.build())
+                                    .build());
+    }
+
+    for(QualityReference feat : m_bonusFeats)
+    {
+      BaseMonsterProto.QualityReference.Builder reference =
+          BaseMonsterProto.QualityReference.newBuilder();
+
+      Reference<BaseQuality> ref = feat.getReference();
+      reference.setReference(BaseMonsterProto.Reference.newBuilder()
+                                 .setName(ref.getName())
+                                 .build());
+
+      if(feat.getCondition().isPresent())
+        reference.setCondition(feat.getCondition().get());
+
+      builder.addBonusFeat(BaseLevelProto.LeveledQuality.newBuilder()
+                               .setLevel(feat.getLevel())
+                               .setQuality(reference.build())
+                               .build());
     }
 
     for(Integer number : m_baseAttacks)
@@ -892,13 +933,23 @@ public class BaseLevel extends BaseEntry
 
     for(BaseLevelProto.LeveledQuality quality : proto.getSpecialQualityList())
       m_specialQualities.add(new QualityReference
-                             (quality.getQuality().getReference().getName(),
-                              quality.getLevel(),
-                              quality.getQuality().getPerDay(),
-                              quality.getQuality().hasCondition()
-                              ? Optional.<String>of
-                                (quality.getQuality().getCondition())
-                              : Optional.<String>absent()));
+                                 (quality.getQuality().getReference().getName(),
+                                  quality.getLevel(),
+                                  quality.getQuality().getPerDay(),
+                                  quality.getQuality().hasCondition()
+                                      ? Optional.<String>of
+                                      (quality.getQuality().getCondition())
+                                      : Optional.<String>absent()));
+
+    for(BaseLevelProto.LeveledQuality feat : proto.getBonusFeatList())
+      m_bonusFeats.add(new QualityReference
+                                 (feat.getQuality().getReference().getName(),
+                                  feat.getLevel(),
+                                  feat.getQuality().getPerDay(),
+                                  feat.getQuality().hasCondition()
+                                      ? Optional.<String>of
+                                      (feat.getQuality().getCondition())
+                                      : Optional.<String>absent()));
 
     for(int baseAttack : proto.getBaseAttackList())
       m_baseAttacks.add(baseAttack);

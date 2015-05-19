@@ -31,7 +31,7 @@
   {@param index: number}
   {call dma.edit.field_input}
     {param name: ($prefix ? $prefix : '') + 'quality@' + $index + '.name' /}
-    {param caption: 'Quality' /}
+    {param caption: 'quality name' /}
     {param value: $entry ? lower($entry.name) : '' /}
     {param class: 'narrow' /}
     {param validate: 'any' /}
@@ -285,6 +285,7 @@
 {template .summary}
   {@param entry: ?}
   <b>{$entry.base_name}</b>
+  , {$entry.short_description}
   {if length(keys($entry.parameters)) > 0}
     {sp}(
     {if length(keys($entry.parameters)) == 1}

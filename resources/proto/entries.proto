@@ -501,7 +501,7 @@ message BaseQualityProto
   }
   repeated KeyedModifier skill_modifier = 12;
   optional ModifierProto attack_modifier = 13;
-  optional ModifierProto damage_modifier = 14; 
+  optional ModifierProto damage_modifier = 14;
   repeated string bonus_feat = 15;
 }
 
@@ -532,6 +532,9 @@ message BaseFeatProto
     optional ModifierProto modifier = 3;
   }
   repeated Effect effect = 7;
+
+  optional ModifierProto attack_modifier = 8;
+  optional ModifierProto damage_modifier = 9;
 }
 
 message BaseSkillProto
@@ -1290,6 +1293,7 @@ message BaseLevelProto
   repeated int32 fortitude_save = 21;
   repeated int32 reflex_save = 22;
   repeated int32 will_save = 23;
+  repeated LeveledQuality bonusFeat = 24;
 }
 
 message EntryProto
@@ -1444,6 +1448,7 @@ message LevelProto
   required string name = 1;
   optional int32 hp = 2;
   repeated QualityProto quality = 3;
+  repeated FeatProto feat = 4;
 }
 
 message FeatProto

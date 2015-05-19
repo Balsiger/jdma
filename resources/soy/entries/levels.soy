@@ -66,6 +66,30 @@
       {/param}
     {/call}
   {/if}
+  {if $entry and length($entry.feats)}
+    {foreach $feat in $entry.feats}
+      {call dma.edit.field_list_line}
+        {param id: 'feat' /}
+        {param field kind="html"}
+          {call dma.entries.feats.edit}
+            {param entry: $feat /}
+            {param prefix: 'level@' + $index + '.' /}
+            {param index: index($feat) /}
+          {/call}
+        {/param}
+      {/call}
+    {/foreach}
+  {else}
+    {call dma.edit.field_list_line}
+      {param id: 'feat' /}
+      {param field kind="html"}
+        {call dma.entries.feats.edit}
+          {param prefix: 'level@' + $index + '.' /}
+          {param index: 0 /}
+        {/call}
+      {/param}
+    {/call}
+  {/if}
 {/template}
 
 /**

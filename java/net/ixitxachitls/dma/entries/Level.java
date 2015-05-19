@@ -56,6 +56,9 @@ public class Level extends NestedEntry
   /** The qualities chosen at this level. */
   private List<Quality> m_qualities = new ArrayList<>();
 
+  /** The feats chosen at this level. */
+  private List<Feat> m_feats = new ArrayList<>();
+
   /** The base level to this level. */
   private Optional<Optional<BaseLevel>> m_base = Optional.absent();
 
@@ -138,6 +141,19 @@ public class Level extends NestedEntry
     return Collections.unmodifiableList(m_qualities);
   }
 
+  public List<Feat> getFeats()
+  {
+    return Collections.unmodifiableList(m_feats);
+  }
+
+  public List<Feat> getBonusFeats(int inLevel)
+  {
+    if(getBase().isPresent())
+      return getBase().get().getBonusFeats(inLevel);
+
+    return new ArrayList<>();
+  }
+
   @Override
   public String toString()
   {
@@ -151,8 +167,8 @@ public class Level extends NestedEntry
   public void set(Values inValues)
   {
     m_name = inValues.use("name", m_name);
-    m_qualities = inValues.useEntries("quality", m_qualities,
-                                      Quality.CREATOR);
+    m_qualities = inValues.useEntries("quality", m_qualities, Quality.CREATOR);
+    m_feats = inValues.useEntries("feat", m_feats, Feat.CREATOR);
 
     Optional<Integer> hp = inValues.use("hp", m_hp);
     if(hp.isPresent())
@@ -174,8 +190,11 @@ public class Level extends NestedEntry
       builder.setName("unknown");
     builder.setHp(m_hp);
 
-    for (Quality quality : m_qualities)
+    for(Quality quality : m_qualities)
       builder.addQuality(quality.toProto());
+
+    for(Feat feat : m_feats)
+      builder.addFeat(feat.toProto());
 
     LevelProto proto = builder.build();
     return proto;
@@ -195,6 +214,9 @@ public class Level extends NestedEntry
 
     for (Entries.QualityProto quality : inProto.getQualityList())
       level.m_qualities.add(Quality.fromProto(quality));
+
+    for (Entries.FeatProto feat : inProto.getFeatList())
+      level.m_feats.add(Feat.fromProto(feat));
 
     return level;
   }
