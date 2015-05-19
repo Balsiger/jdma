@@ -35,7 +35,7 @@
  * @param opt The optional arguments, if any
  */
 {template .Product}
-  {call dma.page.link}
+  {call dma.value.link}
     {param url: '/product/' + ($opt.0 ? $opt.0 : $arg.0) /}
     {param text: $arg.0 /}
     {param class: 'Product' /}
@@ -48,7 +48,7 @@
  * @param arg The arguments to the command.
  */
 {template .Place}
-  {call dma.page.link}
+  {call dma.value.link}
     {param url: '/place/' + $arg.0 /}
     {param text: $arg.0 /}
     {param class: 'Place' /}
@@ -61,7 +61,7 @@
  * @param arg The arguments to the command.
  */
 {template .God}
-  {call dma.page.link}
+  {call dma.value.link}
     {param url: '/god/' + $arg.0 /}
     {param text: $arg.0 /}
     {param class: 'God' /}
@@ -74,7 +74,7 @@
  * @param arg The arguments to the command.
  */
 {template .Class}
-  {call dma.page.link}
+  {call dma.value.link}
     {param url: '/class/' + $arg.0 /}
     {param text: $arg.0 /}
     {param class: 'Class' /}
@@ -87,7 +87,7 @@
  * @param arg The arguments to the command.
  */
 {template .Item}
-  {call dma.page.link}
+  {call dma.value.link}
     {param url: '/item/' + $arg.0 /}
     {param text: $arg.0 /}
     {param class: 'Item' /}
@@ -100,7 +100,7 @@
  * @param arg The arguments to the command.
  */
 {template .Skill}
-  {call dma.page.link}
+  {call dma.value.link}
     {param url: '/skill/' + $arg.0 /}
     {param text: $arg.0 /}
     {param class: 'Skill' /}
@@ -113,7 +113,7 @@
  * @param arg The arguments to the command.
  */
 {template .Feat}
-  {call dma.page.link}
+  {call dma.value.link}
     {param url: '/feat/' + $arg.0 /}
     {param text: $arg.0 /}
     {param class: 'Feat' /}
@@ -126,7 +126,7 @@
  * @param arg The arguments to the command.
  */
 {template .Spell}
-  {call dma.page.link}
+  {call dma.value.link}
     {param url: '/spell/' + $arg.0 /}
     {param text: $arg.0 /}
     {param class: 'Spell' /}
@@ -139,7 +139,7 @@
  * @param arg The arguments to the command.
  */
 {template .Group}
-  {call dma.page.link}
+  {call dma.value.link}
     {param url: '/group/' + $arg.0 /}
     {param text: $arg.0 /}
     {param class: 'Group' /}
@@ -152,7 +152,7 @@
  * @param arg The arguments to the command.
  */
 {template .NPC}
-  {call dma.page.link}
+  {call dma.value.link}
     {param url: '/npc/' + $arg.0 /}
     {param text: $arg.0 /}
     {param class: 'NPC' /}
@@ -165,7 +165,7 @@
  * @param arg The arguments to the command.
  */
 {template .Monster}
-  {call dma.page.link}
+  {call dma.value.link}
     {param url: '/monster/' + $arg.0 /}
     {param text: $arg.0 /}
     {param class: 'Monster' /}
@@ -178,7 +178,7 @@
  * @param arg The arguments to the command.
  */
 {template .SpellRef}
-  {call dma.page.link}
+  {call dma.value.link}
     {param url: '/spell/' + $arg.0 /}
     {param text: $arg.0 /}
     {param class: 'Spell' /}
