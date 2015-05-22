@@ -307,7 +307,7 @@
         {param color: '#808' /}
       {/call}
       {call dma.edit.value}
-        {param name: 'short-description' /}
+        {param name: 'short_description' /}
         {param label: 'Short Description' /}
         {param value: $entry.short_description /}
         {param validate: 'any' /}
@@ -617,19 +617,19 @@
       {call dma.edit.value}
         {param name: 'attack_modifier' /}
         {param label: 'Attack' /}
-        {param value: $entry.attack_modifier.present 
+        {param value: $entry.attack_modifier.present
           ? $entry.attack_modifier : '' /}
         {param validate: 'modifier' /}
         {param color: '#808' /}
-      {/call}    
+      {/call}
       {call dma.edit.value}
         {param name: 'damage_modifier' /}
         {param label: 'Damage' /}
-        {param value: $entry.damage_modifier.present 
+        {param value: $entry.damage_modifier.present
           ? $entry.damage_modifier : '' /}
         {param validate: 'modifier' /}
         {param color: '#808' /}
-      {/call}    
+      {/call}
       {call dma.edit.value_list}
         {param name: 'bonus_feat' /}
         {param label: 'Bonus Feats' /}
