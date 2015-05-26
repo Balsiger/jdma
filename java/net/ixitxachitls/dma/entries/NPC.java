@@ -28,6 +28,7 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.SortedMultiset;
 import com.google.common.collect.TreeMultiset;
@@ -551,6 +552,10 @@ public class NPC extends Monster
                     + levels.count(level.getAbbreviation()));
     }
 
+    // Quality feats
+    for(Quality quality : allQualities())
+      for(String feat : quality.bonusFeats())
+        feats.add(ImmutableList.of(new Feat(feat)), quality.getName());
 
     return feats;
   }

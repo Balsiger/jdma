@@ -248,7 +248,7 @@ public class Quality extends NestedEntry
     if(getBase().isPresent())
       return getBase().get().getBonusFeats();
 
-    return new ArrayList<>();
+    return Collections.emptyList();
   }
 
   public Modifier abilityModifier(Ability inAbility)
