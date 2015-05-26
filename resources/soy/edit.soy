@@ -94,6 +94,7 @@
   {@param value: any}
   {@param validate: string}
   {@param color: string}
+  {@param? rows: number}
   {call .generic_value}
     {param label: $label /}
     {param color: $color /}
@@ -102,6 +103,7 @@
         {param name: $name /}
         {param value: $value /}
         {param validate: $validate /}
+        {param rows: $rows /}
       {/call}
     {/param}
     {/call}
@@ -223,9 +225,11 @@
   {@param name: string}
   {@param value: any}
   {@param validate: string}
+  {@param? rows: number}
   {call .field}
     {param markup kind="html"}
-      <textarea class='field' name='{$name}' rows="10" 
+      <textarea class='field' name='{$name}'
+                rows="{if $rows}{$rows}{else}10{/if}"
                 validate='{$validate}' 
                 onkeyup='window.form.validate(this)'>
         {$value}        

@@ -22,6 +22,7 @@
 package net.ixitxachitls.dma.output.soy;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -68,6 +69,9 @@ public class SoyValue extends SoyMapData
   /** The entry with the data. */
   protected final Object m_object;
 
+  /** The cache for already computed values. */
+  protected final Map<String, SoyData> m_cache = new HashMap<>();
+
   /**
    * Get the value represented by this soy value.
    *
@@ -89,6 +93,19 @@ public class SoyValue extends SoyMapData
   @SuppressWarnings("unchecked")
   @Override
   public SoyData getSingle(String inName)
+  {
+    if(m_cache.containsKey(inName))
+    {
+      return m_cache.get(inName);
+    }
+
+    SoyData data = getSingleUncached(inName);
+    m_cache.put(inName, data);
+
+    return data;
+  }
+
+  private SoyData getSingleUncached(String inName)
   {
     Object value = m_object;
     if(value instanceof Optional && !inName.equals("get"))

@@ -155,7 +155,7 @@ form.checkValue = function(inType, inValue)
         (/^(\s*\d+\s*(lb|lbs|oz|pound|pounds|ounce|ounces))*$/);
 
     case 'modifier':
-    return inValue.match(/^[+-]?\d+(\s+[a-zA-Z]+)*$/);
+    return inValue.match(/^[+-]?\d+(\s+[a-zA-Z]+)*(if .*)?$/);
 
     case 'price':
       return inValue.match(/^[^\d\s]+\s?\d+(\.\d\d)?$/);

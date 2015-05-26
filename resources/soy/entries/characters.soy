@@ -155,12 +155,10 @@
           // unused qualities
           <div>
             {if length($entry.unused_qualities)}
-              (unused{sp}
-              {foreach $quality in $entry.unused_qualities}
+              ({foreach $quality in $entry.unused_qualities}
                 {$quality}
                 {if not isLast($quality)}, {/if}
-              {/foreach}
-              )
+              {/foreach})
             {/if}
           </div>
         {/param}
@@ -2242,7 +2240,6 @@
         {param label: 'Feats' /}
         {param value kind="html"}
           {foreach $feat in $entry.feats}
-            feat: {$feat}
             {call dma.edit.field_list_line}
               {param id: 'feat' /}
               {param field kind="html"}
@@ -2292,6 +2289,14 @@
           {/foreach}
         {/param}
         {param color: '#39f' /}
+      {/call}
+      {call dma.edit.value_text}
+        {param name: 'proto' /}
+        {param label: 'Proto' /}
+        {param value: $entry.proto /}
+        {param validate: 'any' /}
+        {param color: '#39f' /}
+        {param rows: 30 /}
       {/call}
     {/param}
   {/call}

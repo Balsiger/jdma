@@ -24,13 +24,10 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.HashMultiset;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.SortedMultiset;
 import com.google.common.collect.TreeMultiset;
@@ -462,32 +459,46 @@ public class NPC extends Monster
     Multiset<String> names = qualityNames();
 
     Multiset<String> levels = HashMultiset.create();
-    for (Multiset.Entry<String> entry : cumulatedLevels().entrySet())
-      levels.add(entry.getElement().toLowerCase(), entry.getCount());
-
     for(Level level : m_levels)
     {
-      if(!levels.contains(level.getName()))
-        // Already handled
-        continue;
-
       if(level.getBase().isPresent())
       {
+        levels.add(level.getName());
         for(BaseLevel.QualityReference quality
             : level.getBase().get().getSpecialAttacks())
-          if(quality.getLevel() <= levels.count(level.getName())
-              && !names.remove(quality.getName()))
-            qualities.add(quality.getName());
+          if(quality.getLevel() == levels.count(level.getName())
+            && !removeOneOf(names, quality.getName().split("\\|")))
+            qualities.add("-" + quality.getName());
 
         for(BaseLevel.QualityReference quality
             : level.getBase().get().getSpecialQualities())
-          if(quality.getLevel() <= levels.count(level.getName())
-              && !names.remove(quality.getName()))
-            qualities.add(quality.getName());
+          if(quality.getLevel() == levels.count(level.getName())
+              && !removeOneOf(names, quality.getName().split("\\|")))
+            qualities.add("-" + quality.getName());
       }
     }
 
+    for(Quality quality : super.monsterQualities())
+    {
+      if (!removeOneOf(names, quality.getName().split("\\|"))) {
+        qualities.add("-" + quality.getName());
+      }
+    }
+
+    for (String name : names) {
+      qualities.add("+" + name);
+    }
+
     return qualities;
+  }
+
+  private boolean removeOneOf(Multiset<String> set, String ... names)
+  {
+    for (String name : names)
+      if (set.remove(name))
+        return true;
+
+    return false;
   }
 
   public boolean isClassSkill(String inName)
@@ -620,8 +631,9 @@ public class NPC extends Monster
     if(proto.hasGivenName())
       m_givenName = Optional.of(proto.getGivenName());
 
+    m_levels.clear();
     for(LevelProto level : proto.getLevelList())
-        m_levels.add(Level.fromProto(level));
+      m_levels.add(Level.fromProto(level));
 
     if(proto.hasReligion())
       m_religion = Optional.of(proto.getReligion());

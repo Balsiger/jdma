@@ -37,7 +37,6 @@ import net.ixitxachitls.dma.proto.Entries.SkillProto;
 import net.ixitxachitls.dma.rules.CarryingCapacity;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Modifier;
-import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Slot;
 import net.ixitxachitls.dma.values.Speed;
@@ -1080,6 +1079,11 @@ public class Monster extends CampaignEntry
   }
 
   protected List<Quality> allQualities()
+  {
+    return monsterQualities();
+  }
+
+  protected List<Quality> monsterQualities()
   {
     List<Quality> qualities = new ArrayList<>();
 
@@ -4336,15 +4340,18 @@ public class Monster extends CampaignEntry
     if(proto.hasCharisma())
       m_charisma = Optional.of(proto.getCharisma());
 
+    m_feats.clear();
     for(FeatProto feat : proto.getFeatList())
       m_feats.add(Feat.fromProto(feat));
 
+    m_qualities.clear();
     for(QualityProto quality : proto.getQualityList())
       m_qualities.add(Quality.fromProto(quality));
 
     m_maxHP = proto.getMaxHitPoints();
     m_hp = proto.getHitPoints();
 
+    m_skills.clear();
     for(SkillProto skill : proto.getSkillList())
       m_skills.add(Skill.fromProto(skill));
 

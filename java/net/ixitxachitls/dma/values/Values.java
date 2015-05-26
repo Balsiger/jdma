@@ -29,6 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ArrayListMultimap;
@@ -536,11 +537,9 @@ public class Values
   List<E> useEntries(String inKey, List<E> inDefault,
                      NestedEntry.Creator<E> inCreator)
   {
-    // create sub values list; we use insertion order, not the order of the
-    // indexes, as indexes are nor properly ordered when entries are added on
-    // the client
+    // create sub values list sorted by indexes
     String prefix = inKey + "@";
-    Map<String, ListMultimap<String, String>> values = new LinkedHashMap<>();
+    Map<String, ListMultimap<String, String>> values = new TreeMap<>();
     for (String key : m_values.keySet())
       if (key.startsWith(prefix))
       {
