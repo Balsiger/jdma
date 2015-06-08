@@ -26,9 +26,11 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.FeatProto;
+import net.ixitxachitls.dma.values.Condition;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.FeatType;
+import net.ixitxachitls.util.CommandLineParser;
 
 /**
  * An actual feat.
@@ -150,6 +152,23 @@ public class Feat extends NestedEntry
       return getBase().get().getDamageModifier().get();
 
     return new Modifier();
+  }
+
+  public int additionalAttacks()
+  {
+    if(getBase().isPresent()
+        && getBase().get().getAdditionalAttacks().isPresent())
+      return getBase().get().getAdditionalAttacks().get();
+
+    return 0;
+  }
+
+  public Optional<Condition> getCondition()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getCondition();
+
+    return Optional.absent();
   }
 
   @Override

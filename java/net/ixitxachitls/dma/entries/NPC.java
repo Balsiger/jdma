@@ -537,7 +537,7 @@ public class NPC extends Monster
 
   public Annotated<List<Feat>> getCombinedFeats()
   {
-    Annotated.List<Feat> feats = new Annotated.List<>();
+    Annotated.List<Feat> feats = (Annotated.List<Feat>)super.getCombinedFeats();
 
     Multiset<String> levels = HashMultiset.create();
     for(Level level : m_levels)

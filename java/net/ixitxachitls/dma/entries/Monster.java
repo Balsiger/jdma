@@ -23,6 +23,7 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.base.Optional;
@@ -63,6 +64,15 @@ public class Monster extends CampaignEntry
 
   private static final int MIN_SYNERGY_RANKS = 5;
   private static final int SYNERGY_BONUS = 2;
+
+  private static final Comparator<Item> PRICE_ORDERING = new Comparator<Item>()
+  {
+    @Override
+    public int compare(Item first, Item second)
+    {
+      return Double.compare(second.getGoldValue(), first.getGoldValue());
+    }
+  };
 
   /** The class represents a single line in the treasure table (DMG 52/53). */
   private static class Line
@@ -996,6 +1006,7 @@ public class Monster extends CampaignEntry
       if(item != null && item.isWeapon() && !item.isAmmunition())
         weapons.add(item);
 
+    Collections.sort(weapons, PRICE_ORDERING);
     return weapons;
   }
 
@@ -1048,6 +1059,11 @@ public class Monster extends CampaignEntry
   public List<Feat> getFeats()
   {
     return Collections.unmodifiableList(m_feats);
+  }
+
+  public Annotated<List<Feat>> getCombinedFeats()
+  {
+    return new Annotated.List<>(m_feats, getName());
   }
 
   /**

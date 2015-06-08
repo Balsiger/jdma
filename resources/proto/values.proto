@@ -385,5 +385,20 @@ message SpeedProto
 
 message ConditionProto
 {
-  optional string description = 1;
+  optional string generic = 1;
+  optional WeaponStyle weapon_style = 2;
+}
+
+enum WeaponStyle
+{
+  UNKNOWN_STYLE = 0;
+  TWOHANDED_MELEE = 1;
+  ONEHANDED_MELEE = 2;
+  LIGHT_MELEE = 3;
+  UNARMED = 4;
+  RANGED_TOUCH = 5;
+  RANGED = 6;
+  THROWN_TOUCH = 7;
+  THROWN = 8;
+  TOUCH = 9;
 }

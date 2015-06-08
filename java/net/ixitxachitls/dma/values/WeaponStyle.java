@@ -30,6 +30,7 @@ import com.google.common.base.Optional;
 import net.ixitxachitls.dma.proto.Entries.BaseWeaponProto;
 import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Proto;
+import net.ixitxachitls.dma.proto.Values;
 
 /**
  * The possible weapon styles.
@@ -39,42 +40,42 @@ import net.ixitxachitls.dma.values.enums.Proto;
  */
 public enum WeaponStyle implements Named,
     net.ixitxachitls.dma.values.enums.Short,
-    Proto<BaseWeaponProto.Style>
+    Proto<Values.WeaponStyle>
 {
   /** An unknown style value. */
-  UNKNOWN("Unknown", "U", false, 0, BaseWeaponProto.Style.UNKNOWN_STYLE),
+  UNKNOWN("Unknown", "U", false, 0, Values.WeaponStyle.UNKNOWN_STYLE),
 
   /** A two-handed melee weapon. */
   TWOHANDED_MELEE("Two-Handed Melee", "Two", true, 0,
-                  BaseWeaponProto.Style.TWOHANDED_MELEE),
+                  Values.WeaponStyle.TWOHANDED_MELEE),
 
   /** A one-handed melee weapon. */
   ONEANDED_MELEE("One-Handed Melee", "One", true, -1,
-                 BaseWeaponProto.Style.ONEHANDED_MELEE),
+                 Values.WeaponStyle.ONEHANDED_MELEE),
 
   /** A light melee weapon. */
   LIGHT_MELEE("Light Melee", "Light", true, -2,
-              BaseWeaponProto.Style.LIGHT_MELEE),
+              Values.WeaponStyle.LIGHT_MELEE),
 
   /** An unarmed 'weapon'. */
-  UNARMED("Unarmed", "Unarmed", true, 0, BaseWeaponProto.Style.UNARMED),
+  UNARMED("Unarmed", "Unarmed", true, 0, Values.WeaponStyle.UNARMED),
 
   /** A ranged touch weapon. */
   RANGED_TOUCH("Ranged Touch", "Touch R", false, 0,
-               BaseWeaponProto.Style.RANGED_TOUCH),
+               Values.WeaponStyle.RANGED_TOUCH),
 
   /** A ranged weapon. */
-  RANGED("Ranged", "Ranged", false, 0, BaseWeaponProto.Style.RANGED),
+  RANGED("Ranged", "Ranged", false, 0, Values.WeaponStyle.RANGED),
 
   /** A thrown touch weapon. */
   THROWN_TOUCH("Thrown Touch", "Touch T", false, 0,
-               BaseWeaponProto.Style.THROWN_TOUCH),
+               Values.WeaponStyle.THROWN_TOUCH),
 
   /** A thrown weapon. */
-  THROWN("Thrown", "Thrown", false, 0, BaseWeaponProto.Style.THROWN),
+  THROWN("Thrown", "Thrown", false, 0, Values.WeaponStyle.THROWN),
 
   /** A touch weapon. */
-  TOUCH("Touch", "Touch", true, 0, BaseWeaponProto.Style.TOUCH);
+  TOUCH("Touch", "Touch", true, 0, Values.WeaponStyle.TOUCH);
 
   /** The value's name. */
   private String m_name;
@@ -89,7 +90,7 @@ public enum WeaponStyle implements Named,
   private int m_sizeDifference;
 
   /** The corresponding proto value. */
-  private BaseWeaponProto.Style m_proto;
+  private Values.WeaponStyle m_proto;
 
   /** The parser for weapon styles. */
   public static final Parser<WeaponStyle> PARSER =
@@ -112,7 +113,7 @@ public enum WeaponStyle implements Named,
    * @param inProto          the corresponding proto value
    */
   private WeaponStyle(String inName, String inShort, boolean inMelee,
-                int inSizeDifference, BaseWeaponProto.Style inProto)
+                int inSizeDifference, Values.WeaponStyle inProto)
   {
     m_name = inName;
     m_short = inShort;
@@ -160,7 +161,7 @@ public enum WeaponStyle implements Named,
   }
 
   @Override
-  public BaseWeaponProto.Style toProto()
+  public Values.WeaponStyle toProto()
   {
     return m_proto;
   }
@@ -171,7 +172,7 @@ public enum WeaponStyle implements Named,
    * @param   inProto the proto value
    * @return  the converted enum value
    */
-  public static WeaponStyle fromProto(BaseWeaponProto.Style inProto)
+  public static WeaponStyle fromProto(Values.WeaponStyle inProto)
   {
     for(WeaponStyle style : values())
       if(style.m_proto == inProto)

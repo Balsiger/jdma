@@ -324,6 +324,18 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
         + (m_next.isPresent() ? m_next.get().totalModifier() : 0);
   }
 
+  public int unconditionalModifier()
+  {
+    int modifier = 0;
+    if (!m_condition.isPresent())
+      modifier += m_modifier;
+
+    if (m_next.isPresent())
+      modifier += m_next.get().unconditionalModifier();
+
+    return modifier;
+  }
+
   public boolean hasValue()
   {
     if(m_modifier != 0)
@@ -508,16 +520,16 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   {
     Modifier result = null;
     List<ModifierProto.Modifier> modifiers =
-      new ArrayList<>(inProto.getModifierList());
+        new ArrayList<>(inProto.getModifierList());
     Collections.reverse(modifiers);
     for(ModifierProto.Modifier modifier : modifiers)
     {
       result = new Modifier(modifier.getBaseValue(),
-                               Type.fromProto(modifier.getType()),
-                               modifier.hasCondition()
-                                 ? Optional.of(modifier.getCondition())
-                                 : Optional.<String>absent(),
-                               Optional.fromNullable(result));
+                            Type.fromProto(modifier.getType()),
+                            modifier.hasCondition()
+                                ? Optional.of(modifier.getCondition())
+                                : Optional.<String>absent(),
+                            Optional.fromNullable(result));
     }
 
     return result;

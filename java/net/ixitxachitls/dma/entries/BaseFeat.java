@@ -35,7 +35,9 @@ import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
 import net.ixitxachitls.dma.proto.Values.ModifierProto;
 import net.ixitxachitls.dma.values.Modifier;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.Condition;
 import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Effect;
 import net.ixitxachitls.dma.values.enums.FeatType;
@@ -96,6 +98,12 @@ public class BaseFeat extends BaseEntry
 
   /** The damage modifier provided by the feat, if any. */
   protected Optional<Modifier> m_damageModifier = Optional.absent();
+
+  /** The additional attacks. */
+  protected Optional<Integer> m_additionalAttacks = Optional.absent();
+
+  /** The condition when this feat applies. */
+  protected Optional<Condition> m_condition = Optional.absent();
 
   /** The effects of the feat. */
   @Deprecated
@@ -172,6 +180,16 @@ public class BaseFeat extends BaseEntry
     return m_damageModifier;
   }
 
+  public Optional<Integer> getAdditionalAttacks()
+  {
+    return m_additionalAttacks;
+  }
+
+  public Optional<Condition> getCondition()
+  {
+    return m_condition;
+  }
+
   /**
    * Get the effects the feat has on values.
    *
@@ -227,6 +245,11 @@ public class BaseFeat extends BaseEntry
                                     Modifier.PARSER);
     m_damageModifier = inValues.use("damage_modifier", m_damageModifier,
                                     Modifier.PARSER);
+    m_additionalAttacks = inValues.use("additional_attacks",
+                                       m_additionalAttacks,
+                                       Value.INTEGER_PARSER);
+    m_condition = inValues.use("condition", m_condition, Condition.PARSER,
+                               "generic", "weapon_style");
 
     m_effects = inValues.use("effect", m_effects, Effect.PARSER,
                              "affects", "name", "modifier", "text");
@@ -259,6 +282,12 @@ public class BaseFeat extends BaseEntry
 
     if(m_damageModifier.isPresent())
       builder.setDamageModifier(m_damageModifier.get().toProto());
+
+    if(m_additionalAttacks.isPresent())
+      builder.setAdditionalAttacks(m_additionalAttacks.get());
+
+    if(m_condition.isPresent())
+      builder.setCondition(m_condition.get().toProto());
 
     for(Effect effect : m_effects)
     {
@@ -317,6 +346,12 @@ public class BaseFeat extends BaseEntry
     if(proto.hasDamageModifier())
       m_damageModifier =
           Optional.of(Modifier.fromProto(proto.getDamageModifier()));
+
+    if(proto.hasAdditionalAttacks())
+      m_additionalAttacks = Optional.of(proto.getAdditionalAttacks());
+
+    if(proto.hasCondition())
+      m_condition = Optional.of(Condition.fromProto(proto.getCondition()));
 
     for(BaseFeatProto.Effect effect : proto.getEffectList())
       m_effects.add(new Effect(Affects.fromProto(effect.getAffects()),

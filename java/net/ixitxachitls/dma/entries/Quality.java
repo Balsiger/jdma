@@ -35,6 +35,7 @@ import net.ixitxachitls.dma.proto.*;
 import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.values.AbilityModifier;
+import net.ixitxachitls.dma.values.Condition;
 import net.ixitxachitls.dma.values.ExpressionValue;
 import net.ixitxachitls.dma.values.KeyedModifier;
 import net.ixitxachitls.dma.values.Modifier;
@@ -63,6 +64,9 @@ public class Quality extends NestedEntry
   /** The base quality, if found. */
   private Optional<Optional<BaseQuality>> m_base = Optional.absent();
 
+  /** The condition for the quality, if any. */
+  private Optional<Condition> m_condition = Optional.absent();
+
   public static final Creator<Quality> CREATOR =
       new NestedEntry.Creator<Quality>()
       {
@@ -90,6 +94,11 @@ public class Quality extends NestedEntry
     }
 
     return m_base.get();
+  }
+
+  public Optional<Condition> getCondition()
+  {
+    return m_condition;
   }
 
   /**
@@ -149,6 +158,8 @@ public class Quality extends NestedEntry
   public void set(Values inValues)
   {
     m_name = inValues.use("name", m_name);
+    m_condition = inValues.use("condition", m_condition, Condition.PARSER,
+                               "generic", "weapon_style");
 
     List<String> names = new ArrayList<>();
     List<String> values = new ArrayList<>();
@@ -180,6 +191,9 @@ public class Quality extends NestedEntry
     else
       builder.setName("unknown");
 
+    if(m_condition.isPresent())
+      builder.setCondition(m_condition.get().toProto());
+
     for(Map.Entry<String, String> parameter : m_parameters.entrySet())
       builder.addParameter(QualityProto.Parameter.newBuilder()
                                .setName(parameter.getKey())
@@ -200,6 +214,10 @@ public class Quality extends NestedEntry
   {
     Quality quality = new Quality();
     quality.m_name = Optional.of(inProto.getName());
+    if(inProto.hasCondition())
+      quality.m_condition =
+          Optional.of(Condition.fromProto(inProto.getCondition()));
+
     for(QualityProto.Parameter parameter : inProto.getParameterList())
       quality.m_parameters.put(parameter.getName(), parameter.getValue());
 

@@ -66,26 +66,26 @@ public class Effect
 
   /** The parser for effects. */
   public static final Parser<Effect> PARSER =
-    new Parser<Effect>(4)
-    {
-      @Override
-      public Optional<Effect> doParse
-      (String inAffects, String inName, String inModifier, String inText)
+      new Parser<Effect>(4)
       {
-        Optional<Affects> affects = Affects.fromString(inAffects);
-        if(!affects.isPresent())
-          return Optional.absent();
+        @Override
+        public Optional<Effect> doParse
+            (String inAffects, String inName, String inModifier, String inText)
+        {
+          Optional<Affects> affects = Affects.fromString(inAffects);
+          if(!affects.isPresent())
+            return Optional.absent();
 
-        Optional<String> name =
-          inName.isEmpty() ? Optional.<String>absent() : Optional.of(inName);
-        Optional<Modifier> modifier =
-          Modifier.PARSER.parse(inModifier);
-        Optional<String> text = inText.isEmpty()
-          ? Optional.<String>absent() : Optional.of(inText);
+          Optional<String> name =
+              inName.isEmpty() ? Optional.<String>absent() : Optional.of(inName);
+          Optional<Modifier> modifier =
+              Modifier.PARSER.parse(inModifier);
+          Optional<String> text = inText.isEmpty()
+              ? Optional.<String>absent() : Optional.of(inText);
 
-        return Optional.of(new Effect(affects.get(), name, modifier, text));
-      }
-    };
+          return Optional.of(new Effect(affects.get(), name, modifier, text));
+        }
+      };
 
   /**
    * Get what is affected by the effect.

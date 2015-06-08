@@ -535,6 +535,8 @@ message BaseFeatProto
 
   optional ModifierProto attack_modifier = 8;
   optional ModifierProto damage_modifier = 9;
+  optional int32 additional_attacks = 10;
+  optional ConditionProto condition = 11;
 }
 
 message BaseSkillProto
@@ -701,20 +703,7 @@ message BaseWeaponProto
   optional Type type = 4;
   optional CriticalProto critical = 5;
 
-  enum Style
-  {
-    UNKNOWN_STYLE = 0;
-    TWOHANDED_MELEE = 1;
-    ONEHANDED_MELEE = 2;
-    LIGHT_MELEE = 3;
-    UNARMED = 4;
-    RANGED_TOUCH = 5;
-    RANGED = 6;
-    THROWN_TOUCH = 7;
-    THROWN = 8;
-    TOUCH = 9;
-  }
-  optional Style style = 6;
+  optional WeaponStyle style = 6;
 
   enum Proficiency
   {
@@ -1455,6 +1444,7 @@ message FeatProto
 {
   required string name = 1;
   optional string qualifier = 2;
+  optional ConditionProto condition = 5;
 }
 
 message QualityProto

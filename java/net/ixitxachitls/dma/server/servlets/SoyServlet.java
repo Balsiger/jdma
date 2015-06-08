@@ -47,6 +47,7 @@ import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.SizeModifier;
+import net.ixitxachitls.dma.values.WeaponStyle;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Alignment;
@@ -255,6 +256,8 @@ public class SoyServlet extends DMAServlet
        "Affects", new SoyValue("Affects", Affects.class),
        "WeaponProficiency",
        new SoyValue("WeaponProficiency", Proficiency.class),
+       "WeaponStyle",
+       new SoyValue("WeaponStyle", WeaponStyle.class),
        "ArmorProficiency",
        new SoyValue("ArmorProficiency", ArmorType.class),
        "SpellDescriptor",

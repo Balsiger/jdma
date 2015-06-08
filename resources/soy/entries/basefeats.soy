@@ -161,6 +161,20 @@
           {param color: '#0aa' /}
         {/call}
       {/if}
+      {if $entry.additional_attacks.present}
+        {call dma.entry.value}
+          {param label: 'Additional Attacks' /}
+          {param value: $entry.additional_attacks /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.condition.present}
+        {call dma.entry.value}
+          {param label: 'Condition' /}
+          {param value: $entry.condition /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
       {if $entry.effects}
         {call dma.entry.value}
           {param label: 'Effects' /}
@@ -337,6 +351,33 @@
         {param value: $entry.damage_modifier.present
           ? $entry.damage_modifier : '' /}
         {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'additional_attacks' /}
+        {param label: 'Additional Attacks' /}
+        {param value: $entry.additional_attacks.present
+          ? $entry.additional_attacks : '' /}
+        {param validate: 'number' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param label: 'Condition' /}
+        {param value kind="html"}
+          {call dma.edit.field_input}
+            {param name: 'condition.generic' /}
+            {param validate: 'any' /}
+            {param caption: 'condition' /}
+            {param value: $entry.condition.isPresent
+              ? $entry.condition.get.generic : '' /}
+          {/call}
+          {call dma.edit.field_selection}
+            {param name: 'condition.weapon_style' /}
+            {param choices:  $ij.WeaponStyle.names /}
+            {param value: $entry.condition.isPresent
+              ? $entry.condition.wepon_style.get.string : '' /}
+          {/call}
+        {/param}
         {param color: '#0aa' /}
       {/call}
       {call dma.edit.generic_value}
