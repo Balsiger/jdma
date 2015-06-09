@@ -566,6 +566,10 @@ public class Values
     List<E> entries = new ArrayList<>();
     for (ListMultimap<String, String> submap : values.values())
     {
+      // Ignore entries that contain no values.
+      if(!hasValue(submap))
+        continue;
+
       E entry = inCreator.create();
       entry.set(new Values(submap));
       entries.add(entry);
@@ -576,6 +580,15 @@ public class Values
 
     m_changed = true;
     return entries;
+  }
+
+  private boolean hasValue(ListMultimap<String, String> inMap)
+  {
+    for(String value : inMap.values())
+      if(!value.trim().isEmpty())
+        return true;
+
+    return false;
   }
 
   public void clear()

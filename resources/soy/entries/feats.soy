@@ -32,7 +32,7 @@
   {call dma.edit.field_input}
     {param name: ($prefix ? $prefix : '') + 'feat@' + $index + '.name' /}
     {param caption: 'feat name' /}
-    {param value: $entry and $entry.base.pesent 
+    {param value: $entry and $entry.base.present
       ? lower($entry.base.name) : '' /}
     {param class: 'narrow' /}
     {param validate: 'any' /}
