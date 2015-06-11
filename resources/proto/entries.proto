@@ -1424,6 +1424,7 @@ message MonsterProto
   optional int32 will_save = 15;
   optional int32 reflex_save = 16;
   repeated QualityProto quality = 17;
+  repeated BaseMonsterProto.Language.Name m_language = 18;
 }
 
 message SkillProto

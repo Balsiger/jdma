@@ -24,12 +24,15 @@ package net.ixitxachitls.dma.entries;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.base.Optional;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.FeatProto;
 import net.ixitxachitls.dma.proto.Entries.MonsterProto;
@@ -42,13 +45,17 @@ import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Slot;
 import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.ValueSources;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Alignment;
+import net.ixitxachitls.dma.values.enums.Language;
+import net.ixitxachitls.dma.values.enums.LanguageModifier;
 import net.ixitxachitls.dma.values.enums.MonsterType;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.dma.values.enums.Size;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -661,6 +668,9 @@ public class Monster extends CampaignEntry
 
   /** The qualities. */
   protected List<Quality> m_qualities = new ArrayList<>();
+
+  /** The languages the monster knows. */
+  protected List<Language> m_languages = new ArrayList<>();
 
   /** The monetary treasure. */
   // protected Money m_money = new Money();
@@ -2282,6 +2292,7 @@ public class Monster extends CampaignEntry
                                        return new Skill();
                                      }
                                    });
+    m_languages = inValues.use("language", m_languages, Language.PARSER);
   }
 
   /**
@@ -4317,6 +4328,9 @@ public class Monster extends CampaignEntry
     if(m_reflexSave.isPresent())
       builder.setReflexSave(m_reflexSave.get());
 
+    for(Language language : m_languages)
+      builder.addMLanguage(language.toProto());
+
     MonsterProto proto = builder.build();
     return proto;
   }
@@ -4382,6 +4396,9 @@ public class Monster extends CampaignEntry
 
     if(proto.hasReflexSave())
       m_reflexSave = Optional.of(proto.getReflexSave());
+
+    for(BaseMonsterProto.Language.Name language : proto.getMLanguageList())
+      m_languages.add(Language.fromProto(language));
   }
 
   @Override
@@ -4419,5 +4436,50 @@ public class Monster extends CampaignEntry
         return true;
 
     return false;
+  }
+
+  public List<Language> getLanguages() {
+    return m_languages;
+  }
+
+  public Annotated<List<Language>> combinedLanguages() {
+    Annotated.List<Language> languages = new Annotated.List<>();
+    Set<Language> learned = new HashSet<>();
+    Set<Language> possible = new HashSet<>();
+    for(BaseEntry base : getBaseEntries())
+      for(BaseMonster.LanguageOption option
+          : ((BaseMonster)base).getCombinedLanguages().get())
+        if(!learned.contains(option.getLanguage()))
+        {
+          if(option.getModifier() == LanguageModifier.AUTOMATIC)
+          {
+            languages.addSingle(option.getLanguage(),
+                                base.getName() + " (automatic)");
+            learned.add(option.getLanguage());
+          }
+          else
+          {
+            possible.add(option.getLanguage());
+          }
+        }
+
+    int allowed = learned.size() + abilityModifier(Ability.INTELLIGENCE);
+    for(Language language : m_languages)
+      if(!learned.contains(language))
+      {
+        List<String> comments = new ArrayList<>();
+        if(learned.size() >= allowed)
+          comments.add("too much");
+        if(!possible.contains(language))
+          comments.add("not in race list");
+
+        languages.addSingle(language, "learned"
+            + (comments.isEmpty() ? ""
+            : " (" + Strings.COMMA_JOINER.join(comments) + ")"));
+
+        learned.add(language);
+      }
+
+    return languages;
   }
 }

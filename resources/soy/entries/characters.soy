@@ -165,6 +165,11 @@
         {param color: '#39f' /}
       {/call}
       {call dma.entry.value}
+        {param label: 'Languages' /}
+        {param value: annotate($entry.languages) /}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
         {param label: 'Possessions' /}
         {param value kind="html"}
           {foreach $item in $entry.possessions}
@@ -1156,11 +1161,28 @@
           {param entry: $entry /}
         {/call}
       </div>
+
+      <div style="flex: 1; margin-top: 20px">
+        {call .sheet_languages}
+          {param entry: $entry /}
+        {/call}
+      </div>
     </div>
   </div>
 {/template}
 
-/** The class features box. */
+/** The langauges box. */
+{template .sheet_languages}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Languages' /}
+  {/call}
+
+  {annotate($entry.combined_languages)}
+
+{/template}
+
+/** The feats box. */
 {template .sheet_feats}
   {@param entry: ?}
   {call .sheet_subtitle}
@@ -2300,6 +2322,36 @@
               {/param}
             {/call}
           {/foreach}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'language' /}
+        {param label: 'Languges' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $language in $entry.languages}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'language',
+                    'value': $language.string,
+                    'type': 'selection',
+                    'choices': $ij.Language.names
+                  ]] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'language',
+                    'value': '',
+                    'type': 'selection',
+                    'choices': $ij.Language.names
+                  ]] /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
         {/param}
         {param color: '#39f' /}
       {/call}
