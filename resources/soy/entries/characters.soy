@@ -179,12 +179,33 @@
             {if not isLast($item)}, {/if}
           {/foreach}
           {if $ij.user}
-            {sp}|{sp} 
+            {sp}|{sp}
             <span class="action"
-                  onclick="edit.show('', '{$entry.campaign.path}/item/CREATE', 
-                                     'add-item', '', 
+                  onclick="edit.show('', '{$entry.campaign.path}/item/CREATE',
+                                     'add-item', '',
                                      'parent:character/{$entry.name}')">
               add item
+            </span>
+          {/if}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Animal Companions' /}
+        {param value kind="html"}
+          {foreach $monster in $entry.animal_companions}
+            {call dma.entries.monsters.reference}
+              {param entry: $monster /}
+            {/call}
+            {if not isLast($monster)}, {/if}
+          {/foreach}
+          {if $ij.user}
+            {sp}|{sp}
+            <span class="action"
+                  onclick="edit.show('', '{$entry.campaign.path}/monster/CREATE',
+                                     'add-monster', '',
+                                     'parent:character/{$entry.name}')">
+              add animal companion
             </span>
           {/if}
         {/param}
@@ -222,6 +243,12 @@
         {param entry: $entry /}
       {/call}
     </div>
+
+    <div class="sheet-page">
+      {call .sheet_page_4}
+        {param entry: $entry /}
+      {/call}
+    <div>
   </div>
 {/template}
 
@@ -739,14 +766,17 @@
   {@param value: string}
   {@param ability_modifier: string}
   {@param racial: ?}
-  <div class="two-line-label" style="width: 15%; padding-top: 30px">
+  {@param? short: bool}
+  <div class="two-line-label"
+       style="width: {if $short}59{else}15{/if}%;
+              padding-top: {if $short}22{else}30{/if}px">
     <div class="top" style="font-size: 12px">{$name}</div>
     <div class="bottom">({$ability})</div>
   </div>
 
   {call .sheet_value}
     {param label: 'Total' /}
-    {param width: '12.5%' /}
+    {param width: $short ? '30%' : '12.5%' /}
     {param size: '8px' /}
     {param center: true /}
     {param white: true /}
@@ -754,87 +784,89 @@
     {param value: $value /}
   {/call}
 
-  <div class="operator" style="padding-top: 30px">=</div>
+  {if not $short}
+    <div class="operator" style="padding-top: 30px">=</div>
 
-  {call .sheet_value}
-    {param label kind="html"}
-      Base <br/>
-      Save
-    {/param}
-    {param width: '12.5%' /}
-    {param size: '8px' /}
-    {param center: true /}
-    {param white: true /}
-    {param top: true /}
-    {param value: $value /}
-  {/call}
+    {call .sheet_value}
+      {param label kind="html"}
+        Base <br/>
+        Save
+      {/param}
+      {param width: '12.5%' /}
+      {param size: '8px' /}
+      {param center: true /}
+      {param white: true /}
+      {param top: true /}
+      {param value: $value /}
+    {/call}
 
-  <div class="operator" style="padding-top: 30px">+</div>
+    <div class="operator" style="padding-top: 30px">+</div>
 
-  {call .sheet_value}
-    {param label kind="html"}
-      Ability <br/>
-      Modifier
-    {/param}
-    {param width: '12.5%' /}
-    {param size: '8px' /}
-    {param center: true /}
-    {param white: true /}
-    {param top: true /}
-    {param value: $ability_modifier /}
-  {/call}
+    {call .sheet_value}
+      {param label kind="html"}
+        Ability <br/>
+        Modifier
+      {/param}
+      {param width: '12.5%' /}
+      {param size: '8px' /}
+      {param center: true /}
+      {param white: true /}
+      {param top: true /}
+      {param value: $ability_modifier /}
+    {/call}
 
-  <div class="operator" style="padding-top: 30px">+</div>
+    <div class="operator" style="padding-top: 30px">+</div>
 
-  {call .sheet_value}
-    {param label kind="html"}
-      Magic <br/>
-      Modifier
-    {/param}
-    {param width: '12.5%' /}
-    {param size: '8px' /}
-    {param center: true /}
-    {param white: true /}
-    {param top: true /}
-    {param value: '' /}
-  {/call}
+    {call .sheet_value}
+      {param label kind="html"}
+        Magic <br/>
+        Modifier
+      {/param}
+      {param width: '12.5%' /}
+      {param size: '8px' /}
+      {param center: true /}
+      {param white: true /}
+      {param top: true /}
+      {param value: '' /}
+    {/call}
 
-  <div class="operator" style="padding-top: 30px">+</div>
+    <div class="operator" style="padding-top: 30px">+</div>
 
-  {call .sheet_value}
-    {param label kind="html"}
-      Misc. <br/>
-      Modifier
-    {/param}
-    {param width: '12.5%' /}
-    {param size: '8px' /}
-    {param center: true /}
-    {param white: true /}
-    {param top: true /}
-    {param value kind="html"}
-       {if $racial.has_value}
-           {call dma.value.modifier}
-             {param modifier: $racial /}
-             {param hide_condition: true /}
-           {/call}
-        {/if}
-    {/param}
-  {/call}
+    {call .sheet_value}
+      {param label kind="html"}
+        Misc. <br/>
+        Modifier
+      {/param}
+      {param width: '12.5%' /}
+      {param size: '8px' /}
+      {param center: true /}
+      {param white: true /}
+      {param top: true /}
+      {param value kind="html"}
+         {if $racial.has_value}
+             {call dma.value.modifier}
+               {param modifier: $racial /}
+               {param hide_condition: true /}
+             {/call}
+          {/if}
+      {/param}
+    {/call}
 
-  <div class="operator" style="padding-top: 30px">+</div>
+    <div class="operator" style="padding-top: 30px">+</div>
 
-  {call .sheet_value}
-    {param label kind="html"}
-      Temporary <br/>
-      Modifier
-    {/param}
-    {param width: '12.5%' /}
-    {param size: '8px' /}
-    {param center: true /}
-    {param white: true /}
-    {param top: true /}
-    {param value: '' /}
-  {/call}
+    {call .sheet_value}
+      {param label kind="html"}
+        Temporary <br/>
+        Modifier
+      {/param}
+      {param width: '12.5%' /}
+      {param size: '8px' /}
+      {param center: true /}
+      {param white: true /}
+      {param top: true /}
+      {param value: '' /}
+    {/call}
+  {/if}
 
 {/template}
 
@@ -1131,7 +1163,7 @@
 {/template}
 
 /**
- * Contents of the second page of the character sheet.
+ * Contents of the third page of the character sheet.
  *
  * @param entry the entry to print
  */
@@ -1169,6 +1201,315 @@
       </div>
     </div>
   </div>
+{/template}
+
+/** Contents of the third page of the character sheet. */
+{template .sheet_page_4}
+  {@param entry: ?}
+  {if length($entry.animal_companions) > 0}
+    {call .sheet_animal_companion}
+      {param animals: $entry.animal_companions /}
+    {/call}
+  {/if}
+{/template}
+
+/** The box with animal companions. */
+{template .sheet_animal_companion}
+  {@param animals: ?}
+  {call .sheet_subtitle}
+    {param title: 'Animal Companion' /}
+  {/call}
+
+  {foreach $animal in $animals}
+    {call .sheet_value}
+      {param label: 'Name' /}
+      {param width: '50%' /}
+      {param size: '10px' /}
+      {param value kind="html"}
+        {if $animal.given_name.present}
+          {$animal.given_name}{sp}
+        {/if}
+        ({$animal.name})
+      {/param}
+    {/call}
+
+    {call .sheet_value}
+      {param label: 'Creature Type' /}
+      {param width: '49%' /}
+      {param size: '10px' /}
+      {param value kind="html"}
+        {$animal.base_name}
+      {/param}
+    {/call}
+
+    {call .sheet_animal_companion_ability}
+      {param label: 'STR' /}
+      {param total: $animal.total_strength /}
+      {param modifier: $animal.strength_modifier /}
+    {/call}
+    {call .sheet_animal_companion_ability}
+      {param label: 'DEX' /}
+      {param total: $animal.total_dexterity /}
+      {param modifier: $animal.dexterity_modifier /}
+    {/call}
+    {call .sheet_animal_companion_ability}
+      {param label: 'CON' /}
+      {param total: $animal.total_constitution /}
+      {param modifier: $animal.constitution_modifier /}
+    {/call}
+    {call .sheet_animal_companion_ability}
+      {param label: 'INT' /}
+      {param total: $animal.total_intelligence /}
+      {param modifier: $animal.intelligence_modifier /}
+    {/call}
+    {call .sheet_animal_companion_ability}
+      {param label: 'WIS' /}
+      {param total: $animal.total_wisdom /}
+      {param modifier: $animal.wisdom_modifier /}
+    {/call}
+    {call .sheet_animal_companion_ability}
+      {param label: 'CHA' /}
+      {param total: $animal.total_charisma /}
+      {param modifier: $animal.charisma_modifier /}
+    {/call}
+
+    <div class="group boxed" style="width: 20%">
+      {call .sheet_value}
+        {param label: 'Initiative' /}
+        {param width: '100%' /}
+        {param value: bonus($animal.initiative) /}
+      {/call}
+      {call .sheet_value}
+        {param label: 'Speed' /}
+        {param width: '100%' /}
+        {param value kind="html"}
+          {if isList($animal.speeds_annotated)}
+            {foreach $speed in $animal.speeds_annotated}
+              {annotate($speed)}
+              {if not isLast($speed)}, {/if}
+            {/foreach}
+          {/if}
+        {/param}
+      {/call}
+    </div>
+
+    <div style="width: 50%; display: inline-block">
+      {call .sheet_subtitle}
+        {param title: 'Hit Points' /}
+        {param nologo: true /}
+      {/call}
+
+      <div class="values group boxed"
+           style="width: 100%; box-sizing: border-box; padding: 0;">
+        <div class="hps">
+          {for $i in range($animal.maxHP - $animal.HP)}
+            <div class="count crossed">{$animal.maxHP - $i}</div>
+            {if ($animal.maxHP - $i) % 10 == 0}
+              <br/>
+            {/if}
+          {/for}
+          {for $i in range($animal.HP + 1)}
+            <div class="count">{$animal.HP - $i}</div>
+            {if ($animal.HP - $i) % 10 == 0}
+              <br/>
+            {/if}
+          {/for}
+        </div>
+      </div>
+    </div>
+
+    <div class="value-container inline" style="width:50%">
+      <div class="value-label prefixed inline"
+           style="font-size: 14px; vertical-align:top; padding-top: 13px">
+        AC
+      </div>
+
+      {call .sheet_value}
+        {param label kind="html"}
+          Total <br/>
+          &nbsp;
+        {/param}
+        {param width: '12%' /}
+        {param size: '8px' /}
+        {param vSize: '20px' /}
+        {param center: true /}
+        {param value: $animal.armor_class /}
+      {/call}
+
+      <div class="operator" style="padding-top: 25px">+</div>
+
+      {call .sheet_value}
+        {param label kind="html"}
+          Dex<br/>
+          Modifier
+        {/param}
+        {param width: '12%' /}
+        {param size: '8px' /}
+        {param vSize: '14px' /}
+        {param center: true /}
+        {param value: bonus($animal.dexterity_modifier) /}
+      {/call}
+
+      <div class="operator" style="padding-top: 25px">+</div>
+
+      {call .sheet_value}
+        {param label kind="html"}
+          Size<br/>
+          Modifier
+        {/param}
+        {param width: '12%' /}
+        {param size: '8px' /}
+        {param vSize: '14px' /}
+        {param center: true /}
+        {param value: '+0' /}
+      {/call}
+
+      <div class="operator" style="padding-top: 25px">+</div>
+
+      {call .sheet_value}
+        {param label kind="html"}
+          Natural <br/>
+          Armor
+        {/param}
+        {param width: '20%' /}
+        {param size: '8px' /}
+        {param vSize: '14px' /}
+        {param center: true /}
+        {param value: annotate($animal.combined_natural_armor) /}
+      {/call}
+
+      <div class="operator" style="padding-top: 25px">+</div>
+
+      {call .sheet_value}
+        {param label kind="html"}
+          Miscellaneous <br/>
+          Modifiers
+        {/param}
+        {param width: '20%' /}
+        {param size: '8px' /}
+        {param vSize: '14px' /}
+        {param center: true /}
+        {param value: '' /}
+      {/call}
+    </div>
+
+    <div class="inline"
+         style="width: 25%; vertical-align: top; margin-top: 10px;">
+      {call .sheet_value}
+        {param label: 'Touch AC' /}
+        {param width: '100%' /}
+        {param size: '14px' /}
+        {param vSize: '20px' /}
+        {param value: $animal.touch_armor_class /}
+        {param prefix: true /}
+        {param center: true /}
+      {/call}
+    </div>
+
+    <div class="inline"
+         style="width: 25%; vertical-align: top; margin-top: 10px;">
+      {call .sheet_value}
+        {param label: 'Flat-Footed AC' /}
+        {param width: '100%' /}
+        {param size: '14px' /}
+        {param vSize: '20px' /}
+        {param value: $animal.flat_footed_armor_class /}
+        {param prefix: true /}
+        {param center: true /}
+      {/call}
+    </div>
+
+    <div class="inline" style="width: 20%; margin-top: 10px;">
+      {call .sheet_subtitle}
+        {param title: 'Saving Throws' /}
+        {param nologo: true /}
+        {param nopadding: true /}
+      {/call}
+
+      <div class="sheet-row">
+        <div class="saves sheet-column" style="flex: 4; margin: 0">
+          <div>
+            {call .sheet_saves_value}
+              {param name: 'Fortitude' /}
+              {param ability: 'Constitution' /}
+              {param value: annotate($animal.combined_fortitude_save) /}
+              {param racial: $animal.racial_fortitude_modifier /}
+              {param ability_modifier: bonus($animal.constitution_modifier) /}
+              {param short: true /}
+            {/call}
+          </div>
+
+          <div>
+            {call .sheet_saves_value}
+              {param name: 'Reflex' /}
+              {param ability: 'Dexterity' /}
+              {param racial: $animal.racial_reflex_modifier /}
+              {param value: annotate($animal.combined_reflex_save) /}
+              {param ability_modifier: bonus($animal.dexterity_modifier) /}
+              {param short: true /}
+            {/call}
+          </div>
+
+          <div>
+            {call .sheet_saves_value}
+              {param name: 'Will' /}
+              {param ability: 'Wisdom' /}
+              {param racial: $animal.racial_will_modifier /}
+              {param value: annotate($animal.combined_will_save) /}
+              {param ability_modifier: bonus($animal.wisdom_modifier) /}
+              {param short: true /}
+            {/call}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="inline" style="width: 20%; margin-top: 10px;">
+      {call .sheet_subtitle}
+        {param title: 'Attacks' /}
+        {param nologo: true /}
+        {param nopadding: true /}
+      {/call}
+   {foreach $weapon in $entry.weapons}
+     {if index($weapon) < 3}
+       {call .sheet_weapon}
+         {param gray: index($weapon) == 0 or index($weapon) == 2 /}
+         {param weapon: $weapon /}
+       {/call}
+     {/if}
+   {/foreach}
+   {for $i in range(length($entry.weapons), 3)}
+     {call .sheet_weapon}
+       {param gray: $i == 0 or $i == 2 /}
+     {/call}
+   {/for}
+
+
+
+  {/foreach}
+{/template}
+
+/** An ability of an animal companion. */
+{template .sheet_animal_companion_ability}
+  {@param total: string|html|number}
+  {@param modifier: string|html|number}
+  {@param label: string|html}
+  {call .sheet_value}
+    {param label: $label /}
+    {param width: '5%' /}
+    {param size: '12px' /}
+    {param vSize: '15px' /}
+    {param boxed: true /}
+    {param center: true /}
+    {param top: true /}
+    {param value kind="html"}
+      {$total}
+      <div class="size-tiny">
+        {bonus($modifier)}
+      </div>
+    {/param}
+  {/call}
 {/template}
 
 /** The langauges box. */
@@ -2013,15 +2354,14 @@
   </div>
 {/template}
 
-/**
- * Print a subtitle for the character sheet.
- * 
- * @param title  The subtitle text
- * @param? width The width of the subtitle
- * @param? nologo Whether to show the logo
- */
+/** Print a subtitle for the character sheet. */
 {template .sheet_subtitle}
-  <div class="subtitle" {if $width}style="width:{$width}"{/if}>
+  {@param title: string}
+  {@param? width: string}
+  {@param? nologo: bool}
+  {@param? nopadding: bool}
+  <div class="{if $nopadding}nopadding {/if}subtitle"
+      {if $width}style="width:{$width}"{/if}>
     {if not $nologo}<div class="subtitle-logo"></div>{/if}
     <div class="subtitle-text{if $nologo} nologo{/if}">{$title}</div>
   </div>

@@ -108,9 +108,6 @@ public class NPC extends Monster
   /** The gender of the npc. */
   protected Gender m_gender = Gender.UNKNOWN;
 
-  /** A special name for the npc, if any. */
-  protected Optional<String> m_givenName = Optional.absent();
-
   /** The individual levels gained, in order. */
   protected List<Level> m_levels = new ArrayList<>();
 
@@ -125,6 +122,9 @@ public class NPC extends Monster
 
   /** The NPC's description of how it looks. */
   protected Optional<String> m_looks = Optional.absent();
+
+  /** The possible animal compantion. */
+  protected Optional<List<Monster>> m_animalCompanions = Optional.absent();
 
   /*
   @Override
@@ -591,9 +591,6 @@ public class NPC extends Monster
     if(m_gender != Gender.UNKNOWN)
       builder.setGender(m_gender.toProto());
 
-    if(m_givenName.isPresent())
-      builder.setGivenName(m_givenName.get());
-
     for(Level level : m_levels)
       builder.addLevel(level.toProto());
 
@@ -657,5 +654,16 @@ public class NPC extends Monster
   protected Message defaultProto()
   {
     return NPCProto.getDefaultInstance();
+  }
+
+  public List<Monster> getAnimalCompanions()
+  {
+    if(!m_animalCompanions.isPresent()) {
+      m_animalCompanions = Optional.of(DMADataFactory.get().getEntries(
+          Monster.TYPE, Optional.of(getCampaign().get().getKey()),
+          "index-parent", "character/" + getName().toLowerCase()));
+    }
+
+    return m_animalCompanions.get();
   }
 }

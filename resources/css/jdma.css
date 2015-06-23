@@ -153,6 +153,12 @@ DIV.subtitletext, DIV.subtitletext A
 /* special colors */
 .color-light { color: #AAAAAA; }
 
+.nopadding
+{
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 /******************************************************************************
  * header
  *****************************************************************************/
@@ -3495,3 +3501,4 @@ DIV.inline
   width: 25px !important;
   background-position: -224px;
 }
+

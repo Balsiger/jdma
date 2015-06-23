@@ -583,6 +583,11 @@ public class Monster extends CampaignEntry
     super(TYPE);
   }
 
+  public Monster(String inName)
+  {
+    super(inName, TYPE);
+  }
+
   /**
    * This is the normal constructor.
    *
@@ -620,6 +625,9 @@ public class Monster extends CampaignEntry
 
    /** The type of the base entry to this entry. */
    public static final BaseType<BaseMonster> BASE_TYPE = BaseMonster.TYPE;
+
+  /** A special name for the npc, if any. */
+  protected Optional<String> m_givenName = Optional.absent();
 
   /** The possessions value. */
   protected List<Item> m_possessions = null;
@@ -2262,6 +2270,7 @@ public class Monster extends CampaignEntry
   {
     super.setValues(inValues);
 
+    m_givenName = inValues.use("given_name", m_givenName);
     m_alignment = inValues.use("alignment", m_alignment, Alignment.PARSER);
     m_strength = inValues.use("strength", m_strength, Value.INTEGER_PARSER);
     m_constitution = inValues.use("constitution", m_constitution,
@@ -4286,6 +4295,9 @@ public class Monster extends CampaignEntry
 
     builder.setBase((CampaignEntryProto)super.toProto());
 
+    if(m_givenName.isPresent())
+      builder.setGivenName(m_givenName.get());
+
     if(m_strength.isPresent())
       builder.setStrength(m_strength.get());
 
@@ -4329,7 +4341,7 @@ public class Monster extends CampaignEntry
       builder.setReflexSave(m_reflexSave.get());
 
     for(Language language : m_languages)
-      builder.addMLanguage(language.toProto());
+      builder.addLanguage(language.toProto());
 
     MonsterProto proto = builder.build();
     return proto;
@@ -4351,6 +4363,9 @@ public class Monster extends CampaignEntry
     MonsterProto proto = (MonsterProto)inProto;
 
     super.fromProto(proto.getBase());
+
+    if(proto.hasGivenName())
+      m_givenName = Optional.of(proto.getGivenName());
 
     if(proto.hasStrength())
       m_strength = Optional.of(proto.getStrength());
@@ -4397,7 +4412,7 @@ public class Monster extends CampaignEntry
     if(proto.hasReflexSave())
       m_reflexSave = Optional.of(proto.getReflexSave());
 
-    for(BaseMonsterProto.Language.Name language : proto.getMLanguageList())
+    for(BaseMonsterProto.Language.Name language : proto.getLanguageList())
       m_languages.add(Language.fromProto(language));
   }
 
@@ -4481,5 +4496,19 @@ public class Monster extends CampaignEntry
       }
 
     return languages;
+  }
+
+  public String getBaseName()
+  {
+    List<String> names = new ArrayList<>();
+    for(BaseEntry base : getBaseEntries())
+      names.add(base.getName());
+
+    return Strings.COMMA_JOINER.join(names);
+  }
+
+  public Optional<String> getGivenName()
+  {
+    return m_givenName;
   }
 }

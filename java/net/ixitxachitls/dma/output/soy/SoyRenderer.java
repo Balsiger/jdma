@@ -92,7 +92,7 @@ public class SoyRenderer
                                  "entries/baseskills", "entries/skills",
                                  "entries/baseencounters",
                                  "entries/basespells",
-                                 "entries/basemonsters");
+                                 "entries/basemonsters", "entries/monsters");
     }
 
     return s_defaultTemplate;

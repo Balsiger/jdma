@@ -283,7 +283,8 @@ public class DataStore
   public List<Entity> getEntities(String inType, Optional<Key> inParent,
                                   int inStart, int inSize, String ... inFilters)
   {
-    String key = Arrays.toString(inFilters);
+    String key = inType + ":" + inParent + ":" + inStart + ":" + inSize + ":"
+        + Arrays.toString(inFilters);
     List<Entity> entities = (List<Entity>)s_cacheListByValue.get(key);
 
     if(entities == null)
