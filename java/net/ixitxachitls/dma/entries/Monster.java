@@ -27,7 +27,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import com.google.common.base.Optional;
 import com.google.protobuf.Message;
 
@@ -39,7 +38,10 @@ import net.ixitxachitls.dma.proto.Entries.MonsterProto;
 import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
 import net.ixitxachitls.dma.rules.CarryingCapacity;
+import net.ixitxachitls.dma.rules.Combat;
 import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.Damage;
+import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Slot;
@@ -50,6 +52,7 @@ import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Alignment;
+import net.ixitxachitls.dma.values.enums.AttackStyle;
 import net.ixitxachitls.dma.values.enums.Language;
 import net.ixitxachitls.dma.values.enums.LanguageModifier;
 import net.ixitxachitls.dma.values.enums.MonsterType;
@@ -680,6 +683,9 @@ public class Monster extends CampaignEntry
   /** The languages the monster knows. */
   protected List<Language> m_languages = new ArrayList<>();
 
+  /** The monster's personality. */
+  protected Optional<String> m_personality = Optional.absent();
+
   /** The monetary treasure. */
   // protected Money m_money = new Money();
 
@@ -1081,8 +1087,20 @@ public class Monster extends CampaignEntry
 
   public Annotated<List<Feat>> getCombinedFeats()
   {
-    return new Annotated.List<>(m_feats, getName());
+    Annotated<List<Feat>> feats = new Annotated.List<>(m_feats, getName());
+
+    for(BaseEntry base : getBaseEntries())
+    {
+      List<Feat> baseFeats = new ArrayList<>();
+      for(String feat : ((BaseMonster)base).getCombinedFeats().get())
+        baseFeats.add(new Feat(feat));
+
+      feats.add(new Annotated.List<>(baseFeats, base.getName()));
+    }
+
+    return feats;
   }
+
 
   /**
    * Get all of the monster's qualities.
@@ -1495,6 +1513,24 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  public int sizeModifier()
+  {
+    Annotated<Optional<Size>> size = getCombinedSize();
+    if(!size.get().isPresent())
+      return 0;
+
+    return size.get().get().modifier();
+  }
+
+  public int sizeGrappleModifier()
+  {
+    Annotated<Optional<Size>> size = getCombinedSize();
+    if(!size.get().isPresent())
+      return 0;
+
+    return size.get().get().grapple();
+  }
+
   /**
    * Get a monsters combined base attack bonus.
    *
@@ -1507,6 +1543,17 @@ public class Monster extends CampaignEntry
       combined.add(((BaseMonster)entry).getCombinedBaseAttack());
 
     return combined;
+  }
+
+  public int grappleModifier()
+  {
+    int modifier = getStrengthModifier();
+    if (getCombinedBaseAttack().get().isPresent())
+      modifier += getCombinedBaseAttack().get().get();
+
+    modifier += sizeGrappleModifier();
+
+    return modifier;
   }
 
   /**
@@ -1941,9 +1988,12 @@ public class Monster extends CampaignEntry
   {
     Modifier armor = getArmorBonus();
     Modifier shield = getShieldBonus();
+    Modifier natural = getCombinedNaturalArmor().get().get();
     int dexterity = getDexterityModifier();
+    int sizeModifier = sizeModifier();
 
-    return 10 + armor.getModifier() + shield.getModifier() + dexterity;
+    return 10 + armor.getModifier() + shield.getModifier() + dexterity
+        + sizeModifier + natural.getModifier();
   }
 
   /**
@@ -1954,8 +2004,9 @@ public class Monster extends CampaignEntry
   public int getTouchArmorClass()
   {
     int dexterity = getDexterityModifier();
+    int sizeModifier = sizeModifier();
 
-    return 10 + dexterity;
+    return 10 + dexterity + sizeModifier;
   }
 
   /**
@@ -1967,8 +2018,11 @@ public class Monster extends CampaignEntry
   {
     Modifier armor = getArmorBonus();
     Modifier shield = getShieldBonus();
+    Modifier natural = getCombinedNaturalArmor().get().get();
+    int sizeModifier = sizeModifier();
 
-    return 10 + armor.getModifier() + shield.getModifier();
+    return 10 + armor.getModifier() + shield.getModifier()
+        + natural.getModifier() + sizeModifier;
   }
 
   /**
@@ -2265,6 +2319,90 @@ public class Monster extends CampaignEntry
     return getCombinedProficiencies();
   }
 
+  public Annotated<List<BaseMonster.Attack>> getCombinedPrimaryAttacks()
+  {
+    Annotated<List<BaseMonster.Attack>> attacks = new Annotated.List<>();
+
+    for(BaseEntry base : getBaseEntries())
+      attacks.add(((BaseMonster)base).getCombinedPrimaryAttacks());
+
+    return attacks;
+  }
+
+  public class NaturalAttack
+  {
+    public NaturalAttack(BaseMonster.Attack inAttack, boolean inPrimary)
+    {
+      m_attack = inAttack;
+      m_primary = inPrimary;
+    }
+
+    private final BaseMonster.Attack m_attack;
+    private final boolean m_primary;
+
+    public int bonus()
+    {
+      Optional<Integer> combinedBase = getCombinedBaseAttack().get();
+
+      int base = combinedBase.isPresent() ? combinedBase.get() : 0;
+      if(hasFeat(Combat.FEAT_WEAPON_FINESSE)
+          || m_attack.getStyle() == AttackStyle.RANGED)
+        base += getDexterityModifier();
+      else
+      {
+        base += getStrengthModifier();
+        base += sizeModifier();
+      }
+
+      if (!m_primary)
+        base += Combat.MULTIPLE_ATTACK_PENALTY;
+
+      return base;
+    }
+
+    public BaseMonster.Attack getAttack()
+    {
+      return m_attack;
+    }
+
+    public Damage getDamage()
+    {
+      int strengthModifier = getStrengthModifier();
+      if (!m_primary)
+        strengthModifier /= 2;
+
+      if (strengthModifier == 0)
+        return m_attack.getDamage();
+
+      return (Damage)m_attack.getDamage().add(new Damage(
+          new Dice(0, 0, strengthModifier)));
+    }
+  }
+
+  public List<NaturalAttack> naturalAttacks()
+  {
+    List<NaturalAttack> attacks = new ArrayList<>();
+
+    for (BaseMonster.Attack attack : getCombinedPrimaryAttacks().get())
+      attacks.add(new NaturalAttack(attack, true));
+
+    for (BaseMonster.Attack attack : getCombinedSecondaryAttacks().get())
+      attacks.add(new NaturalAttack(attack, false));
+
+    return attacks;
+  }
+
+
+  public Annotated<List<BaseMonster.Attack>> getCombinedSecondaryAttacks()
+  {
+    Annotated<List<BaseMonster.Attack>> attacks = new Annotated.List<>();
+
+    for(BaseEntry base : getBaseEntries())
+      attacks.add(((BaseMonster)base).getCombinedSecondaryAttacks());
+
+    return attacks;
+  }
+
   @Override
   public void setValues(Values inValues)
   {
@@ -2302,6 +2440,7 @@ public class Monster extends CampaignEntry
                                      }
                                    });
     m_languages = inValues.use("language", m_languages, Language.PARSER);
+    m_personality = inValues.use("personality", m_personality);
   }
 
   /**
@@ -4343,6 +4482,9 @@ public class Monster extends CampaignEntry
     for(Language language : m_languages)
       builder.addLanguage(language.toProto());
 
+    if(m_personality.isPresent())
+      builder.setPersonality(m_personality.get());
+
     MonsterProto proto = builder.build();
     return proto;
   }
@@ -4414,6 +4556,9 @@ public class Monster extends CampaignEntry
 
     for(BaseMonsterProto.Language.Name language : proto.getLanguageList())
       m_languages.add(Language.fromProto(language));
+
+    if(proto.hasPersonality())
+      m_personality = Optional.of(proto.getPersonality());
   }
 
   @Override
@@ -4455,6 +4600,10 @@ public class Monster extends CampaignEntry
 
   public List<Language> getLanguages() {
     return m_languages;
+  }
+
+  public Optional<String> getPersonality() {
+    return m_personality;
   }
 
   public Annotated<List<Language>> combinedLanguages() {

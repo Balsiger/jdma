@@ -24,6 +24,7 @@
  */
 {namespace dma.entries.characters}
 
+{guru}
 /**
  * Show the given entry in standard format.
  * 
@@ -219,12 +220,9 @@
   {/call}
 {/template}
 
-/**
- * Print a character sheet.
- *
- * @param entry the entry to print
- */
+/** Print a character sheet. */
 {template .sheet}
+  {@param entry: ?}
   <div class="character-sheet">
     <div class="sheet-page">
       {call .sheet_page_1}
@@ -249,6 +247,12 @@
         {param entry: $entry /}
       {/call}
     <div>
+
+    {foreach $animal in $entry.animal_companions}
+      {call dma.entries.monsters.sheet}
+        {param entry: $animal /}
+      {/call}
+    {/foreach}
   </div>
 {/template}
 
@@ -327,18 +331,15 @@
   </div>
 {/template}
 
-/**
- * The general section of the character sheet.
- *
- * @param entry
- */
+/** The general section of the character sheet. */
 {template .sheet_general}
-  {call .sheet_value}
+  {@param entry: ?}
+  {call dma.sheet.old_value}
     {param label: 'Character Name' /}
     {param width: '50%' /}
     {param value: $entry.name /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Player Name' /}
     {param width: '50%' /}
     {param value kind="html"}
@@ -346,7 +347,7 @@
     {/param}
   {/call}
 
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Class and Level' /}
     {param width: '50%' /}
     {param value kind="html"}
@@ -356,12 +357,12 @@
       {/foreach}
     {/param}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'ECL' /}
     {param width: '5%' /}
     {param value: $entry.effective_character_level /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Race/Template' /}
     {param width: '15%' /}
     {param value kind="html"}
@@ -371,37 +372,37 @@
       {/foreach}
     {/param}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Size' /}
     {param width: '15%' /}
     {param value: annotate($entry.combined_size) /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Gender' /}
     {param width: '15%' /}
     {param value: $entry.gender /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Alignment' /}
     {param width: '10%' /}
     {param value: $entry.alignment /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Religion/Patron Deity' /}
     {param width: '40%' /}
     {param value: $entry.religion.present ? $entry.religion : '' /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Height' /}
     {param width: '10%' /}
     {param value: $entry.height.present ? $entry.height : '' /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Weight' /}
     {param width: '10%' /}
     {param value: $entry.weight.present ? $entry.weight : '' /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Looks' /}
     {param width: '30%' /}
     {param value: $entry.looks.present ? $entry.looks : '' /}
@@ -480,7 +481,7 @@
      {param title: 'Combat Options' /}
    {/call}
 
-   {call .sheet_value}
+   {call dma.sheet.old_value}
      {param label: 'Base Attack Bonus' /}
      {param width: '100%' /}
      {param size: '14px' /}
@@ -585,7 +586,7 @@
  */
 {template .sheet_speed}
   <div class="inline" style="width: 50%">
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label: 'Speed' /}
       {param width: '100%' /}
       {param size: '14px' /}
@@ -604,7 +605,7 @@
   </div>
 
   <div class="inline" style="width: 50%">
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label: 'Initiative Modifier' /}
       {param width: '100%' /}
       {param size: '14px' /}
@@ -621,7 +622,7 @@
       Grapple Modifier
     </div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
        Total <br/>
        &nbsp;
@@ -634,7 +635,7 @@
 
     <div class="operator" style="padding-top: 15px">=</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Base Attack <br/>
         Bonus
@@ -647,7 +648,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Strength<br/>
         Modifier
@@ -659,7 +660,7 @@
     {/call}
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Size<br/>
         Modifier
@@ -672,7 +673,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Misc<br/>
         Modifier
@@ -774,7 +775,7 @@
     <div class="bottom">({$ability})</div>
   </div>
 
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Total' /}
     {param width: $short ? '30%' : '12.5%' /}
     {param size: '8px' /}
@@ -787,7 +788,7 @@
   {if not $short}
     <div class="operator" style="padding-top: 30px">=</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Base <br/>
         Save
@@ -802,7 +803,7 @@
 
     <div class="operator" style="padding-top: 30px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Ability <br/>
         Modifier
@@ -817,7 +818,7 @@
 
     <div class="operator" style="padding-top: 30px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Magic <br/>
         Modifier
@@ -832,7 +833,7 @@
 
     <div class="operator" style="padding-top: 30px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Misc. <br/>
         Modifier
@@ -854,7 +855,7 @@
 
     <div class="operator" style="padding-top: 30px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Temporary <br/>
         Modifier
@@ -886,7 +887,7 @@
       AC
     </div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Total <br/>
         &nbsp;
@@ -900,7 +901,7 @@
 
     <div class="operator" style="padding-top: 15px">= 10 +</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Armor <br/>
         Bonus
@@ -914,7 +915,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Shield<br/>
         Bonus
@@ -928,7 +929,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Dex<br/>
         Modifier
@@ -942,7 +943,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Size<br/>
         Modifier
@@ -956,7 +957,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Natural <br/>
         Armor
@@ -970,7 +971,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Deflection <br/>
         Modifier
@@ -984,7 +985,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Miscellaneous <br/>
         Modifiers
@@ -998,7 +999,7 @@
   </div>
 
   <div class="inline" style="width: 50%">
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label: 'Touch AC' /}
       {param width: '100%' /}
       {param size: '14px' /}
@@ -1010,7 +1011,7 @@
   </div>
 
   <div class="inline" style="width: 50%">
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label: 'Flat-Footed AC' /}
       {param width: '100%' /}
       {param size: '14px' /}
@@ -1023,7 +1024,7 @@
 
   <div class="armors" style="margin-top: 10px">
     <div class="armor">
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Armor Worn' /}
         {param width: '50%' /}
         {param size: '7px' /}
@@ -1038,7 +1039,7 @@
           {/if}
         {/param}
       {/call}
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Max Dex' /}
         {param width: '20%' /}
         {param size: '7px' /}
@@ -1048,7 +1049,7 @@
         {param value: $entry.armor_worn.present
           ? annotate($entry.armor_worn.combined_max_dex) : '' /}
       {/call}
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Armor Check Penalty' /}
         {param width: '20%' /}
         {param size: '7px' /}
@@ -1058,7 +1059,7 @@
         {param value: $entry.armor_worn.present
           ? annotate($entry.armor_worn.combined_check_penalty) : '' /}
       {/call}
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Weight' /}
         {param width: '10%' /}
         {param size: '7px' /}
@@ -1070,7 +1071,7 @@
       {/call}
     </div>
     <div class="armor">
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Shield Carried' /}
         {param width: '50%' /}
         {param size: '7px' /}
@@ -1085,7 +1086,7 @@
           {/if}
         {/param}
       {/call}
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Max Dex' /}
         {param width: '20%' /}
         {param size: '7px' /}
@@ -1095,7 +1096,7 @@
         {param value: $entry.shield_worn.present
           ? annotate($entry.shield_worn.combined_max_dex) : '' /}
       {/call}
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Armor Check Penalty' /}
         {param width: '20%' /}
         {param size: '7px' /}
@@ -1105,7 +1106,7 @@
         {param value: $entry.shield_worn.present
           ? annotate($entry.shield_worn.combined_check_penalty) : '' /}
       {/call}
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Weight' /}
         {param width: '10%' /}
         {param size: '7px' /}
@@ -1205,312 +1206,9 @@
 
 /** Contents of the third page of the character sheet. */
 {template .sheet_page_4}
-  {@param entry: ?}
-  {if length($entry.animal_companions) > 0}
-    {call .sheet_animal_companion}
-      {param animals: $entry.animal_companions /}
-    {/call}
-  {/if}
+  //{@param entry: ?}
 {/template}
 
-/** The box with animal companions. */
-{template .sheet_animal_companion}
-  {@param animals: ?}
-  {call .sheet_subtitle}
-    {param title: 'Animal Companion' /}
-  {/call}
-
-  {foreach $animal in $animals}
-    {call .sheet_value}
-      {param label: 'Name' /}
-      {param width: '50%' /}
-      {param size: '10px' /}
-      {param value kind="html"}
-        {if $animal.given_name.present}
-          {$animal.given_name}{sp}
-        {/if}
-        ({$animal.name})
-      {/param}
-    {/call}
-
-    {call .sheet_value}
-      {param label: 'Creature Type' /}
-      {param width: '49%' /}
-      {param size: '10px' /}
-      {param value kind="html"}
-        {$animal.base_name}
-      {/param}
-    {/call}
-
-    {call .sheet_animal_companion_ability}
-      {param label: 'STR' /}
-      {param total: $animal.total_strength /}
-      {param modifier: $animal.strength_modifier /}
-    {/call}
-    {call .sheet_animal_companion_ability}
-      {param label: 'DEX' /}
-      {param total: $animal.total_dexterity /}
-      {param modifier: $animal.dexterity_modifier /}
-    {/call}
-    {call .sheet_animal_companion_ability}
-      {param label: 'CON' /}
-      {param total: $animal.total_constitution /}
-      {param modifier: $animal.constitution_modifier /}
-    {/call}
-    {call .sheet_animal_companion_ability}
-      {param label: 'INT' /}
-      {param total: $animal.total_intelligence /}
-      {param modifier: $animal.intelligence_modifier /}
-    {/call}
-    {call .sheet_animal_companion_ability}
-      {param label: 'WIS' /}
-      {param total: $animal.total_wisdom /}
-      {param modifier: $animal.wisdom_modifier /}
-    {/call}
-    {call .sheet_animal_companion_ability}
-      {param label: 'CHA' /}
-      {param total: $animal.total_charisma /}
-      {param modifier: $animal.charisma_modifier /}
-    {/call}
-
-    <div class="group boxed" style="width: 20%">
-      {call .sheet_value}
-        {param label: 'Initiative' /}
-        {param width: '100%' /}
-        {param value: bonus($animal.initiative) /}
-      {/call}
-      {call .sheet_value}
-        {param label: 'Speed' /}
-        {param width: '100%' /}
-        {param value kind="html"}
-          {if isList($animal.speeds_annotated)}
-            {foreach $speed in $animal.speeds_annotated}
-              {annotate($speed)}
-              {if not isLast($speed)}, {/if}
-            {/foreach}
-          {/if}
-        {/param}
-      {/call}
-    </div>
-
-    <div style="width: 50%; display: inline-block">
-      {call .sheet_subtitle}
-        {param title: 'Hit Points' /}
-        {param nologo: true /}
-      {/call}
-
-      <div class="values group boxed"
-           style="width: 100%; box-sizing: border-box; padding: 0;">
-        <div class="hps">
-          {for $i in range($animal.maxHP - $animal.HP)}
-            <div class="count crossed">{$animal.maxHP - $i}</div>
-            {if ($animal.maxHP - $i) % 10 == 0}
-              <br/>
-            {/if}
-          {/for}
-          {for $i in range($animal.HP + 1)}
-            <div class="count">{$animal.HP - $i}</div>
-            {if ($animal.HP - $i) % 10 == 0}
-              <br/>
-            {/if}
-          {/for}
-        </div>
-      </div>
-    </div>
-
-    <div class="value-container inline" style="width:50%">
-      <div class="value-label prefixed inline"
-           style="font-size: 14px; vertical-align:top; padding-top: 13px">
-        AC
-      </div>
-
-      {call .sheet_value}
-        {param label kind="html"}
-          Total <br/>
-          &nbsp;
-        {/param}
-        {param width: '12%' /}
-        {param size: '8px' /}
-        {param vSize: '20px' /}
-        {param center: true /}
-        {param value: $animal.armor_class /}
-      {/call}
-
-      <div class="operator" style="padding-top: 25px">+</div>
-
-      {call .sheet_value}
-        {param label kind="html"}
-          Dex<br/>
-          Modifier
-        {/param}
-        {param width: '12%' /}
-        {param size: '8px' /}
-        {param vSize: '14px' /}
-        {param center: true /}
-        {param value: bonus($animal.dexterity_modifier) /}
-      {/call}
-
-      <div class="operator" style="padding-top: 25px">+</div>
-
-      {call .sheet_value}
-        {param label kind="html"}
-          Size<br/>
-          Modifier
-        {/param}
-        {param width: '12%' /}
-        {param size: '8px' /}
-        {param vSize: '14px' /}
-        {param center: true /}
-        {param value: '+0' /}
-      {/call}
-
-      <div class="operator" style="padding-top: 25px">+</div>
-
-      {call .sheet_value}
-        {param label kind="html"}
-          Natural <br/>
-          Armor
-        {/param}
-        {param width: '20%' /}
-        {param size: '8px' /}
-        {param vSize: '14px' /}
-        {param center: true /}
-        {param value: annotate($animal.combined_natural_armor) /}
-      {/call}
-
-      <div class="operator" style="padding-top: 25px">+</div>
-
-      {call .sheet_value}
-        {param label kind="html"}
-          Miscellaneous <br/>
-          Modifiers
-        {/param}
-        {param width: '20%' /}
-        {param size: '8px' /}
-        {param vSize: '14px' /}
-        {param center: true /}
-        {param value: '' /}
-      {/call}
-    </div>
-
-    <div class="inline"
-         style="width: 25%; vertical-align: top; margin-top: 10px;">
-      {call .sheet_value}
-        {param label: 'Touch AC' /}
-        {param width: '100%' /}
-        {param size: '14px' /}
-        {param vSize: '20px' /}
-        {param value: $animal.touch_armor_class /}
-        {param prefix: true /}
-        {param center: true /}
-      {/call}
-    </div>
-
-    <div class="inline"
-         style="width: 25%; vertical-align: top; margin-top: 10px;">
-      {call .sheet_value}
-        {param label: 'Flat-Footed AC' /}
-        {param width: '100%' /}
-        {param size: '14px' /}
-        {param vSize: '20px' /}
-        {param value: $animal.flat_footed_armor_class /}
-        {param prefix: true /}
-        {param center: true /}
-      {/call}
-    </div>
-
-    <div class="inline" style="width: 20%; margin-top: 10px;">
-      {call .sheet_subtitle}
-        {param title: 'Saving Throws' /}
-        {param nologo: true /}
-        {param nopadding: true /}
-      {/call}
-
-      <div class="sheet-row">
-        <div class="saves sheet-column" style="flex: 4; margin: 0">
-          <div>
-            {call .sheet_saves_value}
-              {param name: 'Fortitude' /}
-              {param ability: 'Constitution' /}
-              {param value: annotate($animal.combined_fortitude_save) /}
-              {param racial: $animal.racial_fortitude_modifier /}
-              {param ability_modifier: bonus($animal.constitution_modifier) /}
-              {param short: true /}
-            {/call}
-          </div>
-
-          <div>
-            {call .sheet_saves_value}
-              {param name: 'Reflex' /}
-              {param ability: 'Dexterity' /}
-              {param racial: $animal.racial_reflex_modifier /}
-              {param value: annotate($animal.combined_reflex_save) /}
-              {param ability_modifier: bonus($animal.dexterity_modifier) /}
-              {param short: true /}
-            {/call}
-          </div>
-
-          <div>
-            {call .sheet_saves_value}
-              {param name: 'Will' /}
-              {param ability: 'Wisdom' /}
-              {param racial: $animal.racial_will_modifier /}
-              {param value: annotate($animal.combined_will_save) /}
-              {param ability_modifier: bonus($animal.wisdom_modifier) /}
-              {param short: true /}
-            {/call}
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="inline" style="width: 20%; margin-top: 10px;">
-      {call .sheet_subtitle}
-        {param title: 'Attacks' /}
-        {param nologo: true /}
-        {param nopadding: true /}
-      {/call}
-   {foreach $weapon in $entry.weapons}
-     {if index($weapon) < 3}
-       {call .sheet_weapon}
-         {param gray: index($weapon) == 0 or index($weapon) == 2 /}
-         {param weapon: $weapon /}
-       {/call}
-     {/if}
-   {/foreach}
-   {for $i in range(length($entry.weapons), 3)}
-     {call .sheet_weapon}
-       {param gray: $i == 0 or $i == 2 /}
-     {/call}
-   {/for}
-
-
-
-  {/foreach}
-{/template}
-
-/** An ability of an animal companion. */
-{template .sheet_animal_companion_ability}
-  {@param total: string|html|number}
-  {@param modifier: string|html|number}
-  {@param label: string|html}
-  {call .sheet_value}
-    {param label: $label /}
-    {param width: '5%' /}
-    {param size: '12px' /}
-    {param vSize: '15px' /}
-    {param boxed: true /}
-    {param center: true /}
-    {param top: true /}
-    {param value kind="html"}
-      {$total}
-      <div class="size-tiny">
-        {bonus($modifier)}
-      </div>
-    {/param}
-  {/call}
-{/template}
 
 /** The langauges box. */
 {template .sheet_languages}
@@ -1519,7 +1217,7 @@
     {param title: 'Languages' /}
   {/call}
 
-  {annotate($entry.combined_languages)}
+  {annotate($entry.csombined_languages)}
 
 {/template}
 
@@ -1755,7 +1453,7 @@
 
   <div class="values boxed carrying-capacity"
        style="background-color: #eee;">
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Light<br />
         Load
@@ -1768,7 +1466,7 @@
         up to {$entry.light_load} lb
       {/param}
     {/call}
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Medium<br />
         Load
@@ -1781,7 +1479,7 @@
         up to {$entry.medium_load} lb
       {/param}
     {/call}
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Heavy<br />
         Load
@@ -1794,7 +1492,7 @@
         up to {$entry.heavy_load} lb
       {/param}
     {/call}
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Lift
       {/param}
@@ -1806,7 +1504,7 @@
         up to {$entry.lift_load}
       {/param}
     {/call}
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Drag
       {/param}
@@ -1818,7 +1516,7 @@
         up to {$entry.drag_load}
       {/param}
     {/call}
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Current<br />
         Load
@@ -2024,7 +1722,7 @@
  * @param item
  */
 {template .sheet_magical_item}
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         {$title}
         {if $subtitle}
@@ -2098,7 +1796,7 @@
 {template .sheet_weapon}
   <div class="weapon {if $gray}gray{/if}">
     <div>
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Weapon' /}
         {param width: '30%' /}
         {param size: '8px' /}
@@ -2113,8 +1811,8 @@
           {/if}
         {/param}
       {/call}
-    
-      {call .sheet_value}
+
+      {call dma.sheet.old_value}
         {param label: 'Attack Bonus' /}
         {param width: '30%' /}
         {param size: '8px' /}
@@ -2134,16 +1832,16 @@
            {/if}
          {/param}
       {/call}
-  
-      {call .sheet_value}
+
+      {call dma.sheet.old_value}
         {param label: 'Damage' /}
         {param width: '20%' /}
         {param size: '8px' /}
         {param vSize: '12px' /}
         {param value: $weapon ? $weapon.damage : ' ' /}
       {/call}
-    
-      {call .sheet_value}
+
+      {call dma.sheet.old_value}
         {param label: 'Critical' /}
         {param width: '20%' /}
         {param size: '8px' /}
@@ -2152,7 +1850,7 @@
       {/call}
     </div>
     <div>
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Range Increment' /}
         {param width: '30%' /}
         {param size: '8px' /}
@@ -2162,7 +1860,7 @@
           : ' ' /}
       {/call}
       
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Type' /}
         {param width: '20%' /}
         {param size: '8px' /}
@@ -2171,7 +1869,7 @@
       {/call}
 
       {if $weapon.player_notes.present}
-        {call .sheet_value}
+        {call dma.sheet.old_value}
           {param label: 'Notes' /}
           {param width: '50%' /}
           {param size: '8px' /}
@@ -2180,7 +1878,7 @@
         {/call}
       {else}
         {if $weapon.available_ammunition}
-          {call .sheet_value}
+          {call dma.sheet.old_value}
             {param label: 'Ammunition' /}
             {param width: '50%' /}
             {param size: '8px' /}
@@ -2196,7 +1894,7 @@
             {/param}
           {/call}
         {else}
-          {call .sheet_value}
+          {call dma.sheet.old_value}
             {param label: 'Notes' /}
             {param width: '50%' /}
             {param size: '8px' /}
@@ -2224,7 +1922,7 @@
       <div class="bottom">{$name}</div>
     </div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Total <br/>
         &nbsp;
@@ -2238,7 +1936,7 @@
     
     <div class="operator">=</div>
     
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Base Score +<br/>
         Racial Mod.
@@ -2254,7 +1952,7 @@
     
     <div class="operator">+</div>
     
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Enhcmnt<br/>
         Bonuses
@@ -2268,7 +1966,7 @@
   
     <div class="operator">+</div>
     
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Misc<br/>
         Bonuses
@@ -2282,7 +1980,7 @@
   
     <div class="operator">-</div>
     
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Misc<br/>
         Penalties
@@ -2294,7 +1992,7 @@
       {param value: '' /}
     {/call}
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         {$name}<br/>
         Modifier
@@ -2306,51 +2004,6 @@
       {param boxed: true /}
       {param value: $modifier /}
     {/call}
-  </div>
-{/template}
-
-/** Print a character sheet value. */
-{template .sheet_value}
-  {@param label: html|string}
-  {@param width: string}
-  {@param value: html|string}
-  {@param? center: bool}
-  {@param? boxed: bool}
-  {@param? size: string}
-  {@param? vSize: string}
-  {@param? prefix: bool}
-  {@param? white: bool}
-  {@param? top: bool}
-  {@param? inside: bool}
-  <div class="value-container{if $prefix} prefixed{/if}" 
-       style="width: {$width}">
-    {if $prefix}
-      <div class="value-label prefixed"
-           {if $size} style="font-size: {$size}"{/if}>
-        {$label}
-      </div>
-    {/if}      
-    {if $top}
-      <div class="value-label top 
-                  {if $center} center{/if}{if $inside} inside{/if}"
-           {if $size} style="font-size: {$size}"{/if}>
-        {$label}
-      </div>
-    {/if}      
-    <div class="value{if $center} center{/if}
-                {if $boxed} boxed{/if}
-                {if $white} white{/if}
-                {if $prefix} prefixed{/if}"
-                {if $vSize} style="font-size: {$vSize}"{/if}>
-      {if $value}{$value}{else}&nbsp;{/if}
-    </div>
-    {if not $prefix and not $top}
-      <div class="value-label{if $center} center{/if}
-                  {if $boxed} boxed{/if}"
-           {if $size} style="font-size: {$size}"{/if}>
-         {$label}
-      </div>
-    {/if}
   </div>
 {/template}
 

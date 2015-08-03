@@ -201,6 +201,7 @@ edit.maybeInsertLine = function(inID, inEvent, inElement)
 
 edit.insertLine = function(inID, inElement)
 {
+  console.log("insert", inID, inElement)
   var element = $(inElement);
   var clone = element.clone(false);
   element.parent().append(clone);

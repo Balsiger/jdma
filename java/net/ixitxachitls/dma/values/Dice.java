@@ -191,6 +191,11 @@ public class Dice extends Value<DiceProto>
     return m_dice != 1 && m_dice != 0 && m_number != 0;
   }
 
+  public boolean isOne()
+  {
+    return m_modifier == 1 && m_dice == m_number;
+  }
+
   @Override
   public String toString()
   {

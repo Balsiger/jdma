@@ -2981,6 +2981,18 @@ BODY.print
   margin-bottom: 20px;
 }
 
+.character-sheet .line {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+
+.character-sheet .column {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+}
+
 .character-sheet .value-container
 { 
   display: inline-block;
@@ -2994,6 +3006,13 @@ BODY.print
   font-size: 12px;
   padding: 5px 0 0 0;
   width: auto;
+  flex: 1;
+}
+
+.character-sheet .monster.skill-line
+{
+  width: 50%;
+  display: inline-block;
 }
 
 .character-sheet .value-container .value-label
@@ -3026,11 +3045,17 @@ BODY.print
   border: none;
 }
 
-.character-sheet .value-container .value.prefixed
+.character-sheet .value-container.prefixed .value-label
+{
+  border: none;
+}
+
+.character-sheet .value-container.prefixed .value
 {
   border-bottom: 1px solid black;
   display: inline-block;
   padding-bottom: 5px;
+  padding-left: 10px;
 }
 
 .character-sheet .value-container.prefixed 
@@ -3114,6 +3139,13 @@ BODY.print
 .character-sheet .groups
 {
   position: relative;
+}
+
+.character-sheet .grouptitle
+{
+  text-transform: uppercase;
+  font-size: 12px;
+  margin: 5px 0;
 }
 
 .character-sheet .group
@@ -3390,6 +3422,10 @@ BODY.print
 .character-sheet .unused
 {
   color: #a44;
+}
+
+.character-sheet .value-container.boxed {
+  border: 1px solid #888;
 }
 
 @media print

@@ -1426,6 +1426,7 @@ message MonsterProto
   repeated QualityProto quality = 17;
   repeated BaseMonsterProto.Language.Name language = 18;
   optional string given_name = 19;
+  optional string personality = 20;
 }
 
 message SkillProto

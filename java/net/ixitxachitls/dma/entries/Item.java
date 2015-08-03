@@ -37,6 +37,7 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.ItemProto;
+import net.ixitxachitls.dma.rules.Combat;
 import net.ixitxachitls.dma.values.AggregationState;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Area;
@@ -1254,7 +1255,8 @@ public class Item extends CampaignEntry
       int bonus = 0;
       if(isWeapon())
       {
-        boolean finesse = getPossessor().get().hasFeat("weapon finesse")
+        boolean finesse =
+            getPossessor().get().hasFeat(Combat.FEAT_WEAPON_FINESSE)
             && hasFinesse();
 
         Optional<WeaponStyle> style = getCombinedWeaponStyle().get();

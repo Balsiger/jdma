@@ -296,7 +296,7 @@ public class BaseMonster extends BaseEntry
 
     /** The parser for the advancement value. */
     public static final Parser<Advancement> PARSER =
-      new Parser<Advancement>(3)
+      new Parser<Advancement>(2)
       {
         @Override
         public Optional<Advancement> doParse(String inRange, String inSize)

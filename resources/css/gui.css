@@ -45,6 +45,7 @@ DIV.-gui-notification
   cursor:      pointer;
   box-shadow:  -3px -3px 7px #444;
   font-size:   small;
+  z-index:     10;
 }
 
 IMG.-gui-notification-image

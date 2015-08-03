@@ -79,7 +79,7 @@ public class SoyRenderer
     {
       s_defaultTemplate = new SoyTemplate("page", "errors", "about", "main",
                                  "navigation", "entry", "commands", "value",
-                                 "admin", "cards", "edit",
+                                 "admin", "cards", "edit", "sheet",
 
                                  "entries/basecharacters", "entries/characters",
                                  "entries/baseproducts", "entries/products",
