@@ -537,6 +537,8 @@ message BaseFeatProto
   optional ModifierProto damage_modifier = 9;
   optional int32 additional_attacks = 10;
   optional ConditionProto condition = 11;
+  optional ModifierProto initiative_modifier = 12;
+  repeated NameAndModifierProto skill_modifier = 13;
 }
 
 message BaseSkillProto
@@ -1023,7 +1025,7 @@ message BaseMonsterProto
     optional Reference reference = 1;
     optional ModifierProto modifier = 2;
   }
-  repeated SkillReference class_skill = 25;
+  repeated SkillReference class_skill = 25 [deprecated=true];
   repeated Reference feat = 26;
 
   enum Climate
@@ -1229,6 +1231,7 @@ message BaseMonsterProto
   repeated string proficiency = 44;
   optional bool quadruped = 45 [default=false];
   repeated QualityProto qualities = 46;
+  repeated SkillProto skill = 47;
 }
 
 message BaseEncounterProto

@@ -402,3 +402,9 @@ enum WeaponStyle
   THROWN = 8;
   TOUCH = 9;
 }
+
+message NameAndModifierProto
+{
+  optional string name = 1;
+  optional ModifierProto modifier = 2;
+}

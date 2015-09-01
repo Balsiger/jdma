@@ -126,6 +126,7 @@
           {foreach $skill in $entry.skills}
             {call dma.entries.skills.show}
               {param entry: $skill /}
+              {param monster: $entry /}
             {/call}
             {if not isLast($skill)}, {/if}
           {/foreach}
@@ -2250,6 +2251,7 @@
               {param field kind="html"}
                 {call dma.entries.skills.edit}
                   {param entry: $skill /}
+                  {param index: index($skill) /}
                 {/call}
               {/param}
             {/call}
@@ -2257,7 +2259,9 @@
             {call dma.edit.field_list_line}
               {param id: 'skill' /}
               {param field kind="html"}
-                {call dma.entries.skills.edit /}
+                {call dma.entries.skills.edit}
+                  {param index: 0 /}
+                {/call}
               {/param}
             {/call}
           {/foreach}

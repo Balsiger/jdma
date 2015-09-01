@@ -34,7 +34,9 @@ import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
 import net.ixitxachitls.dma.proto.Values.ModifierProto;
+import net.ixitxachitls.dma.proto.Values.NameAndModifierProto;
 import net.ixitxachitls.dma.values.Modifier;
+import net.ixitxachitls.dma.values.NameAndModifier;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.Condition;
@@ -102,8 +104,14 @@ public class BaseFeat extends BaseEntry
   /** The additional attacks. */
   protected Optional<Integer> m_additionalAttacks = Optional.absent();
 
+  /** The initiative modifier. */
+  protected Optional<Modifier> m_initiativeModifier = Optional.absent();
+
   /** The condition when this feat applies. */
   protected Optional<Condition> m_condition = Optional.absent();
+
+  /** The skill modifiers given by the feat. */
+  protected List<NameAndModifier> m_skillModifiers = new ArrayList<>();
 
   /** The effects of the feat. */
   @Deprecated
@@ -168,6 +176,11 @@ public class BaseFeat extends BaseEntry
   public Optional<Modifier> getAttackModifier()
   {
     return m_attackModifier;
+  }
+
+  public Optional<Modifier> getInitiativeModifier()
+  {
+    return m_initiativeModifier;
   }
 
   /**
@@ -248,8 +261,14 @@ public class BaseFeat extends BaseEntry
     m_additionalAttacks = inValues.use("additional_attacks",
                                        m_additionalAttacks,
                                        Value.INTEGER_PARSER);
+    m_initiativeModifier = inValues.use("initiative_modifier",
+                                        m_initiativeModifier,
+                                        Modifier.PARSER);
     m_condition = inValues.use("condition", m_condition, Condition.PARSER,
                                "generic", "weapon_style");
+    m_skillModifiers = inValues.use("skill", m_skillModifiers,
+                                    NameAndModifier.PARSER,
+                                    "name", "modifier");
 
     m_effects = inValues.use("effect", m_effects, Effect.PARSER,
                              "affects", "name", "modifier", "text");
@@ -286,8 +305,14 @@ public class BaseFeat extends BaseEntry
     if(m_additionalAttacks.isPresent())
       builder.setAdditionalAttacks(m_additionalAttacks.get());
 
+    if(m_initiativeModifier.isPresent())
+      builder.setInitiativeModifier(m_initiativeModifier.get().toProto());
+
     if(m_condition.isPresent())
       builder.setCondition(m_condition.get().toProto());
+
+    for(NameAndModifier skill : m_skillModifiers)
+      builder.addSkillModifier(skill.toProto());
 
     for(Effect effect : m_effects)
     {
@@ -350,8 +375,15 @@ public class BaseFeat extends BaseEntry
     if(proto.hasAdditionalAttacks())
       m_additionalAttacks = Optional.of(proto.getAdditionalAttacks());
 
+    if(proto.hasInitiativeModifier())
+      m_initiativeModifier =
+          Optional.of(Modifier.fromProto(proto.getInitiativeModifier()));
+
     if(proto.hasCondition())
       m_condition = Optional.of(Condition.fromProto(proto.getCondition()));
+
+    for(NameAndModifierProto skill : proto.getSkillModifierList())
+      m_skillModifiers.add(NameAndModifier.fromProto(skill));
 
     for(BaseFeatProto.Effect effect : proto.getEffectList())
       m_effects.add(new Effect(Affects.fromProto(effect.getAffects()),
@@ -363,6 +395,20 @@ public class BaseFeat extends BaseEntry
                                    (effect.getModifier()))
                                  : Optional.<Modifier>absent(),
                                Optional.<String>absent()));
+  }
+
+  public List<NameAndModifier> getSkillModifiers()
+  {
+    return m_skillModifiers;
+  }
+
+  public Modifier getSkillModifier(String inSkill)
+  {
+    for(NameAndModifier skill : m_skillModifiers)
+      if(skill.hasName(inSkill))
+        return skill.getModifier();
+
+    return new Modifier();
   }
 
   @Override

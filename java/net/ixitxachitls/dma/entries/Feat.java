@@ -28,6 +28,7 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.FeatProto;
 import net.ixitxachitls.dma.values.Condition;
 import net.ixitxachitls.dma.values.Modifier;
+import net.ixitxachitls.dma.values.NameAndModifier;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.FeatType;
 import net.ixitxachitls.util.CommandLineParser;
@@ -129,7 +130,7 @@ public class Feat extends NestedEntry
   }
 
   /**
-   * Get the attack modifier provided by this quality.
+   * Get the attack modifier provided by this feat.
    *
    * @return the attack modifier
    */
@@ -141,8 +142,17 @@ public class Feat extends NestedEntry
     return new Modifier();
   }
 
+  public Modifier initiativeModifier()
+  {
+    if(getBase().isPresent()
+        && getBase().get().getInitiativeModifier().isPresent())
+      return getBase().get().getInitiativeModifier().get();
+
+    return new Modifier();
+  }
+
   /**
-   * Get the damage modifier provided by this quality.
+   * Get the damage modifier provided by this feat.
    *
    * @return the damage modifier
    */
@@ -150,6 +160,14 @@ public class Feat extends NestedEntry
   {
     if(getBase().isPresent() && getBase().get().getDamageModifier().isPresent())
       return getBase().get().getDamageModifier().get();
+
+    return new Modifier();
+  }
+
+  public Modifier skillModifier(String inSkill)
+  {
+    if(getBase().isPresent())
+      return getBase().get().getSkillModifier(inSkill);
 
     return new Modifier();
   }

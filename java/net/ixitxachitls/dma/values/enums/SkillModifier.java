@@ -30,7 +30,7 @@ import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
 import net.ixitxachitls.dma.values.Parser;
 
 /**
- * The possible sizes in the game.
+ * The possible skill modifiers in the game.
  *
  * @file SkillModifier.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)

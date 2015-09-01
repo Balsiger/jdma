@@ -22,6 +22,7 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.google.common.base.Optional;
@@ -72,6 +73,76 @@ public class Dice extends Value<DiceProto>
       {
         return Optional.absent();
       }
+    }
+  }
+
+  public static class List
+  {
+    public List()
+    {
+      m_die = new ArrayList<>();
+    }
+
+    public List(Dice inValue)
+    {
+      this();
+
+      m_die.add(inValue);
+    }
+
+    private List(java.util.List<Dice> inValues) {
+      m_die = inValues;
+    }
+
+    private final java.util.List<Dice> m_die;
+
+    public List add(Dice inValue)
+    {
+      java.util.List<Dice> die = new ArrayList<>();
+      for(Dice dice : m_die)
+        if(dice.canAdd(inValue))
+          die.add(dice.add(inValue));
+        else
+          die.add(dice);
+
+      return new List(die);
+    }
+
+    public List add(List inValues)
+    {
+      java.util.List<Dice> die = new ArrayList<>();
+      for(Dice value : inValues.m_die)
+        for(Dice dice : m_die)
+          if(die.add(value))
+            die.add(dice.add(value));
+          else
+            die.add(dice);
+
+      return new List(die);
+    }
+
+    public List add(int inModifier)
+    {
+      java.util.List<Dice> die = new ArrayList<>();
+      for(Dice dice : m_die)
+        die.add(dice.add(inModifier));
+
+      return new List(die);
+    }
+
+    public List addPerDice(int inModifier)
+    {
+      java.util.List<Dice> die = new ArrayList<>();
+      for(Dice dice : m_die)
+        die.add(dice.add(dice.getNumber() * inModifier));
+
+      return new List(die);
+    }
+
+    @Override
+    public String toString()
+    {
+      return Strings.COMMA_JOINER.join(m_die);
     }
   }
 
@@ -191,6 +262,11 @@ public class Dice extends Value<DiceProto>
     return m_dice != 1 && m_dice != 0 && m_number != 0;
   }
 
+  public boolean isZero()
+  {
+    return m_modifier == 0 && m_dice == m_number;
+  }
+
   public boolean isOne()
   {
     return m_modifier == 1 && m_dice == m_number;
@@ -232,7 +308,7 @@ public class Dice extends Value<DiceProto>
    */
   public Dice add(Dice inValue)
   {
-    if(m_number > 0 && inValue.m_number > 0 && m_dice != inValue.m_dice)
+    if(!canAdd(inValue))
       throw new UnsupportedOperationException("can only add same dice");
 
     int number = m_number + inValue.m_number;
@@ -240,6 +316,16 @@ public class Dice extends Value<DiceProto>
     int modifier = m_modifier + inValue.m_modifier;
 
     return new Dice(number, dice, modifier);
+  }
+
+  public boolean canAdd(Dice inValue)
+  {
+    return m_number == 0 || inValue.m_number == 0 || m_dice != inValue.m_dice;
+  }
+
+  public Dice add(int inModifier)
+  {
+    return new Dice(m_number, m_dice, m_modifier + inModifier);
   }
 
   /** Multiply the dice into a new dice.

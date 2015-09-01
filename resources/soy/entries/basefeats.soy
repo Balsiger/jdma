@@ -168,10 +168,29 @@
           {param color: '#0aa' /}
         {/call}
       {/if}
+      {if $entry.initiative_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Initiative' /}
+          {param value: $entry.initiative_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
       {if $entry.condition.present}
         {call dma.entry.value}
           {param label: 'Condition' /}
           {param value: $entry.condition /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.skill_modifiers}
+        {call dma.entry.value}
+          {param label: 'Skills' /}
+          {param value kind="html"}
+            {foreach $skill in $entry.skill_modifiers}
+              {$skill.name} {$skill.modifier}
+              {if not isLast($skill)}; {/if}
+            {/foreach}
+          {/param}
           {param color: '#0aa' /}
         {/call}
       {/if}
@@ -361,6 +380,14 @@
         {param validate: 'number' /}
         {param color: '#0aa' /}
       {/call}
+      {call dma.edit.value}
+        {param name: 'initiative_modifier' /}
+        {param label: 'Initiative' /}
+        {param value: $entry.initiative_modifier.present
+          ? $entry.initiative_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
       {call dma.edit.generic_value}
         {param label: 'Condition' /}
         {param value kind="html"}
@@ -395,8 +422,8 @@
                       'name': 'effect.affects',
                       'value': $effect.affects.string,
                       'type': 'selection',
-                      'choices': $effect.affects.names,  
-                      'caption': 'affects'                 
+                      'choices': $effect.affects.names,
+                      'caption': 'affects'
                     ],
                     [
                       'name': 'effect.name',
@@ -406,7 +433,7 @@
                     ],
                     [
                       'name': 'effect.modifier',
-                      'value': $effect.modifier.present 
+                      'value': $effect.modifier.present
                         ? $effect.modifier.get : '',
                       'validate': 'modifier',
                       'caption': 'modifier'
@@ -428,7 +455,7 @@
                       'value': '',
                       'type': 'selection',
                       'choices': $ij.Affects.names,
-                      'caption': 'affects'                 
+                      'caption': 'affects'
                     ],
                     [
                       'name': 'effect.name',
@@ -455,7 +482,58 @@
           {/call}
         {/param}
         {param validate: 'non-empty' /}
-      {/call}    
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'skill' /}
+        {param color: '#0aa' /}
+        {param label: 'Skills' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $skill in $entry.skill_modifiers}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'skill.name',
+                      'value': $skill.name,
+                      'validate': 'any',
+                      'autocomplete': 'base skill/name',
+                      'caption': 'name'
+                    ],
+                    [
+                      'name': 'skill.modifier',
+                      'value': $skill.modifier,
+                      'validate': 'modifier',
+                      'caption': 'modifier'
+                    ]
+                  ] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'skill.name',
+                      'value': '',
+                      'validate': 'any',
+                      'autocomplete': 'base skill/name',
+                      'caption': 'name'
+                    ],
+                    [
+                      'name': 'skill.modifier',
+                      'value': '',
+                      'validate': 'modifier',
+                      'caption': 'modifier'
+                    ]
+                  ] /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+        {param validate: 'non-empty' /}
+      {/call}
       {call dma.edit.generic_value}
         {param name: 'references' /}
         {param color: '#0aa' /}

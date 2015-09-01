@@ -25,25 +25,25 @@
 /** Show a skill. */
 {template .show}
   {@param entry: ?}
-  {$entry.name} {$entry.ranks}
+  {@param monster: ?}
+  {$entry.name} {bonus(call($entry, 'modifier', $monster))}
 {/template}
 
-/**
- * Editing the skill.
- *
- * @param? entry The skill to edit.
- */
+/** Editing the skill. */
 {template .edit}
+  {@param? entry: ?}
+  {@param? prefix: any}
+  {@param index: number}
   {call dma.edit.field_selection}
-    {param name: 'skill.name' /}
-    {param caption: 'Name' /}
-    {param value: $entry ? $entry.name : '' /}
+    {param name: ($prefix ? $prefix : '') + 'skill@' + $index + '.name' /}
+    {param caption: 'name' /}
+    {param value: $entry ? lower($entry.name) : '' /}
     {param choices: $ij.Skill.available_skills /}
     {param class: 'narrow' /}
   {/call}
   {call dma.edit.field_input}
-    {param name: 'skill.ranks' /}
-    {param caption: 'Ranks' /}
+    {param name: ($prefix ? $prefix : '') + 'skill@' + $index + '.ranks' /}
+    {param caption: 'ranks' /}
     {param value: $entry ? $entry.ranks : '' /}
     {param validate: 'number' /}
     {param width: '25%' /}

@@ -41,6 +41,7 @@
   {@param color: string}
   {@param? title: html}
   {@param? noprint: bool}
+  {@param? nodescriptions: bool}
   <div class="show entry {$type}{if $noprint} no-print{/if}">
 
     {call .toolbar}
@@ -88,17 +89,19 @@
            {param color: $color /}
          {/call}
        {/if}
-       
-      {if def($entry.description)}
-        <div class="_new_value _new_description">
-          {commands(annotate($entry.combined_description))}
-        </div>
-      {/if}
+
+      {if not $nodescriptions}
+        {if def($entry.description)}
+          <div class="_new_value _new_description">
+            {commands(annotate($entry.combined_description))}
+          </div>
+        {/if}
         
-      {if def($entry.short_description)}
-        <div class="_new_value _new_short-description">
-          {commands(annotate($entry.combined_short_description))}
-        </div>
+        {if def($entry.short_description)}
+          <div class="_new_value _new_short-description">
+            {commands(annotate($entry.combined_short_description))}
+          </div>
+        {/if}
       {/if}
 
        <div class="_new_values">

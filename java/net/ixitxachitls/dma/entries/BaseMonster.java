@@ -31,11 +31,13 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Values.SpeedProto;
+import net.ixitxachitls.dma.rules.Monsters;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
@@ -48,6 +50,7 @@ import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.dma.values.enums.AlignmentStatus;
 import net.ixitxachitls.dma.values.enums.AttackMode;
@@ -226,8 +229,8 @@ public class BaseMonster extends BaseEntry
           if(!number.isPresent())
             return Optional.absent();
 
-          Optional<String> plus =
-            inPlus.isEmpty() ? Optional.<String>absent() : Optional.of(inPlus);
+          Optional<String> plus = inPlus.trim().isEmpty()
+              ? Optional.<String>absent() : Optional.of(inPlus);
 
           return Optional.of(new Group(organization.get(), number.get(), plus));
         }
@@ -510,10 +513,10 @@ public class BaseMonster extends BaseEntry
   protected List<Quality> m_qualities = new ArrayList<>();
 
   /** The class skills. */
-  protected List<String> m_classSkills = new ArrayList<>();
+  protected List<Skill> m_skills = new ArrayList<>();
 
   /** The feats. */
-  protected List<String> m_feats = new ArrayList<>();
+  protected List<Feat> m_feats = new ArrayList<>();
 
   /** The terrain. */
   protected Terrain m_terrain = Terrain.UNKNOWN;
@@ -562,6 +565,7 @@ public class BaseMonster extends BaseEntry
 
   /** The standard possessions. */
   protected List<String> m_possessions = new ArrayList<>();
+  private List<Optional<BaseItem>> m_items = new ArrayList<>();
 
   /** The good saving throws. */
   protected List<Save> m_goodSaves = new ArrayList<>();
@@ -693,6 +697,40 @@ public class BaseMonster extends BaseEntry
     return m_hitDice;
   }
 
+  public Dice.List totalHitDie()
+  {
+    Optional<Integer> constitution = getCombinedConstitution().get();
+
+    if (m_hitDice.isPresent())
+      if(constitution.isPresent())
+        return new Dice.List(m_hitDice.get())
+            .addPerDice(Monsters.abilityModifier(constitution.get()));
+      else
+      return new Dice.List(m_hitDice.get());
+
+    Dice.List die = new Dice.List();
+    for (BaseEntry base : getBaseEntries())
+      die = die.add(((BaseMonster)base).totalHitDie());
+
+    if(constitution.isPresent())
+      die.addPerDice(Monsters.abilityModifier(constitution.get()));
+
+    return die;
+  }
+
+  public int initiative()
+  {
+    Optional<Integer> dex = getCombinedDexterity().get();
+    if (!dex.isPresent())
+      return 0;
+
+    Modifier modifier = new Modifier();
+    for (Feat feat : m_feats)
+      modifier = (Modifier)modifier.add(feat.initiativeModifier());
+
+    return Monsters.abilityModifier(dex.get()) + modifier.totalModifier();
+  }
+
   public Annotated.Integer getCombinedHitDie()
   {
     if(m_hitDice.isPresent())
@@ -774,6 +812,170 @@ public class BaseMonster extends BaseEntry
     return m_naturalArmor;
   }
 
+  protected Modifier naturalArmor()
+  {
+    Optional<Modifier> natural = getCombinedNaturalArmor().get();
+    if(natural.isPresent())
+      return natural.get();
+
+    return new Modifier();
+  }
+
+  /**
+   * Get a monster's total armor class.
+   *
+   * @return the armor class modifier
+   */
+  public Modifier armorClass()
+  {
+    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
+                                  Optional.<String>absent(),
+                                  Optional.<Modifier>absent());
+
+    armor = (Modifier)armor.add(naturalArmor());
+    armor = (Modifier)armor.add(dexterityModifier());
+    armor = (Modifier)armor.add(sizeModifier());
+
+    return armor;
+  }
+
+  public int abilityModifier(Ability inAbility)
+  {
+    switch(inAbility)
+    {
+      case NONE:
+      case UNKNOWN:
+        return 0;
+
+      case STRENGTH:
+        return strengthBonus();
+
+      case DEXTERITY:
+        return dexterityBonus();
+
+      case CONSTITUTION:
+        return constitutionBonus();
+
+      case INTELLIGENCE:
+        return intelligenceBonus();
+
+      case WISDOM:
+        return wisdomBonus();
+
+      case CHARISMA:
+        return charismaBonus();
+    }
+
+    return 0;
+  }
+
+  public int strengthBonus()
+  {
+    return Monsters.abilityModifier(getCombinedStrength().get());
+  }
+
+  public int dexterityBonus()
+  {
+    return Monsters.abilityModifier(getCombinedDexterity().get());
+  }
+
+  public int constitutionBonus()
+  {
+    return Monsters.abilityModifier(getCombinedConstitution().get());
+  }
+
+  public int intelligenceBonus()
+  {
+    return Monsters.abilityModifier(getCombinedIntelligence().get());
+  }
+
+  public int wisdomBonus()
+  {
+    return Monsters.abilityModifier(getCombinedWisdom().get());
+  }
+
+  public int charismaBonus()
+  {
+    return Monsters.abilityModifier(getCombinedCharisma().get());
+  }
+
+  public Modifier dexterityModifier()
+  {
+    Optional<Integer> dex = getCombinedDexterity().get();
+    if (dex.isPresent())
+      return new Modifier(Monsters.abilityModifier(dex.get()),
+                          Modifier.Type.ABILITY, Optional.<String>absent(),
+                          Optional.<Modifier>absent());
+
+    return new Modifier();
+  }
+
+
+
+  public Modifier sizeModifier()
+  {
+    Optional<Size> size = getCombinedSize().get();
+    if(size.isPresent())
+      return new Modifier(size.get().modifier(), Modifier.Type.SIZE,
+                          Optional.<String>absent(),
+                          Optional.<Modifier>absent());
+
+    return new Modifier();
+  }
+
+  public Modifier armorClassFlatfooted()
+  {
+    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
+                                  Optional.<String>absent(),
+                                  Optional.<Modifier>absent());
+
+    armor = (Modifier)armor.add(naturalArmor());
+    armor = (Modifier)armor.add(sizeModifier());
+
+    return armor;
+  }
+
+  public Modifier armorClassTouch()
+  {
+    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
+                                  Optional.<String>absent(),
+                                  Optional.<Modifier>absent());
+
+    armor = (Modifier)armor.add(dexterityModifier());
+    armor = (Modifier)armor.add(sizeModifier());
+
+    return armor;
+  }
+
+  /**
+   * Get the monster's armor bonus.
+   *
+   * @return the armor bonus
+   */
+  /*
+  public Modifier armorBonus()
+  {
+    Modifier bonus = null;
+    for(Item armor : getArmor())
+    {
+      if(armor.getArmorType().isShield())
+        continue;
+
+      Optional<Modifier> modifier = armor.getArmorClass();
+      if(modifier.isPresent())
+        if(bonus == null)
+          bonus = modifier.get();
+        else
+          bonus = (Modifier) bonus.add(modifier.get());
+    }
+
+    if(bonus == null)
+      return new Modifier();
+
+    return bonus;
+  }*/
+
+
   /**
    * Get the combined natural armor.
    *
@@ -820,8 +1022,32 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  public int sizeGrappleBonus()
+  {
+    Annotated<Optional<Size>> size = getCombinedSize();
+    if(!size.get().isPresent())
+      return 0;
+
+    return size.get().get().grapple();
+  }
+
+  public int grappleBonus()
+  {
+    int grapple = 0;
+    if (getCombinedBaseAttack().get().isPresent())
+      grapple += getCombinedBaseAttack().get().get();
+
+    Optional<Integer> strength = getCombinedStrength().get();
+    if(strength.isPresent())
+      grapple += Monsters.abilityModifier(strength.get());
+
+    grapple += sizeGrappleBonus();
+
+    return grapple;
+  }
+
   /**
-   * Get the monster's strenght score.
+   * Get the monster's strength score.
    *
    * @return the strength score
    */
@@ -1079,6 +1305,63 @@ public class BaseMonster extends BaseEntry
     return Collections.unmodifiableList(m_primaryAttacks);
   }
 
+  public int attackBonus(Attack inAttack)
+  {
+    int bonus = 0;
+
+    Optional<Integer> baseAttack = getCombinedBaseAttack().get();
+    if(baseAttack.isPresent())
+      bonus += baseAttack.get();
+
+    switch(inAttack.getStyle())
+    {
+      case UNKNOWN:
+        break;
+
+      case MELEE:
+        // TODO: missing handling of weapon finesse with dexterity
+        bonus += Monsters.abilityModifier(getCombinedStrength().get());
+        break;
+
+      case RANGED:
+        bonus += Monsters.abilityModifier(getCombinedDexterity().get());
+        break;
+    }
+
+    bonus += sizeModifier().totalModifier();
+
+    return bonus;
+  }
+
+  public int secondaryAttackBonus(Attack inAttack)
+  {
+    return attackBonus(inAttack) - Monsters.SECONDARY_ATTACK_PENALTY;
+  }
+
+  public Damage damage(Attack inAttack)
+  {
+    Damage damage = inAttack.getDamage();
+
+    int strength = Monsters.abilityModifier(getCombinedStrength().get());
+    if(strength > 0)
+      damage = (Damage) damage.add(new Damage(new Dice(0, 0, strength)));
+
+    return damage;
+  }
+
+  public Damage secondaryDamage(Attack inAttack)
+  {
+    Damage damage = inAttack.getDamage();
+
+    int strength =
+        (int) (Monsters.abilityModifier(getCombinedStrength().get())
+            * Monsters.SECONDARY_DAMAGE_FACTOR);
+    if(strength > 0)
+      damage = (Damage) damage.add(new Damage(new Dice(0, 0, strength)));
+
+    return damage;
+  }
+
   /**
    * Get all the combined and annotated primary attacks.
    *
@@ -1225,9 +1508,9 @@ public class BaseMonster extends BaseEntry
    *
    * @return a list of the class skills
    */
-  public List<String> getClassSkills()
+  public List<Skill> getSkills()
   {
-    return Collections.unmodifiableList(m_classSkills);
+    return Collections.unmodifiableList(m_skills);
   }
 
   /**
@@ -1235,24 +1518,99 @@ public class BaseMonster extends BaseEntry
    *
    * @return the class skills
    */
-  public Annotated<List<String>> getCombinedClassSkills()
+  public Annotated<List<Skill>> getCombinedSkills()
   {
-    if(!m_classSkills.isEmpty())
-      return new Annotated.List<String>(m_classSkills, getName());
+    if(!m_skills.isEmpty())
+      return new Annotated.List<Skill>(m_skills, getName());
 
-    Annotated<List<String>> combined = new Annotated.List<>();
+    Annotated<List<Skill>> combined = new Annotated.List<>();
     for(BaseEntry base : getBaseEntries())
-      combined.add(((BaseMonster)base).getCombinedClassSkills());
+      combined.add(((BaseMonster)base).getCombinedSkills());
 
     return combined;
   }
+
+  public int skillRanks(String inName)
+  {
+    Optional<BaseSkill> skill =
+        DMADataFactory.get().getEntry(new EntryKey(inName, BaseSkill.TYPE));
+    if(skill.isPresent())
+      return abilityModifier(skill.get().getAbility());
+
+    return 0;
+  }
+
+  public int skillPoints()
+  {
+    Optional<MonsterType> combined = getCombinedMonsterType().get();
+    MonsterType type;
+    if (combined.isPresent())
+      type = combined.get();
+    else
+      type = MonsterType.UNKNOWN;
+
+    int intBonus = Math.max(1, intelligenceBonus());
+    int hd;
+    Optional<Integer> hitDie = getCombinedHitDie().get();
+    if (hitDie.isPresent())
+      hd = hitDie.get();
+    else
+      hd = 1;
+
+    switch(type)
+    {
+      case UNKNOWN:
+      case ABERRATION:
+      case ANIMAL:
+      case CONSTRUCT:
+      case ELEMENTAL:
+      case GIANT:
+      case HUMANOID:
+      case MAGICAL_BEAST:
+      case MONSTROUS_HUMANOID:
+      case OOZE:
+      case PLANT:
+      case VERMIN:
+      default:
+        return (2 + intBonus) * (hd + 3);
+
+      case UNDEAD:
+        return (4 + intBonus) * (hd + 3);
+
+      case DRAGON:
+      case FEY:
+        return (6 + intBonus) * (hd + 3);
+
+      case OUTSIDER:
+        return (8 + intBonus) * (hd + 3);
+    }
+  }
+
+  public int skillPointsUsed()
+  {
+    int used = 0;
+    for(Skill skill : m_skills)
+      used += skill.getRanks();
+
+    return used;
+  }
+
+  public Modifier skillModifier(String inName)
+  {
+    Modifier modifier = new Modifier();
+    for(Feat feat : m_feats)
+      modifier = (Modifier)modifier.add(feat.skillModifier(inName));
+
+    return modifier;
+  }
+
 
   /**
    * Get the monster's feats.
    *
    * @return the feats
    */
-  public List<String> getFeats()
+  public List<Feat> getFeats()
   {
     return Collections.unmodifiableList(m_feats);
   }
@@ -1262,12 +1620,12 @@ public class BaseMonster extends BaseEntry
    *
    * @return the feats
    */
-  public Annotated<List<String>> getCombinedFeats()
+  public Annotated<List<Feat>> getCombinedFeats()
   {
     if(!m_feats.isEmpty())
-      return new Annotated.List<String>(m_feats, getName());
+      return new Annotated.List<Feat>(m_feats, getName());
 
-    Annotated<List<String>> combined = new Annotated.List<>();
+    Annotated<List<Feat>> combined = new Annotated.List<>();
     for(BaseEntry base : getBaseEntries())
       combined.add(((BaseMonster)base).getCombinedFeats());
 
@@ -1692,6 +2050,18 @@ public class BaseMonster extends BaseEntry
     return m_possessions;
   }
 
+  private List<Optional<BaseItem>> items()
+  {
+    if(m_items.isEmpty() && !m_possessions.isEmpty())
+    {
+      for(String possession : m_possessions)
+        m_items.add(DMADataFactory.get().<BaseItem>getEntry(
+            new EntryKey(possession, BaseItem.TYPE)));
+    }
+
+    return m_items;
+  }
+
   /**
    * Get the combined and annotated list of possessions.
    *
@@ -1850,10 +2220,17 @@ public class BaseMonster extends BaseEntry
    *
    * @return      the maximally possible hit points
    */
-  // public int getMaxHP()
-  // {
-  //   return (int)m_hitDice.getMax();
-  // }
+  public int getMaxHP()
+  {
+    if(m_hitDice.isPresent())
+      return (int)m_hitDice.get().getMax();
+
+    int max = 0;
+    for(BaseEntry base : getBaseEntries())
+      max += ((BaseMonster)base).getMaxHP();
+
+    return max;
+  }
 
   /**
    * Determine the minimally possible hit points (without any modifiers).
@@ -3404,8 +3781,8 @@ public class BaseMonster extends BaseEntry
     m_specialAttacks = inValues.use("special_attack", m_specialAttacks);
     m_specialQualities = inValues.use("special_quality", m_specialQualities);
     m_qualities = inValues.useEntries("quality", m_qualities, Quality.CREATOR);
-    m_classSkills = inValues.use("class_skill", m_classSkills);
-    m_feats = inValues.use("feats", m_feats);
+    m_skills = inValues.useEntries("skill", m_skills, Skill.CREATOR);
+    m_feats = inValues.useEntries("feat", m_feats, Feat.CREATOR);
     m_terrain = inValues.use("terrain", m_terrain, Terrain.PARSER);
     m_climate = inValues.use("climate", m_climate, Climate.PARSER);
     m_cr = inValues.use("cr", m_cr, Rational.PARSER);
@@ -3541,17 +3918,12 @@ public class BaseMonster extends BaseEntry
     for(Quality quality : m_qualities)
       builder.addQualities(quality.toProto());
 
-    for(String skill : m_classSkills)
-      builder.addClassSkill
-        (BaseMonsterProto.SkillReference.newBuilder()
-         .setReference(BaseMonsterProto.Reference.newBuilder()
-                       .setName(skill)
-                       .build())
-                       .build());
+    for(Skill skill : m_skills)
+      builder.addSkill(skill.toProto());
 
-    for(String feat : m_feats)
+    for(Feat feat : m_feats)
       builder.addFeat(BaseMonsterProto.Reference.newBuilder()
-                      .setName(feat)
+                      .setName(feat.getName())
                       .build());
 
     if(m_climate != Climate.UNKNOWN)
@@ -3730,12 +4102,15 @@ public class BaseMonster extends BaseEntry
     for(Entries.QualityProto quality : proto.getQualitiesList())
       m_qualities.add(Quality.fromProto(quality));
 
+    for(Entries.SkillProto skill : proto.getSkillList())
+      m_skills.add(Skill.fromProto(skill));
+
     for(BaseMonsterProto.SkillReference reference
-      : proto.getClassSkillList())
-      m_classSkills.add(reference.getReference().getName());
+        : proto.getClassSkillList())
+      m_skills.add(new Skill(reference.getReference().getName()));
 
     for(BaseMonsterProto.Reference feat : proto.getFeatList())
-      m_feats.add(feat.getName());
+      m_feats.add(new Feat(feat.getName()));
 
     if(proto.hasClimate())
       m_climate = Climate.fromProto(proto.getClimate());
@@ -3752,7 +4127,9 @@ public class BaseMonster extends BaseEntry
       m_organizations.add
       (new Group(Organization.fromProto(org.getType()),
                  Dice.fromProto(org.getNumber()),
-                 Optional.of(Strings.COMMA_JOINER.join(pluses))));
+                 pluses.isEmpty()
+                     ? Optional.<String>absent()
+                     : Optional.of(Strings.COMMA_JOINER.join(pluses))));
     }
 
     if(proto.hasChallengeRating())

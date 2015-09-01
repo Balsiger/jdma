@@ -150,6 +150,8 @@ DIV.subtitletext, DIV.subtitletext A
 .size-huge     { font-size: xx-large;  }
 .size-huger    { font-size: 500%;      }
 
+.bold { font-weight: bold; }
+
 /* special colors */
 .color-light { color: #AAAAAA; }
 
@@ -3537,4 +3539,14 @@ DIV.inline
   width: 25px !important;
   background-position: -224px;
 }
+
+.stats .line {
+  margin-bottom: 5px;
+}
+
+.paragraph {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 

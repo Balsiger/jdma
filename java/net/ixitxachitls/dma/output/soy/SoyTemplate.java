@@ -406,6 +406,20 @@ public class SoyTemplate
           return StringData.forValue("+" + data.getValue());
       }
 
+      if(inArgs.get(0) instanceof SoyValue
+        && ((SoyValue)inArgs.get(0)).getValue() instanceof Optional)
+      {
+        Optional optional = (Optional)((SoyValue)inArgs.get(0)).getValue();
+        if(optional.isPresent())
+          if (optional.get() instanceof Integer)
+            return StringData.forValue("+" + optional.get());
+          else
+            return StringData.forValue(optional.get().toString());
+        else
+          return StringData.forValue("+0");
+      }
+
+
       return inArgs.get(0);
     }
   }

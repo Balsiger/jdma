@@ -39,6 +39,7 @@ import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
 import net.ixitxachitls.dma.rules.CarryingCapacity;
 import net.ixitxachitls.dma.rules.Combat;
+import net.ixitxachitls.dma.rules.Monsters;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
@@ -656,9 +657,6 @@ public class Monster extends CampaignEntry
   /** The feats. */
   protected List<Feat> m_feats = new ArrayList<>();
 
-  /** The actual maximal number of hit points the monster can have. */
-  protected int m_maxHP = 0;
-
   /** The actual number of hit points the monster currently has. */
   protected int m_hp = 0;
 
@@ -965,21 +963,6 @@ public class Monster extends CampaignEntry
   }
   */
 
-  /**
-   * Compute the ability modifier for the given score.
-   *
-   * @param       inScore the ability score to compute for
-   *
-   * @return      the compute modifier
-   */
-  public int abilityModifier(long inScore)
-  {
-    if(inScore < 0)
-      return 0;
-
-    return (int) (inScore / 2) - 5;
-  }
-
   public int abilityModifier(String inAbility)
   {
     Optional<Ability> ability = Ability.fromString(inAbility);
@@ -1092,8 +1075,8 @@ public class Monster extends CampaignEntry
     for(BaseEntry base : getBaseEntries())
     {
       List<Feat> baseFeats = new ArrayList<>();
-      for(String feat : ((BaseMonster)base).getCombinedFeats().get())
-        baseFeats.add(new Feat(feat));
+      for(Feat feat : ((BaseMonster)base).getCombinedFeats().get())
+        baseFeats.add(feat);
 
       feats.add(new Annotated.List<>(baseFeats, base.getName()));
     }
@@ -1198,7 +1181,7 @@ public class Monster extends CampaignEntry
    */
   public int getStrengthModifier()
   {
-    return abilityModifier(totalStrength());
+    return Monsters.abilityModifier(totalStrength());
   }
 
   /**
@@ -1254,7 +1237,7 @@ public class Monster extends CampaignEntry
    */
   public int getConstitutionModifier()
   {
-    return abilityModifier(totalConstitution());
+    return Monsters.abilityModifier(totalConstitution());
   }
 
   /**
@@ -1313,7 +1296,7 @@ public class Monster extends CampaignEntry
    */
   public int getDexterityModifier()
   {
-    return abilityModifier(totalDexterity());
+    return Monsters.abilityModifier(totalDexterity());
   }
 
   /**
@@ -1370,7 +1353,7 @@ public class Monster extends CampaignEntry
    */
   public int getIntelligenceModifier()
   {
-    return abilityModifier(totalIntelligence());
+    return Monsters.abilityModifier(totalIntelligence());
   }
 
   /**
@@ -1426,7 +1409,7 @@ public class Monster extends CampaignEntry
    */
   public int getWisdomModifier()
   {
-    return abilityModifier(totalWisdom());
+    return Monsters.abilityModifier(totalWisdom());
   }
 
   /**
@@ -1482,7 +1465,7 @@ public class Monster extends CampaignEntry
    */
   public int getCharismaModifier()
   {
-    return abilityModifier(totalCharisma());
+    return Monsters.abilityModifier(totalCharisma());
   }
 
   /**
@@ -1566,14 +1549,13 @@ public class Monster extends CampaignEntry
     return m_alignment;
   }
 
-  /**
-   * Get a monster's maximal hit points.
-   *
-   * @return the maximal hit points
-   */
   public int getMaxHP()
   {
-    return m_maxHP;
+    int hp = 0;
+    for(BaseEntry base : getBaseEntries())
+      hp += ((BaseMonster)base).getMaxHP();
+
+    return hp;
   }
 
   /**
@@ -1926,7 +1908,7 @@ public class Monster extends CampaignEntry
   }
 
   /**
-   * Get the monter's armor bonus.
+   * Get the monster's armor bonus.
    *
    * @return the armor bonus
    */
@@ -4461,7 +4443,6 @@ public class Monster extends CampaignEntry
     for(Quality quality : m_qualities)
       builder.addQuality(quality.toProto());
 
-    builder.setMaxHitPoints(m_maxHP);
     builder.setHitPoints(m_hp);
 
     for(Skill skill : m_skills)
@@ -4535,7 +4516,6 @@ public class Monster extends CampaignEntry
     for(QualityProto quality : proto.getQualityList())
       m_qualities.add(Quality.fromProto(quality));
 
-    m_maxHP = proto.getMaxHitPoints();
     m_hp = proto.getHitPoints();
 
     m_skills.clear();
