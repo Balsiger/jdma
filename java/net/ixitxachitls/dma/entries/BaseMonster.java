@@ -1549,7 +1549,6 @@ public class BaseMonster extends BaseEntry
     else
       type = MonsterType.UNKNOWN;
 
-    int intBonus = Math.max(1, intelligenceBonus());
     int hd;
     Optional<Integer> hitDie = getCombinedHitDie().get();
     if (hitDie.isPresent())
@@ -1572,17 +1571,17 @@ public class BaseMonster extends BaseEntry
       case PLANT:
       case VERMIN:
       default:
-        return (2 + intBonus) * (hd + 3);
+        return Math.max(1, 2 + intelligenceBonus()) * (hd + 3);
 
       case UNDEAD:
-        return (4 + intBonus) * (hd + 3);
+        return Math.max(1, 4 + intelligenceBonus()) * (hd + 3);
 
       case DRAGON:
       case FEY:
-        return (6 + intBonus) * (hd + 3);
+        return Math.max(1, 6 + intelligenceBonus()) * (hd + 3);
 
       case OUTSIDER:
-        return (8 + intBonus) * (hd + 3);
+        return Math.max(1, 8 + intelligenceBonus()) * (hd + 3);
     }
   }
 

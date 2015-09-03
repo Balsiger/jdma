@@ -670,6 +670,14 @@
         {param color: '#080' /}
         {param value kind="html"}
           {call dma.edit.field_input}
+            {param name: 'fortitude_save' /}
+            {param value: $entry.fortitude_save.present
+              ? $entry.fortitude_save : '' /}
+            {param validate: 'number' /}
+            {param caption: 'Fortitude' /}
+            {param class: 'field3' /}
+          {/call}
+          {call dma.edit.field_input}
             {param name: 'reflex_save' /}
             {param value: $entry.reflex_save.present 
               ? $entry.reflex_save : '' /}
@@ -682,14 +690,6 @@
             {param value: $entry.will_save.present ? $entry.will_save : '' /}
             {param validate: 'number' /}
             {param caption: 'Will' /}
-            {param class: 'field3' /}
-          {/call}
-          {call dma.edit.field_input}
-            {param name: 'fortitude_save' /}
-            {param value: $entry.fortitude_save.present 
-              ? $entry.fortitude_save : '' /}
-            {param validate: 'number' /}
-            {param caption: 'Fortitude' /}
             {param class: 'field3' /}
           {/call}
         {/param}
