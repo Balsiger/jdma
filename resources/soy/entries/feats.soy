@@ -42,7 +42,7 @@
     {param name: ($prefix ? $prefix : '') + 'feat@' + $index + '.qualifier' /}
     {param caption: 'feat qualifier' /}
     {param value: $entry.qualifier.present ? $entry.qualifier : '' /}
-    {param validate: 'number' /}
+    {param validate: 'any' /}
     {param width: '50%' /}
   {/call}    
 {/template}
@@ -418,9 +418,14 @@
 /** Feat summary. */
 {template .summary}
   {@param entry: ?}
-  <i>{$entry.base_name}</i>
+  {call dma.value.link}
+    {param text kind="html"}
+      <i>{$entry.base_name}</i>
+    {/param}
+    {param url: '/feat/' + $entry.base_name /}
+  {/call}
   {if $entry.qualifier.present}
-    ({$entry.qualitier})
+    {sp}({$entry.qualifier})
   {/if}
   , {$entry.short_description}
   , {$entry.type}

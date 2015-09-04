@@ -36,6 +36,7 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
+import net.ixitxachitls.dma.proto.Values.ParametersProto;
 import net.ixitxachitls.dma.proto.Values.SpeedProto;
 import net.ixitxachitls.dma.rules.Monsters;
 import net.ixitxachitls.dma.values.Annotated;
@@ -1305,37 +1306,53 @@ public class BaseMonster extends BaseEntry
     return Collections.unmodifiableList(m_primaryAttacks);
   }
 
-  public int attackBonus(Attack inAttack)
+  public Annotated<Optional<Integer>> attackBonus(Attack inAttack)
   {
-    int bonus = 0;
+    Annotated.Integer bonus = new Annotated.Bonus();
 
     Optional<Integer> baseAttack = getCombinedBaseAttack().get();
     if(baseAttack.isPresent())
-      bonus += baseAttack.get();
+      bonus.add(baseAttack.get(), "base attack");
 
     switch(inAttack.getStyle())
     {
+      default:
       case UNKNOWN:
         break;
 
       case MELEE:
         // TODO: missing handling of weapon finesse with dexterity
-        bonus += Monsters.abilityModifier(getCombinedStrength().get());
+        bonus.add(Monsters.abilityModifier(getCombinedStrength().get()),
+                  "Strength");
         break;
 
       case RANGED:
-        bonus += Monsters.abilityModifier(getCombinedDexterity().get());
+        bonus.add(Monsters.abilityModifier(getCombinedDexterity().get()),
+                  "Dexterity");
         break;
     }
 
-    bonus += sizeModifier().totalModifier();
+    bonus.add(sizeModifier().totalModifier(), "size");
+
+    for(Feat feat : m_feats)
+      if(!feat.getQualifier().isPresent()
+          || feat.getQualifier().get().equalsIgnoreCase(
+          inAttack.getMode().toString()))
+      {
+        Modifier modifier = feat.attackModifier();
+        if(modifier.hasValue())
+          bonus.add(modifier.totalModifier(), feat.getName());
+      }
 
     return bonus;
   }
 
-  public int secondaryAttackBonus(Attack inAttack)
+  public Annotated<Optional<Integer>> secondaryAttackBonus(Attack inAttack)
   {
-    return attackBonus(inAttack) - Monsters.SECONDARY_ATTACK_PENALTY;
+    Annotated.Integer bonus = (Annotated.Integer)attackBonus(inAttack);
+    bonus.add(-Monsters.SECONDARY_ATTACK_PENALTY, "secondary attack");
+
+    return bonus;
   }
 
   public Damage damage(Attack inAttack)
@@ -3921,9 +3938,19 @@ public class BaseMonster extends BaseEntry
       builder.addSkill(skill.toProto());
 
     for(Feat feat : m_feats)
-      builder.addFeat(BaseMonsterProto.Reference.newBuilder()
-                      .setName(feat.getName())
-                      .build());
+    {
+      BaseMonsterProto.Reference.Builder ref =
+          BaseMonsterProto.Reference.newBuilder()
+          .setName(feat.getName());
+      if(feat.getQualifier().isPresent())
+        ref.setParameters(ParametersProto.newBuilder()
+                              .addText(ParametersProto.Text.newBuilder()
+                                       .setName("qualifier")
+                                       .setText(feat.getQualifier().get())
+                                           .build())
+                              .build());
+      builder.addFeat(ref.build());
+    }
 
     if(m_climate != Climate.UNKNOWN)
       builder.setClimate(m_climate.toProto());
@@ -4109,7 +4136,12 @@ public class BaseMonster extends BaseEntry
       m_skills.add(new Skill(reference.getReference().getName()));
 
     for(BaseMonsterProto.Reference feat : proto.getFeatList())
-      m_feats.add(new Feat(feat.getName()));
+      if(feat.hasParameters() && feat.getParameters().getTextCount() == 1
+          && feat.getParameters().getText(0).getName().equals("qualifier"))
+        m_feats.add(new Feat(feat.getName(),
+                             feat.getParameters().getText(0).getText()));
+      else
+        m_feats.add(new Feat(feat.getName()));
 
     if(proto.hasClimate())
       m_climate = Climate.fromProto(proto.getClimate());

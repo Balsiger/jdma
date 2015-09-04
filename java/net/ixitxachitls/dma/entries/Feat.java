@@ -53,6 +53,12 @@ public class Feat extends NestedEntry
     m_name = Optional.of(inName);
   }
 
+  public Feat(String inName, String inQualifier) {
+    this(inName);
+
+    m_qualifier = Optional.of(inQualifier);
+  }
+
   /** The qualifier for the feat. */
   private Optional<String> m_qualifier = Optional.absent();
 

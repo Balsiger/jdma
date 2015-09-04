@@ -1,0 +1,137 @@
+/* ****************************************************************************
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/*
+ * The templates for the general page.
+ */
+{namespace dma.sheet}
+
+/** Display a simple sheet value. */
+{template .value}
+  {@param? label: html|string}
+  {@param? value: html|string}
+  {@param? flex: number}
+
+  <div class="value-container" style="flex: {if $flex}{$flex}{else}1{/if}">
+    <div class="value">{if $value}{$value}{else}&nbsp;{/if}</div>
+    <div class="value-label">{if $label}{$label}{/if}</div>
+  </div>
+{/template}
+
+/** A value with a prefixed label. */
+{template .prefixed_value}
+  {@param? label: html|string}
+  {@param? value: html|string}
+  {@param? flex: number}
+
+  <div class="value-container prefixed"
+       style="flex: {if $flex}{$flex}{else}1{/if}">
+    <div class="value-label">{if $label}{$label}{/if}</div>
+    <div class="value">{if $value}{$value}{else}&nbsp;{/if}</div>
+  </div>
+{/template}
+
+/** A value in a box. */
+{template .box}
+  {@param? label: html|string}
+  {@param? value: html|string}
+  {@param? flex: number}
+
+  <div class="value-container" style="flex: {if $flex}{$flex}{else}1{/if}">
+    <div class="value-label top center">{if $label}{$label}{/if}</div>
+    <div class="value boxed center">{if $value}{$value}{else}&nbsp;{/if}</div>
+  </div>
+{/template}
+
+/** Values in a big box. */
+{template .case}
+  {@param? label: html|string}
+  {@param? value: html|string}
+  {@param? flex: number}
+
+  <div class="value-container boxed"{if $flex} style="flex:{$flex}"{/if}>
+    <div class="value-label top center">{if $label}{$label}{/if}</div>
+    <div class="value">{$value}</div>
+  </div>
+
+{/template}
+
+/** A sub title. */
+{template .subtitle}
+  {@param title: string}
+  <div class="subtitle">
+    {$title}
+  </div>
+{/template}
+
+/** A group title. */
+{template .grouptitle}
+  {@param title: string}
+  <div class="grouptitle">
+    {$title}
+  </div>
+{/template}
+
+/** Display a sheet value. */
+{template .old_value}
+  {@param label: html|string}
+  {@param width: string}
+  {@param value: html|string}
+  {@param? center: bool}
+  {@param? boxed: bool}
+  {@param? size: string}
+  {@param? vSize: string}
+  {@param? prefix: bool}
+  {@param? white: bool}
+  {@param? top: bool}
+  {@param? inside: bool}
+  <div class="value-container{if $prefix} prefixed{/if}"
+       style="width: {$width}">
+    {if $prefix}
+      <div class="value-label prefixed"
+           {if $size} style="font-size: {$size}"{/if}>
+        {$label}
+      </div>
+    {/if}
+    {if $top}
+      <div class="value-label top
+                  {if $center} center{/if}{if $inside} inside{/if}"
+           {if $size} style="font-size: {$size}"{/if}>
+        {$label}
+      </div>
+    {/if}
+    <div class="value{if $center} center{/if}
+                {if $boxed} boxed{/if}
+                {if $white} white{/if}
+                {if $prefix} prefixed{/if}"
+                {if $vSize} style="font-size: {$vSize}"{/if}>
+      {if $value}{$value}{else}&nbsp;{/if}
+    </div>
+    {if not $prefix and not $top}
+      <div class="value-label{if $center} center{/if}
+                  {if $boxed} boxed{/if}"
+           {if $size} style="font-size: {$size}"{/if}>
+         {$label}
+      </div>
+    {/if}
+  </div>
+{/template}
+
