@@ -1968,14 +1968,25 @@ public class Monster extends CampaignEntry
    */
   public int getArmorClass()
   {
-    Modifier armor = getArmorBonus();
-    Modifier shield = getShieldBonus();
-    Modifier natural = getCombinedNaturalArmor().get().get();
-    int dexterity = getDexterityModifier();
-    int sizeModifier = sizeModifier();
+    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
+                                  Optional.<String>absent(),
+                                  Optional.<Modifier>absent());
+    armor = (Modifier)armor.add(getArmorBonus());
+    armor = (Modifier)armor.add(getShieldBonus());
+    Optional<Modifier> natural = getCombinedNaturalArmor().get();
+    if(natural.isPresent())
+      armor = (Modifier)armor.add(natural.get());
 
-    return 10 + armor.getModifier() + shield.getModifier() + dexterity
-        + sizeModifier + natural.getModifier();
+    armor = (Modifier)armor.add(new Modifier(getDexterityModifier(),
+                                             Modifier.Type.ABILITY,
+                                             Optional.<String>absent(),
+                                             Optional.<Modifier>absent()));
+    armor = (Modifier)armor.add(new Modifier(sizeModifier(),
+                                             Modifier.Type.SIZE,
+                                             Optional.<String>absent(),
+                                             Optional.<Modifier>absent()));
+
+    return armor.totalModifier();
   }
 
   /**
@@ -1985,10 +1996,20 @@ public class Monster extends CampaignEntry
    */
   public int getTouchArmorClass()
   {
-    int dexterity = getDexterityModifier();
-    int sizeModifier = sizeModifier();
+    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
+                                  Optional.<String>absent(),
+                                  Optional.<Modifier>absent());
 
-    return 10 + dexterity + sizeModifier;
+    armor = (Modifier)armor.add(new Modifier(getDexterityModifier(),
+                                             Modifier.Type.ABILITY,
+                                             Optional.<String>absent(),
+                                             Optional.<Modifier>absent()));
+    armor = (Modifier)armor.add(new Modifier(sizeModifier(),
+                                             Modifier.Type.SIZE,
+                                             Optional.<String>absent(),
+                                             Optional.<Modifier>absent()));
+
+    return armor.totalModifier();
   }
 
   /**
@@ -1998,13 +2019,21 @@ public class Monster extends CampaignEntry
    */
   public int getFlatFootedArmorClass()
   {
-    Modifier armor = getArmorBonus();
-    Modifier shield = getShieldBonus();
-    Modifier natural = getCombinedNaturalArmor().get().get();
-    int sizeModifier = sizeModifier();
+    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
+                                  Optional.<String>absent(),
+                                  Optional.<Modifier>absent());
+    armor = (Modifier)armor.add(getArmorBonus());
+    armor = (Modifier)armor.add(getShieldBonus());
+    Optional<Modifier> natural = getCombinedNaturalArmor().get();
+    if(natural.isPresent())
+      armor = (Modifier)armor.add(natural.get());
 
-    return 10 + armor.getModifier() + shield.getModifier()
-        + natural.getModifier() + sizeModifier;
+    armor = (Modifier)armor.add(new Modifier(sizeModifier(),
+                                             Modifier.Type.SIZE,
+                                             Optional.<String>absent(),
+                                             Optional.<Modifier>absent()));
+
+    return armor.totalModifier();
   }
 
   /**
