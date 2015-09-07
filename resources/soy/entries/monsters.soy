@@ -377,7 +377,6 @@
       {call dma.sheet.grouptitle}
         {param title: 'Attacks' /}
       {/call}
-      primary
       {foreach $attack in $entry.combined_primary_attacks.get}
         <div class="line">
           {call .attack}
@@ -392,7 +391,6 @@
           {/call}
         </div>
       {/foreach}
-      secondary
       {foreach $attack in $entry.combined_secondary_attacks.get}
         <div class="line">
           {call .attack}
@@ -408,20 +406,6 @@
         </div>
       {/foreach}
 
-      natural
-      {foreach $attack in $entry.natural_attacks}
-        <div class="line">
-          {call .attack}
-            {param name: 'guru' + ($attack.attack.number.one ?
-                         '' : $attack.attack.number + ' ')
-                              + $attack.attack.mode /}
-            {param bonus: bonus($attack.bonus) + ' '
-                          + $attack.attack.style /}
-            {param damage: $attack.damage /}
-            {param critical: '20' /}
-          {/call}
-        </div>
-      {/foreach}
       {foreach $weapon in $entry.weapons}
         {if index($weapon) < 4}
           <div class="line">

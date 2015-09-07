@@ -2340,6 +2340,56 @@ public class Monster extends CampaignEntry
     return attacks;
   }
 
+  public Annotated<Optional<Integer>> attackBonus(BaseMonster.Attack inAttack)
+  {
+    Annotated.Integer bonus = new Annotated.Bonus();
+
+    Optional<Integer> baseAttack = getCombinedBaseAttack().get();
+    if(baseAttack.isPresent())
+      bonus.add(baseAttack.get(), "base attack");
+
+    switch(inAttack.getStyle())
+    {
+      default:
+      case UNKNOWN:
+        break;
+
+      case MELEE:
+        // TODO: missing handling of weapon finesse with dexterity
+        bonus.add(Monsters.abilityModifier(getCombinedStrength().get()),
+                  "Strength");
+        break;
+
+      case RANGED:
+        bonus.add(Monsters.abilityModifier(getCombinedDexterity().get()),
+                  "Dexterity");
+        break;
+    }
+
+    bonus.add(sizeModifier(), "size");
+
+    for(Feat feat : m_feats)
+      if(!feat.getQualifier().isPresent()
+          || feat.getQualifier().get().equalsIgnoreCase(
+          inAttack.getMode().toString()))
+      {
+        Modifier modifier = feat.attackModifier();
+        if(modifier.hasValue())
+          bonus.add(modifier.totalModifier(), feat.getName());
+      }
+
+    return bonus;
+  }
+
+  public Annotated<Optional<Integer>> secondaryAttackBonus(
+      BaseMonster.Attack inAttack)
+  {
+    Annotated.Integer bonus = (Annotated.Integer)attackBonus(inAttack);
+    bonus.add(-Monsters.SECONDARY_ATTACK_PENALTY, "secondary attack");
+
+    return bonus;
+  }
+
   public class NaturalAttack
   {
     public NaturalAttack(BaseMonster.Attack inAttack, boolean inPrimary)
