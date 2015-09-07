@@ -377,10 +377,42 @@
       {call dma.sheet.grouptitle}
         {param title: 'Attacks' /}
       {/call}
+      primary
+      {foreach $attack in $entry.combined_primary_attacks.get}
+        <div class="line">
+          {call .attack}
+            {param name: ($attack.number.one ? '' : $attack.number + ' ')
+                          + $attack.mode /}
+            {param bonus kind="html"}
+              {annotate(call($entry, 'attackBonus', $attack))}
+              {sp}{$attack.style}
+            {/param}
+            {param damage: call($entry, 'damage', $attack) /}
+            {param critical: '20' /}
+          {/call}
+        </div>
+      {/foreach}
+      secondary
+      {foreach $attack in $entry.combined_secondary_attacks.get}
+        <div class="line">
+          {call .attack}
+            {param name: ($attack.number.one ? '' : $attack.number + ' ')
+                          + $attack.mode /}
+            {param bonus kind="html"}
+              {annotate(call($entry, 'secondaryAttackBonus', $attack))}
+              {sp}{$attack.style}
+            {/param}
+            {param damage: call($entry, 'secondaryDamage', $attack) /}
+            {param critical: '20' /}
+          {/call}
+        </div>
+      {/foreach}
+
+      natural
       {foreach $attack in $entry.natural_attacks}
         <div class="line">
           {call .attack}
-            {param name: ($attack.attack.number.one ?
+            {param name: 'guru' + ($attack.attack.number.one ?
                          '' : $attack.attack.number + ' ')
                               + $attack.attack.mode /}
             {param bonus: bonus($attack.bonus) + ' '

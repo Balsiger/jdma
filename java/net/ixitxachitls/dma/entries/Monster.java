@@ -2403,6 +2403,30 @@ public class Monster extends CampaignEntry
     return attacks;
   }
 
+  public Damage damage(BaseMonster.Attack inAttack)
+  {
+    Damage damage = inAttack.getDamage();
+
+    int strength = Monsters.abilityModifier(getCombinedStrength().get());
+    if(strength > 0)
+      damage = (Damage) damage.add(new Damage(new Dice(0, 0, strength)));
+
+    return damage;
+  }
+
+  public Damage secondaryDamage(BaseMonster.Attack inAttack)
+  {
+    Damage damage = inAttack.getDamage();
+
+    int strength =
+        (int) (Monsters.abilityModifier(getCombinedStrength().get())
+            * Monsters.SECONDARY_DAMAGE_FACTOR);
+    if(strength > 0)
+      damage = (Damage) damage.add(new Damage(new Dice(0, 0, strength)));
+
+    return damage;
+  }
+
 
   public Annotated<List<BaseMonster.Attack>> getCombinedSecondaryAttacks()
   {
