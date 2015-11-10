@@ -31,6 +31,7 @@ import java.util.Map;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
+import com.google.template.soy.data.SoyData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -120,11 +121,21 @@ public class LibraryServlet extends PageServlet
                     "css", type.getName().replace(" ", "-")));
     }
 
+    data.put("types", types);
+    data.put("indexes", indexes);
+    data.put("template", "dma.page.library");
     data.put("content",
              inRenderer.render("dma.page.library",
                                Optional.of(map("types", types,
                                                "indexes", indexes))));
 
     return data;
+  }
+
+  @Override
+  public String getTemplateName(DMARequest inRequest,
+                                Map<String, SoyData> inData)
+  {
+    return "dma.page.library";
   }
 }

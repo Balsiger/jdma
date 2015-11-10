@@ -120,9 +120,8 @@ public class EntryListServlet extends PageServlet
       AbstractType.getTyped(typeName);
     if(!type.isPresent())
     {
-      data.put("content",
-               inRenderer.render("dma.error.invalidType",
-                                 Optional.of(map("type", typeName))));
+      data.put("type", typeName);
+      data.put("template", "dma.error.invalidType");
       return data;
     }
 
