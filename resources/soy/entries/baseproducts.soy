@@ -22,7 +22,7 @@
  /*
  * Templates for base products.
  */
-{namespace dma.entries.baseproducts autoescape="deprecated-contextual"}
+{namespace dma.entries.baseproducts}
 
 /**
  * Show the given entry in standard format.
@@ -44,9 +44,9 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#444' /}
-    {param title}
+    {param title kind="html"}
       {call dma.entry.title}
-        {param title}
+        {param title kind="html"}
           {if $entry.leader.present}{$entry.leader} {/if}
           {$entry.title}
         {/param}
@@ -59,7 +59,7 @@
         {/call}
       {/if}
     {/param}
-    {param values}            
+    {param values kind="html"}
       {call dma.entry.value}
         {param label: 'Name' /}
         {param value: $entry.name /}
@@ -68,7 +68,7 @@
       {if length($entry.synonyms)}
         {call dma.entry.value}
           {param label: 'Synonyms' /}
-          {param value}
+          {param value kind="html"}
             {foreach $synonym in $entry.synonyms}
               {$synonym}
               {if not isLast($synonym)}; {/if}
@@ -80,7 +80,7 @@
       {if length($entry.categories)}
         {call dma.entry.value}
           {param label: 'Categories' /}
-          {param value}
+          {param value kind="html"}
             {foreach $category in $entry.categories}
               {$category}
               {if not isLast($category)}, {/if}
@@ -91,7 +91,7 @@
       {/if}      
       {call dma.entry.value}
         {param label: 'Worlds' /}        
-        {param value}
+        {param value kind="html"}
           {foreach $world in $entry.getWorlds}
             {$world}{if not isLast($world)}, {/if}
           {/foreach}
@@ -110,7 +110,7 @@
       {/call}
       {call dma.entry.value}
         {param label: 'Type' /}
-        {param value}
+        {param value kind="html"}
           {$entry.product_type.getName}
           {if def($entry.audience)}
             , {$entry.audience.getName}
@@ -121,7 +121,7 @@
       {if $entry.style or def($entry.layout)}
         {call dma.entry.value}
           {param label: 'Style' /}
-          {param value}
+          {param value kind="html"}
             {$entry.style.getName}, {$entry.layout.getName}
           {/param}
           {param color: '#444' /}
@@ -151,7 +151,7 @@
       {if length($entry.series) or $entry.number.present}
         {call dma.entry.value}
           {param label: 'Series' /}
-          {param value}
+          {param value kind="html"}
             {foreach $series in $entry.series}            
               {$series}{if not isLast($series)}, {/if}
             {/foreach}
@@ -168,7 +168,7 @@
       {if $entry.ISBN.present or $entry.ISBN13.present}
         {call dma.entry.value}
           {param label: 'ISBN' /}
-          {param value}
+          {param value kind="html"}
             {if $entry.ISBN.present}
               {$entry.ISBN}
             {/if}
@@ -182,7 +182,7 @@
       {/if}
       {call dma.entry.value}
         {param label: 'Authors' /}
-        {param value}
+        {param value kind="html"}
           {foreach $person in $entry.authors}
             {$person.name}{if $person.job} ({$person.job}){/if}
             {if not isLast($person)}, {/if}
@@ -193,7 +193,7 @@
       {if length($entry.editors) > 0}
         {call dma.entry.value}
           {param label: 'Editors' /}
-          {param value}
+          {param value kind="html"}
             {foreach $person in $entry.editors}
               {$person.name}{if $person.job} ({$person.job}){/if}
               {if not isLast($person)}, {/if}
@@ -205,7 +205,7 @@
       {if length($entry.cover_artists) > 0}
         {call dma.entry.value}
           {param label: 'Cover Artists' /}
-          {param value}
+          {param value kind="html"}
             {foreach $person in $entry.cover_artists}
               {$person.name}{if $person.job} ({$person.job}){/if}
               {if not isLast($person)}, {/if}
@@ -217,7 +217,7 @@
       {if length($entry.cartographers) > 0}
         {call dma.entry.value}
           {param label: 'Cartographers' /}
-          {param value}
+          {param value kind="html"}
             {foreach $person in $entry.cartographers}
               {$person.name}{if $person.job} ({$person.job}){/if}
               {if not isLast($person)}, {/if}
@@ -229,7 +229,7 @@
       {if length($entry.illustrators) > 0}
         {call dma.entry.value}
           {param label: 'Illustrators' /}
-          {param value}
+          {param value kind="html"}
             {foreach $person in $entry.illustrators}
               {$person.name}{if $person.job} ({$person.job}){/if}
               {if not isLast($person)}, {/if}
@@ -241,7 +241,7 @@
       {if length($entry.typographers) > 0}
         {call dma.entry.value}
           {param label: 'Typographers' /}
-          {param value}
+          {param value kind="html"}
             {foreach $person in $entry.typographers}
               {$person.name}{if $person.job} ({$person.job}){/if}
               {if not isLast($person)}, {/if}
@@ -253,7 +253,7 @@
       {if length($entry.managers) > 0}
         {call dma.entry.value}
           {param label: 'Managers' /}
-          {param value}
+          {param value kind="html"}
             {foreach $person in $entry.managers}
               {$person.name}{if $person.job} ({$person.job}){/if}
               {if not isLast($person)}, {/if}
@@ -272,7 +272,7 @@
       {if length($entry.contents)}
         {call dma.entry.value}
           {param label: 'Contents' /}
-          {param value}
+          {param value kind="html"}
             {foreach $content in $entry.contents}
               {if $content.amount != 1}
                 {$content.amount} x{sp}
@@ -287,7 +287,7 @@
       {if length($entry.mandatoryRequirements)}
         {call dma.entry.value}
           {param label: 'Mandatory Req.' /}
-          {param value}
+          {param value kind="html"}
             {foreach $requirement in $entry.mandatoryRequirements}
               {call dma.value.productReference}
                 {param reference : $requirement /}
@@ -301,7 +301,7 @@
       {if length($entry.optionalRequirements)}
         {call dma.entry.value}
           {param label: 'Optional Req.' /}
-          {param value}
+          {param value kind="html"}
             {foreach $requirement in $entry.optionalRequirements}
               {call dma.value.productReference}
                 {param reference : $requirement /}
@@ -315,7 +315,7 @@
       {if $entry.references}
         {call dma.entry.value}
           {param label: 'References' /}
-          {param value}
+          {param value kind="html"}
             {foreach $reference in $entry.references}
               {call dma.value.productReference}
                 {param reference: $reference /}
@@ -329,7 +329,7 @@
       {if $ij.user}
         {call dma.entry.value}
           {param label: 'Owners' /}
-          {param value}
+          {param value kind="html"}
             {foreach $owner in keys($entry.owners)}
               {foreach $id in $entry.owners[$owner]}                  
                 {call dma.page.link}
@@ -344,9 +344,8 @@
             {/foreach}
             {sp}|{sp}            
             <span class="action" onclick="edit.show(
-                           '{$entry.name|escapeJs}', 
-                           '/user/{$ij.user.name}/product/CREATE', 
-                           '{$entry.name|escapeJs}', '{$entry.name|escapeJs}')">
+                   '{let $foo kind="text"}{$entry.name |escapeJs}{/let}{$foo}',
+                   '/user/{$ij.user.name}/product/CREATE', '{$foo}', '{$foo}')">
               add
             </span>
           {/param}
@@ -357,19 +356,15 @@
   {/call}
 {/template}
 
-/**
- * Formatting a list of entries.
- *
- * @param title The list title.
- * @param start The start index
- * @param pagesize The size of the page
- * @param entries The entries printed
- * @param label The navigation label for this page
- * @param path The path to this page
- *
- */
+/** Formatting a list of entries. */
 {template .list}
-  {call dma.entry.newlist}
+  {@param title: html|string}
+  {@param start: number}
+  {@param pagesize: number}
+  {@param entries: list<?>}
+  {@param label: html|string}
+  {@param path: string}
+  {call dma.entry.list}
     {param title: $title /}
     {param label: $label /}
     {param path: $path /}
@@ -377,7 +372,7 @@
     {param pagesize: $pagesize /}
     {param size: $entries ? length($entries) : 0 /}
     {param titles: [ 'ID', 'Title', 'System', 'Worlds', 'Short Descriptoion'] /}
-    {param entries}
+    {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
           {call dma.entry.listEntry}
@@ -406,7 +401,7 @@
     {param type: 'character' /}
     {param id: $id /}
     {param create: $create /}
-    {param values}
+    {param values kind="html"}
       {call dma.edit.value}
         {param name: 'name' /}
         {param label: 'Name' /}
@@ -557,9 +552,9 @@
       {call dma.edit.generic_value}
         {param label: 'ISBN' /}
         {param color: '#444' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {call dma.edit.field_input}
                 {param name: 'isbn.10' /}
                 {param value: $entry.ISBN /}
@@ -624,9 +619,9 @@
         {param name: 'contents' /}
         {param color: '#444' /}
         {param label: 'Contents' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $content in $entry.contents}  
                 {call dma.edit.field_list_multiple}
                   {param id: 'content' /}
@@ -702,9 +697,9 @@
         {param name: 'references' /}
         {param color: '#444' /}
         {param label: 'References' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $reference in $entry.references}  
                 {call dma.edit.field_list_multiple}
                   {param id: 'reference' /}
@@ -764,9 +759,9 @@
     {param name: $name /}
     {param color: '#444' /}
     {param label: $label /}
-    {param value}
+    {param value kind="html"}
       {call dma.edit.field}
-        {param markup}
+        {param markup kind="html"}
           {foreach $person in $persons}
             {call dma.edit.field_list_multiple}
               {param id: 'person' /}
