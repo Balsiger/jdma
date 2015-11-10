@@ -90,6 +90,13 @@
       {/param}
     {/call}
   {/if}
+  {call dma.edit.field_selection}
+    {param name: 'level@' + $index + '.ability_increase' /}
+    {param caption: 'Ability Increase' /}
+    {param value: $entry ? $entry.ability_increase.string : '' /}
+    {param choices: $ij.Ability.names /}
+    {param class: 'narrow' /}
+  {/call}
 {/template}
 
 /**

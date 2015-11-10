@@ -25,6 +25,7 @@ package net.ixitxachitls.dma.entries;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.HashMultiset;
@@ -283,7 +284,7 @@ public class NPC extends Monster
     for(Multiset.Entry<String> entry : cumulatedLevels().entrySet())
     {
       Optional<BaseLevel> level = DMADataFactory.get().getEntry
-        (new EntryKey(entry.getElement(), BaseLevel.TYPE));
+          (new EntryKey(entry.getElement(), BaseLevel.TYPE));
 
       int bonus = 0;
       if(level.isPresent())
@@ -294,9 +295,38 @@ public class NPC extends Monster
             bonus += saves.get(i);
           else
             Log.warning("Cannot find fortitude save for level " + i
-                        + " in " + level.get().getName());
+                            + " in " + level.get().getName());
 
         save.add(bonus, level.get().getName() + " " + entry.getCount());
+      }
+    }
+
+    return save;
+  }
+
+  @Override
+  public Annotated.Modifier fortitudeSave()
+  {
+    Annotated.Modifier save = super.fortitudeSave();
+
+    for(Multiset.Entry<String> entry : cumulatedLevels().entrySet())
+    {
+      Optional<BaseLevel> level = DMADataFactory.get().getEntry
+          (new EntryKey(entry.getElement(), BaseLevel.TYPE));
+
+      if(level.isPresent())
+      {
+        List<Integer> saves = level.get().getFortitudeSaves();
+        int bonus = 0;
+        for(int i = 0; i < entry.getCount(); i++)
+          if(i < saves.size())
+            bonus += saves.get(i);
+          else
+            Log.warning("Cannot find fortitude save for level " + i
+                            + " in " + level.get().getName());
+
+        save.add(new Modifier(bonus),
+                 level.get().getName() + " " + entry.getCount());
       }
     }
 
@@ -362,9 +392,8 @@ public class NPC extends Monster
   @Override
   public int getMaxHP()
   {
-    // Use the levels plus the max hp of the monster
-    int hp = super.getMaxHP();
-
+    // Use the levels of the character, ignoring a monsters other hps.
+    int hp = 0;
     for(Level level : m_levels)
     {
       hp += level.getHP();
@@ -434,6 +463,7 @@ public class NPC extends Monster
     return points;
   }
 
+  @Override
   protected List<Quality> allQualities()
   {
     List<Quality> qualities = super.allQualities();
@@ -442,6 +472,21 @@ public class NPC extends Monster
       qualities.addAll(level.getQualities());
 
     return qualities;
+  }
+
+  @Override
+  protected Set<Feat> allFeats()
+  {
+    Set<Feat> feats = super.allFeats();
+
+    Multiset<String> levels = HashMultiset.create();
+    for(Level level : m_levels)
+    {
+      levels.add(level.getName());
+      feats.addAll(level.getAllFeats(levels.count(level.getName())));
+    }
+
+    return feats;
   }
 
   private Multiset<String> qualityNames()

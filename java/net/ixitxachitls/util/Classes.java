@@ -114,6 +114,18 @@ public final class Classes
     return name.replaceAll("(\\w)(\\p{Upper}\\p{Lower})", "$1 $2");
   }
 
+  public static String toSnakeCaseName(Class<?> inClass)
+  {
+    String name = inClass.getName();
+
+    name = name.substring(name.lastIndexOf('.') + 1);
+
+    return name
+        .replaceAll("(\\w)(\\p{Upper}\\p{Lower})", "$1_$2")
+        .replaceAll("\\$", "_")
+        .toLowerCase();
+  }
+
   /**
     * Get the package name from the given class.
     *

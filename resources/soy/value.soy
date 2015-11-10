@@ -796,6 +796,7 @@
 {template .modifier}
   {@param modifier: ?}
   {@param? hide_condition: bool}
+  {@param? only_conditionals: bool}
   {if $modifier.has_condition}
     {if $hide_condition}
       <span class="modifier-hide-condition">
@@ -813,7 +814,7 @@
         <span class="modifier-condition"> {$modifier.condition}</span>
       {/if}
     {/if}
-  {else}
+  {elseif not $only_conditionals}
     {bonus($modifier.modifier)}
     {if not $modifier.type.general}
       {sp}{$modifier.type}
@@ -823,6 +824,7 @@
     {sp}
     {call .modifier}
       {param modifier: $modifier.next /}
+      {param only_conditionals: $only_conditionals /}
     {/call}
   {/if}
 {/template}
@@ -980,8 +982,8 @@
           <div class="annotation">
             <div class="annotation-value">
               {$source.value}
-            </div> 
-            {sp}&ndash;{sp} 
+            </div>
+            {sp}&ndash;{sp}
             <div class="annotation-source">
               {$source.source}
             </div>
@@ -1014,4 +1016,37 @@
   {else}
     {if $text}{$text}{else}{$url}{/if}
   {/if}
+{/template}
+
+/** An annotated modifier. */
+{template .annotated_modifier}
+  {@param value: ?}
+  {@param? no_conditions: ?}
+  {call .annotated_value}
+    {param value: $no_conditions ? bonus($value.get.unconditional_modifier)
+        : $value.get.total_modifier /}
+    {param sources: $value.sources.sources /}
+  {/call}
+{/template}
+
+/** Format a generic annotated value */
+{template .annotated_value}
+  {@param value: ?}
+  {@param sources: ?}
+  <span class="annotated">
+    {$value}
+    <div class="annotations">
+      {foreach $source in $sources}
+        <div class="annotation">
+          <div class="annotation-value">
+            {$source.value}
+          </div>
+          {sp}&ndash;{sp}
+          <div class="annotation-source">
+            {$source.source}
+          </div>
+        </div>
+      {/foreach}
+    </div>
+  </span>
 {/template}

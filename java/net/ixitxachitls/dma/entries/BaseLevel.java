@@ -42,6 +42,7 @@ import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Alignment;
 import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.util.logging.Log;
@@ -69,7 +70,7 @@ public class BaseLevel extends BaseEntry
     public QualityReference(String inName, int inLevel, int inUsesPerDay,
                             Optional<String> inCondition)
     {
-      m_reference = new Reference<BaseQuality>(BaseQuality.TYPE, inName);
+      m_reference = new Reference<>(BaseQuality.TYPE, inName);
       m_level = inLevel;
       m_usesPerDay = inUsesPerDay;
       m_condition = inCondition;
@@ -95,13 +96,12 @@ public class BaseLevel extends BaseEntry
         public Optional<QualityReference> doParse
         (String inName, String inLevel, String inPerDay, String inCondition)
         {
-          String name = inName;
           int level = Integer.parseInt(inLevel);
           int perDay = inPerDay.isEmpty() ? 0 : Integer.parseInt(inPerDay);
           Optional<String> condition = inCondition.isEmpty()
             ? Optional.<String>absent() : Optional.of(inCondition);
 
-          return Optional.of(new QualityReference(name, level, perDay,
+          return Optional.of(new QualityReference(inName, level, perDay,
                                                   condition));
         }
       };
@@ -259,6 +259,23 @@ public class BaseLevel extends BaseEntry
 
   /** The will saves per level. */
   protected List<Integer> m_willSaves = new ArrayList<>();
+
+  /** n-level spells available per day per level. */
+  protected List<Integer> []m_spellsPerDay = new List[10];
+  {
+    for(int i = 0; i < m_spellsPerDay.length; i++)
+      m_spellsPerDay[i] = new ArrayList<>();
+  }
+
+  /** The n-level spells known per level. */
+  protected List<Integer> []m_spellsKnown = new List[10];
+  {
+    for(int i = 0; i < m_spellsKnown.length; i++)
+      m_spellsKnown[i] = new ArrayList<>();
+  }
+
+  /** The ability that governs spell casting for this level, if any. */
+  protected Optional<Ability> m_spellAbility = Optional.absent();
 
   @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
@@ -562,6 +579,29 @@ public class BaseLevel extends BaseEntry
     return Collections.unmodifiableList(m_willSaves);
   }
 
+  public List<Integer> getSpellsPerDay(Integer inLevel)
+  {
+    if(inLevel < 0 || inLevel > 9)
+      throw new IllegalArgumentException(
+          "Given level out of range: " + inLevel);
+
+    return Collections.unmodifiableList(m_spellsPerDay[inLevel]);
+  }
+
+  public List<Integer> getSpellsKnown(Integer inLevel)
+  {
+    if(inLevel < 0 || inLevel > 9)
+      throw new IllegalArgumentException(
+          "Given level out of range: " + inLevel);
+
+    return Collections.unmodifiableList(m_spellsKnown[inLevel]);
+  }
+
+  public Optional<Ability> getSpellAbility()
+  {
+    return m_spellAbility;
+  }
+
   /**
    * Collect data for a specific level of this base level.
    *
@@ -717,8 +757,49 @@ public class BaseLevel extends BaseEntry
       inValues.use("fortitude_save", m_fortitudeSaves, Value.INTEGER_PARSER);
     m_reflexSaves =
       inValues.use("reflex_save", m_reflexSaves, Value.INTEGER_PARSER);
-    m_willSaves =
-      inValues.use("will_save", m_willSaves, Value.INTEGER_PARSER);
+    m_willSaves = inValues.use("will_save", m_willSaves, Value.INTEGER_PARSER);
+    m_spellsPerDay[0] = inValues.use("spells_per_day_0", m_spellsPerDay[0],
+                                     Value.INTEGER_PARSER);
+    m_spellsPerDay[1] = inValues.use("spells_per_day_1", m_spellsPerDay[1],
+                                     Value.INTEGER_PARSER);
+    m_spellsPerDay[2] = inValues.use("spells_per_day_2", m_spellsPerDay[2],
+                                     Value.INTEGER_PARSER);
+    m_spellsPerDay[3] = inValues.use("spells_per_day_3", m_spellsPerDay[3],
+                                     Value.INTEGER_PARSER);
+    m_spellsPerDay[4] = inValues.use("spells_per_day_4", m_spellsPerDay[4],
+                                     Value.INTEGER_PARSER);
+    m_spellsPerDay[5] = inValues.use("spells_per_day_5", m_spellsPerDay[5],
+                                     Value.INTEGER_PARSER);
+    m_spellsPerDay[6] = inValues.use("spells_per_day_6", m_spellsPerDay[6],
+                                     Value.INTEGER_PARSER);
+    m_spellsPerDay[7] = inValues.use("spells_per_day_7", m_spellsPerDay[7],
+                                     Value.INTEGER_PARSER);
+    m_spellsPerDay[8] = inValues.use("spells_per_day_8", m_spellsPerDay[8],
+                                     Value.INTEGER_PARSER);
+    m_spellsPerDay[9] = inValues.use("spells_per_day_9", m_spellsPerDay[9],
+                                     Value.INTEGER_PARSER);
+    m_spellsKnown[0] = inValues.use("spells_known_0", m_spellsKnown[0],
+                                    Value.INTEGER_PARSER);
+    m_spellsKnown[1] = inValues.use("spells_known_1", m_spellsKnown[1],
+                                    Value.INTEGER_PARSER);
+    m_spellsKnown[2] = inValues.use("spells_known_2", m_spellsKnown[2],
+                                    Value.INTEGER_PARSER);
+    m_spellsKnown[3] = inValues.use("spells_known_3", m_spellsKnown[3],
+                                    Value.INTEGER_PARSER);
+    m_spellsKnown[4] = inValues.use("spells_known_4", m_spellsKnown[4],
+                                    Value.INTEGER_PARSER);
+    m_spellsKnown[5] = inValues.use("spells_known_5", m_spellsKnown[5],
+                                    Value.INTEGER_PARSER);
+    m_spellsKnown[6] = inValues.use("spells_known_6", m_spellsKnown[6],
+                                    Value.INTEGER_PARSER);
+    m_spellsKnown[7] = inValues.use("spells_known_7", m_spellsKnown[7],
+                                    Value.INTEGER_PARSER);
+    m_spellsKnown[8] = inValues.use("spells_known_8", m_spellsKnown[8],
+                                    Value.INTEGER_PARSER);
+    m_spellsKnown[9] = inValues.use("spells_known_9", m_spellsKnown[9],
+                                    Value.INTEGER_PARSER);
+    m_spellAbility = inValues.use("spell_ability", m_spellAbility,
+                                  Ability.PARSER);
   }
 
   @Override
@@ -851,6 +932,27 @@ public class BaseLevel extends BaseEntry
     for(Integer number : m_willSaves)
       builder.addWillSave(number);
 
+    for(int i = 0; i < m_spellsPerDay.length; i++)
+    {
+      BaseLevelProto.PerLevel.Builder level =
+          BaseLevelProto.PerLevel.newBuilder();
+      for(Integer spellsPerDay : m_spellsPerDay[i])
+        level.addValue(spellsPerDay);
+      builder.addSpellsPerDay(level.build());
+    }
+
+    for(int i = 0; i < m_spellsKnown.length; i++)
+    {
+      BaseLevelProto.PerLevel.Builder level =
+          BaseLevelProto.PerLevel.newBuilder();
+      for(Integer spellsKnown : m_spellsKnown[i])
+        level.addValue(spellsKnown);
+      builder.addSpellsKnown(level.build());
+    }
+
+    if(m_spellAbility.isPresent())
+      builder.setSpellAbility(m_spellAbility.get().toProto());
+
     BaseLevelProto proto = builder.build();
     return proto;
   }
@@ -962,6 +1064,17 @@ public class BaseLevel extends BaseEntry
 
     for(int save : proto.getWillSaveList())
       m_willSaves.add(save);
+
+    for(int i = 0;
+        i < m_spellsPerDay.length && i < proto.getSpellsPerDayCount(); i++)
+      m_spellsPerDay[i] = proto.getSpellsPerDay(i).getValueList();
+
+    for(int i = 0; i < m_spellsKnown.length && i < proto.getSpellsKnownCount();
+        i++)
+      m_spellsKnown[i] = proto.getSpellsKnown(i).getValueList();
+
+    if(proto.hasSpellAbility())
+      m_spellAbility = Optional.of(Ability.fromProto(proto.getSpellAbility()));
   }
 
   @Override

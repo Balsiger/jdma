@@ -1573,6 +1573,7 @@ DIV.flex
   -moz-box-flex: 1;
   -webkit-box-flex: 1;
   box-flex: 1;
+  flex-grow: 1;
 }
 
 DIV.edit-note
@@ -3202,6 +3203,14 @@ BODY.print
   margin: -10px 0 0 0;
 }
 
+.character-sheet .box
+{
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  padding: 10px 5px;
+}
+
 .character-sheet .hps
 {
   margin-top: 5px;
@@ -3212,10 +3221,10 @@ BODY.print
 {
   border: 1px solid black;
   border-radius: 3px;
-  padding: 2px;
+  padding: 1px;
   display: inline-block;
-  margin: 2px;
-  min-width: 15px;
+  margin: 1px;
+  min-width: 13px;
   text-align:center;
 }
 

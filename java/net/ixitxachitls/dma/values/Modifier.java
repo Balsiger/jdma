@@ -273,6 +273,18 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
          Optional.<Modifier>absent());
   }
 
+  public Modifier(int inModifier)
+  {
+    this(inModifier, Type.GENERAL, Optional.<String>absent(),
+         Optional.<Modifier>absent());
+  }
+
+  public Modifier(int inModifier, Type inType)
+  {
+    this(inModifier, inType, Optional.<String>absent(),
+         Optional.<Modifier>absent());
+  }
+
   /**
    * Create a modifier with a value.
    *

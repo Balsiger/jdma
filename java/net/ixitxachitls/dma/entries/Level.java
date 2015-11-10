@@ -34,6 +34,7 @@ import net.ixitxachitls.dma.proto.Entries.LevelProto;
 import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Ability;
 
 /**
  * An actual character level.
@@ -61,6 +62,9 @@ public class Level extends NestedEntry
 
   /** The base level to this level. */
   private Optional<Optional<BaseLevel>> m_base = Optional.absent();
+
+  /** The ability that increased at the level, if any. */
+  private Optional<Ability> m_abilityIncrease = Optional.absent();
 
   /**
    * Get the hp this level gives.
@@ -146,6 +150,22 @@ public class Level extends NestedEntry
     return Collections.unmodifiableList(m_feats);
   }
 
+  public List<Feat> getAllFeats(int inLevel)
+  {
+    List<Feat> feats = new ArrayList<>(getFeats());
+
+    if(getBase().isPresent())
+      for(BaseLevel.QualityReference feat : getBase().get().getBonusFeats())
+        if(feat.getLevel() <= inLevel)
+          feats.add(new Feat(feat.getName()));
+
+    return feats;
+  }
+
+  public Optional<Ability> getAbilityIncrease() {
+    return m_abilityIncrease;
+  }
+
   public List<Feat> getBonusFeats(int inLevel)
   {
     if(getBase().isPresent())
@@ -169,6 +189,8 @@ public class Level extends NestedEntry
     m_name = inValues.use("name", m_name);
     m_qualities = inValues.useEntries("quality", m_qualities, Quality.CREATOR);
     m_feats = inValues.useEntries("feat", m_feats, Feat.CREATOR);
+    m_abilityIncrease = inValues.use("ability_increase", m_abilityIncrease,
+                                     Ability.PARSER);
 
     Optional<Integer> hp = inValues.use("hp", m_hp);
     if(hp.isPresent())
@@ -196,6 +218,9 @@ public class Level extends NestedEntry
     for(Feat feat : m_feats)
       builder.addFeat(feat.toProto());
 
+    if(m_abilityIncrease.isPresent())
+      builder.setAbilityIncrease(m_abilityIncrease.get().toProto());
+
     LevelProto proto = builder.build();
     return proto;
   }
@@ -217,6 +242,10 @@ public class Level extends NestedEntry
 
     for (Entries.FeatProto feat : inProto.getFeatList())
       level.m_feats.add(Feat.fromProto(feat));
+
+    if(inProto.hasAbilityIncrease())
+      level.m_abilityIncrease =
+          Optional.of(Ability.fromProto(inProto.getAbilityIncrease()));
 
     return level;
   }
@@ -243,5 +272,37 @@ public class Level extends NestedEntry
       return getBase().get().getArmorProficiencies();
 
     return new ArrayList<>();
+  }
+
+  public int spellsKnown(int inCharacterLevel, int inSpellLevel)
+  {
+    if(!getBase().isPresent())
+      return 0;
+
+    List<Integer> spells = getBase().get().getSpellsKnown(inSpellLevel);
+    if(spells.size() > inCharacterLevel)
+      return spells.get(inCharacterLevel - 1);
+
+    return -1;
+  }
+
+  public int spellsPerDay(int inCharacterLevel, int inSpellLevel)
+  {
+    if(!getBase().isPresent())
+      return 0;
+
+    List<Integer> spells = getBase().get().getSpellsPerDay(inSpellLevel);
+    if(spells.size() > inCharacterLevel)
+      return spells.get(inCharacterLevel - 1);
+
+    return -1;
+  }
+
+  public Optional<Ability> getSpellAbility()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getSpellAbility();
+
+    return Optional.absent();
   }
 }

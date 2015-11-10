@@ -55,4 +55,14 @@ public class Monsters
 
     return 0;
   }
+
+  public static int bonusSpells(int inAbilityScore, int inLevel) {
+    if(inLevel <= 0)
+      return 0;
+
+    if(inAbilityScore < 10)
+      return -1;
+
+    return (inAbilityScore - 3 - 2 * (inLevel - 1)) / 8;
+  }
 }

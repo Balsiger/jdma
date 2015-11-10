@@ -195,6 +195,87 @@ public class Feat extends NestedEntry
     return Optional.absent();
   }
 
+  public Modifier getStrengthModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getStrengthModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getStrengthModifier().get();
+  }
+
+  public Modifier getDexterityModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getDexterityModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getDexterityModifier().get();
+  }
+
+  public Modifier getConstitutionModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getConstitutionModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getConstitutionModifier().get();
+  }
+
+  public Modifier getIntelligenceModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getIntelligenceModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getIntelligenceModifier().get();
+  }
+
+  public Modifier getWisdomModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getWisdomModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getWisdomModifier().get();
+  }
+
+  public Modifier getCharismaModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getCharismaModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getCharismaModifier().get();
+  }
+
+  public Modifier fortitudeModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getFortitudeModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getFortitudeModifier().get();
+  }
+
+  public Modifier willModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getWillModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getFortitudeModifier().get();
+  }
+
+  public Modifier reflexModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getReflexModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getReflexModifier().get();
+  }
+
   @Override
   public String toString()
   {
@@ -251,5 +332,26 @@ public class Feat extends NestedEntry
   // PHB p. 87
   public static int availableFeats(int inLevel) {
     return inLevel / 3 + 1;
+  }
+
+  @Override
+  public boolean equals(Object o)
+  {
+    if(this == o)
+      return true;
+
+    if(o == null || getClass() != o.getClass())
+      return false;
+
+    final Feat feat = (Feat)o;
+    return m_qualifier.equals(feat.m_qualifier)
+        && m_name.equals(feat.m_name);
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return m_qualifier.hashCode()
+        + 31 * m_name.hashCode();
   }
 }

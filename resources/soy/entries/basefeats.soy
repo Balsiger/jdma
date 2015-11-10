@@ -122,21 +122,21 @@
       {if $entry.benefit.present}
         {call dma.entry.value}
           {param label: 'Benefit' /}
-          {param value: $entry.benefit.get /}
+          {param value: commands($entry.benefit.get) /}
           {param color: '#0aa' /}
         {/call}
       {/if}
       {if $entry.special.present}
         {call dma.entry.value}
           {param label: 'Special' /}
-          {param value: $entry.special.get /}
+          {param value: commands($entry.special.get) /}
           {param color: '#0aa' /}
         {/call}
       {/if}
       {if $entry.normal.present}
         {call dma.entry.value}
           {param label: 'Normal' /}
-          {param value: $entry.normal.get /}
+          {param value: commands($entry.normal.get) /}
           {param color: '#0aa' /}
         {/call}
       {/if}
@@ -191,6 +191,69 @@
               {if not isLast($skill)}; {/if}
             {/foreach}
           {/param}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.strength_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Str Modifier' /}
+          {param value: $entry.strength_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.dexterity_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Dex Modifier' /}
+          {param value: $entry.dexterity_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.constitution_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Con Modifier' /}
+          {param value: $entry.constitution_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.intelligence_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Int Modifier' /}
+          {param value: $entry.intelligence_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.wisdom_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Wis Modifier' /}
+          {param value: $entry.wisdom_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.charisma_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Cha Modifier' /}
+          {param value: $entry.charisma_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.fortitude_modifier.present}
+        {call dma.entry.value}
+          {param label: 'For Modifier' /}
+          {param value: $entry.fortitude_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.will_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Will Modifier' /}
+          {param value: $entry.will_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.reflex_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Ref Modifier' /}
+          {param value: $entry.reflex_modifier /}
           {param color: '#0aa' /}
         {/call}
       {/if}
@@ -279,7 +342,7 @@
         {param color: '#0aa' /}
       {/call}
       {call dma.edit.value}
-        {param name: 'short-description' /}
+        {param name: 'short_description' /}
         {param label: 'Short Description' /}
         {param value: $entry.short_description /}
         {param validate: 'any' /}
@@ -328,21 +391,21 @@
         {param choices: $entry.feat_type.names /}
         {param color: '#0aa' /}
       {/call}    
-      {call dma.edit.value}
+      {call dma.edit.value_text}
         {param name: 'benefit' /}
         {param label: 'Benefit' /}
         {param value: $entry.benefit.present ? $entry.benefit.get : '' /}
         {param validate: 'any' /}
         {param color: '#0aa' /}
       {/call}    
-      {call dma.edit.value}
+      {call dma.edit.value_text}
         {param name: 'special' /}
         {param label: 'Special' /}
         {param value: $entry.special.present ? $entry.special.get : '' /}
         {param validate: 'any' /}
         {param color: '#0aa' /}
       {/call}    
-      {call dma.edit.value}
+      {call dma.edit.value_text}
         {param name: 'normal' /}
         {param label: 'Normal' /}
         {param value: $entry.normal.present ? $entry.normal.get : '' /}
@@ -405,6 +468,78 @@
               ? $entry.condition.wepon_style.get.string : '' /}
           {/call}
         {/param}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'strength_modifier' /}
+        {param label: 'Str Modifier' /}
+        {param value: $entry.strength_modifier.present
+          ? $entry.strength_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'dexterity_modifier' /}
+        {param label: 'Dex Modifier' /}
+        {param value: $entry.dexterity_modifier.present
+          ? $entry.dexterity_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'constitution_modifier' /}
+        {param label: 'Con Modifier' /}
+        {param value: $entry.constitution_modifier.present
+          ? $entry.constitution_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'intelligence_modifier' /}
+        {param label: 'Int Modifier' /}
+        {param value: $entry.intelligence_modifier.present
+          ? $entry.intelligence_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'wisdom_modifier' /}
+        {param label: 'Wis Modifier' /}
+        {param value: $entry.wisdom_modifier.present
+          ? $entry.wisdom_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'charisma_modifier' /}
+        {param label: 'Cha Modifier' /}
+        {param value: $entry.charisma_modifier.present
+          ? $entry.charisma_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'fortitude_modifier' /}
+        {param label: 'For Modifier' /}
+        {param value: $entry.fortitude_modifier.present
+          ? $entry.fortitude_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'will_modifier' /}
+        {param label: 'Will Modifier' /}
+        {param value: $entry.will_modifier.present
+          ? $entry.will_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'reflex_modifier' /}
+        {param label: 'Ref Modifier' /}
+        {param value: $entry.reflex_modifier.present
+          ? $entry.reflex_modifier : '' /}
+        {param validate: 'modifier' /}
         {param color: '#0aa' /}
       {/call}
       {call dma.edit.generic_value}

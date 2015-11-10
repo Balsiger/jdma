@@ -428,6 +428,13 @@
       {param ability: annotate($entry.combined_strength) /}
       {param racial: $entry.racial_strength_modifier /}
       {param modifier: bonus($entry.strength_modifier) /}
+      {param misc kind="html"}
+        {if $entry.strength_misc_modifier.has_value}
+          {call dma.value.modifier}
+            {param modifier: $entry.strength_misc_modifier /}
+          {/call}
+        {/if}
+      {/param}
     {/call}
     {call .ability}
       {param name: 'Dexterity' /}
@@ -436,6 +443,13 @@
       {param ability: annotate($entry.combined_dexterity) /}
       {param racial: $entry.racial_dexterity_modifier /}
       {param modifier: bonus($entry.dexterity_modifier) /}
+      {param misc kind="html"}
+        {if $entry.dexterity_misc_modifier.has_value}
+          {call dma.value.modifier}
+            {param modifier: $entry.dexterity_misc_modifier /}
+          {/call}
+        {/if}
+      {/param}
     {/call}
     {call .ability}
       {param name: 'Constitution' /}
@@ -444,6 +458,13 @@
       {param ability: annotate($entry.combined_constitution) /}
       {param racial: $entry.racial_constitution_modifier /}
       {param modifier: bonus($entry.constitution_modifier) /}
+      {param misc kind="html"}
+        {if $entry.constitution_misc_modifier.has_value}
+          {call dma.value.modifier}
+            {param modifier: $entry.constitution_misc_modifier /}
+          {/call}
+        {/if}
+      {/param}
     {/call}
     {call .ability}
       {param name: 'Intelligence' /}
@@ -452,6 +473,13 @@
       {param ability: annotate($entry.combined_intelligence) /}
       {param racial: $entry.racial_intelligence_modifier /}
       {param modifier: bonus($entry.intelligence_modifier) /}
+      {param misc kind="html"}
+        {if $entry.intelligence_misc_modifier.has_value}
+          {call dma.value.modifier}
+            {param modifier: $entry.intelligence_misc_modifier /}
+          {/call}
+        {/if}
+      {/param}
     {/call}
     {call .ability}
       {param name: 'Wisdom' /}
@@ -460,6 +488,13 @@
       {param ability: annotate($entry.combined_wisdom) /}
       {param racial: $entry.racial_wisdom_modifier /}
       {param modifier: bonus($entry.wisdom_modifier) /}
+      {param misc kind="html"}
+        {if $entry.wisdom_misc_modifier.has_value}
+          {call dma.value.modifier}
+            {param modifier: $entry.wisdom_misc_modifier /}
+          {/call}
+        {/if}
+      {/param}
     {/call}
     {call .ability}
       {param name: 'Charisma' /}
@@ -468,6 +503,13 @@
       {param ability: annotate($entry.combined_charisma) /}
       {param racial: $entry.racial_charisma_modifier /}
       {param modifier: bonus($entry.charisma_modifier) /}
+      {param misc kind="html"}
+        {if $entry.charisma_misc_modifier.has_value}
+          {call dma.value.modifier}
+            {param modifier: $entry.charisma_misc_modifier /}
+          {/call}
+        {/if}
+      {/param}
     {/call}
   </div>
 {/template}
@@ -702,25 +744,31 @@
       {call .sheet_saves_value}
         {param name: 'Fortitude' /}
         {param ability: 'Constitution' /}
-        {param value: annotate($entry.combined_fortitude_save) /}
+        {param value: value($entry.fortitude_save, 'no_conditions') /}
+        {param base: annotate($entry.combined_fortitude_save) /}
         {param racial: $entry.racial_fortitude_modifier /}
         {param ability_modifier: bonus($entry.constitution_modifier) /}
+        {param misc: $entry.misc_fortitude_modifier /}
       {/call}
 
       {call .sheet_saves_value}
         {param name: 'Reflex' /}
         {param ability: 'Dexterity' /}
         {param racial: $entry.racial_reflex_modifier /}
-        {param value: annotate($entry.combined_reflex_save) /}
+        {param value: value($entry.reflex_save, 'no_conditions') /}
+        {param base: annotate($entry.combined_reflex_save) /}
         {param ability_modifier: bonus($entry.dexterity_modifier) /}
+        {param misc: $entry.misc_reflex_modifier /}
       {/call}
 
       {call .sheet_saves_value}
         {param name: 'Will' /}
         {param ability: 'Wisdom' /}
         {param racial: $entry.racial_will_modifier /}
-        {param value: annotate($entry.combined_will_save) /}
+        {param value: value($entry.will_save, 'no_conditions') /}
+        {param base: annotate($entry.combined_will_save) /}
         {param ability_modifier: bonus($entry.wisdom_modifier) /}
+        {param misc: $entry.misc_will_modifier /}
       {/call}
     </div>
 
@@ -730,29 +778,32 @@
         Conditional Modifiers
       </div>
       <div style="flex: 1;">
-        {if $entry.racial_reflex_modifier.has_value and
-            $entry.racial_reflex_modifier.has_any_condition}
-          Reflex:{sp}
+        {if $entry.reflex_save.get.has_value and
+            $entry.reflex_save.get.has_any_condition}
+          Ref:{sp}
           {call dma.value.modifier}
-            {param modifier: $entry.racial_reflex_modifier /}
+            {param modifier: $entry.reflex_save.get /}
+            {param only_conditionals: true /}
           {/call}
         {/if}
       </div>
       <div style="flex: 1;">
-        {if $entry.racial_fortitude_modifier.has_value and
-            $entry.racial_fortitude_modifier.has_any_condition}
-          Fortitude:{sp}
+        {if $entry.fortitude_save.get.has_value and
+            $entry.fortitude_save.get.has_any_condition}
+          For:{sp}
           {call dma.value.modifier}
-            {param modifier: $entry.racial_fortitude_modifier /}
+            {param modifier: $entry.fortitude_save.get /}
+            {param only_conditionals: true /}
           {/call}
         {/if}
-        </div>
-        <div style="flex: 1;">
-        {if $entry.racial_will_modifier.has_value and
-            $entry.racial_will_modifier.has_any_condition}
+      </div>
+      <div style="flex: 1;">
+        {if $entry.will_save.get.has_value and
+            $entry.will_save.get.has_any_condition}
           Will:{sp}
           {call dma.value.modifier}
-            {param modifier: $entry.racial_will_modifier /}
+            {param modifier: $entry.will_save.get /}
+            {param only_conditionals: true /}
           {/call}
         {/if}
       </div>
@@ -766,8 +817,10 @@
   {@param name: string}
   {@param ability: string}
   {@param value: string}
+  {@param base: string}
   {@param ability_modifier: string}
   {@param racial: ?}
+  {@param misc: ?}
   {@param? short: bool}
   <div class="two-line-label"
        style="width: {if $short}59{else}15{/if}%;
@@ -799,7 +852,7 @@
       {param center: true /}
       {param white: true /}
       {param top: true /}
-      {param value: $value /}
+      {param value: $base /}
     {/call}
 
     <div class="operator" style="padding-top: 30px">+</div>
@@ -844,12 +897,17 @@
       {param center: true /}
       {param white: true /}
       {param top: true /}
+      {param lineHeight: '6px' /}
       {param value kind="html"}
          {if $racial.has_value}
              {call dma.value.modifier}
                {param modifier: $racial /}
-               {param hide_condition: true /}
              {/call}
+          {/if}
+          {if $misc.has_value}
+            {call dma.value.modifier}
+              {param modifier: $misc /}
+            {/call}
           {/if}
       {/param}
     {/call}
@@ -1176,28 +1234,34 @@
         {param entry: $entry /}
       {/call}
     </div>
-    <div class="sheet-column"
-         style="height: 100%; display: flex; flex-direction: column; flex: 1;">
-      <div style="flex: 1">
+    <div class="sheet-column column flex"
+         style="height: 100%">
+      <div class="flex">
         {call .sheet_racial_traits}
           {param entry: $entry /}
         {/call}
       </div>
 
-      <div style="flex: 1; margin-top: 20px">
+      <div style="flex: 5; margin-top: 20px">
         {call .sheet_class_features}
           {param entry: $entry /}
         {/call}
       </div>
 
-      <div style="flex: 1; margin-top: 20px">
+      <div class="flex" style="margin-top: 20px">
         {call .sheet_feats}
           {param entry: $entry /}
         {/call}
       </div>
 
-      <div style="flex: 1; margin-top: 20px">
+      <div class="flex" style="margin-top: 20px">
         {call .sheet_languages}
+          {param entry: $entry /}
+        {/call}
+      </div>
+
+      <div class="flex" style="margin-top: 20px">
+        {call .sheet_spells}
           {param entry: $entry /}
         {/call}
       </div>
@@ -1210,6 +1274,77 @@
   //{@param entry: ?}
 {/template}
 
+
+/** The spells box. */
+{template .sheet_spells}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Spells' /}
+  {/call}
+
+  <div class="box sheet-column column"
+       style="margin-bottom: 10px; min-height: 200px;">
+    <div>
+      Conditional Modifiers
+    </div>
+  </div>
+
+  <div class="line">
+    <div class="column flex" style="padding-right: 5px">
+      <div class="line flex">
+        <div class="bold flex">Level</div>
+        <div class="flex">Spells<br/>Known</div>
+        <div class="flex">Spell<br/> Save DC</div>
+        <div class="flex">Spells/<br/>Day</div>
+      </div>
+      {for $i in range(5)}
+        {call .sheet_spell_level}
+          {param entry: $entry /}
+          {param level: $i /}
+        {/call}
+      {/for}
+    </div>
+
+    <div class="column flex" style="padding-left: 5px">
+      <div class="line flex">
+        <div class="bold flex">Level</div>
+        <div class="flex">Spells<br/>Known</div>
+        <div class="flex">Spell<br/> Save DC</div>
+        <div class="flex">Spells/<br/>Day</div>
+      </div>
+      {for $i in range(5, 10)}
+        {call .sheet_spell_level}
+          {param entry: $entry /}
+          {param level: $i /}
+        {/call}
+      {/for}
+    </div>
+  </div>
+{/template}
+
+/** A line with information about a spell level. */
+{template .sheet_spell_level}
+  {@param entry: ?}
+  {@param level: number}
+  <div class="line flex">
+    <div class="flex box">{$level}</div>
+    <div class="flex box">
+      {if call($entry, 'spellsKnown', $level) >= 0}
+        {call($entry, 'spellsKnown', $level)}
+      {else}
+        &ndash;
+      {/if}
+    </div>
+    <div class="flex box">{call($entry, 'spellSaveDC', $level)}</div>
+    <div class="flex box">
+      {if call($entry, 'spellsPerDay', $level) >= 0}
+        {call($entry, 'spellsPerDay', $level)}
+      {else}
+        &ndash;
+      {/if}
+    </div>
+  </div>
+{/template}
 
 /** The langauges box. */
 {template .sheet_languages}
@@ -1916,6 +2051,7 @@
   {@param total: string}
   {@param ability: html|string}
   {@param modifier: html|string}
+  {@param misc: html|string}
   {@param racial: ?}
   <div class="ability">
     <div class="two-line-label">
@@ -1975,8 +2111,9 @@
       {param width: '13.5%' /}
       {param size: '6px' /}
       {param vSize: '14px' /}
+      {param lineHeight: '6px' /}
       {param center: true /}
-      {param value: '' /}
+      {param value: $misc /}
     {/call}
   
     <div class="operator">-</div>

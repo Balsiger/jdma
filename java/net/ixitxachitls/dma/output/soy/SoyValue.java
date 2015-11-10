@@ -55,18 +55,18 @@ public class SoyValue extends SoyMapData
    * Create the abstract soy value.
    *
    * @param inName  the name of the soy value
-   * @param inEntry the entry in which to evaluate the values
+   * @param inValue the value
    */
-  public SoyValue(String inName, @Nullable Object inEntry)
+  public SoyValue(String inName, @Nullable Object inValue)
   {
     m_name = inName;
-    m_object = inEntry;
+    m_object = inValue;
   }
 
   /** The name of the value. */
   protected final String m_name;
 
-  /** The entry with the data. */
+  /** The value with the data. */
   protected final Object m_object;
 
   /** The cache for already computed values. */
@@ -80,6 +80,11 @@ public class SoyValue extends SoyMapData
   public Object getValue()
   {
     return m_object;
+  }
+
+  public String getValueName()
+  {
+    return Classes.toSnakeCaseName(m_object.getClass());
   }
 
   /**

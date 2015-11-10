@@ -31,9 +31,12 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CharacterProto;
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
+import net.ixitxachitls.dma.rules.Monsters;
 import net.ixitxachitls.dma.values.File;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.CharacterState;
 import net.ixitxachitls.util.logging.Log;
 
@@ -488,5 +491,64 @@ public class Character extends NPC
   protected Message defaultProto()
   {
     return CharacterProto.getDefaultInstance();
+  }
+
+  public int spellsKnown(Integer inSpellLevel)
+  {
+    int spells = 0;
+    for(Level level : m_levels)
+      spells = level.spellsKnown(getEffectiveCharacterLevel(), inSpellLevel);
+
+    return spells;
+  }
+
+  public int spellsPerDay(Integer inSpellLevel)
+  {
+    int spells = -1;
+    for(Level level : m_levels)
+    {
+      Optional<Ability> ability = level.getSpellAbility();
+      // No spells if ability is not high enough.
+      if(!ability.isPresent() || ability(ability.get()) < 10 + inSpellLevel)
+        continue;
+
+      spells = level.spellsPerDay(getEffectiveCharacterLevel(), inSpellLevel)
+        + Monsters.bonusSpells(ability(ability.get()), inSpellLevel);
+    }
+
+    return spells;
+  }
+
+  public int spellSaveDC(Integer inLevel)
+  {
+    int dc = 10 + inLevel;
+    for(Level level : m_levels)
+    {
+      Optional<Ability> ability = level.getSpellAbility();
+      if(ability.isPresent())
+        dc += abilityModifier(ability.get());
+    }
+
+    return dc;
+  }
+
+  @Override
+  public Modifier abilityModifierFromQualities(Ability inAbility)
+  {
+    Modifier modifier = super.abilityModifierFromQualities(inAbility);
+
+    int value = 0;
+    for(Level level : m_levels)
+      if(level.getAbilityIncrease().isPresent()
+          && level.getAbilityIncrease().get() == inAbility)
+        value++;
+
+    if(value > 0)
+      modifier = (Modifier)modifier.add
+          (new Modifier(value, Modifier.Type.GENERAL,
+                        Optional.<String>absent(),
+                        Optional.<Modifier>absent()));
+
+    return modifier;
   }
 }

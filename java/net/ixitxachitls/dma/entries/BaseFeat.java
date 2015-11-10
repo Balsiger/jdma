@@ -113,6 +113,34 @@ public class BaseFeat extends BaseEntry
   /** The skill modifiers given by the feat. */
   protected List<NameAndModifier> m_skillModifiers = new ArrayList<>();
 
+  /** The strength modifier. */
+  protected Optional<Modifier> m_strengthModifier = Optional.absent();
+
+  /** The dexterity modifier. */
+  protected Optional<Modifier> m_dexterityModifier = Optional.absent();
+
+  /** The constitution modifier. */
+  protected Optional<Modifier> m_constitutionModifier = Optional.absent();
+
+  /** The intelligence modifier. */
+  protected Optional<Modifier> m_intelligenceModifier = Optional.absent();
+
+  /** The wisdom modifier. */
+  protected Optional<Modifier> m_wisdomModifier = Optional.absent();
+
+  /** The charisma modifier. */
+  protected Optional<Modifier> m_charismaModifier = Optional.absent();
+
+  /** The fortitude save modifier. */
+  protected Optional<Modifier> m_fortitudeModifier = Optional.absent();
+
+  /** The will save modifier. */
+  protected Optional<Modifier> m_willModifier = Optional.absent();
+
+  /** The reflex save modifier. */
+  protected Optional<Modifier> m_reflexModifier = Optional.absent();
+
+
   /** The effects of the feat. */
   @Deprecated
   protected List<Effect> m_effects = new ArrayList<>();
@@ -203,6 +231,51 @@ public class BaseFeat extends BaseEntry
     return m_condition;
   }
 
+  public Optional<Modifier> getStrengthModifier()
+  {
+    return m_strengthModifier;
+  }
+
+  public Optional<Modifier> getDexterityModifier()
+  {
+    return m_dexterityModifier;
+  }
+
+  public Optional<Modifier> getConstitutionModifier()
+  {
+    return m_constitutionModifier;
+  }
+
+  public Optional<Modifier> getIntelligenceModifier()
+  {
+    return m_intelligenceModifier;
+  }
+
+  public Optional<Modifier> getWisdomModifier()
+  {
+    return m_wisdomModifier;
+  }
+
+  public Optional<Modifier> getCharismaModifier()
+  {
+    return m_charismaModifier;
+  }
+
+  public Optional<Modifier> getFortitudeModifier()
+  {
+    return m_fortitudeModifier;
+  }
+
+  public Optional<Modifier> getWillModifier()
+  {
+    return m_willModifier;
+  }
+
+  public Optional<Modifier> getReflexModifier()
+  {
+    return m_reflexModifier;
+  }
+
   /**
    * Get the effects the feat has on values.
    *
@@ -269,6 +342,26 @@ public class BaseFeat extends BaseEntry
     m_skillModifiers = inValues.use("skill", m_skillModifiers,
                                     NameAndModifier.PARSER,
                                     "name", "modifier");
+    m_strengthModifier = inValues.use("strength_modifier", m_strengthModifier,
+                                      Modifier.PARSER);
+    m_dexterityModifier = inValues.use("dexterity_modifier",
+                                       m_dexterityModifier, Modifier.PARSER);
+    m_constitutionModifier = inValues.use("constitution_modifier",
+                                          m_constitutionModifier,
+                                          Modifier.PARSER);
+    m_intelligenceModifier = inValues.use("intelligence_modifier",
+                                          m_intelligenceModifier,
+                                          Modifier.PARSER);
+    m_wisdomModifier = inValues.use("wisdom_modifier", m_wisdomModifier,
+                                      Modifier.PARSER);
+    m_charismaModifier = inValues.use("charisma_modifier", m_charismaModifier,
+                                      Modifier.PARSER);
+    m_fortitudeModifier = inValues.use("fortitude_modifier",
+                                       m_fortitudeModifier, Modifier.PARSER);
+    m_willModifier = inValues.use("will_modifier", m_willModifier,
+                                  Modifier.PARSER);
+    m_reflexModifier = inValues.use("reflex_modifier", m_reflexModifier,
+                                    Modifier.PARSER);
 
     m_effects = inValues.use("effect", m_effects, Effect.PARSER,
                              "affects", "name", "modifier", "text");
@@ -313,6 +406,33 @@ public class BaseFeat extends BaseEntry
 
     for(NameAndModifier skill : m_skillModifiers)
       builder.addSkillModifier(skill.toProto());
+
+    if(m_strengthModifier.isPresent())
+      builder.setStrengthModifier(m_strengthModifier.get().toProto());
+
+    if(m_dexterityModifier.isPresent())
+      builder.setDexterityModifier(m_dexterityModifier.get().toProto());
+
+    if(m_constitutionModifier.isPresent())
+      builder.setConstitutionModifier(m_constitutionModifier.get().toProto());
+
+    if(m_intelligenceModifier.isPresent())
+      builder.setIntelligenceModifier(m_intelligenceModifier.get().toProto());
+
+    if(m_wisdomModifier.isPresent())
+      builder.setWisdomModifier(m_wisdomModifier.get().toProto());
+
+    if(m_charismaModifier.isPresent())
+      builder.setCharismaModifier(m_charismaModifier.get().toProto());
+
+    if(m_fortitudeModifier.isPresent())
+      builder.setFortitudeModifier(m_fortitudeModifier.get().toProto());
+
+    if(m_willModifier.isPresent())
+      builder.setWillModifier(m_willModifier.get().toProto());
+
+    if(m_reflexModifier.isPresent())
+      builder.setReflexModifier(m_reflexModifier.get().toProto());
 
     for(Effect effect : m_effects)
     {
@@ -384,6 +504,41 @@ public class BaseFeat extends BaseEntry
 
     for(NameAndModifierProto skill : proto.getSkillModifierList())
       m_skillModifiers.add(NameAndModifier.fromProto(skill));
+
+    if(proto.hasStrengthModifier())
+      m_strengthModifier =
+          Optional.of(Modifier.fromProto(proto.getStrengthModifier()));
+
+    if(proto.hasDexterityModifier())
+      m_dexterityModifier =
+          Optional.of(Modifier.fromProto(proto.getDexterityModifier()));
+
+    if(proto.hasConstitutionModifier())
+      m_constitutionModifier =
+          Optional.of(Modifier.fromProto(proto.getConstitutionModifier()));
+
+    if(proto.hasIntelligenceModifier())
+      m_intelligenceModifier =
+          Optional.of(Modifier.fromProto(proto.getIntelligenceModifier()));
+
+    if(proto.hasWisdomModifier())
+      m_wisdomModifier =
+          Optional.of(Modifier.fromProto(proto.getWisdomModifier()));
+
+    if(proto.hasCharismaModifier())
+      m_charismaModifier =
+          Optional.of(Modifier.fromProto(proto.getCharismaModifier()));
+
+    if(proto.hasFortitudeModifier())
+      m_fortitudeModifier =
+          Optional.of(Modifier.fromProto(proto.getFortitudeModifier()));
+
+    if(proto.hasWillModifier())
+      m_willModifier = Optional.of(Modifier.fromProto(proto.getWillModifier()));
+
+    if(proto.hasReflexModifier())
+      m_reflexModifier =
+          Optional.of(Modifier.fromProto(proto.getReflexModifier()));
 
     for(BaseFeatProto.Effect effect : proto.getEffectList())
       m_effects.add(new Effect(Affects.fromProto(effect.getAffects()),

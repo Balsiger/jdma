@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -152,6 +153,8 @@ public class SoyTemplate
       for (int i = 0; i < arguments.length; i++)
         if((inArgs.get(i + 2) instanceof SoyValue))
           arguments[i] = ((SoyValue)inArgs.get(i + 2)).getValue();
+        else if ((inArgs.get(i + 2)) instanceof IntegerData)
+          arguments[i] = inArgs.get(i + 2).integerValue();
         else
           arguments[i] = inArgs.get(i + 2).stringValue();
 
@@ -326,7 +329,7 @@ public class SoyTemplate
     public SoyData computeForTofu(List<SoyData> inArgs)
     {
       return BooleanData.forValue
-        (inArgs.get(0).toString().matches(inArgs.get(1).toString()));
+          (inArgs.get(0).toString().matches(inArgs.get(1).toString()));
     }
   }
 
@@ -451,6 +454,51 @@ public class SoyTemplate
                   Optional.of(map(
                       "value", data,
                       "link", inArgs.size() > 1 ? inArgs.get(1) : ""))),
+             SanitizedContent.ContentKind.HTML);
+      }
+
+      return inArgs.get(0);
+    }
+  }
+
+  /** A plugin function to format values or printing. */
+  public static class ValueFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "value";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1, 2);
+    }
+
+    @Override
+    public SoyData computeForTofu(List<SoyData> inArgs)
+    {
+      // Values are similar to SoyMapDate to access their values.
+      if(inArgs.get(0) instanceof SoyValue)
+      {
+        SoyValue data = (SoyValue)inArgs.get(0);
+        ImmutableMap.Builder<String, Object> map =
+            ImmutableMap.<String, Object>builder()
+                .put("value", data);
+        for(int i = 1; i < inArgs.size(); i++)
+        {
+          String parts[] = inArgs.get(i).toString().split("\\s*=\\s*");
+          if(parts.length == 2)
+            map.put(parts[0], parts[1]);
+          else
+            map.put(inArgs.get(i).toString(), "true");
+        }
+
+        return UnsafeSanitizedContentOrdainer.ordainAsSafe
+            (COMMAND_RENDERER.renderSoy
+                 ("dma.value." + data.getValueName(),
+                  Optional.of((Map<String, Object>)map.build())),
              SanitizedContent.ContentKind.HTML);
       }
 
@@ -694,6 +742,7 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(FormatNumberFunction.class);
       soyFunctionsSetBinder.addBinding().to(BonusFunction.class);
       soyFunctionsSetBinder.addBinding().to(AnnotateFunction.class);
+      soyFunctionsSetBinder.addBinding().to(ValueFunction.class);
       soyFunctionsSetBinder.addBinding().to(IsListFunction.class);
       soyFunctionsSetBinder.addBinding().to(CamelFunction.class);
       soyFunctionsSetBinder.addBinding().to(LowerFunction.class);

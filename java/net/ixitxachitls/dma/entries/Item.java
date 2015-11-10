@@ -1273,6 +1273,13 @@ public class Item extends CampaignEntry
             && specialization.get().getQualifier().isPresent()
             && hasBaseName(specialization.get().getQualifier().get()))
           bonus += 1;
+
+        Optional<Feat> focus =
+            getPossessor().get().getFeat("weapon focus");
+        if(focus.isPresent()
+            && focus.get().getQualifier().isPresent()
+            && hasBaseName(focus.get().getQualifier().get()))
+          bonus += 1;
       }
 
       Optional<Integer> attack =
@@ -1292,6 +1299,10 @@ public class Item extends CampaignEntry
 
       // Add conditional attack modifiers.
       for(Feat feat : getPossessor().get().getCombinedFeats().get()) {
+        if (feat.getName().equalsIgnoreCase("weapon focus")
+            || feat.getName().equalsIgnoreCase("weapon specialization"))
+          continue;
+
         Optional<Condition> condition = feat.getCondition();
         if(condition.isPresent() && condition.get().check(this).isPresent()
             && !condition.get().check(this).get())

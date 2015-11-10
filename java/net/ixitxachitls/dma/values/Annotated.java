@@ -22,6 +22,7 @@
 package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.google.common.base.Optional;
 
@@ -84,7 +85,7 @@ public abstract class Annotated<V>
     public void add(V inValue, java.lang.String inSource)
     {
       add(Optional.of(inValue));
-      super.add(inValue.toString(), inSource);
+      super.add(Optional.of(inValue), inSource);
     }
 
     @Override
@@ -173,7 +174,7 @@ public abstract class Annotated<V>
     public void add(V inValue, java.lang.String inSource)
     {
       add(Optional.of(inValue));
-      super.add(inValue.toString(), inSource);
+      super.add(Optional.of(inValue), inSource);
     }
 
     @Override
@@ -250,12 +251,11 @@ public abstract class Annotated<V>
         m_value = Optional.of(m_value.get() + " " + inValue.get());
     }
 
-    @Override
     public void add(java.lang.String inValue, java.lang.String inSource)
     {
       add(Optional.of(inValue));
 
-      super.add(inValue, inSource);
+      super.add(Optional.of(inValue), inSource);
     }
 
     @Override
@@ -293,7 +293,8 @@ public abstract class Annotated<V>
      * @param inValue the final value
      * @param inSources the values and source that contributed the final value
      */
-    public Boolean(boolean inValue, ValueSources inSources)
+    public Boolean(boolean inValue,
+                   ValueSources<Optional<java.lang.Boolean>> inSources)
     {
       super(inSources);
 
@@ -325,7 +326,7 @@ public abstract class Annotated<V>
     {
       add(Optional.of(inValue));
 
-      super.add("" + inValue, inSource);
+      super.add(Optional.of(inValue), inSource);
     }
 
     @Override
@@ -363,7 +364,8 @@ public abstract class Annotated<V>
      * @param inValue the final value
      * @param inSources the values and source that contributed the final value
      */
-    public Integer(int inValue, ValueSources inSources)
+    public Integer(int inValue,
+                   ValueSources<Optional<java.lang.Integer>> inSources)
     {
       super(inSources);
 
@@ -395,7 +397,7 @@ public abstract class Annotated<V>
     {
       add(Optional.of(inValue));
 
-      super.add("" + inValue, inSource);
+      super.add(Optional.of(inValue), inSource);
     }
 
     @Override
@@ -431,7 +433,8 @@ public abstract class Annotated<V>
      * @param inSources the sources and values that contributed to the final
      *                  value
      */
-    public Bonus(int inValue, ValueSources inSources)
+    public Bonus(int inValue,
+                 ValueSources<Optional<java.lang.Integer>> inSources)
     {
       super(inValue, inSources);
     }
@@ -441,13 +444,43 @@ public abstract class Annotated<V>
     {
       add(Optional.of(inValue));
 
-      super.add((inValue >= 0 ? "+" : "") + inValue, inSource);
+      super.add(Optional.of(inValue), inSource);
     }
 
     @Override
     public boolean showSign()
     {
       return true;
+    }
+  }
+
+  public static class Modifier
+      extends Annotated<net.ixitxachitls.dma.values.Modifier>
+  {
+    public Modifier()
+    {
+      m_value = new net.ixitxachitls.dma.values.Modifier();
+    }
+
+    private net.ixitxachitls.dma.values.Modifier m_value;
+
+    @Override
+    public void add(net.ixitxachitls.dma.values.Modifier inValue)
+    {
+      m_value = (net.ixitxachitls.dma.values.Modifier)m_value.add(inValue);
+    }
+
+    public void add(net.ixitxachitls.dma.values.Modifier inValue,
+                    java.lang.String inSource){
+      add(inValue);
+
+      super.add(inValue, inSource);
+    }
+
+    @Override
+    public net.ixitxachitls.dma.values.Modifier get()
+    {
+      return m_value;
     }
   }
 
@@ -473,7 +506,7 @@ public abstract class Annotated<V>
      */
     public Arithmetic(V inValue, java.lang.String inSource)
     {
-      super(inValue, inSource);
+      super(Optional.of(inValue), inSource);
 
       m_value = Optional.of(inValue);
     }
@@ -484,7 +517,7 @@ public abstract class Annotated<V>
      * @param inValue the final value
      * @param inSources the source and values contributing to the final value
      */
-    public Arithmetic(V inValue, ValueSources inSources)
+    public Arithmetic(V inValue, ValueSources<Optional<V>> inSources)
     {
       super(inSources);
 
@@ -522,7 +555,7 @@ public abstract class Annotated<V>
     {
       add(Optional.of(inValue));
 
-      super.add(inValue.toString(), inSource);
+      super.add(Optional.of(inValue), inSource);
     }
 
     /**
@@ -533,14 +566,14 @@ public abstract class Annotated<V>
      */
     public void multiply(int inValue, java.lang.String inSource)
     {
-      if(inValue > 1)
+      Optional<V> value = get();
+      if(value.isPresent())
       {
-        Optional<V> value = get();
-        if(value.isPresent())
-          add(Optional.of((V)value.get().multiply(inValue - 1)));
+        value = Optional.of((V)value.get().multiply(inValue - 1));
+        add(value);
       }
 
-      super.add("x" + inValue, inSource);
+      super.add(value, inSource);
     }
 
     @Override
@@ -571,7 +604,7 @@ public abstract class Annotated<V>
      */
     public List(V inValue, java.lang.String inSource)
     {
-      super(inValue.toString(), inSource);
+      super(Collections.singletonList(inValue), inSource);
 
       m_values.add(inValue);
     }
@@ -585,8 +618,7 @@ public abstract class Annotated<V>
     public List(java.util.List<V> inValues, java.lang.String inSource)
     {
       m_values.addAll(inValues);
-      for (V value : inValues)
-        add(value.toString(), inSource);
+      add(inValues, inSource);
     }
 
     /** The annotated list. */
@@ -621,7 +653,7 @@ public abstract class Annotated<V>
     {
       addValue(inValue);
 
-      super.add(inValue.toString(), inSource);
+      super.add(Collections.singletonList(inValue), inSource);
     }
 
     /**
@@ -634,7 +666,7 @@ public abstract class Annotated<V>
     {
       add(inValues);
       for(V value : inValues)
-        super.add(value.toString(), inSource);
+        super.add(Collections.singletonList(value), inSource);
     }
 
     @Override
@@ -647,7 +679,7 @@ public abstract class Annotated<V>
   /** Create an undefined annotated value. */
   public Annotated()
   {
-    m_sources = new ValueSources();
+    m_sources = new ValueSources<>();
   }
 
   /**
@@ -656,9 +688,9 @@ public abstract class Annotated<V>
    * @param inValue the initial value
    * @param inSource the source of the initial value
    */
-  public Annotated(Object inValue, java.lang.String inSource)
+  public Annotated(V inValue, java.lang.String inSource)
   {
-    m_sources = new ValueSources(inValue, inSource);
+    m_sources = new ValueSources<>(inValue, inSource);
   }
 
   /**
@@ -666,20 +698,20 @@ public abstract class Annotated<V>
    *
    * @param inSources the values and sources to create from
    */
-  public Annotated(ValueSources inSources)
+  public Annotated(ValueSources<V> inSources)
   {
     m_sources = inSources;
   }
 
   /** The values and sources contributing to this annotated value. */
-  private final ValueSources m_sources;
+  private final ValueSources<V> m_sources;
 
   /**
    * Get the values and sources.
    *
    * @return the values and sources
    */
-  public ValueSources getSources()
+  public ValueSources<V> getSources()
   {
     return m_sources;
   }
@@ -690,7 +722,7 @@ public abstract class Annotated<V>
    * @param inValue the value to add (string representation)
    * @param inSource the source of the value
    */
-  public void add(java.lang.String inValue, java.lang.String inSource)
+  public void add(V inValue, java.lang.String inSource)
   {
     m_sources.add(inValue, inSource);
   }

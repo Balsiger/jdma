@@ -99,6 +99,7 @@
   {@param? boxed: bool}
   {@param? size: string}
   {@param? vSize: string}
+  {@param? lineHeight: string}
   {@param? prefix: bool}
   {@param? white: bool}
   {@param? top: bool}
@@ -122,7 +123,12 @@
                 {if $boxed} boxed{/if}
                 {if $white} white{/if}
                 {if $prefix} prefixed{/if}"
-                {if $vSize} style="font-size: {$vSize}"{/if}>
+                {if $vSize or $lineHeight}
+                  style="
+                  {if $vSize}font-size: {$vSize};{/if}
+                  {if $lineHeight}line-height: {$lineHeight};{/if}
+                  "
+                {/if}>
       {if $value}{$value}{else}&nbsp;{/if}
     </div>
     {if not $prefix and not $top}
