@@ -22,7 +22,7 @@
  /*
  * Templates for base products.
  */
-{namespace dma.entries.basespells autoescape="deprecated-contextual"}
+{namespace dma.entries.basespells}
 
 /**
  * Show the given entry in standard format.
@@ -44,17 +44,17 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#aaf' /}
-    {param title}
+    {param title kind="html"}
       {call dma.entry.title}
         {param title: $entry.name /}
         {param color: '#aaf' /}
       {/call}
     {/param}
-    {param values}            
+    {param values kind="html"}
       {if length($entry.baseNames)}
         {call dma.entry.value}
           {param label: 'Base' /}
-          {param value}
+          {param value kind="html"}
             {foreach $base in $entry.baseNames}
               {call dma.page.link}
                 {param text: $base /}
@@ -69,7 +69,7 @@
       {if length($entry.synonyms)}
         {call dma.entry.value}
           {param label: 'Synonyms' /}
-          {param value}
+          {param value kind="html"}
             {foreach $synonym in $entry.synonyms}
               {$synonym}
               {if not isLast($synonym)}; {/if}
@@ -82,7 +82,7 @@
           length($entry.combined_categories.annotate)}
         {call dma.entry.value}
           {param label: 'Categories' /}
-          {param value}
+          {param value kind="html"}
             {if length($entry.categories)}
               {foreach $category in $entry.categories}
                 {$category}
@@ -105,7 +105,7 @@
       {if $entry.incomplete or length($entry.combined_incomplete.annotate) > 0}
         {call dma.entry.value}
           {param label: 'Incomplete' /}
-          {param value}
+          {param value kind="html"}
             {if $entry.incomplete}
               {$entry.incomplete}{sp}
             {/if}
@@ -116,7 +116,7 @@
       {/if}
       {call dma.entry.value}
         {param label: 'School' /}
-        {param value}
+        {param value kind="html"}
            {$entry.school} 
            {if length($entry.subschools) > 0}
              {sp}(
@@ -139,7 +139,7 @@
       {/call}
       {call dma.entry.value}
         {param label: 'Level' /}
-        {param value}
+        {param value kind="html"}
            {foreach $level in $entry.levels}
              {$level}
              {if not isLast($level)}, {/if}
@@ -149,7 +149,7 @@
       {/call}
       {call dma.entry.value}
         {param label: 'Components' /}
-        {param value}
+        {param value kind="html"}
           {foreach $component in $entry.components}
             {$component}
             {if not isLast($component)}, {/if}
@@ -171,7 +171,7 @@
       {if $entry.casting_time.present}
         {call dma.entry.value}
           {param label: 'Casting Time' /}
-          {param value}
+          {param value kind="html"}
             {$entry.casting_time.get}
           {/param}
           {param color: '#aaf' /}
@@ -179,7 +179,7 @@
       {/if}
       {call dma.entry.value}
         {param label: 'Range' /}
-        {param value}
+        {param value kind="html"}
           {if $entry.distance.present}
             {$entry.distance.get}
           {else}
@@ -191,7 +191,7 @@
       {if $entry.effect.present}
         {call dma.entry.value}
           {param label: 'Effect' /}
-          {param value}
+          {param value kind="html"}
             {$entry.effect.get}
           {/param}
           {param color: '#aaf' /}
@@ -200,7 +200,7 @@
       {if $entry.target.present}
         {call dma.entry.value}
           {param label: 'Target' /}
-          {param value}
+          {param value kind="html"}
             {$entry.target.get}
           {/param}
           {param color: '#aaf' /}
@@ -209,7 +209,7 @@
       {if $entry.area.present}
         {call dma.entry.value}
           {param label: 'Area' /}
-          {param value}
+          {param value kind="html"}
             {$entry.area.get}
           {/param}
           {param color: '#aaf' /}
@@ -218,7 +218,7 @@
       {if $entry.duration.present}
         {call dma.entry.value}
           {param label: 'Duration' /}
-          {param value}
+          {param value kind="html"}
             {$entry.duration.get}
           {/param}
           {param color: '#aaf' /}
@@ -227,7 +227,7 @@
       {if $entry.saving_throw.present}
         {call dma.entry.value}
           {param label: 'Saving Throw' /}
-          {param value}
+          {param value kind="html"}
             {$entry.saving_throw.get}
           {/param}
           {param color: '#aaf' /}
@@ -236,7 +236,7 @@
       {if $entry.resistance.present}
         {call dma.entry.value}
           {param label: 'Resistance' /}
-          {param value}
+          {param value kind="html"}
             {$entry.resistance.get}
           {/param}
           {param color: '#aaf' /}
@@ -245,7 +245,7 @@
       {if $entry.summary.present}
         {call dma.entry.value}
           {param label: 'Summary' /}
-          {param value}
+          {param value kind="html"}
             {$entry.summary.get}
           {/param}
           {param color: '#aaf' /}
@@ -272,7 +272,7 @@
  *
  */
 {template .list}
-  {call dma.entry.newlist}
+  {call dma.entry.list}
     {param title: $title /}
     {param label: $label /}
     {param path: $path /}
@@ -280,7 +280,7 @@
     {param pagesize: $pagesize /}
     {param size: $entries ? length($entries) : 0 /}
     {param titles: [ 'Name', 'Worlds', 'Short Descriptoion'] /}
-    {param entries}
+    {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
           {call dma.entry.listEntry}
@@ -308,7 +308,7 @@
     {param type: 'base-level' /}
     {param id: $id /}
     {param create: $create /}
-    {param values}
+    {param values kind="html"}
       {call dma.edit.value}
         {param name: 'name' /}
         {param label: 'Name' /}
@@ -377,9 +377,9 @@
         {param name: 'subschool' /}
         {param color: '#aaf' /}
         {param label: 'Subschools' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $subschool in $entry.subschools}
                 {call dma.edit.field_list_multiple}
                   {param values: [
@@ -412,9 +412,9 @@
         {param name: 'descriptor' /}
         {param color: '#aaf' /}
         {param label: 'Descriptors' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $descriptor in $entry.descriptors}
                 {call dma.edit.field_list_multiple}
                   {param values: [
@@ -447,9 +447,9 @@
         {param name: 'level' /}
         {param color: '#aaf' /}
         {param label: 'Levels' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $level in $entry.levels}
                 {call dma.edit.field_list_multiple}
                   {param values: [
@@ -492,9 +492,9 @@
         {param name: 'component' /}
         {param color: '#aaf' /}
         {param label: 'Components' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $component in $entry.components}
                 {call dma.edit.field_list_multiple}
                   {param values: [
@@ -527,9 +527,9 @@
         {param name: 'material' /}
         {param color: '#aaf' /}
         {param label: 'Materials' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $material in $entry.materials}
                 {call dma.edit.field_list_multiple}
                   {param values: [
@@ -573,9 +573,9 @@
         {param name: 'focus' /}
         {param color: '#aaf' /}
         {param label: 'Focus' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {call dma.edit.field_list_multiple}
                 {param values: [
                   [
@@ -626,9 +626,9 @@
         {param name: 'effect' /}
         {param color: '#aaf' /}
         {param label: 'Effect' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {call dma.edit.field_list_multiple}
                 {param values: [
                   [
@@ -677,9 +677,9 @@
         {param name: 'duration' /}
         {param color: '#aaf' /}
         {param label: 'Duration' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {call dma.edit.field_list_multiple}
                 {param values: [
                   [
@@ -752,9 +752,9 @@
         {param name: 'references' /}
         {param color: '#aaf' /}
         {param label: 'References' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $reference in $entry.references}  
                 {call dma.edit.field_list_multiple}
                   {param values: [

@@ -22,7 +22,7 @@
 /*
  * Templates for base characters.
  */
-{namespace dma.entries.basecharacters autoescape="deprecated-contextual"}
+{namespace dma.entries.basecharacters}
 
 /**
  * Show the given entry in standard format.
@@ -44,7 +44,7 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#39f' /}
-    {param values}
+    {param values kind="html"}
       {call dma.entry.value}
         {param label: 'Real Name' /}
         {param value: $entry.real_name /}
@@ -67,7 +67,7 @@
       {/call}
       {call dma.entry.value}
         {param label: 'Recent Products' /}
-        {param value}
+        {param value kind="html"}
           {foreach $product in $entry.products.list}
             {if index($product) < 5}
               {call dma.page.link}
@@ -99,7 +99,7 @@
     {param type: 'character' /}
     {param id: $id /}
     {param create: $create /}
-    {param values}
+    {param values kind="html"}
       {call dma.edit.value}
         {param name: 'name' /}
         {param label: 'Name' /}
@@ -142,6 +142,41 @@
         {param choices: $entry.group.names /}
         {param color: '#39f' /}
       {/call}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Formatting a list of entries.
+ *
+ * @param title The list title.
+ * @param start The start index
+ * @param pagesize The size of the page
+ * @param entries The entries printed
+ * @param label The navigation label for this page
+ * @param path The path to this page
+ *
+ */
+{template .list}
+  {call dma.entry.list}
+    {param title: $title /}
+    {param label: $label /}
+    {param path: $path /}
+    {param start: $start /}
+    {param pagesize: $pagesize /}
+    {param size: $entries ? length($entries) : 0 /}
+    {param titles: [ 'Name', ] /}
+    {param entries kind="html"}
+      {foreach $entry in $entries}
+        <tr onclick="util.link(event, '{$entry.path}')">
+          {call dma.entry.listEntry}
+            {param path: $entry.path /}
+            {param values: [
+              $entry.name
+            ] /}
+          {/call}
+        </tr>
+      {/foreach}
     {/param}
   {/call}
 {/template}
