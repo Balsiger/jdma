@@ -35,6 +35,7 @@ import com.google.template.soy.data.SoyData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseCampaign;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
@@ -108,7 +109,8 @@ public class LibraryServlet extends PageServlet
     List<Map<String, Object>> types = new ArrayList<Map<String, Object>>();
     for(AbstractType<? extends AbstractEntry> type : AbstractType.getAll())
     {
-      if(!(type instanceof BaseType) || type == BaseEntry.TYPE)
+      if(!(type instanceof BaseType)
+          || type == BaseEntry.TYPE)
         continue;
 
       types.add(map("name", type.getName(),
