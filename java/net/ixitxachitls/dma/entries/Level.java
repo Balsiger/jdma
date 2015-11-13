@@ -129,6 +129,14 @@ public class Level extends NestedEntry
     return "(unknown)";
   }
 
+  @Override
+  public String getName() {
+    if(getBase().isPresent())
+      return getBase().get().getName();
+
+    return super.getName();
+  }
+
   /**
    * Get a list of all available level names.
    *

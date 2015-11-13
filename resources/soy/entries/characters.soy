@@ -305,6 +305,10 @@
     </div>
 
     <div class="sheet-column" style="display: flex; flex-direction: column;">
+      {call .sheet_ability_modifiers}
+        {param entry: $entry /}
+      {/call}
+
       {call .sheet_special_attacks}
         {param entry: $entry /}
       {/call}
@@ -429,10 +433,8 @@
       {param racial: $entry.racial_strength_modifier /}
       {param modifier: bonus($entry.strength_modifier) /}
       {param misc kind="html"}
-        {if $entry.strength_misc_modifier.has_value}
-          {call dma.value.modifier}
-            {param modifier: $entry.strength_misc_modifier /}
-          {/call}
+        {if $entry.strength_misc_modifier.unconditional_modifier}
+          {bonus($entry.strength_misc_modifier.unconditional_modifier)}
         {/if}
       {/param}
     {/call}
@@ -444,10 +446,8 @@
       {param racial: $entry.racial_dexterity_modifier /}
       {param modifier: bonus($entry.dexterity_modifier) /}
       {param misc kind="html"}
-        {if $entry.dexterity_misc_modifier.has_value}
-          {call dma.value.modifier}
-            {param modifier: $entry.dexterity_misc_modifier /}
-          {/call}
+        {if $entry.dexterity_misc_modifier.unconditional_modifier}
+          {bonus($entry.dexterity_misc_modifier.unconditional_modifier)}
         {/if}
       {/param}
     {/call}
@@ -459,10 +459,8 @@
       {param racial: $entry.racial_constitution_modifier /}
       {param modifier: bonus($entry.constitution_modifier) /}
       {param misc kind="html"}
-        {if $entry.constitution_misc_modifier.has_value}
-          {call dma.value.modifier}
-            {param modifier: $entry.constitution_misc_modifier /}
-          {/call}
+        {if $entry.constitution_misc_modifier.unconditional_modifier}
+          {bonus($entry.constitution_misc_modifier.unconditional_modifier)}
         {/if}
       {/param}
     {/call}
@@ -474,10 +472,8 @@
       {param racial: $entry.racial_intelligence_modifier /}
       {param modifier: bonus($entry.intelligence_modifier) /}
       {param misc kind="html"}
-        {if $entry.intelligence_misc_modifier.has_value}
-          {call dma.value.modifier}
-            {param modifier: $entry.intelligence_misc_modifier /}
-          {/call}
+        {if $entry.intelligence_misc_modifier.unconditional_modifier}
+          {bonus($entry.intelligence_misc_modifier.unconditional_modifier)}
         {/if}
       {/param}
     {/call}
@@ -489,10 +485,8 @@
       {param racial: $entry.racial_wisdom_modifier /}
       {param modifier: bonus($entry.wisdom_modifier) /}
       {param misc kind="html"}
-        {if $entry.wisdom_misc_modifier.has_value}
-          {call dma.value.modifier}
-            {param modifier: $entry.wisdom_misc_modifier /}
-          {/call}
+        {if $entry.wisdom_misc_modifier.unconditional_modifier}
+          {bonus($entry.wisdom_misc_modifier.unconditional_modifier)}
         {/if}
       {/param}
     {/call}
@@ -504,10 +498,8 @@
       {param racial: $entry.racial_charisma_modifier /}
       {param modifier: bonus($entry.charisma_modifier) /}
       {param misc kind="html"}
-        {if $entry.charisma_misc_modifier.has_value}
-          {call dma.value.modifier}
-            {param modifier: $entry.charisma_misc_modifier /}
-          {/call}
+        {if $entry.charisma_misc_modifier.unconditional_modifier}
+          {bonus($entry.charisma_misc_modifier.unconditional_modifier)}
         {/if}
       {/param}
     {/call}
@@ -587,6 +579,78 @@
         <div class="count">{-$i}</div>
       {/for}
     </div>
+  </div>
+{/template}
+
+/** The special attacks box. */
+{template .sheet_ability_modifiers}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Ability Modifiers' /}
+    {param nologo: true /}
+  {/call}
+
+  <div class="values boxed" style="flex: 1;">
+     {if $entry.strength.get.has_value
+         and $entry.strength.get.has_any_condition}
+       <div>
+         STR:{sp}
+         {call dma.value.modifier}
+           {param modifier: $entry.strength.get /}
+           {param only_conditionals: true /}
+         {/call}
+       </div>
+    {/if}
+     {if $entry.dexterity.get.has_value
+         and $entry.dexterity.get.has_any_condition}
+       <div>
+         DEX:{sp}
+         {call dma.value.modifier}
+           {param modifier: $entry.dexterity.get /}
+           {param only_conditionals: true /}
+         {/call}
+       </div>
+    {/if}
+     {if $entry.constitution.get.has_value
+         and $entry.constitution.get.has_any_condition}
+       <div>
+         CON:{sp}
+         {call dma.value.modifier}
+           {param modifier: $entry.constitution.get /}
+           {param only_conditionals: true /}
+         {/call}
+       </div>
+    {/if}
+     {if $entry.intelligence.get.has_value
+         and $entry.intelligence.get.has_any_condition}
+       <div>
+         INT:{sp}
+         {call dma.value.modifier}
+           {param modifier: $entry.intelligence.get /}
+           {param only_conditionals: true /}
+         {/call}
+       </div>
+    {/if}
+     {if $entry.wisdom.get.has_value
+         and $entry.wisdom.get.has_any_condition}
+       <div>
+         WIS:{sp}
+         {call dma.value.modifier}
+           {param modifier: $entry.wisdom.get /}
+           {param only_conditionals: true /}
+         {/call}
+       </div>
+    {/if}
+     {if $entry.charisma.get.has_value
+         and $entry.charisma.get.has_any_condition}
+       <div>
+         CHA:{sp}
+         {call dma.value.modifier}
+           {param modifier: $entry.charisma.get /}
+           {param only_conditionals: true /}
+         {/call}
+       </div>
+    {/if}
   </div>
 {/template}
 

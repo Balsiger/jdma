@@ -1208,6 +1208,204 @@ public class Monster extends CampaignEntry
     return score;
   }
 
+  public Annotated.Modifier strength()
+  {
+    Annotated.Modifier annotated = new Annotated.Modifier();
+
+    if(m_strength.isPresent())
+      annotated.add(new Modifier(m_strength.get()), getName());
+    else
+      for(BaseEntry base : getBaseEntries())
+        for(ValueSources.ValueSource<Optional<Integer>> bonus
+            : ((BaseMonster)base)
+            .getCombinedStrength().getSources().getSources())
+          if(bonus.getValue().isPresent())
+            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+
+    // Qualities
+    for(Quality quality : allQualities())
+    {
+      Modifier modifier = quality.abilityModifier(Ability.STRENGTH);
+      if(modifier.hasValue())
+        annotated.add(modifier, quality.getName());
+    }
+
+    // Feats
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.getStrengthModifier();
+      if(modifier.hasValue())
+        annotated.add(modifier, feat.getName() + " feat");
+    }
+
+    return annotated;
+  }
+
+  public Annotated.Modifier dexterity()
+  {
+    Annotated.Modifier annotated = new Annotated.Modifier();
+
+    if(m_dexterity.isPresent())
+      annotated.add(new Modifier(m_dexterity.get()), getName());
+    else
+      for(BaseEntry base : getBaseEntries())
+        for(ValueSources.ValueSource<Optional<Integer>> bonus
+            : ((BaseMonster)base)
+            .getCombinedDexterity().getSources().getSources())
+          if(bonus.getValue().isPresent())
+            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+
+    // Qualities
+    for(Quality quality : allQualities())
+    {
+      Modifier modifier = quality.abilityModifier(Ability.DEXTERITY);
+      if(modifier.hasValue())
+        annotated.add(modifier, quality.getName());
+    }
+
+    // Feats
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.getDexterityModifier();
+      if(modifier.hasValue())
+        annotated.add(modifier, feat.getName() + " feat");
+    }
+
+    return annotated;
+  }
+
+  public Annotated.Modifier constitution()
+  {
+    Annotated.Modifier annotated = new Annotated.Modifier();
+
+    if(m_constitution.isPresent())
+      annotated.add(new Modifier(m_constitution.get()), getName());
+    else
+      for(BaseEntry base : getBaseEntries())
+        for(ValueSources.ValueSource<Optional<Integer>> bonus
+            : ((BaseMonster)base)
+            .getCombinedConstitution().getSources().getSources())
+          if(bonus.getValue().isPresent())
+            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+
+    // Qualities
+    for(Quality quality : allQualities())
+    {
+      Modifier modifier = quality.abilityModifier(Ability.CONSTITUTION);
+      if(modifier.hasValue())
+        annotated.add(modifier, quality.getName());
+    }
+
+    // Feats
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.getConstitutionModifier();
+      if(modifier.hasValue())
+        annotated.add(modifier, feat.getName() + " feat");
+    }
+
+    return annotated;
+  }
+
+  public Annotated.Modifier intelligence()
+  {
+    Annotated.Modifier annotated = new Annotated.Modifier();
+
+    if(m_intelligence.isPresent())
+      annotated.add(new Modifier(m_intelligence.get()), getName());
+    else
+      for(BaseEntry base : getBaseEntries())
+        for(ValueSources.ValueSource<Optional<Integer>> bonus
+            : ((BaseMonster)base)
+            .getCombinedIntelligence().getSources().getSources())
+          if(bonus.getValue().isPresent())
+            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+
+    // Qualities
+    for(Quality quality : allQualities())
+    {
+      Modifier modifier = quality.abilityModifier(Ability.INTELLIGENCE);
+      if(modifier.hasValue())
+        annotated.add(modifier, quality.getName());
+    }
+
+    // Feats
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.getIntelligenceModifier();
+      if(modifier.hasValue())
+        annotated.add(modifier, feat.getName() + " feat");
+    }
+
+    return annotated;
+  }
+
+  public Annotated.Modifier wisdom()
+  {
+    Annotated.Modifier annotated = new Annotated.Modifier();
+
+    if(m_wisdom.isPresent())
+      annotated.add(new Modifier(m_wisdom.get()), getName());
+    else
+      for(BaseEntry base : getBaseEntries())
+        for(ValueSources.ValueSource<Optional<Integer>> bonus
+            : ((BaseMonster)base)
+            .getCombinedWisdom().getSources().getSources())
+          if(bonus.getValue().isPresent())
+            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+
+    // Qualities
+    for(Quality quality : allQualities())
+    {
+      Modifier modifier = quality.abilityModifier(Ability.WISDOM);
+      if(modifier.hasValue())
+        annotated.add(modifier, quality.getName());
+    }
+
+    // Feats
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.getWisdomModifier();
+      if(modifier.hasValue())
+        annotated.add(modifier, feat.getName() + " feat");
+    }
+
+    return annotated;
+  }
+
+  public Annotated.Modifier charisma()
+  {
+    Annotated.Modifier annotated = new Annotated.Modifier();
+
+    if(m_charisma.isPresent())
+      annotated.add(new Modifier(m_charisma.get()), getName());
+    else
+      for(BaseEntry base : getBaseEntries())
+        for(ValueSources.ValueSource<Optional<Integer>> bonus
+            : ((BaseMonster)base)
+            .getCombinedCharisma().getSources().getSources())
+          if(bonus.getValue().isPresent())
+            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+
+    // Qualities
+    for(Quality quality : allQualities())
+    {
+      Modifier modifier = quality.abilityModifier(Ability.CHARISMA);
+      if(modifier.hasValue())
+        annotated.add(modifier, quality.getName());
+    }
+
+    // Feats
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.getCharismaModifier();
+      if(modifier.hasValue())
+        annotated.add(modifier, feat.getName() + " feat");
+    }
+
+    return annotated;
+  }
+
   public Modifier getRacialStrengthModifier()
   {
     return abilityModifierFromQualities(Ability.STRENGTH);
@@ -1967,7 +2165,7 @@ public class Monster extends CampaignEntry
 
 
     // Qualities.
-    for (Quality quality : allQualities())
+    for(Quality quality : allQualities())
       if(quality.reflexModifier().hasValue())
         save.add(quality.reflexModifier(), quality.getName());
 

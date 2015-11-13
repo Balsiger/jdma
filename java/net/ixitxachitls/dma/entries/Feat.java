@@ -93,6 +93,14 @@ public class Feat extends NestedEntry
     return m_base.get();
   }
 
+  @Override
+  public String getName() {
+    if(getBase().isPresent())
+      return getBase().get().getName();
+
+    return super.getName();
+  }
+
   /**
    * Get the feat qualifier.
    *

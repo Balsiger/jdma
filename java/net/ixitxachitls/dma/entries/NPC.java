@@ -277,6 +277,24 @@ public class NPC extends Monster
   }
 
   @Override
+  public Annotated.Modifier strength() {
+    Annotated.Modifier annotated = super.strength();
+
+    Multiset<String> levels = HashMultiset.create();
+    for(Level level : m_levels)
+    {
+      levels.add(level.getName());
+
+      if(level.getAbilityIncrease().isPresent()
+          && level.getAbilityIncrease().get() == Ability.STRENGTH)
+        annotated.add(new Modifier(1),
+                      level.getName() + " " + levels.count(level.getName()));
+    }
+
+    return annotated;
+  }
+
+  @Override
   public Annotated.Bonus getCombinedBaseFortitudeSave()
   {
     Annotated.Bonus save = super.getCombinedBaseFortitudeSave();
