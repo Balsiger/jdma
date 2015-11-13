@@ -963,15 +963,11 @@
       {param top: true /}
       {param lineHeight: '6px' /}
       {param value kind="html"}
-         {if $racial.has_value}
-             {call dma.value.modifier}
-               {param modifier: $racial /}
-             {/call}
+         {if $racial.unconditional_modifier}
+           {bonus($racial.unconditional_modifier)}
           {/if}
-          {if $misc.has_value}
-            {call dma.value.modifier}
-              {param modifier: $misc /}
-            {/call}
+          {if $misc.unconditional_modifier}
+            {bonus($misc.unconditional_modifier)}
           {/if}
       {/param}
     {/call}
