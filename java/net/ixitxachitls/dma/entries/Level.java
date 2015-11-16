@@ -47,9 +47,7 @@ public class Level extends NestedEntry
   /**
    * Create a default, unnamed level.
    */
-  public Level()
-  {
-  }
+  public Level() {}
 
   /** The hit points rolled for this level. */
   private int m_hp = 0;
