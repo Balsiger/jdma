@@ -78,8 +78,7 @@
           {param color: '#aaf' /}
         {/call}
       {/if}      
-      {if length($entry.categories) or 
-          length($entry.combined_categories.annotate)}
+      {if $entry.categories.present or $entry.combined_categories.get.present}
         {call dma.entry.value}
           {param label: 'Categories' /}
           {param value kind="html"}
@@ -102,7 +101,7 @@
         {param value: annotate($entry.combined_worlds) /}
         {param color: '#aaf' /}
       {/call}
-      {if $entry.incomplete or length($entry.combined_incomplete.annotate) > 0}
+      {if $entry.incomplete.present or $entry.combined_incomplete.get.present}
         {call dma.entry.value}
           {param label: 'Incomplete' /}
           {param value kind="html"}
@@ -370,7 +369,7 @@
         {param name: 'school' /}
         {param label: 'School' /}
         {param value: $entry.school.string /}
-        {param choices: $entry.school.names /}
+        {param choices: $ij.School.names /}
         {param color: '#aaf' /}
       {/call}    
       {call dma.edit.generic_value}
@@ -387,7 +386,7 @@
                       'name': 'subschool',
                       'value': $subschool.string,
                       'type': 'selection',
-                      'choices': $subschool.names
+                      'choices': $ij.Subschool.names
                     ]
                   ] /}
                 {/call}
@@ -454,13 +453,13 @@
                 {call dma.edit.field_list_multiple}
                   {param values: [
                     [
-                      'name': 'class',
+                      'name': 'level.class',
                       'value': $level.spell_class.string,
                       'type': 'selection',
-                      'choices': $level.spell_class.names
+                      'choices': $ij.SpellClass.names
                     ],
                     [
-                      'name': 'level',
+                      'name': 'level.level',
                       'value': $level.level,
                       'validate': 'number'
                     ]
@@ -470,13 +469,13 @@
                 {call dma.edit.field_list_multiple}
                   {param values: [
                     [
-                      'name': 'level',
+                      'name': 'level.class',
                       'value': '',
                       'type': 'selection',
                       'choices': $ij.SpellClass.names
                     ],
                     [
-                      'name': 'level',
+                      'name': 'level.level',
                       'value': '',
                       'validate': 'number'
                     ]
@@ -502,7 +501,7 @@
                       'name': 'component',
                       'value': $component.string,
                       'type': 'selection',
-                      'choices': $component.names
+                      'choices': $ij.SpellComponent.names
                     ]
                   ] /}
                 {/call}
@@ -513,7 +512,7 @@
                       'name': 'component',
                       'value': '',
                       'type': 'selection',
-                      'choices': $entry.component_names
+                      'choices': $ij.SpellComponent.names
                     ]
                   ] /}
                 {/call}
@@ -644,7 +643,7 @@
                              and $entry.effect.get.effect.present 
                       ? $entry.effect.get.effect.get : '',
                     'type': 'selection',
-                    'choices': $ij.SpellEeffect.names
+                    'choices': $ij.SpellEffect.names
                   ],
                   [
                     'name': 'effect.text',

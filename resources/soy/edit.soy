@@ -251,7 +251,10 @@
     {param markup kind="html"}
       <select name="{$name}" onkeyup="window.form.validate(this)">
         {foreach $choice in $choices}
-          <option value="{$choice}"{if $choice == $value} selected{/if}>
+          <option value="{$choice}"
+            {if lower($choice) == lower($value)}
+              {sp}selected
+            {/if}>
             {$choice}
           </option>
         {/foreach}

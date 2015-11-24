@@ -97,6 +97,35 @@
     {param choices: $ij.Ability.names /}
     {param class: 'narrow' /}
   {/call}
+  {if $entry and length($entry.spells_known)}
+    {foreach $spell in $entry.spells_known}
+      {call dma.edit.field_list_line}
+        {param id: 'spells_known' /}
+        {param field kind="html"}
+          {call dma.edit.field_input}
+            {param name: 'level@' + $index + '.spell_known' /}
+            {param caption: 'spell known' /}
+            {param value: $spell /}
+            {param validate: 'any' /}
+            {param autocomplete: 'base spell/name' /}
+          {/call}
+        {/param}
+      {/call}
+    {/foreach}
+  {else}
+    {call dma.edit.field_list_line}
+      {param id: 'spells_known' /}
+      {param field kind="html"}
+        {call dma.edit.field_input}
+          {param name: 'level@' + $index + '.spell_known' /}
+          {param caption: 'spell known' /}
+          {param value: '' /}
+          {param validate: 'any' /}
+          {param autocomplete: 'base spell/name' /}
+        {/call}
+      {/param}
+    {/call}
+  {/if}
 {/template}
 
 /**

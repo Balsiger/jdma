@@ -64,6 +64,9 @@ public class Level extends NestedEntry
   /** The ability that increased at the level, if any. */
   private Optional<Ability> m_abilityIncrease = Optional.absent();
 
+  /** The spells newly known for this level. */
+  private List<String> m_spellsKnown = new ArrayList<>();
+
   /**
    * Get the hp this level gives.
    *
@@ -197,6 +200,7 @@ public class Level extends NestedEntry
     m_feats = inValues.useEntries("feat", m_feats, Feat.CREATOR);
     m_abilityIncrease = inValues.use("ability_increase", m_abilityIncrease,
                                      Ability.PARSER);
+    m_spellsKnown = inValues.use("spell_known", m_spellsKnown);
 
     Optional<Integer> hp = inValues.use("hp", m_hp);
     if(hp.isPresent())
@@ -227,6 +231,8 @@ public class Level extends NestedEntry
     if(m_abilityIncrease.isPresent())
       builder.setAbilityIncrease(m_abilityIncrease.get().toProto());
 
+    builder.addAllSpellKnown(m_spellsKnown);
+
     LevelProto proto = builder.build();
     return proto;
   }
@@ -243,7 +249,7 @@ public class Level extends NestedEntry
     level.m_name = Optional.of(inProto.getName());
     level.m_hp = inProto.getHp();
 
-    for (Entries.QualityProto quality : inProto.getQualityList())
+    for(Entries.QualityProto quality : inProto.getQualityList())
       level.m_qualities.add(Quality.fromProto(quality));
 
     for (Entries.FeatProto feat : inProto.getFeatList())
@@ -252,6 +258,8 @@ public class Level extends NestedEntry
     if(inProto.hasAbilityIncrease())
       level.m_abilityIncrease =
           Optional.of(Ability.fromProto(inProto.getAbilityIncrease()));
+
+    level.m_spellsKnown = inProto.getSpellKnownList();
 
     return level;
   }
@@ -310,5 +318,10 @@ public class Level extends NestedEntry
       return getBase().get().getSpellAbility();
 
     return Optional.absent();
+  }
+
+  public List<String> getSpellsKnown()
+  {
+    return m_spellsKnown;
   }
 }

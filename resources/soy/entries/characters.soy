@@ -24,7 +24,6 @@
  */
 {namespace dma.entries.characters}
 
-{guru}
 /**
  * Show the given entry in standard format.
  * 
@@ -249,11 +248,25 @@
       {/call}
     <div>
 
-    {foreach $animal in $entry.animal_companions}
-      {call dma.entries.monsters.sheet}
-        {param entry: $animal /}
+    {if $entry.has_spells}
+      <div class="sheet-page">
+        {call .sheet_page_spells}
+          {param entry: $entry /}
+        {/call}
+      <div>
+    {/if}
+
+    {if length($entry.animal_companions) > 0}
+      {call .sheet_subtitle}
+        {param title: 'Animal Companions' /}
       {/call}
-    {/foreach}
+
+      {foreach $animal in $entry.animal_companions}
+        {call dma.entries.monsters.sheet}
+          {param entry: $animal /}
+        {/call}
+      {/foreach}
+    {/if}
   </div>
 {/template}
 
@@ -1329,11 +1342,93 @@
   </div>
 {/template}
 
-/** Contents of the third page of the character sheet. */
+/** Contents of the fourth page of the character sheet. */
 {template .sheet_page_4}
   //{@param entry: ?}
 {/template}
 
+/** Contents of the spells page of the character sheet. */
+{template .sheet_page_spells}
+  {@param entry: ?}
+
+  {call .sheet_subtitle}
+    {param title: 'Spells' /}
+  {/call}
+
+  <table style="padding-bottom: 20px">
+    <tr class="bold">
+      <td>Name</td>
+      <td>Level</td>
+      <td>School</td>
+      <td>Comp.</td>
+      <td>Cast.</td>
+      <td>Range</td>
+      <td>Target</td>
+      <td>Duration</td>
+      <td>Save</td>
+      <td>SR</td>
+      <td>Description</td>
+    </tr>
+
+    {foreach $spell in $entry.spells_known}
+      {call .sheet_spell_line}
+        {param character: $entry /}
+        {param spell: $spell /}
+      {/call}
+    {/foreach}
+  </table>
+{/template}
+
+/** A single line with a spell description. */
+{template .sheet_spell_line}
+  {@param character: ?}
+  {@param spell: ?}
+  <tr>
+    <td>{$spell.name}</td>
+    <td>{$spell.level}</td>
+    <td>
+      {$spell.school}
+
+      {if length($spell.subschools) > 0}
+        {sp}(
+        {foreach $subschool in $spell.subschools}
+          {$subschool}{if not isLast($subschool)}, {/if}
+        {/foreach}
+        )
+      {/if}
+    </td>
+    <td>
+      {foreach $component in $spell.components}
+        {$component.short}{if not isLast($component)}, {/if}
+      {ifempty}
+        &ndash;
+      {/foreach}
+    </td>
+    <td>
+      {if $spell.casting_time.present}
+        {$spell.casting_time.get.short_string}
+      {/if}
+    </td>
+    <td>{$spell.range}</td>
+    <td>
+      {if $spell.target.present}
+        {$spell.target}
+      {/if}
+    </td>
+    <td>
+      {if $spell.duration.present}
+        {$spell.duration}
+      {/if}
+    </td>
+    <td>{call($character, 'spellSaveDC', $spell.level_count)}</td>
+    <td>
+      {if $spell.spell_resistance.present}
+        {$spell.spell_resistance}
+      {/if}
+    </td>
+    <td>{$spell.short_description}</td>
+  </tr>
+{/template}
 
 /** The spells box. */
 {template .sheet_spells}
@@ -2309,44 +2404,47 @@
         {param value kind="html"}
           {call dma.edit.field_input}
             {param name: 'strength' /}
-            {param value: $entry.strength.present ? $entry.strength : '' /}
+            {param value: $entry.get_strength.present
+                ? $entry.get_strength : '' /}
             {param validate: 'number' /}
             {param caption: 'Strength' /}
             {param class: 'field6' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'dexterity' /}
-            {param value: $entry.dexterity.present ? $entry.dexterity : '' /}
+            {param value: $entry.get_dexterity.present
+                ? $entry.get_dexterity : '' /}
             {param validate: 'number' /}
             {param caption: 'Dexterity' /}
             {param class: 'field6' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'constitution' /}
-            {param value: $entry.constitution.present 
-              ? $entry.constitution : '' /}
+            {param value: $entry.get_constitution.present
+              ? $entry.get_constitution : '' /}
             {param validate: 'number' /}
             {param caption: 'Constitution' /}
             {param class: 'field6' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'intelligence' /}
-            {param value: $entry.intelligence.present 
-              ? $entry.intelligence : '' /}
+            {param value: $entry.get_intelligence.present
+              ? $entry.get_intelligence : '' /}
             {param validate: 'number' /}
             {param caption: 'Intelligence' /}
             {param class: 'field6' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'wisdom' /}
-            {param value: $entry.wisdom.present ? $entry.wisdom : '' /}
+            {param value: $entry.get_wisdom.present ? $entry.get_wisdom : '' /}
             {param validate: 'number' /}
             {param caption: 'Wisdom' /}
             {param class: 'field6' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'charisma' /}
-            {param value: $entry.charisma.present ? $entry.charisma : '' /}
+            {param value: $entry.get_charisma.present
+                ? $entry.get_charisma : '' /}
             {param validate: 'number' /}
             {param caption: 'Charisma' /}
             {param class: 'field6' /}

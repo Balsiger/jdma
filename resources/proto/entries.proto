@@ -1461,6 +1461,7 @@ message LevelProto
   repeated QualityProto quality = 3;
   repeated FeatProto feat = 4;
   optional BaseMonsterProto.Ability ability_increase = 5;
+  repeated string spell_known = 6;
 }
 
 message FeatProto

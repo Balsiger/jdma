@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -530,6 +532,24 @@ public class Character extends NPC
     }
 
     return dc;
+  }
+
+  public boolean hasSpells() {
+    for(int i = 0; i <= 9; i++)
+      if(spellsPerDay(i) > 0)
+        return true;
+
+    return false;
+  }
+
+  public List<Spell> spellsKnown(){
+    List<Spell> spells = new ArrayList<>();
+
+    for(Level level : m_levels)
+      for(String spellName : level.getSpellsKnown())
+        spells.add(new Spell(spellName, level));
+
+    return spells;
   }
 
   @Override

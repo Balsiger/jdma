@@ -65,6 +65,7 @@ import net.ixitxachitls.dma.values.enums.MonsterType;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.dma.values.enums.Organization;
 import net.ixitxachitls.dma.values.enums.Save;
+import net.ixitxachitls.dma.values.enums.School;
 import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.dma.values.enums.SkillModifier;
 import net.ixitxachitls.dma.values.enums.SkillRestriction;
@@ -263,6 +264,7 @@ public class SoyServlet extends DMAServlet
        "SpellDescriptor",
        new SoyValue("SpellDescriptor", SpellDescriptor.class),
        "SpellEffect", new SoyValue("SpellEffect", SpellEffect.class),
+       "School", new SoyValue("SpellSchool", School.class),
        "SpellClass", new SoyValue("SpellClass", SpellClass.class),
        "Subschool", new SoyValue("Subschool", Subschool.class),
        "SpellComponent", new SoyValue("SpellComponent", SpellComponent.class),
