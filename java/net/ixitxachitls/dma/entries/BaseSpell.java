@@ -440,7 +440,8 @@ public class BaseSpell extends BaseEntry
           + (m_text.isPresent() ? ", " + m_text.get() : "");
 
       return m_duration.get()
-        + (m_levels.isPresent() ? "/" + m_levels.get() : "")
+        + (m_levels.isPresent() && !m_levels.get().isEmpty()
+            ? "/" + m_levels.get() : "")
         + (m_plusDuration.isPresent() ? " + " + m_plusDuration.get() : "")
           + (m_dismissable ? " (D)" : "")
           + (m_text.isPresent() ? ", " + m_text.get() : "");

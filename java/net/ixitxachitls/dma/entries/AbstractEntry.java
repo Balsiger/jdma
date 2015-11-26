@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
@@ -1011,45 +1012,41 @@ public abstract class AbstractEntry
    *
    * @return      the computed string
    */
-  /*
   public String computeExpressions(String inText,
-                                   @Nullable Parameters inParameters)
+                                   Map<String, String> inValues)
   {
     // TODO: make this more generic and move it to a separate class
     String text = inText;
     StringBuffer result = new StringBuffer();
 
-    if(inParameters != null)
+    Matcher matcher = PATTERN_VAR.matcher(text);
+    while(matcher.find())
     {
-      Matcher matcher = PATTERN_VAR.matcher(text);
-      while(matcher.find())
-      {
-        Value<?> value = inParameters.getValue(matcher.group(1));
-        if(value != null && value.isDefined())
-          matcher.appendReplacement(result, value.toString().replace('$', '_'));
-        else
-          matcher.appendReplacement(result,
-                                    "\\\\color{error}{&#x24;" + matcher.group(1)
-                                    + "}");
-      }
-
-      matcher.appendTail(result);
-
-      text = result.toString();
-      result = new StringBuffer();
+      String value = inValues.get(matcher.group(1));
+      if(value != null)
+        matcher.appendReplacement(result, value.replace('$', '_'));
+      else
+        matcher.appendReplacement(result,
+                                  "\\\\color{error}{&#x24;" + matcher.group(1)
+                                      + "}");
     }
 
-    Matcher matcher = PATTERN_EXPR.matcher(text);
+    matcher.appendTail(result);
+
+    text = result.toString();
+    result = new StringBuffer();
+
+    matcher = PATTERN_EXPR.matcher(text);
 
     while(matcher.find())
       matcher.appendReplacement(result,
-                                "" + computeExpression(matcher.group(1)));
+                                computeExpression(matcher.group(1))
+                                    .replace("\\", "\\\\"));
 
     matcher.appendTail(result);
 
     return result.toString();
   }
-  */
 
   /**
    * Evaluate the given expression.
@@ -1127,8 +1124,17 @@ public abstract class AbstractEntry
         return "* invalid expression, expect (: " + inExpression + " *";
       }
 
-      int level = Integer.parseInt(computeExpression(inExpression, inTokens));
-      List<String> ranges = new ArrayList<String>();
+      int level;
+      try
+      {
+        level = Integer.parseInt(computeExpression(inExpression, inTokens));
+      }
+      catch(NumberFormatException e)
+      {
+        return "* invalid expression, expected number: " + inExpression + " *";
+      }
+
+      List<String> ranges = new ArrayList<>();
 
       String current = "";
       for(String argument = inTokens.nextToken();

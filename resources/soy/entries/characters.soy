@@ -1420,13 +1420,14 @@
         {$spell.duration}
       {/if}
     </td>
-    <td>{call($character, 'spellSaveDC', $spell.level_count)}</td>
+    <td>{$spell.dc}
+    {call($character, 'spellSaveDC', $spell.level_count)}</td>
     <td>
       {if $spell.spell_resistance.present}
         {$spell.spell_resistance}
       {/if}
     </td>
-    <td>{$spell.short_description}</td>
+    <td>{commands($spell.short_description)}</td>
   </tr>
 {/template}
 

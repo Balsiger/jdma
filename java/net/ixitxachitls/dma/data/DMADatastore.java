@@ -492,10 +492,10 @@ public class DMADatastore
         break;
 
       List<Entity> entities =
-        m_data.getEntitiesList(escapeType(inType.toString()),
-                               Optional.<Key>absent(),
-                               Optional.<String>absent(),
-                               start, chunk);
+          m_data.getEntities(escapeType(inType.toString()),
+                             Optional.<Key>absent(),
+                             Optional.<String>absent(),
+                             start, chunk);
 
       for(Entity entity : entities)
       {

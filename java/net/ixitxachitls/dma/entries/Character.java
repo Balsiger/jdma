@@ -547,7 +547,7 @@ public class Character extends NPC
 
     for(Level level : m_levels)
       for(String spellName : level.getSpellsKnown())
-        spells.add(new Spell(spellName, level));
+        spells.add(new Spell(spellName, level, spellSaveDC(0)));
 
     return spells;
   }
