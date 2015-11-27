@@ -134,50 +134,6 @@ public class Character extends NPC
       };
 
   /**
-   * Get all the items contained in this contents.
-   *
-   * @param       inDeep true for returning all item, including nested ones,
-   *                     false for only the top level items
-   * @return      a list with all the items
-   */
-  /*
-  public Map<String, Item> containedItems(boolean inDeep)
-  {
-    Map<String, Item> items = new HashMap<String, Item>();
-
-    if(getCampaign().isPresent())
-      for(Name name : m_items)
-      {
-        Item item = getCampaign().get().getItem(name.get());
-        if(item == null)
-          continue;
-
-        items.put(name.get(), item);
-        //items.putAll(item.containedItems(inDeep));
-      }
-
-    return items;
-  }
-  */
-
-  /**
-   * Checks if the character has the item in possession.
-   *
-   * NOTE: this is an expensive operation, as it has to read all the items
-   * recursively of a character.
-   *
-   * @param       inItem the name of the item to check
-   *
-   * @return      true if the character possesses the item, false if not
-   */
-  /*
-  public boolean possesses(String inItem)
-  {
-    return containedItems(true).containsKey(inItem);
-  }
-  */
-
-  /**
    * Simple getter for state.
    *
    * @return the state
@@ -370,22 +326,6 @@ public class Character extends NPC
       return main.getIcon();
   }
 
-  /*
-  public Optional<Monster> getMonster()
-  {
-    if(!m_monster.isPresent())
-    {
-      if(!m_monsterName.isPresent())
-        return Optional.absent();
-
-      m_monster = Optional.of(DMADataFactory.get().<Monster>getEntry
-          (new EntryKey(m_monsterName.get(), Monster.TYPE)));
-    }
-
-    return m_monster.get();
-  }
-  */
-
   @Override
   public List<Item> getPossessions()
   {
@@ -396,37 +336,6 @@ public class Character extends NPC
 
     return Collections.unmodifiableList(m_possessions);
   }
-
-  /**
-   * Add the given entry to the character entry.
-   *
-   * @ param       inEntry the entry to add
-   *
-   * @return      true if added, false if not
-   *
-   */
-  /*
-  @Override
-  public boolean add(CampaignEntry inEntry)
-  {
-    String name = inEntry.getName();
-    List<Name> names = new ArrayList<Name>();
-    for(Name item : m_items)
-      if(name.equals(item.get()))
-        return true;
-      else
-        names.add(item);
-
-    names.add(m_items.newElement().as(name));
-    m_items = m_items.as(names);
-
-    inEntry.setParent(Optional.of(getKey()));
-
-    changed();
-    save();
-    return true;
-  }
-  */
 
   @Override
   public void setValues(Values inValues)

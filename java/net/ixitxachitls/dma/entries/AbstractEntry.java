@@ -234,11 +234,11 @@ public abstract class AbstractEntry
 
   /** The pattern to replace values in expressions. */
   protected static final Pattern PATTERN_VAR =
-    Pattern.compile("\\$(\\w+)");
+      Pattern.compile("\\$(\\w+)");
 
   /** The pattern for expressions. */
   protected static final Pattern PATTERN_EXPR =
-    Pattern.compile("\\[\\[(.*?)\\]\\]");
+      Pattern.compile("\\[\\[(.*?)\\]\\]");
 
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
@@ -755,32 +755,6 @@ public abstract class AbstractEntry
   }
 
   /**
-   * Get a summary for the entry, using the given parameters.
-   *
-   * @ param       inParameters  the parameters to parameterize the summary
-   *
-   * @return      the string with the summary
-   */
-  /*
-  public String getSummary(@Nullable Parameters inParameters)
-  {
-    Combined<Text> combined = collect("short description");
-    String summary = combined.total().get();
-
-    if(inParameters == null || !inParameters.isDefined())
-      return summary;
-
-    //summary = computeExpressions(summary, inParameters);
-
-    Value<?> notes = inParameters.getValue("Notes");
-    if(notes != null)
-      summary += " (" + notes + ")";
-
-    return summary;
-  }
-  */
-
-  /**
    * Get the name of the icon to use for the given mime type.
    *
    * @param inMimeType the mime type to determine the icon for
@@ -843,8 +817,6 @@ public abstract class AbstractEntry
     // abstract entries don't have an owner
   }
 
-  //------------------------------- addBase --------------------------------
-
   /**
    * Add a base to this entry.
    *
@@ -877,66 +849,6 @@ public abstract class AbstractEntry
       m_baseEntries.add(entry.get());
   }
 
-  //........................................................................
-  //--------------------------- addToModifiable ----------------------------
-
-  /**
-   * Add the given value to the modifiable given.
-   *
-   * @param       inModifiable the modifier to add to
-   * @param       inValue      the value to add
-   * @param       inBaseName   the name of the base entry having the value
-   *
-   */
-//   private void addToModifiable(Modifiable<?> inModifiable, Value inValue,
-//                                String inBaseName)
-//   {
-//     if(inValue instanceof net.ixitxachitls.dma.values.Modifier)
-//     {
-//       net.ixitxachitls.dma.values.Modifier modifier =
-//         (net.ixitxachitls.dma.values.Modifier)inValue;
-
-//       String description = modifier.getDescription();
-
-//       if(description == null || description.length() == 0)
-//         description = inBaseName;
-//       else
-//         description += " (" + inBaseName + ")";
-
-//       inModifiable.addModifier
-//       (new NumberModifier(NumberModifier.Operation.ADD, modifier.getValue(),
-//                             NumberModifier.Type.valueOf
-//                             (modifier.getType().toString().toUpperCase()),
-//                             description));
-//     }
-//     else
-//       if(inValue instanceof BaseModifier)
-//         inModifiable.addModifier((BaseModifier)inValue);
-//       else
-//         if(inValue instanceof Modifiable)
-//         {
-//           Modifiable<?> value = (Modifiable)inValue;
-
-//           for(BaseModifier<?> modifier : value.modifiers())
-//             inModifiable.addModifier(modifier);
-
-//           Value base = value.getBaseValue();
-
-//           if(base.isDefined())
-//             inModifiable.addModifier(new ValueModifier<Value>
-//                                      (ValueModifier.Operation.ADD, base,
-//                                     ValueModifier.Type.GENERAL, inBaseName));
-//         }
-//         else
-//           inModifiable.addModifier(new ValueModifier<Value>
-//                                    (ValueModifier.Operation.ADD, inValue,
-//                                     ValueModifier.Type.GENERAL, inBaseName));
-//   }
-
-  //........................................................................
-
-  //-------------------------------- check ---------------------------------
-
   /**
    * Check the entry for possible problems.
    *
@@ -947,10 +859,6 @@ public abstract class AbstractEntry
   {
     return true;
   }
-
-  //........................................................................
-
-  //------------------------------- changed --------------------------------
 
   /**
    * Set the state of the file to changed.
@@ -972,8 +880,6 @@ public abstract class AbstractEntry
     changed(true);
   }
 
-  //........................................................................
-
   /**
    * Save the entry if it has been changed.
    *
@@ -985,292 +891,6 @@ public abstract class AbstractEntry
       return false;
 
     return DMADataFactory.get().update(this);
-  }
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //--------------------------- ensureExtensions ---------------------------
-
-  /**
-   * Ensure that extensions are properly initialized.
-   */
-  protected void ensureExtensions()
-  {
-    // nothing to do here
-  }
-
-  //........................................................................
-
-  /**
-   * Compute the expressions embedded in the given string and replace all
-   * possible variables.
-   *
-   * @param       inText       the text to replace in
-   * @param       inParameters the parameters for parametrizing expressions
-   *
-   * @return      the computed string
-   */
-  public String computeExpressions(String inText,
-                                   Map<String, String> inValues)
-  {
-    // TODO: make this more generic and move it to a separate class
-    String text = inText;
-    StringBuffer result = new StringBuffer();
-
-    Matcher matcher = PATTERN_VAR.matcher(text);
-    while(matcher.find())
-    {
-      String value = inValues.get(matcher.group(1));
-      if(value != null)
-        matcher.appendReplacement(result, value.replace('$', '_'));
-      else
-        matcher.appendReplacement(result,
-                                  "\\\\color{error}{&#x24;" + matcher.group(1)
-                                      + "}");
-    }
-
-    matcher.appendTail(result);
-
-    text = result.toString();
-    result = new StringBuffer();
-
-    matcher = PATTERN_EXPR.matcher(text);
-
-    while(matcher.find())
-      matcher.appendReplacement(result,
-                                computeExpression(matcher.group(1))
-                                    .replace("\\", "\\\\"));
-
-    matcher.appendTail(result);
-
-    return result.toString();
-  }
-
-  /**
-   * Evaluate the given expression.
-   *
-   * @param  inExpression the expression to evaluate
-   *
-   * @return the evaluated expression
-   */
-  private String computeExpression(String inExpression)
-  {
-    String expression = inExpression.replaceAll("[ \t\n\f\r]", "");
-
-    StringTokenizer tokens =
-      new StringTokenizer(expression, "()+-*/,^", true);
-
-    return computeExpression(expression, tokens);
-  }
-
-  /**
-   * Compute expression from the given tokens.
-   *
-   * @param  inExpression the expression to compute
-   * @param  inTokens     tokens following the expression
-   *
-   * @return the evaluated expression
-   */
-  private String computeExpression(String inExpression,
-                                   StringTokenizer inTokens)
-  {
-    if(!inTokens.hasMoreTokens())
-    {
-      Log.warning("invalid expression, expected more: "  + inExpression);
-
-      return "* invalid expression, expected (: " + inExpression + " *";
-    }
-
-    String token = inTokens.nextToken();
-
-    if("min".equals(token))
-    {
-      if(!"(".equals(inTokens.nextToken()))
-      {
-        Log.warning("invalid expression, expected '(': " + inExpression);
-
-        return "* invalid expression, expected (: " + inExpression + " *";
-      }
-
-      String first = computeExpression(inExpression, inTokens);
-      String second = computeExpression(inExpression, inTokens);
-
-    return "" + Math.min(Integer.parseInt(first), Integer.parseInt(second));
-    }
-
-    if("max".equals(token))
-    {
-      if(!"(".equals(inTokens.nextToken()))
-      {
-        Log.warning("invalid expression, expected '(': " + inExpression);
-
-        return "* invalid expression, expect (: " + inExpression + " *";
-      }
-
-      String first = computeExpression(inExpression, inTokens);
-      String second = computeExpression(inExpression, inTokens);
-
-    return "" + Math.max(Integer.parseInt(first), Integer.parseInt(second));
-    }
-
-    if("range".equals(token))
-    {
-      if(!"(".equals(inTokens.nextToken()))
-      {
-        Log.warning("invalid expression, expected '(': " + inExpression);
-
-        return "* invalid expression, expect (: " + inExpression + " *";
-      }
-
-      int level;
-      try
-      {
-        level = Integer.parseInt(computeExpression(inExpression, inTokens));
-      }
-      catch(NumberFormatException e)
-      {
-        return "* invalid expression, expected number: " + inExpression + " *";
-      }
-
-      List<String> ranges = new ArrayList<>();
-
-      String current = "";
-      for(String argument = inTokens.nextToken();
-          !"(".equals(argument) && inTokens.hasMoreTokens();
-          argument = inTokens.nextToken())
-      {
-        if(",".equals(argument))
-        {
-          ranges.add(current);
-          current = "";
-        }
-        else
-        {
-          current += argument;
-        }
-      }
-      ranges.add(current);
-      Collections.reverse(ranges);
-
-      for(String range : ranges)
-      {
-        String []parts = range.split(":\\s*");
-        if(parts.length != 2)
-          continue;
-
-        try
-        {
-          if(level >= Integer.parseInt(parts[0]))
-            return parts[1];
-        }
-        catch(NumberFormatException e)
-        {
-          // just ignore it
-        }
-      }
-
-      return "* invalid range *";
-    }
-
-    if("switch".equals(token))
-    {
-      if(!"(".equals(inTokens.nextToken()))
-      {
-        Log.warning("invalid expression, expected '(': " + inExpression);
-
-        return "* invalid expression, expect (: " + inExpression + " *";
-      }
-
-      String value = computeExpression(inExpression, inTokens);
-      List<String> options = new ArrayList<String>();
-
-      String current = "";
-      for(String argument = inTokens.nextToken();
-          !"(".equals(argument) && inTokens.hasMoreTokens();
-          argument = inTokens.nextToken())
-      {
-        if(",".equals(argument))
-        {
-          options.add(current);
-          current = "";
-        }
-        else
-        {
-          current += argument;
-        }
-      }
-      options.add(current);
-
-      for(String option : options)
-      {
-        String []parts = option.split(":\\s*");
-        if(parts.length != 2)
-          continue;
-
-        String []cases = parts[0].split("\\|");
-        for(String single : cases)
-          if(single.trim().equalsIgnoreCase(value))
-            return parts[1];
-          else if("default".equalsIgnoreCase(single))
-            return parts[1];
-      }
-
-      return "* invalid switch *";
-    }
-
-    try
-    {
-      String value;
-      if("(".equals(token))
-        value = computeExpression(inExpression, inTokens);
-      else if("-".equals(token))
-        value = "-" + computeExpression(inExpression, inTokens);
-      else if("+".equals(token))
-        value = "+" + computeExpression(inExpression, inTokens);
-      else
-        value = token;
-
-      if(!inTokens.hasMoreTokens())
-        return value;
-
-      String operator = inTokens.nextToken();
-
-      if(",".equals(operator) || ")".equals(operator))
-        return value;
-
-      String operand = computeExpression(inExpression, inTokens);
-
-      if("+".equals(operator))
-        return "" + (Integer.parseInt(value) + Integer.parseInt(operand));
-
-      if("-".equals(operator))
-        return "" + (Integer.parseInt(value) - Integer.parseInt(operand));
-
-      if("*".equals(operator))
-        return "" + (Integer.parseInt(value) * Integer.parseInt(operand));
-
-      if("/".equals(operator))
-        if(Integer.parseInt(value) == 0)
-          return "0";
-        else
-          return "" + (Integer.parseInt(value) / Integer.parseInt(operand));
-
-      if("^".equals(operator))
-        return "" + (int)Math.pow(Integer.parseInt(value),
-                                  Integer.parseInt(operand));
-
-      Log.warning("invalid operator " + operator + ": " + inExpression);
-
-      return value;
-    }
-    catch(NumberFormatException e)
-    {
-      Log.warning(e + ", for " + inExpression);
-
-      return "* invalid number *";
-    }
   }
 
   /**
