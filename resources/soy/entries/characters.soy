@@ -231,6 +231,12 @@
     </div>
 
     <div class="sheet-page">
+      {call .sheet_page_combat}
+        {param entry: $entry /}
+      {/call}
+    </div>
+
+    <div class="sheet-page">
       {call .sheet_page_2}
         {param entry: $entry /}
       {/call}
@@ -296,6 +302,7 @@
         <div class="sheet-column">
           {call .sheet_combat_options}
             {param entry: $entry /}
+            {param size: 4 /}
           {/call}
         </div>
       </div>
@@ -328,6 +335,7 @@
 
       {call .sheet_hit_points}
         {param entry: $entry /}
+        {param break: 10 /}
       {/call}
 
       {call .sheet_special_defenses}
@@ -519,12 +527,10 @@
   </div>
 {/template}
 
-/**
- * The combat options box.
- *
- * @param entry
- */
+/** The combat options box. */
 {template .sheet_combat_options}
+  {@param entry: ?}
+  {@param size: number}
   {call .sheet_subtitle}
      {param title: 'Combat Options' /}
    {/call}
@@ -540,26 +546,24 @@
    {/call}
 
    {foreach $weapon in $entry.weapons}
-     {if index($weapon) < 4}
+     {if index($weapon) < $size}
        {call .sheet_weapon}
          {param gray: index($weapon) == 0 or index($weapon) == 2 /}
          {param weapon: $weapon /}
        {/call}
      {/if}
    {/foreach}
-   {for $i in range(length($entry.weapons), 4)}
+   {for $i in range(length($entry.weapons), $size)}
      {call .sheet_weapon}
        {param gray: $i == 0 or $i == 2 /}
      {/call}
    {/for}
 {/template}
 
-/**
- * The hit points box.
- *
- * @param entry
- */
+/** The hit points box. */
 {template .sheet_hit_points}
+  {@param entry: ?}
+  {@param break: number}
   {call .sheet_subtitle}
     {param title: 'Hit Points' /}
     {param nologo: true /}
@@ -570,19 +574,22 @@
       Temporary<br/>
       {for $i in range(20)}
         <div class="count">{20 - $i}</div>
+        {if $i % $break == 0}
+          <br/>
+        {/if}
       {/for}
     </div>
     <div class="hps">
       Hit Points<br/>
       {for $i in range($entry.maxHP - $entry.HP)}
         <div class="count crossed">{$entry.maxHP - $i}</div>
-        {if ($entry.maxHP - $i) % 10 == 0}
+        {if ($entry.maxHP - $i) % $break == 0}
           <br/>
         {/if}
       {/for}
       {for $i in range($entry.HP + 1)}
         <div class="count">{$entry.HP - $i}</div>
-        {if ($entry.HP - $i) % 10 == 0}
+        {if ($entry.HP - $i) % $break == 0}
           <br/>
         {/if}
       {/for}
@@ -590,6 +597,9 @@
     <div class="hps negative">
       {for $i in range(1, 11)}
         <div class="count">{-$i}</div>
+        {if $i % $break == 0}
+          <br/>
+        {/if}
       {/for}
     </div>
   </div>
@@ -817,7 +827,7 @@
   {/call}
 
   <div class="sheet-row">
-    <div class="saves sheet-column" style="flex: 4">
+    <div class="saves sheet-column flex-4">
       {call .sheet_saves_value}
         {param name: 'Fortitude' /}
         {param ability: 'Constitution' /}
@@ -899,108 +909,109 @@
   {@param racial: ?}
   {@param misc: ?}
   {@param? short: bool}
-  <div class="two-line-label"
-       style="width: {if $short}59{else}15{/if}%;
-              padding-top: {if $short}22{else}30{/if}px">
-    <div class="top" style="font-size: 12px">{$name}</div>
-    <div class="bottom">({$ability})</div>
-  </div>
-
-  {call dma.sheet.old_value}
-    {param label: 'Total' /}
-    {param width: $short ? '30%' : '12.5%' /}
-    {param size: '8px' /}
-    {param center: true /}
-    {param white: true /}
-    {param top: true /}
-    {param value: $value /}
-  {/call}
-
-  {if not $short}
-    <div class="operator" style="padding-top: 30px">=</div>
+  <div class="sheet-row">
+    <div class="two-line-label"
+         style="width: {if $short}59{else}15{/if}%;
+                padding-top: {if $short}22{else}30{/if}px">
+      <div class="top" style="font-size: 12px">{$name}</div>
+      <div class="bottom">({$ability})</div>
+    </div>
 
     {call dma.sheet.old_value}
-      {param label kind="html"}
-        Base <br/>
-        Save
-      {/param}
-      {param width: '12.5%' /}
+      {param label: 'Total' /}
+      {param width: $short ? '30%' : '12.5%' /}
       {param size: '8px' /}
       {param center: true /}
       {param white: true /}
       {param top: true /}
-      {param value: $base /}
+      {param value: $value /}
     {/call}
 
-    <div class="operator" style="padding-top: 30px">+</div>
+    {if not $short}
+      <div class="operator" style="padding-top: 30px">=</div>
 
-    {call dma.sheet.old_value}
-      {param label kind="html"}
-        Ability <br/>
-        Modifier
-      {/param}
-      {param width: '12.5%' /}
-      {param size: '8px' /}
-      {param center: true /}
-      {param white: true /}
-      {param top: true /}
-      {param value: $ability_modifier /}
-    {/call}
+      {call dma.sheet.old_value}
+        {param label kind="html"}
+          Base <br/>
+          Save
+        {/param}
+        {param width: '12.5%' /}
+        {param size: '8px' /}
+        {param center: true /}
+        {param white: true /}
+        {param top: true /}
+        {param value: $base /}
+      {/call}
 
-    <div class="operator" style="padding-top: 30px">+</div>
+      <div class="operator" style="padding-top: 30px">+</div>
 
-    {call dma.sheet.old_value}
-      {param label kind="html"}
-        Magic <br/>
-        Modifier
-      {/param}
-      {param width: '12.5%' /}
-      {param size: '8px' /}
-      {param center: true /}
-      {param white: true /}
-      {param top: true /}
-      {param value: '' /}
-    {/call}
+      {call dma.sheet.old_value}
+        {param label kind="html"}
+          Ability <br/>
+          Modifier
+        {/param}
+        {param width: '12.5%' /}
+        {param size: '8px' /}
+        {param center: true /}
+        {param white: true /}
+        {param top: true /}
+        {param value: $ability_modifier /}
+      {/call}
 
-    <div class="operator" style="padding-top: 30px">+</div>
+      <div class="operator" style="padding-top: 30px">+</div>
 
-    {call dma.sheet.old_value}
-      {param label kind="html"}
-        Misc. <br/>
-        Modifier
-      {/param}
-      {param width: '12.5%' /}
-      {param size: '8px' /}
-      {param center: true /}
-      {param white: true /}
-      {param top: true /}
-      {param lineHeight: '6px' /}
-      {param value kind="html"}
-         {if $racial.unconditional_modifier}
-           {bonus($racial.unconditional_modifier)}
-          {/if}
-          {if $misc.unconditional_modifier}
-            {bonus($misc.unconditional_modifier)}
-          {/if}
-      {/param}
-    {/call}
+      {call dma.sheet.old_value}
+        {param label kind="html"}
+          Magic <br/>
+          Modifier
+        {/param}
+        {param width: '12.5%' /}
+        {param size: '8px' /}
+        {param center: true /}
+        {param white: true /}
+        {param top: true /}
+        {param value: '' /}
+      {/call}
 
-    <div class="operator" style="padding-top: 30px">+</div>
+      <div class="operator" style="padding-top: 30px">+</div>
 
-    {call dma.sheet.old_value}
-      {param label kind="html"}
-        Temporary <br/>
-        Modifier
-      {/param}
-      {param width: '12.5%' /}
-      {param size: '8px' /}
-      {param center: true /}
-      {param white: true /}
-      {param top: true /}
-      {param value: '' /}
-    {/call}
-  {/if}
+      {call dma.sheet.old_value}
+        {param label kind="html"}
+          Misc. <br/>
+          Modifier
+        {/param}
+        {param width: '12.5%' /}
+        {param size: '8px' /}
+        {param center: true /}
+        {param white: true /}
+        {param top: true /}
+        {param lineHeight: '6px' /}
+        {param value kind="html"}
+           {if $racial.unconditional_modifier}
+             {bonus($racial.unconditional_modifier)}
+            {/if}
+            {if $misc.unconditional_modifier}
+              {bonus($misc.unconditional_modifier)}
+            {/if}
+        {/param}
+      {/call}
 
+      <div class="operator" style="padding-top: 30px">+</div>
+
+      {call dma.sheet.old_value}
+        {param label kind="html"}
+          Temporary <br/>
+          Modifier
+        {/param}
+        {param width: '12.5%' /}
+        {param size: '8px' /}
+        {param center: true /}
+        {param white: true /}
+        {param top: true /}
+        {param value: '' /}
+      {/call}
+    {/if}
+    </div>
 {/template}
 
 /**
@@ -1130,28 +1141,31 @@
     {/call}
   </div>
 
-  <div class="inline" style="width: 50%">
-    {call dma.sheet.old_value}
-      {param label: 'Touch AC' /}
-      {param width: '100%' /}
-      {param size: '14px' /}
-      {param vSize: '20px' /}
-      {param value: $entry.touch_armor_class /}
-      {param prefix: true /}
-      {param center: true /}
-    {/call}
-  </div>
 
-  <div class="inline" style="width: 50%">
-    {call dma.sheet.old_value}
-      {param label: 'Flat-Footed AC' /}
-      {param width: '100%' /}
-      {param size: '14px' /}
-      {param vSize: '20px' /}
-      {param value: $entry.flat_footed_armor_class /}
-      {param prefix: true /}
-      {param center: true /}
-    {/call}
+  <div class="sheet-row">
+    <div class="sheet-column">
+      {call dma.sheet.old_value}
+        {param label: 'Touch AC' /}
+        {param width: '100%' /}
+        {param size: '14px' /}
+        {param vSize: '20px' /}
+        {param value: $entry.touch_armor_class /}
+        {param prefix: true /}
+        {param center: true /}
+      {/call}
+    </div>
+
+    <div class="sheet-column">
+      {call dma.sheet.old_value}
+        {param label: 'Flat-Footed AC' /}
+        {param width: '100%' /}
+        {param size: '14px' /}
+        {param vSize: '20px' /}
+        {param value: $entry.flat_footed_armor_class /}
+        {param prefix: true /}
+        {param center: true /}
+      {/call}
+    </div>
   </div>
 
   <div class="armors" style="margin-top: 10px">
@@ -1249,6 +1263,43 @@
           ? annotate($entry.shield_worn.combined_weight) : '' /}
       {/call}
     </div>
+  </div>
+{/template}
+
+/** Sheet with combat options and abilities. */
+{template .sheet_page_combat}
+  {@param entry: ?}
+  <div class="sheet-column">
+  <div class="sheet-row">
+    <div class="sheet-column flex-4" style="margin-right: 5px;">
+      {call .sheet_combat_options}
+        {param entry: $entry /}
+        {param size: 12 /}
+      {/call}
+    </div>
+    <div class="sheet-column" style="flex: 1">
+      {call .sheet_special_attacks}
+        {param entry: $entry /}
+      {/call}
+
+      {call .sheet_hit_points}
+        {param entry: $entry /}
+        {param break: 5 /}
+      {/call}
+    </div>
+  </div>
+  <div class="sheet-row" style="margin-top: 5px;">
+    <div class="sheet-column flex-4">
+      {call .sheet_ac}
+        {param entry: $entry /}
+      {/call}
+    </div>
+    <div class="sheet-column">
+      {call .sheet_special_defenses}
+        {param entry: $entry /}
+      {/call}
+    </div>
+  </div>
   </div>
 {/template}
 

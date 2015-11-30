@@ -240,7 +240,7 @@
         {param validate: 'non-empty' /}
         {param color: '#008' /}
         {param autocomplete: 'base item/name' /}
-      {/call}    
+      {/call}
       {call dma.edit.value}
         {param name: 'parent' /}
         {param label: 'Parent' /}
@@ -735,14 +735,16 @@
  * @param entry the item to format for
  */
 {template .name}
-  {if $ij.isDM or $entry.identified}
-    {$entry.DM_name}
-    {if $entry.player_name and $entry.DM_name != $entry.player_name}
-      {sp}[{$entry.player_name}]
-    {/if} 
-  {else}
-    {$entry.player_name}
-  {/if}
+  <span class="name">
+    {if $ij.isDM or $entry.identified}
+      {$entry.DM_name}
+      {if $entry.player_name and $entry.DM_name != $entry.player_name}
+        {sp}[{$entry.player_name}]
+      {/if}
+    {else}
+      {$entry.player_name}
+    {/if}
+  </span>
   {sp}({$entry.name})
 {/template}
 
