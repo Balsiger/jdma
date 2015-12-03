@@ -289,10 +289,24 @@
       {/if}
       {if $entry.isMagical}
         {call dma.entry.value}
-          {param label: 'Magic' /}        
+          {param label: 'Magic' /}
           {param color: '#008' /}
           {param value kind="html"}
             {annotate($entry.combined_magical_modifiers)}
+          {/param}
+        {/call}
+      {/if}
+      {if length($entry.qualities) > 0}
+        {call dma.entry.value}
+          {param label: 'Qualities' /}
+          {param color: '#008' /}
+          {param value kind="html"}
+           {foreach $quality in $entry.combined_qualities.get}
+             {call dma.entries.qualities.summary}
+               {param entry: $quality /}
+             {/call}
+             ;{sp}
+           {/foreach}
           {/param}
         {/call}
       {/if}
@@ -843,6 +857,32 @@
             {param caption: 'duration' /}            
           {/call}
         {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param label: 'Qualities' /}
+        {param value kind="html"}
+          {foreach $quality in $entry.qualities}
+            {call dma.edit.field_list_line}
+              {param field kind="html"}
+                {call dma.entries.qualities.edit}
+                  {param entry: $quality /}
+                  {param index: index($quality) /}
+                {/call}
+              {/param}
+              {param id: 'quality' /}
+            {/call}
+          {ifempty}
+            {call dma.edit.field_list_line}
+              {param field kind="html"}
+                {call dma.entries.qualities.edit}
+                  {param index: 0 /}
+                {/call}
+              {/param}
+              {param id: 'quality' /}
+            {/call}
+          {/foreach}
+        {/param}
+        {param color: '#008' /}
       {/call}
       {call dma.edit.generic_value}
         {param name: 'magical' /}

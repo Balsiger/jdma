@@ -24,8 +24,8 @@ package net.ixitxachitls.dma.entries;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.appengine.labs.repackaged.com.google.common.collect.ImmutableMap;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.*;

@@ -690,6 +690,7 @@ message BaseItemProto
   optional BaseArmorProto armor = 22;
   optional BaseLightProto light = 23;
   optional BaseCompositeProto composite = 24;
+  repeated QualityProto qualities = 27;
 }
 
 message BaseWeaponProto

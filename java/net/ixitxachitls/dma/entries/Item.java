@@ -1354,7 +1354,7 @@ public class Item extends CampaignEntry
         if(damage == null)
           damage = baseDamage.get();
         else
-          damage.add(baseDamage.get());
+          damage = (Damage)damage.add(baseDamage.get());
     }
 
     if(damage == null)

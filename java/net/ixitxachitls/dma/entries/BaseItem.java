@@ -31,6 +31,8 @@ import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.*;
+import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseArmorProto;
 import net.ixitxachitls.dma.proto.Entries.BaseCommodityProto;
@@ -260,6 +262,9 @@ public class BaseItem extends BaseEntry
 
   /** How much time it takes to remove the item. */
   protected Optional<Duration> m_remove = Optional.absent();
+
+  /** The item's qualities. */
+  protected List<Quality> m_qualities = new ArrayList<>();
 
   /**
    * Check whether this item has weapon properties.
@@ -2126,6 +2131,9 @@ public class BaseItem extends BaseEntry
       builder.setMagic(magic.build());
     }
 
+    for(Quality quality : m_qualities)
+      builder.addQualities(quality.toProto());
+
     BaseItemProto proto = builder.build();
     return proto;
   }
@@ -2210,6 +2218,7 @@ public class BaseItem extends BaseEntry
     m_donHastily = inValues.use("wearable.don_hastily", m_donHastily,
                                 Duration.PARSER);
     m_remove = inValues.use("wearable.remove", m_remove, Duration.PARSER);
+    m_qualities = inValues.useEntries("quality", m_qualities, Quality.CREATOR);
   }
 
   /**
@@ -2402,12 +2411,30 @@ public class BaseItem extends BaseEntry
           AreaShape.fromProto(proto.getLight().getShadowy().getShape());
       }
     }
+
+    for(Entries.QualityProto quality : proto.getQualitiesList())
+      m_qualities.add(Quality.fromProto(quality));
   }
 
   @Override
   protected Message defaultProto()
   {
     return BaseItemProto.getDefaultInstance();
+  }
+
+  public List<Quality> getQualities()
+  {
+    return Collections.unmodifiableList(m_qualities);
+  }
+
+  public Annotated<List<Quality>> getCombinedQualities()
+  {
+    Annotated.List<Quality> combined = new Annotated.List<>();
+    combined.add(m_qualities, getName());
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseItem)entry).getCombinedQualities());
+
+    return combined;
   }
 
   //---------------------------------------------------------------------------

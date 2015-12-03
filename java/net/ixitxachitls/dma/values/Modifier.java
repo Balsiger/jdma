@@ -25,6 +25,7 @@ package net.ixitxachitls.dma.values;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import com.google.common.base.Optional;
 import com.google.template.soy.data.SanitizedContent;
@@ -236,7 +237,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
       for(String value : values)
       {
         String []parts =
-          Strings.getPatterns(value,
+          Strings.getPatterns(Matcher.quoteReplacement(value),
                               "^\\s*([+-]\\d+)\\s*(" + TYPES + ")?\\s*"
                               + "(?: if\\s+(.*))?$");
         if(parts == null || parts.length == 0)
