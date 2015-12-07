@@ -1292,8 +1292,13 @@ public class Item extends CampaignEntry
 
       // Add attack modifiers from qualities.
       for(Quality quality : getPossessor().get().allQualities())
-        attacks = adjustEach(attacks,
-                             quality.attackModifier().unconditionalModifier());
+        attacks = adjustEach(
+            attacks, quality.attackModifier().total(getPossessor().get()));
+
+      for(BaseEntry base : getBaseEntries())
+        for(Quality quality : ((BaseItem)base).getCombinedQualities().get())
+          attacks = adjustEach(
+              attacks, quality.attackModifier().total(getPossessor().get()));
 
       boni.put("", attacks);
 
@@ -1375,7 +1380,15 @@ public class Item extends CampaignEntry
         damage.add(new Damage(new Dice(0, 0, strengthModifier / 2)));
     }
 
-    // TODO: have to subtract strength penalty for non-composite bows
+
+    for(BaseEntry base : getBaseEntries())
+      for(Quality quality : ((BaseItem)base).getCombinedQualities().get())
+      {
+        int modifier = quality.damageModifier().total(getPossessor().get());
+        if(modifier != 0)
+          damage = (Damage)damage.add(new Damage(new Dice(0, 0, modifier)));
+      }
+
     // TODO: deal with offhand and two-hand wielded weapons
 
     return damage;

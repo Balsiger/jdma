@@ -22,6 +22,8 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.io.FileNotFoundException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,10 +33,14 @@ import com.google.common.base.Optional;
 import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.data.UnsafeSanitizedContentOrdainer;
 
+import net.ixitxachitls.dma.entries.Monster;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.proto.Values.ModifierProto;
+import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.input.ReadException;
 import net.ixitxachitls.util.Strings;
 
 /**
@@ -45,12 +51,6 @@ import net.ixitxachitls.util.Strings;
  */
 public class Modifier extends Value.Arithmetic<ModifierProto>
 {
-  /** An interface for stackable objects. */
-  public interface Stackable
-  {
-
-  }
-
   /** The modifiers type. */
   public enum Type implements Named
   {
@@ -96,6 +96,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     /** A competence modifier against attacks. */
     COMPETENCE("competence", false, ModifierProto.Type.COMPETENCE),
 
+    /** A synergy bonus. */
     SYNERGY("synergy", false, ModifierProto.Type.SYNERGY);
 
     /** The value's name. */
@@ -213,6 +214,169 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     }
   }
 
+  private static class Condition
+  {
+    private static class AbilityCondition extends Condition
+    {
+      private AbilityCondition(Ability inAbility, Limit inLimit)
+      {
+        m_ability = inAbility;
+        m_limit = inLimit;
+      }
+
+      private final Ability m_ability;
+      private final Limit m_limit;
+
+      @Override
+      public String toString()
+      {
+        return m_ability + " " + m_limit;
+      }
+
+      @Override
+      public boolean check(Monster inMonster)
+      {
+        return m_limit.check(inMonster.ability(m_ability));
+      }
+    }
+
+    private Condition()
+    {
+      m_text = "";
+    }
+
+    private Condition(String inText)
+    {
+      m_text = inText;
+    }
+
+    public String toString()
+    {
+      return m_text;
+    }
+
+    private String m_text;
+
+    public boolean check(Monster inMonster)
+    {
+      return false;
+    }
+
+    private static Optional<Condition> parse(Optional<String> inText)
+    {
+      if(inText.isPresent())
+        return Optional.of(parse(inText.get()));
+
+      return Optional.absent();
+    }
+
+    private static Condition parse(String inText)
+    {
+      ParseReader reader =
+          new ParseReader(new StringReader(inText), "modifier condition");
+      Optional<String> ability = reader.expectCase(Ability.names(), false);
+      if(ability.isPresent())
+        return parseAbility(ability.get(), reader);
+
+      return new Condition(inText);
+    }
+
+    private static Condition parseAbility(
+        String inAbility, ParseReader inReader)
+    {
+      Optional<Ability> ability = Ability.fromString(inAbility);
+      Optional<Limit> limit = Limit.parse(inReader);
+      if(ability.isPresent() && limit.isPresent())
+        return new AbilityCondition(ability.get(), limit.get());
+
+      return new Condition(inReader.readLine());
+    }
+  }
+
+  private static class Limit
+  {
+    private Limit(Operator inOperator, int inLimit)
+    {
+      m_operator = inOperator;
+      m_limit = inLimit;
+    }
+
+    private enum Operator
+    {
+      ABOVE("above", ">", "over"),
+      ABOVE_OR_EQUAL("above or equal", ">=", "over or equal"),
+      EQUAL("equal", "="),
+      BELOW_OR_EQUAL("below or equal", "<=", "under or equal"),
+      BELOW("below", "<", "under");
+
+      private Operator(String ... inOperators)
+      {
+        m_operators = inOperators;
+      }
+
+      private String []m_operators;
+
+      private static Operator valueOf(ParseReader inReader)
+      {
+        for(Operator operator : values())
+          if (inReader.expectCase(operator.m_operators, false) >= 0)
+            return operator;
+
+        throw new IllegalArgumentException(
+            "unknown operator detected: " + inReader.readLine());
+      }
+
+      public String toString()
+      {
+        return m_operators[0];
+      }
+    }
+
+    private final Operator m_operator;
+    private final int m_limit;
+
+    public boolean check(int inValue)
+    {
+      switch(m_operator)
+      {
+        case ABOVE:
+          return inValue > m_limit;
+
+        case ABOVE_OR_EQUAL:
+          return inValue >= m_limit;
+
+        case EQUAL:
+          return inValue == m_limit;
+
+        case BELOW_OR_EQUAL:
+          return inValue <= m_limit;
+
+        case BELOW:
+          return inValue < m_limit;
+
+        default:
+          return false;
+      }
+    }
+
+    private static Optional<Limit> parse(ParseReader reader)
+    {
+      try
+      {
+        return Optional.of(
+            new Limit(Operator.valueOf(reader), reader.readInt()));
+      }
+      catch(IllegalArgumentException|ReadException e) {}
+
+      return Optional.absent();
+    }
+
+    public String toString()
+    {
+      return m_operator.toString() + " " + m_limit;
+    }
+  }
+
   /** The parser for modifiers. */
   public static final Parser<Modifier> PARSER = new Parser<Modifier>(0)
   {
@@ -297,6 +461,12 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   public Modifier(int inModifier, Type inType, Optional<String> inCondition,
                   Optional<Modifier> inNext)
   {
+    this(inModifier, Condition.parse(inCondition), inNext, inType);
+  }
+
+  private Modifier(int inModifier, Optional<Condition> inCondition,
+                   Optional<Modifier> inNext, Type inType)
+  {
     m_modifier = inModifier;
     m_type = inType;
     m_condition = inCondition;
@@ -316,7 +486,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   private final Type m_defaultType = Type.GENERAL;
 
   /** The condition for the modifier, if any. */
-  private final Optional<String> m_condition;
+  private final Optional<Condition> m_condition;
 
   /** A next modifier, if any. */
   private final Optional<Modifier> m_next;
@@ -349,6 +519,18 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     return modifier;
   }
 
+  public int total(Monster inMonster)
+  {
+    int modifier = 0;
+    if(m_next.isPresent())
+      modifier += m_next.get().total(inMonster);
+
+    if(!m_condition.isPresent() || m_condition.get().check(inMonster))
+      modifier += m_modifier;
+
+    return modifier;
+  }
+
   public boolean hasValue()
   {
     if(m_modifier != 0)
@@ -377,7 +559,9 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
    */
   public Optional<String> getCondition()
   {
-    return m_condition;
+    return m_condition.isPresent()
+        ? Optional.of(m_condition.get().toString())
+        : Optional.<String>absent();
   }
 
   public boolean hasCondition()
@@ -460,7 +644,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     modifier.setBaseValue(m_modifier);
     modifier.setType(m_type.getProto());
     if (m_condition.isPresent())
-      modifier.setCondition(m_condition.get());
+      modifier.setCondition(m_condition.get().toString());
 
     inBuilder.addModifier(modifier.build());
 
@@ -499,28 +683,28 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
         next = Optional.of((Modifier)m_next.get().add(value.m_next.get()));
 
       if(m_type.stacks())
-        return new Modifier(m_modifier + value.m_modifier, m_type,
-                               m_condition, next);
+        return new Modifier(m_modifier + value.m_modifier, m_condition,
+                            Optional.<Modifier>absent(), m_type);
       else
-        return new Modifier(Math.max(m_modifier, value.m_modifier), m_type,
-                               m_condition, next);
+        return new Modifier(Math.max(m_modifier, value.m_modifier),
+                            m_condition, next, m_type);
     }
 
     if(!m_next.isPresent())
-      return new Modifier(m_modifier, m_type, m_condition, Optional.of(value));
+      return new Modifier(m_modifier, m_condition, Optional.of(value), m_type);
 
-    return new Modifier(m_modifier, m_type, m_condition,
-                             Optional.of((Modifier)m_next.get().add(value)));
+    return new Modifier(m_modifier, m_condition,
+                        Optional.of((Modifier)m_next.get().add(value)), m_type);
   }
 
   @Override
   public Value.Arithmetic<ModifierProto> multiply(int inFactor)
   {
-    return new Modifier(m_modifier * inFactor, m_type, m_condition,
+    return new Modifier(m_modifier * inFactor, m_condition,
                            m_next.isPresent()
                              ? Optional.of((Modifier)
                                            m_next.get().multiply(inFactor))
-                             : m_next);
+                             : m_next, m_type);
   }
 
   /**
