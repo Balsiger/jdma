@@ -3871,6 +3871,7 @@ public class Monster extends CampaignEntry
    * @param inName the name (id) of the feat
    * @return the feat or absent if the monster does not have the feat
    */
+  @Deprecated
   public Optional<Feat> getFeat(String inName)
   {
     for(Feat feat : allFeats())
@@ -3878,6 +3879,17 @@ public class Monster extends CampaignEntry
         return Optional.of(feat);
 
     return Optional.absent();
+  }
+
+  public List<Feat> getFeats(String inName)
+  {
+    List<Feat> feats = new ArrayList<>();
+
+    for(Feat feat : allFeats())
+      if(feat.getName().equalsIgnoreCase(inName))
+        feats.add(feat);
+
+    return feats;
   }
 
   /**

@@ -1274,11 +1274,11 @@ public class Item extends CampaignEntry
             && hasBaseName(specialization.get().getQualifier().get()))
           bonus += 1;
 
-        Optional<Feat> focus =
-            getPossessor().get().getFeat("weapon focus");
-        if(focus.isPresent()
-            && focus.get().getQualifier().isPresent()
-            && hasBaseName(focus.get().getQualifier().get()))
+        List<Feat> focus =
+            getPossessor().get().getFeats("weapon focus");
+        for(Feat feat : focus)
+          if(feat.getQualifier().isPresent()
+             && hasBaseName(feat.getQualifier().get()))
           bonus += 1;
       }
 
