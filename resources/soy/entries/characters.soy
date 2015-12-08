@@ -832,7 +832,7 @@
         {param name: 'Fortitude' /}
         {param ability: 'Constitution' /}
         {param value: value($entry.fortitude_save, 'no_conditions') /}
-        {param base: annotate($entry.combined_fortitude_save) /}
+        {param base: annotate($entry.combined_base_fortitude_save) /}
         {param racial: $entry.racial_fortitude_modifier /}
         {param ability_modifier: bonus($entry.constitution_modifier) /}
         {param misc: $entry.misc_fortitude_modifier /}
@@ -843,7 +843,7 @@
         {param ability: 'Dexterity' /}
         {param racial: $entry.racial_reflex_modifier /}
         {param value: value($entry.reflex_save, 'no_conditions') /}
-        {param base: annotate($entry.combined_reflex_save) /}
+        {param base: annotate($entry.combined_base_reflex_save) /}
         {param ability_modifier: bonus($entry.dexterity_modifier) /}
         {param misc: $entry.misc_reflex_modifier /}
       {/call}
@@ -853,7 +853,7 @@
         {param ability: 'Wisdom' /}
         {param racial: $entry.racial_will_modifier /}
         {param value: value($entry.will_save, 'no_conditions') /}
-        {param base: annotate($entry.combined_will_save) /}
+        {param base: annotate($entry.combined_base_will_save) /}
         {param ability_modifier: bonus($entry.wisdom_modifier) /}
         {param misc: $entry.misc_will_modifier /}
       {/call}

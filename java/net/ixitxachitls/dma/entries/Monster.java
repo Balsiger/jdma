@@ -2130,6 +2130,8 @@ public class Monster extends CampaignEntry
           if (bonus.getValue().isPresent())
             save.add(new Modifier(bonus.getValue().get()), base.getName());
 
+    // Abilithy modifier.
+    save.add(new Modifier(getConstitutionModifier()), "Constitution");
 
     // Qualities.
     for (Quality quality : allQualities())
@@ -2163,6 +2165,8 @@ public class Monster extends CampaignEntry
           if (bonus.getValue().isPresent())
             save.add(new Modifier(bonus.getValue().get()), base.getName());
 
+    // Abilithy modifier.
+    save.add(new Modifier(getDexterityModifier()), "Dexterity");
 
     // Qualities.
     for(Quality quality : allQualities())
@@ -2196,6 +2200,8 @@ public class Monster extends CampaignEntry
           if (bonus.getValue().isPresent())
             save.add(new Modifier(bonus.getValue().get()), base.getName());
 
+    // Abilithy modifier.
+    save.add(new Modifier(getWisdomModifier()), "Wisdom");
 
     // Qualities.
     for (Quality quality : allQualities())
