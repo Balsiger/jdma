@@ -918,7 +918,10 @@
     </div>
 
     {call dma.sheet.old_value}
-      {param label: 'Total' /}
+      {param label kind="html"}
+         <br/>
+         Total
+      {/param}
       {param width: $short ? '30%' : '12.5%' /}
       {param size: '8px' /}
       {param center: true /}
