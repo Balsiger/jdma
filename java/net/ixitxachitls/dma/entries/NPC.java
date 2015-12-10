@@ -323,35 +323,6 @@ public class NPC extends Monster
   }
 
   @Override
-  public Annotated.Modifier fortitudeSave()
-  {
-    Annotated.Modifier save = super.fortitudeSave();
-
-    for(Multiset.Entry<String> entry : cumulatedLevels().entrySet())
-    {
-      Optional<BaseLevel> level = DMADataFactory.get().getEntry
-          (new EntryKey(entry.getElement(), BaseLevel.TYPE));
-
-      if(level.isPresent())
-      {
-        List<Integer> saves = level.get().getFortitudeSaves();
-        int bonus = 0;
-        for(int i = 0; i < entry.getCount(); i++)
-          if(i < saves.size())
-            bonus += saves.get(i);
-          else
-            Log.warning("Cannot find fortitude save for level " + i
-                            + " in " + level.get().getName());
-
-        save.add(new Modifier(bonus),
-                 level.get().getName() + " " + entry.getCount());
-      }
-    }
-
-    return save;
-  }
-
-  @Override
   public Annotated.Bonus getCombinedBaseReflexSave()
   {
     Annotated.Bonus save = super.getCombinedBaseReflexSave();

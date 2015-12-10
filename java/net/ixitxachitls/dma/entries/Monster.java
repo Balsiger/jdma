@@ -2120,18 +2120,10 @@ public class Monster extends CampaignEntry
     Annotated.Modifier save = new Annotated.Modifier();
 
     // Racial values.
-    if(m_fortitudeSave.isPresent())
-      save.add(new Modifier(m_fortitudeSave.get()), getName());
-    else
-      for(BaseEntry base : getBaseEntries())
-        for (ValueSources.ValueSource<Optional<Integer>> bonus
-            : ((BaseMonster)base)
-            .getCombinedFortitudeSave().getSources().getSources())
-          if (bonus.getValue().isPresent())
-            save.add(new Modifier(bonus.getValue().get()), base.getName());
-
-    // Abilithy modifier.
-    save.add(new Modifier(getConstitutionModifier()), "Constitution");
+    for (ValueSources.ValueSource<Optional<Integer>> bonus
+        : getCombinedFortitudeSave().getSources().getSources())
+      if (bonus.getValue().isPresent())
+        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
 
     // Qualities.
     for (Quality quality : allQualities())
@@ -2145,8 +2137,6 @@ public class Monster extends CampaignEntry
         save.add(modifier, feat.getName() + " feat");
     }
 
-    save.add(new Modifier(getConstitutionModifier()), "Constitution");
-
     return save;
   }
 
@@ -2155,18 +2145,10 @@ public class Monster extends CampaignEntry
     Annotated.Modifier save = new Annotated.Modifier();
 
     // Racial values.
-    if(m_reflexSave.isPresent())
-      save.add(new Modifier(m_reflexSave.get()), getName());
-    else
-      for(BaseEntry base : getBaseEntries())
-        for (ValueSources.ValueSource<Optional<Integer>> bonus
-            : ((BaseMonster)base)
-            .getCombinedReflexSave().getSources().getSources())
-          if (bonus.getValue().isPresent())
-            save.add(new Modifier(bonus.getValue().get()), base.getName());
-
-    // Abilithy modifier.
-    save.add(new Modifier(getDexterityModifier()), "Dexterity");
+    for (ValueSources.ValueSource<Optional<Integer>> bonus
+        : getCombinedReflexSave().getSources().getSources())
+      if (bonus.getValue().isPresent())
+        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
 
     // Qualities.
     for(Quality quality : allQualities())
@@ -2180,8 +2162,6 @@ public class Monster extends CampaignEntry
         save.add(modifier, feat.getName() + " feat");
     }
 
-    save.add(new Modifier(getDexterityModifier()), "Dexterity");
-
     return save;
   }
 
@@ -2190,18 +2170,10 @@ public class Monster extends CampaignEntry
     Annotated.Modifier save = new Annotated.Modifier();
 
     // Racial values.
-    if(m_willSave.isPresent())
-      save.add(new Modifier(m_willSave.get()), getName());
-    else
-      for(BaseEntry base : getBaseEntries())
-        for (ValueSources.ValueSource<Optional<Integer>> bonus
-            : ((BaseMonster)base)
-            .getCombinedWillSave().getSources().getSources())
-          if (bonus.getValue().isPresent())
-            save.add(new Modifier(bonus.getValue().get()), base.getName());
-
-    // Abilithy modifier.
-    save.add(new Modifier(getWisdomModifier()), "Wisdom");
+    for (ValueSources.ValueSource<Optional<Integer>> bonus
+        : getCombinedWillSave().getSources().getSources())
+      if (bonus.getValue().isPresent())
+        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
 
     // Qualities.
     for (Quality quality : allQualities())
@@ -2214,8 +2186,6 @@ public class Monster extends CampaignEntry
       if(modifier.hasValue())
         save.add(modifier, feat.getName() + " feat");
     }
-
-    save.add(new Modifier(getWisdomModifier()), "Wisdom");
 
     return save;
   }
