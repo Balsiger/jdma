@@ -2651,7 +2651,7 @@ public class Monster extends CampaignEntry
   public int skillModifier(String inSkill, Ability inAbility)
   {
     return skillRanks(inSkill) + abilityModifier(inAbility)
-        + miscModifier(inSkill).totalModifier();
+        + miscModifier(inSkill).unconditionalModifier();
   }
 
   public Modifier miscModifier(String inSkill)
