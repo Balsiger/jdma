@@ -149,6 +149,15 @@ public class Spell extends NestedEntry
     return Optional.absent();
   }
 
+  public String durationString()
+  {
+    Optional<BaseSpell.Duration> duration = duration();
+    if(duration.isPresent())
+      return duration.get().toShortString(levelCount());
+
+    return "";
+  }
+
   public int levelCount()
   {
     if(getBase().isPresent())

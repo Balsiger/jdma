@@ -1435,7 +1435,6 @@
 
 /** A single line with a spell description. */
 {template .sheet_spell_line}
-  {@param character: ?}
   {@param spell: ?}
   <tr>
     <td>{$spell.name}</td>
@@ -1469,13 +1468,8 @@
         {$spell.target}
       {/if}
     </td>
-    <td>
-      {if $spell.duration.present}
-        {$spell.duration}
-      {/if}
-    </td>
-    <td>{$spell.dc}
-    {call($character, 'spellSaveDC', $spell.level_count)}</td>
+    <td>{$spell.duration_string}</td>
+    <td>{$spell.dc}</td>
     <td>
       {if $spell.spell_resistance.present}
         {$spell.spell_resistance}

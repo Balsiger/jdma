@@ -59,8 +59,7 @@ public class Evaluator
 
   public String evaluate(String inText)
   {
-    return replaceVariables(inText);
-
+    return evaluateExpressions(replaceVariables(inText));
   }
 
   private String replaceVariables(String inText)
@@ -211,10 +210,10 @@ public class Evaluator
       return "* invalid expression, expect (: " + inExpression + " *";
     }
 
-    int level;
+    int selected;
     try
     {
-      level = Integer.parseInt(evaluateExpression(inExpression, inTokens));
+      selected = Integer.parseInt(evaluateExpression(inExpression, inTokens));
     }
     catch(NumberFormatException e)
     {
@@ -240,6 +239,8 @@ public class Evaluator
     ranges.add(current);
     Collections.reverse(ranges);
 
+    String match = null;
+    int matchValue = 0;
     for(String range : ranges)
     {
       String []parts = range.split(":\\s*");
@@ -248,8 +249,12 @@ public class Evaluator
 
       try
       {
-        if(level >= Integer.parseInt(parts[0]))
-          return parts[1];
+        int value = Integer.parseInt(parts[0]);
+        if(selected >= value && value > matchValue)
+        {
+          match = parts[1];
+          matchValue = value;
+        }
       }
       catch(NumberFormatException e)
       {
@@ -257,7 +262,10 @@ public class Evaluator
       }
     }
 
-    return "* invalid range *";
+    if (match == null)
+      return "* invalid range *";
+
+    return match;
   }
 
   private String evaluateSwitchExpression(String inExpression,
