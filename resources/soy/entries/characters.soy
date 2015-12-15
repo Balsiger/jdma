@@ -1892,11 +1892,13 @@
   <div class="limited sheet-column" style="flex: 3 3 60%;">
     <div class="gear-title">Possessions on person</div>
 
-    <div class="gear-name">Item</div>
-    <div class="gear-spacer"></div>
-    <div class="gear-location">Location</div>
-    <div class="gear-spacer"></div>
-    <div class="gear-weight">Weight</div>
+    <div class="gear-line">
+      <div class="gear-name">Item</div>
+      <div class="gear-spacer"></div>
+      <div class="gear-location">Location</div>
+      <div class="gear-spacer"></div>
+      <div class="gear-weight">Weight</div>
+    </div>
 
     {foreach $item in $entry.possessions_on_person}
       {if not $item.shownAsWorn}
@@ -1914,11 +1916,13 @@
   <div class="limited sheet-column" style="flex: 2 2 40%;">
     <div class="gear-title">Possessions not on person</div>
 
-    <div class="gear-name">Item</div>
-    <div class="gear-spacer"></div>
-    <div class="gear-location">Location</div>
-    <div class="gear-weight">Weight</div>
-    <div class="gear-spacer"></div>
+    <div class="gear-line">
+      <div class="gear-name">Item</div>
+      <div class="gear-spacer"></div>
+      <div class="gear-location">Location</div>
+      <div class="gear-weight">Weight</div>
+      <div class="gear-spacer"></div>
+    </div>
 
     {foreach $item in $entry.possessions_not_on_person}
       {if not $item.weapon and not $item.armor}
