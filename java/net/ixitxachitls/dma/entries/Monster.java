@@ -2491,6 +2491,20 @@ public class Monster extends CampaignEntry
     return items;
   }
 
+  public Weight weightOnPerson()
+  {
+    Weight weight = new Weight();
+    for(Item item : getPossessions())
+      if(!item.hasBaseName("Storage"))
+      {
+        Optional<Weight> itemWeight = item.getCombinedWeight().get();
+        if(itemWeight.isPresent())
+          weight = (Weight)weight.add(itemWeight.get());
+      }
+
+    return weight;
+  }
+
   public List<Item> magicalItemsOnPerson()
   {
     List<Item> possessions = getPossessions();
