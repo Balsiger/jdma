@@ -166,4 +166,13 @@ public class Skill extends NestedEntry
     return getRanks() + inMonster.abilityModifier(getAbility())
         + inMonster.skillModifier(getName()).totalModifier();
   }
+
+  public int modifier(Monster inMonster) {
+    return inMonster.skillModifier(getName(), getAbility());
+  }
+
+  // Needed to be available in soy.
+  public int modifier(Character inCharacter) {
+    return modifier((Monster)inCharacter);
+  }
 }
