@@ -250,14 +250,16 @@
     {param width: $width /}
     {param markup kind="html"}
       <select name="{$name}" onkeyup="window.form.validate(this)">
-        {foreach $choice in $choices}
-          <option value="{$choice}"
-            {if lower($choice) == lower($value)}
-              {sp}selected
-            {/if}>
-            {$choice}
-          </option>
-        {/foreach}
+        {if isList($choices)}
+          {foreach $choice in $choices}
+            <option value="{$choice}"
+              {if lower($choice) == lower($value)}
+                {sp}selected
+              {/if}>
+              {$choice}
+            </option>
+          {/foreach}
+        {/if}
       </select>
     {/param}
   {/call}

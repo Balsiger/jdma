@@ -37,6 +37,7 @@ import com.google.template.soy.data.SoyData;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.entries.BaseSkill;
 import net.ixitxachitls.dma.entries.Level;
 import net.ixitxachitls.dma.entries.Skill;
@@ -45,6 +46,7 @@ import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.values.ArmorType;
+import net.ixitxachitls.dma.values.Content;
 import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.WeaponStyle;
@@ -285,7 +287,9 @@ public class SoyServlet extends DMAServlet
        "SkillRestriction",
        new SoyValue("SkillRestriction", SkillRestriction.class),
        "Immunity", new SoyValue("Immunity", Immunity.class),
-       "BaseSkill", new SoyValue("BaseSkill", BaseSkill.class));
+       "BaseSkill", new SoyValue("BaseSkill", BaseSkill.class),
+       "BaseProduct_Part",
+       new SoyValue("BaseProduct_Part", BaseProduct.Part.class));
 
     tracer.done();
     return map;
