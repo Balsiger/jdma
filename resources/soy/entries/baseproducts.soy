@@ -419,14 +419,14 @@
       {call dma.edit.value}
         {param name: 'title' /}
         {param label: 'Title' /}
-        {param value: $entry.title /}
+        {param value: $entry.title.present ? $entry.title : '' /}
         {param validate: 'non-empty' /}
         {param color: '#444' /}
       {/call}    
       {call dma.edit.value}
         {param name: 'subtitle' /}
         {param label: 'Subtitle' /}
-        {param value: $entry.subtitle /}
+        {param value: $entry.subtitle.present ? $entry.subtitle : '' /}
         {param validate: 'non-empty' /}
         {param color: '#444' /}
       {/call}    
@@ -545,7 +545,7 @@
       {call dma.edit.value}
         {param name: 'date' /}
         {param label: 'Date' /}
-        {param value: $entry.date /}
+        {param value: $entry.date.present ? $entry.date : '' /}
         {param validate: 'non-empty' /}
         {param color: '#444' /}
       {/call}
@@ -557,14 +557,14 @@
             {param markup kind="html"}
               {call dma.edit.field_input}
                 {param name: 'isbn.10' /}
-                {param value: $entry.ISBN /}
+                {param value: $entry.ISBN.present ? $entry.ISBN : '' /}
                 {param validate: 'isbn' /}
                 {param class: 'field2' /}
                 {param caption: 'ISBN' /}
               {/call}
               {call dma.edit.field_input}
                 {param name: 'isbn.13' /}
-                {param value: $entry.ISBN13 /}
+                {param value: $entry.ISBN13.present ? $entry.ISBN13 : '' /}
                 {param validate: 'isbn13' /}
                 {param class: 'field2' /}
                 {param caption: 'ISBN13' /}
@@ -590,28 +590,28 @@
       {call dma.edit.value}
         {param name: 'number' /}
         {param label: 'Number' /}
-        {param value: $entry.number/}
+        {param value: $entry.number.present ? $entry.number : '' /}
         {param validate: 'non-empty' /}
         {param color: '#444' /}
       {/call}
       {call dma.edit.value}
         {param name: 'volume' /}
         {param label: 'Volume' /}
-        {param value: $entry.volume/}
+        {param value: $entry.volume.present ? $entry.volume : '' /}
         {param validate: 'non-empty' /}
         {param color: '#444' /}
       {/call}
       {call dma.edit.value}
         {param name: 'price' /}
         {param label: 'Price' /}
-        {param value: $entry.price/}
+        {param value: $entry.price.present ? $entry.price : '' /}
         {param validate: 'price' /}
         {param color: '#444' /}
       {/call}
       {call dma.edit.value}
         {param name: 'notes' /}
         {param label: 'Notes' /}
-        {param value: $entry.notes /}
+        {param value: $entry.notes.present ? $entry.notes : '' /}
         {param validate: 'any' /}
         {param color: '#444' /}
       {/call}

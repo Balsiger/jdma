@@ -749,7 +749,14 @@ public class DMADatastore
     // for them in the datastore.
     for(Map.Entry<String, Object> entry
         : inEntry.collectSearchables().entrySet())
-      entity.setProperty(entry.getKey(), entry.getValue());
+      if(entry.getValue() instanceof Optional)
+      {
+        if(((Optional)entry.getValue()).isPresent())
+          entity.setProperty(entry.getKey(),
+                             ((Optional)entry.getValue()).get());
+      }
+      else
+        entity.setProperty(entry.getKey(), entry.getValue());
 
     // Save the index information to make it searchable afterwards.
     Multimap<Index.Path, String> indexes = inEntry.computeIndexValues();

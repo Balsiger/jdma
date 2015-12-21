@@ -1441,13 +1441,8 @@ public class BaseProduct extends BaseEntry
    */
   public String getFullTitle()
   {
-    if(m_leader.isPresent())
-      if(m_title.isPresent())
-        return m_title.get();
-      else
-        return "";
-
-    return m_leader.get() + " " + m_title.get();
+    return m_leader.isPresent() ? m_leader.get() + " " : ""
+        + (m_title.isPresent() ? m_title.get() : "");
   }
 
 
