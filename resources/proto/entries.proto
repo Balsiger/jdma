@@ -478,7 +478,7 @@ message BaseQualityProto
   
   message AbilityModifier
   {
-    required BaseMonsterProto.Ability ability = 1;
+    required Ability ability = 1;
     required ModifierProto modifier = 2;
   }
   repeated AbilityModifier ability_modifier = 7;
@@ -554,7 +554,7 @@ message BaseSkillProto
 {
   required BaseEntryProto base = 1;
 
-  optional BaseMonsterProto.Ability ability = 2;
+  optional Ability ability = 2;
   optional string check = 3;
   optional string action = 4;
   optional string retry = 5;
@@ -1226,18 +1226,6 @@ message BaseMonsterProto
   }
   repeated Save good_save = 43;
 
-  enum Ability
-  {
-    UNKNOWN = 0;
-    STRENGTH = 1;
-    DEXTERITY = 2;
-    CONSTITUTION = 3;
-    INTELLIGENCE = 4;
-    WISDOM = 5;
-    CHARISMA = 6;
-    NONE = 7;
-  }
-  
   repeated string proficiency = 44;
   optional bool quadruped = 45 [default=false];
   repeated QualityProto qualities = 46;
@@ -1296,7 +1284,7 @@ message BaseLevelProto
   repeated int32 reflex_save = 22;
   repeated int32 will_save = 23;
   repeated LeveledQuality bonusFeat = 24;
-  optional BaseMonsterProto.Ability spell_ability = 25;
+  optional Ability spell_ability = 25;
 
   message PerLevel {
     repeated int32 value = 1;
@@ -1461,7 +1449,7 @@ message LevelProto
   optional int32 hp = 2;
   repeated QualityProto quality = 3;
   repeated FeatProto feat = 4;
-  optional BaseMonsterProto.Ability ability_increase = 5;
+  optional Ability ability_increase = 5;
   repeated string spell_known = 6;
 }
 

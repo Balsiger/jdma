@@ -214,169 +214,6 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     }
   }
 
-  private static class Condition
-  {
-    private static class AbilityCondition extends Condition
-    {
-      private AbilityCondition(Ability inAbility, Limit inLimit)
-      {
-        m_ability = inAbility;
-        m_limit = inLimit;
-      }
-
-      private final Ability m_ability;
-      private final Limit m_limit;
-
-      @Override
-      public String toString()
-      {
-        return m_ability + " " + m_limit;
-      }
-
-      @Override
-      public boolean check(Monster inMonster)
-      {
-        return m_limit.check(inMonster.ability(m_ability));
-      }
-    }
-
-    private Condition()
-    {
-      m_text = "";
-    }
-
-    private Condition(String inText)
-    {
-      m_text = inText;
-    }
-
-    public String toString()
-    {
-      return m_text;
-    }
-
-    private String m_text;
-
-    public boolean check(Monster inMonster)
-    {
-      return false;
-    }
-
-    private static Optional<Condition> parse(Optional<String> inText)
-    {
-      if(inText.isPresent())
-        return Optional.of(parse(inText.get()));
-
-      return Optional.absent();
-    }
-
-    private static Condition parse(String inText)
-    {
-      ParseReader reader =
-          new ParseReader(new StringReader(inText), "modifier condition");
-      Optional<String> ability = reader.expectCase(Ability.names(), false);
-      if(ability.isPresent())
-        return parseAbility(ability.get(), reader);
-
-      return new Condition(inText);
-    }
-
-    private static Condition parseAbility(
-        String inAbility, ParseReader inReader)
-    {
-      Optional<Ability> ability = Ability.fromString(inAbility);
-      Optional<Limit> limit = Limit.parse(inReader);
-      if(ability.isPresent() && limit.isPresent())
-        return new AbilityCondition(ability.get(), limit.get());
-
-      return new Condition(inReader.readLine());
-    }
-  }
-
-  private static class Limit
-  {
-    private Limit(Operator inOperator, int inLimit)
-    {
-      m_operator = inOperator;
-      m_limit = inLimit;
-    }
-
-    private enum Operator
-    {
-      ABOVE("above", ">", "over"),
-      ABOVE_OR_EQUAL("above or equal", ">=", "over or equal"),
-      EQUAL("equal", "="),
-      BELOW_OR_EQUAL("below or equal", "<=", "under or equal"),
-      BELOW("below", "<", "under");
-
-      private Operator(String ... inOperators)
-      {
-        m_operators = inOperators;
-      }
-
-      private String []m_operators;
-
-      private static Operator valueOf(ParseReader inReader)
-      {
-        for(Operator operator : values())
-          if (inReader.expectCase(operator.m_operators, false) >= 0)
-            return operator;
-
-        throw new IllegalArgumentException(
-            "unknown operator detected: " + inReader.readLine());
-      }
-
-      public String toString()
-      {
-        return m_operators[0];
-      }
-    }
-
-    private final Operator m_operator;
-    private final int m_limit;
-
-    public boolean check(int inValue)
-    {
-      switch(m_operator)
-      {
-        case ABOVE:
-          return inValue > m_limit;
-
-        case ABOVE_OR_EQUAL:
-          return inValue >= m_limit;
-
-        case EQUAL:
-          return inValue == m_limit;
-
-        case BELOW_OR_EQUAL:
-          return inValue <= m_limit;
-
-        case BELOW:
-          return inValue < m_limit;
-
-        default:
-          return false;
-      }
-    }
-
-    private static Optional<Limit> parse(ParseReader reader)
-    {
-      try
-      {
-        return Optional.of(
-            new Limit(Operator.valueOf(reader), reader.readInt()));
-      }
-      catch(IllegalArgumentException|ReadException e) {}
-
-      return Optional.absent();
-    }
-
-    public String toString()
-    {
-      return m_operator.toString() + " " + m_limit;
-    }
-  }
-
   /** The parser for modifiers. */
   public static final Parser<Modifier> PARSER = new Parser<Modifier>(0)
   {
@@ -461,7 +298,10 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   public Modifier(int inModifier, Type inType, Optional<String> inCondition,
                   Optional<Modifier> inNext)
   {
-    this(inModifier, Condition.parse(inCondition), inNext, inType);
+    this(inModifier,
+         inCondition.isPresent()
+             ? Condition.PARSER.parse(inCondition.get())
+             : Optional.<Condition>absent(), inNext, inType);
   }
 
   private Modifier(int inModifier, Optional<Condition> inCondition,
@@ -525,8 +365,12 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     if(m_next.isPresent())
       modifier += m_next.get().total(inMonster);
 
-    if(!m_condition.isPresent() || m_condition.get().check(inMonster))
-      modifier += m_modifier;
+    if(m_condition.isPresent()) {
+      Optional<Boolean> check = m_condition.get().check(inMonster);
+      if(check.isPresent() && check.get()) {
+        modifier += m_modifier;
+      }
+    }
 
     return modifier;
   }
