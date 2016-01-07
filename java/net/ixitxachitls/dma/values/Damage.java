@@ -74,8 +74,9 @@ public class Damage extends Value.Arithmetic<DamageProto>
         String []parts =
           Strings.getPatterns(value, "^([0-9\\-+\\sd]+)\\s*("
                               + Strings.PIPE_JOINER.join(Type.names()) + ")?"
-                              + "(?:\\s+plus\\s+(.*))?$");
-        if(parts == null || parts.length != 3)
+                              + "(?:\\s+plus\\s+(.*?))?"
+                              + "(?:\\s+if\\s+(.*?))?$");
+        if(parts == null || parts.length != 4)
           return Optional.absent();
 
         if(parts[0] == null)
@@ -92,8 +93,14 @@ public class Damage extends Value.Arithmetic<DamageProto>
           type = Optional.absent();
 
         Optional<String> effect = Optional.fromNullable(parts[2]);
+        Optional<Condition> condition;
+        if(parts[3] == null)
+          condition = Optional.absent();
+        else
+          condition = Condition.PARSER.parse(parts[3]);
 
-        result = Optional.of(new Damage(dice.get(), type, result, effect));
+        result = Optional.of(new Damage(dice.get(), type, result, effect,
+                                        condition));
       }
 
       return result;
@@ -107,14 +114,31 @@ public class Damage extends Value.Arithmetic<DamageProto>
    * @param inType the type of damage done
    * @param inOther an optional further damage linked with this one
    * @param inEffect an optional effect the damage has
+   * @param inCondition a condition the applies for the damage
    */
   public Damage(Dice inDice, Optional<Type> inType,
-                Optional<Damage> inOther, Optional<String> inEffect)
+                Optional<Damage> inOther, Optional<String> inEffect,
+                Optional<Condition> inCondition)
   {
     m_dice = inDice;
     m_type = inType;
     m_other = inOther;
     m_effect = inEffect;
+    m_condition = inCondition;
+  }
+
+  /**
+   * Create a damage value.
+   *
+   * @param inDice the dice for the damage
+   * @param inType the type of damage done
+   * @param inOther an optional further damage linked with this one
+   * @param inEffect an optional effect the damage has
+   */
+  public Damage(Dice inDice, Optional<Type> inType,
+                Optional<Damage> inOther, Optional<String> inEffect)
+  {
+    this(inDice, inType, inOther, inEffect, Optional.<Condition>absent());
   }
 
   /**
@@ -126,7 +150,7 @@ public class Damage extends Value.Arithmetic<DamageProto>
   public Damage(Dice inDice, Type inType)
   {
     this(inDice, Optional.of(inType), Optional.<Damage>absent(),
-         Optional.<String>absent());
+         Optional.<String>absent(), Optional.<Condition>absent());
   }
 
   /**
@@ -137,7 +161,7 @@ public class Damage extends Value.Arithmetic<DamageProto>
   public Damage(Dice inDice)
   {
     this(inDice, Optional.<Type>absent(), Optional.<Damage>absent(),
-         Optional.<String>absent());
+         Optional.<String>absent(), Optional.<Condition>absent());
   }
 
   /** The possible damage types. */
@@ -281,6 +305,9 @@ public class Damage extends Value.Arithmetic<DamageProto>
   /** Additional effects together with the damage, if any. */
   protected final Optional<String> m_effect;
 
+  /** The condition for the damage. */
+  protected final Optional<Condition> m_condition;
+
   /** The parser for parsing damages. */
   public static final Parser<Damage> PARSER = new DamageParser();
 
@@ -350,6 +377,7 @@ public class Damage extends Value.Arithmetic<DamageProto>
     return m_dice
       + (m_type.isPresent() ? " " + m_type.get() : "")
       + (m_effect.isPresent() ? " plus " + m_effect.get() : "")
+      + (m_condition.isPresent() ? " if " + m_condition.get() : "")
       + (m_other.isPresent() ? ", " + m_other.get() : "");
   }
 
@@ -381,6 +409,8 @@ public class Damage extends Value.Arithmetic<DamageProto>
       damage.setType(m_type.get().toProto());
     if(m_effect.isPresent())
       damage.setEffect(m_effect.get());
+    if(m_condition.isPresent())
+      damage.setCondition(m_condition.get().toProto());
 
     inBuilder.addDamage(damage.build());
 
@@ -429,7 +459,13 @@ public class Damage extends Value.Arithmetic<DamageProto>
     else
       effect = Optional.absent();
 
-    return new Damage(dice, type, inNext, effect);
+    Optional<Condition> condition;
+    if(inProto.hasCondition())
+      condition = Optional.of(Condition.fromProto(inProto.getCondition()));
+    else
+      condition = Optional.absent();
+
+    return new Damage(dice, type, inNext, effect, condition);
   }
 
   @Override
@@ -519,6 +555,11 @@ public class Damage extends Value.Arithmetic<DamageProto>
       assertFalse("parsing", PARSER.parse("1d4,").isPresent());
       assertFalse("parsing", PARSER.parse("fire,").isPresent());
       assertFalse("parsing", PARSER.parse("1 plus poison,").isPresent());
+      assertEquals("parsing", "2d6 if against evil",
+                   PARSER.parse("2d6 if   against evil   ").get().toString());
+      assertEquals("parsing", "2d6 plus poison if against evil",
+                   PARSER.parse("2d6 plus poison   if   against evil   ")
+                       .get().toString());
     }
   }
 }

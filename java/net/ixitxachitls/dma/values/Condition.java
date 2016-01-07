@@ -435,7 +435,7 @@ public class Condition extends Value.Arithmetic<Values.ConditionProto>
   {
     Values.ConditionProto.Builder proto = Values.ConditionProto.newBuilder();
 
-    if(!m_generic.isPresent())
+    if(m_generic.isPresent())
       proto.setGeneric(m_generic.get());
 
     if(m_style != WeaponStyle.UNKNOWN)

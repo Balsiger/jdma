@@ -150,7 +150,9 @@
           {annotate($entry.combined_substance)}
           {sp}{annotate($entry.combined_thickness)}
           , hardness {annotate($entry.combined_hardness)}
-          , break dc {annotate($entry.break_DC)}
+          {if $entry.break_DC.present}
+            , break dc {annotate($entry.break_DC)}
+          {/if}
         {/param}
         {param color: '#008' /}
       {/call}
