@@ -1097,6 +1097,7 @@ message BaseMonsterProto
       TANGLE = 20;
       TROUPE = 21;
       COMPANY = 22;
+      DOMESTIC = 23;
     }
     optional Type type = 1;
     optional DiceProto number = 2;

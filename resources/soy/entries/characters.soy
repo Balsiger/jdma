@@ -548,14 +548,14 @@
    {foreach $weapon in $entry.weapons}
      {if index($weapon) < $size}
        {call .sheet_weapon}
-         {param gray: index($weapon) == 0 or index($weapon) == 2 /}
+         {param gray: index($weapon) % 2 == 0 /}
          {param weapon: $weapon /}
        {/call}
      {/if}
    {/foreach}
    {for $i in range(length($entry.weapons), $size)}
      {call .sheet_weapon}
-       {param gray: $i == 0 or $i == 2 /}
+       {param gray: $i % 2 == 0 /}
      {/call}
    {/for}
 {/template}
