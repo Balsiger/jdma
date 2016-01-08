@@ -2198,7 +2198,7 @@
         {param width: '20%' /}
         {param size: '8px' /}
         {param vSize: '12px' /}
-        {param value: $weapon ? $weapon.critical : ' ' /}
+        {param value: $weapon and def($weapon.critical) ? $weapon.critical : ' ' /}
       {/call}
     </div>
     <div>
