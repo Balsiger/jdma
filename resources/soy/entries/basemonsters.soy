@@ -124,6 +124,7 @@
              {call .attacks}
                {param entry: $entry /}
                {param attacks: $entry.combined_secondary_attacks.get /}
+               {param secondary: true /}
              {/call}
            {/if}
          </div>
@@ -141,7 +142,8 @@
            {/if}
            {call .attacks}
              {param entry: $entry /}
-             {param attacks: $entry.combined_secondary_attacks.get /}
+             {param attacks: $entry.combined_primary_attacks.get /}
+             {param secondary: true /}
            {/call}
          </div>
 
@@ -414,6 +416,7 @@
 {template .attacks}
   {@param entry: ?}
   {@param attacks: list<?>}
+  {@param? secondary: bool}
 
   {foreach $attack in $attacks}
     {if not $attack.number.isOne}
@@ -424,8 +427,11 @@
       {/if}
       {sp}
     {/if}
-    {$attack.mode} {annotate(call($entry, 'attackBonus', $attack))}{sp}
-    {$attack.style} ({call($entry, 'damage', $attack)})
+    {$attack.mode} {annotate(call($entry, $secondary
+                                    ? 'secondaryAttackBonus' : 'attackBonus',
+                                    $attack))}{sp}
+    {$attack.style} ({call($entry, $secondary ? 'secondaryDamage' : 'damage',
+                           $attack)})
     {if not isLast($attack)} and {/if}
   {/foreach}
 {/template}
