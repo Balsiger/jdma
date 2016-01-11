@@ -115,40 +115,34 @@
          // attack
          <div class="line">
            <span class="bold">Attack:</span>{sp}
-           {foreach $attack in $entry.combined_primary_attacks.get}
-             {if not $attack.number.isOne}
-               {$attack.number}{sp}
-             {/if}
-             {$attack.mode}{sp}
-             {annotate(call($entry, 'attackBonus', $attack))}{sp}
-             {$attack.style} ({call($entry, 'damage', $attack)})
-             {if not isLast($attack)} and {/if}
-           {/foreach}
+           {if length($entry.combined_primary_attacks.get) > 0}
+             {call .attacks}
+               {param entry: $entry /}
+               {param attacks: $entry.combined_primary_attacks.get /}
+             {/call}
+           {else}
+             {call .attacks}
+               {param entry: $entry /}
+               {param attacks: $entry.combined_secondary_attacks.get /}
+             {/call}
+           {/if}
          </div>
 
          // full attack
          <div class="line">
            <span class="bold">Full Attack:</span>{sp}
-           {foreach $attack in $entry.combined_primary_attacks.get}
-             {if not $attack.number.isOne}
-               {$attack.number}{sp}
-             {/if}
-             {$attack.mode} {annotate(call($entry, 'attackBonus', $attack))}{sp}
-             {$attack.style} ({call($entry, 'damage', $attack)})
-             {if not isLast($attack)} and {/if}
-           {/foreach}
-           {if length($entry.combined_secondary_attacks.get) > 0}
+           {call .attacks}
+             {param entry: $entry /}
+             {param attacks: $entry.combined_primary_attacks.get /}
+           {/call}
+           {if length($entry.combined_secondary_attacks.get) > 0
+               and length($entry.combined_primary_attacks.get) > 0}
              {sp}and{sp}
-             {foreach $attack in $entry.combined_secondary_attacks.get}
-               {if not $attack.number.isOne}
-                 {$attack.number}{sp}
-               {/if}
-               {$attack.mode}{sp}
-               {annotate(call($entry, 'secondaryAttackBonus', $attack))}{sp}
-               {$attack.style} ({call($entry, 'secondaryDamage', $attack)})
-               {if not isLast($attack)} and {/if}
-             {/foreach}
            {/if}
+           {call .attacks}
+             {param entry: $entry /}
+             {param attacks: $entry.combined_secondary_attacks.get /}
+           {/call}
          </div>
 
          // space/reach
@@ -414,6 +408,26 @@
       {/foreach}
     {/param}
   {/call}
+{/template}
+
+/** Format a list of attacks. */
+{template .attacks}
+  {@param entry: ?}
+  {@param attacks: list<?>}
+
+  {foreach $attack in $attacks}
+    {if not $attack.number.isOne}
+      {if $attack.number.is_random}
+        {$attack.number}
+      {else}
+        {$attack.number.modifier}
+      {/if}
+      {sp}
+    {/if}
+    {$attack.mode} {annotate(call($entry, 'attackBonus', $attack))}{sp}
+    {$attack.style} ({call($entry, 'damage', $attack)})
+    {if not isLast($attack)} and {/if}
+  {/foreach}
 {/template}
 
 /**

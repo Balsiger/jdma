@@ -1413,7 +1413,7 @@ public class BaseMonster extends BaseEntry
    */
   public Annotated<List<Attack>> getCombinedSecondaryAttacks()
   {
-    if(!m_primaryAttacks.isEmpty())
+    if(!m_secondaryAttacks.isEmpty())
       return new Annotated.List<Attack>(m_secondaryAttacks, getName());
 
     Annotated<List<Attack>> combined = new Annotated.List<Attack>();
