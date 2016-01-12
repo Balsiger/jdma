@@ -68,9 +68,10 @@
 
          // size and type
          <div class="line bold">
-           {$entry.size} {$entry.monster_type}{sp}
-           {if length($entry.monster_subtypes) > 0}
-             ({foreach $type in $entry.monster_subtypes}
+           {annotate($entry.combined_size)}{sp}
+           {annotate($entry.combined_monster_type)}{sp}
+           {if length($entry.combined_monster_subtypes.get) > 0}
+             ({foreach $type in $entry.combined_monster_subtypes}
                {$type}{if not isLast($type)}, {/if}
              {/foreach})
            {/if}
