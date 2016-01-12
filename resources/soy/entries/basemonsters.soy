@@ -135,6 +135,7 @@
            {call .attacks}
              {param entry: $entry /}
              {param attacks: $entry.combined_primary_attacks.get /}
+             {param full: true /}
            {/call}
            {if length($entry.combined_secondary_attacks.get) > 0
                and length($entry.combined_primary_attacks.get) > 0}
@@ -142,8 +143,9 @@
            {/if}
            {call .attacks}
              {param entry: $entry /}
-             {param attacks: $entry.combined_primary_attacks.get /}
+             {param attacks: $entry.combined_secondary_attacks.get /}
              {param secondary: true /}
+             {param full: true /}
            {/call}
          </div>
 
@@ -417,15 +419,18 @@
   {@param entry: ?}
   {@param attacks: list<?>}
   {@param? secondary: bool}
+  {@param? full: bool}
 
   {foreach $attack in $attacks}
-    {if not $attack.number.isOne}
-      {if $attack.number.is_random}
-        {$attack.number}
-      {else}
-        {$attack.number.modifier}
+    {if $full}
+      {if not $attack.number.isOne}
+        {if $attack.number.is_random}
+          {$attack.number}
+        {else}
+          {$attack.number.modifier}
+        {/if}
+        {sp}
       {/if}
-      {sp}
     {/if}
     {$attack.mode} {annotate(call($entry, $secondary
                                     ? 'secondaryAttackBonus' : 'attackBonus',
