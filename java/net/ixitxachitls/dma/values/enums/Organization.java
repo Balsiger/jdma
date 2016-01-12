@@ -60,7 +60,7 @@ public enum Organization implements Named,
   COVEY("Covey", BaseMonsterProto.Organization.Type.COVEY),
 
   /** Domestic organization. */
-  DOMESTIC("Domestic", BaseMonsterProto.Organization.Type.DOMESTIC),
+  DOMESTIC("Domesticated", BaseMonsterProto.Organization.Type.DOMESTICATED),
 
   /** Flight organization. */
   FLIGHT("Flight", BaseMonsterProto.Organization.Type.FLIGHT),
