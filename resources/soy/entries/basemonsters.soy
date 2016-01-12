@@ -47,20 +47,22 @@
     {param nodescriptions: true /}
     {param title kind="html"}
       {call dma.entry.title}
-        {param title: $entry.name /}
+        {param title kind="html"}
+          {$entry.name}
+          {if length($entry.baseNames)}
+            {sp}(
+              {foreach $base in $entry.baseNames}
+                {call dma.page.link}
+                  {param text: $base /}
+                  {param url: '/monster/'  + $base /}
+                {/call}
+                {if not isLast($base)}; {/if}
+              {/foreach}
+            )
+          {/if}
+        {/param}
         {param color: '#080' /}
       {/call}
-      {if length($entry.baseNames)}
-        {sp}(
-          {foreach $base in $entry.baseNames}
-            {call dma.page.link}
-              {param text: $base /}
-              {param url: '/monster/'  + $base /}
-            {/call}
-            {if not isLast($base)}; {/if}
-          {/foreach}
-        )
-      {/if}
     {/param}
     {param values kind="html"}
 
@@ -71,7 +73,7 @@
            {annotate($entry.combined_size)}{sp}
            {annotate($entry.combined_monster_type)}{sp}
            {if length($entry.combined_monster_subtypes.get) > 0}
-             ({foreach $type in $entry.combined_monster_subtypes}
+             ({foreach $type in $entry.combined_monster_subtypes.get}
                {$type}{if not isLast($type)}, {/if}
              {/foreach})
            {/if}
