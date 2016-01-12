@@ -223,7 +223,8 @@
          // environment
          <div class="line">
            <span class="bold">Environment:</span>{sp}
-           {$entry.terrain}, {$entry.climate}
+           {annotate($entry.combined_terrain)},
+           {annotate($entry.combined_climate)}
          </div>
 
          // organization
@@ -414,7 +415,7 @@
   {/call}
 {/template}
 
-/** Format a list of attacks. */
+/** Format a lisf attacks. */
 {template .attacks}
   {@param entry: ?}
   {@param attacks: list<?>}
