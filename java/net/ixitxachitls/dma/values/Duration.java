@@ -190,6 +190,15 @@ public class Duration extends Value.Arithmetic<DurationProto>
     m_freeActions = inFreeActions;
   }
 
+  public Duration()
+  {
+    this(Optional.<Rational>absent(), Optional.<Rational>absent(),
+         Optional.<Rational>absent(), Optional.<Rational>absent(),
+         Optional.<Rational>absent(), Optional.<Rational>absent(),
+         Optional.<Rational>absent(), Optional.<Rational>absent(),
+         Optional.<Rational>absent());
+  }
+
   /** The number of days in the duration. */
   private final Optional<Rational> m_days;
 

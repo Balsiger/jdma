@@ -23,31 +23,43 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 import com.google.common.base.Optional;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.FeatProto;
 import net.ixitxachitls.dma.proto.Entries.MonsterProto;
 import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
 import net.ixitxachitls.dma.rules.CarryingCapacity;
+import net.ixitxachitls.dma.rules.Combat;
+import net.ixitxachitls.dma.rules.Monsters;
 import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.Damage;
+import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Slot;
 import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.ValueSources;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Alignment;
+import net.ixitxachitls.dma.values.enums.AttackStyle;
+import net.ixitxachitls.dma.values.enums.Language;
+import net.ixitxachitls.dma.values.enums.LanguageModifier;
+import net.ixitxachitls.dma.values.enums.MonsterType;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.dma.values.enums.Size;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -60,6 +72,18 @@ public class Monster extends CampaignEntry
 {
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
+
+  private static final int MIN_SYNERGY_RANKS = 5;
+  private static final int SYNERGY_BONUS = 2;
+
+  private static final Comparator<Item> PRICE_ORDERING = new Comparator<Item>()
+  {
+    @Override
+    public int compare(Item first, Item second)
+    {
+      return Double.compare(second.getGoldValue(), first.getGoldValue());
+    }
+  };
 
   /** The class represents a single line in the treasure table (DMG 52/53). */
   private static class Line
@@ -563,6 +587,11 @@ public class Monster extends CampaignEntry
     super(TYPE);
   }
 
+  public Monster(String inName)
+  {
+    super(inName, TYPE);
+  }
+
   /**
    * This is the normal constructor.
    *
@@ -601,6 +630,9 @@ public class Monster extends CampaignEntry
    /** The type of the base entry to this entry. */
    public static final BaseType<BaseMonster> BASE_TYPE = BaseMonster.TYPE;
 
+  /** A special name for the npc, if any. */
+  protected Optional<String> m_givenName = Optional.absent();
+
   /** The possessions value. */
   protected List<Item> m_possessions = null;
 
@@ -625,9 +657,6 @@ public class Monster extends CampaignEntry
   /** The feats. */
   protected List<Feat> m_feats = new ArrayList<>();
 
-  /** The actual maximal number of hit points the monster can have. */
-  protected int m_maxHP = 0;
-
   /** The actual number of hit points the monster currently has. */
   protected int m_hp = 0;
 
@@ -648,6 +677,12 @@ public class Monster extends CampaignEntry
 
   /** The qualities. */
   protected List<Quality> m_qualities = new ArrayList<>();
+
+  /** The languages the monster knows. */
+  protected List<Language> m_languages = new ArrayList<>();
+
+  /** The monster's personality. */
+  protected Optional<String> m_personality = Optional.absent();
 
   /** The monetary treasure. */
   // protected Money m_money = new Money();
@@ -928,21 +963,6 @@ public class Monster extends CampaignEntry
   }
   */
 
-  /**
-   * Compute the ability modifier for the given score.
-   *
-   * @param       inScore the ability score to compute for
-   *
-   * @return      the compute modifier
-   */
-  public int abilityModifier(long inScore)
-  {
-    if(inScore < 0)
-      return 0;
-
-    return (int) (inScore / 2) - 5;
-  }
-
   public int abilityModifier(String inAbility)
   {
     Optional<Ability> ability = Ability.fromString(inAbility);
@@ -981,6 +1001,35 @@ public class Monster extends CampaignEntry
     }
   }
 
+  public int ability(Ability inAbility)
+  {
+    switch(inAbility)
+    {
+      case UNKNOWN:
+      case NONE:
+      default:
+        return 0;
+
+      case STRENGTH:
+        return totalStrength();
+
+      case DEXTERITY:
+        return totalDexterity();
+
+      case CONSTITUTION:
+        return totalConstitution();
+
+      case INTELLIGENCE:
+        return totalIntelligence();
+
+      case WISDOM:
+        return totalWisdom();
+
+      case CHARISMA:
+        return totalCharisma();
+    }
+  }
+
   /**
    * Get the monster's weapons.
    *
@@ -993,6 +1042,7 @@ public class Monster extends CampaignEntry
       if(item != null && item.isWeapon() && !item.isAmmunition())
         weapons.add(item);
 
+    Collections.sort(weapons, PRICE_ORDERING);
     return weapons;
   }
 
@@ -1047,6 +1097,23 @@ public class Monster extends CampaignEntry
     return Collections.unmodifiableList(m_feats);
   }
 
+  public Annotated<List<Feat>> getCombinedFeats()
+  {
+    Annotated<List<Feat>> feats = new Annotated.List<>(m_feats, getName());
+
+    for(BaseEntry base : getBaseEntries())
+    {
+      List<Feat> baseFeats = new ArrayList<>();
+      for(Feat feat : ((BaseMonster)base).getCombinedFeats().get())
+        baseFeats.add(feat);
+
+      feats.add(new Annotated.List<>(baseFeats, base.getName()));
+    }
+
+    return feats;
+  }
+
+
   /**
    * Get all of the monster's qualities.
    *
@@ -1055,6 +1122,49 @@ public class Monster extends CampaignEntry
   public List<Quality> getQualities()
   {
     return Collections.unmodifiableList(m_qualities);
+  }
+
+  public Annotated.List<Quality> getRacialQualities()
+  {
+    Annotated.List<Quality> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseMonster)entry).getCombinedQualities());
+
+    return combined;
+  }
+
+  protected Set<Feat> allFeats()
+  {
+    Set<Feat> feats = new HashSet<>(getFeats());
+
+    for(BaseEntry entry : getBaseEntries())
+      feats.addAll(((BaseMonster)entry).getCombinedFeats().get());
+
+    return feats;
+  }
+
+  protected Modifier abilityModifierFromQualities(Ability inAbility)
+  {
+    Modifier modifier = new Modifier();
+
+    for(Quality quality : allQualities())
+      modifier = (Modifier)modifier.add(quality.abilityModifier(inAbility));
+    return modifier;
+  }
+
+  protected List<Quality> allQualities()
+  {
+    return monsterQualities();
+  }
+
+  protected List<Quality> monsterQualities()
+  {
+    List<Quality> qualities = new ArrayList<>();
+
+    for(BaseEntry entry : getBaseEntries())
+      qualities.addAll(((BaseMonster)entry).getCombinedQualities().get());
+
+    return qualities;
   }
 
   /**
@@ -1074,13 +1184,231 @@ public class Monster extends CampaignEntry
    */
   public Annotated<Optional<Integer>> getCombinedStrength()
   {
-    Annotated.Integer combined = new Annotated.Integer();
     if(m_strength.isPresent())
-      combined.add(m_strength.get(), getName());
+      return new Annotated.Integer(m_strength.get(), getName());
+
+    Annotated.Integer combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedStrength());
 
     return combined;
+  }
+
+  public int totalStrength()
+  {
+    int score = 0;
+
+    Optional<Integer> combined = getCombinedStrength().get();
+    if(combined.isPresent())
+      score = combined.get();
+
+    score += getRacialStrengthModifier().unconditionalModifier();
+    score += getStrengthMiscModifier().unconditionalModifier();
+
+    return score;
+  }
+
+  public Annotated.Modifier strength()
+  {
+    Annotated.Modifier annotated = new Annotated.Modifier();
+
+    if(m_strength.isPresent())
+      annotated.add(new Modifier(m_strength.get()), getName());
+    else
+      for(BaseEntry base : getBaseEntries())
+        for(ValueSources.ValueSource<Optional<Integer>> bonus
+            : ((BaseMonster)base)
+            .getCombinedStrength().getSources().getSources())
+          if(bonus.getValue().isPresent())
+            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+
+    // Qualities
+    for(Quality quality : allQualities())
+    {
+      Modifier modifier = quality.abilityModifier(Ability.STRENGTH);
+      if(modifier.hasValue())
+        annotated.add(modifier, quality.getName());
+    }
+
+    // Feats
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.getStrengthModifier();
+      if(modifier.hasValue())
+        annotated.add(modifier, feat.getName() + " feat");
+    }
+
+    return annotated;
+  }
+
+  public Annotated.Modifier dexterity()
+  {
+    Annotated.Modifier annotated = new Annotated.Modifier();
+
+    if(m_dexterity.isPresent())
+      annotated.add(new Modifier(m_dexterity.get()), getName());
+    else
+      for(BaseEntry base : getBaseEntries())
+        for(ValueSources.ValueSource<Optional<Integer>> bonus
+            : ((BaseMonster)base)
+            .getCombinedDexterity().getSources().getSources())
+          if(bonus.getValue().isPresent())
+            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+
+    // Qualities
+    for(Quality quality : allQualities())
+    {
+      Modifier modifier = quality.abilityModifier(Ability.DEXTERITY);
+      if(modifier.hasValue())
+        annotated.add(modifier, quality.getName());
+    }
+
+    // Feats
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.getDexterityModifier();
+      if(modifier.hasValue())
+        annotated.add(modifier, feat.getName() + " feat");
+    }
+
+    return annotated;
+  }
+
+  public Annotated.Modifier constitution()
+  {
+    Annotated.Modifier annotated = new Annotated.Modifier();
+
+    if(m_constitution.isPresent())
+      annotated.add(new Modifier(m_constitution.get()), getName());
+    else
+      for(BaseEntry base : getBaseEntries())
+        for(ValueSources.ValueSource<Optional<Integer>> bonus
+            : ((BaseMonster)base)
+            .getCombinedConstitution().getSources().getSources())
+          if(bonus.getValue().isPresent())
+            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+
+    // Qualities
+    for(Quality quality : allQualities())
+    {
+      Modifier modifier = quality.abilityModifier(Ability.CONSTITUTION);
+      if(modifier.hasValue())
+        annotated.add(modifier, quality.getName());
+    }
+
+    // Feats
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.getConstitutionModifier();
+      if(modifier.hasValue())
+        annotated.add(modifier, feat.getName() + " feat");
+    }
+
+    return annotated;
+  }
+
+  public Annotated.Modifier intelligence()
+  {
+    Annotated.Modifier annotated = new Annotated.Modifier();
+
+    if(m_intelligence.isPresent())
+      annotated.add(new Modifier(m_intelligence.get()), getName());
+    else
+      for(BaseEntry base : getBaseEntries())
+        for(ValueSources.ValueSource<Optional<Integer>> bonus
+            : ((BaseMonster)base)
+            .getCombinedIntelligence().getSources().getSources())
+          if(bonus.getValue().isPresent())
+            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+
+    // Qualities
+    for(Quality quality : allQualities())
+    {
+      Modifier modifier = quality.abilityModifier(Ability.INTELLIGENCE);
+      if(modifier.hasValue())
+        annotated.add(modifier, quality.getName());
+    }
+
+    // Feats
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.getIntelligenceModifier();
+      if(modifier.hasValue())
+        annotated.add(modifier, feat.getName() + " feat");
+    }
+
+    return annotated;
+  }
+
+  public Annotated.Modifier wisdom()
+  {
+    Annotated.Modifier annotated = new Annotated.Modifier();
+
+    if(m_wisdom.isPresent())
+      annotated.add(new Modifier(m_wisdom.get()), getName());
+    else
+      for(BaseEntry base : getBaseEntries())
+        for(ValueSources.ValueSource<Optional<Integer>> bonus
+            : ((BaseMonster)base)
+            .getCombinedWisdom().getSources().getSources())
+          if(bonus.getValue().isPresent())
+            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+
+    // Qualities
+    for(Quality quality : allQualities())
+    {
+      Modifier modifier = quality.abilityModifier(Ability.WISDOM);
+      if(modifier.hasValue())
+        annotated.add(modifier, quality.getName());
+    }
+
+    // Feats
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.getWisdomModifier();
+      if(modifier.hasValue())
+        annotated.add(modifier, feat.getName() + " feat");
+    }
+
+    return annotated;
+  }
+
+  public Annotated.Modifier charisma()
+  {
+    Annotated.Modifier annotated = new Annotated.Modifier();
+
+    if(m_charisma.isPresent())
+      annotated.add(new Modifier(m_charisma.get()), getName());
+    else
+      for(BaseEntry base : getBaseEntries())
+        for(ValueSources.ValueSource<Optional<Integer>> bonus
+            : ((BaseMonster)base)
+            .getCombinedCharisma().getSources().getSources())
+          if(bonus.getValue().isPresent())
+            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+
+    // Qualities
+    for(Quality quality : allQualities())
+    {
+      Modifier modifier = quality.abilityModifier(Ability.CHARISMA);
+      if(modifier.hasValue())
+        annotated.add(modifier, quality.getName());
+    }
+
+    // Feats
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.getCharismaModifier();
+      if(modifier.hasValue())
+        annotated.add(modifier, feat.getName() + " feat");
+    }
+
+    return annotated;
+  }
+
+  public Modifier getRacialStrengthModifier()
+  {
+    return abilityModifierFromQualities(Ability.STRENGTH);
   }
 
   /**
@@ -1091,11 +1419,17 @@ public class Monster extends CampaignEntry
    */
   public int getStrengthModifier()
   {
-    Optional<Integer> strength = getCombinedStrength().get();
-    if(!strength.isPresent())
-      return 0;
+    return Monsters.abilityModifier(totalStrength());
+  }
 
-    return abilityModifier(strength.get());
+  public Modifier getStrengthMiscModifier()
+  {
+    Modifier modifier = new Modifier();
+
+    for(Feat feat : allFeats())
+      modifier = (Modifier)modifier.add(feat.getStrengthModifier());
+
+    return modifier;
   }
 
   /**
@@ -1115,13 +1449,33 @@ public class Monster extends CampaignEntry
    */
   public Annotated<Optional<Integer>> getCombinedConstitution()
   {
-    Annotated.Integer combined = new Annotated.Integer();
     if(m_constitution.isPresent())
-      combined.add(m_constitution.get(), getName());
+      return new Annotated.Integer(m_constitution.get(), getName());
+
+    Annotated.Integer combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedConstitution());
 
     return combined;
+  }
+
+  public int totalConstitution()
+  {
+    int score = 0;
+
+    Optional<Integer> combined = getCombinedConstitution().get();
+    if(combined.isPresent())
+      score = combined.get();
+
+    score += getRacialConstitutionModifier().unconditionalModifier();
+    score += getConstitutionMiscModifier().unconditionalModifier();
+
+    return score;
+  }
+
+  public Modifier getRacialConstitutionModifier()
+  {
+    return abilityModifierFromQualities(Ability.CONSTITUTION);
   }
 
   /**
@@ -1132,11 +1486,17 @@ public class Monster extends CampaignEntry
    */
   public int getConstitutionModifier()
   {
-    Optional<Integer> constitution = getCombinedCharisma().get();
-    if(!constitution.isPresent())
-      return 0;
+    return Monsters.abilityModifier(totalConstitution());
+  }
 
-    return abilityModifier(constitution.get());
+  public Modifier getConstitutionMiscModifier()
+  {
+    Modifier modifier = new Modifier();
+
+    for(Feat feat : allFeats())
+      modifier = (Modifier)modifier.add(feat.getConstitutionModifier());
+
+    return modifier;
   }
 
   /**
@@ -1156,13 +1516,36 @@ public class Monster extends CampaignEntry
    */
   public Annotated<Optional<Integer>> getCombinedDexterity()
   {
-    Annotated.Integer combined = new Annotated.Integer();
     if(m_dexterity.isPresent())
-      combined.add(m_dexterity.get(), getName());
+      return new Annotated.Integer(m_dexterity.get(), getName());
+
+    Annotated.Integer combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedDexterity());
 
+    combined.add(getRacialDexterityModifier().totalModifier(),
+                 "racial " + getRacialDexterityModifier());
+
     return combined;
+  }
+
+  public int totalDexterity()
+  {
+    int score = 0;
+
+    Optional<Integer> combined = getCombinedDexterity().get();
+    if(combined.isPresent())
+      score = combined.get();
+
+    score += getRacialDexterityModifier().unconditionalModifier();
+    score += getDexterityMiscModifier().unconditionalModifier();
+
+    return score;
+  }
+
+  public Modifier getRacialDexterityModifier()
+  {
+    return abilityModifierFromQualities(Ability.DEXTERITY);
   }
 
   /**
@@ -1173,11 +1556,17 @@ public class Monster extends CampaignEntry
    */
   public int getDexterityModifier()
   {
-    Optional<Integer> dexterity = getCombinedDexterity().get();
-    if(!dexterity.isPresent())
-      return 0;
+    return Monsters.abilityModifier(totalDexterity());
+  }
 
-    return abilityModifier(dexterity.get());
+  public Modifier getDexterityMiscModifier()
+  {
+    Modifier modifier = new Modifier();
+
+    for(Feat feat : allFeats())
+      modifier = (Modifier)modifier.add(feat.getDexterityModifier());
+
+    return modifier;
   }
 
   /**
@@ -1198,13 +1587,33 @@ public class Monster extends CampaignEntry
    */
   public Annotated<Optional<Integer>> getCombinedIntelligence()
   {
-    Annotated.Integer combined = new Annotated.Integer();
     if(m_intelligence.isPresent())
-      combined.add(m_intelligence.get(), getName());
+      return new Annotated.Integer(m_intelligence.get(), getName());
+
+    Annotated.Integer combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedIntelligence());
 
     return combined;
+  }
+
+  public int totalIntelligence()
+  {
+    int score = 0;
+
+    Optional<Integer> combined = getCombinedIntelligence().get();
+    if(combined.isPresent())
+      score = combined.get();
+
+    score += getRacialIntelligenceModifier().unconditionalModifier();
+    score += getIntelligenceMiscModifier().unconditionalModifier();
+
+    return score;
+  }
+
+  public Modifier getRacialIntelligenceModifier()
+  {
+    return abilityModifierFromQualities(Ability.INTELLIGENCE);
   }
 
   /**
@@ -1215,11 +1624,17 @@ public class Monster extends CampaignEntry
    */
   public int getIntelligenceModifier()
   {
-    Optional<Integer> intelligence = getCombinedIntelligence().get();
-    if(!intelligence.isPresent())
-      return 0;
+    return Monsters.abilityModifier(totalIntelligence());
+  }
 
-    return abilityModifier(intelligence.get());
+  public Modifier getIntelligenceMiscModifier()
+  {
+    Modifier modifier = new Modifier();
+
+    for(Feat feat : allFeats())
+      modifier = (Modifier)modifier.add(feat.getIntelligenceModifier());
+
+    return modifier;
   }
 
   /**
@@ -1239,13 +1654,33 @@ public class Monster extends CampaignEntry
    */
   public Annotated<Optional<Integer>> getCombinedWisdom()
   {
-    Annotated.Integer combined = new Annotated.Integer();
     if(m_wisdom.isPresent())
-      combined.add(m_wisdom.get(), getName());
+      return new Annotated.Integer(m_wisdom.get(), getName());
+
+    Annotated.Integer combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedWisdom());
 
     return combined;
+  }
+
+  public int totalWisdom()
+  {
+    int score = 0;
+
+    Optional<Integer> combined = getCombinedWisdom().get();
+    if(combined.isPresent())
+      score = combined.get();
+
+    score += getRacialWisdomModifier().unconditionalModifier();
+    score += getWisdomMiscModifier().unconditionalModifier();
+
+    return score;
+  }
+
+  public Modifier getRacialWisdomModifier()
+  {
+    return abilityModifierFromQualities(Ability.WISDOM);
   }
 
   /**
@@ -1256,11 +1691,17 @@ public class Monster extends CampaignEntry
    */
   public int getWisdomModifier()
   {
-    Optional<Integer> wisdom = getCombinedWisdom().get();
-    if(!wisdom.isPresent())
-      return 0;
+    return Monsters.abilityModifier(totalWisdom());
+  }
 
-    return abilityModifier(wisdom.get());
+  public Modifier getWisdomMiscModifier()
+  {
+    Modifier modifier = new Modifier();
+
+    for(Feat feat : allFeats())
+      modifier = (Modifier)modifier.add(feat.getWisdomModifier());
+
+    return modifier;
   }
 
   /**
@@ -1280,13 +1721,33 @@ public class Monster extends CampaignEntry
    */
   public Annotated<Optional<Integer>> getCombinedCharisma()
   {
-    Annotated.Integer combined = new Annotated.Integer();
     if(m_charisma.isPresent())
-      combined.add(m_charisma.get(), getName());
+      return new Annotated.Integer(m_charisma.get(), getName());
+
+    Annotated.Integer combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseMonster)entry).getCombinedCharisma());
 
     return combined;
+  }
+
+  public int totalCharisma()
+  {
+    int score = 0;
+
+    Optional<Integer> combined = getCombinedCharisma().get();
+    if(combined.isPresent())
+      score = combined.get();
+
+    score += getRacialCharismaModifier().unconditionalModifier();
+    score += getCharismaMiscModifier().unconditionalModifier();
+
+    return score;
+  }
+
+  public Modifier getRacialCharismaModifier()
+  {
+    return abilityModifierFromQualities(Ability.CHARISMA);
   }
 
   /**
@@ -1297,11 +1758,17 @@ public class Monster extends CampaignEntry
    */
   public int getCharismaModifier()
   {
-    Optional<Integer> charisma = getCombinedCharisma().get();
-    if(!charisma.isPresent())
-      return 0;
+    return Monsters.abilityModifier(totalCharisma());
+  }
 
-    return abilityModifier(charisma.get());
+  public Modifier getCharismaMiscModifier()
+  {
+    Modifier modifier = new Modifier();
+
+    for(Feat feat : allFeats())
+      modifier = (Modifier)modifier.add(feat.getCharismaModifier());
+
+    return modifier;
   }
 
   /**
@@ -1332,6 +1799,24 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  public int sizeModifier()
+  {
+    Annotated<Optional<Size>> size = getCombinedSize();
+    if(!size.get().isPresent())
+      return 0;
+
+    return size.get().get().modifier();
+  }
+
+  public int sizeGrappleModifier()
+  {
+    Annotated<Optional<Size>> size = getCombinedSize();
+    if(!size.get().isPresent())
+      return 0;
+
+    return size.get().get().grapple();
+  }
+
   /**
    * Get a monsters combined base attack bonus.
    *
@@ -1346,6 +1831,17 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  public int grappleModifier()
+  {
+    int modifier = getStrengthModifier();
+    if (getCombinedBaseAttack().get().isPresent())
+      modifier += getCombinedBaseAttack().get().get();
+
+    modifier += sizeGrappleModifier();
+
+    return modifier;
+  }
+
   /**
    * Get a monster's alignment.
    *
@@ -1356,14 +1852,13 @@ public class Monster extends CampaignEntry
     return m_alignment;
   }
 
-  /**
-   * Get a monster's maximal hit points.
-   *
-   * @return the maximal hit points
-   */
   public int getMaxHP()
   {
-    return m_maxHP;
+    int hp = 0;
+    for(BaseEntry base : getBaseEntries())
+      hp += ((BaseMonster)base).getMaxHP();
+
+    return hp;
   }
 
   /**
@@ -1577,6 +2072,36 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  public Modifier miscFortitudeModifier()
+  {
+    Modifier modifier = new Modifier();
+
+    for(Feat feat : allFeats())
+      modifier = (Modifier)modifier.add(feat.fortitudeModifier());
+
+    return modifier;
+  }
+
+  public Modifier miscWillModifier()
+  {
+    Modifier modifier = new Modifier();
+
+    for(Feat feat : allFeats())
+      modifier = (Modifier)modifier.add(feat.willModifier());
+
+    return modifier;
+  }
+
+  public Modifier miscReflexModifier()
+  {
+    Modifier modifier = new Modifier();
+
+    for(Feat feat : allFeats())
+      modifier = (Modifier)modifier.add(feat.reflexModifier());
+
+    return modifier;
+  }
+
   /**
    * Get a monster's combined fortitude save.
    *
@@ -1588,6 +2113,91 @@ public class Monster extends CampaignEntry
     save.add(getConstitutionModifier(), "Constitution");
 
     return save;
+  }
+
+  public Annotated.Modifier fortitudeSave()
+  {
+    Annotated.Modifier save = new Annotated.Modifier();
+
+    // Racial values.
+    for (ValueSources.ValueSource<Optional<Integer>> bonus
+        : getCombinedFortitudeSave().getSources().getSources())
+      if (bonus.getValue().isPresent())
+        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
+
+    // Qualities.
+    for (Quality quality : allQualities())
+      if(quality.fortitudeModifier().hasValue())
+        save.add(quality.fortitudeModifier(), quality.getName());
+
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.fortitudeModifier();
+      if(modifier.hasValue())
+        save.add(modifier, feat.getName() + " feat");
+    }
+
+    return save;
+  }
+
+  public Annotated.Modifier reflexSave()
+  {
+    Annotated.Modifier save = new Annotated.Modifier();
+
+    // Racial values.
+    for (ValueSources.ValueSource<Optional<Integer>> bonus
+        : getCombinedReflexSave().getSources().getSources())
+      if (bonus.getValue().isPresent())
+        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
+
+    // Qualities.
+    for(Quality quality : allQualities())
+      if(quality.reflexModifier().hasValue())
+        save.add(quality.reflexModifier(), quality.getName());
+
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.reflexModifier();
+      if(modifier.hasValue())
+        save.add(modifier, feat.getName() + " feat");
+    }
+
+    return save;
+  }
+
+  public Annotated.Modifier willSave()
+  {
+    Annotated.Modifier save = new Annotated.Modifier();
+
+    // Racial values.
+    for (ValueSources.ValueSource<Optional<Integer>> bonus
+        : getCombinedWillSave().getSources().getSources())
+      if (bonus.getValue().isPresent())
+        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
+
+    // Qualities.
+    for (Quality quality : allQualities())
+      if(quality.willModifier().hasValue())
+        save.add(quality.willModifier(), quality.getName());
+
+    for(Feat feat : allFeats())
+    {
+      Modifier modifier = feat.willModifier();
+      if(modifier.hasValue())
+        save.add(modifier, feat.getName() + " feat");
+    }
+
+    return save;
+  }
+
+  public Modifier racialFortitudeModifier()
+  {
+    Modifier modifier = new Modifier();
+
+    for(Quality quality : allQualities())
+      modifier.add(quality.fortitudeModifier());
+
+    return modifier;
   }
 
   /**
@@ -1621,6 +2231,16 @@ public class Monster extends CampaignEntry
     return save;
   }
 
+  public Modifier racialReflexModifier()
+  {
+    Modifier modifier = new Modifier();
+
+    for(Quality quality : allQualities())
+      modifier.add(quality.reflexModifier());
+
+    return modifier;
+  }
+
   /**
    * Get a monster's annotated and combined base will save.
    *
@@ -1652,6 +2272,16 @@ public class Monster extends CampaignEntry
     return save;
   }
 
+  public Modifier racialWillModifier()
+  {
+    Modifier modifier = new Modifier();
+
+    for(Quality quality : allQualities())
+      modifier = (Modifier)modifier.add(quality.willModifier());
+
+    return modifier;
+  }
+
   /**
    * Get a monster's annotated and combined natural armor.
    *
@@ -1666,8 +2296,27 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  public Annotated<Optional<MonsterType>> getCombinedMonsterType()
+  {
+    Annotated<Optional<MonsterType>> combined =
+        new Annotated.Max<>(MonsterType.UNKNOWN, getName());
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedMonsterType());
+
+    return combined;
+  }
+
+  public Annotated.Integer getCombinedHitDie()
+  {
+    Annotated.Integer combined = new Annotated.Integer();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseMonster)entry).getCombinedHitDie());
+
+    return combined;
+  }
+
   /**
-   * Get the monter's armor bonus.
+   * Get the monster's armor bonus.
    *
    * @return the armor bonus
    */
@@ -1727,11 +2376,25 @@ public class Monster extends CampaignEntry
    */
   public int getArmorClass()
   {
-    Modifier armor = getArmorBonus();
-    Modifier shield = getShieldBonus();
-    int dexterity = getDexterityModifier();
+    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
+                                  Optional.<String>absent(),
+                                  Optional.<Modifier>absent());
+    armor = (Modifier)armor.add(getArmorBonus());
+    armor = (Modifier)armor.add(getShieldBonus());
+    Optional<Modifier> natural = getCombinedNaturalArmor().get();
+    if(natural.isPresent())
+      armor = (Modifier)armor.add(natural.get());
 
-    return 10 + armor.getModifier() + shield.getModifier() + dexterity;
+    armor = (Modifier)armor.add(new Modifier(getDexterityModifier(),
+                                             Modifier.Type.ABILITY,
+                                             Optional.<String>absent(),
+                                             Optional.<Modifier>absent()));
+    armor = (Modifier)armor.add(new Modifier(sizeModifier(),
+                                             Modifier.Type.SIZE,
+                                             Optional.<String>absent(),
+                                             Optional.<Modifier>absent()));
+
+    return armor.totalModifier();
   }
 
   /**
@@ -1741,9 +2404,20 @@ public class Monster extends CampaignEntry
    */
   public int getTouchArmorClass()
   {
-    int dexterity = getDexterityModifier();
+    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
+                                  Optional.<String>absent(),
+                                  Optional.<Modifier>absent());
 
-    return 10 + dexterity;
+    armor = (Modifier)armor.add(new Modifier(getDexterityModifier(),
+                                             Modifier.Type.ABILITY,
+                                             Optional.<String>absent(),
+                                             Optional.<Modifier>absent()));
+    armor = (Modifier)armor.add(new Modifier(sizeModifier(),
+                                             Modifier.Type.SIZE,
+                                             Optional.<String>absent(),
+                                             Optional.<Modifier>absent()));
+
+    return armor.totalModifier();
   }
 
   /**
@@ -1753,10 +2427,21 @@ public class Monster extends CampaignEntry
    */
   public int getFlatFootedArmorClass()
   {
-    Modifier armor = getArmorBonus();
-    Modifier shield = getShieldBonus();
+    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
+                                  Optional.<String>absent(),
+                                  Optional.<Modifier>absent());
+    armor = (Modifier)armor.add(getArmorBonus());
+    armor = (Modifier)armor.add(getShieldBonus());
+    Optional<Modifier> natural = getCombinedNaturalArmor().get();
+    if(natural.isPresent())
+      armor = (Modifier)armor.add(natural.get());
 
-    return 10 + armor.getModifier() + shield.getModifier();
+    armor = (Modifier)armor.add(new Modifier(sizeModifier(),
+                                             Modifier.Type.SIZE,
+                                             Optional.<String>absent(),
+                                             Optional.<Modifier>absent()));
+
+    return armor.totalModifier();
   }
 
   /**
@@ -1804,6 +2489,20 @@ public class Monster extends CampaignEntry
     }
 
     return items;
+  }
+
+  public Weight weightOnPerson()
+  {
+    Weight weight = new Weight();
+    for(Item item : getPossessions())
+      if(!item.hasBaseName("Storage"))
+      {
+        Optional<Weight> itemWeight = item.getCombinedWeight().get();
+        if(itemWeight.isPresent())
+          weight = (Weight)weight.add(itemWeight.get());
+      }
+
+    return weight;
   }
 
   public List<Item> magicalItemsOnPerson()
@@ -1963,11 +2662,264 @@ public class Monster extends CampaignEntry
     return 0;
   }
 
-  @Override
-  public void set(Values inValues)
+  public int skillModifier(String inSkill, Ability inAbility)
   {
-    super.set(inValues);
+    return skillRanks(inSkill) + abilityModifier(inAbility)
+        + miscModifier(inSkill).unconditionalModifier();
+  }
 
+  public Modifier miscModifier(String inSkill)
+  {
+    Optional<BaseSkill> skill = BaseSkill.get(inSkill);
+    Modifier modifier = new Modifier();
+    if(skill.isPresent())
+    {
+      // Armor check penalty, if relevant.
+      if(skill.get().hasArmorCheckPenalty())
+      {
+        int penalty = 0;
+        for(Item armor : getArmor())
+        {
+          Optional<Integer> checkPenalty = armor.getCombinedCheckPenalty().get();
+          if(checkPenalty.isPresent())
+            penalty += checkPenalty.get();
+        }
+
+        if(skill.get().hasDoubleArmorCheckPenalty())
+          penalty *= 2;
+
+        modifier = (Modifier)
+            modifier.add(new Modifier(penalty, Modifier.Type.ARMOR,
+                                      Optional.<String>absent(),
+                                      Optional.<Modifier>absent()));
+      }
+
+      // Synergies, if any
+      for(BaseSkill.Synergy synergy : skill.get().getCombinedSynergies().get())
+        if(skillRanks(synergy.getName()) >= MIN_SYNERGY_RANKS)
+          modifier = (Modifier)
+              modifier.add(new Modifier(SYNERGY_BONUS, Modifier.Type.SYNERGY,
+                                        synergy.getCondition(),
+                                        Optional.<Modifier>absent()));
+
+      // Qualities
+      for(Quality quality : allQualities())
+        modifier = (Modifier)modifier.add(quality.skillModifier(inSkill));
+
+      // Feats
+      for(Feat feat : allFeats())
+        modifier = (Modifier)modifier.add(feat.skillModifier(inSkill));
+    }
+
+    return modifier;
+  }
+
+  public int totalSkillPoints()
+  {
+    int ranks = 0;
+
+    // According to MM p. 301
+    Optional<MonsterType> type = getCombinedMonsterType().get();
+    if(type.isPresent())
+      ranks = type.get().getSkillRanks();
+    else
+      ranks = MonsterType.UNKNOWN.getSkillRanks();
+
+    ranks += Math.max(1, abilityModifier(Ability.INTELLIGENCE));
+
+    if(getCombinedHitDie().get().isPresent())
+      ranks *= getCombinedHitDie().get().get() + 3;
+
+    return ranks;
+  }
+
+  public int totalUsedSkillPoints()
+  {
+    int ranks = 0;
+    for(Skill skill : m_skills)
+      ranks += skill.getRanks();
+
+    return ranks;
+  }
+
+  public Annotated<List<String>> getCombinedProficiencies()
+  {
+    Annotated.List<String> proficiencies = new Annotated.List<>();
+    for(BaseEntry base : getBaseEntries())
+      proficiencies.add(((BaseMonster)base).getCombinedProficiencies());
+
+    return proficiencies;
+  }
+
+  public Annotated<List<String>> weaponProficiencies()
+  {
+    return getCombinedProficiencies();
+  }
+
+  public Annotated<List<BaseMonster.Attack>> getCombinedPrimaryAttacks()
+  {
+    Annotated<List<BaseMonster.Attack>> attacks = new Annotated.List<>();
+
+    for(BaseEntry base : getBaseEntries())
+      attacks.add(((BaseMonster)base).getCombinedPrimaryAttacks());
+
+    return attacks;
+  }
+
+  public Annotated<Optional<Integer>> attackBonus(BaseMonster.Attack inAttack)
+  {
+    Annotated.Integer bonus = new Annotated.Bonus();
+
+    Optional<Integer> baseAttack = getCombinedBaseAttack().get();
+    if(baseAttack.isPresent())
+      bonus.add(baseAttack.get(), "base attack");
+
+    switch(inAttack.getStyle())
+    {
+      default:
+      case UNKNOWN:
+        break;
+
+      case MELEE:
+        // TODO: missing handling of weapon finesse with dexterity
+        bonus.add(Monsters.abilityModifier(getCombinedStrength().get()),
+                  "Strength");
+        break;
+
+      case RANGED:
+        bonus.add(Monsters.abilityModifier(getCombinedDexterity().get()),
+                  "Dexterity");
+        break;
+    }
+
+    bonus.add(sizeModifier(), "size");
+
+    for(Feat feat : getCombinedFeats().get())
+      if(!feat.getQualifier().isPresent()
+          || feat.getQualifier().get().equalsIgnoreCase(
+          inAttack.getMode().toString()))
+      {
+        Modifier modifier = feat.attackModifier();
+        if(modifier.hasValue())
+          bonus.add(modifier.totalModifier(), feat.getName());
+      }
+
+    return bonus;
+  }
+
+  public Annotated<Optional<Integer>> secondaryAttackBonus(
+      BaseMonster.Attack inAttack)
+  {
+    Annotated.Integer bonus = (Annotated.Integer)attackBonus(inAttack);
+    bonus.add(-Monsters.SECONDARY_ATTACK_PENALTY, "secondary attack");
+
+    return bonus;
+  }
+
+  public class NaturalAttack
+  {
+    public NaturalAttack(BaseMonster.Attack inAttack, boolean inPrimary)
+    {
+      m_attack = inAttack;
+      m_primary = inPrimary;
+    }
+
+    private final BaseMonster.Attack m_attack;
+    private final boolean m_primary;
+
+    public int bonus()
+    {
+      Optional<Integer> combinedBase = getCombinedBaseAttack().get();
+
+      int base = combinedBase.isPresent() ? combinedBase.get() : 0;
+      if(hasFeat(Combat.FEAT_WEAPON_FINESSE)
+          || m_attack.getStyle() == AttackStyle.RANGED)
+        base += getDexterityModifier();
+      else
+      {
+        base += getStrengthModifier();
+        base += sizeModifier();
+      }
+
+      if (!m_primary)
+        base += Combat.MULTIPLE_ATTACK_PENALTY;
+
+      return base;
+    }
+
+    public BaseMonster.Attack getAttack()
+    {
+      return m_attack;
+    }
+
+    public Damage getDamage()
+    {
+      int strengthModifier = getStrengthModifier();
+      if (!m_primary)
+        strengthModifier /= 2;
+
+      if (strengthModifier == 0)
+        return m_attack.getDamage();
+
+      return (Damage)m_attack.getDamage().add(new Damage(
+          new Dice(0, 0, strengthModifier)));
+    }
+  }
+
+  public List<NaturalAttack> naturalAttacks()
+  {
+    List<NaturalAttack> attacks = new ArrayList<>();
+
+    for (BaseMonster.Attack attack : getCombinedPrimaryAttacks().get())
+      attacks.add(new NaturalAttack(attack, true));
+
+    for (BaseMonster.Attack attack : getCombinedSecondaryAttacks().get())
+      attacks.add(new NaturalAttack(attack, false));
+
+    return attacks;
+  }
+
+  public Damage damage(BaseMonster.Attack inAttack)
+  {
+    Damage damage = inAttack.getDamage();
+
+    int strength = Monsters.abilityModifier(getCombinedStrength().get());
+    if(strength > 0)
+      damage = (Damage) damage.add(new Damage(new Dice(0, 0, strength)));
+
+    return damage;
+  }
+
+  public Damage secondaryDamage(BaseMonster.Attack inAttack)
+  {
+    Damage damage = inAttack.getDamage();
+
+    int strength =
+        (int) (Monsters.abilityModifier(getCombinedStrength().get())
+            * Monsters.SECONDARY_DAMAGE_FACTOR);
+    if(strength > 0)
+      damage = (Damage) damage.add(new Damage(new Dice(0, 0, strength)));
+
+    return damage;
+  }
+
+
+  public Annotated<List<BaseMonster.Attack>> getCombinedSecondaryAttacks()
+  {
+    Annotated<List<BaseMonster.Attack>> attacks = new Annotated.List<>();
+
+    for(BaseEntry base : getBaseEntries())
+      attacks.add(((BaseMonster)base).getCombinedSecondaryAttacks());
+
+    return attacks;
+  }
+
+  @Override
+  public void setValues(Values inValues)
+  {
+    super.setValues(inValues);
+
+    m_givenName = inValues.use("given_name", m_givenName);
     m_alignment = inValues.use("alignment", m_alignment, Alignment.PARSER);
     m_strength = inValues.use("strength", m_strength, Value.INTEGER_PARSER);
     m_constitution = inValues.use("constitution", m_constitution,
@@ -1988,15 +2940,7 @@ public class Monster extends CampaignEntry
                                     }
                                   });
     m_hp = inValues.use("hp", m_hp, Value.INTEGER_PARSER);
-    m_qualities = inValues.useEntries("quality", m_qualities,
-                                      new NestedEntry.Creator<Quality>()
-                                      {
-                                        @Override
-                                        public Quality create()
-                                        {
-                                          return new Quality();
-                                        }
-                                      });
+    m_qualities = inValues.useEntries("quality", m_qualities, Quality.CREATOR);
     m_skills = inValues.useEntries("skill", m_skills,
                                    new NestedEntry.Creator<Skill>()
                                    {
@@ -2006,6 +2950,8 @@ public class Monster extends CampaignEntry
                                        return new Skill();
                                      }
                                    });
+    m_languages = inValues.use("language", m_languages, Language.PARSER);
+    m_personality = inValues.use("personality", m_personality);
   }
 
   /**
@@ -2567,70 +3513,6 @@ public class Monster extends CampaignEntry
   */
 
   /**
-   * Get information about the current skills of the monster. Skills that can
-   * only be used trained for which the monster has no ranks are not returned.
-   *
-   * @return      the skills information
-   */
-  /*
-  public List<Map<String, Object>> allSkills()
-  {
-    List<Map<String, Object>> skills = Lists.newArrayList();
-    Map<String, Map<Value<?>, ModifiedNumber>> ranks = skillRanks();
-
-    for(BaseSkill skill
-          : DMADataFactory.get().getEntries(BaseSkill.TYPE, null, 0, 1000))
-    {
-      Map<Value<?>, ModifiedNumber> perName = ranks.get(skill.getName());
-      if(perName == null)
-      {
-        perName = Maps.newHashMap();
-        perName.put(null, null);
-      }
-
-      for(Map.Entry<Value<?>, ModifiedNumber> entry : perName.entrySet())
-      {
-        ModifiedNumber modifier = entry.getValue();
-
-        if((modifier == null || modifier.isZero()) && !skill.isUntrained())
-          continue;
-
-        if(modifier == null)
-          modifier = new ModifiedNumber(0, true);
-
-        // Ability modifiers
-        Ability ability = skill.getAbility();
-        if(ability != null)
-          if(ability == Ability.DEXTERITY)
-            modifier.withModifier
-              (new Modifier(dexterityModifierForAC()), "Dexterity");
-          else
-            modifier.withModifier
-              (new Modifier(abilityModifier(ability(ability)
-                                            .getMinValue()),
-                            Modifier.Type.ABILITY),
-               skill.getAbility().toString());
-
-        // Skill penalty from armor
-        // TODO: must be implemented
-
-        // Skill modifiers from items (and other modifiers)
-        modifier.with(collect(skill.getName()).modifier());
-
-        Map<String, Object> values = Maps.newHashMap();
-        values.put("entry", skill);
-        values.put("subtype", entry.getKey());
-        values.put("modifier", modifier);
-
-        skills.add(values);
-      }
-    }
-
-    return skills;
-  }
-  */
-
-  /**
    * Get the special qualities for this and all base monsters.
    *
    * @return  a list of base qualities
@@ -2722,7 +3604,7 @@ public class Monster extends CampaignEntry
 
     if("armor class".equals(inName))
     {
-      // limit this with max dex of items
+      // limit this with max dex of ite
       int dexterity = ability(Ability.DEXTERITY).getMaxValue();
       int modifier = dexterityModifierForAC();
 
@@ -2979,13 +3861,25 @@ public class Monster extends CampaignEntry
    * @param inName the name (id) of the feat
    * @return the feat or absent if the monster does not have the feat
    */
+  @Deprecated
   public Optional<Feat> getFeat(String inName)
   {
-    for(Feat feat : m_feats)
+    for(Feat feat : allFeats())
       if(feat.getName().equalsIgnoreCase(inName))
         return Optional.of(feat);
 
     return Optional.absent();
+  }
+
+  public List<Feat> getFeats(String inName)
+  {
+    List<Feat> feats = new ArrayList<>();
+
+    for(Feat feat : allFeats())
+      if(feat.getName().equalsIgnoreCase(inName))
+        feats.add(feat);
+
+    return feats;
   }
 
   /**
@@ -4063,6 +4957,9 @@ public class Monster extends CampaignEntry
 
     builder.setBase((CampaignEntryProto)super.toProto());
 
+    if(m_givenName.isPresent())
+      builder.setGivenName(m_givenName.get());
+
     if(m_strength.isPresent())
       builder.setStrength(m_strength.get());
 
@@ -4087,7 +4984,6 @@ public class Monster extends CampaignEntry
     for(Quality quality : m_qualities)
       builder.addQuality(quality.toProto());
 
-    builder.setMaxHitPoints(m_maxHP);
     builder.setHitPoints(m_hp);
 
     for(Skill skill : m_skills)
@@ -4104,6 +5000,12 @@ public class Monster extends CampaignEntry
 
     if(m_reflexSave.isPresent())
       builder.setReflexSave(m_reflexSave.get());
+
+    for(Language language : m_languages)
+      builder.addLanguage(language.toProto());
+
+    if(m_personality.isPresent())
+      builder.setPersonality(m_personality.get());
 
     MonsterProto proto = builder.build();
     return proto;
@@ -4126,6 +5028,9 @@ public class Monster extends CampaignEntry
 
     super.fromProto(proto.getBase());
 
+    if(proto.hasGivenName())
+      m_givenName = Optional.of(proto.getGivenName());
+
     if(proto.hasStrength())
       m_strength = Optional.of(proto.getStrength());
 
@@ -4144,15 +5049,17 @@ public class Monster extends CampaignEntry
     if(proto.hasCharisma())
       m_charisma = Optional.of(proto.getCharisma());
 
+    m_feats.clear();
     for(FeatProto feat : proto.getFeatList())
       m_feats.add(Feat.fromProto(feat));
 
+    m_qualities.clear();
     for(QualityProto quality : proto.getQualityList())
       m_qualities.add(Quality.fromProto(quality));
 
-    m_maxHP = proto.getMaxHitPoints();
     m_hp = proto.getHitPoints();
 
+    m_skills.clear();
     for(SkillProto skill : proto.getSkillList())
       m_skills.add(Skill.fromProto(skill));
 
@@ -4167,19 +5074,18 @@ public class Monster extends CampaignEntry
 
     if(proto.hasReflexSave())
       m_reflexSave = Optional.of(proto.getReflexSave());
+
+    for(BaseMonsterProto.Language.Name language : proto.getLanguageList())
+      m_languages.add(Language.fromProto(language));
+
+    if(proto.hasPersonality())
+      m_personality = Optional.of(proto.getPersonality());
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(MonsterProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return MonsterProto.getDefaultInstance();
   }
 
   public boolean shownAsWorn(Item inItem)
@@ -4211,5 +5117,68 @@ public class Monster extends CampaignEntry
         return true;
 
     return false;
+  }
+
+  public List<Language> getLanguages() {
+    return m_languages;
+  }
+
+  public Optional<String> getPersonality() {
+    return m_personality;
+  }
+
+  public Annotated<List<Language>> combinedLanguages() {
+    Annotated.List<Language> languages = new Annotated.List<>();
+    Set<Language> learned = new HashSet<>();
+    Set<Language> possible = new HashSet<>();
+    for(BaseEntry base : getBaseEntries())
+      for(BaseMonster.LanguageOption option
+          : ((BaseMonster)base).getCombinedLanguages().get())
+        if(!learned.contains(option.getLanguage()))
+        {
+          if(option.getModifier() == LanguageModifier.AUTOMATIC)
+          {
+            languages.addSingle(option.getLanguage(),
+                                base.getName() + " (automatic)");
+            learned.add(option.getLanguage());
+          }
+          else
+          {
+            possible.add(option.getLanguage());
+          }
+        }
+
+    int allowed = learned.size() + abilityModifier(Ability.INTELLIGENCE);
+    for(Language language : m_languages)
+      if(!learned.contains(language))
+      {
+        List<String> comments = new ArrayList<>();
+        if(learned.size() >= allowed)
+          comments.add("too much");
+        if(!possible.contains(language))
+          comments.add("not in race list");
+
+        languages.addSingle(language, "learned"
+            + (comments.isEmpty() ? ""
+            : " (" + Strings.COMMA_JOINER.join(comments) + ")"));
+
+        learned.add(language);
+      }
+
+    return languages;
+  }
+
+  public String getBaseName()
+  {
+    List<String> names = new ArrayList<>();
+    for(BaseEntry base : getBaseEntries())
+      names.add(base.getName());
+
+    return Strings.COMMA_JOINER.join(names);
+  }
+
+  public Optional<String> getGivenName()
+  {
+    return m_givenName;
   }
 }

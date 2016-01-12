@@ -28,10 +28,11 @@ import java.util.List;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.proto.*;
+import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseArmorProto;
 import net.ixitxachitls.dma.proto.Entries.BaseCommodityProto;
@@ -261,6 +262,9 @@ public class BaseItem extends BaseEntry
 
   /** How much time it takes to remove the item. */
   protected Optional<Duration> m_remove = Optional.absent();
+
+  /** The item's qualities. */
+  protected List<Quality> m_qualities = new ArrayList<>();
 
   /**
    * Check whether this item has weapon properties.
@@ -2127,14 +2131,17 @@ public class BaseItem extends BaseEntry
       builder.setMagic(magic.build());
     }
 
+    for(Quality quality : m_qualities)
+      builder.addQualities(quality.toProto());
+
     BaseItemProto proto = builder.build();
     return proto;
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_playerName = inValues.use("player_name", m_playerName);
     m_value = inValues.use("value", m_value, Money.PARSER);
@@ -2211,6 +2218,7 @@ public class BaseItem extends BaseEntry
     m_donHastily = inValues.use("wearable.don_hastily", m_donHastily,
                                 Duration.PARSER);
     m_remove = inValues.use("wearable.remove", m_remove, Duration.PARSER);
+    m_qualities = inValues.useEntries("quality", m_qualities, Quality.CREATOR);
   }
 
   /**
@@ -2403,19 +2411,30 @@ public class BaseItem extends BaseEntry
           AreaShape.fromProto(proto.getLight().getShadowy().getShape());
       }
     }
+
+    for(Entries.QualityProto quality : proto.getQualitiesList())
+      m_qualities.add(Quality.fromProto(quality));
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(BaseItemProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return BaseItemProto.getDefaultInstance();
+  }
+
+  public List<Quality> getQualities()
+  {
+    return Collections.unmodifiableList(m_qualities);
+  }
+
+  public Annotated<List<Quality>> getCombinedQualities()
+  {
+    Annotated.List<Quality> combined = new Annotated.List<>();
+    combined.add(m_qualities, getName());
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseItem)entry).getCombinedQualities());
+
+    return combined;
   }
 
   //---------------------------------------------------------------------------

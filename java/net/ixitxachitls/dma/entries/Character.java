@@ -26,15 +26,19 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Optional;
-import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CharacterProto;
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
+import net.ixitxachitls.dma.rules.Monsters;
 import net.ixitxachitls.dma.values.File;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.CharacterState;
 import net.ixitxachitls.util.logging.Log;
 
@@ -128,50 +132,6 @@ public class Character extends NPC
         580000,
         760000,
       };
-
-  /**
-   * Get all the items contained in this contents.
-   *
-   * @param       inDeep true for returning all item, including nested ones,
-   *                     false for only the top level items
-   * @return      a list with all the items
-   */
-  /*
-  public Map<String, Item> containedItems(boolean inDeep)
-  {
-    Map<String, Item> items = new HashMap<String, Item>();
-
-    if(getCampaign().isPresent())
-      for(Name name : m_items)
-      {
-        Item item = getCampaign().get().getItem(name.get());
-        if(item == null)
-          continue;
-
-        items.put(name.get(), item);
-        //items.putAll(item.containedItems(inDeep));
-      }
-
-    return items;
-  }
-  */
-
-  /**
-   * Checks if the character has the item in possession.
-   *
-   * NOTE: this is an expensive operation, as it has to read all the items
-   * recursively of a character.
-   *
-   * @param       inItem the name of the item to check
-   *
-   * @return      true if the character possesses the item, false if not
-   */
-  /*
-  public boolean possesses(String inItem)
-  {
-    return containedItems(true).containsKey(inItem);
-  }
-  */
 
   /**
    * Simple getter for state.
@@ -366,22 +326,6 @@ public class Character extends NPC
       return main.getIcon();
   }
 
-  /*
-  public Optional<Monster> getMonster()
-  {
-    if(!m_monster.isPresent())
-    {
-      if(!m_monsterName.isPresent())
-        return Optional.absent();
-
-      m_monster = Optional.of(DMADataFactory.get().<Monster>getEntry
-          (new EntryKey(m_monsterName.get(), Monster.TYPE)));
-    }
-
-    return m_monster.get();
-  }
-  */
-
   @Override
   public List<Item> getPossessions()
   {
@@ -393,41 +337,10 @@ public class Character extends NPC
     return Collections.unmodifiableList(m_possessions);
   }
 
-  /**
-   * Add the given entry to the character entry.
-   *
-   * @ param       inEntry the entry to add
-   *
-   * @return      true if added, false if not
-   *
-   */
-  /*
   @Override
-  public boolean add(CampaignEntry inEntry)
+  public void setValues(Values inValues)
   {
-    String name = inEntry.getName();
-    List<Name> names = new ArrayList<Name>();
-    for(Name item : m_items)
-      if(name.equals(item.get()))
-        return true;
-      else
-        names.add(item);
-
-    names.add(m_items.newElement().as(name));
-    m_items = m_items.as(names);
-
-    inEntry.setParent(Optional.of(getKey()));
-
-    changed();
-    save();
-    return true;
-  }
-  */
-
-  @Override
-  public void set(Values inValues)
-  {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_state = inValues.use("state", m_state, CharacterState.PARSER);
     m_playerName = inValues.use("player", m_playerName);
@@ -486,15 +399,85 @@ public class Character extends NPC
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
+    return CharacterProto.getDefaultInstance();
+  }
+
+  public int spellsKnown(Integer inSpellLevel)
+  {
+    int spells = 0;
+    for(Level level : m_levels)
+      spells = level.spellsKnown(getEffectiveCharacterLevel(), inSpellLevel);
+
+    return spells;
+  }
+
+  public int spellsPerDay(Integer inSpellLevel)
+  {
+    int spells = -1;
+    for(Level level : m_levels)
     {
-      fromProto(CharacterProto.parseFrom(inBytes));
+      Optional<Ability> ability = level.getSpellAbility();
+      // No spells if ability is not high enough.
+      if(!ability.isPresent() || ability(ability.get()) < 10 + inSpellLevel)
+        continue;
+
+      spells = level.spellsPerDay(getEffectiveCharacterLevel(), inSpellLevel)
+        + Monsters.bonusSpells(ability(ability.get()), inSpellLevel);
     }
-    catch(InvalidProtocolBufferException e)
+
+    return spells;
+  }
+
+  public int spellSaveDC(Integer inLevel)
+  {
+    int dc = 10 + inLevel;
+    for(Level level : m_levels)
     {
-      Log.warning("could not properly parse proto: " + e);
+      Optional<Ability> ability = level.getSpellAbility();
+      if(ability.isPresent())
+        dc += abilityModifier(ability.get());
     }
+
+    return dc;
+  }
+
+  public boolean hasSpells() {
+    for(int i = 0; i <= 9; i++)
+      if(spellsPerDay(i) > 0)
+        return true;
+
+    return false;
+  }
+
+  public List<Spell> spellsKnown(){
+    List<Spell> spells = new ArrayList<>();
+
+    for(Level level : m_levels)
+      for(String spellName : level.getSpellsKnown())
+        spells.add(new Spell(spellName, level, spellSaveDC(0)));
+
+    return spells;
+  }
+
+  @Override
+  public Modifier abilityModifierFromQualities(Ability inAbility)
+  {
+    Modifier modifier = super.abilityModifierFromQualities(inAbility);
+
+    int value = 0;
+    for(Level level : m_levels)
+      if(level.getAbilityIncrease().isPresent()
+          && level.getAbilityIncrease().get() == inAbility)
+        value++;
+
+    if(value > 0)
+      modifier = (Modifier)modifier.add
+          (new Modifier(value, Modifier.Type.GENERAL,
+                        Optional.<String>absent(),
+                        Optional.<Modifier>absent()));
+
+    return modifier;
   }
 }

@@ -55,36 +55,36 @@ public enum AttackMode implements Named,
   /** A fist attack. */
   FIST("Fist", false, BaseMonsterProto.Attack.Mode.FIST),
 
-  /** A quill attack. */
-  QUILL("Quill", true, BaseMonsterProto.Attack.Mode.QUILL),
-
-  /** A weapon attack. */
-  WEAPON("Weapon", false, BaseMonsterProto.Attack.Mode.WEAPON),
-
-  /** A touch attack. */
-  TOUCH("Touch", true, BaseMonsterProto.Attack.Mode.TOUCH),
+  /** A hoof attack. */
+  HOOF("Hoof", true, BaseMonsterProto.Attack.Mode.HOOF),
 
   /** An incorporeal touch attack. */
   INCORPOREAL_TOUCH("Incorporeal Touch", true,
                     BaseMonsterProto.Attack.Mode.INCORPOREAL_TOUCH),
 
-  /** A slam attack. */
-  SLAM("Slam", false, BaseMonsterProto.Attack.Mode.SLAM),
-
-  /** A sting attack. */
-  STING("Sting", false, BaseMonsterProto.Attack.Mode.STING),
-
-  /** A swarm attack. */
-  SWARM("Swarm", false, BaseMonsterProto.Attack.Mode.SWARM),
+  /** A quill attack. */
+  QUILL("Quill", true, BaseMonsterProto.Attack.Mode.QUILL),
 
   /** A ray attack. */
   RAY("Ray", true, BaseMonsterProto.Attack.Mode.RAY),
 
-  /** A hoof attack. */
-  HOOF("Hoof", true, BaseMonsterProto.Attack.Mode.HOOF),
+  /** A slam attack. */
+  SLAM("Slam", false, BaseMonsterProto.Attack.Mode.SLAM),
 
   /** A snakes attack. */
   SNAKES("Snakes", true, BaseMonsterProto.Attack.Mode.SNAKES),
+
+  /** A sting attack. */
+  STING("Sting", false, BaseMonsterProto.Attack.Mode.STING),
+
+  /** A touch attack. */
+  /** A swarm attack. */
+  SWARM("Swarm", false, BaseMonsterProto.Attack.Mode.SWARM),
+
+  TOUCH("Touch", true, BaseMonsterProto.Attack.Mode.TOUCH),
+
+  /** A weapon attack. */
+  WEAPON("Weapon", false, BaseMonsterProto.Attack.Mode.WEAPON),
 
   /** A web attack. */
   WEB("Web", true, BaseMonsterProto.Attack.Mode.WEB);

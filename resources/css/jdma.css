@@ -150,8 +150,16 @@ DIV.subtitletext, DIV.subtitletext A
 .size-huge     { font-size: xx-large;  }
 .size-huger    { font-size: 500%;      }
 
+.bold { font-weight: bold; }
+
 /* special colors */
 .color-light { color: #AAAAAA; }
+
+.nopadding
+{
+  padding: 0 !important;
+  margin: 0 !important;
+}
 
 /******************************************************************************
  * header
@@ -1565,6 +1573,7 @@ DIV.flex
   -moz-box-flex: 1;
   -webkit-box-flex: 1;
   box-flex: 1;
+  flex-grow: 1;
 }
 
 DIV.edit-note
@@ -2354,19 +2363,39 @@ BODY.print
   display: flex;
 }
 
+.flex-0
+{
+  flex: 0;
+}
+
 .flex-1
 {
-  -webkit-flex: 1;
+  flex: 1 !important;
 }
 
 .flex-2
 {
-  -webkit-flex: 2;
+  flex: 2 !important;
 }
 
 .flex-3
 {
-  -webkit-flex: 3;
+  flex: 3 !important;
+}
+
+.flex-4
+{
+  flex: 4 !important;
+}
+
+.flex-5
+{
+  flex: 5 !important;
+}
+
+.flex-6
+{
+  flex: 6 !important;
 }
 
 /*** NEW STYLES BELOW ****/
@@ -2578,6 +2607,11 @@ BODY.print
 .entry .combination-line .combination-text-source
 {
   right: 100%;
+}
+
+.entry.tiny
+{
+  display: inline-block;
 }
 
 /******************************************************************************
@@ -2881,6 +2915,7 @@ BODY.print
 {
   width: 100%;
   position: relative;
+  margin-top: 15px;
 }
 
 .character-sheet .sheet-row
@@ -2888,12 +2923,15 @@ BODY.print
   display: flex;
   width: 100%;
   position: relative;
+  flex-direction: row;
 }
 
 .character-sheet .sheet-column
 {
   flex: 1;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .character-sheet .title
@@ -2969,6 +3007,18 @@ BODY.print
   margin-bottom: 20px;
 }
 
+.character-sheet .line {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+
+.character-sheet .column {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+}
+
 .character-sheet .value-container
 { 
   display: inline-block;
@@ -2982,6 +3032,13 @@ BODY.print
   font-size: 12px;
   padding: 5px 0 0 0;
   width: auto;
+  flex: 1;
+}
+
+.character-sheet .monster.skill-line
+{
+  width: 50%;
+  display: inline-block;
 }
 
 .character-sheet .value-container .value-label
@@ -3014,11 +3071,17 @@ BODY.print
   border: none;
 }
 
-.character-sheet .value-container .value.prefixed
+.character-sheet .value-container.prefixed .value-label
+{
+  border: none;
+}
+
+.character-sheet .value-container.prefixed .value
 {
   border-bottom: 1px solid black;
   display: inline-block;
   padding-bottom: 5px;
+  padding-left: 10px;
 }
 
 .character-sheet .value-container.prefixed 
@@ -3104,6 +3167,13 @@ BODY.print
   position: relative;
 }
 
+.character-sheet .grouptitle
+{
+  text-transform: uppercase;
+  font-size: 12px;
+  margin: 5px 0;
+}
+
 .character-sheet .group
 {
   display: inline-block;
@@ -3139,7 +3209,14 @@ BODY.print
 
 .character-sheet .weapon
 { 
-  padding: 3px 0;
+  padding: 0;
+}
+
+.character-sheet .weapon .name {
+  ddisplay: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .character-sheet .gray
@@ -3156,6 +3233,14 @@ BODY.print
   margin: -10px 0 0 0;
 }
 
+.character-sheet .box
+{
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  padding: 10px 5px;
+}
+
 .character-sheet .hps
 {
   margin-top: 5px;
@@ -3166,10 +3251,10 @@ BODY.print
 {
   border: 1px solid black;
   border-radius: 3px;
-  padding: 2px;
+  padding: 1px;
   display: inline-block;
-  margin: 2px;
-  min-width: 15px;
+  margin: 1px;
+  min-width: 13px;
   text-align:center;
 }
 
@@ -3245,7 +3330,7 @@ BODY.print
 {
   width: 100%;
   position: relative;
-  padding: 5px 0;
+  padding: 2px 0;
 }
 
 .character-sheet .gear-name
@@ -3287,16 +3372,22 @@ BODY.print
 
 .character-sheet .skill-line
 {
-  font-size: 18px;
+  font-size: 12px;
   width: 100%;
   display: flex;
 }
 
 .character-sheet .skill-line.skill-title
 {
-  font-size: 10px;
+  font-size: 8px;
   text-transform: uppercase;
   text-align: center;
+}
+
+.character-sheet .skill-line.unavailable,
+.character-sheet .skill-line.unavailable A
+{
+  color: #ccc;
 }
 
 .character-sheet .skill-line.skill-title .skill-modifier,
@@ -3305,6 +3396,16 @@ BODY.print
 .character-sheet .skill-line.skill-title .skill-misc
 {
   border-bottom: none;
+}
+
+.character-sheet .modifier-condition
+{
+  font-size: 6px;
+}
+
+.character-sheet .modifier-hide-condition
+{
+  font-size: 50%;
 }
 
 .character-sheet .skill-line .class-skill
@@ -3336,9 +3437,36 @@ BODY.print
   text-align: center;
 }
 
+.character-sheet .skill-line .skill-misc
+{
+  flex: 2;
+}
+
+.character-sheet .skill-line .skill-ranks.skill-total
+{
+  text-transform: none;
+  font-size: 10px;
+}
+
 .character-sheet .magical-subtitle
 {
   font-size: 8px;
+}
+
+.character-sheet .quality,
+.character-sheet .feat
+{
+  font-size: 12px;
+  padding-bottom: 4px;
+}
+
+.character-sheet .unused
+{
+  color: #a44;
+}
+
+.character-sheet .value-container.boxed {
+  border: 1px solid #888;
 }
 
 @media print
@@ -3450,3 +3578,14 @@ DIV.inline
   width: 25px !important;
   background-position: -224px;
 }
+
+.stats .line {
+  margin-bottom: 5px;
+}
+
+.paragraph {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+

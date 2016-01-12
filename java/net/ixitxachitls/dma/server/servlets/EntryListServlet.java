@@ -29,10 +29,12 @@ import java.util.Map;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
+import com.google.template.soy.data.SoyData;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.util.Encodings;
@@ -78,7 +80,20 @@ public class EntryListServlet extends PageServlet
                int inStart, int inSize)
   {
     return (List<AbstractEntry>)DMADataFactory.get()
-      .getEntries(inType, null, inStart, inSize);
+      .getEntries(inType, Optional.<EntryKey>absent(), inStart, inSize);
+  }
+
+  @Override
+  public String getTemplateName(DMARequest inRequest,
+                                Map<String, SoyData> inData)
+  {
+    String template = inData.get("template").toString();
+    if(template == null)
+    {
+      return "dma.errors.extract";
+    }
+
+    return template;
   }
 
   /**
@@ -105,9 +120,8 @@ public class EntryListServlet extends PageServlet
       AbstractType.getTyped(typeName);
     if(!type.isPresent())
     {
-      data.put("content",
-               inRenderer.render("dma.error.invalidType",
-                                 Optional.of(map("type", typeName))));
+      data.put("type", typeName);
+      data.put("template", "dma.error.invalidType");
       return data;
     }
 
@@ -122,16 +136,15 @@ public class EntryListServlet extends PageServlet
     for(AbstractEntry entry : rawEntries)
       entries.add(new SoyValue(entry.getKey().toString(), entry));
 
-    data.put("content",
-             inRenderer.render
-             ("dma.entries." + type.get().getMultipleDir().toLowerCase()
-                  + ".list",
-              Optional.of(map("title", title,
-                  "entries", entries,
-                  "label", title.toLowerCase(Locale.US),
-                  "path", path,
-                  "pagesize", inRequest.getPageSize(),
-                  "start", inRequest.getStart()))));
+    data.put("title", title);
+    data.put("entries", entries);
+    data.put("label", title.toLowerCase(Locale.US));
+    data.put("path", path);
+    data.put("pagesize", inRequest.getPageSize());
+    data.put("start", inRequest.getStart());
+    data.put("template",
+             "dma.entries." + type.get().getMultipleDir().toLowerCase()
+             + ".list");
 
     return data;
   }

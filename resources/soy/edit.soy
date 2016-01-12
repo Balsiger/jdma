@@ -94,6 +94,7 @@
   {@param value: any}
   {@param validate: string}
   {@param color: string}
+  {@param? rows: number}
   {call .generic_value}
     {param label: $label /}
     {param color: $color /}
@@ -102,6 +103,7 @@
         {param name: $name /}
         {param value: $value /}
         {param validate: $validate /}
+        {param rows: $rows /}
       {/call}
     {/param}
     {/call}
@@ -193,7 +195,7 @@
 
 /** The field for editing a simple value. */
 {template .field_input}
-  {@param name: string}
+  {@param name: any}
   {@param value: any}
   {@param validate: string}
   {@param? inList: bool}
@@ -201,13 +203,14 @@
   {@param? caption: string}
   {@param? autocomplete: string}
   {@param? width: string}
+  {@param? id: string}
   <div class="input-wrapper field{if $class} {$class}{/if}
               {if $width} width{/if}"
        {if $width} style="width: {$width} !important;"{/if}>
     <input value="{$value}" name="{$name}" validate="{$validate}" 
            {if $autocomplete} dma-autocomplete="{$autocomplete}"{/if}
            onkeyup="window.form.validate(this);
-               {if $inList}edit.maybeInsertLine(event, 
+               {if $inList}edit.maybeInsertLine('{$id}', event,
                                                 this.parentNode.parentNode);
                {/if}">
     </input>
@@ -222,9 +225,11 @@
   {@param name: string}
   {@param value: any}
   {@param validate: string}
+  {@param? rows: number}
   {call .field}
     {param markup kind="html"}
-      <textarea class='field' name='{$name}' rows="10" 
+      <textarea class='field' name='{$name}'
+                rows="{if $rows}{$rows}{else}10{/if}"
                 validate='{$validate}' 
                 onkeyup='window.form.validate(this)'>
         {$value}        
@@ -235,7 +240,7 @@
 
 /** The field for editing a selection value. */
 {template .field_selection}
-  {@param name: string}
+  {@param name: any}
   {@param value: any}
   {@param choices: list<string>}
   {@param? class: string}
@@ -245,11 +250,16 @@
     {param width: $width /}
     {param markup kind="html"}
       <select name="{$name}" onkeyup="window.form.validate(this)">
-        {foreach $choice in $choices}
-          <option value="{$choice}"{if $choice == $value} selected{/if}>
-            {$choice}
-          </option>
-        {/foreach}
+        {if isList($choices)}
+          {foreach $choice in $choices}
+            <option value="{$choice}"
+              {if lower($choice) == lower($value)}
+                {sp}selected
+              {/if}>
+              {$choice}
+            </option>
+          {/foreach}
+        {/if}
       </select>
     {/param}
   {/call}
@@ -302,10 +312,11 @@
 /** A list field value. */
 {template .field_list_line}
   {@param field: html}
+  {@param? id: string}
   <div class="line">
     {$field}
     <div class="sprite edit-list-add" title="Add"
-         onclick="edit.insertLine(this.parentNode)"></div>
+         onclick="edit.insertLine('{$id}', this.parentNode)"></div>
     <div class="sprite edit-list-remove" title="Remove"
          onclick="edit.removeLine(this.parentNode)"></div>
   </div>  
@@ -318,6 +329,7 @@
   {@param validate: string}
   {@param? autocomplete: string}
   {call .field_list_line}
+    {param id: $name /}
     {param field kind="html"}
       {call .field_input}
         {param name: $name /}
@@ -334,7 +346,9 @@
 {template .field_list_multiple}
   {@param values: ?}
   {@param? class: string}
+  {@param? id: string}
   {call dma.edit.field_list_line}
+    {param id: $id /}
     {param field kind="html"}
       {foreach $value in $values}
         {if $value.type and $value.type == 'selection'}

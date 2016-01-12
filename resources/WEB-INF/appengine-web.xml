@@ -7,7 +7,7 @@
     <property name="java.util.logging.config.file"
               value="WEB-INF/logging.properties" />
     <!-- jdma logging -->
-    <property name="logging.level" value="TRACE" />
+    <property name="logging.level" value="IMPORTANT" />
     <property name="logging.loggers" value="ANSILogger,JavaLogger" />
     <property name="file.encoding" value="UTF-8" />
     <property name="DEFAULT_ENCODING" value="UTF-8" />
@@ -23,6 +23,7 @@
 
   <class-loader-config>
     <priority-specifier filename="guava-18.0.jar"/>
+    <priority-specifier filename="soy-2.5.0-SNAPSHOT.jar"/>
   </class-loader-config>
 
   <precompilation-enabled>

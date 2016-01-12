@@ -144,6 +144,7 @@ message ModifierProto
     DEFLECTION = 12;
     RAGE = 13;
     COMPETENCE = 14;
+    SYNERGY = 15;
   }
 
   message Modifier
@@ -219,6 +220,7 @@ message DamageProto
     required DiceProto base = 1;
     optional Type type = 2;
     optional string effect = 3;
+    optional ConditionProto condition = 4;
   }
   repeated Damage damage = 1;
 }
@@ -381,3 +383,56 @@ message SpeedProto
   }
   optional Maneuverability maneuverability = 3;
 }
+
+message ConditionProto
+{
+  optional string generic = 1;
+  optional WeaponStyle weapon_style = 2;
+  optional Ability ability = 3;
+
+  message Limit {
+    enum Operator {
+      ABOVE = 0;
+      ABOVE_OR_EQUAL = 1;
+      EQUAL = 2;
+      BELOW_OR_EQUAL = 3;
+      BELOW = 4;
+    }
+    optional Operator operator = 1;
+    optional int32 value = 2;
+  }
+  optional Limit limit = 4;
+}
+
+enum WeaponStyle
+{
+  UNKNOWN_STYLE = 0;
+  TWOHANDED_MELEE = 1;
+  ONEHANDED_MELEE = 2;
+  LIGHT_MELEE = 3;
+  UNARMED = 4;
+  RANGED_TOUCH = 5;
+  RANGED = 6;
+  THROWN_TOUCH = 7;
+  THROWN = 8;
+  TOUCH = 9;
+}
+
+message NameAndModifierProto
+{
+  optional string name = 1;
+  optional ModifierProto modifier = 2;
+}
+
+enum Ability
+{
+  UNKNOWN = 0;
+  STRENGTH = 1;
+  DEXTERITY = 2;
+  CONSTITUTION = 3;
+  INTELLIGENCE = 4;
+  WISDOM = 5;
+  CHARISMA = 6;
+  NONE = 7;
+}
+

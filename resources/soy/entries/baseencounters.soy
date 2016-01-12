@@ -22,7 +22,7 @@
  /*
  * Templates for base products.
  */
-{namespace dma.entries.baseencounters autoescape="deprecated-contextual"}
+{namespace dma.entries.baseencounters}
 
 /**
  * Show the given entry in standard format.
@@ -44,17 +44,17 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#aaf' /}
-    {param title}
-      {call dma.entry._new_title}
+    {param title kind="html"}
+      {call dma.entry.title}
         {param title: $entry.name /}
         {param color: '#aaf' /}
       {/call}
     {/param}
-    {param values}            
+    {param values kind="html"}
       {if length($entry.baseNames)}
         {call dma.entry.value}
           {param label: 'Base' /}
-          {param value}
+          {param value kind="html"}
             {foreach $base in $entry.baseNames}
               {call dma.page.link}
                 {param text: $base /}
@@ -69,7 +69,7 @@
       {if length($entry.synonyms)}
         {call dma.entry.value}
           {param label: 'Synonyms' /}
-          {param value}
+          {param value kind="html"}
             {foreach $synonym in $entry.synonyms}
               {$synonym}
               {if not isLast($synonym)}; {/if}
@@ -82,7 +82,7 @@
           length($entry.combined_categories.annotate)}
         {call dma.entry.value}
           {param label: 'Categories' /}
-          {param value}
+          {param value kind="html"}
             {if length($entry.categories)}
               {foreach $category in $entry.categories}
                 {$category}
@@ -91,10 +91,7 @@
             {/if}
             {if length($entry.combined_categories.annotate)}
               {if length($entry.categories)},{sp}{/if}
-              {call dma.entry.concatenated_list}
-                {param values: [] /}
-                {param concatenate: $entry.combined_categories /}
-              {/call}
+              {annotate($entry.combined_categories)}
             {/if}
           {/param}
           {param color: '#aaf' /}
@@ -102,25 +99,17 @@
       {/if}
       {call dma.entry.value}
         {param label: 'Worlds' /}        
-        {param value}
-          {call dma.entry.concatenated_list}
-            {param values: $entry.worlds /}
-            {param concatenate: $entry.combined_worlds /}
-          {/call}
-        {/param}
+        {param value: annotate($entry.combined_worlds) /}
         {param color: '#aaf' /}
       {/call}
       {if $entry.incomplete or length($entry.combined_incomplete.annotate) > 0}
         {call dma.entry.value}
           {param label: 'Incomplete' /}
-          {param value}
+          {param value kind="html"}
             {if $entry.incomplete}
               {$entry.incomplete}{sp}
             {/if}
-            {call dma.entry.concatenated}
-              {param value: '' /}
-              {param concatenate: $entry.combined_incomplete /}
-            {/call}
+            {annotate($entry.combined_incomplete)}
           {/param}
           {param color: '#aaf' /}
         {/call}
@@ -135,7 +124,7 @@
       {if length($entry.locations) > 0}
         {call dma.entry.value}
           {param label: 'Locations' /}
-          {param value}
+          {param value kind="html"}
             {foreach $location in $entry.locations}
               {$location}
               {if not isLast($location)}, {/if}
@@ -210,7 +199,7 @@
       {if length($entry.skills) > 0}
         {call dma.entry.value}
           {param label: 'Skills' /}
-          {param value}
+          {param value kind="html"}
             {foreach $location in $entry.skills}
               {$location}
               {if not isLast($location)}, {/if}
@@ -221,12 +210,7 @@
       {/if}
       {call dma.entry.value}
         {param label: 'References' /}
-        {param value}
-          {call dma.entry.concatenated_list}
-            {param values: [] /}
-            {param concatenate: $entry.combined_references /}
-          {/call}
-        {/param}
+        {param value: annotate($entry.combined_references) /}
         {param color: '#aaf' /}
       {/call}
     {/param}
@@ -245,7 +229,7 @@
  *
  */
 {template .list}
-  {call dma.entry.newlist}
+  {call dma.entry.list}
     {param title: $title /}
     {param label: $label /}
     {param path: $path /}
@@ -253,10 +237,10 @@
     {param pagesize: $pagesize /}
     {param size: $entries ? length($entries) : 0 /}
     {param titles: [ 'Name', 'Worlds', 'Short Descriptoion'] /}
-    {param entries}
+    {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
-          {call dma.entry.newListEntry}
+          {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
               $entry.name, $entry.worldsString, $entry.short_description
@@ -281,7 +265,7 @@
     {param type: 'base-level' /}
     {param id: $id /}
     {param create: $create /}
-    {param values}
+    {param values kind="html"}
       {call dma.edit.value}
         {param name: 'name' /}
         {param label: 'Name' /}
@@ -427,9 +411,9 @@
         {param name: 'references' /}
         {param color: '#aaf' /}
         {param label: 'References' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $reference in $entry.references}  
                 {call dma.edit.field_list_multiple}
                   {param values: [

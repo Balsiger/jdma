@@ -45,7 +45,7 @@
     {param last: $last /}
     {param color: '#008' /}
     {param title kind="html"}
-      {call dma.entry._new_title}
+      {call dma.entry.title}
         {param title kind="html"}
           {call .name}
             {param entry: $entry /}
@@ -200,7 +200,7 @@
     {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
-          {call dma.entry.newListEntry}
+          {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
               $entry.name, $entry.DM.get
@@ -222,7 +222,7 @@
 {template .edit}
   {call dma.edit.entry}
     {param entry: $entry /}
-    {param type: 'product' /}
+    {param type: 'item' /}
     {param id: $id /}
     {param create: $create /}
     {param values kind="html"}
@@ -240,7 +240,7 @@
         {param validate: 'non-empty' /}
         {param color: '#008' /}
         {param autocomplete: 'base item/name' /}
-      {/call}    
+      {/call}
       {call dma.edit.value}
         {param name: 'parent' /}
         {param label: 'Parent' /}
@@ -305,14 +305,14 @@
         {param value kind="html"}
           {call dma.edit.field_input}
             {param name: 'multiuse' /}
-            {param value: $entry.counted ? $entry.multiuse : '' /}
+            {param value: $entry.multiuse.present ? $entry.multiuse : '' /}
             {param validate: 'number' /}
             {param caption: 'uses' /}
             {param class: 'narrow' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'multiple' /}
-            {param value: $entry.counted ? $entry.multiple : '' /}
+            {param value: $entry.multiple.present ? $entry.multiple : '' /}
             {param validate: 'number' /}
             {param caption: 'copies' /}
             {param class: 'narrow' /}
@@ -735,14 +735,16 @@
  * @param entry the item to format for
  */
 {template .name}
-  {if $ij.isDM or $entry.identified}
-    {$entry.DM_name}
-    {if $entry.player_name and $entry.DM_name != $entry.player_name}
-      {sp}[{$entry.player_name}]
-    {/if} 
-  {else}
-    {$entry.player_name}
-  {/if}
+  <span class="name">
+    {if $ij.isDM or $entry.identified}
+      {$entry.DM_name}
+      {if $entry.player_name and $entry.DM_name != $entry.player_name}
+        {sp}[{$entry.player_name}]
+      {/if}
+    {else}
+      {$entry.player_name}
+    {/if}
+  </span>
   {sp}({$entry.name})
 {/template}
 
@@ -752,7 +754,7 @@
  * @param entry the item to format
  */
 {template .reference}
-  <a class="Item" href="{$entry.path}">
+  <a class="Item" href="{$entry.path}" target="_blank">
     {call .name}
       {param entry: $entry /}
     {/call}

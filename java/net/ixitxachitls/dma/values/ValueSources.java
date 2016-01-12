@@ -32,10 +32,10 @@ import java.util.List;
  * @file   ValueSources.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
-public class ValueSources
+public class ValueSources<V>
 {
   /** A single value and where it came from (source). */
-  public final static class ValueSource
+  public final static class ValueSource<V>
   {
     /**
      * Create the value source.
@@ -43,14 +43,14 @@ public class ValueSources
      * @param inValue the value
      * @param inSource the source
      */
-    private ValueSource(String inValue, String inSource)
+    private ValueSource(V inValue, String inSource)
     {
       m_value = inValue;
       m_source = inSource;
     }
 
     /** The value representation. */
-    private final String m_value;
+    private final V m_value;
 
     /** The source of the value. */
     private final String m_source;
@@ -60,7 +60,7 @@ public class ValueSources
      *
      * @return the value
      */
-   public String getValue()
+   public V getValue()
    {
       return m_value;
     }
@@ -93,13 +93,13 @@ public class ValueSources
    * @param inValue the value representation
    * @param inSource the source description
    */
-  public ValueSources(Object inValue, String inSource)
+  public ValueSources(V inValue, String inSource)
   {
-    add(inValue.toString(), inSource);
+    add(inValue, inSource);
   }
 
   /** The list of value sources. */
-  private final List<ValueSource> m_sources = new ArrayList<>();
+  private final List<ValueSource<V>> m_sources = new ArrayList<>();
 
   /**
    * Add a value with a source.
@@ -107,7 +107,7 @@ public class ValueSources
    * @param inValue the value representation
    * @param inSource the source description
    */
-  public void add(String inValue, String inSource)
+  public void add(V inValue, String inSource)
   {
     add(new ValueSource(inValue, inSource));
   }
@@ -116,7 +116,7 @@ public class ValueSources
    *
    * @param inSource the source and vaule
    */
-  public void add(ValueSource inSource)
+  public void add(ValueSource<V> inSource)
   {
     m_sources.add(inSource);
   }
@@ -126,9 +126,9 @@ public class ValueSources
    *
    * @param inSources the other sources
    */
-  public void add(ValueSources inSources)
+  public void add(ValueSources<V> inSources)
   {
-    for(ValueSource source : inSources.m_sources)
+    for(ValueSource<V> source : inSources.m_sources)
       add(source);
   }
 
@@ -137,7 +137,7 @@ public class ValueSources
    *
    * @return the value sources.
    */
-  public List<ValueSource> getSources()
+  public List<ValueSource<V>> getSources()
   {
     return Collections.unmodifiableList(m_sources);
   }

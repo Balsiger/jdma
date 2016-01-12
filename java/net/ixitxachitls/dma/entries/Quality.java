@@ -31,10 +31,18 @@ import java.util.Map;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.proto.*;
+import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.QualityProto;
+import net.ixitxachitls.dma.values.AbilityModifier;
+import net.ixitxachitls.dma.values.Condition;
 import net.ixitxachitls.dma.values.ExpressionValue;
+import net.ixitxachitls.dma.values.KeyedModifier;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Ability;
+import net.ixitxachitls.dma.values.enums.Immunity;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 
 /**
@@ -56,6 +64,19 @@ public class Quality extends NestedEntry
   /** The base quality, if found. */
   private Optional<Optional<BaseQuality>> m_base = Optional.absent();
 
+  /** The condition for the quality, if any. */
+  private Optional<Condition> m_condition = Optional.absent();
+
+  public static final Creator<Quality> CREATOR =
+      new NestedEntry.Creator<Quality>()
+      {
+        @Override
+        public Quality create()
+        {
+          return new Quality();
+        }
+      };
+
   /**
    * Get the base quality, if it can be found.
    *
@@ -75,6 +96,11 @@ public class Quality extends NestedEntry
     return m_base.get();
   }
 
+  public Optional<Condition> getCondition()
+  {
+    return m_condition;
+  }
+
   /**
    * Get the parameters for the quality.
    *
@@ -83,6 +109,22 @@ public class Quality extends NestedEntry
   public Map<String, String> getParameters()
   {
     return Collections.unmodifiableMap(m_parameters);
+  }
+
+  public String baseName()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getName();
+
+    return getName();
+  }
+
+  public String getShortDescription()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getShortDescription();
+
+    return "";
   }
 
   /**
@@ -116,6 +158,8 @@ public class Quality extends NestedEntry
   public void set(Values inValues)
   {
     m_name = inValues.use("name", m_name);
+    m_condition = inValues.use("condition", m_condition, Condition.PARSER,
+                               "generic", "weapon_style");
 
     List<String> names = new ArrayList<>();
     List<String> values = new ArrayList<>();
@@ -147,11 +191,14 @@ public class Quality extends NestedEntry
     else
       builder.setName("unknown");
 
+    if(m_condition.isPresent())
+      builder.setCondition(m_condition.get().toProto());
+
     for(Map.Entry<String, String> parameter : m_parameters.entrySet())
       builder.addParameter(QualityProto.Parameter.newBuilder()
-                             .setName(parameter.getKey())
-                             .setValue(parameter.getValue())
-                             .build());
+                               .setName(parameter.getKey())
+                               .setValue(parameter.getValue())
+                               .build());
 
     QualityProto proto = builder.build();
     return proto;
@@ -167,9 +214,175 @@ public class Quality extends NestedEntry
   {
     Quality quality = new Quality();
     quality.m_name = Optional.of(inProto.getName());
+    if(inProto.hasCondition())
+      quality.m_condition =
+          Optional.of(Condition.fromProto(inProto.getCondition()));
+
     for(QualityProto.Parameter parameter : inProto.getParameterList())
       quality.m_parameters.put(parameter.getName(), parameter.getValue());
 
     return quality;
+  }
+
+  public String toString()
+  {
+    if(m_name.isPresent())
+      return m_name.get();
+
+    return "(unknown)";
+  }
+
+  public List<AbilityModifier> abilityModifiers()
+  {
+    List<AbilityModifier> modifiers = new ArrayList<>();
+    if(getBase().isPresent())
+      for(AbilityModifier modifier : getBase().get().getAbilityModifiers())
+        modifiers.add(parametrize(modifier));
+
+    return modifiers;
+  }
+
+  public List<Immunity> immunities()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getImmunities();
+
+    return new ArrayList<>();
+  }
+
+  public List<KeyedModifier> skillModifiers()
+  {
+    List<KeyedModifier> modifiers = new ArrayList<>();
+
+    if(getBase().isPresent())
+      for(KeyedModifier modifier : getBase().get().getSkillModifiers())
+        modifiers.add(parametrize(modifier));
+
+    return modifiers;
+  }
+
+  public List<String> bonusFeats()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getBonusFeats();
+
+    return Collections.emptyList();
+  }
+
+  public Modifier abilityModifier(Ability inAbility)
+  {
+    Modifier modifier = new Modifier();
+
+    if(!getBase().isPresent())
+      return modifier;
+
+    for(AbilityModifier abilityMod : getBase().get().getAbilityModifiers())
+      if(abilityMod.getAbility() == inAbility)
+        modifier = (Modifier)modifier.add(abilityMod.getModifier());
+
+    return parametrize(modifier);
+  }
+
+  public Modifier reflexModifier()
+  {
+    if(getBase().isPresent())
+      if(getBase().get().getReflexModifier().isPresent())
+        return parametrize(getBase().get().getReflexModifier().get());
+
+    return new Modifier();
+  }
+
+  public Modifier willModifier()
+  {
+    if(getBase().isPresent())
+      if(getBase().get().getWillModifier().isPresent())
+        return parametrize(getBase().get().getWillModifier().get());
+
+    return new Modifier();
+  }
+
+  public Modifier fortitudeModifier()
+  {
+    if(getBase().isPresent())
+      if(getBase().get().getFortitudeModifier().isPresent())
+        return parametrize(getBase().get().getFortitudeModifier().get());
+
+    return new Modifier();
+  }
+
+  public Modifier skillModifier(String inSkill)
+  {
+    Modifier result = new Modifier();
+
+    if(getBase().isPresent())
+      for(KeyedModifier modifier
+          : getBase().get().getSkillModifiers())
+        if(modifier.getKey().equalsIgnoreCase(inSkill))
+          result = (Modifier)result.add(parametrize(modifier.getModifier()));
+
+    return parametrize(result);
+  }
+
+  public Modifier attackModifier()
+  {
+    if(getBase().isPresent() && getBase().get().getAttackModifier().isPresent())
+      return parametrize(getBase().get().getAttackModifier().get());
+
+    return new Modifier();
+  }
+
+  public Modifier damageModifier()
+  {
+    if(getBase().isPresent() && getBase().get().getDamageModifier().isPresent())
+      return parametrize(getBase().get().getDamageModifier().get());
+
+    return new Modifier();
+  }
+
+  private Modifier parametrize(Modifier inModifier) {
+    if(!inModifier.hasAnyCondition())
+      return inModifier;
+
+    return new Modifier(inModifier.getModifier(),
+                        inModifier.getType(),
+                        parametrizeText(inModifier.getCondition()),
+                        parametrize(inModifier.getNext()));
+  }
+
+  private AbilityModifier parametrize(AbilityModifier inModifier) {
+    return new AbilityModifier(inModifier.getAbility(),
+                               parametrize(inModifier.getModifier()));
+  }
+
+  private KeyedModifier parametrize(KeyedModifier inModifier)
+  {
+    return new KeyedModifier(inModifier.getKey(),
+                             parametrize(inModifier.getModifier()));
+  }
+
+  private Optional<Modifier> parametrize(Optional<Modifier> inModifier) {
+    if(!inModifier.isPresent())
+      return inModifier;
+
+    if(!inModifier.get().hasAnyCondition())
+      return inModifier;
+
+    return Optional.of(parametrize(inModifier.get()));
+  }
+
+  private Optional<String> parametrizeText(Optional<String> inText)
+  {
+    if(inText.isPresent())
+      return Optional.of(parametrizeText(inText.get()));
+
+    return inText;
+  }
+
+  private String parametrizeText(String inText) {
+    String text = inText;
+    for(Map.Entry<String, String> entry : m_parameters.entrySet())
+      text = text.replace("$" + entry.getKey(), entry.getValue());
+
+    return text;
   }
 }

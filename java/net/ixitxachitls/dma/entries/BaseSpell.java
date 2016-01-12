@@ -28,12 +28,12 @@ import java.util.List;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSpellProto;
 import net.ixitxachitls.dma.values.Distance;
+import net.ixitxachitls.dma.values.Duration;
 import net.ixitxachitls.dma.values.Parser;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Group;
@@ -437,14 +437,43 @@ public class BaseSpell extends BaseEntry
     {
       if(m_durationText.isPresent())
         return m_durationText.get()
-          + (m_dismissable ? " (D)" : "")
-          + (m_text.isPresent() ? ", " + m_text.get() : "");
+            + (m_dismissable ? " (D)" : "")
+            + (m_text.isPresent() ? ", " + m_text.get() : "");
 
       return m_duration.get()
-        + (m_levels.isPresent() ? "/" + m_levels.get() : "")
-        + (m_plusDuration.isPresent() ? " + " + m_plusDuration.get() : "")
+          + (m_levels.isPresent() && !m_levels.get().isEmpty()
+          ? "/" + m_levels.get() : "")
+          + (m_plusDuration.isPresent() ? " + " + m_plusDuration.get() : "")
           + (m_dismissable ? " (D)" : "")
           + (m_text.isPresent() ? ", " + m_text.get() : "");
+    }
+
+    public String toShortString(int level)
+    {
+      if(m_durationText.isPresent())
+        return m_durationText.get()
+            + (m_dismissable ? " (D)" : "")
+            + (m_text.isPresent() ? ", " + m_text.get() : "");
+
+      net.ixitxachitls.dma.values.Duration duration = m_duration.get();
+      try
+      {
+        if(m_levels.isPresent() && !m_levels.get().isEmpty())
+          duration = (net.ixitxachitls.dma.values.Duration)
+              duration.multiply(Integer.parseInt(m_levels.get()));
+      }
+      catch(NumberFormatException e)
+      {
+        Log.warning("Invalid number of levels for duration encountered: "
+                        + m_levels.get());
+      }
+
+      return duration.toShortString()
+          + (m_plusDuration.isPresent() ?
+            " + " + m_plusDuration.get().toShortString() : "")
+          + (m_dismissable ? " (D)" : "")
+          + (m_text.isPresent() && !m_text.get().isEmpty()
+            ? ", " + m_text.get() : "");
     }
   }
 
@@ -1365,9 +1394,9 @@ public class BaseSpell extends BaseEntry
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_school = inValues.use("school", m_school, School.PARSER);
     m_subschools = inValues.use("subschool", m_subschools, Subschool.PARSER);
@@ -1611,16 +1640,9 @@ public class BaseSpell extends BaseEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(BaseSpellProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return BaseSpellProto.getDefaultInstance();
   }
 
   //---------------------------------------------------------------------------

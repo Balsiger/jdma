@@ -25,13 +25,14 @@ package net.ixitxachitls.dma.entries;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.SortedMultiset;
 import com.google.common.collect.TreeMultiset;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -39,7 +40,11 @@ import net.ixitxachitls.dma.proto.Entries.LevelProto;
 import net.ixitxachitls.dma.proto.Entries.MonsterProto;
 import net.ixitxachitls.dma.proto.Entries.NPCProto;
 import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.ArmorType;
+import net.ixitxachitls.dma.values.Modifier;
+import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Gender;
 import net.ixitxachitls.util.logging.Log;
 
@@ -104,9 +109,6 @@ public class NPC extends Monster
   /** The gender of the npc. */
   protected Gender m_gender = Gender.UNKNOWN;
 
-  /** A special name for the npc, if any. */
-  protected Optional<String> m_givenName = Optional.absent();
-
   /** The individual levels gained, in order. */
   protected List<Level> m_levels = new ArrayList<>();
 
@@ -121,6 +123,9 @@ public class NPC extends Monster
 
   /** The NPC's description of how it looks. */
   protected Optional<String> m_looks = Optional.absent();
+
+  /** The possible animal compantion. */
+  protected Optional<List<Monster>> m_animalCompanions = Optional.absent();
 
   /*
   @Override
@@ -272,6 +277,24 @@ public class NPC extends Monster
   }
 
   @Override
+  public Annotated.Modifier strength() {
+    Annotated.Modifier annotated = super.strength();
+
+    Multiset<String> levels = HashMultiset.create();
+    for(Level level : m_levels)
+    {
+      levels.add(level.getName());
+
+      if(level.getAbilityIncrease().isPresent()
+          && level.getAbilityIncrease().get() == Ability.STRENGTH)
+        annotated.add(new Modifier(1),
+                      level.getName() + " " + levels.count(level.getName()));
+    }
+
+    return annotated;
+  }
+
+  @Override
   public Annotated.Bonus getCombinedBaseFortitudeSave()
   {
     Annotated.Bonus save = super.getCombinedBaseFortitudeSave();
@@ -279,7 +302,7 @@ public class NPC extends Monster
     for(Multiset.Entry<String> entry : cumulatedLevels().entrySet())
     {
       Optional<BaseLevel> level = DMADataFactory.get().getEntry
-        (new EntryKey(entry.getElement(), BaseLevel.TYPE));
+          (new EntryKey(entry.getElement(), BaseLevel.TYPE));
 
       int bonus = 0;
       if(level.isPresent())
@@ -290,7 +313,7 @@ public class NPC extends Monster
             bonus += saves.get(i);
           else
             Log.warning("Cannot find fortitude save for level " + i
-                        + " in " + level.get().getName());
+                            + " in " + level.get().getName());
 
         save.add(bonus, level.get().getName() + " " + entry.getCount());
       }
@@ -358,9 +381,8 @@ public class NPC extends Monster
   @Override
   public int getMaxHP()
   {
-    // Use the levels plus the max hp of the monster
-    int hp = super.getMaxHP();
-
+    // Use the levels of the character, ignoring a monsters other hps.
+    int hp = 0;
     for(Level level : m_levels)
     {
       hp += level.getHP();
@@ -375,6 +397,145 @@ public class NPC extends Monster
     return BaseLevel.maxSkillRanks(getEffectiveCharacterLevel());
   }
 
+  public Annotated.Arithmetic<Modifier> attackModifier() {
+    Annotated.Arithmetic<Modifier> modifier = new Annotated.Arithmetic<>();
+
+    for (Level level : m_levels)
+    {
+      for(Quality quality : level.getQualities())
+        modifier.add(quality.attackModifier(), quality.baseName());
+      for(Feat feat : level.getFeats())
+        modifier.add(feat.attackModifier(), feat.baseName());
+    }
+
+    return modifier;
+  }
+
+  public Annotated.Arithmetic<Modifier> damageModifier() {
+    Annotated.Arithmetic<Modifier> modifier = new Annotated.Arithmetic<>();
+
+    for (Level level : m_levels)
+    {
+      for(Quality quality : level.getQualities())
+        modifier.add(quality.damageModifier(), quality.baseName());
+      for(Feat feat : level.getFeats())
+        modifier.add(feat.damageModifier(), feat.baseName());
+    }
+
+    return modifier;
+  }
+
+  public Annotated.List<Quality> getClassQualities()
+  {
+    Annotated.List<Quality> combined = new Annotated.List<>();
+    for(Level level : m_levels)
+      combined.add(level.getQualities(), level.getName());
+
+    return combined;
+  }
+
+  @Override
+  public int totalSkillPoints()
+  {
+    int points = 0;
+    int intModifier = Math.max(1, abilityModifier(Ability.INTELLIGENCE));
+    boolean first = true;
+
+    for(Level level : m_levels)
+      if (first)
+      {
+        points += 4 * (level.getSkillPoints() + intModifier);
+        first = false;
+      } else
+        points += level.getSkillPoints() + intModifier;
+
+    return points;
+  }
+
+  @Override
+  protected List<Quality> allQualities()
+  {
+    List<Quality> qualities = super.allQualities();
+
+    for(Level level : m_levels)
+      qualities.addAll(level.getQualities());
+
+    return qualities;
+  }
+
+  @Override
+  protected Set<Feat> allFeats()
+  {
+    Set<Feat> feats = super.allFeats();
+
+    Multiset<String> levels = HashMultiset.create();
+    for(Level level : m_levels)
+    {
+      levels.add(level.getName());
+      feats.addAll(level.getAllFeats(levels.count(level.getName())));
+    }
+
+    return feats;
+  }
+
+  private Multiset<String> qualityNames()
+  {
+    Multiset<String> names = HashMultiset.create();
+
+    for(Quality quality : allQualities())
+      names.add(quality.getName());
+
+    return names;
+  }
+
+  public List<String> unusedQualities()
+  {
+    List<String> qualities = new ArrayList<>();
+    Multiset<String> names = qualityNames();
+
+    Multiset<String> levels = HashMultiset.create();
+    for(Level level : m_levels)
+    {
+      if(level.getBase().isPresent())
+      {
+        levels.add(level.getName());
+        for(BaseLevel.QualityReference quality
+            : level.getBase().get().getSpecialAttacks())
+          if(quality.getLevel() == levels.count(level.getName())
+            && !removeOneOf(names, quality.getName().split("\\|")))
+            qualities.add("-" + quality.getName());
+
+        for(BaseLevel.QualityReference quality
+            : level.getBase().get().getSpecialQualities())
+          if(quality.getLevel() == levels.count(level.getName())
+              && !removeOneOf(names, quality.getName().split("\\|")))
+            qualities.add("-" + quality.getName());
+      }
+    }
+
+    for(Quality quality : super.monsterQualities())
+    {
+      if (!removeOneOf(names, quality.getName().split("\\|"))) {
+        qualities.add("-" + quality.getName());
+      }
+    }
+
+    for (String name : names) {
+      qualities.add("+" + name);
+    }
+
+    return qualities;
+  }
+
+  private boolean removeOneOf(Multiset<String> set, String ... names)
+  {
+    for (String name : names)
+      if (set.remove(name))
+        return true;
+
+    return false;
+  }
+
   public boolean isClassSkill(String inName)
   {
     for(Level level : m_levels)
@@ -385,9 +546,58 @@ public class NPC extends Monster
   }
 
   @Override
-  public void set(Values inValues)
+  public Annotated<List<String>> weaponProficiencies()
   {
-    super.set(inValues);
+    Annotated.List<String> proficiencies =
+        (Annotated.List<String>)super.weaponProficiencies();
+
+    for(Level level : m_levels)
+      for(Proficiency proficiency : level.weaponProficiencies())
+        proficiencies.addSingle(proficiency.toString(),
+                                level.getAbbreviation());
+
+    return proficiencies;
+  }
+
+  public Annotated.List<ArmorType> armorProficiencies()
+  {
+    Annotated.List<ArmorType> proficiencies = new Annotated.List<>();
+
+    for(Level level : m_levels)
+      proficiencies.add(level.armorProficiencies(), level.getAbbreviation());
+
+    return proficiencies;
+  }
+
+  public Annotated<List<Feat>> getCombinedFeats()
+  {
+    Annotated.List<Feat> feats = (Annotated.List<Feat>)super.getCombinedFeats();
+
+    Multiset<String> levels = HashMultiset.create();
+    for(Level level : m_levels)
+    {
+      levels.add(level.getAbbreviation());
+
+      feats.add(level.getFeats(), level.getAbbreviation());
+
+      // Bonus feats.
+      feats.add(level.getBonusFeats(levels.count(level.getAbbreviation())),
+                level.getAbbreviation()
+                    + levels.count(level.getAbbreviation()));
+    }
+
+    // Quality feats
+    for(Quality quality : allQualities())
+      for(String feat : quality.bonusFeats())
+        feats.add(ImmutableList.of(new Feat(feat)), quality.getName());
+
+    return feats;
+  }
+
+  @Override
+  public void setValues(Values inValues)
+  {
+    super.setValues(inValues);
 
     m_gender = inValues.use("gender", m_gender, Gender.PARSER);
     m_religion = inValues.use("religion", m_religion);
@@ -414,9 +624,6 @@ public class NPC extends Monster
 
     if(m_gender != Gender.UNKNOWN)
       builder.setGender(m_gender.toProto());
-
-    if(m_givenName.isPresent())
-      builder.setGivenName(m_givenName.get());
 
     for(Level level : m_levels)
       builder.addLevel(level.toProto());
@@ -460,8 +667,9 @@ public class NPC extends Monster
     if(proto.hasGivenName())
       m_givenName = Optional.of(proto.getGivenName());
 
+    m_levels.clear();
     for(LevelProto level : proto.getLevelList())
-        m_levels.add(Level.fromProto(level));
+      m_levels.add(Level.fromProto(level));
 
     if(proto.hasReligion())
       m_religion = Optional.of(proto.getReligion());
@@ -477,15 +685,19 @@ public class NPC extends Monster
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(NPCProto.parseFrom(inBytes));
+    return NPCProto.getDefaultInstance();
+  }
+
+  public List<Monster> getAnimalCompanions()
+  {
+    if(!m_animalCompanions.isPresent()) {
+      m_animalCompanions = Optional.of(DMADataFactory.get().getEntries(
+          Monster.TYPE, Optional.of(getCampaign().get().getKey()),
+          "index-parent", "character/" + getName().toLowerCase()));
     }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+
+    return m_animalCompanions.get();
   }
 }

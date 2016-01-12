@@ -125,16 +125,9 @@ public class BaseCampaign extends BaseEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(BaseCampaignProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return BaseCampaignProto.getDefaultInstance();
   }
 
   //---------------------------------------------------------------------------

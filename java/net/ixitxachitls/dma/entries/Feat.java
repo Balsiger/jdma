@@ -26,7 +26,12 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.FeatProto;
+import net.ixitxachitls.dma.values.Condition;
+import net.ixitxachitls.dma.values.Modifier;
+import net.ixitxachitls.dma.values.NameAndModifier;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.FeatType;
+import net.ixitxachitls.util.CommandLineParser;
 
 /**
  * An actual feat.
@@ -43,11 +48,31 @@ public class Feat extends NestedEntry
   {
   }
 
+  public Feat(String inName)
+  {
+    m_name = Optional.of(inName);
+  }
+
+  public Feat(String inName, String inQualifier) {
+    this(inName);
+
+    m_qualifier = Optional.of(inQualifier);
+  }
+
   /** The qualifier for the feat. */
   private Optional<String> m_qualifier = Optional.absent();
 
   /** The base feat to this feat. */
   private Optional<Optional<BaseFeat>> m_base = Optional.absent();
+
+  public static final Creator<Feat> CREATOR = new NestedEntry.Creator<Feat>()
+  {
+    @Override
+    public Feat create()
+    {
+      return new Feat();
+    }
+  };
 
   /**
    * Get the base feat.
@@ -68,6 +93,14 @@ public class Feat extends NestedEntry
     return m_base.get();
   }
 
+  @Override
+  public String getName() {
+    if(getBase().isPresent())
+      return getBase().get().getName();
+
+    return super.getName();
+  }
+
   /**
    * Get the feat qualifier.
    *
@@ -76,6 +109,179 @@ public class Feat extends NestedEntry
   public Optional<String> getQualifier()
   {
     return m_qualifier;
+  }
+
+  public String baseName()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getName();
+
+    return getName();
+  }
+
+  public String getShortDescription()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getShortDescription();
+
+    return "";
+  }
+
+  public FeatType getType()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getFeatType();
+
+    return FeatType.UNKNOWN;
+  }
+
+  public Optional<String> getBenefit()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getBenefit();
+
+    return Optional.absent();
+  }
+
+  /**
+   * Get the attack modifier provided by this feat.
+   *
+   * @return the attack modifier
+   */
+  public Modifier attackModifier()
+  {
+    if(getBase().isPresent() && getBase().get().getAttackModifier().isPresent())
+      return getBase().get().getAttackModifier().get();
+
+    return new Modifier();
+  }
+
+  public Modifier initiativeModifier()
+  {
+    if(getBase().isPresent()
+        && getBase().get().getInitiativeModifier().isPresent())
+      return getBase().get().getInitiativeModifier().get();
+
+    return new Modifier();
+  }
+
+  /**
+   * Get the damage modifier provided by this feat.
+   *
+   * @return the damage modifier
+   */
+  public Modifier damageModifier()
+  {
+    if(getBase().isPresent() && getBase().get().getDamageModifier().isPresent())
+      return getBase().get().getDamageModifier().get();
+
+    return new Modifier();
+  }
+
+  public Modifier skillModifier(String inSkill)
+  {
+    if(getBase().isPresent())
+      return getBase().get().getSkillModifier(inSkill);
+
+    return new Modifier();
+  }
+
+  public int additionalAttacks()
+  {
+    if(getBase().isPresent()
+        && getBase().get().getAdditionalAttacks().isPresent())
+      return getBase().get().getAdditionalAttacks().get();
+
+    return 0;
+  }
+
+  public Optional<Condition> getCondition()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getCondition();
+
+    return Optional.absent();
+  }
+
+  public Modifier getStrengthModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getStrengthModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getStrengthModifier().get();
+  }
+
+  public Modifier getDexterityModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getDexterityModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getDexterityModifier().get();
+  }
+
+  public Modifier getConstitutionModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getConstitutionModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getConstitutionModifier().get();
+  }
+
+  public Modifier getIntelligenceModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getIntelligenceModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getIntelligenceModifier().get();
+  }
+
+  public Modifier getWisdomModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getWisdomModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getWisdomModifier().get();
+  }
+
+  public Modifier getCharismaModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getCharismaModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getCharismaModifier().get();
+  }
+
+  public Modifier fortitudeModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getFortitudeModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getFortitudeModifier().get();
+  }
+
+  public Modifier willModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getWillModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getFortitudeModifier().get();
+  }
+
+  public Modifier reflexModifier()
+  {
+    if(!getBase().isPresent()
+        || !getBase().get().getReflexModifier().isPresent())
+      return new Modifier();
+
+    return getBase().get().getReflexModifier().get();
   }
 
   @Override
@@ -129,5 +335,31 @@ public class Feat extends NestedEntry
       feat.m_qualifier = Optional.of(inProto.getQualifier());
 
     return feat;
+  }
+
+  // PHB p. 87
+  public static int availableFeats(int inLevel) {
+    return inLevel / 3 + 1;
+  }
+
+  @Override
+  public boolean equals(Object o)
+  {
+    if(this == o)
+      return true;
+
+    if(o == null || getClass() != o.getClass())
+      return false;
+
+    final Feat feat = (Feat)o;
+    return m_qualifier.equals(feat.m_qualifier)
+        && m_name.equals(feat.m_name);
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return m_qualifier.hashCode()
+        + 31 * m_name.hashCode();
   }
 }

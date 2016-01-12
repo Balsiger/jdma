@@ -94,6 +94,11 @@ public class Weight extends Value.Arithmetic<WeightProto>
     }
   }
 
+  public Weight()
+  {
+    this(Optional.<Rational>absent(), Optional.<Rational>absent());
+  }
+
   /**
    * Create a weight with imperial metrics.
    *

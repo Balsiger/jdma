@@ -478,7 +478,7 @@ message BaseQualityProto
   
   message AbilityModifier
   {
-    required BaseMonsterProto.Ability ability = 1;
+    required Ability ability = 1;
     required ModifierProto modifier = 2;
   }
   repeated AbilityModifier ability_modifier = 7;
@@ -501,7 +501,7 @@ message BaseQualityProto
   }
   repeated KeyedModifier skill_modifier = 12;
   optional ModifierProto attack_modifier = 13;
-  optional ModifierProto damage_modifier = 14; 
+  optional ModifierProto damage_modifier = 14;
   repeated string bonus_feat = 15;
 }
 
@@ -531,19 +531,35 @@ message BaseFeatProto
     optional string reference= 2;
     optional ModifierProto modifier = 3;
   }
-  repeated Effect effect = 7;
+  repeated Effect effect = 7 [deprecated = true];
+
+  optional ModifierProto attack_modifier = 8;
+  optional ModifierProto damage_modifier = 9;
+  optional int32 additional_attacks = 10;
+  optional ConditionProto condition = 11;
+  optional ModifierProto initiative_modifier = 12;
+  repeated NameAndModifierProto skill_modifier = 13;
+  optional ModifierProto strength_modifier = 14;
+  optional ModifierProto dexterity_modifier = 15;
+  optional ModifierProto constitution_modifier = 16;
+  optional ModifierProto intelligence_modifier = 17;
+  optional ModifierProto wisdom_modifier = 18;
+  optional ModifierProto charisma_modifier = 19;
+  optional ModifierProto fortitude_modifier = 20;
+  optional ModifierProto will_modifier = 21;
+  optional ModifierProto reflex_modifier = 22;
 }
 
 message BaseSkillProto
 {
   required BaseEntryProto base = 1;
 
-  optional BaseMonsterProto.Ability ability = 2;
+  optional Ability ability = 2;
   optional string check = 3;
   optional string action = 4;
   optional string retry = 5;
   optional string special = 6;
-  repeated string synergy = 7;
+  repeated string synergy_deprecated = 7 [deprecated=true];
   optional string synergy_text = 8;
   optional string restriction_text = 9;
   optional string untrained = 10;
@@ -554,6 +570,7 @@ message BaseSkillProto
     TRAINED_ONLY = 1;
     ARMOR_CHECK_PENALTY = 2;
     SUBTYPE_ONLY = 3;
+    DOUBLE_ARMOR_CHECK_PENALTY = 4;
   }
   repeated Restriction restriction = 11;
 
@@ -571,6 +588,13 @@ message BaseSkillProto
     required string text = 2;
   }
   repeated DC dc = 13;
+
+  message Synergy
+  {
+    optional string name = 1;
+    optional string condition = 2;
+  }
+  repeated Synergy synergy = 14;
 }
 
 message BaseItemProto
@@ -666,6 +690,7 @@ message BaseItemProto
   optional BaseArmorProto armor = 22;
   optional BaseLightProto light = 23;
   optional BaseCompositeProto composite = 24;
+  repeated QualityProto qualities = 27;
 }
 
 message BaseWeaponProto
@@ -690,20 +715,7 @@ message BaseWeaponProto
   optional Type type = 4;
   optional CriticalProto critical = 5;
 
-  enum Style
-  {
-    UNKNOWN_STYLE = 0;
-    TWOHANDED_MELEE = 1;
-    ONEHANDED_MELEE = 2;
-    LIGHT_MELEE = 3;
-    UNARMED = 4;
-    RANGED_TOUCH = 5;
-    RANGED = 6;
-    THROWN_TOUCH = 7;
-    THROWN = 8;
-    TOUCH = 9;
-  }
-  optional Style style = 6;
+  optional WeaponStyle style = 6;
 
   enum Proficiency
   {
@@ -1015,15 +1027,15 @@ message BaseMonsterProto
     optional int32 per_day = 2;
     optional string condition = 3;
   }
-  repeated QualityReference specialAttack = 23;
-  repeated QualityReference specialQuality = 24;
+  repeated QualityReference specialAttack = 23 [deprecated=true];
+  repeated QualityReference specialQuality = 24 [deprecated=true];
 
   message SkillReference
   {
     optional Reference reference = 1;
     optional ModifierProto modifier = 2;
   }
-  repeated SkillReference class_skill = 25;
+  repeated SkillReference class_skill = 25 [deprecated=true];
   repeated Reference feat = 26;
 
   enum Climate
@@ -1085,6 +1097,7 @@ message BaseMonsterProto
       TANGLE = 20;
       TROUPE = 21;
       COMPANY = 22;
+      DOMESTIC = 23;
     }
     optional Type type = 1;
     optional DiceProto number = 2;
@@ -1214,20 +1227,10 @@ message BaseMonsterProto
   }
   repeated Save good_save = 43;
 
-  enum Ability
-  {
-    UNKNOWN = 0;
-    STRENGTH = 1;
-    DEXTERITY = 2;
-    CONSTITUTION = 3;
-    INTELLIGENCE = 4;
-    WISDOM = 5;
-    CHARISMA = 6;
-    NONE = 7;
-  }
-  
   repeated string proficiency = 44;
   optional bool quadruped = 45 [default=false];
+  repeated QualityProto qualities = 46;
+  repeated SkillProto skill = 47;
 }
 
 message BaseEncounterProto
@@ -1281,7 +1284,15 @@ message BaseLevelProto
   repeated int32 fortitude_save = 21;
   repeated int32 reflex_save = 22;
   repeated int32 will_save = 23;
-}
+  repeated LeveledQuality bonusFeat = 24;
+  optional Ability spell_ability = 25;
+
+  message PerLevel {
+    repeated int32 value = 1;
+  }
+  repeated PerLevel spells_per_day = 26;
+  repeated PerLevel spells_known = 27;
+ }
 
 message EntryProto
 {
@@ -1422,6 +1433,9 @@ message MonsterProto
   optional int32 will_save = 15;
   optional int32 reflex_save = 16;
   repeated QualityProto quality = 17;
+  repeated BaseMonsterProto.Language.Name language = 18;
+  optional string given_name = 19;
+  optional string personality = 20;
 }
 
 message SkillProto
@@ -1434,12 +1448,17 @@ message LevelProto
 {
   required string name = 1;
   optional int32 hp = 2;
+  repeated QualityProto quality = 3;
+  repeated FeatProto feat = 4;
+  optional Ability ability_increase = 5;
+  repeated string spell_known = 6;
 }
 
 message FeatProto
 {
   required string name = 1;
   optional string qualifier = 2;
+  optional ConditionProto condition = 5;
 }
 
 message QualityProto
@@ -1452,7 +1471,9 @@ message QualityProto
     required string name = 1;
     required string value = 2;
   }
-  repeated Parameter parameter = 3;    
+  repeated Parameter parameter = 3;
+  optional int32 per_day = 4;
+  optional ConditionProto condition = 5;
 }
 
 message NPCProto

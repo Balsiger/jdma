@@ -107,37 +107,6 @@
   {/if}
 {/template}
 
-/** An editable value. */
-{template .editable}
-  {@param? canEdit: bool}
-  {@param name: string}
-  {@param value: html}
-  {@param key: string}
-  {@param type: string}
-  {@param? related: string}
-  {@param? choices: list<string>}
-  {@param? content: html}
-  {@param? note: html}
-  {@param? ifempty: html}
-  {if $canEdit}
-    <dmaeditable name="{$name}" value="{$value}" key="{$key}"
-      class="editable" type="{$type}"{if $related} related="{$related}"{/if}
-      {if $choices} values="{$choices}"{/if}{if $note} note="{$note}"{/if}>
-      {if $content or not $ifempty}
-        {$content}
-      {else}
-        {$ifempty}
-      {/if}
-    </dmaeditable>
-  {else}
-    {if $content or not $ifempty}
-      {$content}
-    {else}
-      {$ifempty}
-    {/if}
-  {/if}
-{/template}
-
 /**
  * A value with a remark.
  *
@@ -166,8 +135,8 @@
  * @param entry The entry rendered
  * @param value The value rendered
  */
-{template .link}
-  {call dma.page.link}
+{template .index_link}
+  {call .link}
     {param url: '/' + $entry.type.multilink + '/' + $args[0] + '/'
         + $value.group /}
     {param text: $value.raw /}
@@ -181,7 +150,7 @@
  * @param value The value rendered
  */
 {template .reference}
-  {call dma.page.link}
+  {call .link}
     {param url: $args[0] + $value.group /}
     {param text: $value.raw /}
   {/call}
@@ -194,7 +163,7 @@
  */
 {template .productReference}
 
-  {call dma.page.link}
+  {call .link}
     {param url: $reference.url /}
     {param text: $reference.title /}
    {/call} 
@@ -213,7 +182,7 @@
  * @param value The value rendered
  */
 {template .entrylink}
-  {call dma.page.link}
+  {call .link}
     {param url: '/' + $entry.type.link + '/' + $value.group /}
     {param text: $value.raw /}
   {/call}
@@ -227,7 +196,7 @@
  * @param value The value rendered
  */
 {template .campaign}
-  {call dma.page.link}
+  {call .link}
     {param url: '/campaign/' + $value.multi[0].print + '/'
         + $value.multi[1].print /}
     {param text: $value.multi[1].print /}
@@ -241,14 +210,14 @@
  * @param value The value rendered
  */
 {template .person}
-  {call dma.page.link}
+  {call .link}
     {param url: '/' + $entry.type.multilink + '/persons/'
         + $value.multi[0].print /}
     {param text: $value.multi[0].print /}
   {/call}
   {if $value.multi[1]}
     {sp}(
-    {call dma.page.link}
+    {call .link}
       {param url: '/' + $entry.type.multilink + '/jobs/'
           + $value.multi[1].print /}
       {param text: $value.multi[1].print /}
@@ -264,7 +233,7 @@
  * @param value The value rendered
  */
 {template .content}
-  {call dma.page.link}
+  {call .link}
     {param url: '/' + $entry.type.multilink + '/parts/'
         + $value.multi[0].print /}
     {param text: $value.multi[0].print /}
@@ -298,7 +267,7 @@
  */
 {template .money}
   <span {if $gold}class="term"{/if}>
-    {call dma.page.link}
+    {call .link}
       {param url: '/items/values/' + $value.group /}
       {param text: $value.raw /}
     {/call}
@@ -313,7 +282,7 @@
  */
 {template .weight}
   <span class="term">
-    {call dma.page.link}
+    {call .link}
       {param url: '/items/values/' + $value.group /}
       {param text: $value.raw /}
     {/call}
@@ -334,7 +303,7 @@
  */
 {template .distance}
   <span class="term">
-    {call dma.page.link}
+    {call .link}
       {param url: '/items/distances/' + $value.group /}
       {param text: $value.raw /}
     {/call}
@@ -355,7 +324,7 @@
  */
 {template .duration}
   <span class="term">
-    {call dma.page.link}
+    {call .link}
       {param url: '/items/durations/' + $value.group /}
       {param text: $value.raw /}
     {/call}
@@ -376,7 +345,7 @@
  */
 {template .volume}
   <span class="term">
-    {call dma.page.link}
+    {call .link}
       {param url: '/items/volumes/' + $value.group /}
       {param text: $value.raw /}
     {/call}
@@ -424,7 +393,7 @@
  * @ param args
  */
 {template .damage}
-  {call dma.page.link}
+  {call .link}
     {param url: '/items/damages/' + $value.group /}
     {param text: $value.raw /}
   {/call}
@@ -442,7 +411,7 @@
 {template .contains}
   {foreach $ands in $value.list}
     {foreach $ors in $ands.list}
-      {call dma.page.link}
+      {call .link}
         {param url: '/item/' + $ors.raw /}
         {param text: $ors.print /}
       {/call}
@@ -823,14 +792,41 @@
   <em>{$value}</em>
 {/template}
 
-/**
- * Print a modifier value.
- *
- * @param value the value to print
- * @ param args arguments to the template
- */
+/** Print a modifier value. */
 {template .modifier}
-  {$value}
+  {@param modifier: ?}
+  {@param? hide_condition: bool}
+  {@param? only_conditionals: bool}
+  {if $modifier.has_condition}
+    {if $hide_condition}
+      <span class="modifier-hide-condition">
+        ({bonus($modifier.modifier)}
+        {if not $modifier.type.general}
+          {sp}{$modifier.type}
+        {/if})
+      </span>
+    {else}
+      {bonus($modifier.modifier)}
+      {if not $modifier.type.general}
+        {sp}{$modifier.type}
+      {/if}
+      {if $modifier.condition.present}
+        <span class="modifier-condition"> {$modifier.condition}</span>
+      {/if}
+    {/if}
+  {elseif not $only_conditionals}
+    {bonus($modifier.modifier)}
+    {if not $modifier.type.general}
+      {sp}{$modifier.type}
+    {/if}
+  {/if}
+  {if $modifier.next.present}
+    {sp}
+    {call .modifier}
+      {param modifier: $modifier.next /}
+      {param only_conditionals: $only_conditionals /}
+    {/call}
+  {/if}
 {/template}
 
 /**
@@ -957,20 +953,19 @@
   {/if}
 {/template}
 
-/**
- * Format an annotated value.
- * 
- * @param value the value to annotate 
- * @param? link the link values point to 
- */
+/** Format an annotated value. */
 {template .annotated}
+  {@param value: ?}
+  {@param? link: string}
   <span class="annotated">
     {if isList($value.get)}
       {foreach $single in $value.get}
         {if $link}
-          <a href="{$link}{$single}">{$single}</a>
+          <a href="{$link}{$single}">
+            {if val($single)}{$single.formatted}{else}{$single}{/if}
+          </a>
         {else}
-          {$single}
+          {if val($single)}{$single.formatted}{else}{$single}{/if}
         {/if}
         {if not isLast($single)}, {/if}
       {/foreach}
@@ -978,7 +973,7 @@
       {if $value.show_sign and $value.get.present}
         {bonus($value.get.integer)}
       {else}
-        {$value.get}
+        {$value.get.formatted}
       {/if}
     {/if}
     <div class="annotations">
@@ -987,14 +982,71 @@
           <div class="annotation">
             <div class="annotation-value">
               {$source.value}
-            </div> 
-            {sp}&ndash;{sp} 
+            </div>
+            {sp}&ndash;{sp}
             <div class="annotation-source">
               {$source.source}
             </div>
           </div>
         {/foreach}
       {/if}
+    </div>
+  </span>
+{/template}
+
+/** A 'dynamic' link. */
+{template .link}
+  {@param? url : string}
+  {@param? js : html}
+  {@param text: html}
+  {@param? tooltip: string}
+  {@param? class: string}
+  {if $url}
+    <a href="{$url}" class="navigation-link{if $class} {$class}{/if}"
+      {if $tooltip} title="{$tooltip}"{/if}
+        onclick="util.link(event, '{$url}')">
+      {if $text}{$text}{else}{$url}{/if}
+    </a>
+  {elseif $js}
+    <a class="navigation-link{if $class} {$class}{/if}"
+      {if $tooltip} title="{$tooltip}"{/if}
+        onclick="{$js}">
+      {if $text}{$text}{else}{$url}{/if}
+    </a>
+  {else}
+    {if $text}{$text}{else}{$url}{/if}
+  {/if}
+{/template}
+
+/** An annotated modifier. */
+{template .annotated_modifier}
+  {@param value: ?}
+  {@param? no_conditions: ?}
+  {call .annotated_value}
+    {param value: $no_conditions ? bonus($value.get.unconditional_modifier)
+        : $value.get.total_modifier /}
+    {param sources: $value.sources.sources /}
+  {/call}
+{/template}
+
+/** Format a generic annotated value */
+{template .annotated_value}
+  {@param value: ?}
+  {@param sources: ?}
+  <span class="annotated">
+    {$value}
+    <div class="annotations">
+      {foreach $source in $sources}
+        <div class="annotation">
+          <div class="annotation-value">
+            {$source.value}
+          </div>
+          {sp}&ndash;{sp}
+          <div class="annotation-source">
+            {$source.source}
+          </div>
+        </div>
+      {/foreach}
     </div>
   </span>
 {/template}

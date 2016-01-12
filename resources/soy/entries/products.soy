@@ -22,7 +22,7 @@
 /*
  * Templates for products
  */
-{namespace dma.entries.products autoescape="deprecated-contextual"}
+{namespace dma.entries.products}
 
 /**
  * Show the given entry in standard format.
@@ -44,15 +44,15 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#444' /}
-    {param title}
-      {call dma.entry._new_title}
-        {param title}
+    {param title kind="html"}
+      {call dma.entry.title}
+        {param title kind="html"}
           {$entry.full_title}
         {/param}
         {param color: '#444' /}
       {/call}      
     {/param}
-    {param values}            
+    {param values kind="html"}
       {call dma.entry.value}
         {param label: 'Name' /}
         {param value: $entry.name /}
@@ -61,7 +61,7 @@
       {if length($entry.baseNames)}
         {call dma.entry.value}
           {param label: 'Base' /}
-          {param value}
+          {param value kind="html"}
             {foreach $base in $entry.baseNames}
               {call dma.page.link}
                 {param text: $base /}
@@ -82,7 +82,7 @@
       {/if}
       {call dma.entry.value}
         {param label: 'Edition' /}
-        {param value}
+        {param value kind="html"}
            {if $entry.edition.present}
              {$entry.edition.get} edition,
            {/if} 
@@ -94,14 +94,14 @@
       {/call}
       {call dma.entry.value}
         {param label: 'Status' /}
-        {param value}
+        {param value kind="html"}
           {$entry.status.getName}
         {/param}
         {param color: '#444' /}
       {/call}
       {call dma.entry.value}
         {param label: 'Condition' /}
-        {param value}
+        {param value kind="html"}
           {$entry.condition} 
           {if $entry.condition_comment.present}
             {sp}{$entry.condition_comment.get}
@@ -133,10 +133,10 @@
     {param pagesize: $pagesize /}
     {param size: $entries ? length($entries) : 0 /}
     {param titles: [ 'ID', 'Title', 'Status'] /}
-    {param entries}
+    {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
-          {call dma.entry.newListEntry}
+          {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
               $entry.name, $entry.fullt_title, $entry.status
@@ -161,7 +161,7 @@
     {param type: 'product' /}
     {param id: $id /}
     {param create: $create /}
-    {param values}
+    {param values kind="html"}
       {call dma.edit.value}
         {param name: 'name' /}
         {param label: 'Name' /}
@@ -188,7 +188,7 @@
       {call dma.edit.generic_value}
         {param name: 'edition' /}
         {param label: 'Edition' /}        
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field_input}
             {param name: 'edition' /}
             {param value: $entry.edition.present ? $entry.edition.get : '' /}
@@ -217,7 +217,7 @@
       {call dma.edit.generic_value}
         {param name: 'condition' /}
         {param label: 'Condition' /}
-        {param value} 
+        {param value kind="html"}
           {call dma.edit.field_selection}
             {param name: 'condition' /}
             {param value: $entry.condition.string /}

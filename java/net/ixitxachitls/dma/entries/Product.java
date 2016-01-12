@@ -29,7 +29,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -249,7 +248,7 @@ public class Product extends Entry
       do
       {
         randomID();
-      } while(DMADataFactory.get().getEntry(getKey()) != null);
+      } while(DMADataFactory.get().getEntry(getKey()).isPresent());
 
     return super.save();
   }
@@ -275,9 +274,9 @@ public class Product extends Entry
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_owner = inValues.use("owner",  m_owner);
     m_edition = inValues.use("edition", m_edition);
@@ -353,16 +352,9 @@ public class Product extends Entry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(ProductProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return ProductProto.getDefaultInstance();
   }
 
   //----------------------------------------------------------------------------

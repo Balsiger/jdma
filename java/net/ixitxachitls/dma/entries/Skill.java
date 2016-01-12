@@ -45,8 +45,20 @@ public class Skill extends NestedEntry
     // nothing to do
   }
 
-  /** The skill name. */
-  protected Optional<String> m_name = Optional.absent();
+  public Skill(String inName)
+  {
+    m_name = Optional.of(inName);
+  }
+
+  public static final Creator<Skill> CREATOR =
+      new NestedEntry.Creator<Skill>()
+      {
+        @Override
+        public Skill create()
+        {
+          return new Skill();
+        }
+      };
 
   /** The number of ranks in the skill .*/
   protected int m_ranks;
@@ -78,7 +90,7 @@ public class Skill extends NestedEntry
   {
     if(!m_base.isPresent() && m_name.isPresent())
       m_base = Optional.of(DMADataFactory.get().<BaseSkill>getEntry
-            (new EntryKey(m_name.get(), BaseLevel.TYPE)));
+            (new EntryKey(m_name.get(), BaseSkill.TYPE)));
 
     return m_base.get();
   }
@@ -147,5 +159,20 @@ public class Skill extends NestedEntry
     builder.setRanks(m_ranks);
 
     return builder.build();
+  }
+
+  public int modifier(BaseMonster inMonster)
+  {
+    return getRanks() + inMonster.abilityModifier(getAbility())
+        + inMonster.skillModifier(getName()).totalModifier();
+  }
+
+  public int modifier(Monster inMonster) {
+    return inMonster.skillModifier(getName(), getAbility());
+  }
+
+  // Needed to be available in soy.
+  public int modifier(Character inCharacter) {
+    return modifier((Monster)inCharacter);
   }
 }

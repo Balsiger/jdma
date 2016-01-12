@@ -28,14 +28,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseSkillProto;
+import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Parser;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Ability;
@@ -77,11 +76,11 @@ public class BaseSkill extends BaseEntry
 
     /** The parser for the dc. */
     public static final Parser<DC> PARSER =
-      new Parser<DC>(2)
-      {
-        @Override
-        public Optional<DC> doParse(String inValue, String inText)
+        new Parser<DC>(2)
         {
+          @Override
+          public Optional<DC> doParse(String inValue, String inText)
+          {
           try
           {
             int value = Integer.parseInt(inValue);
@@ -112,6 +111,72 @@ public class BaseSkill extends BaseEntry
     public String getDescription()
     {
       return m_description;
+    }
+  }
+
+  public static class Synergy
+  {
+    public Synergy(String inName) {
+      m_name = inName;
+      m_condition = Optional.absent();
+    }
+
+    public Synergy(String inName, String inCondition) {
+      m_name = inName;
+      m_condition = Optional.of(inCondition);
+    }
+
+    private String m_name;
+    private Optional<String> m_condition;
+
+    public static final Parser<Synergy> PARSER =
+        new Parser<Synergy>(2)
+        {
+          @Override
+          public Optional<Synergy> doParse(String inName, String inCondition)
+          {
+            if(inCondition != null && !inCondition.isEmpty())
+              return Optional.of(new Synergy(inName, inCondition));
+
+            return Optional.of(new Synergy(inName));
+          }
+        };
+
+    public String getName()
+    {
+      return m_name;
+    }
+
+    public Optional<String> getCondition()
+    {
+      return m_condition;
+    }
+
+    public String toString()
+    {
+      if(m_condition.isPresent())
+        return m_name + " if " + m_condition.get();
+
+      return m_name;
+    }
+
+    public BaseSkillProto.Synergy toProto()
+    {
+      if(m_condition.isPresent())
+        return BaseSkillProto.Synergy.newBuilder()
+            .setName(m_name)
+            .setCondition(m_condition.get())
+            .build();
+
+      return BaseSkillProto.Synergy.newBuilder().setName(m_name).build();
+    }
+
+    public static Synergy fromProto(BaseSkillProto.Synergy inSynergy)
+    {
+      if(inSynergy.hasCondition())
+        return new Synergy(inSynergy.getName(), inSynergy.getCondition());
+
+      return new Synergy(inSynergy.getName());
     }
   }
 
@@ -156,7 +221,10 @@ public class BaseSkill extends BaseEntry
   private Optional<String> m_special = Optional.absent();
 
   /** The synergies to other skills. */
-  private List<String> m_synergies = new ArrayList<String>();
+  private List<String> m_synergies_deprecated = new ArrayList<>();
+
+  /** The synergies from other skills. */
+  private List<Synergy> m_synergies = new ArrayList<>();
 
   /** The restrictions. */
   private Optional<String> m_restriction = Optional.absent();
@@ -183,6 +251,19 @@ public class BaseSkill extends BaseEntry
     return m_ability;
   }
 
+  public Annotated<Optional<Ability>> getCombinedAbility()
+  {
+    if(m_ability != Ability.UNKNOWN)
+      return new Annotated.Max<Ability>(m_ability, getName());
+
+    Annotated<Optional<Ability>> combined = new Annotated.Max<Ability>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedAbility());
+
+    return combined;
+  }
+
+
   /**
    * Get the description about how to do the skill check.
    *
@@ -191,6 +272,18 @@ public class BaseSkill extends BaseEntry
   public Optional<String> getCheck()
   {
     return m_check;
+  }
+
+  public Annotated<Optional<String>> getCombinedCheck()
+  {
+    if(m_check.isPresent())
+      return new Annotated.String(m_check.get(), getName());
+
+    Annotated<Optional<String>> combined = new Annotated.String();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedCheck());
+
+    return combined;
   }
 
   /**
@@ -203,6 +296,18 @@ public class BaseSkill extends BaseEntry
     return m_action;
   }
 
+  public Annotated<Optional<String>> getCombinedAction()
+  {
+    if(m_action.isPresent())
+      return new Annotated.String(m_action.get(), getName());
+
+    Annotated<Optional<String>> combined = new Annotated.String();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedAction());
+
+    return combined;
+  }
+
   /**
    * Get the description explaining if retrying is possible or not.
    *
@@ -211,6 +316,18 @@ public class BaseSkill extends BaseEntry
   public Optional<String> getRetry()
   {
     return m_retry;
+  }
+
+  public Annotated<Optional<String>> getCombinedRetry()
+  {
+    if(m_retry.isPresent())
+      return new Annotated.String(m_retry.get(), getName());
+
+    Annotated<Optional<String>> combined = new Annotated.String();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedRetry());
+
+    return combined;
   }
 
   /**
@@ -223,14 +340,38 @@ public class BaseSkill extends BaseEntry
     return m_special;
   }
 
+  public Annotated<Optional<String>> getCombinedSpecial()
+  {
+    if(m_special.isPresent())
+      return new Annotated.String(m_special.get(), getName());
+
+    Annotated<Optional<String>> combined = new Annotated.String();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedSpecial());
+
+    return combined;
+  }
+
   /**
    * Get the skill synergy description.
    *
    * @return the skill synergies
    */
-  public List<String> getSynergies()
+  public List<Synergy> getSynergies()
   {
     return m_synergies;
+  }
+
+  public Annotated<List<Synergy>> getCombinedSynergies()
+  {
+    if(!m_synergies.isEmpty())
+      return new Annotated.List(m_synergies, getName());
+
+    Annotated<List<Synergy>> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedSynergies());
+
+    return combined;
   }
 
   /**
@@ -243,6 +384,18 @@ public class BaseSkill extends BaseEntry
     return m_restriction;
   }
 
+  public Annotated<Optional<String>> getCombinedRestriction()
+  {
+    if(m_restriction.isPresent())
+      return new Annotated.String(m_restriction.get(), getName());
+
+    Annotated<Optional<String>> combined = new Annotated.String();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedRestriction());
+
+    return combined;
+  }
+
   /**
    * Get the explanation how the skill can be used untrained.
    *
@@ -251,6 +404,18 @@ public class BaseSkill extends BaseEntry
   public Optional<String> getUntrained()
   {
     return m_untrained;
+  }
+
+  public Annotated<Optional<String>> getCombinedUntrained()
+  {
+    if(m_untrained.isPresent())
+      return new Annotated.String(m_untrained.get(), getName());
+
+    Annotated<Optional<String>> combined = new Annotated.String();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedUntrained());
+
+    return combined;
   }
 
   /**
@@ -263,6 +428,18 @@ public class BaseSkill extends BaseEntry
     return m_restrictions;
   }
 
+  public Annotated<List<SkillRestriction>> getCombinedRestrictions()
+  {
+    if(!m_restrictions.isEmpty())
+      return new Annotated.List(m_restrictions, getName());
+
+    Annotated<List<SkillRestriction>> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedRestrictions());
+
+    return combined;
+  }
+
   /**
    * Get the skill modifiers.
    *
@@ -273,6 +450,18 @@ public class BaseSkill extends BaseEntry
     return m_modifiers;
   }
 
+  public Annotated<List<SkillModifier>> getCombinedModifiers()
+  {
+    if(!m_modifiers.isEmpty())
+      return new Annotated.List<>(m_modifiers, getName());
+
+    Annotated<List<SkillModifier>> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedModifiers());
+
+    return combined;
+  }
+
   /**
    * Get the relevant DCs for the skill.
    *
@@ -281,6 +470,18 @@ public class BaseSkill extends BaseEntry
   public List<DC> getDCs()
   {
     return m_dcs;
+  }
+
+  public Annotated<List<DC>> getCombinedDCs()
+  {
+    if(!m_dcs.isEmpty())
+      return new Annotated.List<>(m_dcs, getName());
+
+    Annotated<List<DC>> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseSkill)entry).getCombinedDCs());
+
+    return combined;
   }
 
   @Override
@@ -300,7 +501,27 @@ public class BaseSkill extends BaseEntry
    */
   public boolean isUntrained()
   {
-    return !m_restrictions.contains(SkillRestriction.TRAINED_ONLY);
+    return !getCombinedRestrictions().get()
+        .contains(SkillRestriction.TRAINED_ONLY);
+  }
+
+  public boolean isSubtypeOnly()
+  {
+    return m_restrictions.contains(SkillRestriction.SUBTYPE_ONLY);
+  }
+
+  public boolean hasArmorCheckPenalty()
+  {
+    return getCombinedRestrictions().get()
+        .contains(SkillRestriction.ARMOR_CHECK_PENALTY)
+        || getCombinedRestrictions().get()
+        .contains(SkillRestriction.DOUBLE_ARMOR_CHECK_PENALTY);
+  }
+
+  public boolean hasDoubleArmorCheckPenalty()
+  {
+    return getCombinedRestrictions().get()
+        .contains(SkillRestriction.DOUBLE_ARMOR_CHECK_PENALTY);
   }
 
   /**
@@ -325,22 +546,24 @@ public class BaseSkill extends BaseEntry
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_ability = inValues.use("ability", m_ability, Ability.PARSER);
     m_check = inValues.use("check", m_check);
     m_action = inValues.use("action", m_action);
     m_retry = inValues.use("retry", m_retry);
     m_special = inValues.use("special", m_special);
-    m_synergies = inValues.use("synergies", m_synergies);
+    m_synergies_deprecated = inValues.use("synergies", m_synergies_deprecated);
+    m_synergies = inValues.use("synergy", m_synergies, Synergy.PARSER,
+                               "name", "condition");
     m_restriction = inValues.use("restriction", m_restriction);
     m_untrained = inValues.use("untrained", m_untrained);
     m_restrictions = inValues.use("restrictions", m_restrictions,
                                  SkillRestriction.PARSER);
     m_modifiers = inValues.use("modifier", m_modifiers, SkillModifier.PARSER);
-    m_dcs = inValues.use("dcs", m_dcs, DC.PARSER, "dc", "text");
+    m_dcs = inValues.use("dc", m_dcs, DC.PARSER, "dc", "text");
   }
 
   @Override
@@ -365,8 +588,8 @@ public class BaseSkill extends BaseEntry
     if(m_special.isPresent())
       builder.setSpecial(m_special.get());
 
-    for(String synergy : m_synergies)
-      builder.addSynergy(synergy);
+    for(Synergy synergy : m_synergies)
+      builder.addSynergy(synergy.toProto());
 
     if(m_restriction.isPresent())
       builder.setRestrictionText(m_restriction.get());
@@ -422,9 +645,11 @@ public class BaseSkill extends BaseEntry
     if(proto.hasSpecial())
       m_special = Optional.of(proto.getSpecial());
 
+    for(String synergy : proto.getSynergyDeprecatedList())
+      m_synergies_deprecated.add(synergy);
 
-    for(String synergy : proto.getSynergyList())
-      m_synergies.add(synergy);
+    for(BaseSkillProto.Synergy synergy : proto.getSynergyList())
+      m_synergies.add(Synergy.fromProto(synergy));
 
     if(proto.hasRestrictionText())
       m_restriction = Optional.of(proto.getRestrictionText());
@@ -443,16 +668,9 @@ public class BaseSkill extends BaseEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(BaseSkillProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return BaseSkillProto.getDefaultInstance();
   }
 
   public static List<BaseSkill> allSkills()
@@ -460,6 +678,16 @@ public class BaseSkill extends BaseEntry
     return DMADataFactory.get().getEntries(BaseSkill.TYPE,
                                            Optional.<EntryKey>absent(),
                                            0, 1000);
+  }
+
+  public static Optional<BaseSkill> get(String inName)
+  {
+    for(BaseSkill skill : allSkills()) {
+      if(skill.getName().equalsIgnoreCase(inName))
+        return Optional.of(skill);
+    }
+
+    return Optional.absent();
   }
 
   //---------------------------------------------------------------------------

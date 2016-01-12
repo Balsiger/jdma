@@ -226,16 +226,9 @@ public abstract class Entry extends AbstractEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(EntryProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return EntryProto.getDefaultInstance();
   }
 
   /**

@@ -64,9 +64,13 @@ public class DataStore
   /** The access to the datastore. */
   private DatastoreService m_store;
 
-  /** The cache for indexes. */
+  /** The cache for entities. */
   private static MemcacheService s_cacheEntity =
-    MemcacheServiceFactory.getMemcacheService("entity");
+      MemcacheServiceFactory.getMemcacheService("entity");
+
+  /** The cache for multiple entities. */
+  private static MemcacheService s_cacheEntities =
+      MemcacheServiceFactory.getMemcacheService("entities");
 
   /** The cache for lookups by value. */
   private static MemcacheService s_cacheByValue =
@@ -97,11 +101,14 @@ public class DataStore
   private static MemcacheService s_cacheMultiValues =
     MemcacheServiceFactory.getMemcacheService("multiValues");
 
-  /** Expiration time for the cache. */
-  private static Expiration s_expiration =
-    Expiration.byDeltaSeconds(60 * 60 * 24);
+  /** Short expiration time for the cache. */
+  private static Expiration s_shortExpiration = Expiration.byDeltaSeconds(60);
 
   /** Expiration time for the cache. */
+  private static Expiration s_expiration =
+      Expiration.byDeltaSeconds(60 * 60 * 24);
+
+  /** Long expiration time for the cache. */
   private static Expiration s_longExpiration =
     Expiration.byDeltaSeconds(60 * 60 * 24 * 7);
 
@@ -192,7 +199,7 @@ public class DataStore
   /**
    * Get all entities for the given type.
    *
-   * @param    inType       the type of the entieties to get
+   * @param    inType       the type of the entities to get
    * @param    inParent     the parent entity, if any
    * @param    inSortField  an optional name of the field to sort by
    * @param    inStart      the starting index of the entities to return
@@ -202,69 +209,41 @@ public class DataStore
    * @return   a list with all the entries
    *
    */
-  public Iterable<Entity> getEntities(String inType,
-                                      Optional<Key> inParent,
-                                      Optional<String> inSortField,
-                                      int inStart, int inSize)
+  public List<Entity> getEntities(String inType,
+                                  Optional<Key> inParent,
+                                  Optional<String> inSortField,
+                                  int inStart, int inSize)
   {
-    Tracer tracer = new Tracer("getting entities for " + inType);
-    Query query;
-    if(inParent.isPresent())
-      query = new Query(inType, inParent.get());
-    else
-      query = new Query(inType);
+    String key = inType + ":" + inParent + ":" + inSortField + ":" + inStart
+        + ":" + inSize;
+    List<Entity> entities = (List<Entity>)s_cacheEntities.get(key);
+    if(entities == null)
+    {
+      Tracer tracer = new Tracer("getting entities for " + inType);
+      Query query;
+      if(inParent.isPresent())
+        query = new Query(inType, inParent.get());
+      else
+        query = new Query(inType);
 
-    if(inSortField.isPresent())
-      query.addSort(inSortField.get(), Query.SortDirection.ASCENDING);
+      if(inSortField.isPresent())
+        query.addSort(inSortField.get(), Query.SortDirection.ASCENDING);
 
-    FetchOptions options =
-      FetchOptions.Builder.withOffset(inStart).limit(inSize);
+      FetchOptions options =
+          FetchOptions.Builder.withOffset(inStart).limit(inSize);
 
-    Log.important("gae: getting entities for " + inType
-                  + (inParent.isPresent() ? " (" + inParent + ")" : "")
-                  + (inSortField.isPresent() ? " sorted by " + inSortField : "")
-                  + " from " + inStart + " size " + inSize);
+      Log.important("gae: getting entities for " + inType
+                        + (inParent.isPresent() ? " (" + inParent + ")" : "")
+                        + (inSortField.isPresent() ? " sorted by " + inSortField : "")
+                        + " from " + inStart + " size " + inSize);
 
-    tracer.done();
-    return m_store.prepare(query).asIterable(options);
-  }
+      tracer.done();
 
-  /**
-   * Get all entities for the given type.
-   *
-   * @param    inType       the type of the entieties to get
-   * @param    inParent     the parent entity, if any
-   * @param    inSortField  an optional name of the field to sort by
-   * @param    inStart      the starting index of the entities to return
-   *                        (0 based)
-   * @param    inSize       the maximal number of entieties to return
-   *
-   * @return   a list with all the entries
-   *
-   */
-  public List<Entity> getEntitiesList(String inType,
-                                      Optional<Key> inParent,
-                                      Optional<String> inSortField,
-                                      int inStart, int inSize)
-  {
-    Query query;
-    if(inParent.isPresent())
-      query = new Query(inType, inParent.get());
-    else
-      query = new Query(inType);
+      entities = m_store.prepare(query).asList(options);
+      s_cacheEntities.put(key, entities, s_shortExpiration);
+    }
 
-    if(inSortField.isPresent())
-      query.addSort(inSortField.get(), Query.SortDirection.ASCENDING);
-
-    FetchOptions options =
-      FetchOptions.Builder.withOffset(inStart).limit(inSize);
-
-    Log.important("gae: getting entities for " + inType
-                  + (inParent.isPresent() ? " (" + inParent + ")" : "")
-                  + (inSortField.isPresent() ? " sorted by " + inSortField : "")
-                  + " from " + inStart + " size " + inSize);
-
-    return m_store.prepare(query).asList(options);
+    return entities;
   }
 
   /**
@@ -283,7 +262,8 @@ public class DataStore
   public List<Entity> getEntities(String inType, Optional<Key> inParent,
                                   int inStart, int inSize, String ... inFilters)
   {
-    String key = Arrays.toString(inFilters);
+    String key = inType + ":" + inParent + ":" + inStart + ":" + inSize + ":"
+        + Arrays.toString(inFilters);
     List<Entity> entities = (List<Entity>)s_cacheListByValue.get(key);
 
     if(entities == null)
@@ -466,7 +446,7 @@ public class DataStore
     List<List<String>> records = (List<List<String>>)s_cacheMultiValues.get
       (inType + ":" + Arrays.toString(inFields));
 
-    if (records == null)
+    if(records == null)
     {
       Log.important("gae: get multi values for " + inType + " ("
                     + inParent + ") " + Arrays.toString(inFields));

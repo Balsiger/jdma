@@ -24,22 +24,26 @@ package net.ixitxachitls.dma.entries;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
-import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.common.collect.ImmutableList;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.ItemProto;
+import net.ixitxachitls.dma.rules.Combat;
 import net.ixitxachitls.dma.values.AggregationState;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Area;
 import net.ixitxachitls.dma.values.AreaShape;
 import net.ixitxachitls.dma.values.ArmorType;
+import net.ixitxachitls.dma.values.Condition;
 import net.ixitxachitls.dma.values.CountUnit;
 import net.ixitxachitls.dma.values.Critical;
 import net.ixitxachitls.dma.values.Damage;
@@ -136,6 +140,8 @@ public class Item extends CampaignEntry
 
   /** Whether the item has been identified or not. */
   private boolean m_identified = false;
+
+  private static final int BAB_PER_ATTACK = 6;
 
   /**
    * Get the hit points of the base item.
@@ -1240,19 +1246,18 @@ public class Item extends CampaignEntry
    *
    * @return the attack bonus when attacking with this
    */
-  public int getAttackBonus()
+  public Map<String, List<Integer>> getAttackBonus()
   {
-    int bonus = 0;
+    Map<String, List<Integer>> boni = new LinkedHashMap<>();
+
     if(getPossessor().isPresent())
     {
-      Optional<Integer> attack =
-          getPossessor().get().getCombinedBaseAttack().get();
-      bonus = attack.isPresent() ? attack.get() : 0;
-
+      int bonus = 0;
       if(isWeapon())
       {
-        boolean finesse = getPossessor().get().hasFeat("weapon finesse")
-          && hasFinesse();
+        boolean finesse =
+            getPossessor().get().hasFeat(Combat.FEAT_WEAPON_FINESSE)
+            && hasFinesse();
 
         Optional<WeaponStyle> style = getCombinedWeaponStyle().get();
         if(!finesse && style.isPresent() && style.get().isMelee())
@@ -1263,15 +1268,79 @@ public class Item extends CampaignEntry
           bonus += getPossessor().get().getDexterityModifier();
 
         Optional<Feat> specialization =
-          getPossessor().get().getFeat("weapon specialization");
+            getPossessor().get().getFeat("weapon specialization");
         if(specialization.isPresent()
-           && specialization.get().getQualifier().isPresent()
-           && hasBaseName(specialization.get().getQualifier().get()))
-            bonus += 1;
+            && specialization.get().getQualifier().isPresent()
+            && hasBaseName(specialization.get().getQualifier().get()))
+          bonus += 1;
+
+        List<Feat> focus =
+            getPossessor().get().getFeats("weapon focus");
+        for(Feat feat : focus)
+          if(feat.getQualifier().isPresent()
+             && hasBaseName(feat.getQualifier().get()))
+          bonus += 1;
+      }
+
+      Optional<Integer> attack =
+          getPossessor().get().getCombinedBaseAttack().get();
+      int bab = attack.isPresent() ? attack.get() : 0;
+
+      List<Integer> attacks = new ArrayList<>();
+      for(; bab >= 0; bab -= BAB_PER_ATTACK)
+        attacks.add(bab + bonus);
+
+      // Add attack modifiers from qualities.
+      for(Quality quality : getPossessor().get().allQualities())
+        attacks = adjustEach(
+            attacks, quality.attackModifier().total(getPossessor().get()));
+
+      for(BaseEntry base : getBaseEntries())
+        for(Quality quality : ((BaseItem)base).getCombinedQualities().get())
+          attacks = adjustEach(
+              attacks, quality.attackModifier().total(getPossessor().get()));
+
+      boni.put("", attacks);
+
+      // Add conditional attack modifiers.
+      for(Feat feat : getPossessor().get().getCombinedFeats().get()) {
+        if (feat.getName().equalsIgnoreCase("weapon focus")
+            || feat.getName().equalsIgnoreCase("weapon specialization"))
+          continue;
+
+        Optional<Condition> condition = feat.getCondition();
+        if(condition.isPresent() && condition.get().check(this).isPresent()
+            && !condition.get().check(this).get())
+          continue;
+
+        attacks = new ArrayList<>(attacks);
+        int modifier = feat.attackModifier().unconditionalModifier();
+        if (modifier != 0)
+        {
+          for (int i = 0; i < feat.additionalAttacks(); i++)
+            attacks.add(0, attacks.get(0));
+
+          attacks = adjustEach(attacks, modifier);
+          boni.put(feat.baseName(), attacks);
+        }
       }
     }
+    else
+      boni.put("", ImmutableList.of(0));
 
-    return bonus;
+    return boni;
+  }
+
+  private List<Integer> adjustEach(List<Integer> values, int adjustment)
+  {
+    if(adjustment == 0)
+      return values;
+
+    List<Integer> result = new ArrayList<>(values.size());
+    for(int value : values)
+      result.add(value + adjustment);
+
+    return result;
   }
 
   /**
@@ -1290,7 +1359,7 @@ public class Item extends CampaignEntry
         if(damage == null)
           damage = baseDamage.get();
         else
-          damage.add(baseDamage.get());
+          damage = (Damage)damage.add(baseDamage.get());
     }
 
     if(damage == null)
@@ -1311,7 +1380,15 @@ public class Item extends CampaignEntry
         damage.add(new Damage(new Dice(0, 0, strengthModifier / 2)));
     }
 
-    // TODO: have to subtract strength penalty for non-composite bows
+
+    for(BaseEntry base : getBaseEntries())
+      for(Quality quality : ((BaseItem)base).getCombinedQualities().get())
+      {
+        int modifier = quality.damageModifier().total(getPossessor().get());
+        if(modifier != 0)
+          damage = (Damage)damage.add(new Damage(new Dice(0, 0, modifier)));
+      }
+
     // TODO: deal with offhand and two-hand wielded weapons
 
     return damage;
@@ -1434,9 +1511,9 @@ public class Item extends CampaignEntry
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     Optional<Integer> hp = inValues.use("hp", m_hp);
     if(hp.isPresent())
@@ -1674,16 +1751,9 @@ public class Item extends CampaignEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(ItemProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return ItemProto.getDefaultInstance();
   }
 
   //---------------------------------------------------------------------------

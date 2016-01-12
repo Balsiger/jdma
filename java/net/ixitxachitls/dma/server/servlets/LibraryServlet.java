@@ -31,9 +31,11 @@ import java.util.Map;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
+import com.google.template.soy.data.SoyData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseCampaign;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
@@ -107,7 +109,8 @@ public class LibraryServlet extends PageServlet
     List<Map<String, Object>> types = new ArrayList<Map<String, Object>>();
     for(AbstractType<? extends AbstractEntry> type : AbstractType.getAll())
     {
-      if(!(type instanceof BaseType) || type == BaseEntry.TYPE)
+      if(!(type instanceof BaseType)
+          || type == BaseEntry.TYPE)
         continue;
 
       types.add(map("name", type.getName(),
@@ -120,11 +123,21 @@ public class LibraryServlet extends PageServlet
                     "css", type.getName().replace(" ", "-")));
     }
 
+    data.put("types", types);
+    data.put("indexes", indexes);
+    data.put("template", "dma.page.library");
     data.put("content",
              inRenderer.render("dma.page.library",
                                Optional.of(map("types", types,
                                                "indexes", indexes))));
 
     return data;
+  }
+
+  @Override
+  public String getTemplateName(DMARequest inRequest,
+                                Map<String, SoyData> inData)
+  {
+    return "dma.page.library";
   }
 }

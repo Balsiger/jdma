@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -50,6 +51,7 @@ import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
 import com.google.template.soy.shared.restricted.SoyFunction;
 import com.google.template.soy.shared.restricted.SoyPrintDirective;
+import com.google.template.soy.soytree.TemplateRegistry;
 import com.google.template.soy.tofu.SoyTofu;
 import com.google.template.soy.tofu.restricted.SoyAbstractTofuFunction;
 import com.google.template.soy.tofu.restricted.SoyAbstractTofuPrintDirective;
@@ -134,7 +136,7 @@ public class SoyTemplate
     @Override
     public Set<Integer> getValidArgsSizes()
     {
-      return ImmutableSet.of(3);
+      return ImmutableSet.of(3, 4, 5, 6, 7, 8, 9, 10);
     }
 
     @Override
@@ -147,10 +149,16 @@ public class SoyTemplate
       SoyValue object = (SoyValue)inArgs.get(0);
       String method = inArgs.get(1).stringValue();
 
-      if(inArgs.get(2) instanceof SoyValue)
-        return object.call(method, ((SoyValue)inArgs.get(2)).getValue());
+      Object []arguments = new Object[inArgs.size() - 2];
+      for (int i = 0; i < arguments.length; i++)
+        if((inArgs.get(i + 2) instanceof SoyValue))
+          arguments[i] = ((SoyValue)inArgs.get(i + 2)).getValue();
+        else if ((inArgs.get(i + 2)) instanceof IntegerData)
+          arguments[i] = inArgs.get(i + 2).integerValue();
+        else
+          arguments[i] = inArgs.get(i + 2).stringValue();
 
-      return object.call(method, inArgs.get(2).stringValue());
+      return object.call(method, arguments);
     }
   }
 
@@ -195,7 +203,32 @@ public class SoyTemplate
     public SoyData computeForTofu(List<SoyData> inArgs)
     {
       if(inArgs.get(0) == null
-         || inArgs.get(0) instanceof SoyUndefined)
+          || inArgs.get(0) instanceof SoyUndefined)
+        return BooleanData.forValue(false);
+
+      return BooleanData.forValue(true);
+    }
+  }
+
+  /** A plugin function to convert the argument into an integer. */
+  public static class ValFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "val";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public SoyData computeForTofu(List<SoyData> inArgs)
+    {
+      if(inArgs.get(0) == null || !(inArgs.get(0) instanceof SoyValue))
         return BooleanData.forValue(false);
 
       return BooleanData.forValue(true);
@@ -296,7 +329,7 @@ public class SoyTemplate
     public SoyData computeForTofu(List<SoyData> inArgs)
     {
       return BooleanData.forValue
-        (inArgs.get(0).toString().matches(inArgs.get(1).toString()));
+          (inArgs.get(0).toString().matches(inArgs.get(1).toString()));
     }
   }
 
@@ -376,6 +409,20 @@ public class SoyTemplate
           return StringData.forValue("+" + data.getValue());
       }
 
+      if(inArgs.get(0) instanceof SoyValue
+        && ((SoyValue)inArgs.get(0)).getValue() instanceof Optional)
+      {
+        Optional optional = (Optional)((SoyValue)inArgs.get(0)).getValue();
+        if(optional.isPresent())
+          if (optional.get() instanceof Integer)
+            return StringData.forValue("+" + optional.get());
+          else
+            return StringData.forValue(optional.get().toString());
+        else
+          return StringData.forValue("+0");
+      }
+
+
       return inArgs.get(0);
     }
   }
@@ -407,6 +454,51 @@ public class SoyTemplate
                   Optional.of(map(
                       "value", data,
                       "link", inArgs.size() > 1 ? inArgs.get(1) : ""))),
+             SanitizedContent.ContentKind.HTML);
+      }
+
+      return inArgs.get(0);
+    }
+  }
+
+  /** A plugin function to format values or printing. */
+  public static class ValueFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "value";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1, 2);
+    }
+
+    @Override
+    public SoyData computeForTofu(List<SoyData> inArgs)
+    {
+      // Values are similar to SoyMapDate to access their values.
+      if(inArgs.get(0) instanceof SoyValue)
+      {
+        SoyValue data = (SoyValue)inArgs.get(0);
+        ImmutableMap.Builder<String, Object> map =
+            ImmutableMap.<String, Object>builder()
+                .put("value", data);
+        for(int i = 1; i < inArgs.size(); i++)
+        {
+          String parts[] = inArgs.get(i).toString().split("\\s*=\\s*");
+          if(parts.length == 2)
+            map.put(parts[0], parts[1]);
+          else
+            map.put(inArgs.get(i).toString(), "true");
+        }
+
+        return UnsafeSanitizedContentOrdainer.ordainAsSafe
+            (COMMAND_RENDERER.renderSoy
+                 ("dma.value." + data.getValueName(),
+                  Optional.of((Map<String, Object>)map.build())),
              SanitizedContent.ContentKind.HTML);
       }
 
@@ -456,7 +548,7 @@ public class SoyTemplate
     {
       return StringData.forValue(inArgs.get(0).toString()
                                  .replace("+", "_")
-                                 .replace(" ",  "_"));
+                                 .replace(" ",  "-"));
     }
   }
 
@@ -644,11 +736,13 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(IntegerFunction.class);
       soyFunctionsSetBinder.addBinding().to(LengthFunction.class);
       soyFunctionsSetBinder.addBinding().to(DefFunction.class);
+      soyFunctionsSetBinder.addBinding().to(ValFunction.class);
       soyFunctionsSetBinder.addBinding().to(EscapeFunction.class);
       soyFunctionsSetBinder.addBinding().to(JsEscapeFunction.class);
       soyFunctionsSetBinder.addBinding().to(FormatNumberFunction.class);
       soyFunctionsSetBinder.addBinding().to(BonusFunction.class);
       soyFunctionsSetBinder.addBinding().to(AnnotateFunction.class);
+      soyFunctionsSetBinder.addBinding().to(ValueFunction.class);
       soyFunctionsSetBinder.addBinding().to(IsListFunction.class);
       soyFunctionsSetBinder.addBinding().to(CamelFunction.class);
       soyFunctionsSetBinder.addBinding().to(LowerFunction.class);
@@ -685,9 +779,12 @@ public class SoyTemplate
   /** The injector with our own plugins. */
   private Injector m_injector = createInjector();
 
-  /** The command renderer for rendering values. */
-  public static final SoyRenderer COMMAND_RENDERER = new SoyRenderer();
+  /** The renderer for rendering commands. */
+  public static final SoyRenderer COMMAND_RENDERER =
+      new SoyRenderer("commands", "value");
 
+  /** The renderer for rendering values. */
+  public static final SoyRenderer VALUE_RENDERER = new SoyRenderer("value");
 
   /**
    * Render the template named.

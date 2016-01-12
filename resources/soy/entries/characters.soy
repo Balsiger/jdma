@@ -46,7 +46,7 @@
     {param last: $last /}
     {param color: '#39f' /}
     {param title kind="html"}
-      {call dma.entry._new_title}
+      {call dma.entry.title}
         {param title: $entry.name /}
         {param color: '#39f' /}
       {/call}      
@@ -125,6 +125,7 @@
           {foreach $skill in $entry.skills}
             {call dma.entries.skills.show}
               {param entry: $skill /}
+              {param monster: $entry /}
             {/call}
             {if not isLast($skill)}, {/if}
           {/foreach}
@@ -134,7 +135,6 @@
       {call dma.entry.value}
         {param label: 'Feats' /}
         {param value kind="html"}
-          {$entry.get_feats}
           {foreach $feat in $entry.feats}
             {call dma.entries.feats.tiny}
               {param entry: $feat /}
@@ -153,7 +153,21 @@
             {/call}
             {if not isLast($quality)}, {/if}
           {/foreach}
+          // unused qualities
+          <div>
+            {if length($entry.unused_qualities)}
+              ({foreach $quality in $entry.unused_qualities}
+                {$quality}
+                {if not isLast($quality)}, {/if}
+              {/foreach})
+            {/if}
+          </div>
         {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Languages' /}
+        {param value: annotate($entry.languages) /}
         {param color: '#39f' /}
       {/call}
       {call dma.entry.value}
@@ -166,12 +180,33 @@
             {if not isLast($item)}, {/if}
           {/foreach}
           {if $ij.user}
-            {sp}|{sp} 
+            {sp}|{sp}
             <span class="action"
-                  onclick="edit.show('', '{$entry.campaign.path}/item/CREATE', 
-                                     'add-item', '', 
+                  onclick="edit.show('', '{$entry.campaign.path}/item/CREATE',
+                                     'add-item', '',
                                      'parent:character/{$entry.name}')">
               add item
+            </span>
+          {/if}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Animal Companions' /}
+        {param value kind="html"}
+          {foreach $monster in $entry.animal_companions}
+            {call dma.entries.monsters.reference}
+              {param entry: $monster /}
+            {/call}
+            {if not isLast($monster)}, {/if}
+          {/foreach}
+          {if $ij.user}
+            {sp}|{sp}
+            <span class="action"
+                  onclick="edit.show('', '{$entry.campaign.path}/monster/CREATE',
+                                     'add-monster', '',
+                                     'parent:character/{$entry.name}')">
+              add animal companion
             </span>
           {/if}
         {/param}
@@ -185,15 +220,18 @@
   {/call}
 {/template}
 
-/**
- * Print a character sheet.
- *
- * @param entry the entry to print
- */
+/** Print a character sheet. */
 {template .sheet}
+  {@param entry: ?}
   <div class="character-sheet">
     <div class="sheet-page">
       {call .sheet_page_1}
+        {param entry: $entry /}
+      {/call}
+    </div>
+
+    <div class="sheet-page">
+      {call .sheet_page_combat}
         {param entry: $entry /}
       {/call}
     </div>
@@ -209,6 +247,32 @@
         {param entry: $entry /}
       {/call}
     </div>
+
+    <div class="sheet-page">
+      {call .sheet_page_4}
+        {param entry: $entry /}
+      {/call}
+    <div>
+
+    {if $entry.has_spells}
+      <div class="sheet-page">
+        {call .sheet_page_spells}
+          {param entry: $entry /}
+        {/call}
+      <div>
+    {/if}
+
+    {if length($entry.animal_companions) > 0}
+      {call .sheet_subtitle}
+        {param title: 'Animal Companions' /}
+      {/call}
+
+      {foreach $animal in $entry.animal_companions}
+        {call dma.entries.monsters.sheet}
+          {param entry: $animal /}
+        {/call}
+      {/foreach}
+    {/if}
   </div>
 {/template}
 
@@ -238,6 +302,7 @@
         <div class="sheet-column">
           {call .sheet_combat_options}
             {param entry: $entry /}
+            {param size: 4 /}
           {/call}
         </div>
       </div>
@@ -260,8 +325,17 @@
     </div>
 
     <div class="sheet-column" style="display: flex; flex-direction: column;">
+      {call .sheet_ability_modifiers}
+        {param entry: $entry /}
+      {/call}
+
+      {call .sheet_special_attacks}
+        {param entry: $entry /}
+      {/call}
+
       {call .sheet_hit_points}
         {param entry: $entry /}
+        {param break: 10 /}
       {/call}
 
       {call .sheet_special_defenses}
@@ -283,18 +357,15 @@
   </div>
 {/template}
 
-/**
- * The general section of the character sheet.
- *
- * @param entry
- */
+/** The general section of the character sheet. */
 {template .sheet_general}
-  {call .sheet_value}
+  {@param entry: ?}
+  {call dma.sheet.old_value}
     {param label: 'Character Name' /}
     {param width: '50%' /}
     {param value: $entry.name /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Player Name' /}
     {param width: '50%' /}
     {param value kind="html"}
@@ -302,7 +373,7 @@
     {/param}
   {/call}
 
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Class and Level' /}
     {param width: '50%' /}
     {param value kind="html"}
@@ -312,12 +383,12 @@
       {/foreach}
     {/param}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'ECL' /}
     {param width: '5%' /}
     {param value: $entry.effective_character_level /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Race/Template' /}
     {param width: '15%' /}
     {param value kind="html"}
@@ -327,37 +398,37 @@
       {/foreach}
     {/param}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Size' /}
     {param width: '15%' /}
     {param value: annotate($entry.combined_size) /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Gender' /}
     {param width: '15%' /}
     {param value: $entry.gender /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Alignment' /}
     {param width: '10%' /}
     {param value: $entry.alignment /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Religion/Patron Deity' /}
     {param width: '40%' /}
     {param value: $entry.religion.present ? $entry.religion : '' /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Height' /}
     {param width: '10%' /}
     {param value: $entry.height.present ? $entry.height : '' /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Weight' /}
     {param width: '10%' /}
     {param value: $entry.weight.present ? $entry.weight : '' /}
   {/call}
-  {call .sheet_value}
+  {call dma.sheet.old_value}
     {param label: 'Looks' /}
     {param width: '30%' /}
     {param value: $entry.looks.present ? $entry.looks : '' /}
@@ -378,53 +449,93 @@
     {call .ability}
       {param name: 'Strength' /}
       {param abbreviation: 'STR' /}
+      {param total: $entry.total_strength /}
       {param ability: annotate($entry.combined_strength) /}
+      {param racial: $entry.racial_strength_modifier /}
       {param modifier: bonus($entry.strength_modifier) /}
+      {param misc kind="html"}
+        {if $entry.strength_misc_modifier.unconditional_modifier}
+          {bonus($entry.strength_misc_modifier.unconditional_modifier)}
+        {/if}
+      {/param}
     {/call}
     {call .ability}
       {param name: 'Dexterity' /}
       {param abbreviation: 'DEX' /}
+      {param total: $entry.total_dexterity /}
       {param ability: annotate($entry.combined_dexterity) /}
+      {param racial: $entry.racial_dexterity_modifier /}
       {param modifier: bonus($entry.dexterity_modifier) /}
+      {param misc kind="html"}
+        {if $entry.dexterity_misc_modifier.unconditional_modifier}
+          {bonus($entry.dexterity_misc_modifier.unconditional_modifier)}
+        {/if}
+      {/param}
     {/call}
     {call .ability}
       {param name: 'Constitution' /}
       {param abbreviation: 'CON' /}
+      {param total: $entry.total_constitution /}
       {param ability: annotate($entry.combined_constitution) /}
+      {param racial: $entry.racial_constitution_modifier /}
       {param modifier: bonus($entry.constitution_modifier) /}
+      {param misc kind="html"}
+        {if $entry.constitution_misc_modifier.unconditional_modifier}
+          {bonus($entry.constitution_misc_modifier.unconditional_modifier)}
+        {/if}
+      {/param}
     {/call}
     {call .ability}
       {param name: 'Intelligence' /}
       {param abbreviation: 'INT' /}
+      {param total: $entry.total_intelligence /}
       {param ability: annotate($entry.combined_intelligence) /}
+      {param racial: $entry.racial_intelligence_modifier /}
       {param modifier: bonus($entry.intelligence_modifier) /}
+      {param misc kind="html"}
+        {if $entry.intelligence_misc_modifier.unconditional_modifier}
+          {bonus($entry.intelligence_misc_modifier.unconditional_modifier)}
+        {/if}
+      {/param}
     {/call}
     {call .ability}
       {param name: 'Wisdom' /}
       {param abbreviation: 'WIS' /}
+      {param total: $entry.total_wisdom /}
       {param ability: annotate($entry.combined_wisdom) /}
+      {param racial: $entry.racial_wisdom_modifier /}
       {param modifier: bonus($entry.wisdom_modifier) /}
+      {param misc kind="html"}
+        {if $entry.wisdom_misc_modifier.unconditional_modifier}
+          {bonus($entry.wisdom_misc_modifier.unconditional_modifier)}
+        {/if}
+      {/param}
     {/call}
     {call .ability}
       {param name: 'Charisma' /}
       {param abbreviation: 'CHA' /}
+      {param total: $entry.total_charisma /}
       {param ability: annotate($entry.combined_charisma) /}
+      {param racial: $entry.racial_charisma_modifier /}
       {param modifier: bonus($entry.charisma_modifier) /}
+      {param misc kind="html"}
+        {if $entry.charisma_misc_modifier.unconditional_modifier}
+          {bonus($entry.charisma_misc_modifier.unconditional_modifier)}
+        {/if}
+      {/param}
     {/call}
   </div>
 {/template}
 
-/**
- * The combat options box.
- *
- * @param entry
- */
+/** The combat options box. */
 {template .sheet_combat_options}
+  {@param entry: ?}
+  {@param size: number}
   {call .sheet_subtitle}
      {param title: 'Combat Options' /}
    {/call}
 
-   {call .sheet_value}
+   {call dma.sheet.old_value}
      {param label: 'Base Attack Bonus' /}
      {param width: '100%' /}
      {param size: '14px' /}
@@ -435,26 +546,24 @@
    {/call}
 
    {foreach $weapon in $entry.weapons}
-     {if index($weapon) < 4}
+     {if index($weapon) < $size}
        {call .sheet_weapon}
-         {param gray: index($weapon) == 0 or index($weapon) == 2 /}
+         {param gray: index($weapon) % 2 == 0 /}
          {param weapon: $weapon /}
        {/call}
      {/if}
    {/foreach}
-   {for $i in range(length($entry.weapons), 4)}
+   {for $i in range(length($entry.weapons), $size)}
      {call .sheet_weapon}
-       {param gray: $i == 0 or $i == 2 /}
+       {param gray: $i % 2 == 0 /}
      {/call}
    {/for}
 {/template}
 
-/**
- * The hit points box.
- *
- * @param entry
- */
+/** The hit points box. */
 {template .sheet_hit_points}
+  {@param entry: ?}
+  {@param break: number}
   {call .sheet_subtitle}
     {param title: 'Hit Points' /}
     {param nologo: true /}
@@ -465,19 +574,22 @@
       Temporary<br/>
       {for $i in range(20)}
         <div class="count">{20 - $i}</div>
+        {if $i % $break == 0}
+          <br/>
+        {/if}
       {/for}
     </div>
     <div class="hps">
       Hit Points<br/>
       {for $i in range($entry.maxHP - $entry.HP)}
         <div class="count crossed">{$entry.maxHP - $i}</div>
-        {if ($entry.maxHP - $i) % 10 == 0}
+        {if ($entry.maxHP - $i) % $break == 0}
           <br/>
         {/if}
       {/for}
       {for $i in range($entry.HP + 1)}
         <div class="count">{$entry.HP - $i}</div>
-        {if ($entry.HP - $i) % 10 == 0}
+        {if ($entry.HP - $i) % $break == 0}
           <br/>
         {/if}
       {/for}
@@ -485,8 +597,105 @@
     <div class="hps negative">
       {for $i in range(1, 11)}
         <div class="count">{-$i}</div>
+        {if $i % $break == 0}
+          <br/>
+        {/if}
       {/for}
     </div>
+  </div>
+{/template}
+
+/** The special attacks box. */
+{template .sheet_ability_modifiers}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Ability Modifiers' /}
+    {param nologo: true /}
+  {/call}
+
+  <div class="values boxed" style="flex: 1;">
+     {if $entry.strength.get.has_value
+         and $entry.strength.get.has_any_condition}
+       <div>
+         STR:{sp}
+         {call dma.value.modifier}
+           {param modifier: $entry.strength.get /}
+           {param only_conditionals: true /}
+         {/call}
+       </div>
+    {/if}
+     {if $entry.dexterity.get.has_value
+         and $entry.dexterity.get.has_any_condition}
+       <div>
+         DEX:{sp}
+         {call dma.value.modifier}
+           {param modifier: $entry.dexterity.get /}
+           {param only_conditionals: true /}
+         {/call}
+       </div>
+    {/if}
+     {if $entry.constitution.get.has_value
+         and $entry.constitution.get.has_any_condition}
+       <div>
+         CON:{sp}
+         {call dma.value.modifier}
+           {param modifier: $entry.constitution.get /}
+           {param only_conditionals: true /}
+         {/call}
+       </div>
+    {/if}
+     {if $entry.intelligence.get.has_value
+         and $entry.intelligence.get.has_any_condition}
+       <div>
+         INT:{sp}
+         {call dma.value.modifier}
+           {param modifier: $entry.intelligence.get /}
+           {param only_conditionals: true /}
+         {/call}
+       </div>
+    {/if}
+     {if $entry.wisdom.get.has_value
+         and $entry.wisdom.get.has_any_condition}
+       <div>
+         WIS:{sp}
+         {call dma.value.modifier}
+           {param modifier: $entry.wisdom.get /}
+           {param only_conditionals: true /}
+         {/call}
+       </div>
+    {/if}
+     {if $entry.charisma.get.has_value
+         and $entry.charisma.get.has_any_condition}
+       <div>
+         CHA:{sp}
+         {call dma.value.modifier}
+           {param modifier: $entry.charisma.get /}
+           {param only_conditionals: true /}
+         {/call}
+       </div>
+    {/if}
+  </div>
+{/template}
+
+/** The special attacks box. */
+{template .sheet_special_attacks}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Special Attacks' /}
+    {param nologo: true /}
+  {/call}
+
+  <div class="values boxed" style="flex: 1;">
+     {if $entry.attackModifier.get.present
+         and $entry.attackModifier.get.get.has_value}
+       <div><b>Attack</b> <br />{annotate($entry.attackModifier)}</div>
+    {/if}
+    {if $entry.damageModifier.get.present
+        and $entry.damageModifier.get.get.has_value}
+       <div style="margin-top:10px">
+         <b>Damage</b> </br> {annotate($entry.damageModifier)}
+       </div>
+    {/if}
   </div>
 {/template}
 
@@ -507,7 +716,7 @@
  */
 {template .sheet_speed}
   <div class="inline" style="width: 50%">
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label: 'Speed' /}
       {param width: '100%' /}
       {param size: '14px' /}
@@ -526,7 +735,7 @@
   </div>
 
   <div class="inline" style="width: 50%">
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label: 'Initiative Modifier' /}
       {param width: '100%' /}
       {param size: '14px' /}
@@ -543,7 +752,7 @@
       Grapple Modifier
     </div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
        Total <br/>
        &nbsp;
@@ -556,7 +765,7 @@
 
     <div class="operator" style="padding-top: 15px">=</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Base Attack <br/>
         Bonus
@@ -569,7 +778,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Strength<br/>
         Modifier
@@ -581,7 +790,7 @@
     {/call}
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Size<br/>
         Modifier
@@ -594,7 +803,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Misc<br/>
         Modifier
@@ -618,138 +827,194 @@
   {/call}
 
   <div class="sheet-row">
-    <div class="saves sheet-column" style="flex: 4">
+    <div class="saves sheet-column flex-4">
       {call .sheet_saves_value}
         {param name: 'Fortitude' /}
         {param ability: 'Constitution' /}
-        {param value: annotate($entry.combined_fortitude_save) /}
+        {param value: value($entry.fortitude_save, 'no_conditions') /}
+        {param base: annotate($entry.combined_base_fortitude_save) /}
+        {param racial: $entry.racial_fortitude_modifier /}
         {param ability_modifier: bonus($entry.constitution_modifier) /}
+        {param misc: $entry.misc_fortitude_modifier /}
       {/call}
 
       {call .sheet_saves_value}
         {param name: 'Reflex' /}
         {param ability: 'Dexterity' /}
-        {param value: annotate($entry.combined_reflex_save) /}
+        {param racial: $entry.racial_reflex_modifier /}
+        {param value: value($entry.reflex_save, 'no_conditions') /}
+        {param base: annotate($entry.combined_base_reflex_save) /}
         {param ability_modifier: bonus($entry.dexterity_modifier) /}
+        {param misc: $entry.misc_reflex_modifier /}
       {/call}
 
       {call .sheet_saves_value}
         {param name: 'Will' /}
         {param ability: 'Wisdom' /}
-        {param value: annotate($entry.combined_will_save) /}
+        {param racial: $entry.racial_will_modifier /}
+        {param value: value($entry.will_save, 'no_conditions') /}
+        {param base: annotate($entry.combined_base_will_save) /}
         {param ability_modifier: bonus($entry.wisdom_modifier) /}
+        {param misc: $entry.misc_will_modifier /}
       {/call}
     </div>
 
     <div class="box sheet-column"
          style="display: flex; flex-direction: column;">
-      <div style="flex: 1;">
+      <div>
         Conditional Modifiers
+      </div>
+      <div style="flex: 1;">
+        {if $entry.reflex_save.get.has_value and
+            $entry.reflex_save.get.has_any_condition}
+          Ref:{sp}
+          {call dma.value.modifier}
+            {param modifier: $entry.reflex_save.get /}
+            {param only_conditionals: true /}
+          {/call}
+        {/if}
+      </div>
+      <div style="flex: 1;">
+        {if $entry.fortitude_save.get.has_value and
+            $entry.fortitude_save.get.has_any_condition}
+          For:{sp}
+          {call dma.value.modifier}
+            {param modifier: $entry.fortitude_save.get /}
+            {param only_conditionals: true /}
+          {/call}
+        {/if}
+      </div>
+      <div style="flex: 1;">
+        {if $entry.will_save.get.has_value and
+            $entry.will_save.get.has_any_condition}
+          Will:{sp}
+          {call dma.value.modifier}
+            {param modifier: $entry.will_save.get /}
+            {param only_conditionals: true /}
+          {/call}
+        {/if}
       </div>
     </div>
   </div>
 
 {/template}
 
-/**
- * A single saving throw value.
- *
- * @param name the name of the save
- * @param ability the ability for the save
- * @param value the base save value
- * @param ability_modifier the ability modifier
- */
+/** A single saving throw value. */
 {template .sheet_saves_value}
-  <div class="two-line-label" style="width: 15%; padding-top: 30px">
-    <div class="top" style="font-size: 12px">{$name}</div>
-    <div class="bottom">({$ability})</div>
-  </div>
+  {@param name: string}
+  {@param ability: string}
+  {@param value: string}
+  {@param base: string}
+  {@param ability_modifier: string}
+  {@param racial: ?}
+  {@param misc: ?}
+  {@param? short: bool}
+  <div class="sheet-row">
+    <div class="two-line-label"
+         style="width: {if $short}59{else}15{/if}%;
+                padding-top: {if $short}22{else}30{/if}px">
+      <div class="top" style="font-size: 12px">{$name}</div>
+      <div class="bottom">({$ability})</div>
+    </div>
 
-  {call .sheet_value}
-    {param label: 'Total' /}
-    {param width: '12.5%' /}
-    {param size: '8px' /}
-    {param center: true /}
-    {param white: true /}
-    {param top: true /}
-    {param value: $value /}
-  {/call}
+    {call dma.sheet.old_value}
+      {param label kind="html"}
+         <br/>
+         Total
+      {/param}
+      {param width: $short ? '30%' : '12.5%' /}
+      {param size: '8px' /}
+      {param center: true /}
+      {param white: true /}
+      {param top: true /}
+      {param value: $value /}
+    {/call}
 
-  <div class="operator" style="padding-top: 30px">=</div>
+    {if not $short}
+      <div class="operator" style="padding-top: 30px">=</div>
 
-  {call .sheet_value}
-    {param label kind="html"}
-      Base <br/>
-      Save
-    {/param}
-    {param width: '12.5%' /}
-    {param size: '8px' /}
-    {param center: true /}
-    {param white: true /}
-    {param top: true /}
-    {param value: $value /}
-  {/call}
+      {call dma.sheet.old_value}
+        {param label kind="html"}
+          Base <br/>
+          Save
+        {/param}
+        {param width: '12.5%' /}
+        {param size: '8px' /}
+        {param center: true /}
+        {param white: true /}
+        {param top: true /}
+        {param value: $base /}
+      {/call}
 
-  <div class="operator" style="padding-top: 30px">+</div>
+      <div class="operator" style="padding-top: 30px">+</div>
 
-  {call .sheet_value}
-    {param label kind="html"}
-      Ability <br/>
-      Modifier
-    {/param}
-    {param width: '12.5%' /}
-    {param size: '8px' /}
-    {param center: true /}
-    {param white: true /}
-    {param top: true /}
-    {param value: $ability_modifier /}
-  {/call}
+      {call dma.sheet.old_value}
+        {param label kind="html"}
+          Ability <br/>
+          Modifier
+        {/param}
+        {param width: '12.5%' /}
+        {param size: '8px' /}
+        {param center: true /}
+        {param white: true /}
+        {param top: true /}
+        {param value: $ability_modifier /}
+      {/call}
 
-  <div class="operator" style="padding-top: 30px">+</div>
+      <div class="operator" style="padding-top: 30px">+</div>
 
-  {call .sheet_value}
-    {param label kind="html"}
-      Magic <br/>
-      Modifier
-    {/param}
-    {param width: '12.5%' /}
-    {param size: '8px' /}
-    {param center: true /}
-    {param white: true /}
-    {param top: true /}
-    {param value: '' /}
-  {/call}
+      {call dma.sheet.old_value}
+        {param label kind="html"}
+          Magic <br/>
+          Modifier
+        {/param}
+        {param width: '12.5%' /}
+        {param size: '8px' /}
+        {param center: true /}
+        {param white: true /}
+        {param top: true /}
+        {param value: '' /}
+      {/call}
 
-  <div class="operator" style="padding-top: 30px">+</div>
+      <div class="operator" style="padding-top: 30px">+</div>
 
-  {call .sheet_value}
-    {param label kind="html"}
-      Misc. <br/>
-      Modifier
-    {/param}
-    {param width: '12.5%' /}
-    {param size: '8px' /}
-    {param center: true /}
-    {param white: true /}
-    {param top: true /}
-    {param value: ' ' /}
-  {/call}
+      {call dma.sheet.old_value}
+        {param label kind="html"}
+          Misc. <br/>
+          Modifier
+        {/param}
+        {param width: '12.5%' /}
+        {param size: '8px' /}
+        {param center: true /}
+        {param white: true /}
+        {param top: true /}
+        {param lineHeight: '6px' /}
+        {param value kind="html"}
+           {if $racial.unconditional_modifier}
+             {bonus($racial.unconditional_modifier)}
+            {/if}
+            {if $misc.unconditional_modifier}
+              {bonus($misc.unconditional_modifier)}
+            {/if}
+        {/param}
+      {/call}
 
-  <div class="operator" style="padding-top: 30px">+</div>
+      <div class="operator" style="padding-top: 30px">+</div>
 
-  {call .sheet_value}
-    {param label kind="html"}
-      Temporary <br/>
-      Modifier
-    {/param}
-    {param width: '12.5%' /}
-    {param size: '8px' /}
-    {param center: true /}
-    {param white: true /}
-    {param top: true /}
-    {param value: ' ' /}
-  {/call}
-
+      {call dma.sheet.old_value}
+        {param label kind="html"}
+          Temporary <br/>
+          Modifier
+        {/param}
+        {param width: '12.5%' /}
+        {param size: '8px' /}
+        {param center: true /}
+        {param white: true /}
+        {param top: true /}
+        {param value: '' /}
+      {/call}
+    {/if}
+    </div>
 {/template}
 
 /**
@@ -768,7 +1033,7 @@
       AC
     </div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Total <br/>
         &nbsp;
@@ -782,7 +1047,7 @@
 
     <div class="operator" style="padding-top: 15px">= 10 +</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Armor <br/>
         Bonus
@@ -796,7 +1061,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Shield<br/>
         Bonus
@@ -810,7 +1075,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Dex<br/>
         Modifier
@@ -824,7 +1089,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Size<br/>
         Modifier
@@ -838,7 +1103,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Natural <br/>
         Armor
@@ -852,7 +1117,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Deflection <br/>
         Modifier
@@ -866,7 +1131,7 @@
 
     <div class="operator" style="padding-top: 15px">+</div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Miscellaneous <br/>
         Modifiers
@@ -879,33 +1144,36 @@
     {/call}
   </div>
 
-  <div class="inline" style="width: 50%">
-    {call .sheet_value}
-      {param label: 'Touch AC' /}
-      {param width: '100%' /}
-      {param size: '14px' /}
-      {param vSize: '20px' /}
-      {param value: $entry.touch_armor_class /}
-      {param prefix: true /}
-      {param center: true /}
-    {/call}
-  </div>
 
-  <div class="inline" style="width: 50%">
-    {call .sheet_value}
-      {param label: 'Flat-Footed AC' /}
-      {param width: '100%' /}
-      {param size: '14px' /}
-      {param vSize: '20px' /}
-      {param value: $entry.flat_footed_armor_class /}
-      {param prefix: true /}
-      {param center: true /}
-    {/call}
+  <div class="sheet-row">
+    <div class="sheet-column">
+      {call dma.sheet.old_value}
+        {param label: 'Touch AC' /}
+        {param width: '100%' /}
+        {param size: '14px' /}
+        {param vSize: '20px' /}
+        {param value: $entry.touch_armor_class /}
+        {param prefix: true /}
+        {param center: true /}
+      {/call}
+    </div>
+
+    <div class="sheet-column">
+      {call dma.sheet.old_value}
+        {param label: 'Flat-Footed AC' /}
+        {param width: '100%' /}
+        {param size: '14px' /}
+        {param vSize: '20px' /}
+        {param value: $entry.flat_footed_armor_class /}
+        {param prefix: true /}
+        {param center: true /}
+      {/call}
+    </div>
   </div>
 
   <div class="armors" style="margin-top: 10px">
     <div class="armor">
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Armor Worn' /}
         {param width: '50%' /}
         {param size: '7px' /}
@@ -920,7 +1188,7 @@
           {/if}
         {/param}
       {/call}
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Max Dex' /}
         {param width: '20%' /}
         {param size: '7px' /}
@@ -930,7 +1198,7 @@
         {param value: $entry.armor_worn.present
           ? annotate($entry.armor_worn.combined_max_dex) : '' /}
       {/call}
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Armor Check Penalty' /}
         {param width: '20%' /}
         {param size: '7px' /}
@@ -940,7 +1208,7 @@
         {param value: $entry.armor_worn.present
           ? annotate($entry.armor_worn.combined_check_penalty) : '' /}
       {/call}
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Weight' /}
         {param width: '10%' /}
         {param size: '7px' /}
@@ -952,7 +1220,7 @@
       {/call}
     </div>
     <div class="armor">
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Shield Carried' /}
         {param width: '50%' /}
         {param size: '7px' /}
@@ -967,7 +1235,7 @@
           {/if}
         {/param}
       {/call}
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Max Dex' /}
         {param width: '20%' /}
         {param size: '7px' /}
@@ -977,7 +1245,7 @@
         {param value: $entry.shield_worn.present
           ? annotate($entry.shield_worn.combined_max_dex) : '' /}
       {/call}
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Armor Check Penalty' /}
         {param width: '20%' /}
         {param size: '7px' /}
@@ -987,7 +1255,7 @@
         {param value: $entry.shield_worn.present
           ? annotate($entry.shield_worn.combined_check_penalty) : '' /}
       {/call}
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Weight' /}
         {param width: '10%' /}
         {param size: '7px' /}
@@ -998,6 +1266,43 @@
           ? annotate($entry.shield_worn.combined_weight) : '' /}
       {/call}
     </div>
+  </div>
+{/template}
+
+/** Sheet with combat options and abilities. */
+{template .sheet_page_combat}
+  {@param entry: ?}
+  <div class="sheet-column">
+  <div class="sheet-row">
+    <div class="sheet-column flex-4" style="margin-right: 5px;">
+      {call .sheet_combat_options}
+        {param entry: $entry /}
+        {param size: 12 /}
+      {/call}
+    </div>
+    <div class="sheet-column" style="flex: 1">
+      {call .sheet_special_attacks}
+        {param entry: $entry /}
+      {/call}
+
+      {call .sheet_hit_points}
+        {param entry: $entry /}
+        {param break: 5 /}
+      {/call}
+    </div>
+  </div>
+  <div class="sheet-row" style="margin-top: 5px;">
+    <div class="sheet-column flex-4">
+      {call .sheet_ac}
+        {param entry: $entry /}
+      {/call}
+    </div>
+    <div class="sheet-column">
+      {call .sheet_special_defenses}
+        {param entry: $entry /}
+      {/call}
+    </div>
+  </div>
   </div>
 {/template}
 
@@ -1045,7 +1350,7 @@
 {/template}
 
 /**
- * Contents of the second page of the character sheet.
+ * Contents of the third page of the character sheet.
  *
  * @param entry the entry to print
  */
@@ -1056,6 +1361,271 @@
         {param entry: $entry /}
       {/call}
     </div>
+    <div class="sheet-column column flex"
+         style="height: 100%">
+      <div class="flex">
+        {call .sheet_racial_traits}
+          {param entry: $entry /}
+        {/call}
+      </div>
+
+      <div style="flex: 5; margin-top: 20px">
+        {call .sheet_class_features}
+          {param entry: $entry /}
+        {/call}
+      </div>
+
+      <div class="flex" style="margin-top: 20px">
+        {call .sheet_feats}
+          {param entry: $entry /}
+        {/call}
+      </div>
+
+      <div class="flex" style="margin-top: 20px">
+        {call .sheet_languages}
+          {param entry: $entry /}
+        {/call}
+      </div>
+
+      <div class="flex" style="margin-top: 20px">
+        {call .sheet_spells}
+          {param entry: $entry /}
+        {/call}
+      </div>
+    </div>
+  </div>
+{/template}
+
+/** Contents of the fourth page of the character sheet. */
+{template .sheet_page_4}
+  //{@param entry: ?}
+{/template}
+
+/** Contents of the spells page of the character sheet. */
+{template .sheet_page_spells}
+  {@param entry: ?}
+
+  {call .sheet_subtitle}
+    {param title: 'Spells' /}
+  {/call}
+
+  <table style="padding-bottom: 20px">
+    <tr class="bold">
+      <td>Name</td>
+      <td>Level</td>
+      <td>School</td>
+      <td>Comp.</td>
+      <td>Cast.</td>
+      <td>Range</td>
+      <td>Target</td>
+      <td>Duration</td>
+      <td>Save</td>
+      <td>SR</td>
+      <td>Description</td>
+    </tr>
+
+    {foreach $spell in $entry.spells_known}
+      {call .sheet_spell_line}
+        {param character: $entry /}
+        {param spell: $spell /}
+      {/call}
+    {/foreach}
+  </table>
+{/template}
+
+/** A single line with a spell description. */
+{template .sheet_spell_line}
+  {@param spell: ?}
+  <tr style="vertical-align: top">
+    <td>{$spell.name}</td>
+    <td>{$spell.level}</td>
+    <td>
+      {$spell.school}
+
+      {if length($spell.subschools) > 0}
+        {sp}(
+        {foreach $subschool in $spell.subschools}
+          {$subschool}{if not isLast($subschool)}, {/if}
+        {/foreach}
+        )
+      {/if}
+    </td>
+    <td>
+      {foreach $component in $spell.components}
+        {$component.short}{if not isLast($component)}, {/if}
+      {ifempty}
+        &ndash;
+      {/foreach}
+    </td>
+    <td>
+      {if $spell.casting_time.present}
+        {$spell.casting_time.get.short_string}
+      {/if}
+    </td>
+    <td>{$spell.range}</td>
+    <td>
+      {if $spell.target.present}
+        {$spell.target}
+      {/if}
+    </td>
+    <td>{$spell.duration_string}</td>
+    <td>{$spell.dc}</td>
+    <td>
+      {if $spell.spell_resistance.present}
+        {$spell.spell_resistance}
+      {/if}
+    </td>
+    <td>{commands($spell.short_description)}</td>
+  </tr>
+{/template}
+
+/** The spells box. */
+{template .sheet_spells}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Spells' /}
+  {/call}
+
+  <div class="box sheet-column column"
+       style="margin-bottom: 10px; min-height: 200px;">
+    <div>
+      Conditional Modifiers
+    </div>
+  </div>
+
+  <div class="line">
+    <div class="column flex" style="padding-right: 5px">
+      <div class="line flex">
+        <div class="bold flex">Level</div>
+        <div class="flex">Spells<br/>Known</div>
+        <div class="flex">Spell<br/> Save DC</div>
+        <div class="flex">Spells/<br/>Day</div>
+      </div>
+      {for $i in range(5)}
+        {call .sheet_spell_level}
+          {param entry: $entry /}
+          {param level: $i /}
+        {/call}
+      {/for}
+    </div>
+
+    <div class="column flex" style="padding-left: 5px">
+      <div class="line flex">
+        <div class="bold flex">Level</div>
+        <div class="flex">Spells<br/>Known</div>
+        <div class="flex">Spell<br/> Save DC</div>
+        <div class="flex">Spells/<br/>Day</div>
+      </div>
+      {for $i in range(5, 10)}
+        {call .sheet_spell_level}
+          {param entry: $entry /}
+          {param level: $i /}
+        {/call}
+      {/for}
+    </div>
+  </div>
+{/template}
+
+/** A line with information about a spell level. */
+{template .sheet_spell_level}
+  {@param entry: ?}
+  {@param level: number}
+  <div class="line flex">
+    <div class="flex box">{$level}</div>
+    <div class="flex box">
+      {if call($entry, 'spellsKnown', $level) >= 0}
+        {call($entry, 'spellsKnown', $level)}
+      {else}
+        &ndash;
+      {/if}
+    </div>
+    <div class="flex box">{call($entry, 'spellSaveDC', $level)}</div>
+    <div class="flex box">
+      {if call($entry, 'spellsPerDay', $level) >= 0}
+        {call($entry, 'spellsPerDay', $level)}
+      {else}
+        &ndash;
+      {/if}
+    </div>
+  </div>
+{/template}
+
+/** The langauges box. */
+{template .sheet_languages}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Languages' /}
+  {/call}
+
+  {annotate($entry.combined_languages)}
+
+{/template}
+
+/** The feats box. */
+{template .sheet_feats}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Feats' /}
+  {/call}
+
+  {foreach $feat in $entry.combined_feats.get}
+    <div class="feat">
+      {call dma.entries.feats.summary}
+        {param entry: $feat /}
+      {/call}
+    </div>
+  {/foreach}
+{/template}
+
+/** The class features box. */
+{template .sheet_class_features}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Class Features' /}
+  {/call}
+
+  <div class="quality">
+    <b>Weapon proficiencies: </b>
+    {annotate($entry.weapon_proficiencies)}
+  </div>
+  <div class="quality">
+    <b>Armor proficiencies: </b>
+    {annotate($entry.armor_proficiencies)}
+  </div>
+
+  {foreach $quality in $entry.class_qualities.get}
+    <div class="quality">
+      {call dma.entries.qualities.summary}
+        {param entry: $quality /}
+      {/call}
+    </div>
+  {/foreach}
+{/template}
+
+/** The racial traits box. */
+{template .sheet_racial_traits}
+  {@param entry: ?}
+  {call .sheet_subtitle}
+    {param title: 'Racial Traits' /}
+  {/call}
+
+  {foreach $quality in $entry.racial_qualities.get}
+    <div class="quality">
+      {call dma.entries.qualities.summary}
+        {param entry: $quality /}
+      {/call}
+    </div>
+  {/foreach}
+
+  <div class="unused">
+    // unused qualities
+    {if length($entry.unused_qualities)}
+      (unused{sp}
+      {foreach $quality in $entry.unused_qualities}
+        {$quality}
+        {if not isLast($quality)}, {/if}
+      {/foreach})
+    {/if}
   </div>
 {/template}
 
@@ -1094,13 +1664,44 @@
   </div>
 
   {foreach $skill in $ij.BaseSkill.all_skills}
-    {call .sheet_skill}
-      {param skill: $skill /}
-      {param classSkill: call($entry, 'isClassSkill', $skill.name) /}
-      {param ability: bonus(call($entry, 'abilityModifier', $skill.ability)) /}
-      {param ranks: call($entry, 'skillRanks', $skill.name) /}
-    {/call}
+    {if not $skill.subtype_only}
+      {call .sheet_skill}
+        {param skill: $skill /}
+        {param classSkill: call($entry, 'isClassSkill', $skill.name) /}
+        {param ability: $skill.combined_ability.get.present
+          ? bonus(call($entry, 'abilityModifier',
+                       $skill.combined_ability.get.get))
+          : '+0' /}
+        {param ranks: call($entry, 'skillRanks', $skill.name) /}
+        {param total: call($entry, 'skillModifier', $skill.name, $skill.ability) /}
+        {param misc: call($entry, 'miscModifier', $skill.name) /}
+      {/call}
+    {/if}
   {/foreach}
+
+  {if not $entry.total_used_skill_ppints == $entry.total_skill_points}
+    <div class="skill-line skill-title">
+      <span class="class-skill">
+      </span>
+      <span class="skill-name">
+      </span>
+      <span class="skill-key">
+      </span>
+      <span class="skill-modifier">
+      </span>
+      &nbsp;
+      <span class="skill-ranks skill-total">
+        {$entry.total_used_skill_points}/{$entry.total_skill_points}
+      </span>
+      &nbsp;
+      <span class="skill-ability">
+      </span>
+      &nbsp;
+      <span class="skill-misc">
+      </span>
+    </div>
+  {/if}
+
 {/template}
 
 /** A single skill line. */
@@ -1110,8 +1711,9 @@
   {@param? total: string}
   {@param? ranks: string}
   {@param? ability: any}
-  {@param? misc: string}
-  <div class="skill-line">
+  {@param? misc: ?}
+  <div class="skill-line
+    {if not $skill.is_untrained and not $ranks} unavailable{/if}">
     <span class="class-skill">
       {if $classSkill}
         &#x2612{sp}
@@ -1121,17 +1723,18 @@
     </span>
     <a class="skill-name" href="{$skill.path}">
       {$skill.name}
-      {if $skill.is_untrained}
-        {sp}&diams;
+      {if $skill.is_ntrained}
+        {sp}<span style="font-size: 8px">&diams;</span>
+      {/if}
+      {if $skill.armor_check_penalty}
+        {sp}*
       {/if}
     </a>
     <span class="skill-key">
-      {$skill.ability.short}
+      {$skill.combined_ability.get.short}
     </span>
     <span class="skill-modifier">
-      {if $total}
-        {$total}
-      {/if}
+      {bonus($total)}
     </span>
     =
     <span class="skill-ranks">
@@ -1147,8 +1750,10 @@
     </span>
     +
     <span class="skill-misc">
-      {if $misc}
-        {$misc}
+      {if $misc and $misc.modifier}
+        {call dma.value.modifier}
+          {param modifier: $misc /}
+        {/call}
       {/if}
     </span>
  </div>
@@ -1188,7 +1793,7 @@
 
   <div class="values boxed carrying-capacity"
        style="background-color: #eee;">
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Light<br />
         Load
@@ -1201,7 +1806,7 @@
         up to {$entry.light_load} lb
       {/param}
     {/call}
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Medium<br />
         Load
@@ -1214,7 +1819,7 @@
         up to {$entry.medium_load} lb
       {/param}
     {/call}
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Heavy<br />
         Load
@@ -1227,7 +1832,7 @@
         up to {$entry.heavy_load} lb
       {/param}
     {/call}
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Lift
       {/param}
@@ -1239,7 +1844,7 @@
         up to {$entry.lift_load}
       {/param}
     {/call}
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Drag
       {/param}
@@ -1251,7 +1856,7 @@
         up to {$entry.drag_load}
       {/param}
     {/call}
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Current<br />
         Load
@@ -1287,11 +1892,13 @@
   <div class="limited sheet-column" style="flex: 3 3 60%;">
     <div class="gear-title">Possessions on person</div>
 
-    <div class="gear-name">Item</div>
-    <div class="gear-spacer"></div>
-    <div class="gear-location">Location</div>
-    <div class="gear-spacer"></div>
-    <div class="gear-weight">Weight</div>
+    <div class="gear-line">
+      <div class="gear-name">Item</div>
+      <div class="gear-spacer"></div>
+      <div class="gear-location">Location</div>
+      <div class="gear-spacer"></div>
+      <div class="gear-weight">Weight</div>
+    </div>
 
     {foreach $item in $entry.possessions_on_person}
       {if not $item.shownAsWorn}
@@ -1301,6 +1908,14 @@
       {/if}
     {/foreach}
 
+    <div class="gear-line">
+      <div class="gear-name"></div>
+      <div class="gear-spacer"></div>
+      <div class="gear-location"></div>
+      <div class="gear-spacer"></div>
+      <div class="gear-weight">{$entry.weight_on_person} total</div>
+    </div>
+
     {for $i in range(20)}
       {call .sheet_gear_line /}
     {/for}
@@ -1309,11 +1924,13 @@
   <div class="limited sheet-column" style="flex: 2 2 40%;">
     <div class="gear-title">Possessions not on person</div>
 
-    <div class="gear-name">Item</div>
-    <div class="gear-spacer"></div>
-    <div class="gear-location">Location</div>
-    <div class="gear-weight">Weight</div>
-    <div class="gear-spacer"></div>
+    <div class="gear-line">
+      <div class="gear-name">Item</div>
+      <div class="gear-spacer"></div>
+      <div class="gear-location">Location</div>
+      <div class="gear-weight">Weight</div>
+      <div class="gear-spacer"></div>
+    </div>
 
     {foreach $item in $entry.possessions_not_on_person}
       {if not $item.weapon and not $item.armor}
@@ -1457,7 +2074,7 @@
  * @param item
  */
 {template .sheet_magical_item}
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         {$title}
         {if $subtitle}
@@ -1531,7 +2148,7 @@
 {template .sheet_weapon}
   <div class="weapon {if $gray}gray{/if}">
     <div>
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Weapon' /}
         {param width: '30%' /}
         {param size: '8px' /}
@@ -1546,33 +2163,46 @@
           {/if}
         {/param}
       {/call}
-    
-      {call .sheet_value}
+
+      {call dma.sheet.old_value}
         {param label: 'Attack Bonus' /}
         {param width: '30%' /}
         {param size: '8px' /}
         {param vSize: '12px' /}
-        {param value: $weapon ? bonus($weapon.attack_bonus) : ' ' /}
+        {param value kind="html"}
+           {if $weapon}
+             {foreach $key in keys($weapon.attack_bonus)}
+               {if $key}
+                 {sp}{$key}
+               {/if}
+               {foreach $attack in $weapon.attack_bonus[$key]}
+                 {bonus($attack)}
+                 {if not isLast($attack)}/{/if}
+               {/foreach}
+               {if not isLast($key)}, {/if}
+             {/foreach}
+           {/if}
+         {/param}
       {/call}
-  
-      {call .sheet_value}
+
+      {call dma.sheet.old_value}
         {param label: 'Damage' /}
         {param width: '20%' /}
         {param size: '8px' /}
         {param vSize: '12px' /}
         {param value: $weapon ? $weapon.damage : ' ' /}
       {/call}
-    
-      {call .sheet_value}
+
+      {call dma.sheet.old_value}
         {param label: 'Critical' /}
         {param width: '20%' /}
         {param size: '8px' /}
         {param vSize: '12px' /}
-        {param value: $weapon ? $weapon.critical : ' ' /}
+        {param value: $weapon and def($weapon.critical) ? $weapon.critical : ' ' /}
       {/call}
     </div>
     <div>
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Range Increment' /}
         {param width: '30%' /}
         {param size: '8px' /}
@@ -1582,7 +2212,7 @@
           : ' ' /}
       {/call}
       
-      {call .sheet_value}
+      {call dma.sheet.old_value}
         {param label: 'Type' /}
         {param width: '20%' /}
         {param size: '8px' /}
@@ -1591,7 +2221,7 @@
       {/call}
 
       {if $weapon.player_notes.present}
-        {call .sheet_value}
+        {call dma.sheet.old_value}
           {param label: 'Notes' /}
           {param width: '50%' /}
           {param size: '8px' /}
@@ -1600,7 +2230,7 @@
         {/call}
       {else}
         {if $weapon.available_ammunition}
-          {call .sheet_value}
+          {call dma.sheet.old_value}
             {param label: 'Ammunition' /}
             {param width: '50%' /}
             {param size: '8px' /}
@@ -1616,7 +2246,7 @@
             {/param}
           {/call}
         {else}
-          {call .sheet_value}
+          {call dma.sheet.old_value}
             {param label: 'Notes' /}
             {param width: '50%' /}
             {param size: '8px' /}
@@ -1630,22 +2260,22 @@
 
 {/template}
 
-/**
- * Format the ability with all modifiers.
- * 
- * @param name         the name of hte ability
- * @param abbreviation the abbreviated name of the ability
- * @param ability      the ability value
- * @param modifier     the ability modifier
- */
+/** Format the ability with all modifiers. */
 {template .ability}
+  {@param name: string}
+  {@param abbreviation: string}
+  {@param total: string}
+  {@param ability: html|string}
+  {@param modifier: html|string}
+  {@param misc: html|string}
+  {@param racial: ?}
   <div class="ability">
     <div class="two-line-label">
       <div class="top">{$abbreviation}</div>
       <div class="bottom">{$name}</div>
     </div>
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Total <br/>
         &nbsp;
@@ -1654,12 +2284,12 @@
       {param size: '6px' /}
       {param vSize: '14px' /}
       {param center: true /}
-      {param value: $ability /}
+      {param value: $total /}
     {/call}
     
     <div class="operator">=</div>
     
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Base Score +<br/>
         Racial Mod.
@@ -1668,12 +2298,14 @@
       {param size: '6px' /}
       {param vSize: '14px' /}
       {param center: true /}
-      {param value: $ability /}
+      {param value kind="html"}
+        {$ability}{if $racial.has_value} {$racial}{/if}
+      {/param}
     {/call}
     
     <div class="operator">+</div>
     
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Enhcmnt<br/>
         Bonuses
@@ -1687,7 +2319,7 @@
   
     <div class="operator">+</div>
     
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Misc<br/>
         Bonuses
@@ -1695,13 +2327,14 @@
       {param width: '13.5%' /}
       {param size: '6px' /}
       {param vSize: '14px' /}
+      {param lineHeight: '6px' /}
       {param center: true /}
-      {param value: '' /}
+      {param value: $misc /}
     {/call}
   
     <div class="operator">-</div>
     
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         Misc<br/>
         Penalties
@@ -1713,7 +2346,7 @@
       {param value: '' /}
     {/call}
 
-    {call .sheet_value}
+    {call dma.sheet.old_value}
       {param label kind="html"}
         {$name}<br/>
         Modifier
@@ -1728,60 +2361,14 @@
   </div>
 {/template}
 
-/** Print a character sheet value. */
-{template .sheet_value}
-  {@param label: html|string}
-  {@param width: string}
-  {@param value: html|string}
-  {@param? center: bool}
-  {@param? boxed: bool}
-  {@param? size: string}
-  {@param? vSize: string}
-  {@param? prefix: bool}
-  {@param? white: bool}
-  {@param? top: bool}
-  {@param? inside: bool}
-  <div class="value-container{if $prefix} prefixed{/if}" 
-       style="width: {$width}">
-    {if $prefix}
-      <div class="value-label prefixed"
-           {if $size} style="font-size: {$size}"{/if}>
-        {$label}
-      </div>
-    {/if}      
-    {if $top}
-      <div class="value-label top 
-                  {if $center} center{/if}{if $inside} inside{/if}"
-           {if $size} style="font-size: {$size}"{/if}>
-        {$label}
-      </div>
-    {/if}      
-    <div class="value{if $center} center{/if}
-                {if $boxed} boxed{/if}
-                {if $white} white{/if}
-                {if $prefix} prefixed{/if}"
-                {if $vSize} style="font-size: {$vSize}"{/if}>
-      {$value}
-    </div>
-    {if not $prefix and not $top}
-      <div class="value-label{if $center} center{/if}
-                  {if $boxed} boxed{/if}"
-           {if $size} style="font-size: {$size}"{/if}>
-         {$label}
-      </div>
-    {/if}
-  </div>
-{/template}
-
-/**
- * Print a subtitle for the character sheet.
- * 
- * @param title  The subtitle text
- * @param? width The width of the subtitle
- * @param? nologo Whether to show the logo
- */
+/** Print a subtitle for the character sheet. */
 {template .sheet_subtitle}
-  <div class="subtitle" {if $width}style="width:{$width}"{/if}>
+  {@param title: string}
+  {@param? width: string}
+  {@param? nologo: bool}
+  {@param? nopadding: bool}
+  <div class="{if $nopadding}nopadding {/if}subtitle"
+      {if $width}style="width:{$width}"{/if}>
     {if not $nologo}<div class="subtitle-logo"></div>{/if}
     <div class="subtitle-text{if $nologo} nologo{/if}">{$title}</div>
   </div>
@@ -1810,7 +2397,7 @@
     {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
-          {call dma.entry.newListEntry}
+          {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
               $entry.name, $entry.bases
@@ -1878,44 +2465,47 @@
         {param value kind="html"}
           {call dma.edit.field_input}
             {param name: 'strength' /}
-            {param value: $entry.strength.present ? $entry.strength : '' /}
+            {param value: $entry.get_strength.present
+                ? $entry.get_strength : '' /}
             {param validate: 'number' /}
             {param caption: 'Strength' /}
             {param class: 'field6' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'dexterity' /}
-            {param value: $entry.dexterity.present ? $entry.dexterity : '' /}
+            {param value: $entry.get_dexterity.present
+                ? $entry.get_dexterity : '' /}
             {param validate: 'number' /}
             {param caption: 'Dexterity' /}
             {param class: 'field6' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'constitution' /}
-            {param value: $entry.constitution.present 
-              ? $entry.constitution : '' /}
+            {param value: $entry.get_constitution.present
+              ? $entry.get_constitution : '' /}
             {param validate: 'number' /}
             {param caption: 'Constitution' /}
             {param class: 'field6' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'intelligence' /}
-            {param value: $entry.intelligence.present 
-              ? $entry.intelligence : '' /}
+            {param value: $entry.get_intelligence.present
+              ? $entry.get_intelligence : '' /}
             {param validate: 'number' /}
             {param caption: 'Intelligence' /}
             {param class: 'field6' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'wisdom' /}
-            {param value: $entry.wisdom.present ? $entry.wisdom : '' /}
+            {param value: $entry.get_wisdom.present ? $entry.get_wisdom : '' /}
             {param validate: 'number' /}
             {param caption: 'Wisdom' /}
             {param class: 'field6' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'charisma' /}
-            {param value: $entry.charisma.present ? $entry.charisma : '' /}
+            {param value: $entry.get_charisma.present
+                ? $entry.get_charisma : '' /}
             {param validate: 'number' /}
             {param caption: 'Charisma' /}
             {param class: 'field6' /}
@@ -1987,16 +2577,21 @@
         {param value kind="html"}
           {foreach $level in $entry.levels}
             {call dma.edit.field_list_line}
+              {param id: 'level' /}
               {param field kind="html"}
                 {call dma.entries.levels.edit}
                   {param entry: $level /}
+                  {param index: index($level) /}
                 {/call}
               {/param}
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
+              {param id: 'level' /}
               {param field kind="html"}
-                {call dma.entries.levels.edit /}
+                {call dma.entries.levels.edit}
+                  {param index: 0 /}
+                {/call}
               {/param}
             {/call}
           {/foreach}
@@ -2008,16 +2603,21 @@
         {param value kind="html"}
           {foreach $skill in $entry.skills}
             {call dma.edit.field_list_line}
+              {param id: 'skill' /}
               {param field kind="html"}
                 {call dma.entries.skills.edit}
                   {param entry: $skill /}
+                  {param index: index($skill) /}
                 {/call}
               {/param}
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
+              {param id: 'skill' /}
               {param field kind="html"}
-                {call dma.entries.skills.edit /}
+                {call dma.entries.skills.edit}
+                  {param index: 0 /}
+                {/call}
               {/param}
             {/call}
           {/foreach}
@@ -2028,18 +2628,22 @@
         {param label: 'Feats' /}
         {param value kind="html"}
           {foreach $feat in $entry.feats}
-            feat: {$feat}
             {call dma.edit.field_list_line}
+              {param id: 'feat' /}
               {param field kind="html"}
                 {call dma.entries.feats.edit}
                   {param entry: $feat /}
+                  {param index: 0 /}
                 {/call}
               {/param}
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
+              {param id: 'feat' /}
               {param field kind="html"}
-                {call dma.entries.feats.edit /}
+                {call dma.entries.feats.edit}
+                  {param index: 0 /}
+                {/call}
               {/param}
             {/call}
           {/foreach}
@@ -2051,21 +2655,66 @@
         {param value kind="html"}
           {foreach $quality in $entry.qualities}
             {call dma.edit.field_list_line}
+              {param id: 'quality' /}
               {param field kind="html"}
                 {call dma.entries.qualities.edit}
                   {param entry: $quality /}
+                  {param prefix: 'class' /}
+                  {param index: index($quality) /}
                 {/call}
               {/param}
             {/call}
           {ifempty}
             {call dma.edit.field_list_line}
+              {param id: 'quality' /}
               {param field kind="html"}
-                {call dma.entries.qualities.edit /}
+                {call dma.entries.qualities.edit}
+                  {param prefix: 'class' /}
+                  {param index: 0 /}
+                {/call}
               {/param}
             {/call}
           {/foreach}
         {/param}
         {param color: '#39f' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'language' /}
+        {param label: 'Languges' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $language in $entry.languages}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'language',
+                    'value': $language.string,
+                    'type': 'selection',
+                    'choices': $ij.Language.names
+                  ]] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'language',
+                    'value': '',
+                    'type': 'selection',
+                    'choices': $ij.Language.names
+                  ]] /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.edit.value_text}
+        {param name: 'proto' /}
+        {param label: 'Proto' /}
+        {param value: $entry.proto /}
+        {param validate: 'any' /}
+        {param color: '#39f' /}
+        {param rows: 30 /}
       {/call}
     {/param}
   {/call}

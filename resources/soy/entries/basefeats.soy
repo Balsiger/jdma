@@ -22,7 +22,7 @@
  /*
  * Templates for base products.
  */
-{namespace dma.entries.basefeats autoescape="deprecated-contextual"}
+{namespace dma.entries.basefeats}
 
 /**
  * Show the given entry in standard format.
@@ -44,17 +44,17 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#0aa' /}
-    {param title}
-      {call dma.entry._new_title}
+    {param title kind="html"}
+      {call dma.entry.title}
         {param title: $entry.name /}
         {param color: '#0aa' /}
       {/call}
     {/param}
-    {param values}            
+    {param values kind="html"}
       {if length($entry.baseNames)}
         {call dma.entry.value}
           {param label: 'Base' /}
-          {param value}
+          {param value kind="html"}
             {foreach $base in $entry.baseNames}
               {call dma.page.link}
                 {param text: $base /}
@@ -69,7 +69,7 @@
       {if length($entry.synonyms)}
         {call dma.entry.value}
           {param label: 'Synonyms' /}
-          {param value}
+          {param value kind="html"}
             {foreach $synonym in $entry.synonyms}
               {$synonym}
               {if not isLast($synonym)}; {/if}
@@ -79,22 +79,19 @@
         {/call}
       {/if}      
       {if length($entry.categories) or 
-          length($entry.combined_categories.annotate)}
+          length($entry.combined_categories.get)}
         {call dma.entry.value}
           {param label: 'Categories' /}
-          {param value}
+          {param value kind="html"}
             {if length($entry.categories)}
               {foreach $category in $entry.categories}
                 {$category}
                 {if not isLast($category)}, {/if}
               {/foreach}
             {/if}
-            {if length($entry.combined_categories.annotate)}
+            {if length($entry.combined_categories.get)}
               {if length($entry.categories)},{sp}{/if}
-              {call dma.entry.concatenated_list}
-                {param values: [] /}
-                {param concatenate: $entry.combined_categories /}
-              {/call}
+              {annotate($entry.combined_categories)}
             {/if}
           {/param}
           {param color: '#0aa' /}
@@ -102,25 +99,17 @@
       {/if}
       {call dma.entry.value}
         {param label: 'Worlds' /}        
-        {param value}
-          {call dma.entry.concatenated_list}
-            {param values: $entry.worlds /}
-            {param concatenate: $entry.combined_worlds /}
-          {/call}
-        {/param}
+        {param value: annotate($entry.combined_worlds) /}
         {param color: '#0aa' /}
       {/call}
-      {if $entry.incomplete or length($entry.combined_incomplete.annotate) > 0}
+      {if $entry.incomplete}
         {call dma.entry.value}
           {param label: 'Incomplete' /}
-          {param value}
+          {param value kind="html"}
             {if $entry.incomplete}
               {$entry.incomplete}{sp}
             {/if}
-            {call dma.entry.concatenated}
-              {param value: '' /}
-              {param concatenate: $entry.combined_incomplete /}
-            {/call}
+            {annotate($entry.combined_incomplete)}
           {/param}
           {param color: '#0aa' /}
         {/call}
@@ -133,21 +122,21 @@
       {if $entry.benefit.present}
         {call dma.entry.value}
           {param label: 'Benefit' /}
-          {param value: $entry.benefit.get /}
+          {param value: commands($entry.benefit.get) /}
           {param color: '#0aa' /}
         {/call}
       {/if}
       {if $entry.special.present}
         {call dma.entry.value}
           {param label: 'Special' /}
-          {param value: $entry.special.get /}
+          {param value: commands($entry.special.get) /}
           {param color: '#0aa' /}
         {/call}
       {/if}
       {if $entry.normal.present}
         {call dma.entry.value}
           {param label: 'Normal' /}
-          {param value: $entry.normal.get /}
+          {param value: commands($entry.normal.get) /}
           {param color: '#0aa' /}
         {/call}
       {/if}
@@ -158,10 +147,120 @@
           {param color: '#0aa' /}
         {/call}
       {/if}
+      {if $entry.attack_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Attack' /}
+          {param value: $entry.attack_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.damage_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Damage' /}
+          {param value: $entry.damage_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.additional_attacks.present}
+        {call dma.entry.value}
+          {param label: 'Additional Attacks' /}
+          {param value: $entry.additional_attacks /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.initiative_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Initiative' /}
+          {param value: $entry.initiative_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.condition.present}
+        {call dma.entry.value}
+          {param label: 'Condition' /}
+          {param value: $entry.condition /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.skill_modifiers}
+        {call dma.entry.value}
+          {param label: 'Skills' /}
+          {param value kind="html"}
+            {foreach $skill in $entry.skill_modifiers}
+              {$skill.name} {$skill.modifier}
+              {if not isLast($skill)}; {/if}
+            {/foreach}
+          {/param}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.strength_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Str Modifier' /}
+          {param value: $entry.strength_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.dexterity_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Dex Modifier' /}
+          {param value: $entry.dexterity_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.constitution_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Con Modifier' /}
+          {param value: $entry.constitution_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.intelligence_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Int Modifier' /}
+          {param value: $entry.intelligence_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.wisdom_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Wis Modifier' /}
+          {param value: $entry.wisdom_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.charisma_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Cha Modifier' /}
+          {param value: $entry.charisma_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.fortitude_modifier.present}
+        {call dma.entry.value}
+          {param label: 'For Modifier' /}
+          {param value: $entry.fortitude_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.will_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Will Modifier' /}
+          {param value: $entry.will_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
+      {if $entry.reflex_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Ref Modifier' /}
+          {param value: $entry.reflex_modifier /}
+          {param color: '#0aa' /}
+        {/call}
+      {/if}
       {if $entry.effects}
         {call dma.entry.value}
           {param label: 'Effects' /}
-          {param value}
+          {param value kind="html"}
             {foreach $effect in $entry.effects}
               {$effect}
               {if not isLast($effect)}; {/if}
@@ -172,12 +271,7 @@
       {/if}
       {call dma.entry.value}
         {param label: 'References' /}
-        {param value}
-          {call dma.entry.concatenated_list}
-            {param values: [] /}
-            {param concatenate: $entry.combined_references /}
-          {/call}
-        {/param}
+        {param value: annotate($entry.combined_references) /}
         {param color: '#0aa' /}
       {/call}
     {/param}
@@ -196,7 +290,7 @@
  *
  */
 {template .list}
-  {call dma.entry.newlist}
+  {call dma.entry.list}
     {param title: $title /}
     {param label: $label /}
     {param path: $path /}
@@ -204,10 +298,10 @@
     {param pagesize: $pagesize /}
     {param size: $entries ? length($entries) : 0 /}
     {param titles: [ 'Name', 'Worlds', 'Short Descriptoion'] /}
-    {param entries}
+    {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
-          {call dma.entry.newListEntry}
+          {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
               $entry.name, $entry.worldsString, $entry.short_description
@@ -232,7 +326,7 @@
     {param type: 'base-level' /}
     {param id: $id /}
     {param create: $create /}
-    {param values}
+    {param values kind="html"}
       {call dma.edit.value}
         {param name: 'name' /}
         {param label: 'Name' /}
@@ -248,7 +342,7 @@
         {param color: '#0aa' /}
       {/call}
       {call dma.edit.value}
-        {param name: 'short-description' /}
+        {param name: 'short_description' /}
         {param label: 'Short Description' /}
         {param value: $entry.short_description /}
         {param validate: 'any' /}
@@ -297,21 +391,21 @@
         {param choices: $entry.feat_type.names /}
         {param color: '#0aa' /}
       {/call}    
-      {call dma.edit.value}
+      {call dma.edit.value_text}
         {param name: 'benefit' /}
         {param label: 'Benefit' /}
         {param value: $entry.benefit.present ? $entry.benefit.get : '' /}
         {param validate: 'any' /}
         {param color: '#0aa' /}
       {/call}    
-      {call dma.edit.value}
+      {call dma.edit.value_text}
         {param name: 'special' /}
         {param label: 'Special' /}
         {param value: $entry.special.present ? $entry.special.get : '' /}
         {param validate: 'any' /}
         {param color: '#0aa' /}
       {/call}    
-      {call dma.edit.value}
+      {call dma.edit.value_text}
         {param name: 'normal' /}
         {param label: 'Normal' /}
         {param value: $entry.normal.present ? $entry.normal.get : '' /}
@@ -325,13 +419,136 @@
         {param validate: 'any' /}
         {param color: '#0aa' /}
       {/call}    
+      {call dma.edit.value}
+        {param name: 'attack_modifier' /}
+        {param label: 'Attack' /}
+        {param value: $entry.attack_modifier.present
+          ? $entry.attack_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'damage_modifier' /}
+        {param label: 'Damage' /}
+        {param value: $entry.damage_modifier.present
+          ? $entry.damage_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'additional_attacks' /}
+        {param label: 'Additional Attacks' /}
+        {param value: $entry.additional_attacks.present
+          ? $entry.additional_attacks : '' /}
+        {param validate: 'number' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'initiative_modifier' /}
+        {param label: 'Initiative' /}
+        {param value: $entry.initiative_modifier.present
+          ? $entry.initiative_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param label: 'Condition' /}
+        {param value kind="html"}
+          {call dma.edit.field_input}
+            {param name: 'condition.generic' /}
+            {param validate: 'any' /}
+            {param caption: 'condition' /}
+            {param value: $entry.condition.isPresent
+              ? $entry.condition.get.generic : '' /}
+          {/call}
+          {call dma.edit.field_selection}
+            {param name: 'condition.weapon_style' /}
+            {param choices:  $ij.WeaponStyle.names /}
+            {param value: $entry.condition.isPresent
+              ? $entry.condition.wepon_style.get.string : '' /}
+          {/call}
+        {/param}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'strength_modifier' /}
+        {param label: 'Str Modifier' /}
+        {param value: $entry.strength_modifier.present
+          ? $entry.strength_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'dexterity_modifier' /}
+        {param label: 'Dex Modifier' /}
+        {param value: $entry.dexterity_modifier.present
+          ? $entry.dexterity_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'constitution_modifier' /}
+        {param label: 'Con Modifier' /}
+        {param value: $entry.constitution_modifier.present
+          ? $entry.constitution_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'intelligence_modifier' /}
+        {param label: 'Int Modifier' /}
+        {param value: $entry.intelligence_modifier.present
+          ? $entry.intelligence_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'wisdom_modifier' /}
+        {param label: 'Wis Modifier' /}
+        {param value: $entry.wisdom_modifier.present
+          ? $entry.wisdom_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'charisma_modifier' /}
+        {param label: 'Cha Modifier' /}
+        {param value: $entry.charisma_modifier.present
+          ? $entry.charisma_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'fortitude_modifier' /}
+        {param label: 'For Modifier' /}
+        {param value: $entry.fortitude_modifier.present
+          ? $entry.fortitude_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'will_modifier' /}
+        {param label: 'Will Modifier' /}
+        {param value: $entry.will_modifier.present
+          ? $entry.will_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'reflex_modifier' /}
+        {param label: 'Ref Modifier' /}
+        {param value: $entry.reflex_modifier.present
+          ? $entry.reflex_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#0aa' /}
+      {/call}
       {call dma.edit.generic_value}
         {param name: 'effect' /}
         {param color: '#0aa' /}
         {param label: 'Effects' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $effect in $entry.effects}
                 {call dma.edit.field_list_multiple}
                   {param class: 'narrow' /}
@@ -340,8 +557,8 @@
                       'name': 'effect.affects',
                       'value': $effect.affects.string,
                       'type': 'selection',
-                      'choices': $effect.affects.names,  
-                      'caption': 'affects'                 
+                      'choices': $effect.affects.names,
+                      'caption': 'affects'
                     ],
                     [
                       'name': 'effect.name',
@@ -351,7 +568,7 @@
                     ],
                     [
                       'name': 'effect.modifier',
-                      'value': $effect.modifier.present 
+                      'value': $effect.modifier.present
                         ? $effect.modifier.get : '',
                       'validate': 'modifier',
                       'caption': 'modifier'
@@ -373,7 +590,7 @@
                       'value': '',
                       'type': 'selection',
                       'choices': $ij.Affects.names,
-                      'caption': 'affects'                 
+                      'caption': 'affects'
                     ],
                     [
                       'name': 'effect.name',
@@ -400,14 +617,65 @@
           {/call}
         {/param}
         {param validate: 'non-empty' /}
-      {/call}    
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'skill' /}
+        {param color: '#0aa' /}
+        {param label: 'Skills' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $skill in $entry.skill_modifiers}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'skill.name',
+                      'value': $skill.name,
+                      'validate': 'any',
+                      'autocomplete': 'base skill/name',
+                      'caption': 'name'
+                    ],
+                    [
+                      'name': 'skill.modifier',
+                      'value': $skill.modifier,
+                      'validate': 'modifier',
+                      'caption': 'modifier'
+                    ]
+                  ] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'skill.name',
+                      'value': '',
+                      'validate': 'any',
+                      'autocomplete': 'base skill/name',
+                      'caption': 'name'
+                    ],
+                    [
+                      'name': 'skill.modifier',
+                      'value': '',
+                      'validate': 'modifier',
+                      'caption': 'modifier'
+                    ]
+                  ] /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+        {param validate: 'non-empty' /}
+      {/call}
       {call dma.edit.generic_value}
         {param name: 'references' /}
         {param color: '#0aa' /}
         {param label: 'References' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $reference in $entry.references}  
                 {call dma.edit.field_list_multiple}
                   {param values: [

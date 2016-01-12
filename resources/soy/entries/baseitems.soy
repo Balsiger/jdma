@@ -45,7 +45,7 @@
     {param last: $last /}
     {param color: '#008' /}
     {param title kind="html"}
-      {call dma.entry._new_title}
+      {call dma.entry.title}
         {param title: $entry.name /}
         {param color: '#008' /}
       {/call}
@@ -150,7 +150,9 @@
           {annotate($entry.combined_substance)}
           {sp}{annotate($entry.combined_thickness)}
           , hardness {annotate($entry.combined_hardness)}
-          , break dc {annotate($entry.break_DC)}
+          {if $entry.break_DC.present}
+            , break dc {annotate($entry.break_DC)}
+          {/if}
         {/param}
         {param color: '#008' /}
       {/call}
@@ -289,10 +291,24 @@
       {/if}
       {if $entry.isMagical}
         {call dma.entry.value}
-          {param label: 'Magic' /}        
+          {param label: 'Magic' /}
           {param color: '#008' /}
           {param value kind="html"}
             {annotate($entry.combined_magical_modifiers)}
+          {/param}
+        {/call}
+      {/if}
+      {if length($entry.qualities) > 0}
+        {call dma.entry.value}
+          {param label: 'Qualities' /}
+          {param color: '#008' /}
+          {param value kind="html"}
+           {foreach $quality in $entry.combined_qualities.get}
+             {call dma.entries.qualities.summary}
+               {param entry: $quality /}
+             {/call}
+             ;{sp}
+           {/foreach}
           {/param}
         {/call}
       {/if}
@@ -319,7 +335,7 @@
  *
  */
 {template .list}
-  {call dma.entry.newlist}
+  {call dma.entry.list}
     {param title: $title /}
     {param label: $label /}
     {param path: $path /}
@@ -330,7 +346,7 @@
     {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
-          {call dma.entry.newListEntry}
+          {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
               $entry.name, $entry.worldsString, $entry.short_description
@@ -503,6 +519,7 @@
             {param markup kind="html"}
               {foreach $appearance in $entry.appearances}
                 {call dma.edit.field_list_multiple}
+                  {param id: 'appearance' /}
                   {param class: 'narrow' /}
                   {param values: [
                     [
@@ -522,6 +539,7 @@
                 {/call}          
               {ifempty}
                 {call dma.edit.field_list_multiple}
+                  {param id: 'appearance' /}
                   {param class: 'narrow' /}
                   {param values: [
                     [
@@ -843,6 +861,32 @@
         {/param}
       {/call}
       {call dma.edit.generic_value}
+        {param label: 'Qualities' /}
+        {param value kind="html"}
+          {foreach $quality in $entry.qualities}
+            {call dma.edit.field_list_line}
+              {param field kind="html"}
+                {call dma.entries.qualities.edit}
+                  {param entry: $quality /}
+                  {param index: index($quality) /}
+                {/call}
+              {/param}
+              {param id: 'quality' /}
+            {/call}
+          {ifempty}
+            {call dma.edit.field_list_line}
+              {param field kind="html"}
+                {call dma.entries.qualities.edit}
+                  {param index: 0 /}
+                {/call}
+              {/param}
+              {param id: 'quality' /}
+            {/call}
+          {/foreach}
+        {/param}
+        {param color: '#008' /}
+      {/call}
+      {call dma.edit.generic_value}
         {param name: 'magical' /}
         {param color: '#008' /}
         {param label: 'Magic' /}
@@ -851,6 +895,7 @@
             {param markup kind="html"}
               {foreach $modifier in $entry.magical_modifiers}  
                 {call dma.edit.field_list_multiple}
+                  {param id: 'magic' /}
                   {param values: [
                     [
                       'name': 'magical.type',
@@ -869,6 +914,7 @@
                 {/call}          
               {ifempty}
                 {call dma.edit.field_list_multiple}
+                  {param id: 'magic' /}
                   {param values: [
                     [
                       'name': 'magical.type',
@@ -899,6 +945,7 @@
             {param markup kind="html"}
               {foreach $reference in $entry.references}  
                 {call dma.edit.field_list_multiple}
+                  {param id: 'reference' /}
                   {param values: [
                     [
                       'name': 'references.name',
@@ -917,6 +964,7 @@
                 {/call}          
               {ifempty}
                 {call dma.edit.field_list_multiple}
+                  {param id: 'reference' /}
                   {param values: [
                     [
                       'name': 'references.name',

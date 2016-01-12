@@ -22,6 +22,7 @@
 package net.ixitxachitls.dma.output.soy;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -29,6 +30,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
+import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
@@ -53,19 +55,22 @@ public class SoyValue extends SoyMapData
    * Create the abstract soy value.
    *
    * @param inName  the name of the soy value
-   * @param inEntry the entry in which to evaluate the values
+   * @param inValue the value
    */
-  public SoyValue(String inName, @Nullable Object inEntry)
+  public SoyValue(String inName, @Nullable Object inValue)
   {
     m_name = inName;
-    m_object = inEntry;
+    m_object = inValue;
   }
 
   /** The name of the value. */
   protected final String m_name;
 
-  /** The entry with the data. */
+  /** The value with the data. */
   protected final Object m_object;
+
+  /** The cache for already computed values. */
+  protected final Map<String, SoyData> m_cache = new HashMap<>();
 
   /**
    * Get the value represented by this soy value.
@@ -75,6 +80,11 @@ public class SoyValue extends SoyMapData
   public Object getValue()
   {
     return m_object;
+  }
+
+  public String getValueName()
+  {
+    return Classes.toSnakeCaseName(m_object.getClass());
   }
 
   /**
@@ -89,8 +99,21 @@ public class SoyValue extends SoyMapData
   @Override
   public SoyData getSingle(String inName)
   {
+    if(m_cache.containsKey(inName))
+    {
+      return m_cache.get(inName);
+    }
+
+    SoyData data = getSingleUncached(inName);
+    m_cache.put(inName, data);
+
+    return data;
+  }
+
+  private SoyData getSingleUncached(String inName)
+  {
     Object value = m_object;
-    if(value instanceof Optional)
+    if(value instanceof Optional && !inName.equals("get"))
     {
       if("isPresent".equals(inName) || "present".equals(inName))
         return BooleanData.forValue(((Optional) value).isPresent());
@@ -98,7 +121,7 @@ public class SoyValue extends SoyMapData
       if(((Optional)value).isPresent())
         value = ((Optional)value).get();
       else
-        return new SoyUndefined(m_name + "." + inName);
+        return new SoyUndefined(m_name + "." + inName + "(optional)");
     }
 
     if("integer".equals(inName) && value instanceof Integer)
@@ -123,6 +146,14 @@ public class SoyValue extends SoyMapData
 
       if(((Optional<?>)value).get() instanceof Double)
         return FloatData.forValue(((Optional<Double>)value).get());
+    }
+
+    if("formatted".equals(inName)) {
+      Object formatted = Classes.callMethod("formatted", value);
+      if (formatted != null)
+        return convert(inName, formatted);
+
+      return convert(inName, value);
     }
 
     value = Classes.callMethod(inName, value);
@@ -182,6 +213,9 @@ public class SoyValue extends SoyMapData
    */
   protected SoyData convert(String inName, Object inObject)
   {
+    if(inObject instanceof SanitizedContent)
+      return (SanitizedContent)inObject;
+
     if(inObject instanceof Iterable)
     {
       SoyListData list = new SoyListData();
@@ -221,6 +255,12 @@ public class SoyValue extends SoyMapData
 
     if(inObject instanceof String)
       return StringData.forValue(inObject.toString());
+
+    if(false && inObject instanceof Optional)
+      if(((Optional) inObject).isPresent())
+        return convert(inName, ((Optional) inObject).get());
+      else
+        return new SoyUndefined(m_name + "." + inName + "(optional)");
 
     if(inObject == null)
       return new SoyUndefined(m_name + "." + inName);

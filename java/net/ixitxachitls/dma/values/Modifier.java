@@ -22,14 +22,25 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.io.FileNotFoundException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import com.google.common.base.Optional;
+import com.google.template.soy.data.SanitizedContent;
+import com.google.template.soy.data.UnsafeSanitizedContentOrdainer;
 
+import net.ixitxachitls.dma.entries.Monster;
+import net.ixitxachitls.dma.output.soy.SoyTemplate;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.proto.Values.ModifierProto;
+import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Named;
+import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.input.ReadException;
 import net.ixitxachitls.util.Strings;
 
 /**
@@ -37,16 +48,9 @@ import net.ixitxachitls.util.Strings;
  *
  * @file   NewModifier.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 public class Modifier extends Value.Arithmetic<ModifierProto>
 {
-  /** An interface for stackable objects. */
-  public interface Stackable
-  {
-
-  }
-
   /** The modifiers type. */
   public enum Type implements Named
   {
@@ -90,7 +94,10 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     RAGE("rage", false, ModifierProto.Type.RAGE),
 
     /** A competence modifier against attacks. */
-    COMPETENCE("competence", false, ModifierProto.Type.COMPETENCE);
+    COMPETENCE("competence", false, ModifierProto.Type.COMPETENCE),
+
+    /** A synergy bonus. */
+    SYNERGY("synergy", false, ModifierProto.Type.SYNERGY);
 
     /** The value's name. */
     private final String m_name;
@@ -145,6 +152,11 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     public boolean stacks()
     {
       return m_stacks;
+    }
+
+    public boolean isGeneral()
+    {
+      return this == GENERAL;
     }
 
     /**
@@ -226,7 +238,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
       for(String value : values)
       {
         String []parts =
-          Strings.getPatterns(value,
+          Strings.getPatterns(Matcher.quoteReplacement(value),
                               "^\\s*([+-]\\d+)\\s*(" + TYPES + ")?\\s*"
                               + "(?: if\\s+(.*))?$");
         if(parts == null || parts.length == 0)
@@ -263,6 +275,18 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
          Optional.<Modifier>absent());
   }
 
+  public Modifier(int inModifier)
+  {
+    this(inModifier, Type.GENERAL, Optional.<String>absent(),
+         Optional.<Modifier>absent());
+  }
+
+  public Modifier(int inModifier, Type inType)
+  {
+    this(inModifier, inType, Optional.<String>absent(),
+         Optional.<Modifier>absent());
+  }
+
   /**
    * Create a modifier with a value.
    *
@@ -273,6 +297,15 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
    */
   public Modifier(int inModifier, Type inType, Optional<String> inCondition,
                   Optional<Modifier> inNext)
+  {
+    this(inModifier,
+         inCondition.isPresent()
+             ? Condition.PARSER.parse(inCondition.get())
+             : Optional.<Condition>absent(), inNext, inType);
+  }
+
+  private Modifier(int inModifier, Optional<Condition> inCondition,
+                   Optional<Modifier> inNext, Type inType)
   {
     m_modifier = inModifier;
     m_type = inType;
@@ -293,7 +326,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   private final Type m_defaultType = Type.GENERAL;
 
   /** The condition for the modifier, if any. */
-  private final Optional<String> m_condition;
+  private final Optional<Condition> m_condition;
 
   /** A next modifier, if any. */
   private final Optional<Modifier> m_next;
@@ -306,6 +339,51 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   public int getModifier()
   {
     return m_modifier;
+  }
+
+  public int totalModifier()
+  {
+    return m_modifier
+        + (m_next.isPresent() ? m_next.get().totalModifier() : 0);
+  }
+
+  public int unconditionalModifier()
+  {
+    int modifier = 0;
+    if (!m_condition.isPresent())
+      modifier += m_modifier;
+
+    if (m_next.isPresent())
+      modifier += m_next.get().unconditionalModifier();
+
+    return modifier;
+  }
+
+  public int total(Monster inMonster)
+  {
+    int modifier = 0;
+    if(m_next.isPresent())
+      modifier += m_next.get().total(inMonster);
+
+    if(m_condition.isPresent()) {
+      Optional<Boolean> check = m_condition.get().check(inMonster);
+      if(check.isPresent() && check.get()) {
+        modifier += m_modifier;
+      }
+    }
+
+    return modifier;
+  }
+
+  public boolean hasValue()
+  {
+    if(m_modifier != 0)
+      return true;
+
+    if(m_next.isPresent())
+      return m_next.get().hasValue();
+
+    return false;
   }
 
   /**
@@ -325,7 +403,25 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
    */
   public Optional<String> getCondition()
   {
-    return m_condition;
+    return m_condition.isPresent()
+        ? Optional.of(m_condition.get().toString())
+        : Optional.<String>absent();
+  }
+
+  public boolean hasCondition()
+  {
+    return m_condition.isPresent();
+  }
+
+  public boolean hasAnyCondition()
+  {
+    if(hasCondition())
+      return true;
+
+    if(m_next.isPresent())
+      return m_next.get().hasAnyCondition();
+
+    return false;
   }
 
   /**
@@ -336,6 +432,17 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   public Optional<Modifier> getNext()
   {
     return m_next;
+  }
+
+  public SanitizedContent formatted()
+  {
+    return UnsafeSanitizedContentOrdainer.ordainAsSafe(
+        SoyTemplate.VALUE_RENDERER
+            .renderSoy("dma.value.modifier",
+                       Optional.of(SoyTemplate.map
+                           ("modifier", new SoyValue("(render Modifier)",
+                                                     this)))),
+        SanitizedContent.ContentKind.HTML);
   }
 
   @Override
@@ -381,7 +488,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     modifier.setBaseValue(m_modifier);
     modifier.setType(m_type.getProto());
     if (m_condition.isPresent())
-      modifier.setCondition(m_condition.get());
+      modifier.setCondition(m_condition.get().toString());
 
     inBuilder.addModifier(modifier.build());
 
@@ -396,6 +503,18 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     if(!(inValue instanceof Modifier))
       return this;
 
+    if(m_modifier == 0)
+      if(m_next.isPresent())
+        return m_next.get().add(inValue);
+      else
+        return inValue;
+
+    if(((Modifier) inValue).m_modifier == 0)
+      if(((Modifier) inValue).m_next.isPresent())
+        return ((Modifier) inValue).m_next.get().add(this);
+      else
+        return this;
+
     Modifier value = (Modifier)inValue;
     if(m_type == value.m_type && m_condition.equals(value.m_condition))
     {
@@ -408,29 +527,28 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
         next = Optional.of((Modifier)m_next.get().add(value.m_next.get()));
 
       if(m_type.stacks())
-        return new Modifier(m_modifier + value.m_modifier, m_type,
-                               m_condition, next);
+        return new Modifier(m_modifier + value.m_modifier, m_condition,
+                            Optional.<Modifier>absent(), m_type);
       else
-        return new Modifier(Math.max(m_modifier, value.m_modifier), m_type,
-                               m_condition, next);
+        return new Modifier(Math.max(m_modifier, value.m_modifier),
+                            m_condition, next, m_type);
     }
 
     if(!m_next.isPresent())
-      return new Modifier(m_modifier, m_type, m_condition,
-                             Optional.of(value));
+      return new Modifier(m_modifier, m_condition, Optional.of(value), m_type);
 
-    return new Modifier(m_modifier, m_type, m_condition,
-                             Optional.of((Modifier)m_next.get().add(value)));
+    return new Modifier(m_modifier, m_condition,
+                        Optional.of((Modifier)m_next.get().add(value)), m_type);
   }
 
   @Override
   public Value.Arithmetic<ModifierProto> multiply(int inFactor)
   {
-    return new Modifier(m_modifier * inFactor, m_type, m_condition,
+    return new Modifier(m_modifier * inFactor, m_condition,
                            m_next.isPresent()
                              ? Optional.of((Modifier)
                                            m_next.get().multiply(inFactor))
-                             : m_next);
+                             : m_next, m_type);
   }
 
   /**
@@ -443,16 +561,16 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   {
     Modifier result = null;
     List<ModifierProto.Modifier> modifiers =
-      new ArrayList<>(inProto.getModifierList());
+        new ArrayList<>(inProto.getModifierList());
     Collections.reverse(modifiers);
     for(ModifierProto.Modifier modifier : modifiers)
     {
       result = new Modifier(modifier.getBaseValue(),
-                               Type.fromProto(modifier.getType()),
-                               modifier.hasCondition()
-                                 ? Optional.of(modifier.getCondition())
-                                 : Optional.<String>absent(),
-                               Optional.fromNullable(result));
+                            Type.fromProto(modifier.getType()),
+                            modifier.hasCondition()
+                                ? Optional.of(modifier.getCondition())
+                                : Optional.<String>absent(),
+                            Optional.fromNullable(result));
     }
 
     return result;

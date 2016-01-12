@@ -26,7 +26,7 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 
-import net.ixitxachitls.dma.proto.Entries.BaseMonsterProto;
+import net.ixitxachitls.dma.proto.Values;
 import net.ixitxachitls.dma.values.Parser;
 
 /**
@@ -38,28 +38,28 @@ import net.ixitxachitls.dma.values.Parser;
 public enum Ability implements Named, Short
 {
   /** Unknown.*/
-  UNKNOWN("Unknown", "Unk", BaseMonsterProto.Ability.UNKNOWN),
+  UNKNOWN("Unknown", "Unk", Values.Ability.UNKNOWN),
 
   /** Strength. */
-  STRENGTH("Strength", "Str", BaseMonsterProto.Ability.STRENGTH),
+  STRENGTH("Strength", "Str", Values.Ability.STRENGTH),
 
   /** Dexterity. */
-  DEXTERITY("Dexterity", "Dex", BaseMonsterProto.Ability.DEXTERITY),
+  DEXTERITY("Dexterity", "Dex", Values.Ability.DEXTERITY),
 
   /** Constitution. */
-  CONSTITUTION("Constitution", "Con", BaseMonsterProto.Ability.CONSTITUTION),
+  CONSTITUTION("Constitution", "Con", Values.Ability.CONSTITUTION),
 
   /** Intelligence. */
-  INTELLIGENCE("Intelligence", "Int", BaseMonsterProto.Ability.INTELLIGENCE),
+  INTELLIGENCE("Intelligence", "Int", Values.Ability.INTELLIGENCE),
 
   /** Wisdom. */
-  WISDOM("Wisdom", "Wis", BaseMonsterProto.Ability.WISDOM),
+  WISDOM("Wisdom", "Wis", Values.Ability.WISDOM),
 
   /** Charisma. */
-  CHARISMA("Charisma", "Cha", BaseMonsterProto.Ability.CHARISMA),
+  CHARISMA("Charisma", "Cha", Values.Ability.CHARISMA),
 
   /** No ability. */
-  NONE("None", "-", BaseMonsterProto.Ability.NONE);
+  NONE("None", "-", Values.Ability.NONE);
 
   /** The value's name. */
   private String m_name;
@@ -68,7 +68,7 @@ public enum Ability implements Named, Short
   private String m_short;
 
   /** The proto enum value. */
-  private BaseMonsterProto.Ability m_proto;
+  private Values.Ability m_proto;
 
   /** The parser for abilities. */
   public static final Parser<Ability> PARSER =
@@ -89,7 +89,7 @@ public enum Ability implements Named, Short
    *
    */
   private Ability(String inName, String inShort,
-                  BaseMonsterProto.Ability inProto)
+                  Values.Ability inProto)
   {
     m_name = inName;
     m_short = inShort;
@@ -134,7 +134,7 @@ public enum Ability implements Named, Short
    *
    * @return the proto enum value
    */
-  public BaseMonsterProto.Ability toProto()
+  public Values.Ability toProto()
   {
     return m_proto;
   }
@@ -145,7 +145,7 @@ public enum Ability implements Named, Short
    * @param  inProto     the proto value to look for
    * @return the matched enum (will throw exception if not found)
    */
-  public static Ability fromProto(BaseMonsterProto.Ability inProto)
+  public static Ability fromProto(Values.Ability inProto)
   {
     for(Ability ability : values())
       if(ability.m_proto == inProto)

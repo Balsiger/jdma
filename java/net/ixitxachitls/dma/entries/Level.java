@@ -22,13 +22,19 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.LevelProto;
+import net.ixitxachitls.dma.values.ArmorType;
+import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Ability;
 
 /**
  * An actual character level.
@@ -41,15 +47,25 @@ public class Level extends NestedEntry
   /**
    * Create a default, unnamed level.
    */
-  public Level()
-  {
-  }
+  public Level() {}
 
   /** The hit points rolled for this level. */
   private int m_hp = 0;
 
+  /** The qualities chosen at this level. */
+  private List<Quality> m_qualities = new ArrayList<>();
+
+  /** The feats chosen at this level. */
+  private List<Feat> m_feats = new ArrayList<>();
+
   /** The base level to this level. */
   private Optional<Optional<BaseLevel>> m_base = Optional.absent();
+
+  /** The ability that increased at the level, if any. */
+  private Optional<Ability> m_abilityIncrease = Optional.absent();
+
+  /** The spells newly known for this level. */
+  private List<String> m_spellsKnown = new ArrayList<>();
 
   /**
    * Get the hp this level gives.
@@ -59,6 +75,19 @@ public class Level extends NestedEntry
   public int getHP()
   {
     return m_hp;
+  }
+
+  public int getSkillPoints()
+  {
+    Optional<BaseLevel> level = getBase();
+    if(!level.isPresent())
+      return 0;
+
+    Optional<Integer> points = level.get().getSkillPoints();
+    if(points.isPresent())
+      return points.get();
+
+    return 0;
   }
 
   /**
@@ -101,6 +130,14 @@ public class Level extends NestedEntry
     return "(unknown)";
   }
 
+  @Override
+  public String getName() {
+    if(getBase().isPresent())
+      return getBase().get().getName();
+
+    return super.getName();
+  }
+
   /**
    * Get a list of all available level names.
    *
@@ -110,6 +147,40 @@ public class Level extends NestedEntry
   {
     return DMADataFactory.get().getIDs(BaseLevel.TYPE,
                                        Optional.<EntryKey>absent());
+  }
+
+  public List<Quality> getQualities()
+  {
+    return Collections.unmodifiableList(m_qualities);
+  }
+
+  public List<Feat> getFeats()
+  {
+    return Collections.unmodifiableList(m_feats);
+  }
+
+  public List<Feat> getAllFeats(int inLevel)
+  {
+    List<Feat> feats = new ArrayList<>(getFeats());
+
+    if(getBase().isPresent())
+      for(BaseLevel.QualityReference feat : getBase().get().getBonusFeats())
+        if(feat.getLevel() <= inLevel)
+          feats.add(new Feat(feat.getName()));
+
+    return feats;
+  }
+
+  public Optional<Ability> getAbilityIncrease() {
+    return m_abilityIncrease;
+  }
+
+  public List<Feat> getBonusFeats(int inLevel)
+  {
+    if(getBase().isPresent())
+      return getBase().get().getBonusFeats(inLevel);
+
+    return new ArrayList<>();
   }
 
   @Override
@@ -125,6 +196,11 @@ public class Level extends NestedEntry
   public void set(Values inValues)
   {
     m_name = inValues.use("name", m_name);
+    m_qualities = inValues.useEntries("quality", m_qualities, Quality.CREATOR);
+    m_feats = inValues.useEntries("feat", m_feats, Feat.CREATOR);
+    m_abilityIncrease = inValues.use("ability_increase", m_abilityIncrease,
+                                     Ability.PARSER);
+    m_spellsKnown = inValues.use("spell_known", m_spellsKnown);
 
     Optional<Integer> hp = inValues.use("hp", m_hp);
     if(hp.isPresent())
@@ -146,6 +222,17 @@ public class Level extends NestedEntry
       builder.setName("unknown");
     builder.setHp(m_hp);
 
+    for(Quality quality : m_qualities)
+      builder.addQuality(quality.toProto());
+
+    for(Feat feat : m_feats)
+      builder.addFeat(feat.toProto());
+
+    if(m_abilityIncrease.isPresent())
+      builder.setAbilityIncrease(m_abilityIncrease.get().toProto());
+
+    builder.addAllSpellKnown(m_spellsKnown);
+
     LevelProto proto = builder.build();
     return proto;
   }
@@ -162,6 +249,18 @@ public class Level extends NestedEntry
     level.m_name = Optional.of(inProto.getName());
     level.m_hp = inProto.getHp();
 
+    for(Entries.QualityProto quality : inProto.getQualityList())
+      level.m_qualities.add(Quality.fromProto(quality));
+
+    for (Entries.FeatProto feat : inProto.getFeatList())
+      level.m_feats.add(Feat.fromProto(feat));
+
+    if(inProto.hasAbilityIncrease())
+      level.m_abilityIncrease =
+          Optional.of(Ability.fromProto(inProto.getAbilityIncrease()));
+
+    level.m_spellsKnown = inProto.getSpellKnownList();
+
     return level;
   }
 
@@ -171,5 +270,58 @@ public class Level extends NestedEntry
       return false;
 
     return getBase().get().isClassSkill(inName);
+  }
+
+  public List<Proficiency> weaponProficiencies()
+  {
+    if (getBase().isPresent())
+      return getBase().get().getWeaponProficiencies();
+
+    return new ArrayList<>();
+  }
+
+  public List<ArmorType> armorProficiencies()
+  {
+    if (getBase().isPresent())
+      return getBase().get().getArmorProficiencies();
+
+    return new ArrayList<>();
+  }
+
+  public int spellsKnown(int inCharacterLevel, int inSpellLevel)
+  {
+    if(!getBase().isPresent())
+      return 0;
+
+    List<Integer> spells = getBase().get().getSpellsKnown(inSpellLevel);
+    if(spells.size() > inCharacterLevel)
+      return spells.get(inCharacterLevel - 1);
+
+    return -1;
+  }
+
+  public int spellsPerDay(int inCharacterLevel, int inSpellLevel)
+  {
+    if(!getBase().isPresent())
+      return 0;
+
+    List<Integer> spells = getBase().get().getSpellsPerDay(inSpellLevel);
+    if(spells.size() > inCharacterLevel)
+      return spells.get(inCharacterLevel - 1);
+
+    return -1;
+  }
+
+  public Optional<Ability> getSpellAbility()
+  {
+    if(getBase().isPresent())
+      return getBase().get().getSpellAbility();
+
+    return Optional.absent();
+  }
+
+  public List<String> getSpellsKnown()
+  {
+    return m_spellsKnown;
   }
 }

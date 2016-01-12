@@ -28,30 +28,28 @@
 // @function def 1 0
 // @function entry 1 0
 
-/**
- * Show the entry.
- * 
- * @param entry The entry to show
- * @param type The entry type to use
- * @param values The values to show
- * @param first the first entry available, if any
- * @param previous the previous entry, if any
- * @param list the overview of all entries
- * @param next the next entry, if any
- * @param last the last entry, if any
- * @param color the color for highlights
- * @param? title the special title, if any
- * @param? noprint whether to print this or not
- */
+/** Show the entry. */
 {template .show}
+  {@param entry: ?}
+  {@param type: string}
+  {@param values: html}
+  {@param first: ?}
+  {@param previous: ?}
+  {@param list: ?}
+  {@param next: ?}
+  {@param last: ?}
+  {@param color: string}
+  {@param? title: html}
+  {@param? noprint: bool}
+  {@param? nodescriptions: bool}
   <div class="show entry {$type}{if $noprint} no-print{/if}">
 
-    {call dma.entry.toolbar}
+    {call .toolbar}
       {param entry: $entry /}
     {/call}
 
     {if not $ij.params.card}
-      {call dma.entry.navigation}
+      {call .navigation}
         {param first: $first /}
         {param previous: $previous /}
         {param list: $list /}
@@ -86,22 +84,24 @@
        {if $title}
          {$title}
        {else}
-         {call dma.entry._new_title}
+         {call dma.entry.title}
            {param title: $entry.name /}
            {param color: $color /}
          {/call}
        {/if}
-       
-      {if def($entry.description)}
-        <div class="_new_value _new_description">
-          {commands(annotate($entry.combined_description))}
-        </div>
-      {/if}
+
+      {if not $nodescriptions}
+        {if def($entry.description)}
+          <div class="_new_value _new_description">
+            {commands(annotate($entry.combined_description))}
+          </div>
+        {/if}
         
-      {if def($entry.short_description)}
-        <div class="_new_value _new_short-description">
-          {commands(annotate($entry.combined_short_description))}
-        </div>
+        {if def($entry.short_description)}
+          <div class="_new_value _new_short-description">
+            {commands(annotate($entry.combined_short_description))}
+          </div>
+        {/if}
       {/if}
 
        <div class="_new_values">
@@ -139,62 +139,159 @@
   </div>
 {/template}
 
-/**
- * Show the toolbar with the avaialable actions.
- * 
- * @param entry The entry to show the toolbar for
- */
+/** Show the toolbar with the avaialable actions. */
 {template .toolbar}
+  {@param entry: ?}
   <div class="toolbar">
     <div class="actions">
       <div class="action sprite large edit"
            onclick="edit.show('{$entry.name}',
                               '{$entry.path}',
-                'edit-{let $foo3 kind="text"}{$entry.type |css}{/let}{$foo3}-{escape($entry.name)}')">
+                   'edit-{escape($entry.type)}-{escape($entry.name)}')">
       </div>
       <div class="action sprite large delete"
            onclick="if(confirm('Do you really want to delete this?'))
                       util.ajax('/actions/remove',
-                               {lb} key: '{let $foo5 kind="text"}{$entry.key |escapeJsString}{/let}{$foo5}' {rb},
-                               null, true);">
+                                {lb} key: '{escape($entry.key)}' {rb},
+                                null, true);">
       </div> 
     </div>
   </div>
 {/template}
 
-/** The main title.
- * 
- * @param title The text of the title
- * @param color The color of the title
- */
-{template ._new_title}
+/** The main title. */
+{template .title}
+  {@param title: html|string}
+  {@param color: string}
   <div class="title-container">
   <span class="title" style="color: {$color}">
     {$title}
    <div class="decoration"
-        style="background: -webkit-linear-gradient(right, transparent 0%, {$color} 100%);">
+        style="background: -webkit-linear-gradient(right, transparent 0%,
+               {$color} 100%);">
     </div>
   </span>
   </div>
 {/template}
 
-/** The sub title.
- * 
- * @param title The text of the title
- */
-{template ._new_subtitle}
+/** The sub title. */
+{template .subtitle}
+  {@param title: html|string}
   <div class="subtitle">
     {$title}
   </div>
 {/template}
 
-/**
- * The main image of an entry.
- *
- * @param entry The entry formatted.
- * @param? size The size of the image
- */
+/** The base names of an entry. */
+{template .bases}
+  {@param entry: ?}
+  {@param color: string}
+  {@param type: string}
+  {if length($entry.baseNames)}
+    {call dma.entry.value}
+      {param label: 'Base' /}
+      {param value kind="html"}
+        {foreach $base in $entry.baseNames}
+          {call dma.page.link}
+            {param text: $base /}
+            {param url: '/' + $type + '/'  + $base /}
+
+          {/call}
+          {if not isLast($base)}; {/if}
+        {/foreach}
+      {/param}
+      {param color: $color /}
+    {/call}
+  {/if}
+{/template}
+
+/** The synonyms of an entry. */
+{template .synonyms}
+  {@param entry: ?}
+  {@param color: string}
+  {if length($entry.synonyms)}
+    {call dma.entry.value}
+      {param label: 'Synonyms' /}
+      {param value kind="html"}
+        {foreach $synonym in $entry.synonyms}
+          {$synonym}
+          {if not isLast($synonym)}; {/if}
+        {/foreach}
+      {/param}
+      {param color: $color /}
+    {/call}
+  {/if}
+{/template}
+
+/** The categories of an entry. */
+{template .categories}
+  {@param entry: ?}
+  {@param color: string}
+  {if length($entry.categories) or
+      $entry.combined_categories.get.present}
+    {call dma.entry.value}
+      {param label: 'Categories' /}
+      {param value kind="html"}
+        {if length($entry.categories)}
+          {foreach $category in $entry.categories}
+            {$category}
+            {if not isLast($category)}, {/if}
+          {/foreach}
+        {/if}
+        {if $entry.combined_categories.get.present}
+          {if length($entry.categories)},{sp}{/if}
+          {annotate($entry.combined_categories)}
+        {/if}
+      {/param}
+      {param color: $color /}
+    {/call}
+  {/if}
+{/template}
+
+/** The worlds of an entry. */
+{template .worlds}
+  {@param entry: ?}
+  {@param color: string}
+  {call dma.entry.value}
+    {param label: 'Worlds' /}
+    {param value: annotate($entry.combined_worlds) /}
+    {param color: $color /}
+  {/call}
+{/template}
+
+/** The references of an entry. */
+{template .references}
+  {@param entry: ?}
+  {@param color: string}
+  {call dma.entry.value}
+    {param label: 'References' /}
+    {param value: annotate($entry.combined_references) /}
+    {param color: $color /}
+  {/call}
+{/template}
+
+/** The incomplete value of an entry. */
+{template .incomplete}
+  {@param entry: ?}
+  {@param color: string}
+  {if $entry.incomplete or $entry.combined_incomplete.get.present}
+    {call dma.entry.value}
+      {param label: 'Incomplete' /}
+      {param value kind="html"}
+        {if $entry.incomplete}
+          {$entry.incomplete}{sp}
+        {/if}
+        {annotate($entry.combined_incomplete)}
+      {/param}
+       {param color: $color /}
+    {/call}
+  {/if}
+{/template}
+
+/** The main image of an entry. */
 {template .mainImage}
+  {@param entry: ?}
+  {@param? size: number}
   {if def($entry.main_file)}
     {call dma.page.link}
       {param url: $entry.main_file.path /}
@@ -223,12 +320,9 @@
   {/if}
 {/template}
 
-/**
- * An image for the entry.
- * 
- * @param file The image shown
- */
+/** An image for the entry. */
 {template .file}
+  {@param file: ?}
   {call dma.page.link}
     {param url: $file.path /}
     {param tooltip: $file.name /}
@@ -240,13 +334,11 @@
   {/call}
 {/template}
 
-/** An entry value.
- * 
- * @param label The value label.
- * @param value The value's value.'
- * @param color The color for display.
- */
+/** An entry value. */
 {template .value}
+  {@param label: string|html}
+  {@param value: html}
+  {@param color: string}
   <div class="_new_value">
     <div class="_new_value-label" style="color:{$color}">
       {$label}:
@@ -257,20 +349,16 @@
   </div>
 {/template}
 
-/**
- * Formatting a list of entries.
- *
- * @param title The list title.
- * @param start The start index
- * @param pagesize The size of the page
- * @param size The number of entries shown
- * @param titles An array with the list title names
- * @param entries The entries printed
- * @param label The navigation label for this page
- * @param path The path to this page
- *
- */
-{template .newlist}
+/** Formatting a list of entries. */
+{template .list}
+  {@param title: html|string}
+  {@param start: number}
+  {@param pagesize: number}
+  {@param size: number}
+  {@param titles: list<html|string>}
+  {@param entries: html}
+  {@param label: html|string}
+  {@param path: string}
   <h1>{$title}</h1>
   {call dma.page.title}
     {param title: $title /}
@@ -304,13 +392,18 @@
   {/if}
 {/template}
 
-/**
- * Template for a single list entry.
- * 
- * @param path The path to the value for selection
- * @param values The values for the list entry.
- */
-{template .newListEntry}
+/** Template for a single list title. */
+{template .listtitle}
+  {@param title: string|html}
+  <td class="title">
+    {$title}
+  </td>
+{/template}
+
+/** Template for a single list entry. */
+{template .listEntry}
+  {@param path: string}
+  {@param values: list<?>}
   <tr onclick="util.link(event, '{$path}')">
     {foreach $value in $values}
       <td class="list">{$value}</td>
@@ -318,276 +411,13 @@
   </tr>   
 {/template}
 
-/**
- * Format an addable, combined value.
- * 
- * @param  addable the addable value
- * @param? value   the normal value
- * @param?  short   whether to print short
- */
-{template .added}
-  {if $value.present}
-    {if $short}
-      {$value.short_string}
-    {else}
-      {if $value.get.pure_string and def($value.get.pure_string)}
-        {$value.get.pure_string}
-      {else}
-        {$value.get}
-      {/if}
-    {/if}
-  {else}
-    <span class="combination-value">
-      {if $short}
-        {$addable.value_short_string}
-      {else}
-        {$addable.value_string}
-      {/if}
-      <div class="combination-sources">
-        {foreach $annotated in $addable.annotate}
-          <div class="combination-source">
-            <span class="combination-source-value">
-              {if $annotated.value.present and $annotated.value.get.string}
-                {$annotated.value.get.string}
-              {else}
-                {if $annotated.value.present}
-                  {$annotated.value.get}
-                {else}
-                  x {$annotated.factor}
-                {/if}
-              {/if}
-            </span>
-            <span class="combination-source-origin">
-              from {$annotated.source}
-            </span>
-          </div>
-        {/foreach}
-      </div>
-    </span>
-  {/if}
-{/template}
-
-/**
- * Format an max/min, combined value.
- * 
- * @param combination the combination value
- */
-{template .single}
-  {if not length($combination.annotate)}
-    {$combination.value_string}  
-  {else}
-    {if $combination.value_string != 'Unknown'}
-      <span class="combination-value">
-        {$combination.value_string}
-        <div class="combination-sources">
-          {foreach $annotated in $combination.annotate}
-              <div class="combination-source">
-                <span class="combination-source-value">
-                  {if $annotated.value and $annotated.value.string}
-                    {$annotated.value.string}
-                  {else}
-                    {$annotated.value}
-                  {/if}
-                </span>
-                <span class="combination-source-origin">
-                  from {$annotated.source}
-                </span>
-              </div>
-          {/foreach}
-        </div>
-      </span>
-    {/if}
-  {/if}
-{/template}
-
-/**
- * Format a concatenated, combined value.
- * 
- * @param? value       the normal value
- * @param  concatenate the concatenate value
- * @param? lines      whether to format the text in lines
- */
-{template .concatenated}
-  {if $value}
-    {commands($value)}
-  {else}
-    {foreach $concat in $concatenate.annotate}
-      <span class="combination-{if $lines}line{else}text{/if}">
-        {if $concat.value.present}
-          {commands($concat.value.get)}
-        {else}
-          {commands($concat.value)}
-        {/if}
-        {if not $lines}{sp}{/if}
-        <div class="combination-text-source">
-          from {$concat.source}
-        </div>
-      </span>
-    {/foreach}
-  {/if}
-{/template}
-
-/**
- * Format a concatenated, combined value.
- * 
- * @param values       the normal value
- * @param concatenate the concatenate value
-  */
-{template .concatenated_list}
-  {if $values and length($values)}
-    {foreach $value in $values}
-      {$value}{if not isLast($value)}, {/if}
-    {/foreach}
- {else}
-    <span class="combination-value">
-      {call dma.value.list}
-        {param values: $concatenate.value /}
-      {/call}
-      <div class="combination-sources">
-        {foreach $annotated in $concatenate.annotate}
-          <div class="combination-source">
-            <span class="combination-source-value">
-              {call dma.value.list}
-                {param values: $annotated.value /}
-              {/call}
-            </span>
-            <span class="combination-source-origin">
-              from {$annotated.source}
-            </span>
-          </div>          
-        {/foreach}
-      </div>
-    </span>
-  {/if}
-{/template}
-
-
-// The old templates are below
-// *****************************************************************************
-
-/**
- * The main template for an entry.
- *
- * @param entry the entry to format
- * @param first the first entry available, if any
- * @param previous the previous entry, if any
- * @param list the overview of all entries
- * @param next the next entry, if any
- * @param last the last entry, if any
- *
- */
-{template .container}
-  {if $ij.params.card and $ij.params.body}
-    {delcall dma.entry.page}
-      {param entry: $entry /}
-    {/delcall}
-  {else}
-    {call .navigation}
-      {param first: $first /}
-      {param previous: $previous /}
-      {param list: $list /}
-      {param next: $next /}
-      {param last: $last /}
-    {/call}
-    {delcall dma.entry.page}
-      {param entry: $entry /}
-    {/delcall}
-    {call .navigation}
-      {param first: $first /}
-      {param previous: $previous /}
-      {param list: $list /}
-      {param next: $next /}
-      {param last: $last /}
-    {/call}
-    {literal}
-    <script>
-      $(document).ready(function()
-      {
-        $('DIV.files IMG.image')
-          .mouseover(util.replaceMainImage)
-          .mouseout(util.restoreMainImage);
-      });
-    </script>
-    {/literal}
-  {/if}
-{/template}
-
-/**
- * The container for dma output entries.
- *
- * @param entry the entry to format
- * @param first the first entry available, if any
- * @param previous the previous entry, if any
- * @param list the overview of all entries
- * @param next the next entry, if any
- * @param last the last entry, if any
- *
- */
-{template .dmacontainer}
-  {call .navigation}
-    {param first: $first /}
-    {param previous: $previous /}
-    {param list: $list /}
-    {param next: $next /}
-    {param last: $last /}
-  {/call}
-  <pre>
-    {$entry.dma}
-  </pre>
-  {call .navigation}
-    {param first: $first /}
-    {param previous: $previous /}
-    {param list: $list /}
-    {param next: $next /}
-    {param last: $last /}
-  {/call}
-{/template}
-
-/**
- * The container for deep dma output entries.
- *
- * @param entry the entry to format
- *
- */
-{template .dmadeepcontainer}
-  {$entry.deepdma}
-{/template}
-
-/**
- * The container for entry summaries.
- *
- * @param entry the entry to format
- *
- */
-{template .summarycontainer}
-  {delcall dma.entry.summary}
-    {param entry: $entry /}
-  {/delcall}
-{/template}
-
-/**
- * The template for an entry summary.
- *
- * @param entry the entry to format
- *
- */
-{deltemplate dma.entry.summary}
-  <div class="summary">
-    <h1>{$entry.dmName} ({$entry.name})</h1>
-  </div>
-{/deltemplate}
-
-/**
- * The entry navigation.
- *
- * @param first the first entry available, if any
- * @param previous the previous entry, if any
- * @param list the overview of all entries
- * @param next the next entry, if any
- * @param last the last entry, if any
- *
- */
+/** The entry navigation. */
 {template .navigation}
+  {@param first: ?}
+  {@param previous: ?}
+  {@param list: ?}
+  {@param next: ?}
+  {@param last: ?}
   <div class="entry-nav">
     {call .navigationEntry}
       {param url: $first /}
@@ -617,14 +447,11 @@
   </div>
 {/template}
 
-/**
- * A single navigation entry.
- *
- * @param url The url to link to
- * @param style Style to use for the link
- * @param tooltip tooltip text
- */
+/** A single navigation entry. */
 {template .navigationEntry}
+  {@param url: string}
+  {@param style: string}
+  {@param tooltip: string}
   {call dma.page.link}
     {param url: $url /}
     {param tooltip: $tooltip /}
@@ -634,268 +461,7 @@
   {/call}
 {/template}
 
-/**
- * Ask the user if an entry should be created.
- *
- * @param id The id of the entry to find
- * @param type The type of the entry
- */
-{template .create}
-  {call dma.errors.error}
-    {param title kind="html"}
-      Entry Not Found
-    {/param}
-    {param message kind="html"}
-      The entry '{$id}' typed '{$type}' could not be found.
-    {/param}
-  {/call}
-  {if $ij.user}
-    <script>
-      if(confirm('The desired entry does not exist!\n\n' +
-          'Do you want to create a new entry with id \'{$id}\'?'))
-        location.href = location.href.replace(/\?.*$/, '') + '?create';
-    </script>
-  {/if}
-{/template}
-
-/**
- * The contents part of the page.
- *
- * @param entry The entry rendered.
- */
-{deltemplate dma.entry.page}
-  {call dma.entry.default_page}
-    {param entry: $entry /}
-  {/call}
-{/deltemplate}
-
-/**
- * The values for the entry.
- *
- * @param entry The entry rendered
- */
-{deltemplate dma.entry.values}
-  No values in this entry ({$entry.name}).
-{/deltemplate}
-
-/**
- * Template for the main icon.
- *
- * @param entry The entry to use.
- * @param? size The size of the image
- */
-{template .simplemainfile_deprecated}
-  {if def($entry.files.main)}
-    <img src="{$entry.files.main.icon}=s{if $size}{$size}{else}300{/if}"
-      alt="Main" class="image main" id="file=-main" />
-  {else}
-    <img src="/icons/{$entry.type.multilink}-dummy.png" alt="Main"
-    class="image main" id="file=-main"
-    {if $size}
-      {sp}style="max-width: {$size}px; max-height: {$size}px;"
-    {/if} />
-  {/if}
-{/template}
-
-/**
- * The entry title.
- *
- * @param entry The entry rendered.
- */
-{deltemplate dma.entry.title}
-  <h1>
-    {call dma.value.editable}
-      {param canEdit: $ij.isDM or $ij.isOwner /}
-      {param name: 'name' /}
-      {param value: $entry.name /}
-      {param key: $entry.key /}
-      {param type: 'name' /}
-      {param content: $entry.name /}
-    {/call}
-  </h1>
-  {call dma.page.title}
-    {param title: $entry.name /}
-  {/call}
-{/deltemplate}
-
-/**
- * Printing a descriptive key value pair.
- *
- * @param entry The entry rendered.
- * @param name The name of the value.
- * @param? value The value to print.
- * @param? withoutbase true if setting without base, false if setting with
- * @param? content The content if not using a value.
- * @param? access One of dm, owner, admin.
- * @param? noedit If given, value cannot be edited
- * @param? note The not to be displayed on edit, if any
- */
-{deltemplate dma.entry.keyvalue}
-  {if not $access
-      or ($access == 'user' and $ij.isUser)
-      or ($access == 'dm' and $ij.isDM)
-      or ($access == 'owner' and ($ij.isDM or $ij.isOwner or $ij.isAdmin))
-      or ($access == 'admin' and $ij.isAdmin)}
-    <div class="value {$entry.type.css}">
-      <div class="value-label-container">
-        <div class="value-label">
-          {$name}
-        </div>
-      </div>
-      <div class="value-content
-          {if $noedit and not $ij.isDM and not $ij.isOwner} value-noedit{/if}
-          {if not $value.isEditable and $name != 'name'} value-noedit{/if}">
-        {if $value}
-          {if $withoutbase}
-            {call dma.value.value}
-              {param canEdit: not $noedit and ($ij.isDM or $ij.isOwner) /}
-              {param entry: $entry /}
-              {param value: $value /}
-              {param note: $note /}
-            {/call}
-          {else}
-            {call dma.value.withbase}
-              {param entry: $entry /}
-              {param value: $value /}
-              {param canEdit: not $noedit and ($ij.isDM or $ij.isOwner) /}
-              {param note: $note /}
-            {/call}
-          {/if}
-        {else}
-          {if $content}
-            {$content}
-          {/if}
-        {/if}
-      </div>
-    </div>
-  {/if}
-{/deltemplate}
-
-/**
- * Printing of extension values.
- *
- * @param name The extension name
- * @param content The content of the extension values
- */
-{template .extension}
-  <div class="section">
-    <div class="section-title">
-      <span class="section-titletext">{$name}</span>
-    </div>
-    <div class="section-text">
-      {$content}
-    </div>
-  </div>
-{/template}
-
-/**
- * Formatting a list of entries.
- *
- * @param title The list title.
- * @param start The start index
- * @param pagesize The size of the page
- * @param entries The entries printed
- * @param label The navigation label for this page
- * @param path The path to this page
- *
- */
-{template .list}
-  <h1>{$title}</h1>
-  {call dma.page.title}
-    {param title: $title /}
-  {/call}
-  {call dma.navigation.navigation}
-    {param entries: [[ 'label': $label, 'url': $path ]] /}
-  {/call}
-  {call .listnav}
-    {param start: $start /}
-    {param pagesize: $pagesize /}
-    {param size: length($entries) /}
-  {/call}
-  {if $entries}
-    <table class="entrylist">
-      <tr class="title">
-        {delcall dma.entry.listtitles /}
-      </tr>
-      {foreach $entry in $entries}
-        <tr onclick="util.link(event, '{$entry.path}')">
-          {delcall dma.entry.listentry}
-            {param entry: $entry /}
-          {/delcall}
-        </tr>
-      {/foreach}
-    </table>
-    {call .listnav}
-      {param start: $start /}
-      {param pagesize: $pagesize /}
-      {param size: length($entries) /}
-    {/call}
-  {else}
-    <div class="error">No entries found!</div>
-  {/if}
-{/template}
-
-/**
- * Template for a single list entry.
- *
- * @param entry The entry to render.
- */
-{deltemplate dma.entry.listentry}
-  {call dma.entry.listentryvalue}
-    {param style: 'name' /}
-    {param entry: $entry /}
-    {param content: $entry.name /}
-  {/call}
-  {call dma.entry.listentryvalue}
-    {param style: 'worlds' /}
-    {param entry: $entry /}
-  {/call}
-  {call dma.entry.listentryvalue}
-    {param style: 'short' /}
-    {param entry: $entry /}
-    {param value: $entry.short_description /}
-  {/call}
-{/deltemplate}
-
-/**
- * Template for a list entry value.
- *
- * @param style The style to set the value
- * @param? value The value to set to
- * @param entry The entry rendered
- * @param? content The content to set, if no value given
- */
-{template .listentryvalue}
-  <td class="list-{$style}">
-    {if $content}
-      {$content}
-    {else}
-      {call dma.value.withbase}
-        {param entry: $entry /}
-        {param value: $value /}
-      {/call}
-    {/if}
-  </td>
-{/template}
-
-/**
- * Template for the list titles.
- */
-{deltemplate dma.entry.listtitles}
-  {call dma.entry.listtitle}{param title: 'Name' /}{/call}
-  {call dma.entry.listtitle}{param title: 'Worlds' /}{/call}
-  {call dma.entry.listtitle}{param title: 'Short description' /}{/call}
-{/deltemplate}
-
-/** Template for a single list title.
- *
- * @param title the title text
- */
-{template .listtitle}
-  <td class="title">
-    {$title}
-  </td>
-{/template}
+/* Stuff for indexes, not yet ported over to new template. */
 
 /**
  * Template for list navigation.
@@ -1008,7 +574,7 @@
  * @param entries the entries rendered
  */
 {template .index}
-  <h1>{$title}</h1>
+  <h1>INDEX: {$title}</h1>
   {call dma.page.title}
     {param title: $title /}
   {/call}
@@ -1040,500 +606,3 @@
   {/if}
 {/template}
 
-/**
- * Template for rendering an item reference.
- *
- * @param item the item rendered
- */
-{template .itemreference private="true"}
-  {if $item.name}
-    {call dma.page.link}
-      {param url: $item.path /}
-      {param text kind="html"}
-        <div class="item-reference"
-            title="{if $ij.isDM}{$item.dmName}{else}{$item.playerName}{/if}">
-          <img class="item-image"
-              src="{if $item.files.main}{$item.files.main.icon}=s15
-              {else}/icons/{$item.type.multilink}-dummy.png{/if}">
-          {if $ij.isDM}
-            {$item.dmName}
-          {else}
-            {$item.playerName}
-          {/if}
-        </div>
-      {/param}
-    {/call}
-  {else}
-    <div class="item-reference" title="{$item}">
-      {$item}
-    </div>
-  {/if}
-{/template}
-
-/**
- * Template for rendering simple item references.
- *
- * @param item the item rendered
- */
-{template .simpleitemreference private="true"}
-  {if $item.name}
-    {if $ij.isDM}
-      {$item.dmName}
-    {else}
-      {$item.playerName}
-    {/if}
-  {else}
-    {$item}
-  {/if}
-{/template}
-
-/**
- * Template for rendering an item summary.
- *
- * @param item the item rendered
- */
-{template .itemsummary private="true"}
-  <div class="item-summary">
-    <div class="item-summary-title">
-      {if def($item) and $item.name}
-        {if $ij.isDM}
-          {$item.dmName}
-        {else}
-          {$item.playerName}
-        {/if}
-        {sp}({$item.name})
-      {else}
-        {$item}
-      {/if}
-    </div>
-    <div class="item-summary-text">
-      {if def($item) and $item.name}
-        <div class="item-summary-desc">
-          {$item.appearance}
-        </div>
-        {if $ij.isDM and def($item.short_description.combine.total)}
-          <div class="item-overview-value-dm">
-            {$item.short_description.combine.total}
-          </div>
-        {/if}
-        {if def($item.player_notes)}
-          <div class="item-summary-notes">
-            {$item.player_notes}
-          </div>
-        {/if}
-        {call .overviewValue}
-          {param prefix: '' /}
-          {param postfix: ';' /}
-          {param value: $item.value.combine.total /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: '' /}
-          {param postfix: ';' /}
-          {param value: $item.weight.combine.total /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: 'size' /}
-          {param postfix: ';' /}
-          {param value: $item.size.combine.max /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: 'hp' /}
-          {param postfix: ',' /}
-          {param value: $item.hp.combine.total /}
-          {param dm: true /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: 'break DC' /}
-          {param postfix: ';' /}
-          {param value: $item.break_DC.combine.total /}
-          {param dm: true /}
-        {/call}
-        {if $item.extension_counted}
-          {call .overviewValue}
-            {param prefix: '&#x2736;' /}
-            {param postfix: ';' /}
-            {param content: $item.count.print + ' '
-                + $item.unit.combine.total.print /}
-          {/call}
-        {elseif $item.extension_multiuse or $item.extension_multiple}
-          {call .overviewValue}
-            {param prefix: '&#x2736;' /}
-            {param postfix: ';' /}
-            {param value: $item.count /}
-          {/call}
-        {/if}
-        {if $item.extension_wearable}
-          {call .overviewValue}
-            {param prefix: '&#x269c;' /}
-            {param value: $item.slot.combine.total /}
-          {/call}
-          {if def($item.don.combine.total)}
-            {call .overviewValue}
-              {param prefix: ' ' /}
-              {param value: $item.don.combine.total /}
-            {/call}
-            {call .overviewValue}
-              {param prefix: ', ' /}
-              {param postfix: ';' /}
-              {param value: $item.remove.combine.total /}
-            {/call}
-          {/if}
-        {/if}
-        {if $item.extension_timed}
-          {call .overviewValue}
-            {param prefix: '&#x27f3;' /}
-            {param postfix: ';' /}
-            {param value: $item.duration.combine.total /}
-          {/call}
-        {/if}
-        {if $item.extension_light}
-          {call .overviewValue}
-            {param prefix: '&#x263c;' /}
-            {param value: $item.bright_light.combine.total /}
-          {/call}
-          {call .overviewValue}
-            {param prefix: ' /' /}
-            {param postfix: ';' /}
-            {param value: $item.shadowy_light.combine.total /}
-          {/call}
-        {/if}
-        {if $item.extension_weapon}
-          {call .overviewValue}
-            {param prefix: '&#x2694;' /}
-            {param value: $item.weapon_type.combine.total /}
-          {/call}
-          {call .overviewValue}
-            {param prefix: ' ' /}
-            {param value: $item.proficiency.combine.total /}
-          {/call}
-          {call .overviewValue}
-            {param prefix: ' ' /}
-            {param value: $item.weapon_style.combine.total /}
-          {/call}
-          {call .overviewValue}
-            {param prefix: ', ' /}
-            {param value: $item.damage.combine.total /}
-          {/call}
-          {if def($item.secondary.combine.total)}
-          {call .overviewValue}
-            {param prefix: ' ' /}
-            {param value: $item.secondary_damage.combine.total /}
-          {/call}
-          {/if}
-          {call .overviewValue}
-            {param prefix: ', range' /}
-            {param value: $item.range_increment.combine.total /}
-          {/call}
-          {if def($item.reach.combine.total)}
-            {call .overviewValue}
-              {param prefix: ', reach' /}
-              {param value: $item.reach.combine.total /}
-            {/call}
-          {/if}
-          ;{sp}
-        {/if}
-        {if $item.extension_armor}
-          {call .overviewValue}
-            {param prefix: '&#x2602;' /}
-            {param value: $item.armor_type.combine.total /}
-          {/call}
-          {call .overviewValue}
-            {param prefix: ', AC' /}
-            {param value: $item.AC_bonus.combine.total /}
-          {/call}
-          {call .overviewValue}
-            {param prefix: ', max dex' /}
-            {param value: $item.max_dexterity.combine.total /}
-          {/call}
-          {call .overviewValue}
-            {param prefix: ', check penalty' /}
-            {param value: $item.check_penalty.combine.total /}
-          {/call}
-          {call .overviewValue}
-            {param prefix: ', arcane failure' /}
-            {param value: $item.arcane_failure.combine.total /}
-          {/call}
-          ;{sp}
-        {/if}
-        {if $item.extension_incomplete and $ij.isDM}
-          <div class="item-overview-value-dm">
-            <literal>&#x2639;</literal>{sp}
-            {$item.incomplete.combine.total}
-          </div>
-        {/if}
-        {if $item.dm_notes.isDefined and $ij.isDM}
-          <div class="item-overview-value-dm">
-            {$item.dm_notes}
-          </div>
-        {/if}
-      {else}
-        Item not found!
-      {/if}
-    </div>
-  </div>
-{/template}
-
-
-/**
- * Print an item in the overview list.
- *
- * @param item the item to print
- */
-{template .itemoverview private="true"}
-  <div class="item-overview-entry">
-    {if not def($item.type)}
-      {$item}
-    {else}
-      <div class="item-overview-weight">
-        {if def($item.weight.combine.total)}
-          {$item.weight.combine.total.print}
-        {else}
-          -
-        {/if}
-      </div>
-      {if $ij.isDM}
-        {if def($item.value.combine.total)}
-          <div class="item-overview-value">
-            {$item.value.combine.total.print}
-          </div>
-        {/if}
-      {/if}
-      <div>
-        <img class="item-image"
-            src="{if $item.files.main}{$item.files.main.icon}=s15
-            {else}/icons/{$item.type.multilink}-dummy.png{/if}">
-        {if $ij.isDM}
-          {$item.dmName}
-        {else}
-          {$item.playerName}
-        {/if}
-        {sp}({$item.name})
-      </div>
-      <div class="item-overview-desc">
-        {$item.appearance}
-      </div>
-      {if def($item.playernotes)}
-        <div class="item-overview-notes">
-          {$item.playernotes}
-        </div>
-      {/if}
-    </div>
-    <div class="item-overview-values">
-      {call .overviewValue}
-        {param prefix: 'size' /}
-        {param postfix: ';' /}
-        {param value: $item.size.combine.max /}
-      {/call}
-      {call .overviewValue}
-        {param prefix: 'hp' /}
-        {param postfix: ',' /}
-        {param value: $item.hp.combine.total /}
-        {param dm: true /}
-      {/call}
-      {call .overviewValue}
-        {param prefix: 'break DC' /}
-        {param postfix: ';' /}
-        {param value: $item.break_DC.combine.total /}
-        {param dm: true /}
-      {/call}
-      {if $item.extension_counted}
-        {call .overviewValue}
-          {param prefix: '&#x2736;' /}
-          {param postfix: ';' /}
-          {param content: $item.count.print + ' '
-              + $item.unit.combine.total.print /}
-        {/call}
-      {elseif $item.extension_multiuse or $item.extension_multiple}
-        {call .overviewValue}
-          {param prefix: '&#x2736;' /}
-          {param postfix: ';' /}
-          {param value: $item.count /}
-        {/call}
-      {/if}
-      {if $item.extension_wearable}
-        {call .overviewValue}
-          {param prefix: '&#x269c;' /}
-          {param value: $item.slot.combine.total /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: ' ' /}
-          {param value: $item.don.combine.total /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: ', ' /}
-          {param postfix: ';' /}
-          {param value: $item.remove.combine.total /}
-        {/call}
-      {/if}
-      {if $item.extension_timed}
-        {call .overviewValue}
-          {param prefix: '&#x27f3;' /}
-          {param postfix: ';' /}
-          {param value: $item.duration.combine.total /}
-        {/call}
-      {/if}
-      {if $item.extension_light}
-        {call .overviewValue}
-          {param prefix: '&#x263c;' /}
-          {param value: $item.bright_light.combine.total /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: ' /' /}
-          {param postfix: ';' /}
-          {param value: $item.shadowy_light.combine.total /}
-        {/call}
-      {/if}
-      {if $item.extension_weapon}
-        {call .overviewValue}
-          {param prefix: '&#x2694;' /}
-          {param value: $item.weapon_type.combine.total /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: ' ' /}
-          {param value: $item.proficiency.combine.total /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: ' ' /}
-          {param value: $item.weapon_style.combine.total /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: ', ' /}
-          {param value: $item.damage.combine.total /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: ' ' /}
-        {/call}
-        {if $item.range.combine.total}
-          {call .overviewValue}
-            {param prefix: ', range' /}
-            {param value: $item.range.combine.total /}
-          {/call}
-        {/if}
-        {if $item.reach.combine.total}
-          {call .overviewValue}
-            {param prefix: ', reach' /}
-            {param value: $item.reach.combine.total /}
-          {/call}
-        {/if}
-        ;{sp}
-      {/if}
-      {if $item.extension_armor}
-        {call .overviewValue}
-          {param prefix: '&#x2602;' /}
-          {param value: $item.armor_type.combine.total /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: ', AC' /}
-          {param value: $item.AC_bonus.combine.total /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: ', max dex' /}
-          {param value: $item.max_dexterity.combine.total /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: ', check penalty' /}
-          {param value: $item.check_penalty.combine.total /}
-        {/call}
-        {call .overviewValue}
-          {param prefix: ', arcane failure' /}
-          {param value: $item.arcane_failure.combine.total /}
-        {/call}
-        ;{sp}
-      {/if}
-      {if $item.extension_incomplete and $ij.isDM}
-        <div class="item-overview-value-dm">
-          <literal>&#x2639;</literal>{sp}
-          {$item.incomplete.combine.total}
-        </div>
-      {/if}
-      {if $item.dm_notes.isDefined and $ij.isDM}
-        <div class="item-overview-value-dm">
-          {$item.dm_notes}
-        </div>
-      {/if}
-      {if $ij.isDM and def($item.short_description.combine.total)}
-        <div class="item-overview-value-dm">
-          {$item.short_description.combine.total}
-        </div>
-      {/if}
-    </div>
-  {/if}
-  {if $item.extension_contents}
-    <div class="item-overview-contents">
-      {foreach $content in $item.contents.list}
-      {call .itemoverview}
-        {param item: entry($item.campaign.key + '/item/'
-            + $content.print) /}
-        {/call}
-      {/foreach}
-    </div>
-  {/if}
-{/template}
-
-/**
- * Print the value with the given pre and post fix.
- * 
- * @param? entry       the entry containing the value
- * @param? prefix      the prefix for the value
- * @param? postfix     the postfix for the value
- * @param? value       the vaue to print
- * @param? content     formatted content instead of a value
- * @param? combination a combination value to print (instead of value or
-                       content)
- * @param? dm          if printing only for dm
- */
-{template .overviewValue}
-  {if $dm}
-    {if $ij.isDM}
-      <span class="item-overview-value-dm">
-        {call .overviewValueRaw data="all" /}
-      </span>
-    {/if}
-  {else}
-    {call .overviewValueRaw data="all" /}
-  {/if}
-{/template}
-
-/**
- * Print the raw value, ignoring dm handling.
- *
- * @param? entry        the entry to render
- * @param? prefix      the prefix for the value
- * @param? postfix     the postfix for the value
- * @param? value       the vaue to print
- * @param? content     formatted content instead of a value
- * @param? combination a combination value to print (instead of value or content)
- */
-{template .overviewValueRaw private="true"}
-  {if $combination}
-    {call dma.value.combined}
-      {param value: $combination /}
-      {param entry: $entry /}
-      {param canEdit: false /}
-      {param prefix: $prefix /}
-      {param postfix: $postfix /}
-    {/call}
-  {elseif $content}
-    {if $prefix}{$prefix}{sp}{/if}
-      {$content}
-    {if $postfix}{$postfix}{sp}{/if}
-  {else}
-    {if def($value)}
-      {if $value.isDefined and not def($value.isCombined)}
-        {if $prefix}{$prefix}{sp}{/if}
-        {$value}
-        {if $postfix}{$postfix}{sp}{/if}
-      {else}
-        {call dma.value.withbase}
-          {param entry: $entry /}
-          {param value: $value /}
-          {param canEdit: false /}
-          {param prefix: $prefix /}
-          {param postfix: $postfix /}
-        {/call}
-      {/if}
-    {else}
-      (no value) [{$value}]
-    {/if}
-  {/if}
-{/template}

@@ -156,6 +156,8 @@ public class DMADatastore
              int inStart, int inSize)
   {
     List<T> entries = new ArrayList<>();
+    try
+    {
     Iterable<Entity> entities =
       m_data.getEntities(escapeType(inType.toString()), convert(inParent),
                          inType.getSortField(), inStart, inSize);
@@ -165,6 +167,10 @@ public class DMADatastore
       Optional<T> entry = convert(entity);
       if(entry.isPresent())
         entries.add(entry.get());
+    }
+    } catch(Exception e)
+    {
+      Log.error("Cannot get entries: " + e);
     }
 
     return entries;
@@ -486,10 +492,10 @@ public class DMADatastore
         break;
 
       List<Entity> entities =
-        m_data.getEntitiesList(escapeType(inType.toString()),
-                               Optional.<Key>absent(),
-                               Optional.<String>absent(),
-                               start, chunk);
+          m_data.getEntities(escapeType(inType.toString()),
+                             Optional.<Key>absent(),
+                             Optional.<String>absent(),
+                             start, chunk);
 
       for(Entity entity : entities)
       {
@@ -743,7 +749,14 @@ public class DMADatastore
     // for them in the datastore.
     for(Map.Entry<String, Object> entry
         : inEntry.collectSearchables().entrySet())
-      entity.setProperty(entry.getKey(), entry.getValue());
+      if(entry.getValue() instanceof Optional)
+      {
+        if(((Optional)entry.getValue()).isPresent())
+          entity.setProperty(entry.getKey(),
+                             ((Optional)entry.getValue()).get());
+      }
+      else
+        entity.setProperty(entry.getKey(), entry.getValue());
 
     // Save the index information to make it searchable afterwards.
     Multimap<Index.Path, String> indexes = inEntry.computeIndexValues();

@@ -37,14 +37,19 @@ import com.google.template.soy.data.SoyData;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.entries.BaseSkill;
 import net.ixitxachitls.dma.entries.Level;
 import net.ixitxachitls.dma.entries.Skill;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.output.soy.SoyValue;
+import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.values.ArmorType;
+import net.ixitxachitls.dma.values.Content;
 import net.ixitxachitls.dma.values.Proficiency;
+import net.ixitxachitls.dma.values.SizeModifier;
+import net.ixitxachitls.dma.values.WeaponStyle;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Alignment;
@@ -58,9 +63,12 @@ import net.ixitxachitls.dma.values.enums.Language;
 import net.ixitxachitls.dma.values.enums.LanguageModifier;
 import net.ixitxachitls.dma.values.enums.Maneuverability;
 import net.ixitxachitls.dma.values.enums.MonsterSubtype;
+import net.ixitxachitls.dma.values.enums.MonsterType;
 import net.ixitxachitls.dma.values.enums.MovementMode;
 import net.ixitxachitls.dma.values.enums.Organization;
 import net.ixitxachitls.dma.values.enums.Save;
+import net.ixitxachitls.dma.values.enums.School;
+import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.dma.values.enums.SkillModifier;
 import net.ixitxachitls.dma.values.enums.SkillRestriction;
 import net.ixitxachitls.dma.values.enums.SpellClass;
@@ -69,6 +77,7 @@ import net.ixitxachitls.dma.values.enums.SpellDescriptor;
 import net.ixitxachitls.dma.values.enums.SpellEffect;
 import net.ixitxachitls.dma.values.enums.Subschool;
 import net.ixitxachitls.util.Tracer;
+import net.ixitxachitls.util.logging.Log;
 
 /**
  * The base servlet for all soy rendered pages.
@@ -241,6 +250,8 @@ public class SoyServlet extends DMAServlet
 
        // classes with static access
        "Level", new SoyValue("Level", Level.class),
+       "Size", new SoyValue("Size", Size.class),
+       "SizeModifier", new SoyValue("SizeModifier", SizeModifier.class),
        "Skill", new SoyValue("Skill", Skill.class),
        "Gender", new SoyValue("Gender", Gender.class),
        "Alignment", new SoyValue("Alignment", Alignment.class),
@@ -248,14 +259,18 @@ public class SoyServlet extends DMAServlet
        "Affects", new SoyValue("Affects", Affects.class),
        "WeaponProficiency",
        new SoyValue("WeaponProficiency", Proficiency.class),
+       "WeaponStyle",
+       new SoyValue("WeaponStyle", WeaponStyle.class),
        "ArmorProficiency",
        new SoyValue("ArmorProficiency", ArmorType.class),
        "SpellDescriptor",
        new SoyValue("SpellDescriptor", SpellDescriptor.class),
        "SpellEffect", new SoyValue("SpellEffect", SpellEffect.class),
+       "School", new SoyValue("SpellSchool", School.class),
        "SpellClass", new SoyValue("SpellClass", SpellClass.class),
        "Subschool", new SoyValue("Subschool", Subschool.class),
        "SpellComponent", new SoyValue("SpellComponent", SpellComponent.class),
+       "MonsterType", new SoyValue("MonsterType", MonsterType.class),
        "MonsterSubtype", new SoyValue("MonsterSubtype", MonsterSubtype.class),
        "MovementMode", new SoyValue("MovementMode", MovementMode.class),
        "AttackMode", new SoyValue("AttackMode", AttackMode.class),
@@ -272,7 +287,9 @@ public class SoyServlet extends DMAServlet
        "SkillRestriction",
        new SoyValue("SkillRestriction", SkillRestriction.class),
        "Immunity", new SoyValue("Immunity", Immunity.class),
-       "BaseSkill", new SoyValue("BaseSkill", BaseSkill.class));
+       "BaseSkill", new SoyValue("BaseSkill", BaseSkill.class),
+       "BaseProduct_Part",
+       new SoyValue("BaseProduct_Part", BaseProduct.Part.class));
 
     tracer.done();
     return map;

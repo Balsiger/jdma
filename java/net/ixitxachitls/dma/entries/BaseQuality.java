@@ -29,7 +29,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
@@ -237,16 +236,19 @@ public class BaseQuality extends BaseEntry
     return Collections.unmodifiableList(m_bonusFeats);
   }
 
-  @Override
-  public void set(Values inValues)
+  @Deprecated
+  public List<Effect> getEffects()
   {
-    super.set(inValues);
+    return m_effects;
+  }
+
+  @Override
+  public void setValues(Values inValues)
+  {
+    super.setValues(inValues);
 
     m_qualityType = inValues.use("quality_type", m_qualityType,
                                  EffectType.PARSER);
-    m_effects = inValues.use("effect", m_effects, Effect.PARSER,
-                             "affects", "name", "modifier", "text");
-    m_qualifier = inValues.use("qualifier", m_qualifier);
     m_speed = inValues.use("speed", m_speed,
                            ExpressionValue.parser(Speed.PARSER));
     m_abilityModifiers = inValues.use("ability_modifier", m_abilityModifiers,
@@ -268,6 +270,10 @@ public class BaseQuality extends BaseEntry
     m_damageModifier = inValues.use("damage_modifier", m_damageModifier,
                                     Modifier.PARSER);
     m_bonusFeats = inValues.use("bonus_feat", m_bonusFeats);
+
+    m_effects = inValues.use("effect", m_effects, Effect.PARSER,
+                             "affects", "name", "modifier", "text");
+    m_qualifier = inValues.use("qualifier", m_qualifier);
   }
 
  /**
@@ -286,9 +292,6 @@ public class BaseQuality extends BaseEntry
 
     return values;
   }
-
-  //........................................................................
-  //------------------------- computeSkillModifier -------------------------
 
   /**
    * Get a modifier for a skill.
@@ -545,11 +548,11 @@ public class BaseQuality extends BaseEntry
 
     if(proto.hasAttackModifier())
       m_attackModifier =
-        Optional.of(Modifier.fromProto(proto.getAttackModifier()));
+          Optional.of(Modifier.fromProto(proto.getAttackModifier()));
 
     if(proto.hasDamageModifier())
       m_damageModifier =
-        Optional.of(Modifier.fromProto(proto.getDamageModifier()));
+          Optional.of(Modifier.fromProto(proto.getDamageModifier()));
 
     for(BaseQualityProto.KeyedModifier skillModifeir
           : proto.getSkillModifierList())
@@ -560,16 +563,9 @@ public class BaseQuality extends BaseEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(BaseQualityProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return BaseQualityProto.getDefaultInstance();
   }
 
   //---------------------------------------------------------------------------

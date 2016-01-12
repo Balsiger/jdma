@@ -24,55 +24,61 @@
  */
 {namespace dma.entries.qualities}
 
-/**
- * Editiing the base character.
- * 
- * @param? entry The character to edit. 
- */
+/** Editiing the base character. */
 {template .edit}
+  {@param? entry: ?}
+  {@param? prefix: any}
+  {@param index: number}
   {call dma.edit.field_input}
-    {param name: 'quality.name' /}
-    {param caption: 'Name' /}
+    {param name: ($prefix ? $prefix : '') + 'quality@' + $index + '.name' /}
+    {param caption: 'quality name' /}
     {param value: $entry ? lower($entry.name) : '' /}
     {param class: 'narrow' /}
     {param validate: 'any' /}
-    {param autocomplete: 'base quality/name' /} 
-  {/call}    
-  {if $entry}    
+    {param autocomplete: 'base quality/name' /}
+  {/call}
+  {if $entry}
     {foreach $name in keys($entry.parameters)}
       {call dma.edit.field_list_multiple}
         {param values:  [
           [ 
-            'name' : 'quality.parameter.name',
+            'name' : ($prefix ? $prefix : '') + 'quality@' + $index
+                      + '.parameter.name',
             'value': $name,
-            'validate': 'any'
+            'validate': 'any',
+            'caption': 'param name'
           ],
           [
-            'name': 'quality.parameter.value',
+            'name': ($prefix ? $prefix : '' ) + 'quality@' + $index
+                     + '.parameter.value',
             'value': $entry.parameters[$name],
-            'validate': 'any'          
+            'validate': 'any',
+            'caption': 'param value'
           ]
         ]/}    
         {param class: 'narrow' /} 
       {/call}
     {/foreach}
-  {else}
-    {call dma.edit.field_list_multiple}
-      {param values:  [
-        [ 
-          'name' : 'quality.parameter.name',
-          'value': '',
-          'validate': 'any'
-        ],
-        [
-          'name': 'quality.parameter.value',
-          'value': '',
-          'validate': 'any'          
-        ]
-      ]/}    
-      {param class: 'narrow' /} 
-    {/call}    
-  {/if}    
+  {/if}
+  {call dma.edit.field_list_multiple}
+    {param values:  [
+      [
+        'name' : ($prefix ? $prefix : '' ) + 'quality@' + $index
+                  + '.parameter.name',
+        'value': '',
+        'validate': 'any',
+        'caption': 'param name'
+      ],
+      [
+        'name': ($prefix ? $prefix : '' ) + 'quality@' + $index
+                 + '.parameter.value',
+        'value': '',
+        'validate': 'any',
+        'caption': 'param value'
+      ]
+    ]/}
+    {param class: 'narrow' /}
+  {/call}
 {/template}
 
 /**
@@ -81,7 +87,7 @@
  * @param entry      The entry rendered.
  */
 {template .tiny}
-  <div class="entry level tiny" onclick="details('{$entry.path}')">
+  <div class="entry quality tiny" onclick="details('{$entry.path}')">
     {$entry.name}
     {if length(keys($entry.parameters)) > 0}
       {sp}[
@@ -143,9 +149,7 @@
       </div>
 
      <div class="short-description">
-       {call dma.entry.added}
-         {param addable: $entry.combined_short_description /}
-       {/call}
+       {annotate($entry.combined_short_description)}
      </div>
 
    </div>
@@ -209,17 +213,12 @@
               {param value: 'incomplete' /}
             {/call}
             {sp}
-            {call dma.entry.added}
-              {param addable: $entry.combined_incomplete /}
-            {/call}
+            {annotate($entry.combined_incomplete)}
           </div>
         {/if}
         
         <div class="description">
-          {call dma.entry.concatenated}
-            {param concatenate: $entry.combined_description /}
-            {param lines: true /}
-          {/call}
+          {annotate($entry.combined_description)}
         </div>
         {if $entry.DM_notes.present} 
           <div class="dm-notes block">
@@ -252,10 +251,7 @@
           </div>
         {/if}
         <div class="references">
-          {call dma.entry.concatenated_list}
-            {param values: [] /}
-            {param concatenate: $entry.combined_references /}
-          {/call}
+          {annotate($entry.combined_references)}
         </div>
       </div>
     </div>
@@ -275,10 +271,7 @@
           {param value: 'value' /}
         {/call}
         {sp}
-        {call dma.entry.added} 
-          {param value: $entry.value /}
-          {param addable: $entry.combined_value /}           
-        {/call}
+        {annotate($entry.combined_value)}
       </div>
 
       <div class="hp">
@@ -287,288 +280,78 @@
         {/call}
         {sp}
         {$entry.HP} (of{sp}
-        {call dma.entry.added} 
-          {param addable: $entry.combined_max_HP /}           
-        {/call})
+        {annotate($entry.combined_max_HP)}
       </div>
-
-      <div class="weight">
-        {call dma.value.extension}
-          {param value: 'weight' /}
-        {/call}
-        {sp}
-        {call dma.entry.added}
-          {param addable: $entry.combined_weight /}
-        {/call}
-      </div>
-      <div class="size">
-        {call dma.value.extension}
-          {param value: 'size' /}
-        {/call}
-        {sp}
-        {call dma.entry.added}
-          {param addable: $entry.combined_size /}
-        {/call}
-      </div>
-
-      <div class="hardness">
-        {call dma.value.extension}
-          {param value: 'hardness' /}
-        {/call}
-        {call dma.entry.added}
-          {param addable: $entry.combined_hardness /}
-        {/call}
-        {sp}
-        {call dma.value.extension}
-          {param value: 'break' /}
-        {/call}
-        {call dma.entry.added}
-          {param addable: $entry.combined_break_DC /}
-        {/call}
-      </div>
-
-      <div class="substance">
-        {call dma.value.extension}
-          {param value: 'substance' /}
-        {/call}
-        {sp}
-        <span class="value">
-          {call dma.entry.added}
-            {param addable: $entry.combined_thickness /}
-          {/call}
-          {sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_substance /}
-          {/call}
-        </span>
-      </div>
-
-      {if $entry.multiple.present}
-        <div class="counted">
-          {call dma.value.extension}
-            {param value: 'multiple' /}
-          {/call}
-          {sp}
-          {$entry.multiple.get}
-          {sp}
-          {call dma.entry.added} 
-            {param addable: $entry.combined_count_unit /}
-          {/call}
-          {sp}
-        </div>
-      {/if}
-
-      {if $entry.multiuse.present}
-        <div class="counted">
-          {call dma.value.extension}
-            {param value: 'multiuse' /}
-          {/call}
-          {sp}
-          {$entry.multiuse.get}
-          {sp}
-        </div>
-      {/if}
-
-      {if $entry.wearable}
-        <div class="wearable">
-          {call dma.value.extension}
-            {param value: 'wearable' /}
-          {/call}
-          {sp}
-          {call dma.entry.added} 
-            {param addable: $entry.combined_slot /}
-          {/call}
-          {sp}
-          <div class="stack">
-            <div>
-              {call dma.entry.added} 
-                {param addable: $entry.combined_don /}
-                {param short: true /}
-              {/call}/ 
-              {call dma.entry.added} 
-                {param addable: $entry.combined_don_hastily /}
-                {param short: true /}
-              {/call}
-            </div>
-            <div>
-              {call dma.entry.added} 
-                {param addable: $entry.combined_remove /}
-                {param short: true /}
-              {/call}
-           </div>
-          </div>
-        </div>
-      {/if}
-
-      {if $entry.container}
-        <div class="container">
-          {call dma.value.extension}
-            {param value: 'container' /}
-          {/call}
-          {sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_capacity /}
-            {param short: true /}
-          {/call}
-          {sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_state /}
-            {param short: true /}
-          {/call}
-        </div>
-      {/if}
-
-      {if $entry.light}
-        <div class="light">
-          {call dma.value.extension}
-            {param value: 'light' /}
-          {/call}
-          {sp}
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_light_shape /}
-          {/call}
-          
-          <div class="stack lead">
-            <div>
-              {call dma.entry.added}
-                {param short: true /}
-                {param addable: $entry.combined_bright_light /}
-              {/call}
-            </div>
-            <div>
-              {call dma.entry.added}
-                {param short: true /}
-                {param addable: $entry.combined_shadowy_light /}
-              {/call}
-            </div>
-          </div>
-        </div>
-      {/if}
-
-      {if $entry.timed}
-        <div class="timed">
-          {call dma.value.extension}
-            {param value: 'timed' /}
-          {/call}
-          {sp}
-          {$entry.time_left.get.to_short_string}
-        </div>
-      {/if}
-
-      {if $entry.commodity}
-        <div class="commodity">
-          {call dma.value.extension}
-            {param value: 'commodity' /}
-          {/call}
-          {sp}
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_length /}
-          {/call}
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_area /}
-          {/call}
-        </div>
-      {/if}
-    </div>
-
-    {if $entry.weapon}
-      <div class="statistics-line weapon">
-        {call dma.value.extension}
-          {param value: 'weapon' /}
-        {/call}
-        <div class="value">
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_damage /}
-          {/call}
-          {if $entry.combined_secondary_damage.has_value}
-            {call dma.entry.added}
-              {param short: true /}
-              {param addable: $entry.combined_secondary_damage /}
-            {/call}
-            {sp}
-          {/if}
-          {if $entry.combined_splash.has_value}
-            ({call dma.entry.added}
-              {param short: true /}
-              {param addable: $entry.combined_splash /}
-            {/call})
-            {sp}
-          {/if}
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_critical /}
-          {/call}
-          ,{sp}
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_weapon_type /}
-          {/call}
-          ,{sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_proficiency /}
-            {param short: true /}
-          {/call}
-          ,{sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_weapon_style /}
-            {param short: true /}
-          {/call}
-          ,{sp}
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_reach /}
-          {/call}
-          /
-          {call dma.entry.added}
-            {param short: true /}
-            {param addable: $entry.combined_range /}
-          {/call}
-        </div>
-      </div>
-    {/if}
-
-    {if $entry.armor}
-      <div class="statistics-line armor">
-        {call dma.value.extension}
-          {param value: 'armor' /}
-        {/call}
-        <div class="value">
-          AC{sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_armor_bonus /}
-          {/call}
-          {sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_armor_type /}
-          {/call}
-          , max dex{sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_max_dex /}
-          {/call}
-          , check{sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_check_penalty /}
-          {/call}
-          , arcane{sp}
-          {call dma.entry.added}
-            {param addable: $entry.combined_arcane_failure /}
-          {/call}
-          {if $entry.combined_slow_speed.has_value 
-              or $entry.combined_fast_speed.has_value}
-            , speed{sp}
-            {call dma.entry.added}
-              {param addable: $entry.combined_slow_speed /}
-            {/call}/
-            {call dma.entry.added}
-              {param addable: $entry.combined_fast_speed /}
-            {/call}
-          {/if}
-        </div>
-      </div>
-    {/if}
   </div>
+{/template}
+
+/** Printing a summary. */
+{template .summary}
+  {@param entry: ?}
+  {call dma.value.link}
+    {param text kind="html"}
+      <i>{$entry.base_name}</i>
+    {/param}
+    {param url: '/quality/' + $entry.base_name /}
+  {/call}
+  , {$entry.short_description}
+  {if length(keys($entry.parameters)) > 0}
+    {sp}(
+    {if length(keys($entry.parameters)) == 1}
+      {foreach $key in keys($entry.parameters)}
+        {$entry.parameters[$key]}
+      {/foreach}
+    {else}
+      {foreach $key in keys($entry.parameters)}
+        {$key}: {$entry.parameters[$key]}
+      {/foreach}
+    {/if}
+    )
+  {/if}
+  {if length($entry.ability_modifiers) > 0}
+    ,{sp}
+    {foreach $modifier in $entry.ability_modifiers}
+      {$modifier.short}
+      {if not isLast($modifier)}, {/if}
+    {/foreach}
+  {/if}
+  {if length($entry.immunities) > 0}
+    ; immune {sp}
+    {foreach $immunity in $entry.immunities}
+      {$immunity}
+      {if not isLast($immunity)}, {/if}
+    {/foreach}
+  {/if}
+  {if $entry.reflex_modifier.has_value}
+    ; Ref {$entry.reflex_modifier}
+  {/if}
+  {if $entry.will_modifier.has_value}
+    ; Wil {$entry.will_modifier}
+  {/if}
+  {if $entry.fortitude_modifier.has_value}
+    ; For {$entry.fortitude_modifier}
+  {/if}
+  {if $entry.attack_modifier.has_value}
+    ; attack {$entry.attack_modifier}
+  {/if}
+  {if $entry.damage_modifier.has_value}
+    ; damage {$entry.damage_modifier}
+  {/if}
+  {if $entry.speed.present}
+    ; damage {$entry.speed}
+  {/if}
+  {if length($entry.skill_modifiers)}
+    ;{sp}
+    {foreach $skill in $entry.skill_modifiers}
+      {$skill}
+      {if not isLast($skill)}, {/if}
+    {/foreach}
+  {/if}
+  {if length($entry.bonus_feats)}
+    ;{sp}
+    {foreach $feat in $entry.bonus_feats}
+      {$feat}
+      {if not isLast($feat)}, {/if}
+    {/foreach}
+  {/if}
 {/template}

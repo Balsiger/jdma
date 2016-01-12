@@ -25,8 +25,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ArrayListMultimap;
@@ -34,6 +37,7 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.NestedEntry;
+import net.ixitxachitls.util.Strings;
 
 /**
  * A utility class to parse and generally deal with values.
@@ -434,15 +438,16 @@ public class Values
     if(values == null || values.isEmpty())
       return Optional.absent();
 
-    // TODO: don't know why this was here before???
-    if(values.isEmpty())
-      return Optional.of("");
-
     if(values.size() > 1)
     {
       m_messages.add("Found multiple values for " + inKey
                          + ", expected single value.");
     }
+
+    // Specially treat the empty case when setting a value from something to
+    // empty.
+    if(values.iterator().next().trim().isEmpty())
+      return Optional.of("");
 
     return Optional.fromNullable(values.iterator().next());
   }
@@ -532,25 +537,39 @@ public class Values
   List<E> useEntries(String inKey, List<E> inDefault,
                      NestedEntry.Creator<E> inCreator)
   {
-    // create sub values list
-    String prefix = inKey + ".";
-    List<ListMultimap<String, String>> values = new ArrayList<>();
+    // create sub values list sorted by indexes
+    String prefix = inKey + "@";
+    Map<String, ListMultimap<String, String>> values = new TreeMap<>();
     for (String key : m_values.keySet())
       if (key.startsWith(prefix))
       {
-        if (values.isEmpty())
-          for (@SuppressWarnings("unused") String value : m_values.get(key))
-            values.add(ArrayListMultimap.<String, String>create());
+        String []sub = Strings.getPatterns(key, "(.*?)@(\\d+)\\.(.*)");
+        if (sub.length != 3)
+          continue;
 
-        String subkey = key.substring(prefix.length());
-        int i = 0;
+        String id = sub[1];
+        String subkey = sub[2];
+
         for (String value : m_values.get(key))
-          values.get(i++).put(subkey, value);
+        {
+          ListMultimap<String, String> subvalues = values.get(id);
+          if(subvalues == null)
+          {
+            subvalues = ArrayListMultimap.create();
+            values.put(id, subvalues);
+          }
+
+          subvalues.put(subkey, value);
+        }
       }
 
-    List<E> entries = new ArrayList<E>();
-    for (ListMultimap<String, String> submap : values)
+    List<E> entries = new ArrayList<>();
+    for (ListMultimap<String, String> submap : values.values())
     {
+      // Ignore entries that contain no values.
+      if(!hasValue(submap))
+        continue;
+
       E entry = inCreator.create();
       entry.set(new Values(submap));
       entries.add(entry);
@@ -561,5 +580,19 @@ public class Values
 
     m_changed = true;
     return entries;
+  }
+
+  private boolean hasValue(ListMultimap<String, String> inMap)
+  {
+    for(String value : inMap.values())
+      if(!value.trim().isEmpty())
+        return true;
+
+    return false;
+  }
+
+  public void clear()
+  {
+    m_values.clear();
   }
 }

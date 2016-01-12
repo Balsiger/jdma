@@ -50,6 +50,11 @@ public enum SkillRestriction implements Named,
                       BaseSkillProto.Restriction.ARMOR_CHECK_PENALTY),
 
   /** Armor check penalty. */
+  DOUBLE_ARMOR_CHECK_PENALTY("Double Armor Check Penalty",
+                             BaseSkillProto.Restriction
+                                 .DOUBLE_ARMOR_CHECK_PENALTY),
+
+  /** Armor check penalty. */
   SUBTYPE_ONLY("Subtype Only", BaseSkillProto.Restriction.SUBTYPE_ONLY);
 
   /** The value's name. */

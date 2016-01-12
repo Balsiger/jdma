@@ -115,6 +115,11 @@ public class Speed extends Value.Arithmetic<SpeedProto>
     return m_speed;
   }
 
+  public int squares()
+  {
+    return (int)(m_speed.asFeet() / 5.0);
+  }
+
   /**
    * The maneuverability class when flying.
    *

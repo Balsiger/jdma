@@ -22,7 +22,7 @@
  /*
  * Templates for base products.
  */
-{namespace dma.entries.baselevels autoescape="deprecated-contextual"}
+{namespace dma.entries.baselevels}
 
 /**
  * Show the given entry in standard format.
@@ -44,17 +44,17 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#aaf' /}
-    {param title}
-      {call dma.entry._new_title}
+    {param title kind="html"}
+      {call dma.entry.title}
         {param title: $entry.name /}
         {param color: '#aaf' /}
       {/call}
     {/param}
-    {param values}            
+    {param values kind="html"}
       {if length($entry.baseNames)}
         {call dma.entry.value}
           {param label: 'Base' /}
-          {param value}
+          {param value kind="html"}
             {foreach $base in $entry.baseNames}
               {call dma.page.link}
                 {param text: $base /}
@@ -69,7 +69,7 @@
       {if length($entry.synonyms)}
         {call dma.entry.value}
           {param label: 'Synonyms' /}
-          {param value}
+          {param value kind="html"}
             {foreach $synonym in $entry.synonyms}
               {$synonym}
               {if not isLast($synonym)}; {/if}
@@ -82,7 +82,7 @@
           length($entry.combined_categories.get)}
         {call dma.entry.value}
           {param label: 'Categories' /}
-          {param value}
+          {param value kind="html"}
             {if length($entry.categories)}
               {foreach $category in $entry.categories}
                 {$category}
@@ -91,10 +91,7 @@
             {/if}
             {if length($entry.combined_categories.get)}
               {if length($entry.categories)},{sp}{/if}
-              {call dma.entry.concatenated_list}
-                {param values: [] /}
-                {param concatenate: $entry.combined_categories /}
-              {/call}
+              {annotate($entry.combined_categories)}
             {/if}
           {/param}
           {param color: '#aaf' /}
@@ -102,25 +99,17 @@
       {/if}
       {call dma.entry.value}
         {param label: 'Worlds' /}        
-        {param value}
-          {call dma.entry.concatenated_list}
-            {param values: $entry.worlds /}
-            {param concatenate: $entry.combined_worlds /}
-          {/call}
-        {/param}
+        {param value: annotate($entry.combined_worlds) /}
         {param color: '#aaf' /}
       {/call}
       {if $entry.incomplete or $entry.combined_incomplete.get.present}
         {call dma.entry.value}
           {param label: 'Incomplete' /}
-          {param value}
+          {param value kind="html"}
             {if $entry.incomplete}
               {$entry.incomplete}{sp}
             {/if}
-            {call dma.entry.concatenated}
-              {param value: '' /}
-              {param concatenate: $entry.combined_incomplete /}
-            {/call}
+            {annotate($entry.combined_incomplete)}
           {/param}
           {param color: '#aaf' /}
         {/call}
@@ -198,7 +187,7 @@
       {if $entry.allowed_alignments}
         {call dma.entry.value}
           {param label: 'Alignments' /}
-          {param value}
+          {param value kind="html"}
             {foreach $alignment in $entry.allowed_alignments}
               {$alignment}
               {if not isLast($alignment)}, {/if}
@@ -224,7 +213,7 @@
       {if $entry.class_skills}
         {call dma.entry.value}
           {param label: 'Class Skills' /}
-          {param value}
+          {param value kind="html"}
             {foreach $skill in $entry.class_skills}
               {$skill}
               {if not isLast($skill)}, {/if}
@@ -236,7 +225,7 @@
       {if $entry.weapon_proficiencies}
         {call dma.entry.value}
           {param label: 'Weapon Prof.' /}
-          {param value}
+          {param value kind="html"}
             {foreach $proficiency in $entry.weapon_proficiencies}
               {$proficiency}
               {if not isLast($proficiency)}, {/if}
@@ -248,7 +237,7 @@
       {if $entry.armor_proficiencies}
         {call dma.entry.value}
           {param label: 'Armor Prof.' /}
-          {param value}
+          {param value kind="html"}
             {foreach $proficiency in $entry.armor_proficiencies}
               {$proficiency}
               {if not isLast($proficiency)}, {/if}
@@ -260,7 +249,7 @@
       {if $entry.special_attacks}
         {call dma.entry.value}
           {param label: 'Special Attacks' /}
-          {param value}
+          {param value kind="html"}
             {foreach $attack in $entry.special_attacks}              
               {$attack}
               {if not isLast($attack)}; {/if}
@@ -272,10 +261,22 @@
       {if $entry.special_attacks}
         {call dma.entry.value}
           {param label: 'Special Qualities' /}
-          {param value}
-            {foreach $quality in $entry.special_qualities}              
+          {param value kind="html"}
+            {foreach $quality in $entry.special_qualities}
               {$quality}
               {if not isLast($quality)}; {/if}
+            {/foreach}
+          {/param}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if $entry.special_attacks}
+        {call dma.entry.value}
+          {param label: 'Bonus Feats' /}
+          {param value kind="html"}
+            {foreach $feat in $entry.bonus_feats}
+              {$feat}
+              {if not isLast($feat)}; {/if}
             {/foreach}
           {/param}
           {param color: '#aaf' /}
@@ -284,7 +285,7 @@
       {if $entry.base_attacks}
         {call dma.entry.value}
           {param label: 'Base Attacks' /}
-          {param value}
+          {param value kind="html"}
             {foreach $attack in $entry.base_attacks}              
               {$attack}
               {if not isLast($attack)}, {/if}
@@ -296,7 +297,7 @@
       {if $entry.fortitude_saves}
         {call dma.entry.value}
           {param label: 'For Saves' /}
-          {param value}
+          {param value kind="html"}
             {foreach $save in $entry.fortitude_saves}              
               {$save}
               {if not isLast($save)}, {/if}
@@ -308,7 +309,7 @@
       {if $entry.reflex_saves}
         {call dma.entry.value}
           {param label: 'Ref Saves' /}
-          {param value}
+          {param value kind="html"}
             {foreach $save in $entry.reflex_saves}              
               {$save}
               {if not isLast($save)}, {/if}
@@ -320,8 +321,8 @@
       {if $entry.will_saves}
         {call dma.entry.value}
           {param label: 'Will Saves' /}
-          {param value}
-            {foreach $save in $entry.will_saves}              
+          {param value kind="html"}
+            {foreach $save in $entry.will_saves}
               {$save}
               {if not isLast($save)}, {/if}
             {/foreach}
@@ -329,11 +330,172 @@
           {param color: '#aaf' /}
         {/call}
       {/if}
+      {if $entry.spell_ability}
+        {call dma.entry.value}
+          {param label: 'Spell Ability' /}
+          {param value: $entry.spell_ability /}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if length(call($entry, 'getSpellsPerDay', 1)) > 0}
+        {call dma.entry.value}
+          {param label: 'Spells Per Day' /}
+          {param value kind="html"}
+            {if length(call($entry, 'getSpellsPerDay', 0)) > 0}
+              0th level{sp}
+              {foreach $spells in call($entry, 'getSpellsPerDay', 0)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsPerDay', 1)) > 0}
+              {sp}1st level{sp}
+              {foreach $spells in call($entry, 'getSpellsPerDay', 1)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsPerDay', 2)) > 0}
+              {sp}2nd level{sp}
+              {foreach $spells in call($entry, 'getSpellsPerDay', 2)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsPerDay', 3)) > 0}
+              {sp}3rd level{sp}
+              {foreach $spells in call($entry, 'getSpellsPerDay', 3)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsPerDay', 4)) > 0}
+              {sp}4th level{sp}
+              {foreach $spells in call($entry, 'getSpellsPerDay', 4)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsPerDay', 5)) > 0}
+              {sp}5th level{sp}
+              {foreach $spells in call($entry, 'getSpellsPerDay', 5)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsPerDay', 6)) > 0}
+              {sp}6th level{sp}
+              {foreach $spells in call($entry, 'getSpellsPerDay', 6)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsPerDay', 7)) > 0}
+              {sp}7th level{sp}
+              {foreach $spells in call($entry, 'getSpellsPerDay', 7)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsPerDay', 8)) > 0}
+              {sp}8th level{sp}
+              {foreach $spells in call($entry, 'getSpellsPerDay', 8)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsPerDay', 9)) > 0}
+              {sp}9th level{sp}
+              {foreach $spells in call($entry, 'getSpellsPerDay', 9)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach}
+            {/if}
+          {/param}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
+      {if length(call($entry, 'getSpellsKnown', 1)) > 0}
+        {call dma.entry.value}
+          {param label: 'Spells Known' /}
+          {param value kind="html"}
+            {if length(call($entry, 'getSpellsKnown', 0)) > 0}
+              0th level{sp}
+              {foreach $spells in call($entry, 'getSpellsKnown', 0)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsKnown', 1)) > 0}
+              {sp}1st level{sp}
+              {foreach $spells in call($entry, 'getSpellsKnown', 1)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsKnown', 2)) > 0}
+              {sp}2nd level{sp}
+              {foreach $spells in call($entry, 'getSpellsKnown', 2)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsKnown', 3)) > 0}
+              {sp}3rd level{sp}
+              {foreach $spells in call($entry, 'getSpellsKnown', 3)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsKnown', 4)) > 0}
+              {sp}4th level{sp}
+              {foreach $spells in call($entry, 'getSpellsPerDay', 4)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsKnown', 5)) > 0}
+              {sp}5th level{sp}
+              {foreach $spells in call($entry, 'getSpellsKnown', 5)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsKnown', 6)) > 0}
+              {sp}6th level{sp}
+              {foreach $spells in call($entry, 'getSpellsKnown', 6)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsKnown', 7)) > 0}
+              {sp}7th level{sp}
+              {foreach $spells in call($entry, 'getSpellsKnown', 7)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsKnown', 8)) > 0}
+              {sp}8th level{sp}
+              {foreach $spells in call($entry, 'getSpellsKnown', 8)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach};
+            {/if}
+            {if length(call($entry, 'getSpellsKnown', 9)) > 0}
+              {sp}9th level{sp}
+              {foreach $spells in call($entry, 'getSpellsKnown', 9)}
+                {$spells}
+                {if not isLast($spells)}, {/if}
+              {/foreach}
+            {/if}
+          {/param}
+          {param color: '#aaf' /}
+        {/call}
+      {/if}
       {call dma.entry.value}
         {param label: 'References' /}
-        {param value}
-          {annotate($entry.combined_references)}
-        {/param}
+        {param value: annotate($entry.combined_references) /}
         {param color: '#aaf' /}
       {/call}
     {/param}
@@ -352,7 +514,7 @@
  *
  */
 {template .list}
-  {call dma.entry.newlist}
+  {call dma.entry.list}
     {param title: $title /}
     {param label: $label /}
     {param path: $path /}
@@ -360,10 +522,10 @@
     {param pagesize: $pagesize /}
     {param size: $entries ? length($entries) : 0 /}
     {param titles: [ 'Name', 'Worlds', 'Short Descriptoion'] /}
-    {param entries}
+    {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
-          {call dma.entry.newListEntry}
+          {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
               $entry.name, $entry.worldsString, $entry.short_description
@@ -388,7 +550,7 @@
     {param type: 'base-level' /}
     {param id: $id /}
     {param create: $create /}
-    {param values}
+    {param values kind="html"}
       {call dma.edit.value}
         {param name: 'name' /}
         {param label: 'Name' /}
@@ -530,9 +692,9 @@
         {param name: 'allowed_alignment' /}
         {param color: '#aaf' /}
         {param label: 'Alignments' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $alignment in $entry.allowed_alignments}
                 {call dma.edit.field_list_multiple}
                   {param values: [
@@ -588,9 +750,9 @@
         {param name: 'weapon_proficiency' /}
         {param color: '#aaf' /}
         {param label: 'Weapon Prof.' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $proficiency in $entry.weapon_proficiencies}
                 {call dma.edit.field_list_multiple}
                   {param values: [
@@ -623,9 +785,9 @@
         {param name: 'armor_proficiency' /}
         {param color: '#aaf' /}
         {param label: 'Armor Prof.' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $proficiency in $entry.armor_proficiencies}
                 {call dma.edit.field_list_multiple}
                   {param values: [
@@ -658,9 +820,9 @@
         {param name: 'special_attack' /}
         {param color: '#aaf' /}
         {param label: 'Special Attacks' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $attack in $entry.special_attacks}
                 {call dma.edit.field_list_multiple}
                   {param class: 'narrow' /}
@@ -669,7 +831,8 @@
                       'name': 'special_attack.name',
                       'value': $attack.name,
                       'validate': 'non-empty',  
-                      'caption': 'name'                 
+                      'caption': 'name',
+                      'autocomplete': 'base quality/name'
                     ],
                     [
                       'name': 'special_attack.level',
@@ -700,7 +863,8 @@
                       'name': 'special_attack.name',
                       'value': '',
                       'validate': 'non-empty',
-                      'caption': 'name'                   
+                      'caption': 'name',
+                      'autocomplete': 'base quality/name'
                     ],
                     [
                       'name': 'special_attack.level',
@@ -732,9 +896,9 @@
         {param name: 'special_quality' /}
         {param color: '#aaf' /}
         {param label: 'Special Quality' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $quality in $entry.special_qualities}
                 {call dma.edit.field_list_multiple}
                   {param class: 'narrow' /}
@@ -743,7 +907,8 @@
                       'name': 'special_quality.name',
                       'value': $quality.name,
                       'validate': 'non-empty',
-                      'caption': 'name'                   
+                      'caption': 'name',
+                      'autocomplete': 'base quality/name'
                     ],
                     [
                       'name': 'special_quality.level',
@@ -759,7 +924,7 @@
                     ],
                     [
                       'name': 'special_quality.condition',
-                      'value': $quality.condition.present 
+                      'value': $quality.condition.present
                         ? $quality.condition : '',
                       'validate': 'any',
                       'caption': 'condition'
@@ -774,7 +939,8 @@
                       'name': 'special_quality.name',
                       'value': '',
                       'validate': 'non-empty',
-                      'caption': 'name'                   
+                      'caption': 'name',
+                      'autocomplete': 'base quality/name'
                     ],
                     [
                       'name': 'special_quality.level',
@@ -801,7 +967,71 @@
           {/call}
         {/param}
         {param validate: 'non-empty' /}
-      {/call}    
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'bonus_feat' /}
+        {param color: '#aaf' /}
+        {param label: 'Bonus Feat' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $feat in $entry.bonus_feats}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'bonus_feat.name',
+                      'value': $feat.name,
+                      'validate': 'non-empty',
+                      'caption': 'name',
+                      'autocomplete': 'base feat/name'
+                    ],
+                    [
+                      'name': 'bonus_feat.level',
+                      'value': $feat.level,
+                      'validate': 'number',
+                      'caption': 'level'
+                    ],
+                    [
+                      'name': 'special_quality.condition',
+                      'value': $feat.condition.present
+                        ? $feat.condition : '',
+                      'validate': 'any',
+                      'caption': 'condition'
+                    ]
+                  ] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'bonus_feat.name',
+                      'value': '',
+                      'validate': 'non-empty',
+                      'caption': 'name',
+                      'autocomplete': 'base feat/name'
+                    ],
+                    [
+                      'name': 'bonus_feat.level',
+                      'value': '',
+                      'validate': 'number',
+                      'caption': 'level'
+                    ],
+                    [
+                      'name': 'bonus_feat.condition',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'condition'
+                    ]
+                  ] /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+        {param validate: 'non-empty' /}
+      {/call}
       {call dma.edit.value_list}
         {param name: 'base_attack' /}
         {param label: 'Base Attacks' /}
@@ -829,14 +1059,161 @@
         {param values: $entry.will_saves /}
         {param validate: 'number' /}
         {param color: '#aaf' /}
-      {/call}    
+      {/call}
+      {call dma.edit.value_selection}
+        {param name: 'spell_ability' /}
+        {param label: 'Spell Ability' /}
+        {param value: $entry.spell_ability.string /}
+        {param choices: $ij.Ability.names /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_per_day_0' /}
+        {param label: 'Oth Spells Per Day' /}
+        {param values: call($entry, 'getSpellsPerDay', 0) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_per_day_1' /}
+        {param label: '1st Spells Per Day' /}
+        {param values: call($entry, 'getSpellsPerDay', 1) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_per_day_2' /}
+        {param label: '2nd Spells Per Day' /}
+        {param values: call($entry, 'getSpellsPerDay', 2) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_per_day_3' /}
+        {param label: '3rd Spells Per Day' /}
+        {param values: call($entry, 'getSpellsPerDay', 3) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_per_day_4' /}
+        {param label: '4th Spells Per Day' /}
+        {param values: call($entry, 'getSpellsPerDay', 4) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_per_day_5' /}
+        {param label: '5th Spells Per Day' /}
+        {param values: call($entry, 'getSpellsPerDay', 5) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_per_day_6' /}
+        {param label: '6th Spells Per Day' /}
+        {param values: call($entry, 'getSpellsPerDay', 6) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_per_day_7' /}
+        {param label: '7th Spells Per Day' /}
+        {param values: call($entry, 'getSpellsPerDay', 7) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_per_day_8' /}
+        {param label: '8th Spells Per Day' /}
+        {param values: call($entry, 'getSpellsPerDay', 8) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_per_day_9' /}
+        {param label: '9th Spells Per Day' /}
+        {param values: call($entry, 'getSpellsPerDay', 9) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_known_0' /}
+        {param label: 'Oth Spells Known' /}
+        {param values: call($entry, 'getSpellsKnown', 0) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_known_1' /}
+        {param label: '1st Spells Known' /}
+        {param values: call($entry, 'getSpellsKnown', 1) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_known_2' /}
+        {param label: '2nd Spells Known' /}
+        {param values: call($entry, 'getSpellsKnown', 2) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_known_3' /}
+        {param label: '3rd Spells Known' /}
+        {param values: call($entry, 'getSpellsKnown', 3) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_known_4' /}
+        {param label: '4th Spells Known' /}
+        {param values: call($entry, 'getSpellsKnown', 4) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_known_5' /}
+        {param label: '5th Spells Known' /}
+        {param values: call($entry, 'getSpellsKnown', 5) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_known_6' /}
+        {param label: '6th Spells Known' /}
+        {param values: call($entry, 'getSpellsKnown', 6) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_known_7' /}
+        {param label: '7th Spells Known' /}
+        {param values: call($entry, 'getSpellsKnown', 7) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_known_8' /}
+        {param label: '8th Spells Known' /}
+        {param values: call($entry, 'getSpellsKnown', 8) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'spells_known_9' /}
+        {param label: '9th Spells Known' /}
+        {param values: call($entry, 'getSpellsKnown', 9) /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
       {call dma.edit.generic_value}
         {param name: 'references' /}
         {param color: '#aaf' /}
         {param label: 'References' /}
-        {param value}
+        {param value kind="html"}
           {call dma.edit.field}
-            {param markup}
+            {param markup kind="html"}
               {foreach $reference in $entry.references}  
                 {call dma.edit.field_list_multiple}
                   {param values: [

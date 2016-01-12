@@ -25,7 +25,6 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -301,9 +300,9 @@ public class Campaign extends CampaignEntry
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_dm = inValues.use("DM", m_dm);
   }
@@ -344,15 +343,8 @@ public class Campaign extends CampaignEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(CampaignProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return CampaignProto.getDefaultInstance();
   }
 }

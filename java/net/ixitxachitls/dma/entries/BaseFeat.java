@@ -27,7 +27,6 @@ import java.util.List;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
@@ -35,8 +34,12 @@ import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseFeatProto;
 import net.ixitxachitls.dma.proto.Values.ModifierProto;
+import net.ixitxachitls.dma.proto.Values.NameAndModifierProto;
 import net.ixitxachitls.dma.values.Modifier;
+import net.ixitxachitls.dma.values.NameAndModifier;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.Condition;
 import net.ixitxachitls.dma.values.enums.Affects;
 import net.ixitxachitls.dma.values.enums.Effect;
 import net.ixitxachitls.dma.values.enums.FeatType;
@@ -92,7 +95,54 @@ public class BaseFeat extends BaseEntry
   /** The prerequisites. */
   protected Optional<String> m_prerequisites = Optional.absent();
 
+  /** The attack modifier provided by the feat, if any. */
+  protected Optional<Modifier> m_attackModifier = Optional.absent();
+
+  /** The damage modifier provided by the feat, if any. */
+  protected Optional<Modifier> m_damageModifier = Optional.absent();
+
+  /** The additional attacks. */
+  protected Optional<Integer> m_additionalAttacks = Optional.absent();
+
+  /** The initiative modifier. */
+  protected Optional<Modifier> m_initiativeModifier = Optional.absent();
+
+  /** The condition when this feat applies. */
+  protected Optional<Condition> m_condition = Optional.absent();
+
+  /** The skill modifiers given by the feat. */
+  protected List<NameAndModifier> m_skillModifiers = new ArrayList<>();
+
+  /** The strength modifier. */
+  protected Optional<Modifier> m_strengthModifier = Optional.absent();
+
+  /** The dexterity modifier. */
+  protected Optional<Modifier> m_dexterityModifier = Optional.absent();
+
+  /** The constitution modifier. */
+  protected Optional<Modifier> m_constitutionModifier = Optional.absent();
+
+  /** The intelligence modifier. */
+  protected Optional<Modifier> m_intelligenceModifier = Optional.absent();
+
+  /** The wisdom modifier. */
+  protected Optional<Modifier> m_wisdomModifier = Optional.absent();
+
+  /** The charisma modifier. */
+  protected Optional<Modifier> m_charismaModifier = Optional.absent();
+
+  /** The fortitude save modifier. */
+  protected Optional<Modifier> m_fortitudeModifier = Optional.absent();
+
+  /** The will save modifier. */
+  protected Optional<Modifier> m_willModifier = Optional.absent();
+
+  /** The reflex save modifier. */
+  protected Optional<Modifier> m_reflexModifier = Optional.absent();
+
+
   /** The effects of the feat. */
+  @Deprecated
   protected List<Effect> m_effects = new ArrayList<>();
 
   /**
@@ -147,6 +197,86 @@ public class BaseFeat extends BaseEntry
   }
 
   /**
+   * Get the attack modifier provided by this quality.
+   *
+   * @return the attack modifier
+   */
+  public Optional<Modifier> getAttackModifier()
+  {
+    return m_attackModifier;
+  }
+
+  public Optional<Modifier> getInitiativeModifier()
+  {
+    return m_initiativeModifier;
+  }
+
+  /**
+   * Get the damage modifier provided by this quality.
+   *
+   * @return the damage modifier
+   */
+  public Optional<Modifier> getDamageModifier()
+  {
+    return m_damageModifier;
+  }
+
+  public Optional<Integer> getAdditionalAttacks()
+  {
+    return m_additionalAttacks;
+  }
+
+  public Optional<Condition> getCondition()
+  {
+    return m_condition;
+  }
+
+  public Optional<Modifier> getStrengthModifier()
+  {
+    return m_strengthModifier;
+  }
+
+  public Optional<Modifier> getDexterityModifier()
+  {
+    return m_dexterityModifier;
+  }
+
+  public Optional<Modifier> getConstitutionModifier()
+  {
+    return m_constitutionModifier;
+  }
+
+  public Optional<Modifier> getIntelligenceModifier()
+  {
+    return m_intelligenceModifier;
+  }
+
+  public Optional<Modifier> getWisdomModifier()
+  {
+    return m_wisdomModifier;
+  }
+
+  public Optional<Modifier> getCharismaModifier()
+  {
+    return m_charismaModifier;
+  }
+
+  public Optional<Modifier> getFortitudeModifier()
+  {
+    return m_fortitudeModifier;
+  }
+
+  public Optional<Modifier> getWillModifier()
+  {
+    return m_willModifier;
+  }
+
+  public Optional<Modifier> getReflexModifier()
+  {
+    return m_reflexModifier;
+  }
+
+  /**
    * Get the effects the feat has on values.
    *
    * @return a list with all the effects
@@ -188,15 +318,51 @@ public class BaseFeat extends BaseEntry
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_featType = inValues.use("feat_type", m_featType, FeatType.PARSER);
     m_benefit = inValues.use("benefit", m_benefit);
     m_special = inValues.use("special", m_special);
     m_normal = inValues.use("normal", m_normal);
     m_prerequisites = inValues.use("prerequisites", m_prerequisites);
+    m_attackModifier = inValues.use("attack_modifier", m_attackModifier,
+                                    Modifier.PARSER);
+    m_damageModifier = inValues.use("damage_modifier", m_damageModifier,
+                                    Modifier.PARSER);
+    m_additionalAttacks = inValues.use("additional_attacks",
+                                       m_additionalAttacks,
+                                       Value.INTEGER_PARSER);
+    m_initiativeModifier = inValues.use("initiative_modifier",
+                                        m_initiativeModifier,
+                                        Modifier.PARSER);
+    m_condition = inValues.use("condition", m_condition, Condition.PARSER,
+                               "generic", "weapon_style");
+    m_skillModifiers = inValues.use("skill", m_skillModifiers,
+                                    NameAndModifier.PARSER,
+                                    "name", "modifier");
+    m_strengthModifier = inValues.use("strength_modifier", m_strengthModifier,
+                                      Modifier.PARSER);
+    m_dexterityModifier = inValues.use("dexterity_modifier",
+                                       m_dexterityModifier, Modifier.PARSER);
+    m_constitutionModifier = inValues.use("constitution_modifier",
+                                          m_constitutionModifier,
+                                          Modifier.PARSER);
+    m_intelligenceModifier = inValues.use("intelligence_modifier",
+                                          m_intelligenceModifier,
+                                          Modifier.PARSER);
+    m_wisdomModifier = inValues.use("wisdom_modifier", m_wisdomModifier,
+                                      Modifier.PARSER);
+    m_charismaModifier = inValues.use("charisma_modifier", m_charismaModifier,
+                                      Modifier.PARSER);
+    m_fortitudeModifier = inValues.use("fortitude_modifier",
+                                       m_fortitudeModifier, Modifier.PARSER);
+    m_willModifier = inValues.use("will_modifier", m_willModifier,
+                                  Modifier.PARSER);
+    m_reflexModifier = inValues.use("reflex_modifier", m_reflexModifier,
+                                    Modifier.PARSER);
+
     m_effects = inValues.use("effect", m_effects, Effect.PARSER,
                              "affects", "name", "modifier", "text");
   }
@@ -222,6 +388,51 @@ public class BaseFeat extends BaseEntry
 
     if(m_prerequisites.isPresent())
       builder.setPrerequisites(m_prerequisites.get());
+
+    if(m_attackModifier.isPresent())
+      builder.setAttackModifier(m_attackModifier.get().toProto());
+
+    if(m_damageModifier.isPresent())
+      builder.setDamageModifier(m_damageModifier.get().toProto());
+
+    if(m_additionalAttacks.isPresent())
+      builder.setAdditionalAttacks(m_additionalAttacks.get());
+
+    if(m_initiativeModifier.isPresent())
+      builder.setInitiativeModifier(m_initiativeModifier.get().toProto());
+
+    if(m_condition.isPresent())
+      builder.setCondition(m_condition.get().toProto());
+
+    for(NameAndModifier skill : m_skillModifiers)
+      builder.addSkillModifier(skill.toProto());
+
+    if(m_strengthModifier.isPresent())
+      builder.setStrengthModifier(m_strengthModifier.get().toProto());
+
+    if(m_dexterityModifier.isPresent())
+      builder.setDexterityModifier(m_dexterityModifier.get().toProto());
+
+    if(m_constitutionModifier.isPresent())
+      builder.setConstitutionModifier(m_constitutionModifier.get().toProto());
+
+    if(m_intelligenceModifier.isPresent())
+      builder.setIntelligenceModifier(m_intelligenceModifier.get().toProto());
+
+    if(m_wisdomModifier.isPresent())
+      builder.setWisdomModifier(m_wisdomModifier.get().toProto());
+
+    if(m_charismaModifier.isPresent())
+      builder.setCharismaModifier(m_charismaModifier.get().toProto());
+
+    if(m_fortitudeModifier.isPresent())
+      builder.setFortitudeModifier(m_fortitudeModifier.get().toProto());
+
+    if(m_willModifier.isPresent())
+      builder.setWillModifier(m_willModifier.get().toProto());
+
+    if(m_reflexModifier.isPresent())
+      builder.setReflexModifier(m_reflexModifier.get().toProto());
 
     for(Effect effect : m_effects)
     {
@@ -273,6 +484,62 @@ public class BaseFeat extends BaseEntry
     if(proto.hasPrerequisites())
       m_prerequisites = Optional.of(proto.getPrerequisites());
 
+    if(proto.hasAttackModifier())
+      m_attackModifier =
+          Optional.of(Modifier.fromProto(proto.getAttackModifier()));
+
+    if(proto.hasDamageModifier())
+      m_damageModifier =
+          Optional.of(Modifier.fromProto(proto.getDamageModifier()));
+
+    if(proto.hasAdditionalAttacks())
+      m_additionalAttacks = Optional.of(proto.getAdditionalAttacks());
+
+    if(proto.hasInitiativeModifier())
+      m_initiativeModifier =
+          Optional.of(Modifier.fromProto(proto.getInitiativeModifier()));
+
+    if(proto.hasCondition())
+      m_condition = Optional.of(Condition.fromProto(proto.getCondition()));
+
+    for(NameAndModifierProto skill : proto.getSkillModifierList())
+      m_skillModifiers.add(NameAndModifier.fromProto(skill));
+
+    if(proto.hasStrengthModifier())
+      m_strengthModifier =
+          Optional.of(Modifier.fromProto(proto.getStrengthModifier()));
+
+    if(proto.hasDexterityModifier())
+      m_dexterityModifier =
+          Optional.of(Modifier.fromProto(proto.getDexterityModifier()));
+
+    if(proto.hasConstitutionModifier())
+      m_constitutionModifier =
+          Optional.of(Modifier.fromProto(proto.getConstitutionModifier()));
+
+    if(proto.hasIntelligenceModifier())
+      m_intelligenceModifier =
+          Optional.of(Modifier.fromProto(proto.getIntelligenceModifier()));
+
+    if(proto.hasWisdomModifier())
+      m_wisdomModifier =
+          Optional.of(Modifier.fromProto(proto.getWisdomModifier()));
+
+    if(proto.hasCharismaModifier())
+      m_charismaModifier =
+          Optional.of(Modifier.fromProto(proto.getCharismaModifier()));
+
+    if(proto.hasFortitudeModifier())
+      m_fortitudeModifier =
+          Optional.of(Modifier.fromProto(proto.getFortitudeModifier()));
+
+    if(proto.hasWillModifier())
+      m_willModifier = Optional.of(Modifier.fromProto(proto.getWillModifier()));
+
+    if(proto.hasReflexModifier())
+      m_reflexModifier =
+          Optional.of(Modifier.fromProto(proto.getReflexModifier()));
+
     for(BaseFeatProto.Effect effect : proto.getEffectList())
       m_effects.add(new Effect(Affects.fromProto(effect.getAffects()),
                                effect.hasReference()
@@ -285,17 +552,24 @@ public class BaseFeat extends BaseEntry
                                Optional.<String>absent()));
   }
 
-  @Override
-  public void parseFrom(byte []inBytes)
+  public List<NameAndModifier> getSkillModifiers()
   {
-    try
-    {
-      fromProto(BaseFeatProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return m_skillModifiers;
+  }
+
+  public Modifier getSkillModifier(String inSkill)
+  {
+    for(NameAndModifier skill : m_skillModifiers)
+      if(skill.hasName(inSkill))
+        return skill.getModifier();
+
+    return new Modifier();
+  }
+
+  @Override
+  protected Message defaultProto()
+  {
+    return BaseFeatProto.getDefaultInstance();
   }
 
   //----------------------------------------------------------------------------

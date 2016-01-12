@@ -120,6 +120,6 @@ jDMA checkstyle definition.
   </module>
   <module name="SuppressionCommentFilter"/>
   <module name="SuppressionFilter">
-    <property name="file" value="/Users/balsiger/private/jdma/lib/build/suppressions.xml"/>
+    <property name="file" value="/Users/balsiger/private/jdma-git/jdma/lib/build/suppressions.xml"/>
   </module>
 </module>

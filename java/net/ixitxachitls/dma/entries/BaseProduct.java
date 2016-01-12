@@ -36,7 +36,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -1442,13 +1441,8 @@ public class BaseProduct extends BaseEntry
    */
   public String getFullTitle()
   {
-    if(m_leader.isPresent())
-      if(m_title.isPresent())
-        return m_title.get();
-      else
-        return "";
-
-    return m_leader.get() + " " + m_title.get();
+    return m_leader.isPresent() ? m_leader.get() + " " : ""
+        + (m_title.isPresent() ? m_title.get() : "");
   }
 
 
@@ -1710,9 +1704,9 @@ public class BaseProduct extends BaseEntry
   }
 
   @Override
-  public void set(Values inValues)
+  public void setValues(Values inValues)
   {
-    super.set(inValues);
+    super.setValues(inValues);
 
     m_leader = inValues.use("leader", m_leader);
     m_title = inValues.use("title", m_title);
@@ -1964,16 +1958,9 @@ public class BaseProduct extends BaseEntry
   }
 
   @Override
-  public void parseFrom(byte []inBytes)
+  protected Message defaultProto()
   {
-    try
-    {
-      fromProto(BaseProductProto.parseFrom(inBytes));
-    }
-    catch(InvalidProtocolBufferException e)
-    {
-      Log.warning("could not properly parse proto: " + e);
-    }
+    return BaseProductProto.getDefaultInstance();
   }
 
   /** This is the test. */
