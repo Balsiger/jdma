@@ -254,13 +254,13 @@
         <div class="hps">
           {for $i in range($entry.maxHP - $entry.HP)}
             <div class="count crossed">{$entry.maxHP - $i}</div>
-            {if ($entry.maxHP - $i) % 10 == 0}
+            {if ($entry.maxHP - $i) % 20 == 0}
               <br/>
             {/if}
           {/for}
           {for $i in range($entry.HP + 1)}
             <div class="count">{$entry.HP - $i}</div>
-            {if ($entry.HP - $i) % 10 == 0}
+            {if ($entry.HP - $i) % 20 == 0}
               <br/>
             {/if}
           {/for}

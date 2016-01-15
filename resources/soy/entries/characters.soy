@@ -275,7 +275,7 @@
           {param entry: $animal /}
         {/call}
 
-        {if index($animal) % 2 == 0}
+        {if index($animal) % 2 == 1 or isLast($animal)}
           </div>
         {/if}
       {/foreach}
