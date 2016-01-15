@@ -259,18 +259,25 @@
         {call .sheet_page_spells}
           {param entry: $entry /}
         {/call}
-      <div>
+      </div>
     {/if}
 
     {if length($entry.animal_companions) > 0}
-      {call .sheet_subtitle}
-        {param title: 'Animal Companions' /}
-      {/call}
-
       {foreach $animal in $entry.animal_companions}
+        {if index($animal) % 2 == 0}
+          <div class="sheet-page">
+            {call .sheet_subtitle}
+              {param title: 'Animal Companions' /}
+            {/call}
+        {/if}
+
         {call dma.entries.monsters.sheet}
           {param entry: $animal /}
         {/call}
+
+        {if index($animal) % 2 == 0}
+          </div>
+        {/if}
       {/foreach}
     {/if}
   </div>
