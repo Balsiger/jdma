@@ -78,24 +78,25 @@ public class RemoveActionServlet extends ActionServlet
     if(!keyParam.isPresent())
       return "gui.alert('No key given')";
 
-    Optional<EntryKey> key = EntryKey.fromString(keyParam.get());
+    Optional<EntryKey> key =
+        EntryKey.fromString(keyParam.get().replace("_", "+").replace("-", " "));
 
     if(!key.isPresent())
       return "gui.alert('Invalid key " + keyParam + "');";
 
     Optional<AbstractEntry> entry = DMADataFactory.get().getEntry(key.get());
     if(!entry.isPresent())
-      return "gui.alert('Could not find " + key + " to delete');";
+      return "gui.alert('Could not find " + key.get() + " to delete');";
 
     if(!entry.get().isDM(user))
-      return "gui.alert('Not allow to delete " + key + "!');";
+      return "gui.alert('Not allow to delete " + key.get() + "!');";
 
     if(DMADataFactory.get().remove(entry.get()))
     {
       Log.important("Deleted entry " + keyParam);
-      return "gui.info('Entry " + key + " deleted!');";
+      return "gui.info('Entry " + key.get() + " deleted!');";
     }
 
-    return "gui.alert('Could not delete " + key + "');";
+    return "gui.alert('Could not delete " + key.get() + "');";
   }
 }

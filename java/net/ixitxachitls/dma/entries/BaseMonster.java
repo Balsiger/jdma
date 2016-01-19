@@ -1617,6 +1617,9 @@ public class BaseMonster extends BaseEntry
     for(Feat feat : m_feats)
       modifier = (Modifier)modifier.add(feat.skillModifier(inName));
 
+    for(Quality quality : m_qualities)
+      modifier = (Modifier)modifier.add(quality.skillModifier(inName));
+
     return modifier;
   }
 
