@@ -174,7 +174,7 @@
         {param label: 'Possessions' /}
         {param value kind="html"}
           {foreach $item in $entry.possessions}
-            {call dma.entries.items.reference}
+            {call dma.entries.items.tiny}
               {param entry: $item /}
             {/call}
             {if not isLast($item)}, {/if}

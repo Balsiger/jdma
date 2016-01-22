@@ -138,6 +138,12 @@ public class Item extends CampaignEntry
   /** The possessor of the item, if any. */
   private Optional<Monster> m_possessor = null;
 
+  /**
+   * The locations the item was obtained from, in chronoligical order, oldest
+   * first.
+   */
+  private List<String> m_locations = new ArrayList<>();
+
   /** Whether the item has been identified or not. */
   private boolean m_identified = false;
 
@@ -1160,44 +1166,6 @@ public class Item extends CampaignEntry
   }
 
   /**
-   * Get all the items contained in this one.
-   *
-   * @ param       inDeep true for returning all item, including nested ones,
-   *                     false for only the top level items
-   * @return      a list of all contained items
-   */
-  /*
-  public Map<String, Item> containedItems(boolean inDeep)
-  {
-    Map<String, Item> items = new HashMap<String, Item>();
-
-    Contents contents = (Contents)getExtension("contents");
-    if(contents != null)
-    {
-      Map<String, Item> contained = contents.containedItems(inDeep);
-      for(String key : contained.keySet())
-        if(items.containsKey(key))
-          Log.warning("item loop detected for " + key);
-
-      items.putAll(contents.containedItems(inDeep));
-    }
-
-    Composite composite = (Composite)getExtension("composite");
-    if(composite != null)
-    {
-      Map<String, Item> contained = composite.containedItems(inDeep);
-      for(String key : contained.keySet())
-        if(items.containsKey(key))
-          Log.warning("item loop detected for " + key);
-
-      items.putAll(composite.containedItems(inDeep));
-    }
-
-    return items;
-  }
-  */
-
-  /**
    * Get the monster (or NPC, PC) that possess this item, if any.
    *
    * @return the monster, if any
@@ -1240,6 +1208,12 @@ public class Item extends CampaignEntry
 
     return m_possessor;
   }
+
+  public List<String> getLocations()
+  {
+    return Collections.unmodifiableList(m_locations);
+  }
+
 
   /**
    * Get the attack bonus for this item.
@@ -1529,6 +1503,7 @@ public class Item extends CampaignEntry
     m_timeLeft = inValues.use("time_left", m_timeLeft, Duration.PARSER);
     m_identified = inValues.use("identified", m_identified,
                                 Value.BOOLEAN_PARSER);
+    m_locations = inValues.use("location", m_locations);
 
     if(m_parentName.isPresent() && !m_parentName.get().contains("/"))
       m_parentName = Optional.of("item/" + m_parentName.get());
@@ -1702,6 +1677,7 @@ public class Item extends CampaignEntry
       builder.setTimeLeft(m_timeLeft.get().toProto());
 
     builder.setIdentified(m_identified);
+    builder.addAllLocation(m_locations);
 
     ItemProto proto = builder.build();
     return proto;
@@ -1746,6 +1722,7 @@ public class Item extends CampaignEntry
       m_timeLeft = Optional.of(Duration.fromProto(proto.getTimeLeft()));
 
     m_identified = proto.getIdentified();
+    m_locations = proto.getLocationList();
 
     super.fromProto(proto.getBase());
   }
