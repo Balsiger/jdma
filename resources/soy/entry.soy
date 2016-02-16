@@ -146,7 +146,7 @@
     <div class="actions">
       <div class="action sprite large edit"
            onclick="edit.show('{$entry.name}',
-                              '{$entry.path}',
+                              '{$entry.path}.edit',
                    'edit-{escape($entry.type)}-{escape($entry.name)}')">
       </div>
       <div class="action sprite large delete"
@@ -308,7 +308,7 @@
       {param tooltip: 'Main' /}
       {param class: 'image-link' /}
       {param text kind="html"}
-        <img src="/icons/{$entry.type.multilink}-dummy.png" alt="Main"
+        <img src="/icons/{$entry.type.multiple_link}-dummy.png" alt="Main"
         class="_new_ _new_image _new_main"
         {if $size}
           {sp}style="max-width: {$size}px; max-height: {$size}px;"

@@ -75,6 +75,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>move</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.MoveActionServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>remove</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.RemoveActionServlet</servlet-class>
   </servlet>
@@ -127,6 +132,11 @@
   <servlet-mapping>
     <servlet-name>save</servlet-name>
     <url-pattern>/actions/save</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>move</servlet-name>
+    <url-pattern>/actions/move</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

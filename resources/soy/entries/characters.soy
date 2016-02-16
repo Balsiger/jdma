@@ -174,7 +174,7 @@
         {param label: 'Possessions' /}
         {param value kind="html"}
           {foreach $item in $entry.possessions}
-            {call dma.entries.items.tiny}
+            {call dma.entries.items.reference}
               {param entry: $item /}
             {/call}
             {if not isLast($item)}, {/if}
@@ -182,10 +182,19 @@
           {if $ij.user}
             {sp}|{sp}
             <span class="action"
-                  onclick="edit.show('', '{$entry.campaign.path}/item/CREATE',
+                  onclick="edit.show('Edit {$entry.name}',
+                                     '{$entry.campaign.path}/item/CREATE.edit',
                                      'add-item', '',
                                      'parent:character/{$entry.name}')">
               add item
+            </span>
+            {sp}|{sp}
+            <span class="action"
+                  onclick="edit.show('Move items for {$entry.name}',
+                                     '{$entry.path}.move_items',
+                                     'move-items', '',
+                                     'parent:character/{$entry.name}')">
+              move items
             </span>
           {/if}
         {/param}
@@ -2757,4 +2766,47 @@
   </div>
 {/template}
 
+/** Move a characters item around. */
+{template .move_items}
+  {@param entry: ?}
 
+  {call .move_items_list}
+    {param items: $entry.possessions /}
+  {/call}
+
+  <button id="move-items-save"
+          onclick="edit.moveItems($('.move-items')[0],
+                                    'character/{$entry.name}');">
+    Save
+  </button>
+
+  <script>
+    $(".move-items")
+      .sortable({lb}
+        connectWith: ".move-items",
+        placeholder: "placeholder"
+      {rb}).disableSelection();
+    $("#move-items-save").button();
+  </script>
+{/template}
+
+/** A list of items to move around, allowing to nest. */
+{template .move_items_list}
+  {@param items: list<?>}
+
+  <ul class="move-items">
+    {foreach $item in $items}
+      <li name="{$item.key}">
+        {call dma.entries.items.reference}
+          {param entry: $item /}
+        {/call}
+        {if $item.is_container}
+          {call .move_items_list}
+            {param items: $item.contents /}
+          {/call}
+        {/if}
+      </li>
+    {ifempty}<li class="empty"/>
+    {/foreach}
+  </ul>
+{/template}

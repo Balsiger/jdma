@@ -116,7 +116,8 @@ public class EntryServlet extends PageServlet
     if(entry != null && !entry.isShownTo(inRequest.getUser()))
       return "dma.errors.invalidPage";
 
-    switch(inData.get("action").coerceToString())
+    String action = inData.get("action").coerceToString();
+    switch(action)
     {
       case "print":
         return "dma.entry.printcontainer";
@@ -134,9 +135,12 @@ public class EntryServlet extends PageServlet
             + key.getType().getMultipleDir().toLowerCase() + ".edit";
 
       case "show":
-      default:
         return "dma.entries."
             + key.getType().getMultipleDir().toLowerCase() + ".show";
+
+      default:
+        return "dma.entries."
+            + key.getType().getMultipleDir().toLowerCase() + "." + action;
     }
   }
 

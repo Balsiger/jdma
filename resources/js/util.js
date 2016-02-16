@@ -50,6 +50,7 @@ var util = new Object();
  */
 util.ajax = function(inURL, inValues, inFunction, inEval)
 {
+  console.log("ajax", inURL, inValues, inFunction, inEval);
   var request;
 
   if(window.XMLHttpRequest)

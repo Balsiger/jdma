@@ -121,7 +121,7 @@ public class EntryListServlet extends PageServlet
     if(!type.isPresent())
     {
       data.put("type", typeName);
-      data.put("template", "dma.error.invalidType");
+      data.put("template", "dma.errors.invalidType");
       return data;
     }
 

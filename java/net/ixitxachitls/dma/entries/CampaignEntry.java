@@ -255,9 +255,17 @@ public abstract class CampaignEntry extends Entry
   public void setParent(Optional<EntryKey> inParent)
   {
     if(inParent.isPresent())
-      m_parentName = Optional.of(inParent.toString());
+    {
+      String parent = inParent.get().getType() + "/" + inParent.get().getID();
+      if(parent.equals(m_parentName))
+        return;
+
+      m_parentName = Optional.of(parent);
+    }
     else
       m_parentName = Optional.absent();
+
+    Log.info("Setting parent of " + getKey() + " to " + inParent);
 
     changed();
     save();

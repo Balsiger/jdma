@@ -37,24 +37,25 @@ edit.all = [];
 /**
  * Show the edit window for editing an entry.
  *
- * @param inName   the name of the entry edited
+ * @param inTitlec the title of the dialog
  * @param inPath   the path of the entry to edit
  * @param inID     the id of the element to create
  * @param inBases  the bases for the entry, if any
  * @param inValues the values to preset (as key:value,key:value,...), if any
  */
-edit.show = function(inName, inPath, inID, inBases, inValues)
+edit.show = function(inTitle, inPath, inID, inBases, inValues)
 {
-  var contents = util.ajax(inPath + '.edit?body&id=' + inID
+  console.log(inTitle, inPath, inID, inBases, inValues);
+  var contents = util.ajax(inPath + '?body&id=' + inID
       + '&bases=' + inBases + '&values=' + inValues);
   var dialog = $('<div id="dialog-' + inID.replace(/ /g, "_") + '"/>')
     .html(contents)
     .dialog({
-      title: 'Edit ' + inName,
+      title: inTitle,
       modal: true,
       resizable: false,
       width: $(window).width() * 3 / 4,
-      height: $(window).height(),
+      height: $(window).height() - 20,
       closeOnEscape: false,
       dialogClass: 'edit-dialog',
     });
@@ -172,6 +173,33 @@ edit.save = function(inKey, inID, inCreate)
     // reload the saved entry
     util.link(null, null, null);
   }
+};
+
+edit.moveItems = function(inList, inParent)
+{
+  var names = edit.collectMoveItems(inList, inParent);
+  window.console.log("moving", names);
+  var eval = util.ajax('/actions/move', { 'names': names }, null, true);
+};
+
+edit.collectMoveItems = function(inList, inContainer)
+{
+  var items = [];
+  $(inList).find('> li').each(function(index, value)
+  {
+    if($(value).attr('name'))
+    {
+      var name = $(value).attr('name');
+      items.push(inContainer + ':' + name);
+      var contents = $(value).find('ul');
+      if(contents.length > 0)
+        Array.prototype.push.apply(items,
+                                   edit.collectMoveItems(contents[0],
+                                                         'item/' + name));
+    }
+  });
+
+  return items;
 };
 
 /**
