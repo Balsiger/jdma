@@ -54,6 +54,8 @@ message BaseCharacterProto
   optional string last_action = 3;
   optional string real_name = 4;
   optional string email = 5;
+  repeated string possessions = 6; // This is only used for the ordering of
+                                   // items.
 }
 
 message BaseProductProto
@@ -1382,6 +1384,7 @@ message ItemProto
   optional DurationProto time_left = 10;
   optional bool identified = 11;
   repeated string location = 12;
+  repeated string contents = 13;
 }
 
 message EncounterProto
