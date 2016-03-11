@@ -78,8 +78,7 @@
           {param color: '#ccf' /}
         {/call}
       {/if}      
-      {if length($entry.categories) or 
-          length($entry.combined_categories.annotate)}
+      {if $entry.categories.present or $entry.combined_categories.get.present}
         {call dma.entry.value}
           {param label: 'Categories' /}
           {param value kind="html"}
@@ -89,29 +88,46 @@
                 {if not isLast($category)}, {/if}
               {/foreach}
             {/if}
-            {if length($entry.combined_categories.annotate)}
-              {if length($entry.categories)},{sp}{/if}
-              {annotate($entry.combined_categories)}
-            {/if}
+            {annotate($entry.combined_categories)}
           {/param}
-          {param color: '#ccf' /}
+          {param color: '#008' /}
         {/call}
       {/if}
       {call dma.entry.value}
-        {param label: 'Worlds' /}        
+        {param label: 'Worlds' /}
         {param value: annotate($entry.combined_worlds) /}
         {param color: '#ccf' /}
       {/call}
-      {if $entry.incomplete or length($entry.combined_incomplete.annotate) > 0}
+      {call dma.entry.value}
+        {param label: 'Calendar' /}
+        {param value kind="html"}
+          Years{sp}
+          {foreach $year in $entry.calendar.years}
+            {$year}
+            {if not isLast($year)}, {/if}
+          {/foreach}<br/>
+          Months{sp}
+          {foreach $month in $entry.calendar.months}
+            {$month}
+            {if not isLast($month)}, {/if}
+          {/foreach}<br/>
+          {$entry.calendar.days_per_week} days per week,{sp}
+          {$entry.calendar.hours_per_day} hours per day,{sp}
+          {$entry.calendar.minutes_per_hour} minutes per hour,{sp}
+          {$entry.calendar.seconds_per_minute} seconds per minute.
+        {/param}
+        {param color: '#ccf' /}
+      {/call}
+      {if $entry.incomplete.present or $entry.combined_incomplete.get.present}
         {call dma.entry.value}
           {param label: 'Incomplete' /}
           {param value kind="html"}
             {if $entry.incomplete}
               {$entry.incomplete}{sp}
             {/if}
-            {annotate($entry.combined_incomplete)}
+              {annotate($entry.combined_incomplete)}
           {/param}
-          {param color: '#ccf' /}
+          {param color: '#008' /}
         {/call}
       {/if}
       {call dma.entry.value}
@@ -221,7 +237,153 @@
         {param values: $entry.worlds/}
         {param validate: 'non-empty' /}
         {param color: '#ccf' /}
-      {/call}    
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'calendar.year' /}
+        {param color: '#008' /}
+        {param label: 'Calendar Years' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $year in $entry.calendar.years}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'calendar.year' /}
+                  {param values: [
+                    [
+                      'name': 'calendar.year.start',
+                      'value': $year.start,
+                      'validate': 'number',
+                      'caption': 'start'
+                    ],
+                    [
+                      'name': 'calendar.year.end',
+                      'value': $year.end,
+                      'validate': 'number',
+                      'caption': 'end'
+                    ],
+                    [
+                      'name': 'calendar.year.name',
+                      'value': $year.name,
+                      'validate': 'any',
+                      'caption': 'name'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'reference' /}
+                  {param values: [
+                    [
+                      'name': 'calendar.year.start',
+                      'value': '',
+                      'validate': 'number',
+                      'caption': 'start'
+                    ],
+                    [
+                      'name': 'calendar.year.end',
+                      'value': '',
+                      'validate': 'number',
+                      'caption': 'end'
+                    ],
+                    [
+                      'name': 'calendar.year.name',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'name'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'calendar.month' /}
+        {param color: '#008' /}
+        {param label: 'Calendar Months' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $month in $entry.calendar.months}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'calendar.month' /}
+                  {param values: [
+                    [
+                      'name': 'calendar.month.name',
+                      'value': $month.name,
+                      'validate': 'any',
+                      'caption': 'name'
+                    ],
+                    [
+                      'name': 'calendar.month.days',
+                      'value': $month.days,
+                      'validate': 'number',
+                      'caption': 'days'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'reference' /}
+                  {param values: [
+                    [
+                      'name': 'calendar.month.name',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'name'
+                    ],
+                    [
+                      'name': 'calendar.month.days',
+                      'value': '',
+                      'validate': 'number',
+                      'caption': 'days'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param color: '#008' /}
+        {param label: 'Calendar' /}
+        {param value kind="html"}
+          {call dma.edit.field_input}
+            {param name: 'calendar.days_per_week' /}
+            {param value: $entry.calendar.days_per_week /}
+            {param validate: 'number' /}
+            {param caption: 'days per week' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'calendar.hours_per_day' /}
+            {param value: $entry.calendar.hours_per_day /}
+            {param validate: 'number' /}
+            {param caption: 'hours per day' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'calendar.minutes_per_hour' /}
+            {param value: $entry.calendar.minutes_per_hour /}
+            {param validate: 'number' /}
+            {param caption: 'minutes per hour' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'calendar.seconds_per_minute' /}
+            {param value: $entry.calendar.seconds_per_minute /}
+            {param validate: 'number' /}
+            {param caption: 'seconds per minute' /}
+            {param class: 'narrow' /}
+          {/call}
+        {/param}
+      {/call}
       {call dma.edit.value}
         {param name: 'incomplete' /}
         {param label: 'Incomplete' /}
@@ -236,7 +398,7 @@
         {param value kind="html"}
           {call dma.edit.field}
             {param markup kind="html"}
-              {foreach $reference in $entry.references}  
+              {foreach $reference in $entry.references}
                 {call dma.edit.field_list_multiple}
                   {param id: 'reference' /}
                   {param values: [
@@ -244,17 +406,17 @@
                       'name': 'references.name',
                       'value': $reference.name,
                       'validate': 'non-empty',
-                      'caption': 'name' 
+                      'caption': 'name'
                     ],
                     [
                       'name': 'references.pages',
                       'value': $reference.pagesString,
                       'validate': 'any',
-                      'caption': 'pages' 
+                      'caption': 'pages'
                     ]
-                  ] 
+                  ]
                   /}
-                {/call}          
+                {/call}
               {ifempty}
                 {call dma.edit.field_list_multiple}
                   {param id: 'reference' /}
@@ -263,21 +425,21 @@
                       'name': 'references.name',
                       'value': '',
                       'validate': 'non-empty',
-                      'caption': 'name' 
+                      'caption': 'name'
                     ],
                     [
                       'name': 'references.pages',
                       'value': '',
                       'validate': 'any',
-                      'caption': 'pages' 
+                      'caption': 'pages'
                     ]
-                  ] 
+                  ]
                   /}
-                {/call}          
+                {/call}
               {/foreach}
             {/param}
           {/call}
-        {/param}            
+        {/param}
       {/call}
     {/param}
   {/call}

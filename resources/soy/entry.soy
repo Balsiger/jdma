@@ -137,6 +137,11 @@
       </pre>
     {/if}
   </div>
+  {if $entry.campaign}
+    {call .campaign}
+      {param campaign: $entry.campaign /}
+    {/call}
+  {/if}
 {/template}
 
 /** Show the toolbar with the avaialable actions. */
@@ -606,3 +611,14 @@
   {/if}
 {/template}
 
+/** Campaign specific information. */
+{template .campaign}
+  {@param campaign: ?}
+
+  <div id="campaign">
+    <div class="campaign-container">
+      <div class="campaign-name">{$campaign.name}</div>
+      <div class="campaign-date">{$campaign.date}</div>
+     </div>
+  </div>
+{/template}

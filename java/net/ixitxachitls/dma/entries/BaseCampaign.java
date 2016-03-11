@@ -29,6 +29,8 @@ import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.proto.Entries.BaseCampaignProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.values.Calendar;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.util.logging.Log;
 
@@ -45,6 +47,8 @@ public class BaseCampaign extends BaseEntry
 {
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
+
+  private Calendar m_calendar;
 
   /**
    * This is the internal, default constructor for an undefined value.
@@ -63,28 +67,13 @@ public class BaseCampaign extends BaseEntry
   public BaseCampaign(String inName)
   {
     super(inName, TYPE);
+
+    m_calendar = new Calendar();
   }
 
   /** The type of this entry. */
   public static final BaseType<BaseCampaign> TYPE =
     new BaseType.Builder<BaseCampaign>(BaseCampaign.class).build();
-
-  /*
-  @Override
-  public @Nullable Object compute(String inKey)
-  {
-    if("campaigns".equals(inKey))
-    {
-      List<Name> names = new ArrayList<Name>();
-      for(String name : DMADataFactory.get().getIDs(Campaign.TYPE, getKey()))
-        names.add(new Name(name));
-
-      return new ValueList<Name>(names);
-    }
-
-    return super.compute(inKey);
-  }
-  */
 
   @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
@@ -95,12 +84,18 @@ public class BaseCampaign extends BaseEntry
     return inUser.get().hasAccess(Group.ADMIN);
   }
 
+  public Calendar getCalendar()
+  {
+    return m_calendar;
+  }
+
   @Override
   public Message toProto()
   {
     BaseCampaignProto.Builder builder = BaseCampaignProto.newBuilder();
 
     builder.setBase((BaseEntryProto)super.toProto());
+    builder.setCalendar(m_calendar.toProto());
 
     BaseCampaignProto proto = builder.build();
     return proto;
@@ -121,6 +116,9 @@ public class BaseCampaign extends BaseEntry
 
     BaseCampaignProto proto = (BaseCampaignProto)inProto;
 
+    if(proto.hasCalendar())
+      m_calendar = Calendar.fromProto(proto.getCalendar());
+
     super.fromProto(proto.getBase());
   }
 
@@ -128,6 +126,14 @@ public class BaseCampaign extends BaseEntry
   protected Message defaultProto()
   {
     return BaseCampaignProto.getDefaultInstance();
+  }
+
+  @Override
+  public void setValues(Values inValues)
+  {
+    super.setValues(inValues);
+
+    m_calendar.set(inValues);
   }
 
   //---------------------------------------------------------------------------

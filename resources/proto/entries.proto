@@ -902,6 +902,7 @@ message BaseCompositeProto
 message BaseCampaignProto
 {
   required BaseEntryProto base = 1;
+  optional CalendarProto calendar = 2;
 }
 
 message BaseMonsterProto
