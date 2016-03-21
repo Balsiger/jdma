@@ -345,6 +345,7 @@
     <dev_appserver war="${war.dir}" port="8888">
       <options>
         <arg value="--disable_update_check"/>
+        <arg value="--jvm_flag=-ea"/>
         <arg value="--jvm_flag=-Xmx1024m"/>
         <arg value="--jvm_flag=-Dappengine.user.timezone.impl=UTC"/>
         <arg value="--jvm_flag=-Dappengine.user.timezone=UTC"/>

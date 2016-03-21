@@ -456,3 +456,12 @@ message CalendarProto
   optional int32 minutes_per_hour = 5;
   optional int32 seconds_per_minute = 6;
 }
+
+message CampaignDateProto
+{
+  optional int32 year = 1;
+  optional int32 month = 2;
+  optional int32 day = 3;
+  optional int32 hour = 4;
+  optional int32 minute = 5;
+}

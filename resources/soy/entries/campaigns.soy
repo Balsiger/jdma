@@ -22,7 +22,7 @@
 /*
  * Templates for products
  */
-{namespace dma.entries.campaigns autoescape="deprecated-contextual"}
+{namespace dma.entries.campaigns}
 
 /**
  * Show the given entry in standard format.
@@ -44,28 +44,28 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#ccf' /}
-    {param title}
+    {param title kind="html"}
       {call dma.entry.title}
         {param title: $entry.name /}
         {param color: '#ccf' /}
       {/call}      
     {/param}
-    {param values}            
+    {param values kind="html"}
       {if length($entry.baseNames)}
         {call dma.entry.value}
           {param label: 'Base' /}
-          {param value}
+          {param value kind="html"}
             {foreach $base in $entry.baseNames}
               {call dma.page.link}
                 {param text: $base /}
-                {param url: '/product/'  + $base /}
+                {param url: '/campaign/'  + $base /}
               {/call}
               {if not isLast($base)}; {/if}
             {/foreach}
           {/param}
-          {param color: '#ccf' /}
-        {/call} 
-      {/if}      
+          {param color: '#008' /}
+        {/call}
+      {/if}
       {if $entry.owner.present}
         {call dma.entry.value}
           {param label: 'DM' /}
@@ -97,7 +97,7 @@
     {param pagesize: $pagesize /}
     {param size: $entries ? length($entries) : 0 /}
     {param titles: [ 'Name', 'DM'] /}
-    {param entries}
+    {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
           {call dma.entry.listEntry}
@@ -125,7 +125,7 @@
     {param type: 'product' /}
     {param id: $id /}
     {param create: $create /}
-    {param values}
+    {param values kind="html"}
       {call dma.edit.value}
         {param name: 'name' /}
         {param label: 'Name' /}
@@ -148,7 +148,48 @@
         {param validate: 'non-empty' /}
         {param color: '#ccf' /}
         {param autocomplete: 'base character/name' /}
-      {/call}    
+      {/call}
+      {call dma.edit.generic_value}
+        {param color: '#008' /}
+        {param label: 'Date' /}
+        {param value kind="html"}
+          {call dma.edit.field_input}
+            {param name: 'campaign_date.year' /}
+            {param value: $entry.date.present ? $entry.date.year : '' /}
+            {param validate: 'number' /}
+            {param caption: 'year' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'campaign_date.month' /}
+            {param value: $entry.date.present ? $entry.date.month : '' /}
+            {param validate: 'number' /}
+            {param caption: 'month' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'campaign_date.day' /}
+            {param value: $entry.date.present ? $entry.date.day : '' /}
+            {param validate: 'number' /}
+            {param caption: 'day' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'campaign_date.hour' /}
+            {param value: $entry.date.present ? $entry.date.hour : '' /}
+            {param validate: 'number' /}
+            {param caption: 'hour' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'campaign_date.minute' /}
+            {param value: $entry.date.present ? $entry.date.minute : '' /}
+            {param validate: 'number' /}
+            {param caption: 'year' /}
+            {param class: 'narrow' /}
+          {/call}
+        {/param}
+      {/call}
     {/param}
   {/call}
 {/template}

@@ -618,7 +618,82 @@
   <div id="campaign">
     <div class="campaign-container">
       <div class="campaign-name">{$campaign.name}</div>
-      <div class="campaign-date">{$campaign.date}</div>
+      <div class="campaign-date">
+        {call .adjustableDate}
+          {param campaign: $campaign /}
+          {param date: $campaign.date /}
+        {/call}
+      </div>
      </div>
+  </div>
+{/template}
+
+/** Formatting a date that can be adjusted. */
+{template .adjustableDate}
+  {@param campaign: ?}
+  {@param date: ?}
+
+  {call .adjustableDatePart}
+    {param part: $date.monthFormatted /}
+    {param key: $campaign.key /}
+    {param month: 1 /}
+    {param name: 'month' /}
+  {/call}
+
+  {call .adjustableDatePart}
+    {param part: $date.dayFormatted /}
+    {param key: $campaign.key /}
+    {param day: 1 /}
+    {param name: 'day' /}
+  {/call}
+
+  {call .adjustableDatePart}
+    {param part: $date.year /}
+    {param key: $campaign.key /}
+    {param year: 1 /}
+    {param name: 'year' /}
+  {/call}
+
+  {call .adjustableDatePart}
+    {param part: $date.hoursFormatted /}
+    {param key: $campaign.key /}
+    {param hour: 1 /}
+    {param name: 'hours' /}
+  {/call}
+  :
+  {call .adjustableDatePart}
+    {param part: $date.minutesFormatted /}
+    {param key: $campaign.key /}
+    {param minute: 5 /}
+    {param name: 'minutes' /}
+  {/call}
+
+{/template}
+
+/** A part of a formatted and adjustable date. */
+{template .adjustableDatePart}
+  {@param name: string}
+  {@param part: html}
+  {@param key: string}
+  {@param? year: int}
+  {@param? month: int}
+  {@param? day: int}
+  {@param? hour: int}
+  {@param? minute: int}
+
+  <div class="date-element">
+    <span id="campaign-date-{$name}">{$part}</span>
+    <div class="action up"
+         onclick="util.time('{$key}', {$minute ? $minute : 0},
+                            {$hour ? $hour : 0}, {$day ? $day : 0},
+                            {$month ? $month : 0}, {$year ? $year : 0})">
+      ▲
+    </div>
+    <div class="action down"
+         onclick="util.time('{$key}', {$minute ? -$minute : 0},
+                            {$hour ? -$hour : 0}, {$day ? -$day : 0},
+                            {$month ? -$month : 0}, {$year ? -$year : 0})">
+      ▼
+    </div>
   </div>
 {/template}

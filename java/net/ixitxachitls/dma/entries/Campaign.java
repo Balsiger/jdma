@@ -31,6 +31,8 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.CampaignProto;
+import net.ixitxachitls.dma.values.Calendar;
+import net.ixitxachitls.dma.values.CampaignDate;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.util.logging.Log;
 
@@ -74,6 +76,9 @@ public class Campaign extends CampaignEntry
   /** The dm for this campaign. */
   protected Optional<String> m_dm = Optional.absent();
 
+  /** The date of the campaign. */
+  protected Optional<CampaignDate> m_date = Optional.absent();
+
   /**
    * Get the key for the campaign.
    *
@@ -102,6 +107,11 @@ public class Campaign extends CampaignEntry
     return m_dm;
   }
 
+  public Optional<CampaignDate> getDate()
+  {
+    return m_date;
+  }
+
   @Override
   public String getDMName()
   {
@@ -109,6 +119,14 @@ public class Campaign extends CampaignEntry
       return m_dm.get();
 
     return "(none)";
+  }
+
+  public Calendar getCalendar()
+  {
+    for(BaseEntry base : getBaseEntries())
+      return ((BaseCampaign)base).getCalendar();
+
+    return new Calendar();
   }
 
   /**
@@ -128,11 +146,6 @@ public class Campaign extends CampaignEntry
   public Optional<Campaign> getCampaign()
   {
     return Optional.of(this);
-  }
-
-  public Optional<?> getDate()
-  {
-    return Optional.absent();
   }
 
   /**
@@ -196,6 +209,11 @@ public class Campaign extends CampaignEntry
     super.setValues(inValues);
 
     m_dm = inValues.use("DM", m_dm);
+
+    if(!m_date.isPresent())
+      m_date = Optional.of(new CampaignDate(getCalendar()));
+
+    m_date.get().set(inValues);
   }
 
   @Override
@@ -207,6 +225,9 @@ public class Campaign extends CampaignEntry
 
     if(m_dm.isPresent())
       builder.setDm(m_dm.get());
+
+    if(m_date.isPresent())
+      builder.setDate(m_date.get().toProto());
 
     CampaignProto proto = builder.build();
     return proto;
@@ -231,6 +252,24 @@ public class Campaign extends CampaignEntry
 
     if(proto.hasDm())
       m_dm = Optional.of(proto.getDm());
+
+    if(proto.hasDate())
+      m_date = Optional.of(CampaignDate.fromProto(
+          getCalendar(), proto.getDate()));
+  }
+
+  public Optional<CampaignDate> manipulateTime(int inMinutes, int inHours,
+                                               int inDays, int inMonths,
+                                               int inYears)
+  {
+    if(m_date.isPresent())
+    {
+      m_date.get().manipulate(inMinutes, inHours, inDays, inMonths, inYears);
+      changed();
+    }
+
+    save();
+    return m_date;
   }
 
   @Override

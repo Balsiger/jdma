@@ -538,6 +538,21 @@ util.track = function(inCategory, inAction, inLabel, inValue)
 
 //..........................................................................
 
+util.time = function(inCampaign, inMinutes, inHours, inDays, inMonths, inYears)
+{
+  util.ajax('/actions/time',
+    { campaign: inCampaign, minutes: inMinutes, hours: inHours, days: inDays,
+      months: inMonths, years: inYears },
+    function (inDate) {
+      var parts = inDate.split("::");
+      $('#campaign-date-month').html(parts[0]);
+      $('#campaign-date-day').html(parts[1]);
+      $('#campaign-date-year').html(parts[2]);
+      $('#campaign-date-hours').html(parts[3]);
+      $('#campaign-date-minutes').html(parts[4]);
+    }, false);
+}
+
 //--------------------------------- extend ---------------------------------
 
 /**

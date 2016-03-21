@@ -1349,6 +1349,7 @@ message CampaignProto
   required CampaignEntryProto base = 1;
 
   optional string dm = 2;
+  optional CampaignDateProto date = 3;
 }
 
 message CharacterProto
