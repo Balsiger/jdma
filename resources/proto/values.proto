@@ -448,6 +448,7 @@ message CalendarProto
   message Month {
     optional string name = 1;
     optional int32 days = 2;
+    optional int32 leap_years = 3;
   }
   repeated Month month = 2;
 

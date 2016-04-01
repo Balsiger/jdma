@@ -137,7 +137,7 @@
       </pre>
     {/if}
   </div>
-  {if $entry.campaign}
+  {if def($entry.campaign)}
     {call .campaign}
       {param campaign: $entry.campaign /}
     {/call}
@@ -682,7 +682,7 @@
   {@param? minute: int}
 
   <div class="date-element">
-    <span id="campaign-date-{$name}">{$part}</span>
+    <span id="campaign-date-{$name}">{if $part}{$part}{else}&nbsp;{/if}</span>
     <div class="action up"
          onclick="util.time('{$key}', {$minute ? $minute : 0},
                             {$hour ? $hour : 0}, {$day ? $day : 0},
