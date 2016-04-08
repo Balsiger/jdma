@@ -1385,7 +1385,7 @@ message ItemProto
   optional int32 multiuse = 9; 
   optional DurationProto time_left = 10;
   optional bool identified = 11;
-  repeated string location = 12;
+  repeated OccurrenceProto location = 12;
   repeated string contents = 13;
 }
 

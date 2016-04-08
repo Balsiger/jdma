@@ -295,11 +295,54 @@
         {param value: $entry.identified /}
         {param color: '#008' /}
       {/call}
-      {call dma.edit.value_list}
+      {call dma.edit.generic_value}
         {param name: 'location' /}
         {param label: 'Location' /}
-        {param values: $entry.locations /}
-        {param validate: 'any' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $location in $entry.locations}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'location' /}
+                  {param values: [
+                    [
+                      'name': 'location.location',
+                      'value': $location.location,
+                      'validate': 'any',
+                      'caption': 'location'
+                    ],
+                    [
+                      'name': 'location.date',
+                      'value': $location.date,
+                      'validate': 'any',
+                      'caption': 'date'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'location' /}
+                  {param values: [
+                    [
+                      'name': 'location.location',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'location'
+                    ],
+                    [
+                      'name': 'location.date',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'date'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
         {param color: '#008' /}
       {/call}
       {call dma.edit.value}

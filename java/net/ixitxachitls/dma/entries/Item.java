@@ -37,6 +37,7 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.ItemProto;
+import net.ixitxachitls.dma.proto.Values.OccurrenceProto;
 import net.ixitxachitls.dma.rules.Combat;
 import net.ixitxachitls.dma.values.AggregationState;
 import net.ixitxachitls.dma.values.Annotated;
@@ -52,6 +53,7 @@ import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Duration;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Money;
+import net.ixitxachitls.dma.values.Occurrence;
 import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Slot;
 import net.ixitxachitls.dma.values.Substance;
@@ -142,7 +144,7 @@ public class Item extends CampaignEntry
    * The locations the item was obtained from, in chronoligical order, oldest
    * first.
    */
-  private List<String> m_locations = new ArrayList<>();
+  private List<Occurrence> m_locations = new ArrayList<>();
 
   /** Whether the item has been identified or not. */
   private boolean m_identified = false;
@@ -1209,7 +1211,7 @@ public class Item extends CampaignEntry
     return m_possessor;
   }
 
-  public List<String> getLocations()
+  public List<Occurrence> getLocations()
   {
     return Collections.unmodifiableList(m_locations);
   }
@@ -1503,7 +1505,11 @@ public class Item extends CampaignEntry
     m_timeLeft = inValues.use("time_left", m_timeLeft, Duration.PARSER);
     m_identified = inValues.use("identified", m_identified,
                                 Value.BOOLEAN_PARSER);
-    m_locations = inValues.use("location", m_locations);
+    if(getCampaign().isPresent())
+      m_locations =
+          inValues.use("location", m_locations,
+                       Occurrence.parser(getCampaign().get().getCalendar()),
+                       "location", "date");
 
     if(m_parentName.isPresent() && !m_parentName.get().contains("/"))
       m_parentName = Optional.of("item/" + m_parentName.get());
@@ -1677,7 +1683,8 @@ public class Item extends CampaignEntry
       builder.setTimeLeft(m_timeLeft.get().toProto());
 
     builder.setIdentified(m_identified);
-    builder.addAllLocation(m_locations);
+    for(Occurrence occurrence : m_locations)
+      builder.addLocation(occurrence.toProto());
 
     ItemProto proto = builder.build();
     return proto;
@@ -1693,6 +1700,7 @@ public class Item extends CampaignEntry
     }
 
     ItemProto proto = (ItemProto)inProto;
+    super.fromProto(proto.getBase());
 
     if(proto.hasHitPoints())
       m_hp = proto.getHitPoints();
@@ -1722,9 +1730,10 @@ public class Item extends CampaignEntry
       m_timeLeft = Optional.of(Duration.fromProto(proto.getTimeLeft()));
 
     m_identified = proto.getIdentified();
-    m_locations = proto.getLocationList();
-
-    super.fromProto(proto.getBase());
+    if(getCampaign().isPresent())
+      for(OccurrenceProto occurrence : proto.getLocationList())
+        m_locations.add(Occurrence.fromProto(getCampaign().get().getCalendar(),
+                                             occurrence));
   }
 
   @Override

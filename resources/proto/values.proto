@@ -466,3 +466,14 @@ message CampaignDateProto
   optional int32 hour = 4;
   optional int32 minute = 5;
 }
+
+message LocationProto
+{
+  optional string name = 1;
+}
+
+message OccurrenceProto
+{
+  optional LocationProto location = 1;
+  optional CampaignDateProto date = 2;
+}

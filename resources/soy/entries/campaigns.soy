@@ -63,13 +63,20 @@
               {if not isLast($base)}; {/if}
             {/foreach}
           {/param}
-          {param color: '#008' /}
+          {param color: '#ccf' /}
         {/call}
       {/if}
-      {if $entry.owner.present}
+      {if $entry.DM.present}
         {call dma.entry.value}
           {param label: 'DM' /}
           {param value: $entry.DM /}
+          {param color: '#ccf' /}
+        {/call}
+      {/if}
+      {if $entry.date.present}
+        {call dma.entry.value}
+          {param label: 'Date' /}
+          {param value: $entry.date /}
           {param color: '#ccf' /}
         {/call}
       {/if}
