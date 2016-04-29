@@ -1502,6 +1502,22 @@ message NPCProto
   optional string looks = 8;
 }
 
+message BaseMiniatureProto
+{
+  required BaseEntryProto base = 1;
+
+  optional string set = 2;
+  optional int32 number = 3;
+  optional string origin = 4;
+  optional string type = 5;
+  repeated string subtype = 6;
+  optional BaseMonsterProto.Alignment alignment = 7;
+  repeated string character_class = 8;
+  optional int32 level = 9;
+  optional string role = 10;
+  optional BaseItemProto.Size size = 11;
+}
+
 message EntriesProto
 {
   repeated BaseCharacterProto base_character = 1;
@@ -1516,6 +1532,7 @@ message EntriesProto
   repeated BaseEncounterProto base_encounter = 10;
   repeated BaseLevelProto base_level = 11;
   repeated BaseEntryProto base_entry = 19;
+  repeated BaseMiniatureProto base_miniature = 20;
 
   repeated ProductProto product = 12;
   repeated CharacterProto character = 13;
@@ -1524,3 +1541,4 @@ message EntriesProto
   repeated MonsterProto monster = 17;
   repeated NPCProto npc = 18;
 }
+

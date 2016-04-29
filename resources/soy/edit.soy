@@ -28,10 +28,10 @@
 {template .entry}
   {@param entry: [key: string]}
   {@param type: string}
-  {@param id: string}
+  {@param id: string|null}
   {@param values: html}
   {@param create: bool}
-  <div class="edit {$type}" id="{escape($id)}">
+  <div class="edit {$type}"{if $id} id="{escape($id)}"{/if}>
     <div class="scroll">
       <div class="values">
         {$values}

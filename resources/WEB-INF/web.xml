@@ -228,7 +228,7 @@
         /_entries/base campaign/$1/campaign/$2/encounter
 
         ^/campaign/([^/]+)/([^/]+)/npcs
-        /_entries/base campaign/$1/campaign/$2/NPC
+        /_entries/base campaign/$1/campaign/$2/npc
 
         ^/campaign/([^/]+)/([^/]+)/item/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/item/$3
@@ -278,6 +278,9 @@
         ^/item/([^/]+)$
         /_entry/base item/$1
 
+        ^/miniature/([^/]+)$
+        /_entry/base miniature/$1
+
         ^/campaign/([^/]+)$
         /_entry/base campaign/$1
 
@@ -301,6 +304,9 @@
 
         ^/monsters/(.*)$
         /_index/base monster/$1
+
+        ^/miniatures/(.*)$
+        /_index/base miniature/$1
 
         ^/encounters/(.*)$
         /_index/base encounter/$1
@@ -331,6 +337,9 @@
 
         ^/monsters
         /_entries/base monster
+
+        ^/miniatures
+        /_entries/base miniature
 
         ^/encounters
         /_entries/base encounter

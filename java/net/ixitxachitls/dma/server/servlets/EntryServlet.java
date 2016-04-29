@@ -294,7 +294,7 @@ public class EntryServlet extends PageServlet
       data.put("variant", type.getName().replace(" ", ""));
       data.put("id",
                inRequest.hasParam("id")
-                   ? inRequest.getParam("id").get() : null);
+                   ? inRequest.getParam("id").get() : entry.get().getName());
       data.put("create", isCreate);
       data.put("title", entry.get().getName());
     }

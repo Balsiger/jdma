@@ -335,7 +335,8 @@ public enum Size implements Named, net.ixitxachitls.dma.values.enums.Short
   public static Optional<Size> fromString(String inText)
   {
     for(Size size : values())
-      if(size.m_name.equalsIgnoreCase(inText))
+      if(size.m_name.equalsIgnoreCase(inText)
+          || size.m_short.equalsIgnoreCase(inText))
         return Optional.of(size);
 
     return Optional.absent();

@@ -88,11 +88,12 @@ public class SoyRenderer
                                  "entries/basequalities", "entries/qualities",
                                  "entries/baselevels", "entries/levels",
                                  "entries/basefeats", "entries/feats",
-
                                  "entries/baseskills", "entries/skills",
                                  "entries/baseencounters",
                                  "entries/basespells",
-                                 "entries/basemonsters", "entries/monsters");
+                                 "entries/basemonsters", "entries/monsters",
+                                                         "entries/npcs",
+                                 "entries/baseminiatures");
     }
 
     return s_defaultTemplate;

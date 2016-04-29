@@ -548,7 +548,9 @@ public class SoyTemplate
     {
       return StringData.forValue(inArgs.get(0).toString()
                                  .replace("+", "_")
-                                 .replace(" ",  "-"));
+                                 .replace(" ",  "-")
+                                 .replace("(", "_")
+                                 .replace(")", "_"));
     }
   }
 
@@ -760,7 +762,7 @@ public class SoyTemplate
   }
 
   /** The soy files for the template. */
-  private List<String> m_files = new ArrayList<String>();
+  private List<String> m_files = new ArrayList<>();
 
   /** The compiled template file set. */
   private Optional<SoyTofu> m_compiled = Optional.absent();

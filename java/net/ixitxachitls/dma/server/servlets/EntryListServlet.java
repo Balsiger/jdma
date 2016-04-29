@@ -79,8 +79,12 @@ public class EntryListServlet extends PageServlet
                AbstractType<? extends AbstractEntry> inType,
                int inStart, int inSize)
   {
+    Optional<EntryKey> parent = Optional.absent();
+    if(inPath.startsWith("/_entries/base campaign/"))
+      parent = extractKey(inPath.replaceAll("/[^/]+$", ""));
+
     return (List<AbstractEntry>)DMADataFactory.get()
-      .getEntries(inType, Optional.<EntryKey>absent(), inStart, inSize);
+      .getEntries(inType, parent, inStart, inSize);
   }
 
   @Override

@@ -21,7 +21,7 @@
   <property name="version" value="animatedobject" />
 
   <!-- Google App Engine -->
-  <property name="gae.version" value="1.9.30" />
+  <property name="gae.version" value="1.9.36" />
   <property name="gae.dir" location="../../../Software/appengine-java-sdk-${gae.version}" />
   <import file="${gae.dir}/config/user/ant-macros.xml" />
 
@@ -102,6 +102,14 @@
     <pathelement location="${resources.dir}" />
     <!-- guava -->
     <pathelement location="${lib.dir}/guava-18.0.jar" />
+    <!-- Google App Engine -->
+    <fileset dir="${gae.dir}/lib">
+      <include name="shared/**/*.jar" />
+    </fileset>
+    <pathelement location="${gae.dir}/lib/appengine-remote-api.jar" />
+    <pathelement location="${gae.dir}/lib/appengine-api.jar" />
+    <pathelement location="${gae.dir}/lib/appengine-api-stubs.jar" />
+    <pathelement location="${gae.dir}/lib/user/appengine-api-1.0-sdk-${gae.version}.jar" />
     <!-- for testing -->
     <pathelement location="${lib.test.dir}/junit-4.8.2.jar" />
     <pathelement location="${lib.test.dir}/cglib-nodep-2.2.jar" />
@@ -126,12 +134,6 @@
     <!-- somehow required probably because checkstyle does not handle -->
     <!-- build.sysclasspath... -->
     <pathelement location="${lib.build.dir}/checkstyle-5.6-all.jar"  />
-    <!-- Google App Engine -->
-      <fileset dir="${gae.dir}/lib">
-          <include name="shared/**/*.jar" />
-      </fileset>
-    <pathelement location="${gae.dir}/lib/appengine-remote-api.jar" />
-    <pathelement location="${gae.dir}/lib/user/appengine-api-1.0-sdk-${gae.version}.jar" />
     <!-- Cloud Storage -->
     <pathelement location="${lib.dir}/appengine-gcs-client-0.4.1.jar" />
     <pathelement location="${lib.dir}/google-http-client-1.19.0.jar" />
