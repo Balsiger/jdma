@@ -1628,7 +1628,7 @@ public class BaseProduct extends BaseEntry
 
   @Override
   public Multimap<Index.Path, String> computeIndexValues()
-    {
+  {
     Multimap<Index.Path, String> values = super.computeIndexValues();
 
     // persons

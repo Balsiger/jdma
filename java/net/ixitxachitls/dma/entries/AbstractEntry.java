@@ -488,7 +488,7 @@ public abstract class AbstractEntry
         for(Iterator<ListItem> i = m_gcs.list(bucket, options); i.hasNext(); )
         {
           ListItem item = i.next();
-          if(item.isDirectory())
+          if(item.isDirectory() || item.getName().endsWith("/"))
             continue;
 
           String name = item.getName().replaceAll(".*/", "");

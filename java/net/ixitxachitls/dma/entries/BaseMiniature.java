@@ -25,8 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
+import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.BaseMiniatureProto;
 import net.ixitxachitls.dma.values.Value;
@@ -196,5 +198,24 @@ public class BaseMiniature extends BaseEntry
   protected Message defaultProto()
   {
     return BaseMiniatureProto.getDefaultInstance();
+  }
+
+  @Override
+  public Multimap<Index.Path, String> computeIndexValues()
+  {
+    Multimap<Index.Path, String> values = super.computeIndexValues();
+
+    if(m_set.isPresent())
+      values.put(Index.Path.SETS, m_set.get());
+    if(m_origin.isPresent())
+      values.put(Index.Path.ORIGINS, m_origin.get());
+    if(m_miniatureType.isPresent())
+      values.put(Index.Path.MINATURE_TYPES, m_miniatureType.get());
+    values.putAll(Index.Path.SUBTYPES, m_subtypes);
+    values.putAll(Index.Path.CLASSES, m_classes);
+    if(m_role.isPresent())
+      values.put(Index.Path.ROLES, m_role.get());
+
+    return values;
   }
 }
