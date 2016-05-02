@@ -3701,3 +3701,10 @@ DIV.inline
 {
   top: 45%;
 }
+
+.image-storage-link
+{
+  font-size: 10px;
+  text-align: center;
+  display: block;
+}

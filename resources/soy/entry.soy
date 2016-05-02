@@ -77,6 +77,13 @@
           {/call}
         {/if}
       {/foreach}
+
+      {if $ij.hasDMAccess}
+        <a target="_gcsimage" class="image-storage-link"
+           href="https://console.cloud.google.com/storage/browser/jdmaixit-hrd.appspot.com/{$entry.type}/{lower($entry.name)}/?project=jdmaixit-hrd">
+          cloud storage
+        </a>
+      {/if}
     </div>
 
     <div class="values">

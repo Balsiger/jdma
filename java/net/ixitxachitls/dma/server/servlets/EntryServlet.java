@@ -50,6 +50,7 @@ import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
@@ -317,6 +318,7 @@ public class EntryServlet extends PageServlet
     data.put("isDM", user != null
         && (!entry.isPresent() || entry.get().isDM(user)));
     data.put("isDev", DMAServlet.isDev() || inRequest.hasParam("dev"));
+    data.put("hasDMAccess", user.isPresent() && user.get().hasAccess(Group.DM));
     data.put("isOwner", user.isPresent()
         && (!entry.isPresent() || entry.get().isOwner(user.get())));
 
