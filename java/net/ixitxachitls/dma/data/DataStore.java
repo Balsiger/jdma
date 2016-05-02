@@ -501,7 +501,7 @@ public class DataStore
                     + ") " + " for field " + inField);
       Query query;
       if(inParent.isPresent())
-      query = new Query(inType, inParent.get());
+        query = new Query(inType, inParent.get());
       else
         query = new Query(inType);
 

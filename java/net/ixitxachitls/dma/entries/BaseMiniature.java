@@ -210,7 +210,7 @@ public class BaseMiniature extends BaseEntry
     if(m_origin.isPresent())
       values.put(Index.Path.ORIGINS, m_origin.get());
     if(m_miniatureType.isPresent())
-      values.put(Index.Path.MINATURE_TYPES, m_miniatureType.get());
+      values.put(Index.Path.MINIATURE_TYPES, m_miniatureType.get());
     values.putAll(Index.Path.SUBTYPES, m_subtypes);
     values.putAll(Index.Path.CLASSES, m_classes);
     if(m_role.isPresent())
