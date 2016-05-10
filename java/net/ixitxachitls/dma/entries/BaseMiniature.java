@@ -23,6 +23,7 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
@@ -56,7 +57,10 @@ public class BaseMiniature extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseMiniature> TYPE =
-      new BaseType.Builder<>(BaseMiniature.class).build();
+      new BaseType.Builder<>(BaseMiniature.class)
+          .index(new Index.Builder(Index.Path.SETS, "Sets", BaseMiniature.TYPE)
+                     .images().paginated().sort("number").build())
+          .build();
 
   protected Optional<String> m_set = Optional.absent();
   protected Optional<Integer> m_number = Optional.absent();
@@ -217,5 +221,21 @@ public class BaseMiniature extends BaseEntry
       values.put(Index.Path.ROLES, m_role.get());
 
     return values;
+  }
+
+  public Map<String, Object> collectSearchables() {
+    Map<String, Object> searchables = super.collectSearchables();
+
+    searchables.put("number", m_number.isPresent() ? m_number.get() : 0);
+    return searchables;
+  }
+
+  @Override
+  public String getImageSearchQuery()
+  {
+    if(m_set.isPresent())
+      return super.getImageSearchQuery() + " " + m_set.get();
+
+    return super.getImageSearchQuery();
   }
 }

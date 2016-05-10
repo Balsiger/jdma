@@ -223,7 +223,8 @@ public class DMADatastore
   {
     return (List<T>)
       convert(m_data.getEntities(escapeType(inType.toString()),
-                                 convert(inParent), 0, 1000, inKey, inValue));
+                                 convert(inParent), 0, 1000,
+                                 Optional.<String>absent(), inKey, inValue));
   }
 
   /**
@@ -294,13 +295,15 @@ public class DMADatastore
                                              AbstractType<?> inType,
                                              Optional<EntryKey> inParent,
                                              String inGroup,
-                                             int inStart, int inSize)
+                                             int inStart, int inSize,
+                                             Optional<String> inSort)
   {
     List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
 
     for(Entity entity : m_data.getEntities(escapeType(inType.toString()),
                                            convert(inParent),
                                            inStart, inSize,
+                                           inSort,
                                            Index.PREFIX + inIndex, inGroup))
     {
       Optional<AbstractEntry> entry = convert(entity);
@@ -340,7 +343,8 @@ public class DMADatastore
 
     for(Entity entity : m_data.getEntities(escapeType(inType.toString()),
                                            Optional.<Key>absent(),
-                                           0, 10000, inFilters))
+                                           0, 10000, Optional.<String>absent(),
+                                           inFilters))
 
     {
       List<String> values = (List<String>)

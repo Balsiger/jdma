@@ -83,6 +83,10 @@
            href="https://console.cloud.google.com/storage/browser/jdmaixit-hrd.appspot.com/{$entry.type}/{lower($entry.name)}/?project=jdmaixit-hrd">
           cloud storage
         </a>
+        <a target="_imgsrch" class="image-storage-link"
+           href="https://www.google.com/search?tbm=isch&q={$entry.image_search_query}">
+          image search
+        </a>
       {/if}
     </div>
 
@@ -506,16 +510,17 @@
   </div>
 {/template}
 
-/**
- * Template for rendering an index overview.
- *
- * @param title the page title
- * @param indexes the names of the indexes to render
- * @param name the index name
- * @param keys the keys for nested groups
- * @param type The type of the entries shown
- */
+/** Template for rendering an index overview. */
 {template .indexoverview}
+  {@param title: string}
+  {@param indexes: ?}
+  {@param name: string}
+  {@param keys: list<string>|null}
+  {@param type: string}
+  {@param images: bool}
+
+
+  {if $images}images{/if}
   <h1>{$title}</h1>
   {call dma.page.title}
     {param title: $title /}
@@ -543,12 +548,13 @@
         </div>
         <div class="index-group">
           {foreach $index in $indexes[$key]}
+            {$index} index
             {call dma.page.link}
               {param url : $name + '/'
                   + ($index ? $key + '::' + $index : $key) /}
               {param text kind="html"}
                 <div class="index-overview">
-                  {$index}
+                  {$index}--gugus
                 </div>
               {/param}
               {param tooltip: $index /}

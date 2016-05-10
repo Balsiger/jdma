@@ -24,11 +24,14 @@ package net.ixitxachitls.dma.entries;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
+
+import net.ixitxachitls.dma.entries.indexes.Index;
 
 /**
  * The type specification for a base entry.
@@ -66,7 +69,8 @@ public class BaseType<T extends BaseEntry> extends AbstractType<T>
      */
     public BaseType<T> build()
     {
-      return new BaseType(m_class, m_multiple, m_link, m_multipleLink, m_sort);
+      return new BaseType(m_class, m_multiple, m_link, m_multipleLink, m_sort,
+                          m_indexes);
     }
   }
 
@@ -78,13 +82,15 @@ public class BaseType<T extends BaseEntry> extends AbstractType<T>
    * @param inLink the link to the entry
    * @param inMultipleLink the link to multiple entries
    * @param inSort the text to use for sorting the type
+   * @param inIndexes the indexes available for this type
    */
   protected BaseType(Class<T> inClass, Optional<String> inMultiple,
                      Optional<String> inLink,
                      Optional<String> inMultipleLink,
-                     Optional<String> inSort)
+                     Optional<String> inSort,
+                     List<Index> inIndexes)
   {
-    super(inClass, inMultiple, inLink, inMultipleLink, inSort);
+    super(inClass, inMultiple, inLink, inMultipleLink, inSort, inIndexes);
   }
 
   /** All the non-base types available. */

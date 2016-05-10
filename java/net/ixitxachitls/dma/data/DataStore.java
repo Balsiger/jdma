@@ -260,7 +260,9 @@ public class DataStore
    */
   @SuppressWarnings("unchecked")
   public List<Entity> getEntities(String inType, Optional<Key> inParent,
-                                  int inStart, int inSize, String ... inFilters)
+                                  int inStart, int inSize,
+                                  Optional<String> inSort,
+                                  String ... inFilters)
   {
     String key = inType + ":" + inParent + ":" + inStart + ":" + inSize + ":"
         + Arrays.toString(inFilters);
@@ -276,6 +278,9 @@ public class DataStore
         query = new Query(inType, inParent.get());
       else
         query = new Query(inType);
+
+      if(inSort.isPresent())
+        query.addSort(inSort.get());
 
       if(inFilters.length > 2)
       {

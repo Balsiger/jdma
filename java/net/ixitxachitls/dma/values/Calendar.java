@@ -34,7 +34,6 @@ import net.ixitxachitls.dma.proto.Values.CalendarProto;
 import net.ixitxachitls.dma.server.servlets.MoveActionServlet;
 import net.ixitxachitls.util.logging.Log;
 import net.ixitxachitls.util.logging.Logger;
-import org.hsqldb.lib.Collection;
 
 /**
  * Specification of a calendar for a specific world.

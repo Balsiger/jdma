@@ -33,8 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
@@ -973,6 +971,11 @@ public abstract class AbstractEntry
   protected Message defaultProto()
   {
     return AbstractEntryProto.getDefaultInstance();
+  }
+
+  public String getImageSearchQuery()
+  {
+    return m_name;
   }
 
   //........................................................................

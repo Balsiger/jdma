@@ -174,7 +174,8 @@ public class FakeDMADatastore extends DMADatastore
                                              AbstractType<?> inType,
                                              Optional<EntryKey> inParent,
                                              String inGroup,
-                                             int inStart, int inSize)
+                                             int inStart, int inSize,
+                                             Optional<String> inSortField)
   {
     throw new UnsupportedOperationException("not yet implemented");
   }
