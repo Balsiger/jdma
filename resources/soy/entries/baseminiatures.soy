@@ -248,7 +248,7 @@
           {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
-              'https://storage.cloud.google.com/jdmaixit-hrd.appspot.com/base miniature/alusair obarskyr/main.jpg',
+              def($entry.main_file) ? $entry.main_file.icon : '',
               $entry.name, $entry.set, $entry.number,
               $entry.origin, $entry.miniature_type
             ] /}
@@ -258,4 +258,3 @@
     {/param}
   {/call}
 {/template}
-//              def($entry.main_file) ? $entry.main_file.icon : '',

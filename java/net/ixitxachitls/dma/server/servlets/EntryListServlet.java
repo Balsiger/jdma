@@ -118,7 +118,7 @@ public class EntryListServlet extends PageServlet
     String path = inRequest.getRequestURI();
     String typeName = "";
     String []match =
-        Strings.getPatterns(path, "^/_index/([^/]+)/([^/]+)(?:/(.*$))?");
+        Strings.getPatterns(path, "^/_entries/([^/]+)(?:/([^/]+))?(?:/(.*$))?");
     if(match.length > 0)
       typeName = match[0];
 
