@@ -375,9 +375,14 @@
   {@param entries: html}
   {@param label: html|string}
   {@param path: string}
-  <h1>{$title}</h1>
+  {@param? group: string}
+
+  <h1>
+    {$title}
+    {if $group} &ndash; {$group}{/if}
+  </h1>
   {call dma.page.title}
-    {param title: $title /}
+    {param title: $title + $group ? ' - ' + $group : '' /}
   {/call}
 
   {call dma.navigation.navigation}
@@ -422,7 +427,12 @@
   {@param values: list<?>}
   <tr onclick="util.link(event, '{$path}')">
     {foreach $value in $values}
-      <td class="list">{$value}</td>
+      {if startsWith($value, 'https://storage.cloud.google.com')}
+        <td class="list image"><img src="{$value}" class="list-image"/></td>
+      {else}
+        <td class="list">{$value}</td>
+      {/if}
+      </td>
     {/foreach}          
   </tr>   
 {/template}
@@ -518,7 +528,6 @@
   {@param keys: list<string>|null}
   {@param type: string}
   {@param images: bool}
-
 
   {if $images}images{/if}
   <h1>{$title}</h1>

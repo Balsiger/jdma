@@ -231,6 +231,8 @@
   {@param entries: list<?>}
   {@param label: string}
   {@param path: string}
+  {@param? group: string}
+
   {call dma.entry.list}
     {param title: $title /}
     {param label: $label /}
@@ -238,15 +240,17 @@
     {param start: $start /}
     {param pagesize: $pagesize /}
     {param size: $entries ? length($entries) : 0 /}
-    {param titles: [ 'Name', 'Set', 'Number', 'Origin', 'Type' ] /}
+    {param titles: [ '', 'Name', 'Set', 'Number', 'Origin', 'Type' ] /}
+    {param group: $group /}
     {param entries kind="html"}
       {foreach $entry in $entries}
         <tr onclick="util.link(event, '{$entry.path}')">
           {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
-              $entry.name, $entry.set, $entry.number, $entry.origin,
-              $entry.miniature_type
+              'https://storage.cloud.google.com/jdmaixit-hrd.appspot.com/base miniature/alusair obarskyr/main.jpg',
+              $entry.name, $entry.set, $entry.number,
+              $entry.origin, $entry.miniature_type
             ] /}
           {/call}
         </tr>
@@ -254,3 +258,4 @@
     {/param}
   {/call}
 {/template}
+//              def($entry.main_file) ? $entry.main_file.icon : '',

@@ -3708,3 +3708,14 @@ DIV.inline
   text-align: center;
   display: block;
 }
+
+.list-image
+{
+  width: 25xp;
+  height: 25px;
+}
+
+TD.list.image
+{
+  background-color: white;
+}

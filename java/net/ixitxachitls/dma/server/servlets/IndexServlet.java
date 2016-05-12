@@ -97,7 +97,7 @@ public class IndexServlet extends PageServlet
       return data;
 
     String []match =
-      Strings.getPatterns(path, "^/_index/([^/]+)/([^/]+)(?:/(.*$))?");
+        Strings.getPatterns(path, "^/_index/([^/]+)/([^/]+)(?:/(.*$))?");
     Optional<? extends AbstractType<? extends AbstractEntry>> type =
         Optional.absent();
     String name = null;

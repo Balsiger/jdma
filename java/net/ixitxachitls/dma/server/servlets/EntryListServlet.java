@@ -117,8 +117,14 @@ public class EntryListServlet extends PageServlet
 
     String path = inRequest.getRequestURI();
     String typeName = "";
-    if(path != null)
-      typeName = Strings.getPattern(path, "([^/]*)/?$");
+    String []match =
+        Strings.getPatterns(path, "^/_index/([^/]+)/([^/]+)(?:/(.*$))?");
+    if(match.length > 0)
+      typeName = match[0];
+
+    String group = "";
+    if(match.length > 2)
+      group = match[2];
 
     Optional<? extends AbstractType<? extends AbstractEntry>> type =
       AbstractType.getTyped(typeName);
@@ -141,6 +147,7 @@ public class EntryListServlet extends PageServlet
       entries.add(new SoyValue(entry.getKey().toString(), entry));
 
     data.put("title", title);
+    data.put("group", group);
     data.put("entries", entries);
     data.put("label", title.toLowerCase(Locale.US));
     data.put("path", path);

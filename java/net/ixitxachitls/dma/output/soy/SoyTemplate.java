@@ -528,6 +528,29 @@ public class SoyTemplate
     }
   }
 
+  /** A plugin function to check if a value starts with a given string. */
+  public static class StatsWithFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "startsWith";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(2);
+    }
+
+    @Override
+    public SoyData computeForTofu(List<SoyData> inArgs)
+    {
+      return BooleanData.forValue(inArgs.get(0).coerceToString().startsWith(
+          inArgs.get(1).coerceToString()));
+    }
+  }
+
   /** A plugin function to check if a value is a list. */
   public static class EscapeFunction implements SoyTofuFunction
   {
@@ -746,6 +769,7 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(AnnotateFunction.class);
       soyFunctionsSetBinder.addBinding().to(ValueFunction.class);
       soyFunctionsSetBinder.addBinding().to(IsListFunction.class);
+      soyFunctionsSetBinder.addBinding().to(StatsWithFunction.class);
       soyFunctionsSetBinder.addBinding().to(CamelFunction.class);
       soyFunctionsSetBinder.addBinding().to(LowerFunction.class);
       soyFunctionsSetBinder.addBinding().to(MatchesFunction.class);
