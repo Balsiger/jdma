@@ -1518,6 +1518,15 @@ message BaseMiniatureProto
   optional BaseItemProto.Size size = 11;
 }
 
+message MiniatureProto
+{
+  required EntryProto base = 1;
+
+  optional string owner = 2;
+  optional int32 number = 3;
+  optional string notes = 4;
+}
+
 message EntriesProto
 {
   repeated BaseCharacterProto base_character = 1;
@@ -1540,5 +1549,6 @@ message EntriesProto
   repeated EncounterProto encounter = 15;
   repeated MonsterProto monster = 17;
   repeated NPCProto npc = 18;
+  repeated MiniatureProto miniature = 21;
 }
 

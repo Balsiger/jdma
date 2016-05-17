@@ -215,6 +215,12 @@
         ^/user/([^/]+)/product/([^/]+)$
         /_entry/base character/$1/product/$2
 
+        ^/user/([^/]+)/miniatures$
+        /_entries/base character/$1/miniature
+
+        ^/user/([^/]+)/miniature/([^/]+)$
+        /_entry/base character/$1/miniature/$2
+
         ^/campaign/([^/]+)/([^/]+)/characters
         /_entries/base campaign/$1/campaign/$2/character
 

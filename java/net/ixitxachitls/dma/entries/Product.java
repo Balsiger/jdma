@@ -45,8 +45,6 @@ import net.ixitxachitls.util.logging.Log;
  * @file          Product.java
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
-
-@ParametersAreNonnullByDefault
 public class Product extends Entry
 {
   /** The serial version id. */
@@ -72,7 +70,7 @@ public class Product extends Entry
 
   /** The type of this entry. */
   public static final Type<Product> TYPE =
-    new Type.Builder<>(Product.class, BaseProduct.TYPE).build();
+      new Type.Builder<>(Product.class, BaseProduct.TYPE).build();
 
   /** The edition of the copy. */
   protected Optional<String> m_edition = Optional.absent();
@@ -221,6 +219,7 @@ public class Product extends Entry
    * @return the key
    */
   @SuppressWarnings("unchecked")
+  @Override
   public EntryKey getKey()
   {
     if(m_owner.isPresent())

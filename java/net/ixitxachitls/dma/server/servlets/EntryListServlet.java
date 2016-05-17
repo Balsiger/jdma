@@ -119,12 +119,21 @@ public class EntryListServlet extends PageServlet
     String typeName = "";
     String []match =
         Strings.getPatterns(path, "^/_entries/([^/]+)(?:/([^/]+))?(?:/(.*$))?");
+
     if(match.length > 0)
-      typeName = match[0];
+      typeName = match[0].replace("%20", " ");
 
     String group = "";
     if(match.length > 2)
       group = match[2];
+
+    Optional<EntryKey> parent = Optional.absent();
+    if(!group.isEmpty() &&
+        (typeName.equals("base character") || typeName.equals("base campaign")))
+    {
+      typeName = group;
+      parent = extractKey(path.replaceAll("/[^/]+$", ""));
+    }
 
     Optional<? extends AbstractType<? extends AbstractEntry>> type =
       AbstractType.getTyped(typeName);
