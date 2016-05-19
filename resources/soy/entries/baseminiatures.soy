@@ -106,6 +106,32 @@
         {param value: $entry.size /}
         {param color: '#7c0' /}
       {/call}
+      {if $ij.user}
+        {call dma.entry.value}
+          {param label: 'Owners' /}
+          {param value kind="html"}
+            {foreach $owner in keys($entry.owners)}
+              {foreach $id in $entry.owners[$owner]}
+                {call dma.page.link}
+                  {param url: '/user/' + $owner+ '/miniature/' + $id /}
+                  {param text: $owner /}
+                {/call}
+                {if not isLast($id)}, {/if}
+              {/foreach}
+              {if not isLast($owner)}, {/if}
+            {ifempty}
+              none
+            {/foreach}
+            {sp}|{sp}
+            <span class="action" onclick="edit.show(
+                   '{let $foo kind="text"}{$entry.name |escapeJs}{/let}{$foo}',
+                   '/user/{$ij.user.name}/miniature/CREATE', '{$foo}', '{$foo}')">
+              add
+            </span>
+          {/param}
+          {param color: '#7c0' /}
+        {/call}
+      {/if}
     {/param}
   {/call}
 {/template}

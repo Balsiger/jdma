@@ -27,8 +27,10 @@ import java.util.Map;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.google.protobuf.Message;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.BaseMiniatureProto;
@@ -237,5 +239,11 @@ public class BaseMiniature extends BaseEntry
       return super.getImageSearchQuery() + " " + m_set.get();
 
     return super.getImageSearchQuery();
+  }
+
+  public Map<String, List<String>> owners()
+  {
+    return Multimaps.asMap(DMADataFactory.get().getOwners(Miniature.TYPE,
+                                                          this.getName()));
   }
 }

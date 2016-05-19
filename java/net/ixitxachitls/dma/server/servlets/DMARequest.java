@@ -381,6 +381,8 @@ public class DMARequest extends HttpServletRequestWrapper
       Log.warning("could not properly initialize npc type");
     if(net.ixitxachitls.dma.entries.BaseMiniature.TYPE == null)
       Log.warning("could not properly initialize base miniature type");
+    if(net.ixitxachitls.dma.entries.Miniature.TYPE == null)
+      Log.warning("could not properly initialize miniature type");
   }
 
   //----------------------------------------------------------------------------

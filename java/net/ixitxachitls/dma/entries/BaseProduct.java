@@ -1623,7 +1623,8 @@ public class BaseProduct extends BaseEntry
    */
   public Map<String, List<String>> owners()
   {
-    return Multimaps.asMap(DMADataFactory.get().getOwners(this.getName()));
+    return Multimaps.asMap(DMADataFactory.get().getOwners(Product.TYPE,
+                                                          this.getName()));
   }
 
   @Override

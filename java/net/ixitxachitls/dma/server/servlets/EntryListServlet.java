@@ -124,7 +124,7 @@ public class EntryListServlet extends PageServlet
       typeName = match[0].replace("%20", " ");
 
     String group = "";
-    if(match.length > 2)
+    if(match.length > 2 && match[2] != null)
       group = match[2];
 
     Optional<EntryKey> parent = Optional.absent();

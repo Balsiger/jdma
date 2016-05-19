@@ -266,11 +266,12 @@ public class DMADatastore
    *
    * @return   a multi map from owner to ids
    */
-  public ListMultimap<String, String> getOwners(String inID)
+  public ListMultimap<String, String> getOwners(
+      AbstractType<? extends AbstractEntry> inType, String inID)
   {
-    Log.debug("getting owners for " + inID);
+    Log.debug("getting owners for " + inType + "/" + inID);
     ListMultimap<String, String> owners = ArrayListMultimap.create();
-    for(Entity entity : m_data.getIDs(escapeType(Product.TYPE.toString()),
+    for(Entity entity : m_data.getIDs(escapeType(inType.toString()),
                                       "bases", inID.toLowerCase(Locale.US)))
       owners.put(entity.getKey().getParent().getName(),
                  entity.getKey().getName());

@@ -154,36 +154,36 @@ public class Product extends Entry
   public String getPath()
   {
     return "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner.get() + "/"
-      + getType().getLink() + "/" + getName();
+        + getType().getLink() + "/" + getName();
   }
 
   @Override
   public List<Link> getNavigation()
   {
     return ImmutableList.of
-      (new Link(BaseCharacter.TYPE.getLink(),
-                "/" + BaseCharacter.TYPE.getMultipleLink()),
-      new Link(m_owner.toString(),
-               "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner),
-      new Link(getType().getLink(),
-               "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
-               + "/" + getType().getMultipleLink()),
-      new Link(getName(),
-               "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
-               + "/" + getType().getLink() + "/" + getName()));
+        (new Link(BaseCharacter.TYPE.getLink(),
+                  "/" + BaseCharacter.TYPE.getMultipleLink()),
+         new Link(m_owner.toString(),
+                  "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner),
+         new Link(getType().getLink(),
+                  "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
+                      + "/" + getType().getMultipleLink()),
+         new Link(getName(),
+                  "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
+                      + "/" + getType().getLink() + "/" + getName()));
   }
 
   @Override
   public String [] getListNavigation()
   {
     return new String [] {
-      BaseCharacter.TYPE.getLink(),
-      "/" + BaseCharacter.TYPE.getMultipleLink(),
-      m_owner.toString(),
-      "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner,
-      getType().getMultipleLink(),
-      "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
-      + "/" + getType().getMultipleLink(),
+        BaseCharacter.TYPE.getLink(),
+        "/" + BaseCharacter.TYPE.getMultipleLink(),
+        m_owner.toString(),
+        "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner,
+        getType().getMultipleLink(),
+        "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
+            + "/" + getType().getMultipleLink(),
     };
   }
 

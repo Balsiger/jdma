@@ -93,7 +93,8 @@ public class SoyRenderer
                                  "entries/basespells",
                                  "entries/basemonsters", "entries/monsters",
                                                          "entries/npcs",
-                                 "entries/baseminiatures");
+                                 "entries/baseminiatures", "entries/miniatures"
+      );
     }
 
     return s_defaultTemplate;

@@ -164,7 +164,8 @@ public class FakeDMADatastore extends DMADatastore
   }
 
   @Override
-  public ListMultimap<String, String> getOwners(String inID)
+  public ListMultimap<String, String> getOwners(
+      AbstractType<? extends AbstractEntry> inType, String inID)
   {
     throw new UnsupportedOperationException("not yet implemented");
   }
