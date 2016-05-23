@@ -67,6 +67,7 @@ message BaseCharacterProto
     }
     optional Rule rule = 2;
     optional string value = 3;
+    optional string color = 4;
   }
   repeated MiniatureLocation miniature_locations = 7;
 }

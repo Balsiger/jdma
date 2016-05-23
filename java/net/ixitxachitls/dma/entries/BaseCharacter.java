@@ -228,7 +228,7 @@ public class BaseCharacter extends BaseEntry
     m_miniatureLocations = inValues.use("miniature_location",
                                         m_miniatureLocations,
                                         MiniatureLocation.PARSER,
-                                        "location", "rule", "value");
+                                        "location", "rule", "value", "color");
   }
 
   /**

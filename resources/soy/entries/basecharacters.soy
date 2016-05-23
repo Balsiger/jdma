@@ -74,7 +74,7 @@
         {param label: 'Miniature Locations' /}
         {param value kind="html"}
           {foreach $location in $entry.miniature_locations}
-            <div>{$location}</div>
+            <div style="background-color: {$location.color}">{$location}</div>
           {/foreach}
         {/param}
         {param color: '#39f' /}
@@ -187,6 +187,12 @@
                       'value': $location.value,
                       'validate': 'any',
                       'caption': 'value'
+                    ],
+                    [
+                      'name': 'miniature_location.color',
+                      'value': $location.color,
+                      'validate': 'any',
+                      'caption': 'color'
                     ]
                   ]
                   /}
@@ -213,6 +219,12 @@
                       'value': '',
                       'validate': 'any',
                       'caption': 'value'
+                    ],
+                    [
+                      'name': 'miniature_location.color',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'color'
                     ]
                   ]
                   /}
