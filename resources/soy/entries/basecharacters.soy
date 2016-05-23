@@ -65,6 +65,20 @@
         {param value: $entry.last_action/}
         {param color: '#39f' /}
       {/call}
+      {call dma.entry.value}
+        {param label: 'Last Action' /}
+        {param value: $entry.last_action/}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Miniature Locations' /}
+        {param value kind="html"}
+          {foreach $location in $entry.miniature_locations}
+            <div>{$location}</div>
+          {/foreach}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
       /* TODO: readd the call to return products...
       {call dma.entry.value}
         {param label: 'Recent Products' /}
@@ -143,6 +157,70 @@
         {param value: $entry.group.string /}
         {param choices: $entry.group.names /}
         {param color: '#39f' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'contents' /}
+        {param color: '#444' /}
+        {param label: 'Minature Locations' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $location in $entry.miniature_locations}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'miniature_location' /}
+                  {param values: [
+                    [
+                      'name': 'miniature_location.location',
+                      'value': $location.location,
+                      'validate': 'any',
+                      'caption': 'value'
+                    ],
+                    [
+                      'name': 'miniature_location.rule',
+                      'value': $location.rule.getName,
+                      'type': 'selection',
+                      'choices': $ij.MiniatureLocationRule.names,
+                      'caption': 'rule'
+                    ],
+                    [
+                      'name': 'miniature_location.value',
+                      'value': $location.value,
+                      'validate': 'any',
+                      'caption': 'value'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'miniature_location' /}
+                  {param values: [
+                    [
+                      'name': 'miniature_location.location',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'location'
+                    ],
+                    [
+                      'name': 'miniature_location.rule',
+                      'value': '',
+                      'type': 'selection',
+                      'choices': $ij.MiniatureLocationRule.names,
+                      'caption': 'rule'
+                    ],
+                    [
+                      'name': 'miniature_location.value',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'value'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
       {/call}
     {/param}
   {/call}

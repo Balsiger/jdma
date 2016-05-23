@@ -200,7 +200,7 @@ public class BaseProduct extends BaseEntry
     @Override
     public String toString()
     {
-        return m_name;
+      return m_name;
     }
 
     /**

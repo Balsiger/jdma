@@ -56,6 +56,19 @@ message BaseCharacterProto
   optional string email = 5;
   repeated string possessions = 6; // This is only used for the ordering of
                                    // items.
+
+  message MiniatureLocation
+  {
+    optional string location = 1;
+
+    enum Rule
+    {
+      TYPE = 0;
+    }
+    optional Rule rule = 2;
+    optional string value = 3;
+  }
+  repeated MiniatureLocation miniature_locations = 7;
 }
 
 message BaseProductProto

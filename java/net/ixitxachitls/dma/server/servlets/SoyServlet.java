@@ -44,9 +44,7 @@ import net.ixitxachitls.dma.entries.Skill;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.output.soy.SoyValue;
-import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.values.ArmorType;
-import net.ixitxachitls.dma.values.Content;
 import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.WeaponStyle;
@@ -62,6 +60,7 @@ import net.ixitxachitls.dma.values.enums.Immunity;
 import net.ixitxachitls.dma.values.enums.Language;
 import net.ixitxachitls.dma.values.enums.LanguageModifier;
 import net.ixitxachitls.dma.values.enums.Maneuverability;
+import net.ixitxachitls.dma.values.enums.MiniatureLocationRule;
 import net.ixitxachitls.dma.values.enums.MonsterSubtype;
 import net.ixitxachitls.dma.values.enums.MonsterType;
 import net.ixitxachitls.dma.values.enums.MovementMode;
@@ -77,7 +76,6 @@ import net.ixitxachitls.dma.values.enums.SpellDescriptor;
 import net.ixitxachitls.dma.values.enums.SpellEffect;
 import net.ixitxachitls.dma.values.enums.Subschool;
 import net.ixitxachitls.util.Tracer;
-import net.ixitxachitls.util.logging.Log;
 
 /**
  * The base servlet for all soy rendered pages.
@@ -289,7 +287,9 @@ public class SoyServlet extends DMAServlet
        "Immunity", new SoyValue("Immunity", Immunity.class),
        "BaseSkill", new SoyValue("BaseSkill", BaseSkill.class),
        "BaseProduct_Part",
-       new SoyValue("BaseProduct_Part", BaseProduct.Part.class));
+       new SoyValue("BaseProduct_Part", BaseProduct.Part.class),
+       "MiniatureLocationRule",new SoyValue("MiniatureLocationRule",
+                                            MiniatureLocationRule.class));
 
     tracer.done();
     return map;

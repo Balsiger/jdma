@@ -21,6 +21,9 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Optional;
@@ -30,6 +33,7 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.BaseCharacterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.values.MiniatureLocation;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.util.Strings;
@@ -43,6 +47,7 @@ import net.ixitxachitls.util.logging.Log;
  */
 public class BaseCharacter extends BaseEntry
 {
+
   /**
    * This is the standard constructor to create a base character with its
    * name.
@@ -88,6 +93,8 @@ public class BaseCharacter extends BaseEntry
 
   /** The files in the base campaign. */
   protected Optional<String> m_realName = Optional.absent();
+
+  protected List<MiniatureLocation> m_miniatureLocations = new ArrayList<>();
 
   /** The number of recent products to show. */
   public static final int MAX_PRODUCTS = 5;
@@ -149,6 +156,11 @@ public class BaseCharacter extends BaseEntry
     return "";
   }
 
+  public List<MiniatureLocation> getMiniatureLocations()
+  {
+    return Collections.unmodifiableList(m_miniatureLocations);
+  }
+
   /**
    * Checks if the user has at least the given access.
    *
@@ -199,6 +211,8 @@ public class BaseCharacter extends BaseEntry
       builder.setRealName(m_realName.get());
     if(m_email.isPresent())
       builder.setEmail(m_email.get());
+    for(MiniatureLocation location : m_miniatureLocations)
+      builder.addMiniatureLocations(location.toProto());
 
     return builder.build();
   }
@@ -211,6 +225,10 @@ public class BaseCharacter extends BaseEntry
     m_realName = inValues.use("real_name", m_realName);
     m_email = inValues.use("email", m_email);
     m_group = inValues.use("group", m_group, Group.PARSER);
+    m_miniatureLocations = inValues.use("miniature_location",
+                                        m_miniatureLocations,
+                                        MiniatureLocation.PARSER,
+                                        "location", "rule", "value");
   }
 
   /**
@@ -275,6 +293,9 @@ public class BaseCharacter extends BaseEntry
       m_realName = Optional.of(proto.getRealName());
     if(proto.hasEmail())
       m_email = Optional.of(proto.getEmail());
+    for(BaseCharacterProto.MiniatureLocation location
+        : proto.getMiniatureLocationsList())
+      m_miniatureLocations.add(MiniatureLocation.fromProto(location));
   }
 
   //----------------------------------------------------------------------------
