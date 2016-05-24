@@ -60,7 +60,7 @@ import net.ixitxachitls.dma.values.enums.Immunity;
 import net.ixitxachitls.dma.values.enums.Language;
 import net.ixitxachitls.dma.values.enums.LanguageModifier;
 import net.ixitxachitls.dma.values.enums.Maneuverability;
-import net.ixitxachitls.dma.values.enums.MiniatureLocationRule;
+import net.ixitxachitls.dma.values.enums.MiniatureLocationRuleType;
 import net.ixitxachitls.dma.values.enums.MonsterSubtype;
 import net.ixitxachitls.dma.values.enums.MonsterType;
 import net.ixitxachitls.dma.values.enums.MovementMode;
@@ -289,7 +289,7 @@ public class SoyServlet extends DMAServlet
        "BaseProduct_Part",
        new SoyValue("BaseProduct_Part", BaseProduct.Part.class),
        "MiniatureLocationRule",new SoyValue("MiniatureLocationRule",
-                                            MiniatureLocationRule.class));
+                                            MiniatureLocationRuleType.class));
 
     tracer.done();
     return map;

@@ -61,13 +61,18 @@ message BaseCharacterProto
   {
     optional string location = 1;
 
-    enum Rule
+    message Rule
     {
-      TYPE = 0;
+      enum Type
+      {
+        TYPE = 0;
+        ORIGIN = 1;
+      }
+      optional Type type = 1;
+      optional string value = 2;
     }
-    optional Rule rule = 2;
-    optional string value = 3;
-    optional string color = 4;
+    repeated Rule rules = 2;
+    optional string color = 3;
   }
   repeated MiniatureLocation miniature_locations = 7;
 }
