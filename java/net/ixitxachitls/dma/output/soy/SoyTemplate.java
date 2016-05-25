@@ -571,6 +571,7 @@ public class SoyTemplate
     {
       return StringData.forValue(inArgs.get(0).toString()
                                  .replace("+", "_")
+                                 .replace(",", "_")
                                  .replace(" ",  "-")
                                  .replace("(", "_")
                                  .replace(")", "_"));

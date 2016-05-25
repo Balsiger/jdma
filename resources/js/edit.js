@@ -139,6 +139,7 @@ edit.save = function(inKey, inID, inCreate)
   var values = { '_key_': inKey };
   $('#' + inID + " :input").each(function ()
     {
+      console.log("name", this.name)
       if(this.name)
       {
         if(this.name in values)

@@ -23,6 +23,7 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -211,6 +212,21 @@ public class BaseCharacter extends BaseEntry
       builder.setRealName(m_realName.get());
     if(m_email.isPresent())
       builder.setEmail(m_email.get());
+
+    // Sort the location before storing.
+    Collections.sort(m_miniatureLocations, new Comparator<MiniatureLocation>()
+    {
+      @Override
+      public int compare(MiniatureLocation o1, MiniatureLocation o2)
+      {
+        int compare = o1.getLocation().compareTo(o2.getLocation());
+        if(compare != 0)
+          return compare;
+
+        return o1.getRules().compareTo(o2.getRules());
+      }
+    });
+
     for(MiniatureLocation location : m_miniatureLocations)
       builder.addMiniatureLocations(location.toProto());
 
@@ -228,7 +244,8 @@ public class BaseCharacter extends BaseEntry
     m_miniatureLocations = inValues.use("miniature_location",
                                         m_miniatureLocations,
                                         MiniatureLocation.PARSER,
-                                        "location", "rules", "color");
+                                        "location", "rules", "overrides",
+                                        "color");
   }
 
   /**

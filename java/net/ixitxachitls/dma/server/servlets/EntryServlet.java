@@ -245,7 +245,7 @@ public class EntryServlet extends PageServlet
           // bases are overwritten by values if done before!
           if(inRequest.hasParam("bases"))
             for(String base
-                : inRequest.getParam("bases").get().split("\\s*,\\s*"))
+                : inRequest.getParam("bases").get().split("\\s*,,\\s*"))
               if(!base.isEmpty())
                 entry.get().addBase(base);
 

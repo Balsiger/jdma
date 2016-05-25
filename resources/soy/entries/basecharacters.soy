@@ -74,7 +74,10 @@
         {param label: 'Miniature Locations' /}
         {param value kind="html"}
           {foreach $location in $entry.miniature_locations}
-            <div style="background-color: {$location.color}">{$location}</div>
+            <div style="background-color: {$location.color};
+                        {if $location.color}color: white{/if}">
+              {$location}
+            </div>
           {/foreach}
         {/param}
         {param color: '#39f' /}
@@ -182,6 +185,12 @@
                       'caption': 'rules'
                     ],
                     [
+                      'name': 'miniature_location.overrides',
+                      'value': $location.overrides,
+                      'type': 'flag',
+                      'caption': 'override'
+                    ],
+                    [
                       'name': 'miniature_location.color',
                       'value': $location.color,
                       'validate': 'any',
@@ -205,6 +214,12 @@
                       'value': '',
                       'validate': 'any',
                       'caption': 'rules'
+                    ],
+                    [
+                      'name': 'miniature_location.overrides',
+                      'value': '',
+                      'type': 'flag',
+                      'caption': 'override',
                     ],
                     [
                       'name': 'miniature_location.color',

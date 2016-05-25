@@ -270,14 +270,15 @@
   {@param name: string}
   {@param value: any}
   {@param? class: string}
-  {@param? width: string}
+  {@param? caption: string}
   {call .field}
     {param class: $class /}
-    {param width: $width /}
     {param markup kind="html"}
-      <input name="{$name}"
+      <input name="{$name}" style="width: auto"
         onclick="this.checked ? this.value='true' : this.value='false'"
-        type="checkbox" {if $value}checked{/if}/>
+        type="checkbox" {if $value}checked value="true"{/if}/>
+        {if $caption}{$caption}{/if}
+      </input>
     {/param}
   {/call}
 {/template}
@@ -355,7 +356,14 @@
           {call .field_selection}
             {param name: $value.name /}
             {param value: $value.value /}
-            {param choices: $value.choices /}      
+            {param choices: $value.choices /}
+            {param class: $class ? $class : 'field' + length($values) /}
+          {/call}
+        {elseif $value.type and $value.type == 'flag'}
+          {call .field_flag}
+            {param name: $value.name /}
+            {param value: $value.value /}
+            {param caption: $value.caption /}
             {param class: $class ? $class : 'field' + length($values) /}
           {/call}
         {else}

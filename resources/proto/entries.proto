@@ -67,12 +67,16 @@ message BaseCharacterProto
       {
         TYPE = 0;
         ORIGIN = 1;
+        SUBTYPE = 2;
+        CLASS = 3;
+        SIZE = 4;
       }
       optional Type type = 1;
       optional string value = 2;
     }
     repeated Rule rules = 2;
     optional string color = 3;
+    optional bool overrides = 4;
   }
   repeated MiniatureLocation miniature_locations = 7;
 }
