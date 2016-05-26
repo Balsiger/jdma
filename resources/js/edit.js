@@ -159,7 +159,7 @@ edit.save = function(inKey, inID, inCreate)
 
   // send the data to the server
   window.console.log('saving!', inID, values);
-  if(window.location.href.match(/\?create$/) || inCreate)
+  if(window.location.href.match(/\?(create|copy)$/) || inCreate)
     values['_create_'] = '';
   var eval = util.ajax('/actions/save', values, null, true);
 
