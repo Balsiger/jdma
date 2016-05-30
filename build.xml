@@ -183,6 +183,9 @@
       <fileset dir="${lib.dir}">
         <include name="*.jar" />
       </fileset>
+      <fileset dir="${lib.test.dir}">
+        <include name="junit-4.8.2.jar"/>
+      </fileset>
     </copy>
     <copy todir="${webinf.dir}" flatten="true">
       <fileset dir="${resources.dir}/WEB-INF">

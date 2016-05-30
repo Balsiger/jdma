@@ -181,7 +181,7 @@
 
   <servlet-mapping>
     <servlet-name>html</servlet-name>
-    <url-pattern>/[^_]*</url-pattern>
+    <url-pattern>/about</url-pattern>
   </servlet-mapping>
 
   <filter>
