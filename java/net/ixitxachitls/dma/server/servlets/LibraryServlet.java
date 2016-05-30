@@ -126,10 +126,12 @@ public class LibraryServlet extends PageServlet
     data.put("types", types);
     data.put("indexes", indexes);
     data.put("template", "dma.page.library");
+    /* Not used?
     data.put("content",
              inRenderer.render("dma.page.library",
                                Optional.of(map("types", types,
                                                "indexes", indexes))));
+    */
 
     return data;
   }

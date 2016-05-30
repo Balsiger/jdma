@@ -29,7 +29,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
+import com.google.template.soy.data.SanitizedContent;
+import com.google.template.soy.data.SanitizedContents;
 import com.google.template.soy.data.SoyData;
+import com.google.template.soy.shared.restricted.Sanitizers;
 
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 
@@ -41,7 +44,7 @@ import net.ixitxachitls.dma.output.soy.SoyRenderer;
  */
 @Immutable
 @ParametersAreNonnullByDefault
-public class StaticPageServlet extends SoyServlet
+public class StaticPageServlet extends PageServlet
 {
   /**
    * Default constructor.
@@ -55,10 +58,27 @@ public class StaticPageServlet extends SoyServlet
   private static final long serialVersionUID = 1L;
 
   @Override
-  protected String getTemplateName(DMARequest inRequest,
+  protected String getTemplateName(DMARequest inDMARequest,
                                    Map<String, SoyData> inData)
   {
+    return "dma.page.print";
+  }
+
+  /**
+   * Collect the data that is to be printed.
+   *
+   * @param    inRequest  the request for the page
+   * @param    inRenderer the renderer for rendering sub values
+   *
+   * @return   a map with key/value pairs for data (values can be primitives
+   *           or maps or lists)
+   */
+  @Override
+  protected Map<String, Object> collectData(DMARequest inRequest,
+                                            SoyRenderer inRenderer)
+  {
     String path = inRequest.getRequestURI();
+    Map<String, Object> map = super.collectData(inRequest, inRenderer);
 
     // check the given path for illegal relative stuff and add the root
     if(path == null || path.isEmpty())
@@ -71,6 +91,20 @@ public class StaticPageServlet extends SoyServlet
     else if(name.endsWith(".html"))
       name = name.substring(0, name.length() - 5);
 
-    return name;
+    try
+    {
+      map.put("content", inRenderer.renderStrict(name));
+      map.put("title", Sanitizers.cleanHtml("Guru guru"));
+    }
+    catch(com.google.template.soy.tofu.SoyTofuException e)
+    {
+      // template could not be loaded
+      map.put("content", inRenderer.renderStrictSoy(
+          "dma.errors.invalidPage",
+          Optional.of(map("name", name,
+                          "error", e.toString()))));
+    }
+
+    return map;
   }
 }

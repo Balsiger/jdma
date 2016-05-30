@@ -25,6 +25,7 @@
  * The error for an invalid page.
  *
  * @param path The name of the page that is invalid.
+ * @param error The error that happened
  */
 {template .invalidPage}
   {call .error}
@@ -36,6 +37,9 @@
         The requested page '{$path}' does not exist.
       {else}
         No path given for page.
+      {/if}
+      {if $error}
+        <div style="margin-top: 200px">ERROR: {$error}</div>
       {/if}
     {/param}
   {/call}

@@ -572,6 +572,7 @@ public class SoyTemplate
       return StringData.forValue(inArgs.get(0).toString()
                                  .replace("+", "_")
                                  .replace(",", "_")
+                                 .replace("'", "_")
                                  .replace(" ",  "-")
                                  .replace("(", "_")
                                  .replace(")", "_"));
@@ -854,6 +855,22 @@ public class SoyTemplate
                           Optional<SoyMapData> inData,
                           Optional<SoyMapData> inInjected)
   {
+    SoyTofu.Renderer renderer = createRenderer(inName, inData, inInjected);
+    return renderer.render();
+  }
+
+  public SanitizedContent renderStrictSoy(String inName,
+                                          Optional<SoyMapData> inData,
+                                          Optional<SoyMapData> inInjected)
+  {
+    SoyTofu.Renderer renderer = createRenderer(inName, inData, inInjected);
+    return renderer.renderStrict();
+  }
+
+  private SoyTofu.Renderer createRenderer(String inName,
+                                          Optional<SoyMapData> inData,
+                                          Optional<SoyMapData> inInjected)
+  {
     compile();
 
     SoyTofu.Renderer renderer = m_compiled.get().newRenderer(inName);
@@ -864,7 +881,7 @@ public class SoyTemplate
     else
       renderer.setIjData(new SoyMapData());
 
-    return renderer.render();
+    return renderer;
   }
 
   /**

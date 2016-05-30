@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.common.base.Optional;
+import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyMapData;
 
@@ -248,7 +249,31 @@ public class SoyRenderer
     {
       // In case there is an error, we always want to recompile on dev.
       if(SystemProperty.environment.value()
-         == SystemProperty.Environment.Value.Development)
+          == SystemProperty.Environment.Value.Development)
+        recompile();
+
+      throw e;
+    }
+  }
+
+  public SanitizedContent renderStrictSoy(String inName,
+                                          Optional<Map<String, Object>> inData)
+  {
+    Optional<SoyMapData> data;
+    if(inData.isPresent())
+      data = Optional.of(new SoyMapData(inData.get()));
+    else
+      data = Optional.absent();
+
+    try
+    {
+      return m_template.renderStrictSoy(inName, data, m_injected);
+    }
+    catch(Exception e) // $codepro.audit.disable caughtExceptions
+    {
+      // In case there is an error, we always want to recompile on dev.
+      if(SystemProperty.environment.value()
+          == SystemProperty.Environment.Value.Development)
         recompile();
 
       throw e;
@@ -265,6 +290,11 @@ public class SoyRenderer
   public String render(String inName)
   {
     return m_template.renderSoy(inName, m_data, m_injected);
+  }
+
+  public SanitizedContent renderStrict(String inName)
+  {
+    return m_template.renderStrictSoy(inName, m_data, m_injected);
   }
 
   /**
