@@ -45,7 +45,12 @@ edit.all = [];
  */
 edit.show = function(inTitle, inPath, inID, inBases, inValues)
 {
-  console.log(inTitle, inPath, inID, inBases, inValues);
+  inTitle = edit.unescape(inTitle);
+  inPath = edit.unescape(inPath);
+  inID = edit.unescape(inID);
+  inBases = edit.unescape(inBases);
+
+  console.log("show", inTitle, inPath, inID, inBases, inValues);
   var contents = util.ajax(inPath + '?body&id=' + inID
       + '&bases=' + inBases + '&values=' + inValues);
   var dialog = $('<div id="dialog-' + inID.replace(/ /g, "_") + '"/>')
@@ -63,6 +68,11 @@ edit.show = function(inTitle, inPath, inID, inBases, inValues)
   // Setup any necessary autocomplete
   edit.setupAutocomplete($(":input[dma-autocomplete]"));
 };
+
+edit.unescape = function(inText)
+{
+  return inText.replace('\\x27', "'");
+}
 
 /**
  * Install autocomplete handling into the given elements.
@@ -135,6 +145,9 @@ edit.removeImage = function(inID)
  */
 edit.save = function(inKey, inID, inCreate)
 {
+  inKey = edit.unescape(inKey);
+  inID = edit.unescape(inID);
+
   window.console.log("save", inKey, inID, inCreate);
   var values = { '_key_': inKey };
   $('#' + inID + " :input").each(function ()

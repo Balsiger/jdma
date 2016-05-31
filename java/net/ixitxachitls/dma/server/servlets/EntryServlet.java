@@ -317,7 +317,6 @@ public class EntryServlet extends PageServlet
     // should have access to it.
     data.put("isDM", user != null
         && (!entry.isPresent() || entry.get().isDM(user)));
-    data.put("isDev", DMAServlet.isDev() || inRequest.hasParam("dev"));
     data.put("hasDMAccess", user.isPresent() && user.get().hasAccess(Group.DM));
     data.put("isOwner", user.isPresent()
         && (!entry.isPresent() || entry.get().isOwner(user.get())));
