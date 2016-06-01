@@ -71,6 +71,9 @@ edit.show = function(inTitle, inPath, inID, inBases, inValues)
 
 edit.unescape = function(inText)
 {
+  if(!inText)
+    return inText;
+
   return inText.replace('\\x27', "'");
 }
 

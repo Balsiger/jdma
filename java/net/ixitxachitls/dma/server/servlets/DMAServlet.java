@@ -52,6 +52,9 @@ import net.ixitxachitls.util.logging.Log;
 @Immutable
 public abstract class DMAServlet extends BaseServlet
 {
+  public static String ACTION_REGEXP =
+      "\\.(print|summary|card|create|edit|show)$";
+
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
@@ -163,7 +166,8 @@ public abstract class DMAServlet extends BaseServlet
    */
   public Optional<AbstractEntry> getEntry(DMARequest inRequest, String inPath)
   {
-    String path = inPath.replaceAll("\\.[^\\./\\\\]*$", "");
+    // remove any actions in the name
+    String path = inPath.replaceAll(ACTION_REGEXP, "");
     Optional<EntryKey> key = extractKey(path);
     if(!key.isPresent())
       return Optional.absent();

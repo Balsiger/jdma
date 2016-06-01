@@ -137,12 +137,9 @@ public class EntryServlet extends PageServlet
             + key.getType().getMultipleDir().toLowerCase() + ".edit";
 
       case "show":
-        return "dma.entries."
-            + key.getType().getMultipleDir().toLowerCase() + ".show";
-
       default:
         return "dma.entries."
-            + key.getType().getMultipleDir().toLowerCase() + "." + action;
+            + key.getType().getMultipleDir().toLowerCase() + ".show";
     }
   }
 
@@ -160,7 +157,7 @@ public class EntryServlet extends PageServlet
     if(isCreate(inRequest, inKey))
       return "edit";
 
-    String action = Strings.getPattern(inPath, "\\.(.*)$");
+    String action = Strings.getPattern(inPath, ACTION_REGEXP);
     if(action != null && !action.isEmpty())
       return action;
 
