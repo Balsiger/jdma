@@ -84,11 +84,9 @@ public class MiniatureLocation
           return false;
 
         case CLASS:
-          for(String charClass : inMiniature.getClasses())
-            if(charClass.toLowerCase().startsWith(m_value.toLowerCase()))
-              return true;
-
-          return false;
+          return !inMiniature.getClasses().isEmpty()
+              && inMiniature.getClasses().get(0).toLowerCase().startsWith(
+              m_value.toLowerCase());
 
         case SIZE:
           return inMiniature.getSize().toString().equalsIgnoreCase(m_value);

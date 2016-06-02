@@ -383,7 +383,7 @@
     {if $group} &ndash; {$group}{/if}
   </h1>
   {call dma.page.title}
-    {param title: $title + $group ? ' - ' + $group : '' /}
+    {param title: $title + ($group ? ' - ' + $group : '') /}
   {/call}
 
   {call dma.navigation.navigation}
