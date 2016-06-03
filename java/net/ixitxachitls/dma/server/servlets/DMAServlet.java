@@ -22,6 +22,8 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
@@ -38,6 +40,7 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.server.servlets.BaseServlet;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -52,8 +55,17 @@ import net.ixitxachitls.util.logging.Log;
 @Immutable
 public abstract class DMAServlet extends BaseServlet
 {
-  public static String ACTION_REGEXP =
-      "\\.(print|summary|card|create|edit|show)$";
+  public enum Action { show, print, summary, card, create, edit, };
+
+  public static final String ACTION_REGEXP;
+  static
+  {
+    List<String> actions = new ArrayList<>();
+    for(Action action : Action.values())
+      actions.add(action.name());
+
+    ACTION_REGEXP = "\\.(" + Strings.PIPE_JOINER.join(actions) + ")$";
+  }
 
   /** The serial version id. */
   private static final long serialVersionUID = 1L;

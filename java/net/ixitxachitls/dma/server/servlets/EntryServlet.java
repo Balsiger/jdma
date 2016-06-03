@@ -118,25 +118,33 @@ public class EntryServlet extends PageServlet
     if(entry != null && !entry.isShownTo(inRequest.getUser()))
       return "dma.errors.invalidPage";
 
-    String action = inData.get("action").coerceToString();
+    String actionName = inData.get("action").coerceToString();
+    Action action = Action.edit;
+    for(Action act : Action.values())
+      if(act.name().equalsIgnoreCase(actionName))
+      {
+        action = act;
+        break;
+      }
+
     switch(action)
     {
-      case "print":
+      case print:
         return "dma.entry.printcontainer";
 
-      case "summary":
+      case summary:
         return "dma.entry.summarycontainer";
 
-      case "card":
+      case card:
         return "dma.entries."
             + key.getType().getMultipleDir().toLowerCase() + ".large";
 
-      case "create":
-      case "edit":
+      case create:
+      case edit:
         return "dma.entries."
             + key.getType().getMultipleDir().toLowerCase() + ".edit";
 
-      case "show":
+      case show:
       default:
         return "dma.entries."
             + key.getType().getMultipleDir().toLowerCase() + ".show";
@@ -152,16 +160,17 @@ public class EntryServlet extends PageServlet
    *
    * @return the action that should be used to show the page
    */
-  private String getAction(String inPath, EntryKey inKey, DMARequest inRequest)
+  private Action getAction(String inPath, EntryKey inKey, DMARequest inRequest)
   {
     if(isCreate(inRequest, inKey))
-      return "edit";
+      return Action.edit;
 
-    String action = Strings.getPattern(inPath, ACTION_REGEXP);
-    if(action != null && !action.isEmpty())
-      return action;
+    String actionName = Strings.getPattern(inPath, ACTION_REGEXP);
+    for(Action action : Action.values())
+      if(action.name().equalsIgnoreCase(actionName))
+        return action;
 
-    return "show";
+    return Action.show;
   }
 
   /**
@@ -175,8 +184,8 @@ public class EntryServlet extends PageServlet
   private boolean isCreate(DMARequest inRequest, EntryKey inKey)
   {
     return inRequest.hasUser()
-        && (inRequest.hasParam("create")
-            || "CREATE".equalsIgnoreCase(inKey.getID()));
+        && (inRequest.hasParam(Action.create.name())
+            || Action.create.name().equalsIgnoreCase(inKey.getID()));
   }
 
   @Override
@@ -197,8 +206,8 @@ public class EntryServlet extends PageServlet
     if(!key.isPresent())
       return data;
 
-    String action = getAction(path, key.get(), inRequest);
-    data.put("action", action);
+    Action action = getAction(path, key.get(), inRequest);
+    data.put("action", action.name());
 
     Optional<? extends AbstractEntry> entry = Optional.absent();
     boolean isCreate = isCreate(inRequest, key.get());
