@@ -110,6 +110,22 @@ public class IndexServlet extends PageServlet
       group = match[2];
     }
 
+    Optional<EntryKey> parent = Optional.absent();
+    if(!group.isEmpty() &&
+        ("base character".equals(match[0]) || "base campaign".equals(match[0])))
+    {
+      String []parts = Strings.getPatterns(group, "(.*?)/(.*)");
+
+      if(parts.length == 2)
+      {
+        type = AbstractType.getTyped(parts[0]);
+        name = parts[1];
+        // TODO: support groups
+        group = "";
+        parent = extractKey(match[0] + "/" + match[1]);
+      }
+    }
+
     if(name == null || name.isEmpty() || !type.isPresent())
       return data;
 
@@ -140,7 +156,7 @@ public class IndexServlet extends PageServlet
       // SortedSet<String> indexes =
       //   DMADataFactory.get().getIndexNames(name, type, false);
       SortedSet<String> indexes =
-        DMADataFactory.get().getValues(type.get(), Index.PREFIX + name);
+        DMADataFactory.get().getValues(parent, type.get(), Index.PREFIX + name);
 
       if(indexes.size() == 1)
         group = indexes.iterator().next();

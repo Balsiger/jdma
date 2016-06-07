@@ -25,9 +25,11 @@ import java.util.List;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.MiniatureProto;
 import net.ixitxachitls.dma.values.MiniatureLocation;
@@ -55,7 +57,10 @@ public class Miniature extends Entry
   /** The type of this entry. */
   public static final Type<Miniature> TYPE =
       new Type.Builder<>(Miniature.class, BaseMiniature.TYPE)
+          .index(new Index.Builder(Index.Path.LOCATIONS, "Locations",
+                                   Miniature.TYPE).build())
           .sort("bases").build();
+  private static final String COLOR_SEPARATOR = "@@";
 
   protected Optional<Integer> m_number = Optional.absent();
   protected Optional<String> m_notes = Optional.absent();
@@ -137,12 +142,12 @@ public class Miniature extends Entry
   {
     Optional<BaseCharacter> user = getUser();
     if(user.isPresent())
-      return getLocation(user.get().getMiniatureLocations());
+      return computeLocation(user.get().getMiniatureLocations());
 
     return Optional.absent();
   }
 
-  private Optional<MiniatureLocation> getLocation(
+  private Optional<MiniatureLocation> computeLocation(
       List<MiniatureLocation> inLocations)
   {
     int matches = 0;
@@ -262,5 +267,19 @@ public class Miniature extends Entry
   protected Message defaultProto()
   {
     return MiniatureProto.getDefaultInstance();
+  }
+
+  @Override
+  public Multimap<Index.Path, String> computeIndexValues()
+  {
+    Multimap<Index.Path, String> values = super.computeIndexValues();
+
+    Optional<MiniatureLocation> location = getLocation();
+    if(location.isPresent())
+      values.put(Index.Path.LOCATIONS, location.get().getLocation()
+        + (location.get().getColor().isEmpty()
+          ? "" : COLOR_SEPARATOR + location.get().getColor()));
+
+    return values;
   }
 }

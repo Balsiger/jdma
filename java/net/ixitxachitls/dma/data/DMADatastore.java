@@ -389,8 +389,15 @@ public class DMADatastore
   public SortedSet<String> getValues
   (AbstractType<? extends AbstractEntry> inType, String inField)
   {
+    return getValues(Optional.<EntryKey>absent(), inType, inField);
+  }
+
+  public SortedSet<String> getValues
+      (Optional<EntryKey> inParent,
+       AbstractType<? extends AbstractEntry> inType, String inField)
+  {
     return m_data.getValues(escapeType(inType.toString()),
-                            Optional.<Key>absent(), inField);
+                            convert(inParent), inField);
   }
 
   /**
