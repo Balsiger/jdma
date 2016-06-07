@@ -188,6 +188,7 @@ public class Index implements Serializable, Comparable<Index>
 
   /** Version for serialization. */
   private static final long serialVersionUID = 1L;
+  public static final String COLOR_SEPARATOR = "@@";
 
   /**
    * Convert given groups into a string for storing.
@@ -335,6 +336,29 @@ public class Index implements Serializable, Comparable<Index>
       + (m_editable ? " is editable" : "")
       + (m_paginated ? " is paginated" : "")
       + ")";
+  }
+
+  public static String createColored(String inText, String inColor)
+  {
+    if(inColor.isEmpty())
+      return inText;
+
+    return inText + COLOR_SEPARATOR + inColor;
+  }
+
+  public static String extractTitle(String inText)
+  {
+    String []parts = inText.split(COLOR_SEPARATOR);
+    return parts[0];
+  }
+
+  public static String extractColor(String inText)
+  {
+    String []parts = inText.split(COLOR_SEPARATOR);
+    if(parts.length == 2)
+      return parts[1];
+
+    return "";
   }
 
   //------------------------------------------------------------------- test

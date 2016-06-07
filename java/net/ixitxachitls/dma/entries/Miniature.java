@@ -60,7 +60,6 @@ public class Miniature extends Entry
           .index(new Index.Builder(Index.Path.LOCATIONS, "Locations",
                                    Miniature.TYPE).build())
           .sort("bases").build();
-  private static final String COLOR_SEPARATOR = "@@";
 
   protected Optional<Integer> m_number = Optional.absent();
   protected Optional<String> m_notes = Optional.absent();
@@ -276,9 +275,9 @@ public class Miniature extends Entry
 
     Optional<MiniatureLocation> location = getLocation();
     if(location.isPresent())
-      values.put(Index.Path.LOCATIONS, location.get().getLocation()
-        + (location.get().getColor().isEmpty()
-          ? "" : COLOR_SEPARATOR + location.get().getColor()));
+      values.put(Index.Path.LOCATIONS,
+                 Index.createColored(location.get().getLocation(),
+                                     location.get().getColor()));
 
     return values;
   }

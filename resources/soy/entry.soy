@@ -534,6 +534,7 @@
   {@param indexes: ?}
   {@param name: string}
   {@param keys: list<string>|null}
+  {@param colors: list<string>}
   {@param type: string}
   {@param images: bool}
 
@@ -586,7 +587,10 @@
       {call dma.page.link}
         {param url : $name + '/' + $index /}
         {param text kind="html"}
-          <div class="index-overview">
+          <div class="index-overview"
+               {if $colors[index($index)]}
+                 {sp}style="background-color: {$colors[index($index)]}"
+               {/if}>
             {$index}
           </div>
         {/param}

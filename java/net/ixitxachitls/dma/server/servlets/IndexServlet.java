@@ -35,6 +35,7 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.SortedSetMultimap;
 import com.google.common.collect.TreeMultimap;
@@ -121,7 +122,7 @@ public class IndexServlet extends PageServlet
         type = AbstractType.getTyped(parts[0]);
         name = parts[1];
         // TODO: support groups
-        group = "";
+        group = null;
         parent = extractKey(match[0] + "/" + match[1]);
       }
     }
@@ -159,23 +160,35 @@ public class IndexServlet extends PageServlet
         DMADataFactory.get().getValues(parent, type.get(), Index.PREFIX + name);
 
       if(indexes.size() == 1)
-        group = indexes.iterator().next();
+        group = Index.extractTitle(indexes.iterator().next());
       else
       {
+        ArrayList<String> titles = new ArrayList<>();
+        ArrayList<String> colors = new ArrayList<>();
+        for(String indexName : indexes)
+        {
+          titles.add(Index.extractTitle(indexName));
+          colors.add(Index.extractColor(indexName));
+        }
+
         if(isNested(indexes))
         {
-          SortedMap<String, List<String>> groups = nestedGroups(indexes);
+          SortedMap<String, List<String>> groups = nestedGroups(titles);
           data.put("indexes", groups);
+          data.put("colors", colors);
           data.put("keys", new ArrayList<String>(groups.keySet()));
         }
         else
-          data.put("indexes", new ArrayList<String>(indexes));
+        {
+          data.put("indexes", titles);
+          data.put("colors", colors);
+        }
 
         return data;
       }
-    }
 
-    title += " - " + group.replace("::", " ");
+      title += " - " + group.replace("::", " ");
+    }
 
     List<? extends AbstractEntry> rawEntries =
       DMADataFactory.get().getIndexEntries(name, type.get(),
@@ -206,8 +219,8 @@ public class IndexServlet extends PageServlet
    *
    * @return A sorted map of index groups to index pages
    */
-  public static SortedMap<String, List<String>> nestedGroups
-    (SortedSet<String> inValues)
+  public static SortedMap<String, List<String>>
+  nestedGroups(List<String> inValues)
   {
     SortedSetMultimap<String, String> groups = TreeMultimap.create();
     for(String value : inValues)
@@ -265,13 +278,13 @@ public class IndexServlet extends PageServlet
     public void groups()
     {
       assertEquals("empty", "{}",
-                   nestedGroups(ImmutableSortedSet.<String>of()).toString());
+                   nestedGroups(ImmutableList.<String>of()).toString());
       assertEquals("non-nested", "{one=[], three=[], two=[]}",
-                   nestedGroups(ImmutableSortedSet.of("one", "two", "three"))
+                   nestedGroups(ImmutableList.of("one", "two", "three"))
                    .toString());
       assertEquals("nested",
                    "{one=[first, second, third], three=[], two=[first]}",
-                   nestedGroups(ImmutableSortedSet.of
+                   nestedGroups(ImmutableList.of
                        ("one::first", "two::first", "one::second",
                         "one::third", "three"))
                        .toString());
