@@ -38,75 +38,120 @@
     </auth-constraint>
   </security-constraint>
 
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>tasks</web-resource-name>
+      <url-pattern>/task/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+
   <servlet>
     <servlet-name>register</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.RegisterServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.RegisterServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>html</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.StaticPageServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.StaticPageServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>entry</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.EntryServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.EntryServlet
+    </servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
 
   <servlet>
     <servlet-name>entries</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.EntryListServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.EntryListServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>index</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.IndexServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.IndexServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>library</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.LibraryServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.LibraryServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>save</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.SaveActionServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.SaveActionServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>move</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.MoveActionServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.MoveActionServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>remove</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.RemoveActionServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.RemoveActionServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>recompile</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.RecompileActionServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.RecompileActionServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>time</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.TimeActionServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.TimeActionServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>admin</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.AdminServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.AdminServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>autocomplete</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.Autocomplete</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.Autocomplete
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>main</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.MainPageServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.MainPageServlet
+    </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>refresh</servlet-name>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.workers.EntryRefresh
+    </servlet-class>
   </servlet>
 
   <servlet-mapping>
@@ -182,6 +227,11 @@
   <servlet-mapping>
     <servlet-name>html</servlet-name>
     <url-pattern>/about</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>refresh</servlet-name>
+    <url-pattern>/task/refresh</url-pattern>
   </servlet-mapping>
 
   <filter>

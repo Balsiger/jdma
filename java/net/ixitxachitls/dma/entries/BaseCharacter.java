@@ -27,6 +27,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.protobuf.Message;
@@ -34,6 +37,7 @@ import com.google.protobuf.Message;
 import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.BaseCharacterProto;
 import net.ixitxachitls.dma.proto.Entries.BaseEntryProto;
+import net.ixitxachitls.dma.server.servlets.workers.EntryRefresh;
 import net.ixitxachitls.dma.values.MiniatureLocation;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Group;
@@ -277,6 +281,20 @@ public class BaseCharacter extends BaseEntry
   {
     m_lastAction = Optional.of(Strings.today());
     save();
+  }
+
+  @Override
+  public boolean save()
+  {
+    if(m_changed)
+    {
+      Queue queue = QueueFactory.getDefaultQueue();
+      queue.add(TaskOptions.Builder.withUrl("/task/refresh")
+                    .param(EntryRefresh.PARENT_PARAM, getKey().toString())
+                    .param(EntryRefresh.TYPE_PARAM, Miniature.TYPE.toString()));
+    }
+
+    return super.save();
   }
 
   @Override

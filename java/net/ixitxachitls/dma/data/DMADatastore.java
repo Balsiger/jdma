@@ -553,6 +553,45 @@ public class DMADatastore
     return count;
   }
 
+  public int refresh(AbstractType<? extends AbstractEntry> inType,
+                     Optional<EntryKey> inParent)
+  {
+    Log.debug("refresh data for " + inType);
+
+    int count = 0;
+    int chunk = 100;
+    for(int start = 0; count < 10000; start += chunk)
+    {
+      List<Entity> entities = m_data.getEntities(escapeType(inType.toString()),
+                                                 convert(inParent),
+                                                 Optional.<String>absent(),
+                                                 start, chunk);
+
+      for(Entity entity : entities)
+      {
+        Optional<AbstractEntry> entry = convert(entity);
+        if(!entry.isPresent())
+          continue;
+
+        Entity converted  = convert(entry.get());
+        if (equals(entity, converted))
+          continue;
+
+        m_data.update(converted);
+
+        if (!entity.getKey().equals(converted.getKey()))
+          m_data.remove(entity.getKey());
+
+        count++;
+      }
+
+      if(entities.size() < chunk)
+        break;
+    }
+
+    return count;
+  }
+
   /**
    * Check whether the two given entities are equal.
    *
