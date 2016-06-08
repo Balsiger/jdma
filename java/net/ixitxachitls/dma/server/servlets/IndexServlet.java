@@ -112,7 +112,7 @@ public class IndexServlet extends PageServlet
     }
 
     Optional<EntryKey> parent = Optional.absent();
-    if(!group.isEmpty() &&
+    if(group != null && !group.isEmpty() &&
         ("base character".equals(match[0]) || "base campaign".equals(match[0])))
     {
       String []parts = Strings.getPatterns(group, "(.*?)/(.*)");
