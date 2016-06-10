@@ -166,6 +166,16 @@ public class BaseCharacter extends BaseEntry
     return Collections.unmodifiableList(m_miniatureLocations);
   }
 
+  public Optional<MiniatureLocation> getFirstMatchingMiniatureLocation(
+      String inLocation)
+  {
+    for(MiniatureLocation location : m_miniatureLocations)
+      if(location.getLocation().equalsIgnoreCase(inLocation))
+        return Optional.of(location);
+
+    return Optional.absent();
+  }
+
   /**
    * Checks if the user has at least the given access.
    *

@@ -275,9 +275,7 @@ public class Miniature extends Entry
 
     Optional<MiniatureLocation> location = getLocation();
     if(location.isPresent())
-      values.put(Index.Path.LOCATIONS,
-                 Index.createColored(location.get().getLocation(),
-                                     location.get().getColor()));
+      values.put(Index.Path.LOCATIONS, location.get().getLocation());
 
     return values;
   }

@@ -147,7 +147,7 @@ public class Index implements Serializable, Comparable<Index>
     SCHOOLS, SUBSCHOOLS, DESCRIPTORS, CLASSES, LEVELS, COMPONENTS, MATERIALS,
     FOCUSES, CASTING_TIMES, EFFECTS, SAVING_THROWS, SPELL_RESISTANCES,
     FORTITUDE_SAVES, WILL_SAVES, REFLEX_SAVES,
-    PARENT, DM, SETS, ORIGINS, MINIATURE_TYPES, ROLES, LOCATIONS;
+    PARENT, DM, SETS, ORIGINS, MINIATURE_TYPES, ROLES, LOCATIONS, LOCATION_COLORS;
     // CHECKSTYLE:ON
 
     /**
@@ -336,29 +336,6 @@ public class Index implements Serializable, Comparable<Index>
       + (m_editable ? " is editable" : "")
       + (m_paginated ? " is paginated" : "")
       + ")";
-  }
-
-  public static String createColored(String inText, String inColor)
-  {
-    if(inColor.isEmpty())
-      return inText;
-
-    return inText + COLOR_SEPARATOR + inColor;
-  }
-
-  public static String extractTitle(String inText)
-  {
-    String []parts = inText.split(COLOR_SEPARATOR);
-    return parts[0];
-  }
-
-  public static String extractColor(String inText)
-  {
-    String []parts = inText.split(COLOR_SEPARATOR);
-    if(parts.length == 2)
-      return parts[1];
-
-    return "";
   }
 
   //------------------------------------------------------------------- test

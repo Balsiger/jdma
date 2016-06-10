@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.SortedSetMultimap;
 import com.google.common.collect.TreeMultimap;
@@ -51,6 +52,7 @@ import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyValue;
+import net.ixitxachitls.dma.values.MiniatureLocation;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -115,15 +117,15 @@ public class IndexServlet extends PageServlet
     if(group != null && !group.isEmpty() &&
         ("base character".equals(match[0]) || "base campaign".equals(match[0])))
     {
-      String []parts = Strings.getPatterns(group, "(.*?)/(.*)");
+      String []parts = Strings.getPatterns(group, "(.*?)/(.*?)(?:/(.*))?$");
 
-      if(parts.length == 2)
+      if(parts.length == 3)
       {
         type = AbstractType.getTyped(parts[0]);
         name = parts[1];
         // TODO: support groups
-        group = null;
         parent = extractKey(match[0] + "/" + match[1]);
+        group = parts[2];
       }
     }
 
@@ -160,28 +162,37 @@ public class IndexServlet extends PageServlet
         DMADataFactory.get().getValues(parent, type.get(), Index.PREFIX + name);
 
       if(indexes.size() == 1)
-        group = Index.extractTitle(indexes.iterator().next());
+        group = indexes.iterator().next();
       else
       {
-        ArrayList<String> titles = new ArrayList<>();
-        ArrayList<String> colors = new ArrayList<>();
-        for(String indexName : indexes)
+        List<String> colors = new ArrayList<>();
+        if(parent.isPresent())
         {
-          titles.add(Index.extractTitle(indexName));
-          colors.add(Index.extractColor(indexName));
+          Optional<AbstractEntry> parentEntry =
+              DMADataFactory.get().getEntry(parent.get());
+          if(parentEntry.isPresent()
+              && parentEntry.get() instanceof BaseCharacter)
+          {
+            for(String indexName : indexes)
+            {
+              Optional<MiniatureLocation> location =
+                  ((BaseCharacter)parentEntry.get())
+                      .getFirstMatchingMiniatureLocation(indexName);
+              if(location.isPresent())
+                colors.add(location.get().getColor());
+              else
+                colors.add("");
+            }
+          }
         }
+
+        data.put("indexes", indexes);
+        data.put("colors", colors);
 
         if(isNested(indexes))
         {
-          SortedMap<String, List<String>> groups = nestedGroups(titles);
-          data.put("indexes", groups);
-          data.put("colors", colors);
+          SortedMap<String, List<String>> groups = nestedGroups(indexes);
           data.put("keys", new ArrayList<String>(groups.keySet()));
-        }
-        else
-        {
-          data.put("indexes", titles);
-          data.put("colors", colors);
         }
 
         return data;
@@ -191,8 +202,7 @@ public class IndexServlet extends PageServlet
     }
 
     List<? extends AbstractEntry> rawEntries =
-      DMADataFactory.get().getIndexEntries(name, type.get(),
-                                           Optional.<EntryKey>absent(), group,
+      DMADataFactory.get().getIndexEntries(name, type.get(), parent, group,
                                            inRequest.getStart(),
                                            inRequest.getPageSize() + 1,
                                            index.get().getSortField());
@@ -220,7 +230,7 @@ public class IndexServlet extends PageServlet
    * @return A sorted map of index groups to index pages
    */
   public static SortedMap<String, List<String>>
-  nestedGroups(List<String> inValues)
+  nestedGroups(SortedSet<String> inValues)
   {
     SortedSetMultimap<String, String> groups = TreeMultimap.create();
     for(String value : inValues)
@@ -278,13 +288,13 @@ public class IndexServlet extends PageServlet
     public void groups()
     {
       assertEquals("empty", "{}",
-                   nestedGroups(ImmutableList.<String>of()).toString());
+                   nestedGroups(ImmutableSortedSet.<String>of()).toString());
       assertEquals("non-nested", "{one=[], three=[], two=[]}",
-                   nestedGroups(ImmutableList.of("one", "two", "three"))
+                   nestedGroups(ImmutableSortedSet.of("one", "two", "three"))
                    .toString());
       assertEquals("nested",
                    "{one=[first, second, third], three=[], two=[first]}",
-                   nestedGroups(ImmutableList.of
+                   nestedGroups(ImmutableSortedSet.of
                        ("one::first", "two::first", "one::second",
                         "one::third", "three"))
                        .toString());
