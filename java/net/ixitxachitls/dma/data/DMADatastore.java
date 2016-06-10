@@ -577,6 +577,7 @@ public class DMADatastore
         if (equals(entity, converted))
           continue;
 
+        Log.warning("updating " + converted.getKey());
         m_data.update(converted);
 
         if (!entity.getKey().equals(converted.getKey()))

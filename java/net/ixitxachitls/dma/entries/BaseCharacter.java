@@ -100,6 +100,7 @@ public class BaseCharacter extends BaseEntry
   protected Optional<String> m_realName = Optional.absent();
 
   protected List<MiniatureLocation> m_miniatureLocations = new ArrayList<>();
+  protected boolean m_locationsChanged = false;
 
   /** The number of recent products to show. */
   public static final int MAX_PRODUCTS = 5;
@@ -255,11 +256,14 @@ public class BaseCharacter extends BaseEntry
     m_realName = inValues.use("real_name", m_realName);
     m_email = inValues.use("email", m_email);
     m_group = inValues.use("group", m_group, Group.PARSER);
+    List<MiniatureLocation> oldLocations =
+        new ArrayList<>(m_miniatureLocations);
     m_miniatureLocations = inValues.use("miniature_location",
                                         m_miniatureLocations,
                                         MiniatureLocation.PARSER,
                                         "location", "rules", "overrides",
                                         "color");
+    m_locationsChanged = !oldLocations.equals(m_miniatureLocations);
   }
 
   /**
@@ -296,12 +300,13 @@ public class BaseCharacter extends BaseEntry
   @Override
   public boolean save()
   {
-    if(m_changed)
+    if(m_locationsChanged)
     {
       Queue queue = QueueFactory.getDefaultQueue();
       queue.add(TaskOptions.Builder.withUrl("/task/refresh")
                     .param(EntryRefresh.PARENT_PARAM, getKey().toString())
                     .param(EntryRefresh.TYPE_PARAM, Miniature.TYPE.toString()));
+      m_locationsChanged = false;
     }
 
     return super.save();

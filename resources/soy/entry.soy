@@ -377,6 +377,7 @@
   {@param label: html|string}
   {@param path: string}
   {@param? group: string}
+  {@param? images: bool}
 
   <h1>
     {$title}
@@ -397,11 +398,13 @@
 
   {if $entries}
     <table class="entrylist">
-      <tr class="title">
-        {foreach $listTitle in $titles}
-          {call .listtitle}{param title: $listTitle /}{/call}
-        {/foreach}
-      </tr>
+      {if not $images}
+        <tr class="title">
+          {foreach $listTitle in $titles}
+            {call .listtitle}{param title: $listTitle /}{/call}
+          {/foreach}
+        </tr>
+      {/if}
       {$entries}
     </table>
     {call dma.entry.listnav}
@@ -438,11 +441,30 @@
                 style="background-color: {$colors[index($value)]}; color: white"
 
               {/if}
-            {/if}>{$value}</td>
+            {/if}>
+            <a href="{$path}">{$value}</a>
+        </td>
       {/if}
       </td>
-    {/foreach}          
-  </tr>   
+    {/foreach}
+  </tr>
+{/template}
+
+/** Template for a list image entry. */
+{template .listImageEntry}
+  {@param image: string}
+  {@param name: string}
+  {@param id: string}
+  {@param overlay: string}
+
+  <div class="list-image-entry">
+    <img class="image" src="{$image}" />
+    <div class="overlay">{$overlay}</div>
+    <div class="caption">
+      {$name}<br/>
+      ({$id})
+    </div>
+  </div>
 {/template}
 
 /** The entry navigation. */
@@ -538,7 +560,7 @@
   {@param type: string}
   {@param images: bool}
 
-  {if $images}images{/if}
+  {if $images}{/if}
   <h1>{$title}</h1>
   {call dma.page.title}
     {param title: $title /}

@@ -58,7 +58,7 @@ public class Miniature extends Entry
   public static final Type<Miniature> TYPE =
       new Type.Builder<>(Miniature.class, BaseMiniature.TYPE)
           .index(new Index.Builder(Index.Path.LOCATIONS, "Locations",
-                                   Miniature.TYPE).build())
+                                   Miniature.TYPE).images().build())
           .sort("bases").build();
 
   protected Optional<Integer> m_number = Optional.absent();

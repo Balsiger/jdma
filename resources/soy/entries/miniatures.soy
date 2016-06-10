@@ -122,6 +122,8 @@
  * @param entries The entries printed
  * @param label The navigation label for this page
  * @param path The path to this page
+ * @param? group the group printed
+ * @param images whether to show images
  *
  */
 {template .list}
@@ -131,11 +133,21 @@
     {param path: $path /}
     {param start: $start /}
     {param pagesize: $pagesize /}
+    {param group: $group /}
     {param size: $entries ? length($entries) : 0 /}
     {param titles: [ 'Name', 'Number', 'Location'] /}
+    {param images: $images /}
     {param entries kind="html"}
       {foreach $entry in $entries}
-        <tr onclick="util.link(event, '{$entry.path}')">
+        {if $images}
+          {call dma.entry.listImageEntry}
+            {param image: def($entry.main_file)
+                ? $entry.main_file.icon : '/icons/miniatures-dummy.png' /}
+            {param name: $entry.base_name /}
+            {param id: $entry.name /}
+            {param overlay: $entry.number /}
+          {/call}
+        {else}
           {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
@@ -146,7 +158,7 @@
                             $entry.location.present ? $entry.location.color : ''
                            ] /}
           {/call}
-        </tr>
+        {/if}
       {/foreach}
     {/param}
   {/call}
