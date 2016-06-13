@@ -3734,7 +3734,8 @@ TD.list > a
 .list-image-entry
 {
   display: inline-block;
-  width: 120px;
+  margin: 20px;
+  width: 100px;
   text-align: center;
   position: relative;
   vertical-align: top;

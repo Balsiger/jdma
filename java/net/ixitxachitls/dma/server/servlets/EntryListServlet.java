@@ -22,6 +22,8 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -34,7 +36,9 @@ import com.google.template.soy.data.SoyData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseMiniature;
 import net.ixitxachitls.dma.entries.EntryKey;
+import net.ixitxachitls.dma.entries.Miniature;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.util.Encodings;
@@ -80,11 +84,35 @@ public class EntryListServlet extends PageServlet
                int inStart, int inSize)
   {
     Optional<EntryKey> parent = Optional.absent();
-    if(inPath.startsWith("/_entries/base campaign/"))
+    if(inPath.startsWith("/_entries/base campaign/")
+        || inPath.startsWith("/_entries/base character"))
       parent = extractKey(inPath.replaceAll("/[^/]+$", ""));
+
+    if(inPath.endsWith("/missing"))
+      return missingMiniatures(parent, inType);
 
     return (List<AbstractEntry>)DMADataFactory.get()
       .getEntries(inType, parent, inStart, inSize);
+  }
+
+  private List<AbstractEntry> missingMiniatures(
+      Optional<EntryKey> inParent, AbstractType<? extends AbstractEntry> inType)
+  {
+    Map<String, BaseMiniature> miniatures = new HashMap<>();
+    for(BaseMiniature miniature : DMADataFactory.get().getEntries(
+        BaseMiniature.TYPE, Optional.<EntryKey>absent(), 0, 10_000))
+      miniatures.put(miniature.getName().toLowerCase(), miniature);
+
+    for(Miniature miniature : DMADataFactory.get().getEntries(
+        Miniature.TYPE, inParent, 0, 10_000))
+      if(miniature.getNumber().isPresent() && miniature.getNumber().get() > 0)
+        miniatures.remove(miniature.getBaseName().toLowerCase());
+
+    List<AbstractEntry> result =
+        new ArrayList<AbstractEntry>(miniatures.values());
+    Collections.sort(result);
+
+    return result;
   }
 
   @Override
@@ -131,7 +159,17 @@ public class EntryListServlet extends PageServlet
     if(!group.isEmpty() &&
         (typeName.equals("base character") || typeName.equals("base campaign")))
     {
-      typeName = group;
+      String []parts = Strings.getPatterns(group, "^(.*?)/(.*)$");
+      if (parts.length == 2)
+      {
+        typeName = parts[0];
+        group = parts[1];
+      }
+      else
+      {
+        typeName = group;
+        group = null;
+      }
       parent = extractKey(path.replaceAll("/[^/]+$", ""));
     }
 

@@ -364,6 +364,9 @@
         ^/miniatures/(.*)$
         /_index/base miniature/$1
 
+        ^/user/(.*)/miniatures/missing$
+        /_entries/base character/$1/base miniature/missing
+
         ^/user/(.*)/miniatures/(.*)$
         /_index/base character/$1/miniature/$2
 

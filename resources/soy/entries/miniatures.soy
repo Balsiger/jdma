@@ -146,8 +146,7 @@
                   ? $entry.main_file.icon : '/icons/miniatures-dummy.png' /}
               {param name: $entry.base_name /}
               {param id: $entry.name /}
-              {param overlay: $entry.number /}
-              {param guru: index($entry) + 1 /}
+              {param overlay: $entry.number + 'x' /}
             {/call}
           {else}
             {call dma.entry.listEntry}
