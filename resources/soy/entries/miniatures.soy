@@ -138,28 +138,32 @@
     {param titles: [ 'Name', 'Number', 'Location'] /}
     {param images: $images /}
     {param entries kind="html"}
-      {foreach $entry in $entries}
-        {if $images}
-          {call dma.entry.listImageEntry}
-            {param image: def($entry.main_file)
-                ? $entry.main_file.icon : '/icons/miniatures-dummy.png' /}
-            {param name: $entry.base_name /}
-            {param id: $entry.name /}
-            {param overlay: $entry.number /}
-          {/call}
-        {else}
-          {call dma.entry.listEntry}
-            {param path: $entry.path /}
-            {param values: [
-              $entry.base_name, $entry.number,
-              $entry.location.present ? $entry.location.location : ''
-            ] /}
-            {param colors: ['', '',
-                            $entry.location.present ? $entry.location.color : ''
-                           ] /}
-          {/call}
-        {/if}
-      {/foreach}
+      <div class="list-image-entries">
+        {foreach $entry in $entries}
+          {if $images}
+            {call dma.entry.listImageEntry}
+              {param image: def($entry.main_file)
+                  ? $entry.main_file.icon : '/icons/miniatures-dummy.png' /}
+              {param name: $entry.base_name /}
+              {param id: $entry.name /}
+              {param overlay: $entry.number /}
+              {param guru: index($entry) + 1 /}
+            {/call}
+          {else}
+            {call dma.entry.listEntry}
+              {param path: $entry.path /}
+              {param values: [
+                $entry.base_name, $entry.number,
+                $entry.location.present ? $entry.location.location : ''
+              ] /}
+              {param colors: ['', '',
+                              $entry.location.present
+                              ? $entry.location.color : ''
+                             ] /}
+            {/call}
+          {/if}
+        {/foreach}
+      </div>
     {/param}
   {/call}
 {/template}

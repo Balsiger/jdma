@@ -3727,16 +3727,27 @@ TD.list > a
   color: inherit;
 }
 
+.list-image-entries
+{
+}
+
 .list-image-entry
 {
   display: inline-block;
   width: 120px;
-  height: 120px;
   text-align: center;
   position: relative;
+  vertical-align: top;
 }
 
-.list-image-entry img
+.list-image-entry .image-wrapper
+{
+  width: 100px;
+  height: 100px;
+  vertical-align: bottom;
+}
+
+.list-image-entry .image-wrapper img
 {
   max-width:  100px;
   max-height: 100px;
