@@ -229,8 +229,9 @@ public class DataStore
       if(inSortField.isPresent())
         query.addSort(inSortField.get(), Query.SortDirection.ASCENDING);
 
-      FetchOptions options =
-          FetchOptions.Builder.withOffset(inStart).limit(inSize);
+      FetchOptions options = FetchOptions.Builder.withOffset(inStart)
+          .chunkSize(100)
+          .limit(inSize);
 
       Log.important("gae: getting entities for " + inType
                         + (inParent.isPresent() ? " (" + inParent + ")" : "")
