@@ -32,14 +32,14 @@
   {@param last: ?}
   {call dma.entry.show}
     {param entry: $entry /}
-    {param type: 'monster' /}
+    {param type: 'npc' /}
     {param first: $first /}
     {param previous: $previous /}
     {param list: $list /}
     {param next: $next /}
     {param last: $last /}
     {param color: '#080' /}
-    {param title: $entry.base_name /}
+    {param title: $entry.name /}
     {param values kind="html"}
       {if length($entry.baseNames)}
         {call dma.entry.value}
@@ -71,24 +71,33 @@
       {call dma.entry.value}
         {param label: 'HP' /}
         {param value kind="html"}
-         {$entry.HP} (max {$entry.max_HP})
+          {$entry.HP} (max {$entry.max_HP})
         {/param}
         {param color: '#080' /}
       {/call}
-      {if $entry.given_name.present}
-        {call dma.entry.value}
-          {param label: 'Given Name' /}
-          {param value kind="html"}
-           {$entry.given_name}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
+      {call dma.entry.value}
+        {param label: 'Gender' /}
+        {param value kind="html"}
+          {$entry.gender}
+        {/param}
+        {param color: '#080' /}
+      {/call}
       {if $entry.personality.present}
         {call dma.entry.value}
           {param label: 'Personality' /}
           {param value kind="html"}
-           {$entry.personality}
+            {$entry.personality}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.occupations) > 0}
+        {call dma.entry.value}
+          {param label: 'Occupation' /}
+          {param value kind="html"}
+            {foreach $occupation in $entry.occupations}
+              {commands($occupation)}{if not isLast($occupation)}, {/if}
+            {/foreach}
           {/param}
           {param color: '#080' /}
         {/call}
@@ -136,11 +145,11 @@
         {param validate: 'non-empty' /}
         {param color: '#080' /}
       {/call}
-      {call dma.edit.value}
-        {param name: 'given_name' /}
-        {param label: 'Given Name' /}
-        {param value: $entry.given_name.present ? $entry.given_name : '' /}
-        {param validate: 'non-empty' /}
+      {call dma.edit.value_selection}
+        {param name: 'gender' /}
+        {param label: 'Gender' /}
+        {param value: $entry.gender /}
+        {param choices: $ij.Gender.names /}
         {param color: '#080' /}
       {/call}
       {call dma.edit.value}
@@ -161,6 +170,13 @@
         {param name: 'personality' /}
         {param label: 'Personality' /}
         {param value: $entry.personality.present ? $entry.personality : '' /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'occupation' /}
+        {param label: 'Occupation' /}
+        {param values: $entry.occupations /}
         {param validate: 'non-empty' /}
         {param color: '#080' /}
       {/call}
@@ -587,7 +603,7 @@
           {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
-              $entry.name, $entry.bases
+              $entry.name, $entry.base_name
             ] /}
           {/call}
         </tr>

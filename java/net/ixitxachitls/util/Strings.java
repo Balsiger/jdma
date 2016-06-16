@@ -134,6 +134,9 @@ public final class Strings
   /** The joiner to convert with pipes. */
   public static final Joiner PIPE_JOINER = Joiner.on("|");
 
+  /** The joiner to convert with path separator. */
+  public static final Joiner PATH_JOINER = Joiner.on("/");
+
   /** The splitter to split by commas. */
   public static final Splitter COMMA_SPLITTER = Splitter.on(',').trimResults();
 

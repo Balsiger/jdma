@@ -123,6 +123,7 @@ public class NPC extends Monster
 
   /** The NPC's description of how it looks. */
   protected Optional<String> m_looks = Optional.absent();
+  protected List<String> m_occupations = new ArrayList<>();
 
   /** The possible animal compantion. */
   protected Optional<List<Monster>> m_animalCompanions = Optional.absent();
@@ -246,6 +247,11 @@ public class NPC extends Monster
   public Optional<String> getLooks()
   {
     return m_looks;
+  }
+
+  public List<String> getOccupations()
+  {
+    return m_occupations;
   }
 
   @Override
@@ -604,6 +610,7 @@ public class NPC extends Monster
     m_weight = inValues.use("weight", m_weight);
     m_height = inValues.use("height", m_height);
     m_looks = inValues.use("looks", m_looks);
+    m_occupations = inValues.use("occupation", m_occupations);
     m_levels = inValues.useEntries("level", m_levels,
                                    new NestedEntry.Creator<Level>()
                                    {
@@ -639,6 +646,8 @@ public class NPC extends Monster
 
     if(m_looks.isPresent())
       builder.setLooks(m_looks.get());
+
+    builder.addAllOccupation(m_occupations);
 
     NPCProto proto = builder.build();
     return proto;
@@ -682,6 +691,8 @@ public class NPC extends Monster
 
     if(proto.hasLooks())
       m_looks = Optional.of(proto.getLooks());
+
+    m_occupations.addAll(proto.getOccupationList());
   }
 
   @Override

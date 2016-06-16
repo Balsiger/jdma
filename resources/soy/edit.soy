@@ -46,7 +46,11 @@
       {param create: $create /}
     {/call}
     
-  </div>  
+  </div>
+  <script>
+    // Setup any necessary autocomplete
+    edit.setupAutocomplete($(":input[dma-autocomplete]"));
+  </script>
 {/template}
 
 /** An editable value. */
@@ -393,7 +397,7 @@
         <div class="action sprite large save" title="Save"
              onclick="edit.save
                         ('{$key}'.replace(/\/[^\/]*$/, '/' + 
-                                          $('#{$id} input[name=name]').val()), 
+                                          $('#{$id} input[name=name]').val()),
                          '{$id}', {if $create}true{else}false{/if})">
         </div>
         <div class="action sprite large revert" title="Revert"

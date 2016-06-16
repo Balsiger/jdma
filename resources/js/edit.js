@@ -66,7 +66,7 @@ edit.show = function(inTitle, inPath, inID, inBases, inValues)
     });
   
   // Setup any necessary autocomplete
-  edit.setupAutocomplete($(":input[dma-autocomplete]"));
+  //edit.setupAutocomplete($(":input[dma-autocomplete]"));
 };
 
 edit.unescape = function(inText)

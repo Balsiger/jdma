@@ -22,6 +22,7 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -66,37 +67,20 @@ public class EntryListServlet extends PageServlet
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
-  /**
-   * Get the entries in the given page range.
-   *
-   * @param       inRequest the original request
-   * @param       inPath    the path used to access the entries
-   * @param       inType    the type of entries to get
-   * @param       inStart   the index where to start to get entries
-   * @param       inSize    the maximal number of entries to return
-   *
-   * @return      a list of all entries in range
-   */
   @SuppressWarnings("unchecked") // need to cast
   public List<AbstractEntry>
-    getEntries(DMARequest inRequest, String inPath,
-               AbstractType<? extends AbstractEntry> inType,
-               int inStart, int inSize)
+  getEntries(AbstractType<? extends AbstractEntry> inType,
+             Optional<EntryKey> inParent, String inGroup,
+             int inStart, int inSize)
   {
-    Optional<EntryKey> parent = Optional.absent();
-    if(inPath.startsWith("/_entries/base campaign/")
-        || inPath.startsWith("/_entries/base character"))
-      parent = extractKey(inPath.replaceAll("/[^/]+$", ""));
-
-    if(inPath.endsWith("/missing"))
-      return missingMiniatures(parent, inType);
+    if("missing".equalsIgnoreCase(inGroup) && inType == BaseMiniature.TYPE)
+      return missingMiniatures(inParent);
 
     return (List<AbstractEntry>)DMADataFactory.get()
-      .getEntries(inType, parent, inStart, inSize);
+      .getEntries(inType, inParent, inStart, inSize);
   }
 
-  private List<AbstractEntry> missingMiniatures(
-      Optional<EntryKey> inParent, AbstractType<? extends AbstractEntry> inType)
+  private List<AbstractEntry> missingMiniatures(Optional<EntryKey> inParent)
   {
     Map<String, BaseMiniature> miniatures = new HashMap<>();
     for(BaseMiniature miniature : DMADataFactory.get().getEntries(
@@ -144,37 +128,19 @@ public class EntryListServlet extends PageServlet
     Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
     String path = inRequest.getRequestURI();
-    String typeName = "";
-    String []match = Strings.getPatterns(
-        path, "^/_entries/([^/]+)(?:/([^/]+))?(?:/(.*$))?");
+    List<String> parts = new ArrayList<>(Arrays.asList(path.split("/")));
+    // remove leading empty part because of leading /
+    parts.remove(0);
+    // remove leading _entries, in which we are not interested
+    parts.remove(0);
 
-    if(match.length > 0)
-      typeName = match[0].replace("%20", " ");
+    Optional<EntryKey> parent = extractParent(parts);
 
-    String group = "";
-    if(match.length > 2 && match[2] != null)
-      group = match[2];
-
-    Optional<EntryKey> parent = Optional.absent();
-    if(!group.isEmpty() &&
-        (typeName.equals("base character") || typeName.equals("base campaign")))
-    {
-      String []parts = Strings.getPatterns(group, "^(.*?)/(.*)$");
-      if (parts.length == 2)
-      {
-        typeName = parts[0];
-        group = parts[1];
-      }
-      else
-      {
-        typeName = group;
-        group = null;
-      }
-      parent = extractKey(path.replaceAll("/[^/]+$", ""));
-    }
-
+    String typeName =
+        parts.isEmpty() ? "" : parts.remove(0).replace("%20", " ");
     Optional<? extends AbstractType<? extends AbstractEntry>> type =
-      AbstractType.getTyped(typeName);
+        AbstractType.getTyped(typeName);
+
     if(!type.isPresent())
     {
       data.put("type", typeName);
@@ -182,10 +148,12 @@ public class EntryListServlet extends PageServlet
       return data;
     }
 
+    String group = Strings.PATH_JOINER.join(parts);
+
     String title = Encodings.toWordUpperCase(type.get().getMultipleLink());
     Log.info("serving dynamic list " + title);
 
-    List<AbstractEntry> rawEntries = getEntries(inRequest, path, type.get(),
+    List<AbstractEntry> rawEntries = getEntries(type.get(), parent, group,
                                                 inRequest.getStart(),
                                                 inRequest.getPageSize() + 1);
 
@@ -205,5 +173,33 @@ public class EntryListServlet extends PageServlet
              + ".list");
 
     return data;
+  }
+
+  private Optional<EntryKey> extractParent(List<String> ioParts)
+  {
+    return extractParent(ioParts, Optional.<EntryKey>absent());
+  }
+
+  private Optional<EntryKey> extractParent(List<String> ioParts,
+                                           Optional<EntryKey> inParent)
+  {
+    if(ioParts.size() < 3)
+      return inParent;
+
+    Optional<? extends AbstractType<? extends AbstractEntry>> type
+        = AbstractType.getTyped(ioParts.get(0).replace("%20", " "));
+
+    if(type.isPresent())
+    {
+      // the type already parsed
+      ioParts.remove(0);
+      String id = ioParts.remove(0).replace("%20", " ");
+
+      return extractParent(ioParts, Optional.of(new EntryKey(id, type.get(),
+                                                             inParent)));
+    }
+
+    return inParent;
+
   }
 }

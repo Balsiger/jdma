@@ -1523,6 +1523,15 @@ message NPCProto
   optional string height = 6;
   optional string weight = 7;
   optional string looks = 8;
+  repeated string occupation = 9;
+  optional string family_name = 10;
+  repeated string title = 11;
+  repeated string location = 12;
+  repeated string faction = 13;
+  repeated string mannerism = 14;
+  repeated string secret = 15;
+  repeated string quest = 16;
+  repeated string interactions = 17;
 }
 
 message BaseMiniatureProto

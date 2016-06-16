@@ -128,7 +128,7 @@ public class SaveActionServlet extends ActionServlet
     {
       entry.get().changed();
       entry.get().save();
-      return "gui.info('Entry " + entry.get().getName()
+      return "gui.info('Entry " + Encodings.escapeJS(entry.get().getName())
           + " has been saved.'); true";
     }
 
