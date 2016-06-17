@@ -102,6 +102,101 @@
           {param color: '#080' /}
         {/call}
       {/if}
+      {if $entry.family_name.present}
+        {call dma.entry.value}
+          {param label: 'Family Name' /}
+          {param value kind="html"}
+            {$entry.family_name}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if $entry.family_name.present}
+        {call dma.entry.value}
+          {param label: 'Appearance' /}
+          {param value kind="html"}
+            {$entry.looks}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.titles) > 0}
+        {call dma.entry.value}
+          {param label: 'Title' /}
+          {param value kind="html"}
+            {foreach $title in $entry.titles}
+              {commands($title)}{if not isLast($title)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.locations) > 0}
+        {call dma.entry.value}
+          {param label: 'Location' /}
+          {param value kind="html"}
+            {foreach $location in $entry.locations}
+              {commands($location)}{if not isLast($location)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.factions) > 0}
+        {call dma.entry.value}
+          {param label: 'Faction' /}
+          {param value kind="html"}
+            {foreach $faction in $entry.factions}
+              {commands($faction)}{if not isLast($faction)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.mannerisms) > 0}
+        {call dma.entry.value}
+          {param label: 'Mannerism' /}
+          {param value kind="html"}
+            {foreach $mannerism in $entry.mannerisms}
+              {commands($mannerism)}{if not isLast($mannerism)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.secrets) > 0}
+        {call dma.entry.value}
+          {param label: 'Secret' /}
+          {param value kind="html"}
+            {foreach $secret in $entry.secrets}
+              {commands($secret)}{if not isLast($secret)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.quests) > 0}
+        {call dma.entry.value}
+          {param label: 'Quest' /}
+          {param value kind="html"}
+            {foreach $quest in $entry.quests}
+              {commands($quest)}{if not isLast($quest)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.interactions) > 0}
+        {call dma.entry.value}
+          {param label: 'Interaction' /}
+          {param value kind="html"}
+            {foreach $interaction in $entry.interactions}
+              {commands($interaction)}{if not isLast($interaction)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
     {/param}
   {/call}
 
@@ -177,6 +272,69 @@
         {param name: 'occupation' /}
         {param label: 'Occupation' /}
         {param values: $entry.occupations /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'family_name' /}
+        {param label: 'Family Name' /}
+        {param value: $entry.family_name.present ? $entry.family_name : '' /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'looks' /}
+        {param label: 'Appearance' /}
+        {param value: $entry.looks.present ? $entry.looks : '' /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'title' /}
+        {param label: 'Title' /}
+        {param values: $entry.titles /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'location' /}
+        {param label: 'Location' /}
+        {param values: $entry.locations /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'faction' /}
+        {param label: 'Faction' /}
+        {param values: $entry.factions /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'mannerism' /}
+        {param label: 'Mannerism' /}
+        {param values: $entry.mannerisms /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'secret' /}
+        {param label: 'Secret' /}
+        {param values: $entry.secrets /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'quest' /}
+        {param label: 'Quest' /}
+        {param values: $entry.quests /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'interaction' /}
+        {param label: 'Interaction' /}
+        {param values: $entry.interactions /}
         {param validate: 'non-empty' /}
         {param color: '#080' /}
       {/call}

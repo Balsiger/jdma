@@ -53,6 +53,7 @@ edit.show = function(inTitle, inPath, inID, inBases, inValues)
   console.log("show", inTitle, inPath, inID, inBases, inValues);
   var contents = util.ajax(inPath + '?body&id=' + inID
       + '&bases=' + inBases + '&values=' + inValues);
+  window.console.log("show id", inID.replace(/ /g));
   var dialog = $('<div id="dialog-' + inID.replace(/ /g, "_") + '"/>')
     .html(contents)
     .dialog({
@@ -64,9 +65,6 @@ edit.show = function(inTitle, inPath, inID, inBases, inValues)
       closeOnEscape: false,
       dialogClass: 'edit-dialog',
     });
-  
-  // Setup any necessary autocomplete
-  //edit.setupAutocomplete($(":input[dma-autocomplete]"));
 };
 
 edit.unescape = function(inText)
@@ -185,6 +183,7 @@ edit.save = function(inKey, inID, inCreate)
   // close the dialog
   if(eval)
   {
+    window.console.log("save id", inID);
     $('#dialog-' + inID).dialog('close').dialog('destroy').remove();
 
     // reload the saved entry

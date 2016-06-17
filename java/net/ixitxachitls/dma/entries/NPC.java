@@ -124,6 +124,14 @@ public class NPC extends Monster
   /** The NPC's description of how it looks. */
   protected Optional<String> m_looks = Optional.absent();
   protected List<String> m_occupations = new ArrayList<>();
+  protected Optional<String> m_familyName = Optional.absent();
+  protected List<String> m_titles = new ArrayList<>();
+  protected List<String> m_locations = new ArrayList<>();
+  protected List<String> m_factions = new ArrayList<>();
+  protected List<String> m_mannerisms = new ArrayList<>();
+  protected List<String> m_secrets = new ArrayList<>();
+  protected List<String> m_quests = new ArrayList<>();
+  protected List<String> m_interactions = new ArrayList<>();
 
   /** The possible animal compantion. */
   protected Optional<List<Monster>> m_animalCompanions = Optional.absent();
@@ -252,6 +260,46 @@ public class NPC extends Monster
   public List<String> getOccupations()
   {
     return m_occupations;
+  }
+
+  public Optional<String> getFamilyName()
+  {
+    return m_familyName;
+  }
+
+  public List<String> getTitles()
+  {
+    return m_titles;
+  }
+
+  public List<String> getLocations()
+  {
+    return m_locations;
+  }
+
+  public List<String> getFactions()
+  {
+    return m_factions;
+  }
+
+  public List<String> getMannerisms()
+  {
+    return m_mannerisms;
+  }
+
+  public List<String> getSecrets()
+  {
+    return m_secrets;
+  }
+
+  public List<String> getQuests()
+  {
+    return m_quests;
+  }
+
+  public List<String> getInteractions()
+  {
+    return m_interactions;
   }
 
   @Override
@@ -611,6 +659,14 @@ public class NPC extends Monster
     m_height = inValues.use("height", m_height);
     m_looks = inValues.use("looks", m_looks);
     m_occupations = inValues.use("occupation", m_occupations);
+    m_familyName = inValues.use("family_name", m_familyName);
+    m_titles = inValues.use("title", m_titles);
+    m_locations = inValues.use("location", m_locations);
+    m_factions = inValues.use("faction", m_factions);
+    m_mannerisms = inValues.use("mannerism", m_mannerisms);
+    m_secrets = inValues.use("secret", m_secrets);
+    m_quests = inValues.use("quest", m_quests);
+    m_interactions = inValues.use("interaction", m_interactions);
     m_levels = inValues.useEntries("level", m_levels,
                                    new NestedEntry.Creator<Level>()
                                    {
@@ -648,6 +704,17 @@ public class NPC extends Monster
       builder.setLooks(m_looks.get());
 
     builder.addAllOccupation(m_occupations);
+
+    if(m_familyName.isPresent())
+      builder.setFamilyName(m_familyName.get());
+
+    builder.addAllTitle(m_titles);
+    builder.addAllLocation(m_locations);
+    builder.addAllFaction(m_factions);
+    builder.addAllMannerism(m_mannerisms);
+    builder.addAllSecret(m_secrets);
+    builder.addAllQuest(m_quests);
+    builder.addAllInteractions(m_interactions);
 
     NPCProto proto = builder.build();
     return proto;
@@ -693,6 +760,17 @@ public class NPC extends Monster
       m_looks = Optional.of(proto.getLooks());
 
     m_occupations.addAll(proto.getOccupationList());
+
+    if(proto.hasFamilyName())
+      m_familyName = Optional.of(proto.getFamilyName());
+
+    m_titles.addAll(proto.getTitleList());
+    m_locations.addAll(proto.getLocationList());
+    m_factions.addAll(proto.getFactionList());
+    m_mannerisms.addAll(proto.getMannerismList());
+    m_secrets.addAll(proto.getSecretList());
+    m_quests.addAll(proto.getQuestList());
+    m_interactions.addAll(proto.getInteractionsList());
   }
 
   @Override
