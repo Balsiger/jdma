@@ -120,8 +120,6 @@ public class PageServlet extends SoyServlet
     else
       data.put("dm", false);
 
-    data.put("isDev", DMAServlet.isDev() || inRequest.hasParam("dev"));
-
     tracer.done();
     return data;
   }

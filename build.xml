@@ -753,11 +753,16 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
     <uptodate property="noiconchanges"
               targetfile="build/war/icons/icons.png">
       <srcfiles file="resources/icons/icons.png" />
+    </uptodate>
+    <uptodate property="nolargeiconchanges"
+              targetfile="build/war/icons/icons-large.png">
       <srcfiles file="resources/icons/icons-large.png" />
     </uptodate>
   </target>
 
-  <target name="icons" depends="prepare,iconchanges"
+  <target name="icons" depends="icons-normal,icons-large"></target>
+
+  <target name="icons-normal" depends="prepare,iconchanges"
           description="created colored icons" unless="noiconchanges">
     <exec executable="convert">
       <arg line="( resources/icons/icons.png -alpha extract ) -background white -alpha shape build/war/icons/icons-white.png" />
@@ -768,7 +773,10 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
     <exec executable="convert">
       <arg line="( resources/icons/icons.png -alpha extract ) -background #d66a00 -alpha shape build/war/icons/icons-hover.png" />
     </exec>
+  </target>
 
+  <target name="icons-large" depends="prepare,iconchanges"
+          description="created large colored icons" unless="nolargeiconchanges">
     <exec executable="convert">
       <arg line="( resources/icons/icons-large.png -alpha extract ) -background white -alpha shape build/war/icons/icons-large-white.png" />
     </exec>

@@ -34,6 +34,9 @@ import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.memcache.Expiration;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.base.Optional;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -72,6 +75,9 @@ public class DMADatastore
   /** The access to the datastore. Don't use this except in the AdminServlet! */
   private DataStore m_data = new DataStore();
 
+  private static MemcacheService s_campaign_cache =
+      MemcacheServiceFactory.getMemcacheService("campaign-current");
+
   /** The cache of entries. */
   private static ThreadLocal<Map<EntryKey, AbstractEntry>> s_cache =
       new ThreadLocal<Map<EntryKey, AbstractEntry>>()
@@ -86,6 +92,30 @@ public class DMADatastore
   /** The id for serialization. */
   @SuppressWarnings("unused")
   private static final long serialVersionUID = 1L;
+
+  public void setCurrentCampaignEntry(String inCampaignKey, String inEntry)
+  {
+    s_campaign_cache.put(inCampaignKey, inEntry,
+                         Expiration.byDeltaSeconds(60 * 60 * 24));
+  }
+
+  public Optional<String> getCurrentCampaignEntryKey(String inCampaignKey)
+  {
+    return Optional.fromNullable((String)s_campaign_cache.get(inCampaignKey));
+  }
+
+  public Optional<AbstractEntry> getCurrentCampaignEntry(String inCampaignKey)
+  {
+    Optional<String> cachedKey = getCurrentCampaignEntryKey(inCampaignKey);
+    if(!cachedKey.isPresent())
+      return Optional.absent();
+
+    Optional<EntryKey> key = EntryKey.fromString(cachedKey.get());
+    if(!key.isPresent())
+      return Optional.absent();
+
+    return getEntry(key.get());
+  }
 
   /**
    * Cache the entry for later use. The cache is only per thread and is used

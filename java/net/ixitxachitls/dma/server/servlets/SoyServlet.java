@@ -98,6 +98,8 @@ public class SoyServlet extends DMAServlet
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
+  public enum Key { path };
+
   /**
    * Get the name of the template to render the page.
    *
@@ -210,7 +212,10 @@ public class SoyServlet extends DMAServlet
   protected Map<String, Object> collectData(DMARequest inRequest,
                                             SoyRenderer inRenderer)
   {
-    return SoyTemplate.map();
+    Map<String, Object> data = SoyTemplate.map();
+    data.put(Key.path.name(), inRequest.getRequestURI());
+
+    return data;
   }
 
   /**
@@ -289,7 +294,8 @@ public class SoyServlet extends DMAServlet
        "BaseProduct_Part",
        new SoyValue("BaseProduct_Part", BaseProduct.Part.class),
        "MiniatureLocationRule",new SoyValue("MiniatureLocationRule",
-                                            MiniatureLocationRuleType.class));
+                                            MiniatureLocationRuleType.class),
+       "isDev", DMAServlet.isDev() || inRequest.hasParam("dev"));
 
     tracer.done();
     return map;

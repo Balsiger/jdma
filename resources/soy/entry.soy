@@ -81,7 +81,7 @@
 
       {if $ij.hasDMAccess}
         <a target="_gcsimage" class="image-storage-link"
-           href="https://console.cloud.google.com/storage/browser/jdmaixit-hrd.appspot.com/{$entry.file_path}/?project=jdmaixit-hrd">
+           href="https://console.cloud.google.com/storage/browser/jdmaixit-hrd.appspot.com/{$entry.file_path}?project=jdmaixit-hrd">
           cloud storage
         </a>
         <a target="_imgsrch" class="image-storage-link"
@@ -152,6 +152,7 @@
   {if def($entry.campaign)}
     {call .campaign}
       {param campaign: $entry.campaign /}
+      {param entry: $entry /}
     {/call}
   {/if}
 {/template}
@@ -673,10 +674,27 @@
 /** Campaign specific information. */
 {template .campaign}
   {@param campaign: ?}
+  {@param entry: ?}
 
   <div id="campaign">
     <div class="campaign-container">
       <div class="campaign-name">{$campaign.name}</div>
+      <div class="campaign-set-current">
+        <div class="project sprite large" title="set current"
+             onclick="util.ajax('/actions/current-campaign',
+                                {lb}campaign: '{jsescape($campaign.key)}',
+                                    entry: '{jsescape($entry.key)}'{rb}, null,
+                                true)">
+        </div>
+        {if $campaign.current_entry.present}
+          <div class="entry" id="campaign-current-entry"
+               onclick="util.link(event, '{$campaign.current_entry.path}')">
+            {$campaign.current_entry.name}
+          </div>
+        {else}
+          <div class="entry" id="campaign-current-entry"></div>
+        {/if}
+      </div>
       <div class="campaign-date">
         {call .adjustableDate}
           {param campaign: $campaign /}

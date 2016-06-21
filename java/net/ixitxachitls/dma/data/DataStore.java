@@ -83,7 +83,7 @@ public class DataStore
   /** The cache for lookup ids. */
   // TODO: for some reason, the memcache does not cache long enough
   private static MemcacheService s_cacheIDs =
-    MemcacheServiceFactory.getMemcacheService("ids");
+      MemcacheServiceFactory.getMemcacheService("ids");
 
   /** The cache for lookup ids by value. */
   private static MemcacheService s_cacheIDsByValue =

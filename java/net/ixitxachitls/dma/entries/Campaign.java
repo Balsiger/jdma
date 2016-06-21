@@ -194,6 +194,11 @@ public class Campaign extends CampaignEntry
       + "/";
   }
 
+  public Optional<AbstractEntry> getCurrentEntry()
+  {
+    return DMADataFactory.get().getCurrentCampaignEntry(getKey().toString());
+  }
+
   @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
   {

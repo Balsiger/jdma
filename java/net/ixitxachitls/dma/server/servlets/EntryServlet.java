@@ -100,15 +100,11 @@ public class EntryServlet extends PageServlet
   {
     String path = inData.get("path").coerceToString();
     if(path == null)
-    {
       return "dma.errors.noEntry";
-    }
 
     EntryKey key = (EntryKey) ((SoyValue) inData.get("key")).getValue();
     if(key == null)
-    {
       return "dma.errors.extract";
-    }
 
     if(!inData.containsKey("entry"))
       return "dma.errors.invalidPage";
@@ -194,8 +190,7 @@ public class EntryServlet extends PageServlet
   {
     Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
-    String path = inRequest.getRequestURI();
-    data.put("path", path);
+    String path = (String)data.get(Key.path.name());
     if(path == null)
       return data;
 

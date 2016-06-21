@@ -71,6 +71,14 @@
   </servlet>
 
   <servlet>
+    <servlet-name>current</servlet-name>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.CurrentCampaignServlet
+    </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet>
     <servlet-name>entries</servlet-name>
     <servlet-class>
       net.ixitxachitls.dma.server.servlets.EntryListServlet
@@ -127,6 +135,13 @@
   </servlet>
 
   <servlet>
+    <servlet-name>current-campaign</servlet-name>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.CurrentCampaignActionServlet
+    </servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>admin</servlet-name>
     <servlet-class>
       net.ixitxachitls.dma.server.servlets.AdminServlet
@@ -162,6 +177,11 @@
   <servlet-mapping>
     <servlet-name>entry</servlet-name>
     <url-pattern>/_entry/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>current</servlet-name>
+    <url-pattern>/_current/*</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
@@ -202,6 +222,11 @@
   <servlet-mapping>
     <servlet-name>time</servlet-name>
     <url-pattern>/actions/time</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>current-campaign</servlet-name>
+    <url-pattern>/actions/current-campaign</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
@@ -303,6 +328,9 @@
 
         ^/campaign/([^/]+)/([^/]+)/monster/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/monster/$3
+
+        ^/campaign/([^/]+)/([^/]+)/current$
+        /_current/base campaign/$1/campaign/$2
 
         ^/user/([^/]+)$
         /_entry/base character/$1

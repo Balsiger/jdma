@@ -200,3 +200,20 @@
     {/param}
   {/call}
 {/template}
+
+/** The public information about the current campaign. */
+{template .current}
+  {@param campaign: ?}
+
+  {call dma.page.head}
+    {param title: $campaign.name /}
+  {/call}
+
+  <div class="campaign-current">
+    <div class="status">
+      {$campaign.date}
+    </div>
+  </div>
+
+  {call dma.page.recompile /}
+{/template}

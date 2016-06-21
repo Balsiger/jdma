@@ -231,16 +231,19 @@
     <div class="version">
       {dma.project} version {dma.version}
     </div>
-    {if $ij.isDev}
-      <div class="recompile sprite large" title="Recompile template"
-           onclick="gui.info('Recompilation initiated'); util.recompile();">
-      </div>
-    {/if}
+    {call .recompile /}
 {/template}
 
-/**
- * User display.
- */
+/** Add a debugging button to recompile templates. */
+{template .recompile}
+  {if $ij.isDev}
+    <div class="recompile sprite large" title="Recompile template"
+         onclick="gui.info('Recompilation initiated'); util.recompile();">
+    </div>
+  {/if}
+{/template}
+
+/** User display. */
 {template .user}
   <a class="user" onclick="util.link(event, '/user/{let $foo kind="text"}{$ij.user.name |escapeJs}{/let}{$foo}')"
      href="/user/{let $foo2 kind="text"}{$ij.user.name |escapeUri}{/let}{$foo2}">
