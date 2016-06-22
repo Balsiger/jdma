@@ -212,12 +212,9 @@
   <div class="campaign-current"
     {if def($campaign.current_entry.main_file)}
       style="background-image:
-             url('{jsencode($campaign.current_entry.main_file.path)}')"
+             url('{jsescape($campaign.current_entry.main_file.path)}')"
     {/if}
   >
-    {if def($campaign.current_entry.main_file)}
-      {$campaign.current_entry.main_file.path}
-    {/if}
     <div class="status">
       {$campaign.date}
     </div>
