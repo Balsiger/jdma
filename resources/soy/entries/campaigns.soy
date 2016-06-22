@@ -207,6 +207,11 @@
 
   {call dma.page.head}
     {param title: $campaign.name /}
+    {param meta kind="html"}
+      // Allow full screen if installed on home screen.
+      <meta name="mobile-web-app-capable" content="yes">
+      <meta name="apple-web-app-capable" content="yes">
+    {/param}
   {/call}
 
   <div class="campaign-current"

@@ -87,13 +87,14 @@
   {$content}
 {/template}
 
-/**
- * The head portion of the page.
- *
- * @param title The page title
- */
+/** The head portion of the page. */
 {template .head}
+  {@param title: html|string}
+  {@param? meta: html}
+
   <head>
+
+  {$meta}
 
   // jquery
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js">
