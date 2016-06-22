@@ -3778,6 +3778,9 @@ TD.list > a
   width: 100%;
   background-color: black;
   color: white;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .campaign-current .status
