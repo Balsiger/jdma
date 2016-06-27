@@ -93,17 +93,17 @@ public abstract class Action
     return alert("not implemented: " + inParams);
   }
 
-  protected String alert(String inMessage)
+  public static String alert(String inMessage)
   {
     return "gui.alert('" + Encodings.escapeJS(inMessage) + "');";
   }
 
-  protected String warning(String inMessage)
+  protected static String warning(String inMessage)
   {
     return "gui.warning('" + Encodings.escapeJS(inMessage) + "');";
   }
 
-  protected String info(String inMessage)
+  protected static String info(String inMessage)
   {
     return "gui.info('" + Encodings.escapeJS(inMessage) + "');";
   }

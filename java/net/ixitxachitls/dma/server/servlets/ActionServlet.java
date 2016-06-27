@@ -27,13 +27,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Optional;
-
-import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.server.servlets.actions.Action;
 import net.ixitxachitls.dma.server.servlets.actions.CampaignTimeAction;
@@ -133,7 +130,7 @@ public class ActionServlet extends DMAServlet
         Action action = s_actions.get(name);
         String text;
         if(action == null)
-          text = doAction(inRequest, inResponse);
+          text = Action.alert("unknown acton " + name);
         else
           text = action.execute(inRequest);
 
@@ -152,39 +149,6 @@ public class ActionServlet extends DMAServlet
   }
 
   /**
-    *
-    * Send back a message to the client, using a cookie to show the message
-    * after page reload.
-    *
-    * @param       inResponse the response to send to
-    * @param       inMessage  the message to send back
-    *
-    */
-  protected void setMessage(HttpServletResponse inResponse,
-                            String inMessage)
-  {
-    Cookie cookie = new Cookie("INFO", inMessage);
-    cookie.setPath("/");
-
-    inResponse.addCookie(cookie);
-  }
-
-  /**
-   *
-   * Execute the action associated with this servlet.
-   *
-   * @param       inRequest  the request from the client
-   * @param       inResponse the response to write to
-   *
-   * @return      the javascript code to send back to the client
-   */
-  protected String doAction(DMARequest inRequest,
-                            HttpServletResponse inResponse)
-  {
-    throw new UnsupportedOperationException("Should be overwritten!");
-  }
-
-  /**
    * Fail handling the action with the given message.
    *
    * @param       inMessage the message with which to fail
@@ -198,134 +162,7 @@ public class ActionServlet extends DMAServlet
     return "gui.alert('" + inMessage + "');";
   }
 
-  //----------------------------------------------------------------------------
-
-  /** The tests. */
-  public static class Test extends net.ixitxachitls.server.ServerUtils.Test
-  {
-    /**
-     * The get Test.
-     *
-     * @throws Exception should not happen
-     */
-    @org.junit.Test
-    public void get() throws Exception
-    {
-      HttpServletRequest request =
-        EasyMock.createMock(HttpServletRequest.class);
-      HttpServletResponse response =
-        EasyMock.createMock(HttpServletResponse.class);
-
-      EasyMock.expect(request.getMethod()).andReturn("GET").times(2);
-      response.sendError(405, "GET not allowed for this request");
-      EasyMock.expect(request.getRequestURI()).andReturn("uri");
-      EasyMock.replay(request, response);
-
-      ActionServlet servlet = new ActionServlet() {
-          /** Serial version id. */
-          private static final long serialVersionUID = 1L;
-          @Override
-          protected String doAction(DMARequest inRequest,
-                                    HttpServletResponse inResponse)
-          {
-            return "done";
-          }
-        };
-
-      servlet.doGet(request, response);
-
-      EasyMock.verify(request, response);
-    }
-
-    /**
-     * The handle Test.
-     *
-     * @throws Exception should not happen
-     */
-    @org.junit.Test
-    public void handle() throws Exception
-    {
-      HttpServletRequest request =
-        EasyMock.createMock(DMARequest.class);
-      HttpServletResponse response =
-        EasyMock.createMock(HttpServletResponse.class);
-      try (MockServletOutputStream output = new MockServletOutputStream())
-      {
-        EasyMock.expect(request.getMethod()).andReturn("POST");
-        EasyMock.expect(request.getRequestURI()).andReturn("uri");
-        response.setHeader("Content-Type", "text/javascript");
-        response.setHeader("Cache-Control", "max-age=0");
-        EasyMock.expect(response.getOutputStream()).andReturn(output);
-        EasyMock.replay(request, response);
-
-        ActionServlet servlet = new ActionServlet() {
-            /** Serial version id. */
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected String doAction(DMARequest inRequest,
-                                      HttpServletResponse inResponse)
-            {
-              return "done";
-            }
-          };
-
-        servlet.doPost(request, response);
-        assertEquals("post", "done", output.toString());
-
-        EasyMock.verify(request, response);
-      }
-    }
-
-    /** The setMessage Test. */
-    @org.junit.Test
-    public void setMessage()
-    {
-      HttpServletResponse response =
-        EasyMock.createMock(HttpServletResponse.class);
-
-      response.addCookie(EasyMock.isA(Cookie.class));
-
-      EasyMock.replay(response);
-
-      ActionServlet servlet = new ActionServlet() {
-          /** Serial version id. */
-          private static final long serialVersionUID = 1L;
-          @Override
-          protected String doAction(DMARequest inRequest,
-                                    HttpServletResponse inResponse)
-          {
-            return "done";
-          }
-        };
-
-      servlet.setMessage(response, "message");
-
-      EasyMock.verify(response);
-    }
-
-    /** The fail Test. */
-    @org.junit.Test
-    public void checkFail()
-    {
-      ActionServlet servlet = new ActionServlet()
-        {
-          /** Serial version id. */
-          private static final long serialVersionUID = 1L;
-          @Override
-          protected String doAction(DMARequest inRequest,
-                                    HttpServletResponse inResponse)
-          {
-            return "done";
-          }
-        };
-
-      assertEquals("fail", "gui.alert('message');", servlet.fail("message"));
-
-      m_logger.addExpected("WARNING: message");
-    }
-  }
-
-  public static String extractActionName(DMARequest inRequest)
+  private static String extractActionName(DMARequest inRequest)
   {
     String path = inRequest.getOriginalPath();
     String name = Strings.getPattern(path, "/actions/(.*)$");
@@ -333,5 +170,12 @@ public class ActionServlet extends DMAServlet
       return "";
 
     return name;
+  }
+
+  //----------------------------------------------------------------------------
+
+  /** The tests. */
+  public static class Test extends net.ixitxachitls.server.ServerUtils.Test
+  {
   }
 }
