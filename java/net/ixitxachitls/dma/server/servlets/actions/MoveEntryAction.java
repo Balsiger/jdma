@@ -19,32 +19,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ******************************************************************************/
 
-package net.ixitxachitls.dma.server.servlets;
+package net.ixitxachitls.dma.server.servlets.actions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.data.DMADatastore;
-import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.entries.Character;
-import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.EntryKey;
-import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.entries.Type;
-import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.util.Strings;
 
 /**
- * The servlet to move entries around.
+ * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
-public class MoveActionServlet extends ActionServlet
+public class MoveEntryAction extends Action
 {
   public static class ParentUpdate {
     private final String m_id;
@@ -67,17 +57,8 @@ public class MoveActionServlet extends ActionServlet
     }
   }
 
-  public MoveActionServlet()
-  {
-    // nothing to do here
-  }
-
-  /** The id for serialization. */
-  private static final long serialVersionUID = 1L;
-
   @Override
-  protected  String doAction(DMARequest inRequest,
-                             HttpServletResponse inResponse)
+  public String execute(DMARequest inRequest)
   {
     List<String> errors = new ArrayList<>();
     List<ParentUpdate> updates = new ArrayList<>();
@@ -91,15 +72,15 @@ public class MoveActionServlet extends ActionServlet
         Optional<EntryKey> parent = EntryKey.fromString(parts[0]);
         Optional<EntryKey> key = EntryKey.fromString(parts[1]);
         if(!parent.isPresent() || !key.isPresent()
-          || !DMADataFactory.get().setParent(key.get(), parent.get()))
+            || !DMADataFactory.get().setParent(key.get(), parent.get()))
           errors.add("failed to move " + id);
       }
     }
 
     if(errors.isEmpty())
-      return "gui.info('Entries moved!');";
+      return info("Entries moved!");
 
-    return "gui.alert('Could not move items: "
-        + Strings.COMMA_JOINER.join(errors) + "');";
+    return alert("Could not move items: "
+        + Strings.COMMA_JOINER.join(errors));
   }
 }

@@ -55,14 +55,14 @@ import net.ixitxachitls.util.logging.Log;
 @Immutable
 public abstract class DMAServlet extends BaseServlet
 {
-  public enum Action { show, print, summary, card, create, edit, };
+  public enum ActionType { show, print, summary, card, create, edit, };
 
   public static final String ACTION_REGEXP;
   static
   {
     List<String> actions = new ArrayList<>();
-    for(Action action : Action.values())
-      actions.add(action.name());
+    for(ActionType actionType : ActionType.values())
+      actions.add(actionType.name());
 
     ACTION_REGEXP = "\\.(" + Strings.PIPE_JOINER.join(actions) + ")$";
   }

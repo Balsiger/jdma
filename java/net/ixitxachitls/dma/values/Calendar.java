@@ -31,9 +31,7 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.NestedEntry;
 import net.ixitxachitls.dma.proto.Values.CalendarProto;
-import net.ixitxachitls.dma.server.servlets.MoveActionServlet;
 import net.ixitxachitls.util.logging.Log;
-import net.ixitxachitls.util.logging.Logger;
 
 /**
  * Specification of a calendar for a specific world.

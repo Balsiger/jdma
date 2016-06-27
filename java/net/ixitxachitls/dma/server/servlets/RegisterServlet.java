@@ -115,7 +115,7 @@ public class RegisterServlet extends ActionServlet
     }
 
     Optional<BaseCharacter> user = DMADataFactory.get().getEntry
-      (AbstractEntry.createKey(username.get(), BaseCharacter.TYPE));
+        (AbstractEntry.createKey(username.get(), BaseCharacter.TYPE));
     if(user.isPresent())
     {
       return "Username allready used, choose a new one.";

@@ -49,13 +49,6 @@
   </security-constraint>
 
   <servlet>
-    <servlet-name>register</servlet-name>
-    <servlet-class>
-      net.ixitxachitls.dma.server.servlets.RegisterServlet
-    </servlet-class>
-  </servlet>
-
-  <servlet>
     <servlet-name>html</servlet-name>
     <servlet-class>
       net.ixitxachitls.dma.server.servlets.StaticPageServlet
@@ -79,6 +72,14 @@
   </servlet>
 
   <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.ActionServlet
+    </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet>
     <servlet-name>entries</servlet-name>
     <servlet-class>
       net.ixitxachitls.dma.server.servlets.EntryListServlet
@@ -96,48 +97,6 @@
     <servlet-name>library</servlet-name>
     <servlet-class>
       net.ixitxachitls.dma.server.servlets.LibraryServlet
-    </servlet-class>
-  </servlet>
-
-  <servlet>
-    <servlet-name>save</servlet-name>
-    <servlet-class>
-      net.ixitxachitls.dma.server.servlets.SaveActionServlet
-    </servlet-class>
-  </servlet>
-
-  <servlet>
-    <servlet-name>move</servlet-name>
-    <servlet-class>
-      net.ixitxachitls.dma.server.servlets.MoveActionServlet
-    </servlet-class>
-  </servlet>
-
-  <servlet>
-    <servlet-name>remove</servlet-name>
-    <servlet-class>
-      net.ixitxachitls.dma.server.servlets.RemoveActionServlet
-    </servlet-class>
-  </servlet>
-
-  <servlet>
-    <servlet-name>recompile</servlet-name>
-    <servlet-class>
-      net.ixitxachitls.dma.server.servlets.RecompileActionServlet
-    </servlet-class>
-  </servlet>
-
-  <servlet>
-    <servlet-name>time</servlet-name>
-    <servlet-class>
-      net.ixitxachitls.dma.server.servlets.TimeActionServlet
-    </servlet-class>
-  </servlet>
-
-  <servlet>
-    <servlet-name>current-campaign</servlet-name>
-    <servlet-class>
-      net.ixitxachitls.dma.server.servlets.CurrentCampaignActionServlet
     </servlet-class>
   </servlet>
 
@@ -170,18 +129,8 @@
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>register</servlet-name>
-    <url-pattern>/actions/register</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
     <servlet-name>entry</servlet-name>
     <url-pattern>/_entry/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>current</servlet-name>
-    <url-pattern>/_current/*</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
@@ -200,33 +149,8 @@
   </servlet-mapping>
 
   <servlet-mapping>
-    <servlet-name>save</servlet-name>
-    <url-pattern>/actions/save</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>move</servlet-name>
-    <url-pattern>/actions/move</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>remove</servlet-name>
-    <url-pattern>/actions/remove</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>recompile</servlet-name>
-    <url-pattern>/actions/recompile</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>time</servlet-name>
-    <url-pattern>/actions/time</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>current-campaign</servlet-name>
-    <url-pattern>/actions/current-campaign</url-pattern>
+    <servlet-name>action</servlet-name>
+    <url-pattern>/actions/*</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
@@ -328,9 +252,6 @@
 
         ^/campaign/([^/]+)/([^/]+)/monster/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/monster/$3
-
-        ^/campaign/([^/]+)/([^/]+)/current$
-        /_current/base campaign/$1/campaign/$2
 
         ^/user/([^/]+)$
         /_entry/base character/$1

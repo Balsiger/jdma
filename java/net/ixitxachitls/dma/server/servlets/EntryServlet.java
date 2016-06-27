@@ -44,7 +44,6 @@ import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseItem;
-import net.ixitxachitls.dma.entries.CampaignEntry;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
@@ -115,15 +114,15 @@ public class EntryServlet extends PageServlet
       return "dma.errors.invalidPage";
 
     String actionName = inData.get("action").coerceToString();
-    Action action = Action.edit;
-    for(Action act : Action.values())
+    ActionType actionType = ActionType.edit;
+    for(ActionType act : ActionType.values())
       if(act.name().equalsIgnoreCase(actionName))
       {
-        action = act;
+        actionType = act;
         break;
       }
 
-    switch(action)
+    switch(actionType)
     {
       case print:
         return "dma.entry.printcontainer";
@@ -156,17 +155,17 @@ public class EntryServlet extends PageServlet
    *
    * @return the action that should be used to show the page
    */
-  private Action getAction(String inPath, EntryKey inKey, DMARequest inRequest)
+  private ActionType getAction(String inPath, EntryKey inKey, DMARequest inRequest)
   {
     if(isCreate(inRequest, inKey))
-      return Action.edit;
+      return ActionType.edit;
 
     String actionName = Strings.getPattern(inPath, ACTION_REGEXP);
-    for(Action action : Action.values())
-      if(action.name().equalsIgnoreCase(actionName))
-        return action;
+    for(ActionType actionType : ActionType.values())
+      if(actionType.name().equalsIgnoreCase(actionName))
+        return actionType;
 
-    return Action.show;
+    return ActionType.show;
   }
 
   /**
@@ -180,8 +179,8 @@ public class EntryServlet extends PageServlet
   private boolean isCreate(DMARequest inRequest, EntryKey inKey)
   {
     return inRequest.hasUser()
-        && (inRequest.hasParam(Action.create.name())
-            || Action.create.name().equalsIgnoreCase(inKey.getID()));
+        && (inRequest.hasParam(ActionType.create.name())
+            || ActionType.create.name().equalsIgnoreCase(inKey.getID()));
   }
 
   @Override
@@ -201,8 +200,8 @@ public class EntryServlet extends PageServlet
     if(!key.isPresent())
       return data;
 
-    Action action = getAction(path, key.get(), inRequest);
-    data.put("action", action.name());
+    ActionType actionType = getAction(path, key.get(), inRequest);
+    data.put("action", actionType.name());
 
     Optional<? extends AbstractEntry> entry = Optional.absent();
     boolean isCreate = isCreate(inRequest, key.get());
@@ -286,13 +285,13 @@ public class EntryServlet extends PageServlet
 
       data.put("entry",
                new SoyValue(entry.get().getKey().toString(), entry.get()));
-      data.put("first", current <= 0 ? "" : ids.get(0) + "." + action);
+      data.put("first", current <= 0 ? "" : ids.get(0) + "." + actionType);
       data.put("previous",
-               current <= 0 ? "" : ids.get(current - 1) + "." + action);
+               current <= 0 ? "" : ids.get(current - 1) + "." + actionType);
       data.put("list", "/" + entry.get().getType().getMultipleLink());
       data.put("next",
-               current >= last ? "" : ids.get(current + 1) + "." + action);
-      data.put("last", current >= last ? "" : ids.get(last) + "." + action);
+               current >= last ? "" : ids.get(current + 1) + "." + actionType);
+      data.put("last", current >= last ? "" : ids.get(last) + "." + actionType);
       data.put("variant", type.getName().replace(" ", ""));
       data.put("id",
                inRequest.hasParam("id")

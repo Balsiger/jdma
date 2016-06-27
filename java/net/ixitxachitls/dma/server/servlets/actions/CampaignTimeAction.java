@@ -19,9 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ******************************************************************************/
 
-package net.ixitxachitls.dma.server.servlets;
-
-import javax.servlet.http.HttpServletResponse;
+package net.ixitxachitls.dma.server.servlets.actions;
 
 import com.google.common.base.Optional;
 
@@ -29,19 +27,24 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.Campaign;
 import net.ixitxachitls.dma.entries.EntryKey;
+import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.dma.values.CampaignDate;
 import net.ixitxachitls.util.logging.Log;
 
 /**
- * Action for advancing the campaign time/date.
+ * Action to modify the campaign time.
  *
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
-public class TimeActionServlet extends ActionServlet
+public class CampaignTimeAction extends Action
 {
+  public CampaignTimeAction()
+  {
+    super("campaign, minutes, hours, days, months, years");
+  }
+
   @Override
-  protected String doAction(DMARequest inRequest,
-                            HttpServletResponse inResponse)
+  public String execute(DMARequest inRequest)
   {
     int minutes = inRequest.getParam("minutes", 0);
     int hours = inRequest.getParam("hours", 0);
@@ -55,8 +58,8 @@ public class TimeActionServlet extends ActionServlet
         || !keyName.isPresent() || !user.isPresent())
     {
       Log.warning("not possible to advance time for "
-                  + minutes + "/" + hours + "/" + days + ", "
-                  + keyName + ", " + user);
+                      + minutes + "/" + hours + "/" + days + ", "
+                      + keyName + ", " + user);
       return "??";
     }
 
@@ -92,5 +95,6 @@ public class TimeActionServlet extends ActionServlet
         + "::" + date.get().getYear()
         + "::" + date.get().getHoursFormatted()
         + "::" + date.get().getMinutesFormatted();
+
   }
 }

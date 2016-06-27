@@ -45,15 +45,11 @@ import com.google.common.collect.Multimap;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.dma.entries.Campaign;
 import net.ixitxachitls.dma.entries.CampaignEntry;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.EntryKey;
-import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
-import net.ixitxachitls.dma.server.servlets.MoveActionServlet;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
 

@@ -23,6 +23,8 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -33,6 +35,15 @@ import com.google.common.base.Optional;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.server.servlets.actions.Action;
+import net.ixitxachitls.dma.server.servlets.actions.CampaignTimeAction;
+import net.ixitxachitls.dma.server.servlets.actions.CurrentCampaignAction;
+import net.ixitxachitls.dma.server.servlets.actions.MoveEntryAction;
+import net.ixitxachitls.dma.server.servlets.actions.RecompileAction;
+import net.ixitxachitls.dma.server.servlets.actions.RegisterAction;
+import net.ixitxachitls.dma.server.servlets.actions.RemoveEntryAction;
+import net.ixitxachitls.dma.server.servlets.actions.SaveEntryAction;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -41,15 +52,27 @@ import net.ixitxachitls.util.logging.Log;
  * @file          ActionServlet.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-public abstract class ActionServlet extends DMAServlet
+public class ActionServlet extends DMAServlet
 {
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
+  private static Map<String, Action> s_actions = new HashMap<>();
+  static
+  {
+    s_actions.put("current-campaign", new CurrentCampaignAction());
+    s_actions.put("save", new SaveEntryAction());
+    s_actions.put("move", new MoveEntryAction());
+    s_actions.put("recompile", new RecompileAction());
+    s_actions.put("register", new RegisterAction());
+    s_actions.put("remove", new RemoveEntryAction());
+    s_actions.put("time", new CampaignTimeAction());
+  }
+
   /**
    * Create the servlet for actions.
    */
-  protected ActionServlet()
+  public ActionServlet()
   {
   }
 
@@ -106,7 +129,13 @@ public abstract class ActionServlet extends DMAServlet
       // data, though.
       synchronized(ActionServlet.class)
       {
-        String text = doAction(inRequest, inResponse);
+        String name = extractActionName(inRequest);
+        Action action = s_actions.get(name);
+        String text;
+        if(action == null)
+          text = doAction(inRequest, inResponse);
+        else
+          text = action.execute(inRequest);
 
         try (PrintStream print = new PrintStream(inResponse.getOutputStream()))
         {
@@ -149,8 +178,11 @@ public abstract class ActionServlet extends DMAServlet
    *
    * @return      the javascript code to send back to the client
    */
-  protected abstract String doAction(DMARequest inRequest,
-                                     HttpServletResponse inResponse);
+  protected String doAction(DMARequest inRequest,
+                            HttpServletResponse inResponse)
+  {
+    throw new UnsupportedOperationException("Should be overwritten!");
+  }
 
   /**
    * Fail handling the action with the given message.
@@ -291,5 +323,15 @@ public abstract class ActionServlet extends DMAServlet
 
       m_logger.addExpected("WARNING: message");
     }
+  }
+
+  public static String extractActionName(DMARequest inRequest)
+  {
+    String path = inRequest.getOriginalPath();
+    String name = Strings.getPattern(path, "/actions/(.*)$");
+    if(name == null)
+      return "";
+
+    return name;
   }
 }
