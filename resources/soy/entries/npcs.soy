@@ -111,6 +111,15 @@
           {param color: '#080' /}
         {/call}
       {/if}
+      {if $entry.origin_region.present}
+        {call dma.entry.value}
+          {param label: 'Origin Region' /}
+          {param value kind="html"}
+            {$entry.origin_region}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
       {if $entry.family_name.present}
         {call dma.entry.value}
           {param label: 'Appearance' /}
@@ -224,6 +233,16 @@
         {param value: $entry.name /}
         {param validate: 'non-empty' /}
         {param color: '#080' /}
+        {param actions kind="html"}
+          <div class="sprite large random" tooltip="random name"
+               onclick="$('input[name=name]').val(util.ajax('/actions/random?
+                        {nil}campaign={$entry.campaign.key}
+                        {nil}&kind=name
+                        {nil}&race=' + $('input[name=base]').val() + '
+                        {nil}&region=' + $('input[name=origin_region]').val() +'
+                        {nil}&gender=' + $('select[name=gender]').val()))">
+          </div>
+        {/param}
       {/call}
       {call dma.edit.value_list}
         {param name: 'base' /}
@@ -279,6 +298,14 @@
         {param name: 'family_name' /}
         {param label: 'Family Name' /}
         {param value: $entry.family_name.present ? $entry.family_name : '' /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'origin_region' /}
+        {param label: 'Origin Region' /}
+        {param value: $entry.origin_region.present
+            ? $entry.origin_region : '' /}
         {param validate: 'non-empty' /}
         {param color: '#080' /}
       {/call}

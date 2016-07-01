@@ -36,6 +36,7 @@ import net.ixitxachitls.dma.server.servlets.actions.Action;
 import net.ixitxachitls.dma.server.servlets.actions.CampaignTimeAction;
 import net.ixitxachitls.dma.server.servlets.actions.CurrentCampaignAction;
 import net.ixitxachitls.dma.server.servlets.actions.MoveEntryAction;
+import net.ixitxachitls.dma.server.servlets.actions.RandomNameAction;
 import net.ixitxachitls.dma.server.servlets.actions.RecompileAction;
 import net.ixitxachitls.dma.server.servlets.actions.RegisterAction;
 import net.ixitxachitls.dma.server.servlets.actions.RemoveEntryAction;
@@ -64,6 +65,7 @@ public class ActionServlet extends DMAServlet
     s_actions.put("register", new RegisterAction());
     s_actions.put("remove", new RemoveEntryAction());
     s_actions.put("time", new CampaignTimeAction());
+    s_actions.put("random", new RandomNameAction());
   }
 
   /**

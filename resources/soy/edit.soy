@@ -58,12 +58,17 @@
   {@param label: string}
   {@param value: any}
   {@param color: string}
+  {@param? actions: html}
+
   <div class="value">
     {call .label}
       {param text: $label /}
       {param color: $color /}
     {/call}
     {$value}
+    {if $actions}
+      {$actions}
+    {/if}
   </div>
 {/template}
 
@@ -74,6 +79,7 @@
   {@param value: any}
   {@param validate: string}
   {@param color: string}
+  {@param? actions: html}
   {call .generic_value}
     {param label: $label /}
     {param color: $color /}
@@ -88,6 +94,7 @@
         {/param}
       {/call}
     {/param}
+    {param actions: $actions /}
   {/call}
 {/template}
 
@@ -289,9 +296,10 @@
 
 /** The field for editing a list value. */
 {template .field_list}
-  {@param name: string}
+  {@param name: any}
   {@param values: list<html>}
   {@param validate: string}
+  {@param? caption: string}
   {@param? autocomplete: string}
   {call .field}
     {param markup kind="html"}
@@ -301,6 +309,7 @@
           {param value: $value /}
           {param validate: $validate /}
           {param autocomplete: $autocomplete /}
+          {param caption: $caption /}
         {/call}
       {ifempty}
         {call .field_list_input_line}
@@ -308,6 +317,7 @@
           {param value: '' /}
           {param validate: $validate /}
           {param autocomplete: $autocomplete /}
+          {param caption: $caption /}
         {/call}
       {/foreach}
     {/param}
@@ -317,21 +327,26 @@
 /** A list field value. */
 {template .field_list_line}
   {@param field: html}
-  {@param? id: string}
+  {@param? caption: string}
+  {@param? id: any}
   <div class="line">
     {$field}
+    {if $caption}
+      <div class="input-label">{$caption}</div>
+    {/if}
     <div class="sprite edit-list-add" title="Add"
          onclick="edit.insertLine('{$id}', this.parentNode)"></div>
     <div class="sprite edit-list-remove" title="Remove"
          onclick="edit.removeLine(this.parentNode)"></div>
-  </div>  
+  </div>
 {/template}
 
 /** A list field value. */
 {template .field_list_input_line}
-  {@param name: string}
+  {@param name: any}
   {@param value: any}
   {@param validate: string}
+  {@param? caption: string}
   {@param? autocomplete: string}
   {call .field_list_line}
     {param id: $name /}
@@ -342,6 +357,7 @@
         {param validate: $validate /}
         {param inList: true /}
         {param autocomplete: $autocomplete /}
+        {param caption: $caption /}
       {/call}
     {/param}
   {/call}

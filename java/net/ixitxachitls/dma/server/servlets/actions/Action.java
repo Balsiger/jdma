@@ -62,6 +62,14 @@ public abstract class Action
       case 3:
         return execute(params.get(0), params.get(1), params.get(2));
 
+      case 4:
+        return execute(params.get(0), params.get(1), params.get(2),
+                       params.get(3));
+
+      case 5:
+        return execute(params.get(0), params.get(1), params.get(2),
+                       params.get(3), params.get(4));
+
       default:
         return execute(params);
     }
@@ -86,6 +94,21 @@ public abstract class Action
   {
     return alert("not implemented: " + inFirst + "/" + inSecond + "/"
                      + inThird);
+  }
+
+  protected String execute(Optional<String> inFirst, Optional<String> inSecond,
+                           Optional<String> inThird, Optional<String> inFourth)
+  {
+    return alert("not implemented: " + inFirst + "/" + inSecond + "/"
+                     + inThird + "/" + inFourth);
+  }
+
+  protected String execute(Optional<String> inFirst, Optional<String> inSecond,
+                           Optional<String> inThird, Optional<String> inFourth,
+                           Optional<String> inFifth)
+  {
+    return alert("not implemented: " + inFirst + "/" + inSecond + "/"
+                     + inThird + "/" + inFourth + "/" + inFifth);
   }
 
   private String execute(List<Optional<String>> inParams)

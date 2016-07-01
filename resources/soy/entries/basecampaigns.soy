@@ -24,17 +24,15 @@
  */
 {namespace dma.entries.basecampaigns}
 
-/**
- * Show the given entry in standard format.
- * 
- * @param entry The entry to show.
- * @param first the first entry available, if any
- * @param previous the previous entry, if any
- * @param list the overview of all entries
- * @param next the next entry, if any
- * @param last the last entry, if any
- */
+/** Show the given entry in standard format.  */
 {template .show}
+  {@param entry: ?}
+  {@param first: ?}
+  {@param previous: ?}
+  {@param list: ?}
+  {@param next: ?}
+  {@param last: ?}
+
   {call dma.entry.show}
     {param entry: $entry /}
     {param type: 'base-campaign' /}
@@ -118,6 +116,17 @@
         {/param}
         {param color: '#ccf' /}
       {/call}
+      {call dma.entry.value}
+        {param label: 'Names' /}
+        {param value kind="html"}
+          {foreach $name in $entry.names}
+            {call .names_show}
+              {param names: $name /}
+            {/call}
+          {/foreach}
+        {/param}
+        {param color: '#ccf' /}
+      {/call}
       {if $entry.incomplete.present or $entry.combined_incomplete.get.present}
         {call dma.entry.value}
           {param label: 'Incomplete' /}
@@ -174,14 +183,12 @@
   {/call}
 {/template}
 
-/**
- * Editiing the base item.
- * 
- * @param entry The item to edit. 
- * @param id    THe id to use for the editing dialog.
- * @param create  Whether to create a new entry
- */
+/** Editing the base item. */
 {template .edit}
+  {@param entry: ?}
+  {@param id: string}
+  {@param create: bool}
+
   {call dma.edit.entry}
     {param entry: $entry /}
     {param type: 'campaign' /}
@@ -396,6 +403,32 @@
           {/call}
         {/param}
       {/call}
+      {call dma.edit.generic_value}
+        {param label: 'Names' /}
+        {param value kind="html"}
+          {foreach $names in $entry.names}
+            {call dma.edit.field_list_line}
+              {param id: 'names' /}
+              {param field kind="html"}
+                {call dma.entries.basecampaigns.names_edit}
+                  {param names: $names /}
+                  {param index: index($names) /}
+                {/call}
+              {/param}
+            {/call}
+          {ifempty}
+            {call dma.edit.field_list_line}
+              {param id: 'names' /}
+              {param field kind="html"}
+                {call dma.entries.basecampaigns.names_edit}
+                  {param index: 0 /}
+                {/call}
+              {/param}
+            {/call}
+          {/foreach}
+        {/param}
+        {param color: '#ccf' /}
+      {/call}
       {call dma.edit.value}
         {param name: 'incomplete' /}
         {param label: 'Incomplete' /}
@@ -457,3 +490,74 @@
   {/call}
 {/template}
 
+/** Show a names value. */
+{template .names_show}
+  {@param names: ?}
+
+  {$names.race}
+  {if $names.region} ({$names.region}){/if}:
+  {sp}
+  <em>Male</em>
+  {sp}
+  {foreach $name in $names.male_names}
+    {$name}{if not isLast($name)}, {/if}
+  {/foreach}
+  ;{sp}
+  <em>Female</em>
+  {sp}
+  {foreach $name in $names.female_names}
+    {$name}{if not isLast($name)}, {/if}
+  {/foreach}
+  ;{sp}
+  <em>Surenames</em>
+  {sp}
+  {foreach $name in $names.surenames}
+    {$name}{if not isLast($name)}, {/if}
+  {/foreach}
+{/template}
+
+/** Edit for a names value. */
+{template .names_edit}
+  {@param? names: ?}
+  {@param index: number}
+
+  {call dma.edit.field_input}
+    {param name: 'names@' + $index + '.race' /}
+    {param caption: 'Race' /}
+    {param value: $names ? $names.race : '' /}
+    {param validate: 'any' /}
+    {param width: '50%' /}
+    {param autocomplete: 'base monster/name' /}
+  {/call}
+  {call dma.edit.field_input}
+    {param name: 'names@' + $index + '.region' /}
+    {param caption: 'Region' /}
+    {param value: $names ? $names.region : '' /}
+    {param validate: 'any' /}
+    {param width: '50%' /}
+  {/call}
+  <div>
+  {call dma.edit.field_list}
+    {param name: 'names@' + $index + '.male_name' /}
+    {param values: $names ? $names.male_names : [] /}
+    {param validate: 'not-empty' /}
+    {param caption: 'male' /}
+  {/call}
+  </div>
+  <div>
+  {call dma.edit.field_list}
+    {param name: 'names@' + $index + '.female_name' /}
+    {param values: $names ? $names.female_names : [] /}
+    {param validate: 'not-empty' /}
+    {param caption: 'female' /}
+  {/call}
+  </div>
+  <div>
+  {call dma.edit.field_list}
+    {param name: 'names@' + $index + '.surename' /}
+    {param values: $names ? $names.surenames : [] /}
+    {param validate: 'not-empty' /}
+    {param caption: 'surename' /}
+  {/call}
+  </div>
+{/template}

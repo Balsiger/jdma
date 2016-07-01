@@ -133,6 +133,8 @@ public class NPC extends Monster
   protected List<String> m_quests = new ArrayList<>();
   protected List<String> m_interactions = new ArrayList<>();
 
+  protected Optional<String> m_originRegion = Optional.absent();
+
   /** The possible animal compantion. */
   protected Optional<List<Monster>> m_animalCompanions = Optional.absent();
 
@@ -300,6 +302,11 @@ public class NPC extends Monster
   public List<String> getInteractions()
   {
     return m_interactions;
+  }
+
+  public Optional<String> getOriginRegion()
+  {
+    return m_originRegion;
   }
 
   @Override
@@ -676,6 +683,7 @@ public class NPC extends Monster
                                        return new Level();
                                      }
                                    });
+    m_originRegion = inValues.use("origin_region", m_originRegion);
   }
 
   @Override
@@ -715,6 +723,9 @@ public class NPC extends Monster
     builder.addAllSecret(m_secrets);
     builder.addAllQuest(m_quests);
     builder.addAllInteractions(m_interactions);
+
+    if(m_originRegion.isPresent())
+      builder.setOriginRegion(m_originRegion.get());
 
     NPCProto proto = builder.build();
     return proto;
@@ -771,6 +782,9 @@ public class NPC extends Monster
     m_secrets.addAll(proto.getSecretList());
     m_quests.addAll(proto.getQuestList());
     m_interactions.addAll(proto.getInteractionsList());
+
+    if(proto.hasOriginRegion())
+      m_originRegion = Optional.of(proto.getOriginRegion());
   }
 
   @Override

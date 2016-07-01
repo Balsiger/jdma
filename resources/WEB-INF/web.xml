@@ -64,14 +64,6 @@
   </servlet>
 
   <servlet>
-    <servlet-name>current</servlet-name>
-    <servlet-class>
-      net.ixitxachitls.dma.server.servlets.CurrentCampaignServlet
-    </servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet>
     <servlet-name>action</servlet-name>
     <servlet-class>
       net.ixitxachitls.dma.server.servlets.ActionServlet

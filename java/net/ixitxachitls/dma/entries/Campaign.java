@@ -34,6 +34,7 @@ import net.ixitxachitls.dma.proto.Entries.CampaignProto;
 import net.ixitxachitls.dma.values.Calendar;
 import net.ixitxachitls.dma.values.CampaignDate;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Gender;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -275,6 +276,13 @@ public class Campaign extends CampaignEntry
 
     save();
     return m_date;
+  }
+
+  public String generateRandomName(String inRace, Optional<String> inRegion,
+                                   Gender inGender)
+  {
+    return ((BaseCampaign)getBaseEntry()).generateRandomName(inRace, inRegion,
+                                                             inGender);
   }
 
   @Override

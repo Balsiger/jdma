@@ -926,6 +926,16 @@ message BaseCampaignProto
 {
   required BaseEntryProto base = 1;
   optional CalendarProto calendar = 2;
+
+  message Names
+  {
+    optional string race = 1;
+    optional string region = 2;
+    repeated string male = 3;
+    repeated string female = 4;
+    repeated string surename = 5;
+  }
+  repeated Names names = 3;
 }
 
 message BaseMonsterProto
@@ -1532,6 +1542,7 @@ message NPCProto
   repeated string secret = 15;
   repeated string quest = 16;
   repeated string interactions = 17;
+  optional string origin_region = 18;
 }
 
 message BaseMiniatureProto

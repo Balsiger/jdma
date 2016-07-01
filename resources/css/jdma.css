@@ -3815,3 +3815,11 @@ TD.list > a
 {
   cursor: pointer;
 }
+
+.sprite.large.random
+{
+  background-position-x: -290px;
+  width: 25px !important;
+  height: 25px !important;
+  margin-bottom: -10px;
+}

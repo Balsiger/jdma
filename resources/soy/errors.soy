@@ -35,6 +35,15 @@
     {param message kind="html"}
       {if $path}
         The requested page '{$path}' does not exist.
+
+        {if $ij.user.DM}
+          <p>
+          {call dma.value.link}
+            {param text: 'Create' /}
+            {param url: '?create' /}
+          {/call}{sp}
+          the missing entry.
+        {/if}
       {else}
         No path given for page.
       {/if}
