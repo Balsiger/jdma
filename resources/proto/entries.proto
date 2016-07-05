@@ -54,6 +54,31 @@ message BaseCharacterProto
   optional string last_action = 3;
   optional string real_name = 4;
   optional string email = 5;
+  repeated string possessions = 6; // This is only used for the ordering of
+                                   // items.
+
+  message MiniatureLocation
+  {
+    optional string location = 1;
+
+    message Rule
+    {
+      enum Type
+      {
+        TYPE = 0;
+        ORIGIN = 1;
+        SUBTYPE = 2;
+        CLASS = 3;
+        SIZE = 4;
+      }
+      optional Type type = 1;
+      optional string value = 2;
+    }
+    repeated Rule rules = 2;
+    optional string color = 3;
+    optional bool overrides = 4;
+  }
+  repeated MiniatureLocation miniature_locations = 7;
 }
 
 message BaseProductProto
@@ -900,6 +925,17 @@ message BaseCompositeProto
 message BaseCampaignProto
 {
   required BaseEntryProto base = 1;
+  optional CalendarProto calendar = 2;
+
+  message Names
+  {
+    optional string race = 1;
+    optional string region = 2;
+    repeated string male = 3;
+    repeated string female = 4;
+    repeated string surename = 5;
+  }
+  repeated Names names = 3;
 }
 
 message BaseMonsterProto
@@ -1097,7 +1133,7 @@ message BaseMonsterProto
       TANGLE = 20;
       TROUPE = 21;
       COMPANY = 22;
-      DOMESTIC = 23;
+      DOMESTICATED = 23;
     }
     optional Type type = 1;
     optional DiceProto number = 2;
@@ -1346,6 +1382,7 @@ message CampaignProto
   required CampaignEntryProto base = 1;
 
   optional string dm = 2;
+  optional CampaignDateProto date = 3;
 }
 
 message CharacterProto
@@ -1381,6 +1418,8 @@ message ItemProto
   optional int32 multiuse = 9; 
   optional DurationProto time_left = 10;
   optional bool identified = 11;
+  repeated OccurrenceProto location = 12;
+  repeated string contents = 13;
 }
 
 message EncounterProto
@@ -1494,6 +1533,41 @@ message NPCProto
   optional string height = 6;
   optional string weight = 7;
   optional string looks = 8;
+  repeated string occupation = 9;
+  optional string family_name = 10;
+  repeated string title = 11;
+  repeated string location = 12;
+  repeated string faction = 13;
+  repeated string mannerism = 14;
+  repeated string secret = 15;
+  repeated string quest = 16;
+  repeated string interactions = 17;
+  optional string origin_region = 18;
+}
+
+message BaseMiniatureProto
+{
+  required BaseEntryProto base = 1;
+
+  optional string set = 2;
+  optional int32 number = 3;
+  optional string origin = 4;
+  optional string type = 5;
+  repeated string subtype = 6;
+  optional BaseMonsterProto.Alignment alignment = 7;
+  repeated string character_class = 8;
+  optional int32 level = 9;
+  optional string role = 10;
+  optional BaseItemProto.Size size = 11;
+}
+
+message MiniatureProto
+{
+  required EntryProto base = 1;
+
+  optional string owner = 2;
+  optional int32 number = 3;
+  optional string notes = 4;
 }
 
 message EntriesProto
@@ -1510,6 +1584,7 @@ message EntriesProto
   repeated BaseEncounterProto base_encounter = 10;
   repeated BaseLevelProto base_level = 11;
   repeated BaseEntryProto base_entry = 19;
+  repeated BaseMiniatureProto base_miniature = 20;
 
   repeated ProductProto product = 12;
   repeated CharacterProto character = 13;
@@ -1517,4 +1592,6 @@ message EntriesProto
   repeated EncounterProto encounter = 15;
   repeated MonsterProto monster = 17;
   repeated NPCProto npc = 18;
+  repeated MiniatureProto miniature = 21;
 }
+

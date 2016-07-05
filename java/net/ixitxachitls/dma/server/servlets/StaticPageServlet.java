@@ -29,34 +29,23 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
+import com.google.template.soy.data.SanitizedContent;
+import com.google.template.soy.data.SanitizedContents;
+import com.google.template.soy.data.SoyData;
+import com.google.template.soy.shared.restricted.Sanitizers;
 
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * A servlet for static HTML dma pages.
  *
  * @file          StaticPageServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
-
-//..........................................................................
-
-//__________________________________________________________________________
-
 @Immutable
 @ParametersAreNonnullByDefault
-public class StaticPageServlet extends SoyServlet
+public class StaticPageServlet extends PageServlet
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //-------------------------- StaticPageServlet ---------------------------
-
   /**
    * Default constructor.
    */
@@ -65,20 +54,15 @@ public class StaticPageServlet extends SoyServlet
     // nothing to do
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //----------------------------- collectData ------------------------------
+  @Override
+  protected String getTemplateName(DMARequest inDMARequest,
+                                   Map<String, SoyData> inData)
+  {
+    return "dma.page.print";
+  }
 
   /**
    * Collect the data that is to be printed.
@@ -88,7 +72,6 @@ public class StaticPageServlet extends SoyServlet
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
-   *
    */
   @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
@@ -110,14 +93,16 @@ public class StaticPageServlet extends SoyServlet
 
     try
     {
-      map.put("content", inRenderer.render(name));
+      map.put("content", inRenderer.renderStrict(name));
+      map.put("title", Sanitizers.cleanHtml("Guru guru"));
     }
     catch(com.google.template.soy.tofu.SoyTofuException e)
     {
       // template could not be loaded
-      map.put("content",
-              inRenderer.render("dma.errors.invalidPage",
-                                Optional.of(map("name", name))));
+      map.put("content", inRenderer.renderStrictSoy(
+          "dma.errors.invalidPage",
+          Optional.of(map("name", name,
+                          "error", e.toString()))));
     }
 
     return map;

@@ -150,7 +150,8 @@ public abstract class Entry extends AbstractEntry
   public BaseEntry getBaseEntry()
   {
     List<BaseEntry> bases = getBaseEntries();
-    assert bases.size() == 1 : "Expected a single base entry";
+    assert bases.size() == 1
+        : "Expected a single base entry, found " + bases.size();
 
     return bases.get(0);
   }

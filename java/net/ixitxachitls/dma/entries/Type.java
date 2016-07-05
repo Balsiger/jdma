@@ -24,11 +24,14 @@ package net.ixitxachitls.dma.entries;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
+
+import net.ixitxachitls.dma.entries.indexes.Index;
 
 /**
  * The type specification for an entry.
@@ -69,7 +72,7 @@ public class Type<T extends Entry> extends AbstractType<T>
     public Type<T> build()
     {
       return new Type(m_class, m_base, m_multiple, m_link, m_multipleLink,
-                      m_sort);
+                      m_sort, m_indexes);
     }
   }
 
@@ -87,9 +90,10 @@ public class Type<T extends Entry> extends AbstractType<T>
                  Optional<String> inMultiple,
                  Optional<String> inLink,
                  Optional<String> inMultipleLink,
-                 Optional<String> inSort)
+                 Optional<String> inSort,
+                 List<Index> inIndexes)
   {
-    super(inClass, inMultiple, inLink, inMultipleLink, inSort);
+    super(inClass, inMultiple, inLink, inMultipleLink, inSort, inIndexes);
 
     m_base = inBase;
   }

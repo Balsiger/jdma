@@ -436,3 +436,44 @@ enum Ability
   NONE = 7;
 }
 
+message CalendarProto
+{
+  message Year {
+    optional int32 start = 1;
+    optional int32 end = 2;
+    optional string name = 3;
+  }
+  repeated Year year = 1;
+
+  message Month {
+    optional string name = 1;
+    optional int32 days = 2;
+    optional int32 leap_years = 3;
+  }
+  repeated Month month = 2;
+
+  optional int32 days_per_week = 3;
+  optional int32 hours_per_day = 4;
+  optional int32 minutes_per_hour = 5;
+  optional int32 seconds_per_minute = 6;
+}
+
+message CampaignDateProto
+{
+  optional int32 year = 1;
+  optional int32 month = 2;
+  optional int32 day = 3;
+  optional int32 hour = 4;
+  optional int32 minute = 5;
+}
+
+message LocationProto
+{
+  optional string name = 1;
+}
+
+message OccurrenceProto
+{
+  optional LocationProto location = 1;
+  optional CampaignDateProto date = 2;
+}

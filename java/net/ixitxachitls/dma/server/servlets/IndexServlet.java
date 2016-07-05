@@ -35,6 +35,8 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.SortedSetMultimap;
 import com.google.common.collect.TreeMultimap;
@@ -46,9 +48,11 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyValue;
+import net.ixitxachitls.dma.values.MiniatureLocation;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -76,10 +80,11 @@ public class IndexServlet extends PageServlet
   protected String getTemplateName(DMARequest inDMARequest,
                                    Map<String, SoyData> inData)
   {
-    if(inData.get("path") == null
-        || inData.get("name") == null
-        || inData.get("title") == null)
+    if(inData.get("name") == null || inData.get("title") == null)
       return "dma.errors.invalidPage";
+
+    if(inData.get("template") != null)
+      return inData.get("template").toString();
 
     return "dma.entry.indexoverview";
   }
@@ -95,8 +100,9 @@ public class IndexServlet extends PageServlet
       return data;
 
     String []match =
-      Strings.getPatterns(path, "^/_index/([^/]+)/([^/]+)(?:/(.*$))?");
-    Optional<? extends AbstractType<? extends AbstractEntry>> type = null;
+        Strings.getPatterns(path, "^/_index/([^/]+)/([^/]+)(?:/(.*$))?");
+    Optional<? extends AbstractType<? extends AbstractEntry>> type =
+        Optional.absent();
     String name = null;
     String group = null;
 
@@ -107,10 +113,24 @@ public class IndexServlet extends PageServlet
       group = match[2];
     }
 
-    if(name == null || name.isEmpty() || !type.isPresent())
+    Optional<EntryKey> parent = Optional.absent();
+    if(group != null && !group.isEmpty() &&
+        ("base character".equals(match[0]) || "base campaign".equals(match[0])))
     {
-      return data;
+      String []parts = Strings.getPatterns(group, "(.*?)/(.*?)(?:/(.*))?$");
+
+      if(parts.length == 3)
+      {
+        type = AbstractType.getTyped(parts[0]);
+        name = parts[1];
+        // TODO: support groups
+        parent = extractKey(match[0] + "/" + match[1]);
+        group = parts[2];
+      }
     }
+
+    if(name == null || name.isEmpty() || !type.isPresent())
+      return data;
 
     name = name.replace("%20", " ");
     data.put("name", name);
@@ -121,48 +141,71 @@ public class IndexServlet extends PageServlet
 
     data.put("group", group);
 
-    // determine the index to use
-    // TODO: this needs to be fixed. We currently don't show indexes anywere.
-    Index index = null; //ValueGroup.getIndex(name, type);
-    if(index == null)
+    Optional<Index> index =
+        type.isPresent() ? type.get().getIndex(name) : Optional.<Index>absent();
+    if(!index.isPresent())
       return data;
 
-    Log.info("serving dynamic " + type + " index '" + name + "/"
-             + group + "'");
+    Log.info("serving dynamic " + type + " index " + name
+                 + (group == null ? "" : "/" + group));
 
-    String title = index.getTitle();
+    String title = index.get().getTitle();
     data.put("title", title);
+    data.put("images", index.get().hasImages());
+    data.put("paginated", index.get().isPaginated());
     if(group == null)
     {
       // get all the index groups available
       // SortedSet<String> indexes =
       //   DMADataFactory.get().getIndexNames(name, type, false);
       SortedSet<String> indexes =
-        DMADataFactory.get().getValues(type.get(), Index.PREFIX + name);
+        DMADataFactory.get().getValues(parent, type.get(), Index.PREFIX + name);
 
       if(indexes.size() == 1)
         group = indexes.iterator().next();
       else
       {
+        List<String> colors = new ArrayList<>();
+        if(parent.isPresent())
+        {
+          Optional<AbstractEntry> parentEntry =
+              DMADataFactory.get().getEntry(parent.get());
+          if(parentEntry.isPresent()
+              && parentEntry.get() instanceof BaseCharacter)
+          {
+            for(String indexName : indexes)
+            {
+              Optional<MiniatureLocation> location =
+                  ((BaseCharacter)parentEntry.get())
+                      .getFirstMatchingMiniatureLocation(indexName);
+              if(location.isPresent())
+                colors.add(location.get().getColor());
+              else
+                colors.add("");
+            }
+          }
+        }
+
+        data.put("indexes", indexes);
+        data.put("colors", colors);
+
         if(isNested(indexes))
         {
           SortedMap<String, List<String>> groups = nestedGroups(indexes);
-          data.put("indexes", groups);
           data.put("keys", new ArrayList<String>(groups.keySet()));
         }
-        else
-          data.put("indexes", new ArrayList<String>(indexes));
 
         return data;
       }
+
+      title += " - " + group.replace("::", " ");
     }
 
-    title += " - " + group.replace("::", " ");
-
     List<? extends AbstractEntry> rawEntries =
-      DMADataFactory.get().getIndexEntries(name, type.get(), null, group,
+      DMADataFactory.get().getIndexEntries(name, type.get(), parent, group,
                                            inRequest.getStart(),
-                                           inRequest.getPageSize() + 1);
+                                           inRequest.getPageSize() + 1,
+                                           index.get().getSortField());
 
     List<SoyValue> entries = new ArrayList<>();
     for(AbstractEntry entry : rawEntries)
@@ -171,6 +214,10 @@ public class IndexServlet extends PageServlet
     data.put("start", inRequest.getStart());
     data.put("pagesize", inRequest.getPageSize());
     data.put("entries", entries);
+    data.put("template", "dma.entries."
+        + type.get().getMultipleDir().toLowerCase() + ".list");
+    data.put("label", title);
+    data.put("path", inRequest.getRequestURI());
 
     return data;
   }
@@ -180,10 +227,10 @@ public class IndexServlet extends PageServlet
    *
    * @param  inValues the index groups
    *
-   * @return A sorted map of index groups to indexs pages
+   * @return A sorted map of index groups to index pages
    */
-  public static SortedMap<String, List<String>> nestedGroups
-    (SortedSet<String> inValues)
+  public static SortedMap<String, List<String>>
+  nestedGroups(SortedSet<String> inValues)
   {
     SortedSetMultimap<String, String> groups = TreeMultimap.create();
     for(String value : inValues)

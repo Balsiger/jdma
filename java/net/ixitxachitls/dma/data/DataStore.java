@@ -83,7 +83,7 @@ public class DataStore
   /** The cache for lookup ids. */
   // TODO: for some reason, the memcache does not cache long enough
   private static MemcacheService s_cacheIDs =
-    MemcacheServiceFactory.getMemcacheService("ids");
+      MemcacheServiceFactory.getMemcacheService("ids");
 
   /** The cache for lookup ids by value. */
   private static MemcacheService s_cacheIDsByValue =
@@ -229,8 +229,9 @@ public class DataStore
       if(inSortField.isPresent())
         query.addSort(inSortField.get(), Query.SortDirection.ASCENDING);
 
-      FetchOptions options =
-          FetchOptions.Builder.withOffset(inStart).limit(inSize);
+      FetchOptions options = FetchOptions.Builder.withOffset(inStart)
+          .chunkSize(100)
+          .limit(inSize);
 
       Log.important("gae: getting entities for " + inType
                         + (inParent.isPresent() ? " (" + inParent + ")" : "")
@@ -260,7 +261,9 @@ public class DataStore
    */
   @SuppressWarnings("unchecked")
   public List<Entity> getEntities(String inType, Optional<Key> inParent,
-                                  int inStart, int inSize, String ... inFilters)
+                                  int inStart, int inSize,
+                                  Optional<String> inSort,
+                                  String ... inFilters)
   {
     String key = inType + ":" + inParent + ":" + inStart + ":" + inSize + ":"
         + Arrays.toString(inFilters);
@@ -276,6 +279,9 @@ public class DataStore
         query = new Query(inType, inParent.get());
       else
         query = new Query(inType);
+
+      if(inSort.isPresent())
+        query.addSort(inSort.get());
 
       if(inFilters.length > 2)
       {
@@ -501,7 +507,7 @@ public class DataStore
                     + ") " + " for field " + inField);
       Query query;
       if(inParent.isPresent())
-      query = new Query(inType, inParent.get());
+        query = new Query(inType, inParent.get());
       else
         query = new Query(inType);
 

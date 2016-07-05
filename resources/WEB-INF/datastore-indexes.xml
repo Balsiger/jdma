@@ -13,5 +13,9 @@
     <property name="change" direction="desc"/>
   </datastore-index>
 
+  <datastore-index kind="miniature" ancestor="true" source="manual">
+    <property name="index-locations" direction="asc"/>
+  </datastore-index>
+
 </datastore-indexes>
 

@@ -47,20 +47,22 @@
     {param nodescriptions: true /}
     {param title kind="html"}
       {call dma.entry.title}
-        {param title: $entry.name /}
+        {param title kind="html"}
+          {$entry.name}
+          {if length($entry.baseNames)}
+            {sp}(
+              {foreach $base in $entry.baseNames}
+                {call dma.page.link}
+                  {param text: $base /}
+                  {param url: '/monster/'  + $base /}
+                {/call}
+                {if not isLast($base)}; {/if}
+              {/foreach}
+            )
+          {/if}
+        {/param}
         {param color: '#080' /}
       {/call}
-      {if length($entry.baseNames)}
-        {sp}(
-          {foreach $base in $entry.baseNames}
-            {call dma.page.link}
-              {param text: $base /}
-              {param url: '/monster/'  + $base /}
-            {/call}
-            {if not isLast($base)}; {/if}
-          {/foreach}
-        )
-      {/if}
     {/param}
     {param values kind="html"}
 
@@ -68,9 +70,10 @@
 
          // size and type
          <div class="line bold">
-           {$entry.size} {$entry.monster_type}{sp}
-           {if length($entry.monster_subtypes) > 0}
-             ({foreach $type in $entry.monster_subtypes}
+           {annotate($entry.combined_size)}{sp}
+           {annotate($entry.combined_monster_type)}{sp}
+           {if length($entry.combined_monster_subtypes.get) > 0}
+             ({foreach $type in $entry.combined_monster_subtypes.get}
                {$type}{if not isLast($type)}, {/if}
              {/foreach})
            {/if}
@@ -223,7 +226,8 @@
          // environment
          <div class="line">
            <span class="bold">Environment:</span>{sp}
-           {$entry.terrain}, {$entry.climate}
+           {annotate($entry.combined_terrain)},
+           {annotate($entry.combined_climate)}
          </div>
 
          // organization
@@ -414,7 +418,7 @@
   {/call}
 {/template}
 
-/** Format a list of attacks. */
+/** Format a lisf attacks. */
 {template .attacks}
   {@param entry: ?}
   {@param attacks: list<?>}

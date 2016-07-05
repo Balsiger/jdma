@@ -138,29 +138,49 @@
           {param color: '#008' /}
         {/call}
       {/if}
-        {if $entry.container}
-          {call dma.entry.value}
-            {param label: 'Contents' /}
-            {param color: '#008' /}
-            {param value kind="html"}
-              {foreach $item in $entry.contents}
-                {call .reference}
-                  {param entry: $item /}
-                {/call}
-                {if not isLast($item)}, {/if}
-              {/foreach}
-              {if $ij.user}
-              {sp}|{sp}
-              <span class="action"
-                    onclick="edit.show('', '{$entry.campaign.path}/item/CREATE',
-                                       'add-item', '',
-                                       'parent:item/{$entry.name}')">
-                add item
-              </span>
-              {/if}
-            {/param}
-          {/call}
-        {/if}
+      {call dma.entry.value}
+        {param label: 'Identified' /}
+        {param value kind="html"}
+          {if $entry.identified}
+            Yes
+          {else}
+            No
+          {/if}
+        {/param}
+        {param color: '#008' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Locations' /}
+        {param value kind="html"}
+          {foreach $location in $entry.locations}
+            {$location}{if not isLast($location)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#008' /}
+      {/call}
+      {if $entry.container}
+        {call dma.entry.value}
+          {param label: 'Contents' /}
+          {param color: '#008' /}
+          {param value kind="html"}
+            {foreach $item in $entry.contents}
+              {call .reference}
+                {param entry: $item /}
+              {/call}
+              {if not isLast($item)}, {/if}
+            {/foreach}
+            {if $ij.user}
+            {sp}|{sp}
+            <span class="action"
+                  onclick="edit.show('', '{$entry.campaign.path}/item/CREATE',
+                                     'add-item', '',
+                                     'parent:item/{$entry.name}')">
+              add item
+            </span>
+            {/if}
+          {/param}
+       {/call}
+      {/if}
     {/param}
   {/call}
   
@@ -189,7 +209,7 @@
  *
  */
 {template .list}
-  {call dma.entry.newlist}
+  {call dma.entry.list}
     {param title: $title /}
     {param label: $label /}
     {param path: $path /}
@@ -273,6 +293,56 @@
         {param name: 'identified' /}
         {param label: 'Identified' /}
         {param value: $entry.identified /}
+        {param color: '#008' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'location' /}
+        {param label: 'Location' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $location in $entry.locations}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'location' /}
+                  {param values: [
+                    [
+                      'name': 'location.location',
+                      'value': $location.location,
+                      'validate': 'any',
+                      'caption': 'location'
+                    ],
+                    [
+                      'name': 'location.date',
+                      'value': $location.date,
+                      'validate': 'any',
+                      'caption': 'date'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'location' /}
+                  {param values: [
+                    [
+                      'name': 'location.location',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'location'
+                    ],
+                    [
+                      'name': 'location.date',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'date'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
         {param color: '#008' /}
       {/call}
       {call dma.edit.value}

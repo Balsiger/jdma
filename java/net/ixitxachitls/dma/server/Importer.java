@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.server;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -61,6 +62,7 @@ import net.ixitxachitls.dma.entries.Campaign;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.entries.Product;
+import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.Encodings;
@@ -68,6 +70,7 @@ import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.ANSILogger;
 import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.util.resources.Resource;
 
 /**
  * A utility to import dma entries into the app engine data store.
@@ -92,8 +95,7 @@ public final class Importer
    * @param   inWebHost    the host to connect to via web
    * @param   inPort       the port to use for the remove api
    * @param   inWebPort    the port to use for web access
-   * @param   inUserName   the username to connect to the remote api
-   * @param   inPassword   the password to connect to the remote api
+   * @param   inDevCredentials if true, use development credentials
    * @param   inMain       if true, treat all images imported as main images
    * @param   inIndividual if true, store each entry after reading instead of
    *                       in batch (slower and more expensive, but can
@@ -105,8 +107,9 @@ public final class Importer
    *
    */
   public Importer(String inHost, String inWebHost, int inPort, int inWebPort,
-                  String inUserName, String inPassword, boolean inMain,
-                  boolean inIndividual, boolean inBlobs, boolean inASCII)
+                  boolean inDevCredentials, boolean inMain,
+                  boolean inIndividual, boolean inBlobs, boolean inASCII,
+                  String inType)
     throws IOException
   {
     m_host = inHost;
@@ -118,13 +121,17 @@ public final class Importer
     m_ascii = inASCII;
 
     RemoteApiOptions options = new RemoteApiOptions()
-      .server(inHost, inPort)
-      .credentials(inUserName, inPassword);
+      .server(inHost, inPort);
+    if(inDevCredentials)
+      options.useDevelopmentServerCredential();
+    else
+      options.useApplicationDefaultCredential();
 
     m_installer = new RemoteApiInstaller();
     m_installer.install(options);
 
     DMARequest.ensureTypes();
+    m_type = AbstractType.getTyped(inType);
 }
 
   /** The data store. */
@@ -169,6 +176,7 @@ public final class Importer
 
   /** The list of entries with errors to store later. */
   private List<AbstractEntry> m_errors = new ArrayList<>();
+  private final Optional<? extends AbstractType<? extends AbstractEntry>> m_type;
 
   /** Joiner for paths. */
   public static final Joiner PATH_JOINER = Joiner.on('/').skipNulls();
@@ -271,38 +279,49 @@ public final class Importer
     for(String file : m_protoFiles)
     {
       Log.important("Processing file " + file);
-      String []parts = file.split("/");
 
-      Optional<? extends AbstractType<? extends AbstractEntry>> type;
-      if(parts.length >= 3 && "campaign".equals(parts[parts.length - 3]))
-        type = Optional.of(Campaign.TYPE);
-      else if (parts.length >= 5 && "campaign".equals(parts[parts.length - 5]))
-        type = AbstractType.getTyped(parts[parts.length - 2]);
-      else if (parts.length >= 4 && "product".equals(parts[parts.length - 2])
-               && "user".equals(parts[parts.length - 4]))
-        type = Optional.of(Product.TYPE);
-      else
-        type = AbstractType.getTyped("base " + parts[parts.length - 2]);
-
-      if(!type.isPresent())
-        Log.warning("ignoring invalid type for " + file + ": "
-                    + Arrays.toString(parts));
+      if(m_type.isPresent())
+      {
+        Entries.EntriesProto.Builder builder = Entries.EntriesProto.newBuilder();
+        TextFormat.merge(new InputStreamReader(new FileInputStream(file)),
+                         builder);
+        for(Entries.BaseMiniatureProto proto : builder.getBaseMiniatureList())
+          add(m_type.get().create().get(), proto);
+      }
       else
       {
-        if (lastType != type.get() && !m_entities.isEmpty())
-        {
-          lastType = type.get();
-          Log.important("storing " + m_entities.size()
-                        + " entities in datastore");
-          m_store.put(m_entities);
-          m_entities.clear();
-        }
+        Optional<? extends AbstractType<? extends AbstractEntry>> type;
+        String[] parts = file.split("/");
 
-        final Optional<? extends AbstractEntry> entry =
-            type.get().create("proto import");
-        if (entry.isPresent())
-          add(entry.get(),
-              fill(entry.get().toProto().newBuilderForType(), file));
+        if(parts.length >= 3 && "campaign".equals(parts[parts.length - 3]))
+          type = Optional.of(Campaign.TYPE);
+        else if(parts.length >= 5 && "campaign".equals(parts[parts.length - 5]))
+          type = AbstractType.getTyped(parts[parts.length - 2]);
+        else if(parts.length >= 4 && "product".equals(parts[parts.length - 2])
+            && "user".equals(parts[parts.length - 4]))
+          type = Optional.of(Product.TYPE);
+        else
+          type = AbstractType.getTyped("base " + parts[parts.length - 2]);
+
+        if(!type.isPresent())
+          Log.warning("ignoring invalid type for " + file);
+        else
+        {
+          if(lastType != type.get() && !m_entities.isEmpty())
+          {
+            lastType = type.get();
+            Log.important("storing " + m_entities.size()
+                              + " entities in datastore");
+            m_store.put(m_entities);
+            m_entities.clear();
+          }
+
+          final Optional<? extends AbstractEntry> entry =
+              type.get().create("proto import");
+          if(entry.isPresent())
+            add(entry.get(),
+                fill(entry.get().toProto().newBuilderForType(), file));
+        }
       }
     }
 
@@ -536,33 +555,28 @@ public final class Importer
        ("w", "webport", "The web port to connect to.", 8888),
        new CommandLineParser.Flag
        ("m", "main", "Treat all images as main images."),
-       new CommandLineParser.StringOption
-       ("u", "username", "The username to connect with.",
-        "balsiger@ixitxachitls.net"),
        new CommandLineParser.Flag
        ("i", "individual", "Individually store entries."),
        new CommandLineParser.Flag
-       ("n", "nopassword", "Connect without a password."),
+       ("d", "dev", "User dev credentials."),
        new CommandLineParser.Flag
        ("a", "ascii", "Import ascii protos (default is binary)."),
        new CommandLineParser.Flag
-       ("b", "blobs", "Import blobs associated with entries."));
+       ("b", "blobs", "Import blobs associated with entries."),
+       new CommandLineParser.StringOption(
+           "t", "type", "The type of entries to read", ""));
 
     List<String> files = clp.parse(inArguments);
-    String password = "";
-    if(!clp.hasValue("nopassword"))
-      password = new String(System.console().readPassword
-                            ("password for " + clp.getString("username")
-                             + ": "));
 
     SystemProperty.environment.set
         (SystemProperty.Environment.Value.Development);
     Importer importer =
       new Importer(clp.getString("host"), clp.getString("webhost"),
                    clp.getInteger("port"), clp.getInteger("webport"),
-                   clp.getString("username"),
-                   password, clp.hasValue("main"), clp.hasValue("individual"),
-                   clp.hasValue("blobs"), clp.hasValue("ascii"));
+                   clp.hasValue("dev"), clp.hasValue("main"),
+                   clp.hasValue("individual"),
+                   clp.hasValue("blobs"), clp.hasValue("ascii"),
+                   clp.getString("type"));
 
     try
     {

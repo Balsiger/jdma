@@ -1,0 +1,286 @@
+/* ****************************************************************************
+ * Copyright (C) 2002-2016 Peter 'Merlin' Balsiger And Fred 'Mythos' Dobler
+ * All Rights Reserved
+ *
+ * This File Is Part Of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant Is Free Software; You Can Redistribute It And/Or
+ * Modify It Under The Terms Of The Gnu General Public License As Published By
+ * The Free Software Foundation; Either Version 2 Of The License, Or
+ * (At Your Option) Any Later Version.
+ *
+ * Dungeon Master Assistant Is Distributed In The Hope That It Will Be Useful,
+ * But Without Any Warranty; Without Even The Implied Warranty Of
+ * Merchantability Or Fitness For A Particular Purpose.  See The
+ * Gnu General Public License For More Details.
+ *
+ * You Should Have Received A Copy Of The Gnu General Public License
+ * Along With Dungeon Master Assistant; If Not, Write To The Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, Ma  02111-1307  Usa
+ *****************************************************************************/
+
+/*
+ * Templates for base miniatures.
+ */
+{namespace dma.entries.baseminiatures}
+
+/** Show the given entry in standard format. */
+{template .show}
+  {@param entry: ?}
+  {@param first: ?}
+  {@param previous: ?}
+  {@param list: ?}
+  {@param next: ?}
+  {@param last: ?}
+  {call dma.entry.show}
+    {param entry: $entry /}
+    {param type: 'base-miniature' /}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param list: $list /}
+    {param next: $next /}
+    {param last: $last /}
+    {param color: '#7c0' /}
+    {param values kind="html"}
+      {call dma.entry.value}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Set' /}
+        {param value: $entry.set.present ? $entry.set : '' /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Number' /}
+        {param value: $entry.number.present ? $entry.number : '' /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Origin' /}
+        {param value: $entry.origin.present ? $entry.origin : '' /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Type' /}
+        {param value: $entry.miniature_type.present
+          ? $entry.miniature_type : '' /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Subtypes' /}
+        {param value kind="html"}
+          {foreach $subtype in $entry.subtypes}
+            {$subtype}{if not isLast($subtype)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Alignment' /}
+        {param value: $entry.alignment /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Classes' /}
+        {param value kind="html"}
+          {foreach $class in $entry.classes}
+            {$class}{if not isLast($class)}, {/if}
+          {/foreach}
+        {/param}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Level' /}
+        {param value: $entry.level.present ? $entry.level : '' /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Role' /}
+        {param value: $entry.role.present ? $entry.role : '' /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Size' /}
+        {param value: $entry.size /}
+        {param color: '#7c0' /}
+      {/call}
+      {if $ij.user}
+        {call dma.entry.value}
+          {param label: 'Owners' /}
+          {param value kind="html"}
+            {foreach $owner in keys($entry.owners)}
+              {foreach $id in $entry.owners[$owner]}
+                {call dma.page.link}
+                  {param url: '/user/' + $owner+ '/miniature/' + $id /}
+                  {param text: $owner /}
+                {/call}
+                {if not isLast($id)}, {/if}
+              {/foreach}
+              {if not isLast($owner)}, {/if}
+            {ifempty}
+              none
+            {/foreach}
+            {sp}|{sp}
+            <span class="action" onclick="edit.show(
+                   '{let $foo kind="text"}{$entry.name |escapeJs}{/let}{$foo}',
+                   '/user/{$ij.user.name}/miniature/CREATE', '{$foo}', '{$foo}')">
+              add
+            </span>
+          {/param}
+          {param color: '#7c0' /}
+        {/call}
+      {/if}
+    {/param}
+  {/call}
+{/template}
+
+/** Editing the base miniature. */
+{template .edit}
+  {@param entry: ?}
+  {@param id: string|null}
+  {@param create: bool}
+  {call dma.edit.entry}
+    {param entry: $entry /}
+    {param type: 'miniature' /}
+    {param id: $id /}
+    {param create: $create /}
+    {param values kind="html"}
+      {call dma.edit.value}
+        {param name: 'name' /}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param validate: 'non-empty' /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.edit.value_text}
+        {param name: 'description' /}
+        {param label: 'Description' /}
+        {param value: $entry.description /}
+        {param validate: 'any' /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'short-description' /}
+        {param label: 'Short Description' /}
+        {param value: $entry.short_description /}
+        {param validate: 'any' /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'set' /}
+        {param label: 'Set' /}
+        {param value: $entry.set.present ? $entry.set : '' /}
+        {param validate: 'non-empty' /}
+        {param color: '#7c0' /}
+        {param autocomplete: 'base miniature/index-sets' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'number' /}
+        {param label: 'Number' /}
+        {param value: $entry.number.present ? $entry.number : '' /}
+        {param validate: 'number' /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'origin' /}
+        {param label: 'Origin' /}
+        {param value: $entry.origin.present ? $entry.origin : '' /}
+        {param validate: 'any' /}
+        {param color: '#7c0' /}
+        {param autocomplete: 'base miniature/index-origins' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'miniature_type' /}
+        {param label: 'Type' /}
+        {param value: $entry.miniature_type.present
+          ? $entry.miniature_type : '' /}
+        {param validate: 'any' /}
+        {param color: '#7c0' /}
+        {param autocomplete: 'base miniature/index-miniaturetypes' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'subtype' /}
+        {param label: 'Subtypes' /}
+        {param values: $entry.subtypes /}
+        {param validate: 'non-empty' /}
+        {param color: '#7c0' /}
+        {param autocomplete: 'base miniature/index-subtypes' /}
+      {/call}
+      {call dma.edit.value_selection}
+        {param name: 'alignment' /}
+        {param label: 'Alignment' /}
+        {param value: $entry.alignment.string /}
+        {param choices: $ij.Alignment.names /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'class' /}
+        {param label: 'Classes' /}
+        {param values: $entry.classes /}
+        {param validate: 'any' /}
+        {param color: '#7c0' /}
+        {param autocomplete: 'base miniature/index-classes' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'level' /}
+        {param label: 'Level' /}
+        {param value: $entry.level.present ? $entry.level : '' /}
+        {param validate: 'number' /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'role' /}
+        {param label: 'Role' /}
+        {param value: $entry.role.present ? $entry.role : '' /}
+        {param validate: 'any' /}
+        {param color: '#7c0' /}
+        {param autocomplete: 'base miniature/index-roles' /}
+      {/call}
+      {call dma.edit.value_selection}
+        {param name: 'size' /}
+        {param label: 'Size' /}
+        {param value: $entry.size.string /}
+        {param choices: $ij.Size.names /}
+        {param color: '#7c0' /}
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
+/** Formatting a list of entries. */
+{template .list}
+  {@param title: string}
+  {@param start: int}
+  {@param pagesize: int}
+  {@param entries: list<?>}
+  {@param label: string}
+  {@param path: string}
+  {@param? group: string}
+
+  {call dma.entry.list}
+    {param title: $title /}
+    {param label: $label /}
+    {param path: $path /}
+    {param start: $start /}
+    {param pagesize: $pagesize /}
+    {param size: $entries ? length($entries) : 0 /}
+    {param titles: [ '', 'Name', 'Set', 'Number', 'Origin', 'Type' ] /}
+    {param group: $group /}
+    {param entries kind="html"}
+      {foreach $entry in $entries}
+        <tr onclick="util.link(event, '{$entry.path}')">
+          {call dma.entry.listEntry}
+            {param path: $entry.path /}
+            {param values: [
+              def($entry.main_file) ? $entry.main_file.icon : '',
+              $entry.name, $entry.set, $entry.number,
+              $entry.origin, $entry.miniature_type
+            ] /}
+          {/call}
+        </tr>
+      {/foreach}
+    {/param}
+  {/call}
+{/template}

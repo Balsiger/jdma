@@ -30,8 +30,6 @@
  *
  */
 
-//------------------------------- register ---------------------------------
-
 /**
  * Create the registration dialog and ask the user to register.
  *
@@ -87,9 +85,6 @@ function register()
   form.setupValidation(registrationDialog);
 }
 
-//..........................................................................
-//------------------------------ createEntry -------------------------------
-
 /**
  * Create a new entry.
  */
@@ -136,9 +131,6 @@ function createEntry()
   form.setupValidation(entryDialog);
 }
 
-//..........................................................................
-//------------------------------ removeEntry -------------------------------
-
 /**
  * Remove the entry with the given id from the data store.
  *
@@ -149,9 +141,6 @@ function removeEntry(inID)
 {
   gui.alert('Not yet implemented');
 }
-
-//..........................................................................
-//----------------------------- doRegistration -----------------------------
 
 /**
   *
@@ -174,9 +163,6 @@ function doRegister(inUsername, inRealName)
     util.reload();
 }
 
-//..........................................................................
-//--------------------------------- ready ----------------------------------
-
 /**
  * Called when the document is ready (or a new dynamic 'page' is loaded)
  *
@@ -197,8 +183,6 @@ function ready()
 
   $('div.section-title').click();
 }
-
-//..........................................................................
 
 /**
  * Load and show the details for the given entry.
@@ -265,10 +249,6 @@ admin.refresh = function(inType)
 {
   util.ajax('/admin', { 'refresh': inType }, null, true);
 };
-
-//..........................................................................
-//----- jQuery extensions --------------------------------------------------
-//..........................................................................
 
 
 // if there are sections on the page, install a handler for them and open them

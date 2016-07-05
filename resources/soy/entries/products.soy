@@ -125,7 +125,7 @@
  *
  */
 {template .list}
-  {call dma.entry.newlist}
+  {call dma.entry.list}
     {param title: $title /}
     {param label: $label /}
     {param path: $path /}
@@ -139,7 +139,7 @@
           {call dma.entry.listEntry}
             {param path: $entry.path /}
             {param values: [
-              $entry.name, $entry.fullt_title, $entry.status
+              $entry.name, $entry.full_title, $entry.status
             ] /}
           {/call}
         </tr>

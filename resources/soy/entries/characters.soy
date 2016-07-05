@@ -182,10 +182,19 @@
           {if $ij.user}
             {sp}|{sp}
             <span class="action"
-                  onclick="edit.show('', '{$entry.campaign.path}/item/CREATE',
+                  onclick="edit.show('Edit {$entry.name}',
+                                     '{$entry.campaign.path}/item/CREATE.edit',
                                      'add-item', '',
                                      'parent:character/{$entry.name}')">
               add item
+            </span>
+            {sp}|{sp}
+            <span class="action"
+                  onclick="edit.show('Move items for {$entry.name}',
+                                     '{$entry.path}.move_items',
+                                     'move-items', '',
+                                     'parent:character/{$entry.name}')">
+              move items
             </span>
           {/if}
         {/param}
@@ -259,18 +268,25 @@
         {call .sheet_page_spells}
           {param entry: $entry /}
         {/call}
-      <div>
+      </div>
     {/if}
 
     {if length($entry.animal_companions) > 0}
-      {call .sheet_subtitle}
-        {param title: 'Animal Companions' /}
-      {/call}
-
       {foreach $animal in $entry.animal_companions}
+        {if index($animal) % 2 == 0}
+          <div class="sheet-page">
+            {call .sheet_subtitle}
+              {param title: 'Animal Companions' /}
+            {/call}
+        {/if}
+
         {call dma.entries.monsters.sheet}
           {param entry: $animal /}
         {/call}
+
+        {if index($animal) % 2 == 1 or isLast($animal)}
+          </div>
+        {/if}
       {/foreach}
     {/if}
   </div>
@@ -335,7 +351,7 @@
 
       {call .sheet_hit_points}
         {param entry: $entry /}
-        {param break: 10 /}
+        {param break: 5 /}
       {/call}
 
       {call .sheet_special_defenses}
@@ -2208,7 +2224,7 @@
         {param size: '8px' /}
         {param vSize: '12px' /}
         {param value: $weapon 
-          ? (def($weapon.range) ? $weapon.range : '&mdash;') 
+          ? (def($weapon.range) ? $weapon.range : '-')
           : ' ' /}
       {/call}
       
@@ -2386,7 +2402,7 @@
  *
  */
 {template .list}
-  {call dma.entry.newlist}
+  {call dma.entry.list}
     {param title: $title /}
     {param label: $label /}
     {param path: $path /}
@@ -2750,4 +2766,47 @@
   </div>
 {/template}
 
+/** Move a characters item around. */
+{template .move_items}
+  {@param entry: ?}
 
+  {call .move_items_list}
+    {param items: $entry.possessions /}
+  {/call}
+
+  <button id="move-items-save"
+          onclick="edit.moveItems($('.move-items')[0],
+                                    'character/{$entry.name}');">
+    Save
+  </button>
+
+  <script>
+    $(".move-items")
+      .sortable({lb}
+        connectWith: ".move-items",
+        placeholder: "placeholder"
+      {rb}).disableSelection();
+    $("#move-items-save").button();
+  </script>
+{/template}
+
+/** A list of items to move around, allowing to nest. */
+{template .move_items_list}
+  {@param items: list<?>}
+
+  <ul class="move-items">
+    {foreach $item in $items}
+      <li name="{$item.key}">
+        {call dma.entries.items.reference}
+          {param entry: $item /}
+        {/call}
+        {if $item.is_container}
+          {call .move_items_list}
+            {param items: $item.contents /}
+          {/call}
+        {/if}
+      </li>
+    {ifempty}<li class="empty"/>
+    {/foreach}
+  </ul>
+{/template}

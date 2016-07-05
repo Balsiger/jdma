@@ -65,6 +65,23 @@
         {param value: $entry.last_action/}
         {param color: '#39f' /}
       {/call}
+      {call dma.entry.value}
+        {param label: 'Last Action' /}
+        {param value: $entry.last_action/}
+        {param color: '#39f' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Miniature Locations' /}
+        {param value kind="html"}
+          {foreach $location in $entry.miniature_locations}
+            <div style="background-color: {$location.color};
+                        {if $location.color}color: white{/if}">
+              {$location}
+            </div>
+          {/foreach}
+        {/param}
+        {param color: '#39f' /}
+      {/call}
       /* TODO: readd the call to return products...
       {call dma.entry.value}
         {param label: 'Recent Products' /}
@@ -143,6 +160,80 @@
         {param value: $entry.group.string /}
         {param choices: $entry.group.names /}
         {param color: '#39f' /}
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'contents' /}
+        {param color: '#444' /}
+        {param label: 'Minature Locations' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $location in $entry.miniature_locations}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'miniature_location' /}
+                  {param values: [
+                    [
+                      'name': 'miniature_location.location',
+                      'value': $location.location,
+                      'validate': 'any',
+                      'caption': 'value'
+                    ],
+                    [
+                      'name': 'miniature_location.rules',
+                      'value': $location.rules,
+                      'validate': 'any',
+                      'caption': 'rules'
+                    ],
+                    [
+                      'name': 'miniature_location.overrides',
+                      'value': $location.overrides,
+                      'type': 'flag',
+                      'caption': 'override'
+                    ],
+                    [
+                      'name': 'miniature_location.color',
+                      'value': $location.color,
+                      'validate': 'any',
+                      'caption': 'color'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'miniature_location' /}
+                  {param values: [
+                    [
+                      'name': 'miniature_location.location',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'location'
+                    ],
+                    [
+                      'name': 'miniature_location.rules',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'rules'
+                    ],
+                    [
+                      'name': 'miniature_location.overrides',
+                      'value': '',
+                      'type': 'flag',
+                      'caption': 'override',
+                    ],
+                    [
+                      'name': 'miniature_location.color',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'color'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
       {/call}
     {/param}
   {/call}

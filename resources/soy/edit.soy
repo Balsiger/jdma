@@ -28,10 +28,10 @@
 {template .entry}
   {@param entry: [key: string]}
   {@param type: string}
-  {@param id: string}
+  {@param id: string|null}
   {@param values: html}
   {@param create: bool}
-  <div class="edit {$type}" id="{escape($id)}">
+  <div class="edit {$type}"{if $id} id="{escape($id)}"{/if}>
     <div class="scroll">
       <div class="values">
         {$values}
@@ -46,7 +46,11 @@
       {param create: $create /}
     {/call}
     
-  </div>  
+  </div>
+  <script>
+    // Setup any necessary autocomplete
+    edit.setupAutocomplete($(":input[dma-autocomplete]"));
+  </script>
 {/template}
 
 /** An editable value. */
@@ -54,12 +58,17 @@
   {@param label: string}
   {@param value: any}
   {@param color: string}
+  {@param? actions: html}
+
   <div class="value">
     {call .label}
       {param text: $label /}
       {param color: $color /}
     {/call}
     {$value}
+    {if $actions}
+      {$actions}
+    {/if}
   </div>
 {/template}
 
@@ -70,6 +79,7 @@
   {@param value: any}
   {@param validate: string}
   {@param color: string}
+  {@param? actions: html}
   {call .generic_value}
     {param label: $label /}
     {param color: $color /}
@@ -84,6 +94,7 @@
         {/param}
       {/call}
     {/param}
+    {param actions: $actions /}
   {/call}
 {/template}
 
@@ -270,23 +281,25 @@
   {@param name: string}
   {@param value: any}
   {@param? class: string}
-  {@param? width: string}
+  {@param? caption: string}
   {call .field}
     {param class: $class /}
-    {param width: $width /}
     {param markup kind="html"}
-      <input name="{$name}"
+      <input name="{$name}" style="width: auto"
         onclick="this.checked ? this.value='true' : this.value='false'"
-        type="checkbox" {if $value}checked{/if}/>
+        type="checkbox" {if $value}checked value="true"{/if}/>
+        {if $caption}{$caption}{/if}
+      </input>
     {/param}
   {/call}
 {/template}
 
 /** The field for editing a list value. */
 {template .field_list}
-  {@param name: string}
+  {@param name: any}
   {@param values: list<html>}
   {@param validate: string}
+  {@param? caption: string}
   {@param? autocomplete: string}
   {call .field}
     {param markup kind="html"}
@@ -296,6 +309,7 @@
           {param value: $value /}
           {param validate: $validate /}
           {param autocomplete: $autocomplete /}
+          {param caption: $caption /}
         {/call}
       {ifempty}
         {call .field_list_input_line}
@@ -303,6 +317,7 @@
           {param value: '' /}
           {param validate: $validate /}
           {param autocomplete: $autocomplete /}
+          {param caption: $caption /}
         {/call}
       {/foreach}
     {/param}
@@ -312,21 +327,26 @@
 /** A list field value. */
 {template .field_list_line}
   {@param field: html}
-  {@param? id: string}
+  {@param? caption: string}
+  {@param? id: any}
   <div class="line">
     {$field}
+    {if $caption}
+      <div class="input-label">{$caption}</div>
+    {/if}
     <div class="sprite edit-list-add" title="Add"
          onclick="edit.insertLine('{$id}', this.parentNode)"></div>
     <div class="sprite edit-list-remove" title="Remove"
          onclick="edit.removeLine(this.parentNode)"></div>
-  </div>  
+  </div>
 {/template}
 
 /** A list field value. */
 {template .field_list_input_line}
-  {@param name: string}
+  {@param name: any}
   {@param value: any}
   {@param validate: string}
+  {@param? caption: string}
   {@param? autocomplete: string}
   {call .field_list_line}
     {param id: $name /}
@@ -337,6 +357,7 @@
         {param validate: $validate /}
         {param inList: true /}
         {param autocomplete: $autocomplete /}
+        {param caption: $caption /}
       {/call}
     {/param}
   {/call}
@@ -355,7 +376,14 @@
           {call .field_selection}
             {param name: $value.name /}
             {param value: $value.value /}
-            {param choices: $value.choices /}      
+            {param choices: $value.choices /}
+            {param class: $class ? $class : 'field' + length($values) /}
+          {/call}
+        {elseif $value.type and $value.type == 'flag'}
+          {call .field_flag}
+            {param name: $value.name /}
+            {param value: $value.value /}
+            {param caption: $value.caption /}
             {param class: $class ? $class : 'field' + length($values) /}
           {/call}
         {else}
@@ -385,7 +413,7 @@
         <div class="action sprite large save" title="Save"
              onclick="edit.save
                         ('{$key}'.replace(/\/[^\/]*$/, '/' + 
-                                          $('#{$id} input[name=name]').val()), 
+                                          $('#{$id} input[name=name]').val()),
                          '{$id}', {if $create}true{else}false{/if})">
         </div>
         <div class="action sprite large revert" title="Revert"

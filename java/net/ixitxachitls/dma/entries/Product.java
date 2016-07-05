@@ -45,8 +45,6 @@ import net.ixitxachitls.util.logging.Log;
  * @file          Product.java
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  */
-
-@ParametersAreNonnullByDefault
 public class Product extends Entry
 {
   /** The serial version id. */
@@ -72,7 +70,7 @@ public class Product extends Entry
 
   /** The type of this entry. */
   public static final Type<Product> TYPE =
-    new Type.Builder<>(Product.class, BaseProduct.TYPE).build();
+      new Type.Builder<>(Product.class, BaseProduct.TYPE).build();
 
   /** The edition of the copy. */
   protected Optional<String> m_edition = Optional.absent();
@@ -156,36 +154,36 @@ public class Product extends Entry
   public String getPath()
   {
     return "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner.get() + "/"
-      + getType().getLink() + "/" + getName();
+        + getType().getLink() + "/" + getName();
   }
 
   @Override
   public List<Link> getNavigation()
   {
     return ImmutableList.of
-      (new Link(BaseCharacter.TYPE.getLink(),
-                "/" + BaseCharacter.TYPE.getMultipleLink()),
-      new Link(m_owner.toString(),
-               "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner),
-      new Link(getType().getLink(),
-               "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
-               + "/" + getType().getMultipleLink()),
-      new Link(getName(),
-               "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
-               + "/" + getType().getLink() + "/" + getName()));
+        (new Link(BaseCharacter.TYPE.getLink(),
+                  "/" + BaseCharacter.TYPE.getMultipleLink()),
+         new Link(m_owner.toString(),
+                  "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner),
+         new Link(getType().getLink(),
+                  "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
+                      + "/" + getType().getMultipleLink()),
+         new Link(getName(),
+                  "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
+                      + "/" + getType().getLink() + "/" + getName()));
   }
 
   @Override
   public String [] getListNavigation()
   {
     return new String [] {
-      BaseCharacter.TYPE.getLink(),
-      "/" + BaseCharacter.TYPE.getMultipleLink(),
-      m_owner.toString(),
-      "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner,
-      getType().getMultipleLink(),
-      "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
-      + "/" + getType().getMultipleLink(),
+        BaseCharacter.TYPE.getLink(),
+        "/" + BaseCharacter.TYPE.getMultipleLink(),
+        m_owner.toString(),
+        "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner,
+        getType().getMultipleLink(),
+        "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
+            + "/" + getType().getMultipleLink(),
     };
   }
 
@@ -221,6 +219,7 @@ public class Product extends Entry
    * @return the key
    */
   @SuppressWarnings("unchecked")
+  @Override
   public EntryKey getKey()
   {
     if(m_owner.isPresent())

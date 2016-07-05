@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.server;
 
 import java.io.BufferedReader;
@@ -44,53 +42,23 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * A static class with some server utility functions.
  *
- *
  * @file          ServerUtils.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @Immutable
-@ParametersAreNonnullByDefault
 public final class ServerUtils
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //----------------------------- ServerUtils ------------------------------
-
   /**
    * A private constructor to prevent instantiation.
-   *
    */
   private ServerUtils()
   {
     // nothing to do
   }
-
-  //........................................................................
-
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //--------------------------- extractParams ------------------------------
 
   /**
    * Extract all the parameters from the request and return them.
@@ -98,10 +66,8 @@ public final class ServerUtils
    * values for a single key.
    *
    * @param       inRequest the request from the client
-   *
    * @return      A multi map with keys of the parameter names and values
    *              containing the parameter values.
-   *
    */
   public static Multimap<String, String> extractParams
     (HttpServletRequest inRequest)
@@ -214,18 +180,6 @@ public final class ServerUtils
     return values;
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //........................................................................
-
   //------------------------------------------------------------------- test
 
   /** The tests. */
@@ -254,8 +208,6 @@ public final class ServerUtils
       m_localServiceTestHelper.tearDown();
       m_localServiceTestHelper = null;
     }
-
-    //--------------------------------------------------------------- nested
 
     /** A simple mock servlet stream implementation. */
     public static class MockServletInputStream extends ServletInputStream
@@ -330,10 +282,6 @@ public final class ServerUtils
       }
     }
 
-    //......................................................................
-
-    //----- params ---------------------------------------------------------
-
     /**
      * The params Test.
      * @throws Exception to lazy to catch
@@ -372,9 +320,5 @@ public final class ServerUtils
         EasyMock.verify(request);
       }
     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

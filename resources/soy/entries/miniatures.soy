@@ -1,0 +1,224 @@
+/* ****************************************************************************
+ * Copyright (c) 2002-2016 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/*
+ * Templates for products
+ */
+{namespace dma.entries.miniatures}
+
+/**
+ * Show the given entry in standard format.
+ *
+ * @param entry The entry to show.
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ */
+{template .show}
+  {call dma.entry.show}
+    {param entry: $entry /}
+    {param type: 'miniature' /}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param list: $list /}
+    {param next: $next /}
+    {param last: $last /}
+    {param color: '#7c0' /}
+    {param title kind="html"}
+      {call dma.entry.title}
+        {param title kind="html"}
+          {$entry.base_name}
+        {/param}
+        {param color: '#7c0' /}
+      {/call}
+    {/param}
+    {param values kind="html"}
+      {call dma.entry.value}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param color: '#7c0' /}
+      {/call}
+      {if length($entry.baseNames)}
+        {call dma.entry.value}
+          {param label: 'Base' /}
+          {param value kind="html"}
+            {foreach $base in $entry.baseNames}
+              {call dma.page.link}
+                {param text: $base /}
+                {param url: '/miniature/'  + $base /}
+              {/call}
+              {if not isLast($base)}; {/if}
+            {/foreach}
+          {/param}
+          {param color: '#7c0' /}
+        {/call}
+      {/if}
+      {if $entry.owner.present}
+        {call dma.entry.value}
+          {param label: 'Owner' /}
+          {param value: $entry.owner.get /}
+          {param color: '#7c0' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'Notes' /}
+        {param value kind="html"}
+           {if $entry.notes.present}
+             {$entry.notes.get}
+           {/if}
+        {/param}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Number' /}
+        {param value kind="html"}
+          {if $entry.number.present}
+            {$entry.number.get}
+          {/if}
+        {/param}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Location' /}
+        {param value kind="html"}
+          {if $entry.location.present}
+            <div style="background-color: {$entry.location.color};
+                        color: white; padding: 5px;">
+              {$entry.location.location}
+            </div>
+          {/if}
+        {/param}
+        {param color: '#7c0' /}
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Formatting a list of entries.
+ *
+ * @param title The list title.
+ * @param start The start index
+ * @param pagesize The size of the page
+ * @param entries The entries printed
+ * @param label The navigation label for this page
+ * @param path The path to this page
+ * @param? group the group printed
+ * @param images whether to show images
+ *
+ */
+{template .list}
+  {call dma.entry.list}
+    {param title: $title /}
+    {param label: $label /}
+    {param path: $path /}
+    {param start: $start /}
+    {param pagesize: $pagesize /}
+    {param group: $group /}
+    {param size: $entries ? length($entries) : 0 /}
+    {param titles: [ 'Name', 'Number', 'Location'] /}
+    {param images: $images /}
+    {param entries kind="html"}
+      <div class="list-image-entries">
+        {foreach $entry in $entries}
+          {if $images}
+            {call dma.entry.listImageEntry}
+              {param image: def($entry.main_file)
+                  ? $entry.main_file.icon : '/icons/miniatures-dummy.png' /}
+              {param name: $entry.base_name /}
+              {param id: $entry.name /}
+              {param overlay: $entry.number + 'x' /}
+            {/call}
+          {else}
+            {call dma.entry.listEntry}
+              {param path: $entry.path /}
+              {param values: [
+                $entry.base_name, $entry.number,
+                $entry.location.present ? $entry.location.location : ''
+              ] /}
+              {param colors: ['', '',
+                              $entry.location.present
+                              ? $entry.location.color : ''
+                             ] /}
+            {/call}
+          {/if}
+        {/foreach}
+      </div>
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Editiing the miniature.
+ *
+ * @param entry The character to edit.
+ * @param id    THe id to use for the editing dialog.
+ * @param create  Whether to create a new entry
+ */
+{template .edit}
+  {call dma.edit.entry}
+    {param entry: $entry /}
+    {param type: 'product' /}
+    {param id: $id /}
+    {param create: $create /}
+    {param values kind="html"}
+      {call dma.edit.value}
+        {param name: 'name' /}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param validate: 'non-empty' /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'base' /}
+        {param label: 'Base' /}
+        {param values: $entry.base_names /}
+        {param validate: 'non-empty' /}
+        {param color: '#7c0' /}
+        {param autocomplete: 'base miniature/name' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'owner' /}
+        {param label: 'Owner' /}
+        {param value: $entry.owner.present ? $entry.owner.get : '' /}
+        {param validate: 'non-empty' /}
+        {param color: '#7c0' /}
+        {param autocomplete: 'base character/name' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'notes' /}
+        {param label: 'Notes' /}
+        {param value: $entry.notes.present ? $entry.notes.get : '' /}
+        {param validate: 'non-empty' /}
+        {param color: '#7c0' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'number' /}
+        {param label: 'Number' /}
+        {param value: $entry.number.present ? $entry.number.get : '' /}
+        {param validate: 'number' /}
+        {param color: '#7c0' /}
+      {/call}
+    {/param}
+  {/call}
+{/template}

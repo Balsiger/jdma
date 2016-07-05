@@ -528,6 +528,29 @@ public class SoyTemplate
     }
   }
 
+  /** A plugin function to check if a value starts with a given string. */
+  public static class StatsWithFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "startsWith";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(2);
+    }
+
+    @Override
+    public SoyData computeForTofu(List<SoyData> inArgs)
+    {
+      return BooleanData.forValue(inArgs.get(0).coerceToString().startsWith(
+          inArgs.get(1).coerceToString()));
+    }
+  }
+
   /** A plugin function to check if a value is a list. */
   public static class EscapeFunction implements SoyTofuFunction
   {
@@ -548,7 +571,11 @@ public class SoyTemplate
     {
       return StringData.forValue(inArgs.get(0).toString()
                                  .replace("+", "_")
-                                 .replace(" ",  "-"));
+                                 .replace(",", "_")
+                                 .replace("'", "_")
+                                 .replace(" ",  "-")
+                                 .replace("(", "_")
+                                 .replace(")", "_"));
     }
   }
 
@@ -744,6 +771,7 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(AnnotateFunction.class);
       soyFunctionsSetBinder.addBinding().to(ValueFunction.class);
       soyFunctionsSetBinder.addBinding().to(IsListFunction.class);
+      soyFunctionsSetBinder.addBinding().to(StatsWithFunction.class);
       soyFunctionsSetBinder.addBinding().to(CamelFunction.class);
       soyFunctionsSetBinder.addBinding().to(LowerFunction.class);
       soyFunctionsSetBinder.addBinding().to(MatchesFunction.class);
@@ -760,7 +788,7 @@ public class SoyTemplate
   }
 
   /** The soy files for the template. */
-  private List<String> m_files = new ArrayList<String>();
+  private List<String> m_files = new ArrayList<>();
 
   /** The compiled template file set. */
   private Optional<SoyTofu> m_compiled = Optional.absent();
@@ -827,6 +855,22 @@ public class SoyTemplate
                           Optional<SoyMapData> inData,
                           Optional<SoyMapData> inInjected)
   {
+    SoyTofu.Renderer renderer = createRenderer(inName, inData, inInjected);
+    return renderer.render();
+  }
+
+  public SanitizedContent renderStrictSoy(String inName,
+                                          Optional<SoyMapData> inData,
+                                          Optional<SoyMapData> inInjected)
+  {
+    SoyTofu.Renderer renderer = createRenderer(inName, inData, inInjected);
+    return renderer.renderStrict();
+  }
+
+  private SoyTofu.Renderer createRenderer(String inName,
+                                          Optional<SoyMapData> inData,
+                                          Optional<SoyMapData> inInjected)
+  {
     compile();
 
     SoyTofu.Renderer renderer = m_compiled.get().newRenderer(inName);
@@ -837,7 +881,7 @@ public class SoyTemplate
     else
       renderer.setIjData(new SoyMapData());
 
-    return renderer.render();
+    return renderer;
   }
 
   /**

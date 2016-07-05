@@ -24,17 +24,15 @@
  */
 {namespace dma.entries.basecampaigns}
 
-/**
- * Show the given entry in standard format.
- * 
- * @param entry The entry to show.
- * @param first the first entry available, if any
- * @param previous the previous entry, if any
- * @param list the overview of all entries
- * @param next the next entry, if any
- * @param last the last entry, if any
- */
+/** Show the given entry in standard format.  */
 {template .show}
+  {@param entry: ?}
+  {@param first: ?}
+  {@param previous: ?}
+  {@param list: ?}
+  {@param next: ?}
+  {@param last: ?}
+
   {call dma.entry.show}
     {param entry: $entry /}
     {param type: 'base-campaign' /}
@@ -78,8 +76,7 @@
           {param color: '#ccf' /}
         {/call}
       {/if}      
-      {if length($entry.categories) or 
-          length($entry.combined_categories.annotate)}
+      {if $entry.categories.present or $entry.combined_categories.get.present}
         {call dma.entry.value}
           {param label: 'Categories' /}
           {param value kind="html"}
@@ -89,29 +86,57 @@
                 {if not isLast($category)}, {/if}
               {/foreach}
             {/if}
-            {if length($entry.combined_categories.annotate)}
-              {if length($entry.categories)},{sp}{/if}
-              {annotate($entry.combined_categories)}
-            {/if}
+            {annotate($entry.combined_categories)}
           {/param}
-          {param color: '#ccf' /}
+          {param color: '#008' /}
         {/call}
       {/if}
       {call dma.entry.value}
-        {param label: 'Worlds' /}        
+        {param label: 'Worlds' /}
         {param value: annotate($entry.combined_worlds) /}
         {param color: '#ccf' /}
       {/call}
-      {if $entry.incomplete or length($entry.combined_incomplete.annotate) > 0}
+      {call dma.entry.value}
+        {param label: 'Calendar' /}
+        {param value kind="html"}
+          Years{sp}
+          {foreach $year in $entry.calendar.years}
+            {$year}
+            {if not isLast($year)}, {/if}
+          {/foreach}<br/>
+          Months{sp}
+          {foreach $month in $entry.calendar.months}
+            {$month}
+            {if not isLast($month)}, {/if}
+          {/foreach}<br/>
+          {$entry.calendar.days_per_week} days per week,{sp}
+          {$entry.calendar.hours_per_day} hours per day,{sp}
+          {$entry.calendar.minutes_per_hour} minutes per hour,{sp}
+          {$entry.calendar.seconds_per_minute} seconds per minute.
+        {/param}
+        {param color: '#ccf' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Names' /}
+        {param value kind="html"}
+          {foreach $name in $entry.names}
+            {call .names_show}
+              {param names: $name /}
+            {/call}
+          {/foreach}
+        {/param}
+        {param color: '#ccf' /}
+      {/call}
+      {if $entry.incomplete.present or $entry.combined_incomplete.get.present}
         {call dma.entry.value}
           {param label: 'Incomplete' /}
           {param value kind="html"}
             {if $entry.incomplete}
               {$entry.incomplete}{sp}
             {/if}
-            {annotate($entry.combined_incomplete)}
+              {annotate($entry.combined_incomplete)}
           {/param}
-          {param color: '#ccf' /}
+          {param color: '#008' /}
         {/call}
       {/if}
       {call dma.entry.value}
@@ -158,14 +183,12 @@
   {/call}
 {/template}
 
-/**
- * Editiing the base item.
- * 
- * @param entry The item to edit. 
- * @param id    THe id to use for the editing dialog.
- * @param create  Whether to create a new entry
- */
+/** Editing the base item. */
 {template .edit}
+  {@param entry: ?}
+  {@param id: string}
+  {@param create: bool}
+
   {call dma.edit.entry}
     {param entry: $entry /}
     {param type: 'campaign' /}
@@ -221,7 +244,191 @@
         {param values: $entry.worlds/}
         {param validate: 'non-empty' /}
         {param color: '#ccf' /}
-      {/call}    
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'calendar.year' /}
+        {param color: '#008' /}
+        {param label: 'Calendar Years' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $year in $entry.calendar.years}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'calendar.year' /}
+                  {param values: [
+                    [
+                      'name': 'calendar.year.start',
+                      'value': $year.start,
+                      'validate': 'number',
+                      'caption': 'start'
+                    ],
+                    [
+                      'name': 'calendar.year.end',
+                      'value': $year.end,
+                      'validate': 'number',
+                      'caption': 'end'
+                    ],
+                    [
+                      'name': 'calendar.year.name',
+                      'value': $year.name,
+                      'validate': 'any',
+                      'caption': 'name'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'reference' /}
+                  {param values: [
+                    [
+                      'name': 'calendar.year.start',
+                      'value': '',
+                      'validate': 'number',
+                      'caption': 'start'
+                    ],
+                    [
+                      'name': 'calendar.year.end',
+                      'value': '',
+                      'validate': 'number',
+                      'caption': 'end'
+                    ],
+                    [
+                      'name': 'calendar.year.name',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'name'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param name: 'calendar.month' /}
+        {param color: '#008' /}
+        {param label: 'Calendar Months' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $month in $entry.calendar.months}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'calendar.month' /}
+                  {param values: [
+                    [
+                      'name': 'calendar.month.name',
+                      'value': $month.name,
+                      'validate': 'any',
+                      'caption': 'name'
+                    ],
+                    [
+                      'name': 'calendar.month.days',
+                      'value': $month.days,
+                      'validate': 'number',
+                      'caption': 'days'
+                    ],
+                    [
+                      'name': 'calendar.month.leap_years',
+                      'value': $month.leapYears,
+                      'validate': 'number',
+                      'caption': 'leap years'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'reference' /}
+                  {param values: [
+                    [
+                      'name': 'calendar.month.name',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'name'
+                    ],
+                    [
+                      'name': 'calendar.month.days',
+                      'value': '',
+                      'validate': 'number',
+                      'caption': 'days'
+                    ],
+                    [
+                      'name': 'calendar.month.leap_years',
+                      'value': '',
+                      'validate': 'number',
+                      'caption': 'leap years'
+                    ]
+                  ]
+                  /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param color: '#008' /}
+        {param label: 'Calendar' /}
+        {param value kind="html"}
+          {call dma.edit.field_input}
+            {param name: 'calendar.days_per_week' /}
+            {param value: $entry.calendar.days_per_week /}
+            {param validate: 'number' /}
+            {param caption: 'days per week' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'calendar.hours_per_day' /}
+            {param value: $entry.calendar.hours_per_day /}
+            {param validate: 'number' /}
+            {param caption: 'hours per day' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'calendar.minutes_per_hour' /}
+            {param value: $entry.calendar.minutes_per_hour /}
+            {param validate: 'number' /}
+            {param caption: 'minutes per hour' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'calendar.seconds_per_minute' /}
+            {param value: $entry.calendar.seconds_per_minute /}
+            {param validate: 'number' /}
+            {param caption: 'seconds per minute' /}
+            {param class: 'narrow' /}
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param label: 'Names' /}
+        {param value kind="html"}
+          {foreach $names in $entry.names}
+            {call dma.edit.field_list_line}
+              {param id: 'names' /}
+              {param field kind="html"}
+                {call dma.entries.basecampaigns.names_edit}
+                  {param names: $names /}
+                  {param index: index($names) /}
+                {/call}
+              {/param}
+            {/call}
+          {ifempty}
+            {call dma.edit.field_list_line}
+              {param id: 'names' /}
+              {param field kind="html"}
+                {call dma.entries.basecampaigns.names_edit}
+                  {param index: 0 /}
+                {/call}
+              {/param}
+            {/call}
+          {/foreach}
+        {/param}
+        {param color: '#ccf' /}
+      {/call}
       {call dma.edit.value}
         {param name: 'incomplete' /}
         {param label: 'Incomplete' /}
@@ -236,7 +443,7 @@
         {param value kind="html"}
           {call dma.edit.field}
             {param markup kind="html"}
-              {foreach $reference in $entry.references}  
+              {foreach $reference in $entry.references}
                 {call dma.edit.field_list_multiple}
                   {param id: 'reference' /}
                   {param values: [
@@ -244,17 +451,17 @@
                       'name': 'references.name',
                       'value': $reference.name,
                       'validate': 'non-empty',
-                      'caption': 'name' 
+                      'caption': 'name'
                     ],
                     [
                       'name': 'references.pages',
                       'value': $reference.pagesString,
                       'validate': 'any',
-                      'caption': 'pages' 
+                      'caption': 'pages'
                     ]
-                  ] 
+                  ]
                   /}
-                {/call}          
+                {/call}
               {ifempty}
                 {call dma.edit.field_list_multiple}
                   {param id: 'reference' /}
@@ -263,23 +470,95 @@
                       'name': 'references.name',
                       'value': '',
                       'validate': 'non-empty',
-                      'caption': 'name' 
+                      'caption': 'name'
                     ],
                     [
                       'name': 'references.pages',
                       'value': '',
                       'validate': 'any',
-                      'caption': 'pages' 
+                      'caption': 'pages'
                     ]
-                  ] 
+                  ]
                   /}
-                {/call}          
+                {/call}
               {/foreach}
             {/param}
           {/call}
-        {/param}            
+        {/param}
       {/call}
     {/param}
   {/call}
 {/template}
 
+/** Show a names value. */
+{template .names_show}
+  {@param names: ?}
+
+  {$names.race}
+  {if $names.region.present} ({$names.region}){/if}:
+  {sp}
+  <em>Male</em>
+  {sp}
+  {foreach $name in $names.male_names}
+    {$name}{if not isLast($name)}, {/if}
+  {/foreach}
+  ;{sp}
+  <em>Female</em>
+  {sp}
+  {foreach $name in $names.female_names}
+    {$name}{if not isLast($name)}, {/if}
+  {/foreach}
+  ;{sp}
+  <em>Surenames</em>
+  {sp}
+  {foreach $name in $names.surenames}
+    {$name}{if not isLast($name)}, {/if}
+  {/foreach}
+  <br/>
+{/template}
+
+/** Edit for a names value. */
+{template .names_edit}
+  {@param? names: ?}
+  {@param index: number}
+
+  {call dma.edit.field_input}
+    {param name: 'names@' + $index + '.race' /}
+    {param caption: 'Race' /}
+    {param value: $names ? $names.race : '' /}
+    {param validate: 'any' /}
+    {param width: '50%' /}
+    {param autocomplete: 'base monster/name' /}
+  {/call}
+  {call dma.edit.field_input}
+    {param name: 'names@' + $index + '.region' /}
+    {param caption: 'Region' /}
+    {param value: $names ? $names.region : '' /}
+    {param validate: 'any' /}
+    {param width: '50%' /}
+  {/call}
+  <div>
+  {call dma.edit.field_list}
+    {param name: 'names@' + $index + '.male_name' /}
+    {param values: $names ? $names.male_names : [] /}
+    {param validate: 'not-empty' /}
+    {param caption: 'male' /}
+  {/call}
+  </div>
+  <div>
+  {call dma.edit.field_list}
+    {param name: 'names@' + $index + '.female_name' /}
+    {param values: $names ? $names.female_names : [] /}
+    {param validate: 'not-empty' /}
+    {param caption: 'female' /}
+  {/call}
+  </div>
+  <div>
+  {call dma.edit.field_list}
+    {param name: 'names@' + $index + '.surename' /}
+    {param values: $names ? $names.surenames : [] /}
+    {param validate: 'not-empty' /}
+    {param caption: 'surename' /}
+  {/call}
+  </div>
+{/template}

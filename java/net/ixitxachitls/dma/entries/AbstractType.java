@@ -23,18 +23,23 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 
+import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.logging.Log;
 
@@ -73,6 +78,8 @@ public class AbstractType<T extends AbstractEntry>
     /** The name of the field to use for sortig this type. */
     protected Optional<String> m_sort = Optional.absent();
 
+    protected List<Index> m_indexes = new ArrayList<>();
+
     /**
      * Create the builder.
      *
@@ -91,7 +98,7 @@ public class AbstractType<T extends AbstractEntry>
     public AbstractType<T> build()
     {
       return new AbstractType(m_class, m_multiple, m_link, m_multipleLink,
-                              m_sort);
+                              m_sort, m_indexes);
     }
 
     /** Set the string to use for the multiple name of the type.
@@ -129,6 +136,12 @@ public class AbstractType<T extends AbstractEntry>
       m_sort = Optional.of(inSort);
       return (B)this;
     }
+
+    public B index(Index inIndex)
+    {
+      m_indexes.add(inIndex);
+      return (B)this;
+    }
   }
 
   /**
@@ -142,7 +155,8 @@ public class AbstractType<T extends AbstractEntry>
   protected AbstractType(Class<T> inClass, Optional<String> inMultiple,
                          Optional<String> inLink,
                          Optional<String> inMultipleLink,
-                         Optional<String> inSort)
+                         Optional<String> inSort,
+                         List<Index> inIndexes)
   {
     m_name = Classes.fromClassName(inClass).toLowerCase(Locale.US);
     m_class = inClass;
@@ -182,6 +196,9 @@ public class AbstractType<T extends AbstractEntry>
     s_linkedTypes.put(getMultipleLink(), this);
 
     s_all.add(this);
+
+    for(Index index : inIndexes)
+      m_indexes.put(index.getPath(), index);
   }
 
   /**
@@ -199,20 +216,6 @@ public class AbstractType<T extends AbstractEntry>
 
     s_types.put(getLink(), this);
     s_types.put(getMultipleLink(), this);
-    return this;
-  }
-
-  /**
-   * Set the sort field to use for this type.
-   *
-   * @param       inSort  the field used to sort
-   *
-   * @return      the type for chaining
-   */
-  public AbstractType<T> withSort(String inSort)
-  {
-    m_sort = Optional.of(inSort);
-
     return this;
   }
 
@@ -236,6 +239,8 @@ public class AbstractType<T extends AbstractEntry>
 
   /** The field to be used for sorting. */
   private Optional<String> m_sort = Optional.absent();
+
+  private Map<String, Index> m_indexes = new HashMap<>();
 
   /** All the available types. */
   private static final Map<String, AbstractType<? extends AbstractEntry>>
@@ -404,6 +409,15 @@ public class AbstractType<T extends AbstractEntry>
   public String toString()
   {
     return m_name;
+  }
+
+  public Optional<Index> getIndex(String inPath)
+  {
+    @Nullable Index index = m_indexes.get(inPath);
+    if(index != null)
+      return Optional.of(index);
+
+    return Optional.absent();
   }
 
   /**

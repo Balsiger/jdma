@@ -93,11 +93,6 @@
   </Match>
 
   <Match>
-    <Class name="~net.ixitxachitls.dma.server.servlets.SaveActionServlet.*" />
-    <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
-  </Match>
-
-  <Match>
     <Class name="~net.ixitxachitls..*\$Test.*" />
     <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
   </Match>
@@ -181,11 +176,6 @@
 
   <Match>
     <Class name="~net.ixitxachitls.dma.data.DMAData.*" />
-    <Bug pattern="SE_BAD_FIELD" />
-  </Match>
-
-  <Match>
-    <Class name="~net.ixitxachitls.dma.server.servlets.SaveActionServlet" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 

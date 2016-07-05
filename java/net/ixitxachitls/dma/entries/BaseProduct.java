@@ -200,7 +200,7 @@ public class BaseProduct extends BaseEntry
     @Override
     public String toString()
     {
-        return m_name;
+      return m_name;
     }
 
     /**
@@ -1623,12 +1623,13 @@ public class BaseProduct extends BaseEntry
    */
   public Map<String, List<String>> owners()
   {
-    return Multimaps.asMap(DMADataFactory.get().getOwners(this.getName()));
+    return Multimaps.asMap(DMADataFactory.get().getOwners(Product.TYPE,
+                                                          this.getName()));
   }
 
   @Override
   public Multimap<Index.Path, String> computeIndexValues()
-    {
+  {
     Multimap<Index.Path, String> values = super.computeIndexValues();
 
     // persons

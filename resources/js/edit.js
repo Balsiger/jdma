@@ -37,31 +37,43 @@ edit.all = [];
 /**
  * Show the edit window for editing an entry.
  *
- * @param inName   the name of the entry edited
+ * @param inTitlec the title of the dialog
  * @param inPath   the path of the entry to edit
  * @param inID     the id of the element to create
  * @param inBases  the bases for the entry, if any
  * @param inValues the values to preset (as key:value,key:value,...), if any
  */
-edit.show = function(inName, inPath, inID, inBases, inValues)
+edit.show = function(inTitle, inPath, inID, inBases, inValues)
 {
-  var contents = util.ajax(inPath + '.edit?body&id=' + inID
+  inTitle = edit.unescape(inTitle);
+  inPath = edit.unescape(inPath);
+  inID = edit.unescape(inID);
+  inBases = edit.unescape(inBases);
+
+  console.log("show", inTitle, inPath, inID, inBases, inValues);
+  var contents = util.ajax(inPath + '?body&id=' + inID
       + '&bases=' + inBases + '&values=' + inValues);
+  window.console.log("show id", inID.replace(/ /g));
   var dialog = $('<div id="dialog-' + inID.replace(/ /g, "_") + '"/>')
     .html(contents)
     .dialog({
-      title: 'Edit ' + inName,
+      title: inTitle,
       modal: true,
       resizable: false,
       width: $(window).width() * 3 / 4,
-      height: $(window).height(),
+      height: $(window).height() - 20,
       closeOnEscape: false,
       dialogClass: 'edit-dialog',
     });
-  
-  // Setup any necessary autocomplete
-  edit.setupAutocomplete($(":input[dma-autocomplete]"));
 };
+
+edit.unescape = function(inText)
+{
+  if(!inText)
+    return inText;
+
+  return inText.replace('\\x27', "'");
+}
 
 /**
  * Install autocomplete handling into the given elements.
@@ -134,10 +146,14 @@ edit.removeImage = function(inID)
  */
 edit.save = function(inKey, inID, inCreate)
 {
+  inKey = edit.unescape(inKey);
+  inID = edit.unescape(inID);
+
   window.console.log("save", inKey, inID, inCreate);
   var values = { '_key_': inKey };
   $('#' + inID + " :input").each(function ()
     {
+      console.log("name", this.name)
       if(this.name)
       {
         if(this.name in values)
@@ -157,7 +173,7 @@ edit.save = function(inKey, inID, inCreate)
 
   // send the data to the server
   window.console.log('saving!', inID, values);
-  if(window.location.href.match(/\?create$/) || inCreate)
+  if(window.location.href.match(/\?(create|copy)$/) || inCreate)
     values['_create_'] = '';
   var eval = util.ajax('/actions/save', values, null, true);
 
@@ -167,11 +183,39 @@ edit.save = function(inKey, inID, inCreate)
   // close the dialog
   if(eval)
   {
+    window.console.log("save id", inID);
     $('#dialog-' + inID).dialog('close').dialog('destroy').remove();
 
     // reload the saved entry
     util.link(null, null, null);
   }
+};
+
+edit.moveItems = function(inList, inParent)
+{
+  var names = edit.collectMoveItems(inList, inParent);
+  window.console.log("moving", names);
+  var eval = util.ajax('/actions/move', { 'names': names }, null, true);
+};
+
+edit.collectMoveItems = function(inList, inContainer)
+{
+  var items = [];
+  $(inList).find('> li').each(function(index, value)
+  {
+    if($(value).attr('name'))
+    {
+      var name = $(value).attr('name');
+      items.push(inContainer + ':' + name);
+      var contents = $(value).find('ul');
+      if(contents.length > 0)
+        Array.prototype.push.apply(items,
+                                   edit.collectMoveItems(contents[0],
+                                                         'item/' + name));
+    }
+  });
+
+  return items;
 };
 
 /**

@@ -34,6 +34,9 @@ import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.memcache.Expiration;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.base.Optional;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -42,9 +45,9 @@ import com.google.common.collect.Multimap;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.CampaignEntry;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.EntryKey;
-import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.util.Tracer;
@@ -68,6 +71,9 @@ public class DMADatastore
   /** The access to the datastore. Don't use this except in the AdminServlet! */
   private DataStore m_data = new DataStore();
 
+  private static MemcacheService s_campaign_cache =
+      MemcacheServiceFactory.getMemcacheService("campaign-current");
+
   /** The cache of entries. */
   private static ThreadLocal<Map<EntryKey, AbstractEntry>> s_cache =
       new ThreadLocal<Map<EntryKey, AbstractEntry>>()
@@ -82,6 +88,30 @@ public class DMADatastore
   /** The id for serialization. */
   @SuppressWarnings("unused")
   private static final long serialVersionUID = 1L;
+
+  public void setCurrentCampaignEntry(String inCampaignKey, String inEntry)
+  {
+    s_campaign_cache.put(inCampaignKey, inEntry,
+                         Expiration.byDeltaSeconds(60 * 60 * 24));
+  }
+
+  public Optional<String> getCurrentCampaignEntryKey(String inCampaignKey)
+  {
+    return Optional.fromNullable((String)s_campaign_cache.get(inCampaignKey));
+  }
+
+  public Optional<AbstractEntry> getCurrentCampaignEntry(String inCampaignKey)
+  {
+    Optional<String> cachedKey = getCurrentCampaignEntryKey(inCampaignKey);
+    if(!cachedKey.isPresent())
+      return Optional.absent();
+
+    Optional<EntryKey> key = EntryKey.fromString(cachedKey.get());
+    if(!key.isPresent())
+      return Optional.absent();
+
+    return getEntry(key.get());
+  }
 
   /**
    * Cache the entry for later use. The cache is only per thread and is used
@@ -219,7 +249,8 @@ public class DMADatastore
   {
     return (List<T>)
       convert(m_data.getEntities(escapeType(inType.toString()),
-                                 convert(inParent), 0, 1000, inKey, inValue));
+                                 convert(inParent), 0, 1000,
+                                 Optional.<String>absent(), inKey, inValue));
   }
 
   /**
@@ -261,11 +292,12 @@ public class DMADatastore
    *
    * @return   a multi map from owner to ids
    */
-  public ListMultimap<String, String> getOwners(String inID)
+  public ListMultimap<String, String> getOwners(
+      AbstractType<? extends AbstractEntry> inType, String inID)
   {
-    Log.debug("getting owners for " + inID);
+    Log.debug("getting owners for " + inType + "/" + inID);
     ListMultimap<String, String> owners = ArrayListMultimap.create();
-    for(Entity entity : m_data.getIDs(escapeType(Product.TYPE.toString()),
+    for(Entity entity : m_data.getIDs(escapeType(inType.toString()),
                                       "bases", inID.toLowerCase(Locale.US)))
       owners.put(entity.getKey().getParent().getName(),
                  entity.getKey().getName());
@@ -290,13 +322,15 @@ public class DMADatastore
                                              AbstractType<?> inType,
                                              Optional<EntryKey> inParent,
                                              String inGroup,
-                                             int inStart, int inSize)
+                                             int inStart, int inSize,
+                                             Optional<String> inSort)
   {
     List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
 
     for(Entity entity : m_data.getEntities(escapeType(inType.toString()),
                                            convert(inParent),
                                            inStart, inSize,
+                                           inSort,
                                            Index.PREFIX + inIndex, inGroup))
     {
       Optional<AbstractEntry> entry = convert(entity);
@@ -336,7 +370,8 @@ public class DMADatastore
 
     for(Entity entity : m_data.getEntities(escapeType(inType.toString()),
                                            Optional.<Key>absent(),
-                                           0, 10000, inFilters))
+                                           0, 10000, Optional.<String>absent(),
+                                           inFilters))
 
     {
       List<String> values = (List<String>)
@@ -380,8 +415,15 @@ public class DMADatastore
   public SortedSet<String> getValues
   (AbstractType<? extends AbstractEntry> inType, String inField)
   {
+    return getValues(Optional.<EntryKey>absent(), inType, inField);
+  }
+
+  public SortedSet<String> getValues
+      (Optional<EntryKey> inParent,
+       AbstractType<? extends AbstractEntry> inType, String inField)
+  {
     return m_data.getValues(escapeType(inType.toString()),
-                            Optional.<Key>absent(), inField);
+                            convert(inParent), inField);
   }
 
   /**
@@ -393,6 +435,18 @@ public class DMADatastore
   public boolean isChanged()
   {
     return false;
+  }
+
+  public boolean setParent(EntryKey inKey, EntryKey inParent)
+  {
+    Optional<AbstractEntry> entry = getEntry(inKey);
+    if(!entry.isPresent() || !(entry.get() instanceof CampaignEntry))
+      return false;
+
+    CampaignEntry campaignEntry = (CampaignEntry)entry.get();
+    campaignEntry.setParent(Optional.of(inParent));
+
+    return true;
   }
 
   /**
@@ -510,6 +564,46 @@ public class DMADatastore
         if (equals(entity, converted))
           continue;
 
+        m_data.update(converted);
+
+        if (!entity.getKey().equals(converted.getKey()))
+          m_data.remove(entity.getKey());
+
+        count++;
+      }
+
+      if(entities.size() < chunk)
+        break;
+    }
+
+    return count;
+  }
+
+  public int refresh(AbstractType<? extends AbstractEntry> inType,
+                     Optional<EntryKey> inParent)
+  {
+    Log.debug("refresh data for " + inType);
+
+    int count = 0;
+    int chunk = 100;
+    for(int start = 0; count < 10000; start += chunk)
+    {
+      List<Entity> entities = m_data.getEntities(escapeType(inType.toString()),
+                                                 convert(inParent),
+                                                 Optional.<String>absent(),
+                                                 start, chunk);
+
+      for(Entity entity : entities)
+      {
+        Optional<AbstractEntry> entry = convert(entity);
+        if(!entry.isPresent())
+          continue;
+
+        Entity converted  = convert(entry.get());
+        if (equals(entity, converted))
+          continue;
+
+        Log.warning("updating " + converted.getKey());
         m_data.update(converted);
 
         if (!entity.getKey().equals(converted.getKey()))

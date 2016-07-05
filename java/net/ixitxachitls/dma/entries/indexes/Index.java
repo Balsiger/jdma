@@ -19,46 +19,71 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.dma.entries.indexes;
 
 import java.io.Serializable;
 import java.util.Locale;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-
-//..........................................................................
-
-//------------------------------------------------------------------- header
 
 /**
  * The base class for all index specifications.
  *
  * @file          Index.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
 @Immutable
-@ParametersAreNonnullByDefault
 public class Index implements Serializable, Comparable<Index>
 {
-  //--------------------------------------------------------- constructor(s)
+  public static class Builder
+  {
+    public Builder(Path inPath, String inTitle,
+                   AbstractType<? extends AbstractEntry> inType)
+    {
+      m_path = inPath;
+      m_title = inTitle;
+      m_type = inType;
+    }
 
-  //-------------------------------- Index ---------------------------------
+    private Path m_path;
+    private String m_title;
+    private AbstractType<? extends AbstractEntry> m_type;
+    private boolean m_images;
+    private boolean m_paginated;
+    private Optional<String> m_sortField = Optional.absent();
+
+    public Builder paginated()
+    {
+      m_paginated = true;
+      return this;
+    }
+
+    public Builder images()
+    {
+      m_images = true;
+      return this;
+    }
+
+    public Builder sort(String inField)
+    {
+      m_sortField = Optional.of(inField);
+      return this;
+    }
+
+    public Index build()
+    {
+      return new Index(m_path, m_title, m_type, m_images, m_paginated,
+                       m_sortField);
+    }
+  }
 
   /**
    * Create the index.
@@ -66,68 +91,21 @@ public class Index implements Serializable, Comparable<Index>
    * @param         inPath      the path to the index
    * @param         inTitle     the index title
    * @param         inType      the type of entries served
-   *
+   * @param         inImages    whether to show images
+   * @param         inPaginated whether to paginate the page
    */
   public Index(Path inPath, String inTitle,
-               AbstractType<? extends AbstractEntry> inType)
+               AbstractType<? extends AbstractEntry> inType,
+               boolean inImages, boolean inPaginated,
+               Optional<String> inSortField)
   {
     m_path = inPath;
     m_title = inTitle;
     m_type = inType;
+    m_images = inImages;
+    m_paginated = inPaginated;
+    m_sortField = inSortField;
   }
-
-  //........................................................................
-
-  //------------------------------ withImages ------------------------------
-
-  /**
-   * Enable images for the index.
-   *
-   * @return  the index for chaining
-   *
-   */
-  public Index withImages()
-  {
-    m_images = true;
-
-    return this;
-  }
-
-  //........................................................................
-  //-------------------------- withoutPagination ---------------------------
-
-  /**
-   * Disables pagination for the index.
-   *
-   * @return  the index for chaining
-   *
-   */
-  public Index withoutPagination()
-  {
-    m_paginated = false;
-
-    return this;
-  }
-
-  //........................................................................
-  //-------------------------- withoutPagination ---------------------------
-
-  /**
-   * Disables pagination for the index.
-   *
-   * @return  the index for chaining
-   *
-   */
-  public Index withEditable()
-  {
-    m_editable = true;
-
-    return this;
-  }
-
-  //........................................................................
-
-  //----------------------------- withAccess -------------------------------
 
   /**
    * Set the access level for this index.
@@ -135,9 +113,7 @@ public class Index implements Serializable, Comparable<Index>
    * This method can be chained with the constructor.
    *
    * @param       inAccess the new access rights required, null for none
-   *
    * @return      this object
-   *
    */
   // @SuppressWarnings("unchecked")
   // public Index<I> withAccess(BaseCharacter.Group inAccess)
@@ -146,56 +122,6 @@ public class Index implements Serializable, Comparable<Index>
 
   //   return this;
   // }
-
-  //........................................................................
-  //--------------------------- withDataSource -----------------------------
-
-  /**
-   * Set the data source to for this index.
-   *
-   * This method can be chained with the constructor.
-   *
-   * @param       inSource the data source to use for this index
-   *
-   * @return      this object
-   *
-   */
-//   @SuppressWarnings("unchecked")
-//   public Index<I> withDataSource(DataSource inSource)
-//   {
-//     m_source = inSource;
-
-//     return this;
-//   }
-
-  //........................................................................
-  //--------------------------- withDataSource -----------------------------
-
-  /**
-   * Set the data source to for this index.
-   *
-   * This method can be chained with the constructor.
-   *
-   * @param       inSource the data source to use for this index
-   *
-   * @return      this object
-   *
-   */
-// public Index<I> withType(AbstractEntry.Type<? extends AbstractEntry> inType)
-//   {
-//     m_type = inType;
-
-//     if(m_type != null)
-//       withDataSource(DataSource.typed);
-
-//     return this;
-//   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The prefix for index names. */
   public static final String PREFIX = "index-";
@@ -221,7 +147,7 @@ public class Index implements Serializable, Comparable<Index>
     SCHOOLS, SUBSCHOOLS, DESCRIPTORS, CLASSES, LEVELS, COMPONENTS, MATERIALS,
     FOCUSES, CASTING_TIMES, EFFECTS, SAVING_THROWS, SPELL_RESISTANCES,
     FORTITUDE_SAVES, WILL_SAVES, REFLEX_SAVES,
-    PARENT, DM;
+    PARENT, DM, SETS, ORIGINS, MINIATURE_TYPES, ROLES, LOCATIONS, LOCATION_COLORS;
     // CHECKSTYLE:ON
 
     /**
@@ -255,143 +181,72 @@ public class Index implements Serializable, Comparable<Index>
 
   /** Flag if index is paginated or not. */
   private boolean m_paginated = true;
+  private Optional<String> m_sortField;
 
   /** The access level required for this index. */
   //private @Nullable BaseCharacter.Group m_access = null;
 
   /** Version for serialization. */
   private static final long serialVersionUID = 1L;
-
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //---------------------------- groupsToString ----------------------------
+  public static final String COLOR_SEPARATOR = "@@";
 
   /**
    * Convert given groups into a string for storing.
    *
    * @param       inGroups the index group values
-   *
    * @return      the converted string
-   *
    */
   public static String groupsToString(String ... inGroups)
   {
     return s_joinGroups.join(inGroups);
   }
 
-  //........................................................................
-  //---------------------------- stringToGroups ----------------------------
-
   /**
    * Convert the given string back into an array of group names.
    *
    * @param       inText the text to convert
-   *
    * @return      the individual groups
-   *
    */
   public static String [] stringToGroups(String inText)
   {
     return inText.split("::");
   }
 
-  //........................................................................
-
-  //------------------------------- getType --------------------------------
-
   /**
    * Get the type of entries in this index.
    *
    * @return the type of entries
-   *
    */
   public String getPath()
   {
     return m_path.getPath();
   }
 
-  //........................................................................
-  //------------------------------- getType --------------------------------
-
   /**
    * Get the type of entries in this index.
    *
    * @return the type of entries
-   *
    */
   public AbstractType<? extends AbstractEntry> getType()
   {
     return m_type;
   }
 
-  //........................................................................
-  //------------------------------- getTitle -------------------------------
-
   /**
    * Get the index title.
    *
    * @return      the title
-   *
    */
   public String getTitle()
   {
     return m_title;
   }
 
-  //........................................................................
-  //--------------------------- getIdentificator ---------------------------
-
-  /**
-   * Get the indentificator used to name items.
-   *
-   * @return      the identificator
-   *
-   */
-//   public Identificator<AbstractEntry> getIdentificator()
-//   {
-//     return s_identificator;
-//   }
-
-  //........................................................................
-  //----------------------------- getFormatter -----------------------------
-
-  /**
-   * Get the formatter to use for formatting a single entry.
-   *
-   * @return      the formatter
-   *
-   */
-//   public Formatter getFormatter()
-//   {
-//     return m_formatter;
-//   }
-
-  //........................................................................
-  //------------------------------ getFormat ------------------------------
-
-  /**
-   * Get the format for the complete index table.
-   *
-   * @return      the string with the format
-   *
-   */
-//   public String getFormat()
-//   {
-//     return m_format;
-//   }
-
-  //........................................................................
-  //-------------------------------- allows --------------------------------
-
   /**
    * Check if this index allows access by the given access level.
    *
    * @param       inLevel the level to check for
-   *
    * @return      true if allowed, false if not
-   *
    */
   // public boolean allows(BaseCharacter.Group inLevel)
   // {
@@ -401,60 +256,36 @@ public class Index implements Serializable, Comparable<Index>
   //   return m_access.allows(inLevel);
   // }
 
-  //........................................................................
-  //---------------------------- getDataSource -----------------------------
-
-  /**
-   * Get the data source to use for this index.
-   *
-   * @return      the enum value denoting the data source to use
-   *
-   */
-//   public DataSource getDataSource()
-//   {
-//     return m_source;
-//   }
-
-  //........................................................................
-
-  //------------------------------ hasImages -------------------------------
-
   /**
    * Check if the index shows images or not.
    *
    * @return      true if images are used, false not
-   *
    */
   public boolean hasImages()
   {
     return m_images;
   }
 
-  //........................................................................
-  //----------------------------- isPaginated ------------------------------
-
   /**
-   *
    * Check if the index is to be served paginated or not.
    *
    * @return      true for paginated, false for not
-   *
    */
   public boolean isPaginated()
   {
     return m_paginated;
   }
 
-  //......................................................................
-  //------------------------------ compareTo -------------------------------
+  public Optional<String> getSortField()
+  {
+    return m_sortField;
+  }
 
   /**
    * Compare this index to another one for sorting.
    *
    * @param       inOther the other type to compare to
-   *
    * @return      < 0 if this is lower, > if this is bigger, 0 if equal
-   *
    */
   @Override
   public int compareTo(@Nullable Index inOther)
@@ -465,16 +296,11 @@ public class Index implements Serializable, Comparable<Index>
     return m_title.compareTo(inOther.m_title);
   }
 
-  //........................................................................
-  //-------------------------------- equals --------------------------------
-
   /**
    * Check for equality of the given index.
    *
    * @param       inOther the object to compare to
-   *
    * @return      true if equal, false else
-   *
    */
   @Override
   public boolean equals(Object inOther)
@@ -491,46 +317,17 @@ public class Index implements Serializable, Comparable<Index>
       return false;
   }
 
-  //........................................................................
-  //------------------------------- hashCode -------------------------------
-
   /**
    * Compute the hash code for this class.
    *
    * @return      the hash code
-   *
    */
   @Override
-public int hashCode()
+  public int hashCode()
   {
     return m_title.hashCode();
   }
 
-  //........................................................................
-  //------------------------------ isEditable ------------------------------
-
-  /**
-   * Check whether the index can be edited.
-   *
-   * @param       inPath the sub path to the index
-   *
-   * @return      true if index is editable, false if not
-   *
-   */
-  public boolean isEditable(@Nullable String inPath)
-  {
-    return m_editable;
-  }
-
-  //........................................................................
-  //------------------------------- toString -------------------------------
-
-  /**
-   * Conver the index to a string for debugging.
-   *
-   * @return      the string representation
-   *
-   */
   @Override
   public String toString()
   {
@@ -541,29 +338,18 @@ public int hashCode()
       + ")";
   }
 
-  //........................................................................
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
   //------------------------------------------------------------------- test
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- init -----------------------------------------------------------
-
     /** The init Test. */
     @org.junit.Test
     public void init()
     {
       Index index = new Index(Path.TITLES, "title",
-                              net.ixitxachitls.dma.entries.BaseCharacter.TYPE);
+                              net.ixitxachitls.dma.entries.BaseCharacter.TYPE,
+                              false, false, Optional.<String>absent());
 
       assertEquals("type", net.ixitxachitls.dma.entries.BaseCharacter.TYPE,
                    index.getType());
@@ -571,14 +357,12 @@ public int hashCode()
       assertEquals("title", "title", index.getTitle());
       assertTrue("paginated", index.isPaginated());
 
-      index = index.withImages().withoutPagination();
+      index = new Index(Path.TITLES, "title",
+                        net.ixitxachitls.dma.entries.BaseCharacter.TYPE,
+                        true, false, Optional.<String>absent());
 
       assertTrue("images", index.hasImages());
       assertFalse("paginated", index.isPaginated());
     }
-
-    //......................................................................
   }
-
-  //........................................................................
 }

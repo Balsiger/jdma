@@ -1,0 +1,798 @@
+/* ****************************************************************************
+ * Copyright (c) 2002-2015 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/* Templates for monsters. */
+{namespace dma.entries.npcs}
+
+/** Show the monster. */
+{template .show}
+  {@param entry: ?}
+  {@param first: ?}
+  {@param previous: ?}
+  {@param list: ?}
+  {@param next: ?}
+  {@param last: ?}
+  {call dma.entry.show}
+    {param entry: $entry /}
+    {param type: 'npc' /}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param list: $list /}
+    {param next: $next /}
+    {param last: $last /}
+    {param color: '#080' /}
+    {param title: $entry.name /}
+    {param values kind="html"}
+      {if length($entry.baseNames)}
+        {call dma.entry.value}
+          {param label: 'Base' /}
+          {param value kind="html"}
+            {foreach $base in $entry.baseNames}
+              {call dma.page.link}
+                {param text: $base /}
+                {param url: '/monster/'  + $base /}
+              {/call}
+              {if not isLast($base)}; {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if $entry.parent.present}
+        {call dma.entry.value}
+          {param label: 'Parent' /}
+          {param value kind="html"}
+            {call dma.page.link}
+              {param url: $entry.campaign.path + '/' + $entry.parent /}
+              {param text: $entry.parent /}
+            {/call}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {call dma.entry.value}
+        {param label: 'HP' /}
+        {param value kind="html"}
+          {$entry.HP} (max {$entry.max_HP})
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {call dma.entry.value}
+        {param label: 'Gender' /}
+        {param value kind="html"}
+          {$entry.gender}
+        {/param}
+        {param color: '#080' /}
+      {/call}
+      {if $entry.personality.present}
+        {call dma.entry.value}
+          {param label: 'Personality' /}
+          {param value kind="html"}
+            {$entry.personality}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.occupations) > 0}
+        {call dma.entry.value}
+          {param label: 'Occupation' /}
+          {param value kind="html"}
+            {foreach $occupation in $entry.occupations}
+              {commands($occupation)}{if not isLast($occupation)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if $entry.family_name.present}
+        {call dma.entry.value}
+          {param label: 'Family Name' /}
+          {param value kind="html"}
+            {$entry.family_name}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if $entry.origin_region.present}
+        {call dma.entry.value}
+          {param label: 'Origin Region' /}
+          {param value kind="html"}
+            {$entry.origin_region}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if $entry.family_name.present}
+        {call dma.entry.value}
+          {param label: 'Appearance' /}
+          {param value kind="html"}
+            {$entry.looks}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.titles) > 0}
+        {call dma.entry.value}
+          {param label: 'Title' /}
+          {param value kind="html"}
+            {foreach $title in $entry.titles}
+              {commands($title)}{if not isLast($title)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.locations) > 0}
+        {call dma.entry.value}
+          {param label: 'Location' /}
+          {param value kind="html"}
+            {foreach $location in $entry.locations}
+              {commands($location)}{if not isLast($location)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.factions) > 0}
+        {call dma.entry.value}
+          {param label: 'Faction' /}
+          {param value kind="html"}
+            {foreach $faction in $entry.factions}
+              {commands($faction)}{if not isLast($faction)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.mannerisms) > 0}
+        {call dma.entry.value}
+          {param label: 'Mannerism' /}
+          {param value kind="html"}
+            {foreach $mannerism in $entry.mannerisms}
+              {commands($mannerism)}{if not isLast($mannerism)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.secrets) > 0}
+        {call dma.entry.value}
+          {param label: 'Secret' /}
+          {param value kind="html"}
+            {foreach $secret in $entry.secrets}
+              {commands($secret)}{if not isLast($secret)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.quests) > 0}
+        {call dma.entry.value}
+          {param label: 'Quest' /}
+          {param value kind="html"}
+            {foreach $quest in $entry.quests}
+              {commands($quest)}{if not isLast($quest)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+      {if length($entry.interactions) > 0}
+        {call dma.entry.value}
+          {param label: 'Interaction' /}
+          {param value kind="html"}
+            {foreach $interaction in $entry.interactions}
+              {commands($interaction)}{if not isLast($interaction)}, {/if}
+            {/foreach}
+          {/param}
+          {param color: '#080' /}
+        {/call}
+      {/if}
+    {/param}
+  {/call}
+
+  <div class="character-sheet">
+    {call .sheet}
+      {param entry: $entry /}
+    {/call}
+  </div>
+{/template}
+
+/** Editing the monster. */
+{template .edit}
+  {@param entry: ?}
+  {@param id: string|null}
+  {@param create: bool}
+  {call dma.edit.entry}
+    {param entry: $entry /}
+    {param type: 'monster' /}
+    {param id: $id /}
+    {param create: $create /}
+    {param values kind="html"}
+      {call dma.edit.value}
+        {param name: 'name' /}
+        {param label: 'Name' /}
+        {param value: $entry.name /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+        {param actions kind="html"}
+          <div class="sprite large random" tooltip="random name"
+               onclick="$('input[name=name]').val(util.ajax('/actions/random?
+                        {nil}campaign={$entry.campaign.key}
+                        {nil}&kind=name
+                        {nil}&race=' + $('input[name=base]').val() + '
+                        {nil}&region=' + $('input[name=origin_region]').val() +'
+                        {nil}&gender=' + $('select[name=gender]').val()))">
+          </div>
+        {/param}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'base' /}
+        {param label: 'Base' /}
+        {param values: $entry.base_names /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+        {param autocomplete: 'base monster/name' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'parent' /}
+        {param label: 'Parent' /}
+        {param value: $entry.parent.present ? $entry.parent : '' /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_selection}
+        {param name: 'gender' /}
+        {param label: 'Gender' /}
+        {param value: $entry.gender /}
+        {param choices: $ij.Gender.names /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'hp' /}
+        {param label: 'Hit Points' /}
+        {param value: $entry.HP /}
+        {param validate: 'number' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'max_hp' /}
+        {param label: 'Max HP' /}
+        {param value: $entry.maxHP /}
+        {param validate: 'number' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'personality' /}
+        {param label: 'Personality' /}
+        {param value: $entry.personality.present ? $entry.personality : '' /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'occupation' /}
+        {param label: 'Occupation' /}
+        {param values: $entry.occupations /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'family_name' /}
+        {param label: 'Family Name' /}
+        {param value: $entry.family_name.present ? $entry.family_name : '' /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'origin_region' /}
+        {param label: 'Origin Region' /}
+        {param value: $entry.origin_region.present
+            ? $entry.origin_region : '' /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'looks' /}
+        {param label: 'Appearance' /}
+        {param value: $entry.looks.present ? $entry.looks : '' /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'title' /}
+        {param label: 'Title' /}
+        {param values: $entry.titles /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'location' /}
+        {param label: 'Location' /}
+        {param values: $entry.locations /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'faction' /}
+        {param label: 'Faction' /}
+        {param values: $entry.factions /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'mannerism' /}
+        {param label: 'Mannerism' /}
+        {param values: $entry.mannerisms /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'secret' /}
+        {param label: 'Secret' /}
+        {param values: $entry.secrets /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'quest' /}
+        {param label: 'Quest' /}
+        {param values: $entry.quests /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+      {call dma.edit.value_list}
+        {param name: 'interaction' /}
+        {param label: 'Interaction' /}
+        {param values: $entry.interactions /}
+        {param validate: 'non-empty' /}
+        {param color: '#080' /}
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
+/** Format the monster name with a link. */
+{template .reference}
+  {@param entry: ?}
+  <a class="Monster" href="{$entry.path}">
+    {$entry.base_name} ({$entry.name})
+  </a>
+{/template}
+
+/** Print a statistics sheet for the monster. */
+{template .sheet}
+  {@param entry: ?}
+
+  // General
+  <div class="line">
+    {call dma.sheet.value}
+      {param label: 'Name' /}
+      {param value: $entry.given_name + ' (' + $entry.name + ')' /}
+    {/call}
+    {call dma.sheet.value}
+      {param label: 'Creature Type' /}
+      {param value: $entry.base_name /}
+    {/call}
+  </div>
+
+  // Abilities
+  <div class="line">
+    <div class="line" style="flex: 2">
+    {call .ability_box}
+      {param label: 'STR' /}
+      {param total: $entry.total_strength /}
+      {param modifier: $entry.strength_modifier /}
+    {/call}
+    {call .ability_box}
+      {param label: 'DEX' /}
+      {param total: $entry.total_dexterity /}
+      {param modifier: $entry.dexterity_modifier /}
+    {/call}
+    {call .ability_box}
+      {param label: 'CON' /}
+      {param total: $entry.total_constitution /}
+      {param modifier: $entry.constitution_modifier /}
+    {/call}
+    {call .ability_box}
+      {param label: 'INT' /}
+      {param total: $entry.total_intelligence /}
+      {param modifier: $entry.intelligence_modifier /}
+    {/call}
+    {call .ability_box}
+      {param label: 'WIS' /}
+      {param total: $entry.total_wisdom /}
+      {param modifier: $entry.wisdom_modifier /}
+    {/call}
+    {call .ability_box}
+      {param label: 'CHA' /}
+      {param total: $entry.total_charisma /}
+      {param modifier: $entry.charisma_modifier /}
+    {/call}
+    </div>
+    // Initiative and speed
+    <div class="column" style="flex: 1">
+      {call dma.sheet.value}
+        {param label: 'Initiative' /}
+        {param width: '100%' /}
+        {param value: bonus($entry.initiative) /}
+      {/call}
+      {call dma.sheet.value}
+        {param label: 'Speed' /}
+        {param width: '100%' /}
+        {param value kind="html"}
+          {if isList($entry.speeds_annotated)}
+            {foreach $speed in $entry.speeds_annotated}
+              {annotate($speed)}
+              {if not isLast($speed)}, {/if}
+            {/foreach}
+          {/if}
+        {/param}
+      {/call}
+    </div>
+    // Hit points
+    {call dma.sheet.case}
+      {param label: 'Hit Points' /}
+      {param flex: 3 /}
+      {param value kind="html"}
+        <div class="hps">
+          {for $i in range($entry.maxHP - $entry.HP)}
+            <div class="count crossed">{$entry.maxHP - $i}</div>
+            {if ($entry.maxHP - $i) % 20 == 0}
+              <br/>
+            {/if}
+          {/for}
+          {for $i in range($entry.HP + 1)}
+            <div class="count">{$entry.HP - $i}</div>
+            {if ($entry.HP - $i) % 20 == 0}
+              <br/>
+            {/if}
+          {/for}
+        </div>
+      {/param}
+    {/call}
+  </div>
+
+  // Armor
+  <div class="line">
+    <div class="line" style="flex: 4">
+      <div class="value-label prefixed inline"
+           style="vertical-align:top; padding-top: 13px">
+        AC
+      </div>
+
+      {call dma.sheet.value}
+         {param label kind="html"}
+           Total <br/>
+           &nbsp;
+         {/param}
+         {param value: $entry.armor_class /}
+      {/call}
+
+      <div class="operator" style="padding-top: 13px">=</div>
+
+      <div class="inline" style="vertical-align: top; padding-top: 13px">
+      &nbsp;10&nbsp;
+      </div>
+
+      <div class="operator" style="padding-top: 13px">+</div>
+
+      {call dma.sheet.value}
+        {param label kind="html"}
+          Dex<br/>
+          Modifier
+        {/param}
+        {param value: bonus($entry.dexterity_modifier) /}
+      {/call}
+
+      <div class="operator" style="padding-top: 13px">+</div>
+
+      {call dma.sheet.value}
+        {param label kind="html"}
+          Size<br/>
+          Modifier
+        {/param}
+      {param value: bonus($entry.size_modifier) /}
+      {/call}
+
+      <div class="operator" style="padding-top: 13px">+</div>
+
+      {call dma.sheet.value}
+        {param label kind="html"}
+          Natural <br/>
+          Armor
+        {/param}
+        {param value: annotate($entry.combined_natural_armor) /}
+      {/call}
+
+      <div class="operator" style="padding-top: 13px">+</div>
+
+      {call dma.sheet.value}
+        {param label kind="html"}
+          Misc <br/>
+          Modifiers
+        {/param}
+        {param value: '' /}
+      {/call}
+    </div>
+
+    {call dma.sheet.value}
+      {param label: 'Touch AC' /}
+      {param value: $entry.touch_armor_class /}
+    {/call}
+
+    {call dma.sheet.value}
+      {param label: 'Flat-Footed AC' /}
+      {param value: $entry.flat_footed_armor_class /}
+    {/call}
+
+  </div>
+
+  <div class="line">
+    <div class="column" style="flex: 1">
+      {call dma.sheet.grouptitle}
+        {param title: 'Saving Throws' /}
+      {/call}
+
+      <div class="line">
+        <div class="inline" style="flex:6;margin-top:10px">Fortitude (CON)</div>
+        {call dma.sheet.box}
+          {param value: annotate($entry.combined_fortitude_save) /}
+          {param flex: 0 /}
+        {/call}
+      </div>
+
+      <div class="line">
+        <div class="inline" style="flex:6;margin-top:10px">Relfex (DEX)</div>
+        {call dma.sheet.box}
+          {param value: annotate($entry.combined_reflex_save) /}
+        {/call}
+      </div>
+
+      <div class="line">
+        <div class="inline" style="flex:6;margin-top:10px">Will (WIS)</div>
+        {call dma.sheet.box}
+          {param value: annotate($entry.combined_will_save) /}
+        {/call}
+      </div>
+    </div>
+
+    <div class="column" style="flex: 2">
+      {call dma.sheet.grouptitle}
+        {param title: 'Attacks' /}
+      {/call}
+      {foreach $attack in $entry.combined_primary_attacks.get}
+        <div class="line">
+          {call .attack}
+            {param name: ($attack.number.one ? '' : $attack.number + ' ')
+                          + $attack.mode /}
+            {param bonus kind="html"}
+              {annotate(call($entry, 'attackBonus', $attack))}
+              {sp}{$attack.style}
+            {/param}
+            {param damage: call($entry, 'damage', $attack) /}
+            {param critical: '20' /}
+          {/call}
+        </div>
+      {/foreach}
+      {foreach $attack in $entry.combined_secondary_attacks.get}
+        <div class="line">
+          {call .attack}
+            {param name: ($attack.number.one ? '' : $attack.number + ' ')
+                          + $attack.mode /}
+            {param bonus kind="html"}
+              {annotate(call($entry, 'secondaryAttackBonus', $attack))}
+              {sp}{$attack.style}
+            {/param}
+            {param damage: call($entry, 'secondaryDamage', $attack) /}
+            {param critical: '20' /}
+          {/call}
+        </div>
+      {/foreach}
+
+      {foreach $weapon in $entry.weapons}
+        {if index($weapon) < 4}
+          <div class="line">
+            {call .attack}
+              {param name kind="html"}
+                {call dma.entries.items.reference}
+                  {param entry: $weapon /}
+                {/call}
+              {/param}
+              {param bonus kind="html"}
+                {foreach $key in keys($weapon.attack_bonus)}
+                  {if $key}
+                    {sp}{$key}
+                  {/if}
+                  {foreach $attack in $weapon.attack_bonus[$key]}
+                    {bonus($attack)}
+                    {if not isLast($attack)}/{/if}
+                  {/foreach}
+                  {if not isLast($key)}, {/if}
+                {/foreach}
+              {/param}
+              {param damage: $weapon.damage /}
+              {param critical: $weapon.critical /}
+              {param weapon: $weapon /}
+            {/call}
+          </div>
+        {/if}
+      {/foreach}
+    </div>
+
+    <div class="column" style="flex: 1">
+      <div class="line">
+        {call dma.sheet.prefixed_value}
+          {param label: 'Base Attack' /}
+          {param value: annotate($entry.combined_base_attack) /}
+        {/call}
+      </div>
+
+      <div class="line">
+        {call dma.sheet.prefixed_value}
+          {param label: 'Grapple Modifier' /}
+          {param value: bonus($entry.grapple_modifier) /}
+        {/call}
+      </div>
+
+      <div class="line">
+        {call dma.sheet.prefixed_value}
+          {param label: 'Personality' /}
+          {param value: $entry.personality /}
+        {/call}
+      </div>
+    </div>
+  </div>
+
+  <div class="line">
+    <div class="column" style="flex: 2">
+      {call dma.sheet.grouptitle}
+        {param title: 'Skills' /}
+      {/call}
+
+      <div>
+      {foreach $skill in $ij.BaseSkill.all_skills}
+        {if not $skill.subtype_only
+            and call($entry, 'skillModifier', $skill.name, $skill.ability)}
+          <div class="monster skill-line">
+            {$skill.name}{sp}
+            {call($entry, 'skillModifier', $skill.name, $skill.ability)}
+          </div>
+        {/if}
+      {/foreach}
+      </div>
+    </div>
+
+    <div class="column" style="flex: 3">
+      {call dma.sheet.grouptitle}
+        {param title: 'Feats' /}
+      {/call}
+
+      {foreach $feat in $entry.combined_feats.get}
+        <div class="feat">
+          {call dma.entries.feats.summary}
+            {param entry: $feat /}
+          {/call}
+        </div>
+      {/foreach}
+
+      {call dma.sheet.grouptitle}
+        {param title: 'Special Abilities' /}
+      {/call}
+
+      {foreach $quality in $entry.qualities}
+        <div class="quality">
+          {call dma.entries.qualities.summary}
+            {param entry: $quality /}
+          {/call}
+        </div>
+      {/foreach}
+
+      {foreach $quality in $entry.racial_qualities.get}
+        <div class="quality">
+          {call dma.entries.qualities.summary}
+            {param entry: $quality /}
+          {/call}
+        </div>
+      {/foreach}
+
+    </div>
+  </div>
+{/template}
+
+/** A weapon line. */
+{template .attack}
+  {@param name: string|html}
+  {@param bonus: string|html}
+  {@param damage: string|html}
+  {@param critical: string|html}
+  {call dma.sheet.value}
+    {param label: 'Weapon' /}
+    {param value: $name /}
+  {/call}
+
+  {call dma.sheet.value}
+    {param label: 'Attack Bonus' /}
+    {param value: $bonus /}
+  {/call}
+
+  {call dma.sheet.value}
+    {param label: 'Damage' /}
+    {param value: $damage /}
+  {/call}
+
+  {call dma.sheet.value}
+    {param label: 'Critical' /}
+    {param value: $critical /}
+  {/call}
+{/template}
+
+/** A box with an ability score. */
+{template .ability_box}
+  {@param total: string|html|number}
+  {@param modifier: string|html|number}
+  {@param label: string|html}
+  {call dma.sheet.box}
+    {param label: $label /}
+    {param width: '5%' /}
+    {param size: '12px' /}
+    {param vSize: '15px' /}
+    {param boxed: true /}
+    {param center: true /}
+    {param top: true /}
+    {param value kind="html"}
+      {$total}
+      <div class="size-tiny">
+        {bonus($modifier)}
+      </div>
+    {/param}
+  {/call}
+{/template}
+
+/** Formatting a list of entries. */
+{template .list}
+  {@param start: number}
+  {@param pagesize: number}
+  {@param entries: list<?>}
+  {@param label: string|html}
+  {@param path: string}
+
+  {call dma.entry.list}
+    {param title: 'NPCs' /}
+    {param label: $label /}
+    {param path: $path /}
+    {param start: $start /}
+    {param pagesize: $pagesize /}
+    {param size: $entries ? length($entries) : 0 /}
+    {param titles: [ 'Name', 'Race'] /}
+    {param entries kind="html"}
+      {foreach $entry in $entries}
+        <tr onclick="util.link(event, '{$entry.path}')">
+          {call dma.entry.listEntry}
+            {param path: $entry.path /}
+            {param values: [
+              $entry.name, $entry.base_name
+            ] /}
+          {/call}
+        </tr>
+      {/foreach}
+    {/param}
+  {/call}
+{/template}

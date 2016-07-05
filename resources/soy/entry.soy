@@ -42,6 +42,7 @@
   {@param? title: html}
   {@param? noprint: bool}
   {@param? nodescriptions: bool}
+
   <div class="show entry {$type}{if $noprint} no-print{/if}">
 
     {call .toolbar}
@@ -77,6 +78,17 @@
           {/call}
         {/if}
       {/foreach}
+
+      {if $ij.hasDMAccess}
+        <a target="_gcsimage" class="image-storage-link"
+           href="https://console.cloud.google.com/storage/browser/jdmaixit-hrd.appspot.com/{$entry.file_path}?project=jdmaixit-hrd">
+          cloud storage
+        </a>
+        <a target="_imgsrch" class="image-storage-link"
+           href="https://www.google.com/search?tbm=isch&q={$entry.image_search_query}">
+          image search
+        </a>
+      {/if}
     </div>
 
     <div class="values">
@@ -137,6 +149,12 @@
       </pre>
     {/if}
   </div>
+  {if def($entry.campaign)}
+    {call .campaign}
+      {param campaign: $entry.campaign /}
+      {param entry: $entry /}
+    {/call}
+  {/if}
 {/template}
 
 /** Show the toolbar with the avaialable actions. */
@@ -146,7 +164,7 @@
     <div class="actions">
       <div class="action sprite large edit"
            onclick="edit.show('{$entry.name}',
-                              '{$entry.path}',
+                              '{$entry.path}.edit',
                    'edit-{escape($entry.type)}-{escape($entry.name)}')">
       </div>
       <div class="action sprite large delete"
@@ -308,7 +326,7 @@
       {param tooltip: 'Main' /}
       {param class: 'image-link' /}
       {param text kind="html"}
-        <img src="/icons/{$entry.type.multilink}-dummy.png" alt="Main"
+        <img src="/icons/{$entry.type.multiple_link}-dummy.png" alt="Main"
         class="_new_ _new_image _new_main"
         {if $size}
           {sp}style="max-width: {$size}px; max-height: {$size}px;"
@@ -359,9 +377,15 @@
   {@param entries: html}
   {@param label: html|string}
   {@param path: string}
-  <h1>{$title}</h1>
+  {@param? group: string}
+  {@param? images: bool}
+
+  <h1>
+    {$title}
+    {if $group} &ndash; {$group}{/if}
+  </h1>
   {call dma.page.title}
-    {param title: $title /}
+    {param title: $title + ($group ? ' - ' + $group : '') /}
   {/call}
 
   {call dma.navigation.navigation}
@@ -375,11 +399,13 @@
 
   {if $entries}
     <table class="entrylist">
-      <tr class="title">
-        {foreach $listTitle in $titles}
-          {call .listtitle}{param title: $listTitle /}{/call}
-        {/foreach}
-      </tr>
+      {if not $images}
+        <tr class="title">
+          {foreach $listTitle in $titles}
+            {call .listtitle}{param title: $listTitle /}{/call}
+          {/foreach}
+        </tr>
+      {/if}
       {$entries}
     </table>
     {call dma.entry.listnav}
@@ -404,11 +430,44 @@
 {template .listEntry}
   {@param path: string}
   {@param values: list<?>}
+  {@param? colors: list<?>}
   <tr onclick="util.link(event, '{$path}')">
     {foreach $value in $values}
-      <td class="list">{$value}</td>
-    {/foreach}          
-  </tr>   
+      {if startsWith($value, 'https://storage.cloud.google.com')}
+        <td class="list image"><img src="{$value}" class="list-image"/></td>
+      {else}
+        <td class="list"
+            {if $colors}
+              {if $colors[index($value)]}
+                style="background-color: {$colors[index($value)]}; color: white"
+
+              {/if}
+            {/if}>
+            <a href="{$path}">{$value}</a>
+        </td>
+      {/if}
+      </td>
+    {/foreach}
+  </tr>
+{/template}
+
+/** Template for a list image entry. */
+{template .listImageEntry}
+  {@param image: string}
+  {@param name: string}
+  {@param id: string}
+  {@param overlay: string}
+
+  <div class="list-image-entry">
+    <div class="image-wrapper">
+      <img class="image" src="{$image}" />
+    </div>
+    <div class="overlay">{$overlay}</div>
+    <div class="caption">
+      {$name}<br/>
+      ({$id})
+    </div>
+  </div>
 {/template}
 
 /** The entry navigation. */
@@ -494,16 +553,17 @@
   </div>
 {/template}
 
-/**
- * Template for rendering an index overview.
- *
- * @param title the page title
- * @param indexes the names of the indexes to render
- * @param name the index name
- * @param keys the keys for nested groups
- * @param type The type of the entries shown
- */
+/** Template for rendering an index overview. */
 {template .indexoverview}
+  {@param title: string}
+  {@param indexes: ?}
+  {@param name: string}
+  {@param keys: list<string>|null}
+  {@param colors: list<string>}
+  {@param type: string}
+  {@param images: bool}
+
+  {if $images}{/if}
   <h1>{$title}</h1>
   {call dma.page.title}
     {param title: $title /}
@@ -531,12 +591,13 @@
         </div>
         <div class="index-group">
           {foreach $index in $indexes[$key]}
+            {$index} index
             {call dma.page.link}
               {param url : $name + '/'
                   + ($index ? $key + '::' + $index : $key) /}
               {param text kind="html"}
                 <div class="index-overview">
-                  {$index}
+                  {$index}--gugus
                 </div>
               {/param}
               {param tooltip: $index /}
@@ -551,7 +612,11 @@
       {call dma.page.link}
         {param url : $name + '/' + $index /}
         {param text kind="html"}
-          <div class="index-overview">
+          <div class="index-overview"
+               {if $colors[index($index)]}
+                 {sp}style="color: white;
+                            background-color: {$colors[index($index)]}"
+               {/if}>
             {$index}
           </div>
         {/param}
@@ -606,3 +671,106 @@
   {/if}
 {/template}
 
+/** Campaign specific information. */
+{template .campaign}
+  {@param campaign: ?}
+  {@param entry: ?}
+
+  <div id="campaign">
+    <div class="campaign-container">
+      <div class="campaign-name">{$campaign.name}</div>
+      <div class="campaign-set-current">
+        <div class="project sprite large" title="set current"
+             onclick="util.ajax('/actions/current-campaign',
+                                {lb}campaign: '{jsescape($campaign.key)}',
+                                    entry: '{jsescape($entry.key)}'{rb}, null,
+                                true)">
+        </div>
+        {if $campaign.current_entry.present}
+          <div class="entry" id="campaign-current-entry"
+               onclick="util.link(event, '{$campaign.current_entry.path}')">
+            {$campaign.current_entry.name}
+          </div>
+        {else}
+          <div class="entry" id="campaign-current-entry"></div>
+        {/if}
+      </div>
+      <div class="campaign-date">
+        {call .adjustableDate}
+          {param campaign: $campaign /}
+          {param date: $campaign.date /}
+        {/call}
+      </div>
+     </div>
+  </div>
+{/template}
+
+/** Formatting a date that can be adjusted. */
+{template .adjustableDate}
+  {@param campaign: ?}
+  {@param date: ?}
+
+  {call .adjustableDatePart}
+    {param part: $date.monthFormatted /}
+    {param key: $campaign.key /}
+    {param month: 1 /}
+    {param name: 'month' /}
+  {/call}
+
+  {call .adjustableDatePart}
+    {param part: $date.dayFormatted /}
+    {param key: $campaign.key /}
+    {param day: 1 /}
+    {param name: 'day' /}
+  {/call}
+
+  {call .adjustableDatePart}
+    {param part: $date.year /}
+    {param key: $campaign.key /}
+    {param year: 1 /}
+    {param name: 'year' /}
+  {/call}
+
+  {call .adjustableDatePart}
+    {param part: $date.hoursFormatted /}
+    {param key: $campaign.key /}
+    {param hour: 1 /}
+    {param name: 'hours' /}
+  {/call}
+  :
+  {call .adjustableDatePart}
+    {param part: $date.minutesFormatted /}
+    {param key: $campaign.key /}
+    {param minute: 5 /}
+    {param name: 'minutes' /}
+  {/call}
+
+{/template}
+
+/** A part of a formatted and adjustable date. */
+{template .adjustableDatePart}
+  {@param name: string}
+  {@param part: html}
+  {@param key: string}
+  {@param? year: int}
+  {@param? month: int}
+  {@param? day: int}
+  {@param? hour: int}
+  {@param? minute: int}
+
+  <div class="date-element">
+    <span id="campaign-date-{$name}">{if $part}{$part}{else}&nbsp;{/if}</span>
+    <div class="action up"
+         onclick="util.time('{$key}', {$minute ? $minute : 0},
+                            {$hour ? $hour : 0}, {$day ? $day : 0},
+                            {$month ? $month : 0}, {$year ? $year : 0})">
+      ▲
+    </div>
+    <div class="action down"
+         onclick="util.time('{$key}', {$minute ? -$minute : 0},
+                            {$hour ? -$hour : 0}, {$day ? -$day : 0},
+                            {$month ? -$month : 0}, {$year ? -$year : 0})">
+      ▼
+    </div>
+  </div>
+{/template}

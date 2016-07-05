@@ -49,6 +49,7 @@ import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
@@ -98,15 +99,11 @@ public class EntryServlet extends PageServlet
   {
     String path = inData.get("path").coerceToString();
     if(path == null)
-    {
       return "dma.errors.noEntry";
-    }
 
     EntryKey key = (EntryKey) ((SoyValue) inData.get("key")).getValue();
     if(key == null)
-    {
       return "dma.errors.extract";
-    }
 
     if(!inData.containsKey("entry"))
       return "dma.errors.invalidPage";
@@ -116,24 +113,33 @@ public class EntryServlet extends PageServlet
     if(entry != null && !entry.isShownTo(inRequest.getUser()))
       return "dma.errors.invalidPage";
 
-    switch(inData.get("action").coerceToString())
+    String actionName = inData.get("action").coerceToString();
+    ActionType actionType = ActionType.edit;
+    for(ActionType act : ActionType.values())
+      if(act.name().equalsIgnoreCase(actionName))
+      {
+        actionType = act;
+        break;
+      }
+
+    switch(actionType)
     {
-      case "print":
+      case print:
         return "dma.entry.printcontainer";
 
-      case "summary":
+      case summary:
         return "dma.entry.summarycontainer";
 
-      case "card":
+      case card:
         return "dma.entries."
             + key.getType().getMultipleDir().toLowerCase() + ".large";
 
-      case "create":
-      case "edit":
+      case create:
+      case edit:
         return "dma.entries."
             + key.getType().getMultipleDir().toLowerCase() + ".edit";
 
-      case "show":
+      case show:
       default:
         return "dma.entries."
             + key.getType().getMultipleDir().toLowerCase() + ".show";
@@ -149,16 +155,17 @@ public class EntryServlet extends PageServlet
    *
    * @return the action that should be used to show the page
    */
-  private String getAction(String inPath, EntryKey inKey, DMARequest inRequest)
+  private ActionType getAction(String inPath, EntryKey inKey, DMARequest inRequest)
   {
     if(isCreate(inRequest, inKey))
-      return "edit";
+      return ActionType.edit;
 
-    String action = Strings.getPattern(inPath, "\\.(.*)$");
-    if(action != null && !action.isEmpty())
-      return action;
+    String actionName = Strings.getPattern(inPath, ACTION_REGEXP);
+    for(ActionType actionType : ActionType.values())
+      if(actionType.name().equalsIgnoreCase(actionName))
+        return actionType;
 
-    return "show";
+    return ActionType.show;
   }
 
   /**
@@ -172,8 +179,8 @@ public class EntryServlet extends PageServlet
   private boolean isCreate(DMARequest inRequest, EntryKey inKey)
   {
     return inRequest.hasUser()
-        && (inRequest.hasParam("create")
-            || "CREATE".equalsIgnoreCase(inKey.getID()));
+        && (inRequest.hasParam(ActionType.create.name())
+            || ActionType.create.name().equalsIgnoreCase(inKey.getID()));
   }
 
   @Override
@@ -182,8 +189,7 @@ public class EntryServlet extends PageServlet
   {
     Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
-    String path = inRequest.getRequestURI();
-    data.put("path", path);
+    String path = (String)data.get(Key.path.name());
     if(path == null)
       return data;
 
@@ -194,8 +200,8 @@ public class EntryServlet extends PageServlet
     if(!key.isPresent())
       return data;
 
-    String action = getAction(path, key.get(), inRequest);
-    data.put("action", action);
+    ActionType actionType = getAction(path, key.get(), inRequest);
+    data.put("action", actionType.name());
 
     Optional<? extends AbstractEntry> entry = Optional.absent();
     boolean isCreate = isCreate(inRequest, key.get());
@@ -239,7 +245,7 @@ public class EntryServlet extends PageServlet
           // bases are overwritten by values if done before!
           if(inRequest.hasParam("bases"))
             for(String base
-                : inRequest.getParam("bases").get().split("\\s*,\\s*"))
+                : inRequest.getParam("bases").get().split("\\s*,,\\s*"))
               if(!base.isEmpty())
                 entry.get().addBase(base);
 
@@ -279,17 +285,17 @@ public class EntryServlet extends PageServlet
 
       data.put("entry",
                new SoyValue(entry.get().getKey().toString(), entry.get()));
-      data.put("first", current <= 0 ? "" : ids.get(0) + "." + action);
+      data.put("first", current <= 0 ? "" : ids.get(0) + "." + actionType);
       data.put("previous",
-               current <= 0 ? "" : ids.get(current - 1) + "." + action);
+               current <= 0 ? "" : ids.get(current - 1) + "." + actionType);
       data.put("list", "/" + entry.get().getType().getMultipleLink());
       data.put("next",
-               current >= last ? "" : ids.get(current + 1) + "." + action);
-      data.put("last", current >= last ? "" : ids.get(last) + "." + action);
+               current >= last ? "" : ids.get(current + 1) + "." + actionType);
+      data.put("last", current >= last ? "" : ids.get(last) + "." + actionType);
       data.put("variant", type.getName().replace(" ", ""));
       data.put("id",
                inRequest.hasParam("id")
-                   ? inRequest.getParam("id").get() : null);
+                   ? inRequest.getParam("id").get() : entry.get().getName());
       data.put("create", isCreate);
       data.put("title", entry.get().getName());
     }
@@ -311,7 +317,7 @@ public class EntryServlet extends PageServlet
     // should have access to it.
     data.put("isDM", user != null
         && (!entry.isPresent() || entry.get().isDM(user)));
-    data.put("isDev", DMAServlet.isDev() || inRequest.hasParam("dev"));
+    data.put("hasDMAccess", user.isPresent() && user.get().hasAccess(Group.DM));
     data.put("isOwner", user.isPresent()
         && (!entry.isPresent() || entry.get().isOwner(user.get())));
 

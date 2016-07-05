@@ -44,9 +44,7 @@ import net.ixitxachitls.dma.entries.Skill;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.output.soy.SoyValue;
-import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.values.ArmorType;
-import net.ixitxachitls.dma.values.Content;
 import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.WeaponStyle;
@@ -62,6 +60,7 @@ import net.ixitxachitls.dma.values.enums.Immunity;
 import net.ixitxachitls.dma.values.enums.Language;
 import net.ixitxachitls.dma.values.enums.LanguageModifier;
 import net.ixitxachitls.dma.values.enums.Maneuverability;
+import net.ixitxachitls.dma.values.enums.MiniatureLocationRuleType;
 import net.ixitxachitls.dma.values.enums.MonsterSubtype;
 import net.ixitxachitls.dma.values.enums.MonsterType;
 import net.ixitxachitls.dma.values.enums.MovementMode;
@@ -77,7 +76,6 @@ import net.ixitxachitls.dma.values.enums.SpellDescriptor;
 import net.ixitxachitls.dma.values.enums.SpellEffect;
 import net.ixitxachitls.dma.values.enums.Subschool;
 import net.ixitxachitls.util.Tracer;
-import net.ixitxachitls.util.logging.Log;
 
 /**
  * The base servlet for all soy rendered pages.
@@ -99,6 +97,8 @@ public class SoyServlet extends DMAServlet
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
+
+  public enum Key { path };
 
   /**
    * Get the name of the template to render the page.
@@ -212,7 +212,10 @@ public class SoyServlet extends DMAServlet
   protected Map<String, Object> collectData(DMARequest inRequest,
                                             SoyRenderer inRenderer)
   {
-    return SoyTemplate.map();
+    Map<String, Object> data = SoyTemplate.map();
+    data.put(Key.path.name(), inRequest.getRequestURI());
+
+    return data;
   }
 
   /**
@@ -289,7 +292,10 @@ public class SoyServlet extends DMAServlet
        "Immunity", new SoyValue("Immunity", Immunity.class),
        "BaseSkill", new SoyValue("BaseSkill", BaseSkill.class),
        "BaseProduct_Part",
-       new SoyValue("BaseProduct_Part", BaseProduct.Part.class));
+       new SoyValue("BaseProduct_Part", BaseProduct.Part.class),
+       "MiniatureLocationRule",new SoyValue("MiniatureLocationRule",
+                                            MiniatureLocationRuleType.class),
+       "isDev", DMAServlet.isDev() || inRequest.hasParam("dev"));
 
     tracer.done();
     return map;

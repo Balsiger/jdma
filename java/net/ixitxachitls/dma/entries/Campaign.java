@@ -31,7 +31,10 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.proto.Entries.CampaignEntryProto;
 import net.ixitxachitls.dma.proto.Entries.CampaignProto;
+import net.ixitxachitls.dma.values.Calendar;
+import net.ixitxachitls.dma.values.CampaignDate;
 import net.ixitxachitls.dma.values.Values;
+import net.ixitxachitls.dma.values.enums.Gender;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -74,6 +77,9 @@ public class Campaign extends CampaignEntry
   /** The dm for this campaign. */
   protected Optional<String> m_dm = Optional.absent();
 
+  /** The date of the campaign. */
+  protected Optional<CampaignDate> m_date = Optional.absent();
+
   /**
    * Get the key for the campaign.
    *
@@ -102,6 +108,11 @@ public class Campaign extends CampaignEntry
     return m_dm;
   }
 
+  public Optional<CampaignDate> getDate()
+  {
+    return m_date;
+  }
+
   @Override
   public String getDMName()
   {
@@ -109,6 +120,14 @@ public class Campaign extends CampaignEntry
       return m_dm.get();
 
     return "(none)";
+  }
+
+  public Calendar getCalendar()
+  {
+    for(BaseEntry base : getBaseEntries())
+      return ((BaseCampaign)base).getCalendar();
+
+    return new Calendar();
   }
 
   /**
@@ -144,120 +163,6 @@ public class Campaign extends CampaignEntry
     return monsters;
   }
 
-  /**
-   * Compute a value for a given key, taking base entries into account if
-   * available.
-   *
-   * @ param    inKey the key of the value to compute
-   *
-   * @return   the compute value
-   *
-   */
-  /*
-  @Override
-  public @Nullable Object compute(String inKey)
-  {
-    if("characters".equals(inKey))
-    {
-      List<String> characters =
-        DMADataFactory.get().getIDs(Character.TYPE, getKey());
-
-      List<Multiple> list = new ArrayList<Multiple>();
-      for(String character : characters)
-        list.add(new Multiple
-                 (new Multiple.Element(new Name(character), false),
-                  new Multiple.Element(new Name(getPath() + "/"
-                                                + Character.TYPE.getLink() + "/"
-                                                + character), false)));
-
-      if (list.isEmpty())
-        return null;
-
-      return new ValueList<Multiple>(list);
-    }
-
-    if("encounters".equals(inKey))
-    {
-      List<Encounter> encounters =
-        DMADataFactory.get().getEntries(Encounter.TYPE, getKey(), 0, 100);
-
-      List<Encounter> list = new ArrayList<>();
-      for(Encounter encounter : encounters)
-        if (encounter.getCampaign().getName().equals(this.getName()))
-          list.add(encounter);
-
-      return list;
-    }
-
-    if("items".equals(inKey))
-    {
-       List<Character> characters =
-         DMADataFactory.get().getEntries(Character.TYPE, getKey(), 0, 100);
-      List<Multiple> list = new ArrayList<Multiple>();
-
-       Map<String, Item> owned = new HashMap<String, Item>();
-       for(Character character : characters)
-       {
-         Map<String, Item> contained = character.containedItems(true);
-         for(String key : contained.keySet())
-           if(owned.containsKey(key))
-             Log.warning("item " + key + " is possessed by two characters");
-
-         owned.putAll(contained);
-       }
-
-       for(Monster monster : monsters())
-       {
-         Map<String, Item> contained = monster.containedItems(true);
-         for(String key : contained.keySet())
-           if(owned.containsKey(key))
-             Log.warning("item " + key
-                         + " is possessed by two characters/monsters");
-
-         owned.putAll(contained);
-       }
-
-       for(int pos = 0;; pos += 100)
-       {
-         // TODO: this is expensive, we might want to do this only on demand?
-         List<Item> items =
-           DMADataFactory.get().getEntries(Item.TYPE, getKey(), pos, 100);
-
-         for(Item item : items)
-         {
-           if(owned.containsKey(item.getName()))
-             continue;
-
-           list.add(new Multiple
-                    (new Multiple.Element(new Name(item.getPlayerName()),
-                                          false),
-                     new Multiple.Element(new Name(item.getDMName()),
-                                          false),
-                     new Multiple.Element(new Name(getPath() + "/"
-                                                   + Item.TYPE.getLink() + "/"
-                                                 + item.getName()), false)));
-         }
-
-         if(items.size() < 100 || list.size() > 5)
-           break;
-       }
-
-      if(list.isEmpty())
-        return new ValueList<Multiple>
-          (new Multiple(new Multiple.Element(new Name(), false),
-                        new Multiple.Element(new Name(), false),
-                        new Multiple.Element(new Name(), false)));
-      else
-        return new ValueList<Multiple>(list);
-    }
-
-    if("basename".equals(inKey))
-      return new Name(m_base.get(0));
-
-    return super.compute(inKey);
-  }
-*/
-
   @Override
   public Multimap<Index.Path, String> computeIndexValues()
   {
@@ -290,6 +195,11 @@ public class Campaign extends CampaignEntry
       + "/";
   }
 
+  public Optional<AbstractEntry> getCurrentEntry()
+  {
+    return DMADataFactory.get().getCurrentCampaignEntry(getKey().toString());
+  }
+
   @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
   {
@@ -305,6 +215,11 @@ public class Campaign extends CampaignEntry
     super.setValues(inValues);
 
     m_dm = inValues.use("DM", m_dm);
+
+    if(!m_date.isPresent())
+      m_date = Optional.of(new CampaignDate(getCalendar()));
+
+    m_date.get().set(inValues);
   }
 
   @Override
@@ -316,6 +231,9 @@ public class Campaign extends CampaignEntry
 
     if(m_dm.isPresent())
       builder.setDm(m_dm.get());
+
+    if(m_date.isPresent())
+      builder.setDate(m_date.get().toProto());
 
     CampaignProto proto = builder.build();
     return proto;
@@ -340,6 +258,31 @@ public class Campaign extends CampaignEntry
 
     if(proto.hasDm())
       m_dm = Optional.of(proto.getDm());
+
+    if(proto.hasDate())
+      m_date = Optional.of(CampaignDate.fromProto(
+          getCalendar(), proto.getDate()));
+  }
+
+  public Optional<CampaignDate> manipulateTime(int inMinutes, int inHours,
+                                               int inDays, int inMonths,
+                                               int inYears)
+  {
+    if(m_date.isPresent())
+    {
+      m_date.get().manipulate(inMinutes, inHours, inDays, inMonths, inYears);
+      changed();
+    }
+
+    save();
+    return m_date;
+  }
+
+  public String generateRandomName(String inRace, Optional<String> inRegion,
+                                   Gender inGender)
+  {
+    return ((BaseCampaign)getBaseEntry()).generateRandomName(inRace, inRegion,
+                                                             inGender);
   }
 
   @Override

@@ -23,16 +23,25 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Optional;
 
-import org.easymock.EasyMock;
-
+import net.ixitxachitls.dma.server.servlets.actions.Action;
+import net.ixitxachitls.dma.server.servlets.actions.CampaignTimeAction;
+import net.ixitxachitls.dma.server.servlets.actions.CurrentCampaignAction;
+import net.ixitxachitls.dma.server.servlets.actions.MoveEntryAction;
+import net.ixitxachitls.dma.server.servlets.actions.RandomNameAction;
+import net.ixitxachitls.dma.server.servlets.actions.RecompileAction;
+import net.ixitxachitls.dma.server.servlets.actions.RegisterAction;
+import net.ixitxachitls.dma.server.servlets.actions.RemoveEntryAction;
+import net.ixitxachitls.dma.server.servlets.actions.SaveEntryAction;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -41,15 +50,28 @@ import net.ixitxachitls.util.logging.Log;
  * @file          ActionServlet.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  */
-public abstract class ActionServlet extends DMAServlet
+public class ActionServlet extends DMAServlet
 {
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
+  private static Map<String, Action> s_actions = new HashMap<>();
+  static
+  {
+    s_actions.put("current-campaign", new CurrentCampaignAction());
+    s_actions.put("save", new SaveEntryAction());
+    s_actions.put("move", new MoveEntryAction());
+    s_actions.put("recompile", new RecompileAction());
+    s_actions.put("register", new RegisterAction());
+    s_actions.put("remove", new RemoveEntryAction());
+    s_actions.put("time", new CampaignTimeAction());
+    s_actions.put("random", new RandomNameAction());
+  }
+
   /**
    * Create the servlet for actions.
    */
-  protected ActionServlet()
+  public ActionServlet()
   {
   }
 
@@ -106,7 +128,13 @@ public abstract class ActionServlet extends DMAServlet
       // data, though.
       synchronized(ActionServlet.class)
       {
-        String text = doAction(inRequest, inResponse);
+        String name = extractActionName(inRequest);
+        Action action = s_actions.get(name);
+        String text;
+        if(action == null)
+          text = Action.alert("unknown acton " + name);
+        else
+          text = action.execute(inRequest);
 
         try (PrintStream print = new PrintStream(inResponse.getOutputStream()))
         {
@@ -123,36 +151,6 @@ public abstract class ActionServlet extends DMAServlet
   }
 
   /**
-    *
-    * Send back a message to the client, using a cookie to show the message
-    * after page reload.
-    *
-    * @param       inResponse the response to send to
-    * @param       inMessage  the message to send back
-    *
-    */
-  protected void setMessage(HttpServletResponse inResponse,
-                            String inMessage)
-  {
-    Cookie cookie = new Cookie("INFO", inMessage);
-    cookie.setPath("/");
-
-    inResponse.addCookie(cookie);
-  }
-
-  /**
-   *
-   * Execute the action associated with this servlet.
-   *
-   * @param       inRequest  the request from the client
-   * @param       inResponse the response to write to
-   *
-   * @return      the javascript code to send back to the client
-   */
-  protected abstract String doAction(DMARequest inRequest,
-                                     HttpServletResponse inResponse);
-
-  /**
    * Fail handling the action with the given message.
    *
    * @param       inMessage the message with which to fail
@@ -166,130 +164,20 @@ public abstract class ActionServlet extends DMAServlet
     return "gui.alert('" + inMessage + "');";
   }
 
+  private static String extractActionName(DMARequest inRequest)
+  {
+    String path = inRequest.getOriginalPath();
+    String name = Strings.getPattern(path, "/actions/(.*)$");
+    if(name == null)
+      return "";
+
+    return name;
+  }
+
   //----------------------------------------------------------------------------
 
   /** The tests. */
   public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
-    /**
-     * The get Test.
-     *
-     * @throws Exception should not happen
-     */
-    @org.junit.Test
-    public void get() throws Exception
-    {
-      HttpServletRequest request =
-        EasyMock.createMock(HttpServletRequest.class);
-      HttpServletResponse response =
-        EasyMock.createMock(HttpServletResponse.class);
-
-      EasyMock.expect(request.getMethod()).andReturn("GET").times(2);
-      response.sendError(405, "GET not allowed for this request");
-      EasyMock.expect(request.getRequestURI()).andReturn("uri");
-      EasyMock.replay(request, response);
-
-      ActionServlet servlet = new ActionServlet() {
-          /** Serial version id. */
-          private static final long serialVersionUID = 1L;
-          @Override
-          protected String doAction(DMARequest inRequest,
-                                    HttpServletResponse inResponse)
-          {
-            return "done";
-          }
-        };
-
-      servlet.doGet(request, response);
-
-      EasyMock.verify(request, response);
-    }
-
-    /**
-     * The handle Test.
-     *
-     * @throws Exception should not happen
-     */
-    @org.junit.Test
-    public void handle() throws Exception
-    {
-      HttpServletRequest request =
-        EasyMock.createMock(DMARequest.class);
-      HttpServletResponse response =
-        EasyMock.createMock(HttpServletResponse.class);
-      try (MockServletOutputStream output = new MockServletOutputStream())
-      {
-        EasyMock.expect(request.getMethod()).andReturn("POST");
-        EasyMock.expect(request.getRequestURI()).andReturn("uri");
-        response.setHeader("Content-Type", "text/javascript");
-        response.setHeader("Cache-Control", "max-age=0");
-        EasyMock.expect(response.getOutputStream()).andReturn(output);
-        EasyMock.replay(request, response);
-
-        ActionServlet servlet = new ActionServlet() {
-            /** Serial version id. */
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected String doAction(DMARequest inRequest,
-                                      HttpServletResponse inResponse)
-            {
-              return "done";
-            }
-          };
-
-        servlet.doPost(request, response);
-        assertEquals("post", "done", output.toString());
-
-        EasyMock.verify(request, response);
-      }
-    }
-
-    /** The setMessage Test. */
-    @org.junit.Test
-    public void setMessage()
-    {
-      HttpServletResponse response =
-        EasyMock.createMock(HttpServletResponse.class);
-
-      response.addCookie(EasyMock.isA(Cookie.class));
-
-      EasyMock.replay(response);
-
-      ActionServlet servlet = new ActionServlet() {
-          /** Serial version id. */
-          private static final long serialVersionUID = 1L;
-          @Override
-          protected String doAction(DMARequest inRequest,
-                                    HttpServletResponse inResponse)
-          {
-            return "done";
-          }
-        };
-
-      servlet.setMessage(response, "message");
-
-      EasyMock.verify(response);
-    }
-
-    /** The fail Test. */
-    @org.junit.Test
-    public void checkFail()
-    {
-      ActionServlet servlet = new ActionServlet()
-        {
-          /** Serial version id. */
-          private static final long serialVersionUID = 1L;
-          @Override
-          protected String doAction(DMARequest inRequest,
-                                    HttpServletResponse inResponse)
-          {
-            return "done";
-          }
-        };
-
-      assertEquals("fail", "gui.alert('message');", servlet.fail("message"));
-
-      m_logger.addExpected("WARNING: message");
-    }
   }
 }

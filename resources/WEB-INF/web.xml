@@ -38,71 +38,87 @@
     </auth-constraint>
   </security-constraint>
 
-  <servlet>
-    <servlet-name>register</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.RegisterServlet</servlet-class>
-  </servlet>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>tasks</web-resource-name>
+      <url-pattern>/task/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
 
   <servlet>
     <servlet-name>html</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.StaticPageServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.StaticPageServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>entry</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.EntryServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.EntryServlet
+    </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.ActionServlet
+    </servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
 
   <servlet>
     <servlet-name>entries</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.EntryListServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.EntryListServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>index</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.IndexServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.IndexServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>library</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.LibraryServlet</servlet-class>
-  </servlet>
-
-  <servlet>
-    <servlet-name>save</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.SaveActionServlet</servlet-class>
-  </servlet>
-
-  <servlet>
-    <servlet-name>remove</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.RemoveActionServlet</servlet-class>
-  </servlet>
-
-  <servlet>
-    <servlet-name>recompile</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.RecompileActionServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.LibraryServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>admin</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.AdminServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.AdminServlet
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>autocomplete</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.Autocomplete</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.Autocomplete
+    </servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>main</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.MainPageServlet</servlet-class>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.MainPageServlet
+    </servlet-class>
   </servlet>
 
-  <servlet-mapping>
-    <servlet-name>register</servlet-name>
-    <url-pattern>/actions/register</url-pattern>
-  </servlet-mapping>
+  <servlet>
+    <servlet-name>refresh</servlet-name>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.workers.EntryRefresh
+    </servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>entry</servlet-name>
@@ -125,18 +141,8 @@
   </servlet-mapping>
 
   <servlet-mapping>
-    <servlet-name>save</servlet-name>
-    <url-pattern>/actions/save</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>remove</servlet-name>
-    <url-pattern>/actions/remove</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>recompile</servlet-name>
-    <url-pattern>/actions/recompile</url-pattern>
+    <servlet-name>action</servlet-name>
+    <url-pattern>/actions/*</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
@@ -161,7 +167,12 @@
 
   <servlet-mapping>
     <servlet-name>html</servlet-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/about</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>refresh</servlet-name>
+    <url-pattern>/task/refresh</url-pattern>
   </servlet-mapping>
 
   <filter>
@@ -195,6 +206,12 @@
         ^/user/([^/]+)/product/([^/]+)$
         /_entry/base character/$1/product/$2
 
+        ^/user/([^/]+)/miniatures$
+        /_entries/base character/$1/miniature
+
+        ^/user/([^/]+)/miniature/([^/]+)$
+        /_entry/base character/$1/miniature/$2
+
         ^/campaign/([^/]+)/([^/]+)/characters
         /_entries/base campaign/$1/campaign/$2/character
 
@@ -208,7 +225,7 @@
         /_entries/base campaign/$1/campaign/$2/encounter
 
         ^/campaign/([^/]+)/([^/]+)/npcs
-        /_entries/base campaign/$1/campaign/$2/NPC
+        /_entries/base campaign/$1/campaign/$2/npc
 
         ^/campaign/([^/]+)/([^/]+)/item/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/item/$3
@@ -258,6 +275,9 @@
         ^/item/([^/]+)$
         /_entry/base item/$1
 
+        ^/miniature/([^/]+)$
+        /_entry/base miniature/$1
+
         ^/campaign/([^/]+)$
         /_entry/base campaign/$1
 
@@ -281,6 +301,15 @@
 
         ^/monsters/(.*)$
         /_index/base monster/$1
+
+        ^/miniatures/(.*)$
+        /_index/base miniature/$1
+
+        ^/user/(.*)/miniatures/missing$
+        /_entries/base character/$1/base miniature/missing
+
+        ^/user/(.*)/miniatures/(.*)$
+        /_index/base character/$1/miniature/$2
 
         ^/encounters/(.*)$
         /_index/base encounter/$1
@@ -311,6 +340,9 @@
 
         ^/monsters
         /_entries/base monster
+
+        ^/miniatures
+        /_entries/base miniature
 
         ^/encounters
         /_entries/base encounter

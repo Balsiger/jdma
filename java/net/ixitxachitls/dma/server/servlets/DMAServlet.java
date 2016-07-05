@@ -22,6 +22,8 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
@@ -38,6 +40,7 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.EntryKey;
 import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.server.servlets.BaseServlet;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -52,6 +55,18 @@ import net.ixitxachitls.util.logging.Log;
 @Immutable
 public abstract class DMAServlet extends BaseServlet
 {
+  public enum ActionType { show, print, summary, card, create, edit, };
+
+  public static final String ACTION_REGEXP;
+  static
+  {
+    List<String> actions = new ArrayList<>();
+    for(ActionType actionType : ActionType.values())
+      actions.add(actionType.name());
+
+    ACTION_REGEXP = "\\.(" + Strings.PIPE_JOINER.join(actions) + ")$";
+  }
+
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
@@ -163,7 +178,8 @@ public abstract class DMAServlet extends BaseServlet
    */
   public Optional<AbstractEntry> getEntry(DMARequest inRequest, String inPath)
   {
-    String path = inPath.replaceAll("\\.[^\\./\\\\]*$", "");
+    // remove any actions in the name
+    String path = inPath.replaceAll(ACTION_REGEXP, "");
     Optional<EntryKey> key = extractKey(path);
     if(!key.isPresent())
       return Optional.absent();

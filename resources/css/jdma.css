@@ -453,14 +453,14 @@ DIV.footer
   font-size:   75%;
   text-align:  center;
   padding:     5px;
-  height:      50px;
-  margin-top:  -60px;
+  height:      80px;
+  margin-top:  -90px;
   position:    relative;
 }
 
 #footer-spacer
 {
-  height: 60px;
+  height: 90px;
 }
 
 DIV.footer DIV.version
@@ -2304,6 +2304,7 @@ SELECT.admin-button
 @media print
 {
   #header,
+  #campaign,
   DIV.footer,
   DIV.title-actions,
   DIV.section-title,
@@ -3574,9 +3575,10 @@ DIV.inline
 .recompile {
   position: fixed;
   right: 5px;
-  bottom: 5px;
+  bottom: 40px;
   width: 25px !important;
   background-position: -224px;
+  z-index: 3;
 }
 
 .stats .line {
@@ -3588,4 +3590,236 @@ DIV.inline
   margin-bottom: 10px;
 }
 
+.move-items
+{
+  list-style-type: none;
+  margin: 5px;
+  padding: 0;
+  font-size: 10px;
+}
 
+.move-items > li
+{
+  border: 1px solid white;
+  background-color: #ddd;
+  padding: 5px;
+}
+
+.move-items .placeholder
+{
+  border: 1px dashed #aaa;
+  height: 5px;
+  width: 100%;
+}
+
+.move-items .empty
+{
+  border: none;
+  padding: 2px;
+}
+
+/***** Campaign banner ********************************************************/
+
+#campaign
+{
+  border-top:       solid 1px #88a;
+  background-color: #eef;
+  position:         fixed;
+  bottom:           0;
+  left:             0;
+  right:            0;
+  font-size:        10px;
+  padding:          5px 10px;
+  box-shadow:       0 1px 3px #777;
+  z-index:          2;
+  line-height:      20px;
+}
+
+.campaign-container
+{
+  display: flex;
+}
+
+.campaign-name
+{
+  flex: 1;
+}
+
+.campaign-date
+{
+  padding-right: 10px;
+  font-weight: bold;
+  flex: 1;
+  text-align: right;
+}
+
+.campaign-date .action
+{
+  display: inline-block;
+  padding: 0 3px;
+  color: #ddd;
+  font-weight: normal;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* IE/Edge */
+  user-select: none;           /* non-prefixed version, currently
+                                  not supported by any browser */
+}
+
+.campaign-date .date-element
+{
+  position: relative;
+  min-width: 15px;
+  display: inline-block;
+  text-align: center;
+}
+
+.campaign-date .date-element .action
+{
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.campaign-date .date-element .action:hover
+{
+  color: black;
+  text-decoration: none;
+}
+
+.campaign-date .date-element .action:active
+{
+  color: orange;
+}
+
+.campaign-date .date-element .action.up
+{
+  top: -45%;
+}
+
+.campaign-date .date-element .action.down
+{
+  top: 45%;
+}
+
+.image-storage-link
+{
+  font-size: 10px;
+  text-align: center;
+  display: block;
+}
+
+.list-image
+{
+  width: 25xp;
+  height: 25px;
+}
+
+TD.list.image
+{
+  background-color: white;
+}
+
+TD.list > a
+{
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.list-image-entries
+{
+}
+
+.list-image-entry
+{
+  display: inline-block;
+  margin: 20px;
+  width: 100px;
+  text-align: center;
+  position: relative;
+  vertical-align: top;
+}
+
+.list-image-entry .image-wrapper
+{
+  width: 100px;
+  height: 100px;
+  vertical-align: bottom;
+}
+
+.list-image-entry .image-wrapper img
+{
+  max-width:  100px;
+  max-height: 100px;
+}
+
+.list-image-entry .caption
+{
+  color: #ccc;
+  font-size: 12px;
+}
+
+.list-image-entry .overlay
+{
+  font-size: 20px;
+  position: absolute;
+  font-weight: bold;
+  color: #800;
+  top: 0;
+  left: 0;
+}
+
+.campaign-current
+{
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  color: white;
+  text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.campaign-current .status
+{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 35px;
+  padding: 10px;
+  background-color: #444;
+  opacity: 0.5;
+  font-size: 30px;
+  text-align: center;
+}
+
+.campaign-set-current
+{
+  text-align: center;
+  line-height: 10px;
+}
+
+.campaign-set-current .project
+{
+  background-position-x: -250px;
+  width: 35px !important;
+  height: 24px !important;
+}
+
+.campaign-set-current .entry
+{
+  cursor: pointer;
+}
+
+.sprite.large.random
+{
+  background-position-x: -290px;
+  width: 25px !important;
+  height: 25px !important;
+  margin-bottom: -10px;
+}

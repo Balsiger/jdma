@@ -25,6 +25,7 @@
  * The error for an invalid page.
  *
  * @param path The name of the page that is invalid.
+ * @param error The error that happened
  */
 {template .invalidPage}
   {call .error}
@@ -34,8 +35,20 @@
     {param message kind="html"}
       {if $path}
         The requested page '{$path}' does not exist.
+
+        {if $ij.user.DM}
+          <p>
+          {call dma.value.link}
+            {param text: 'Create' /}
+            {param url: '?create' /}
+          {/call}{sp}
+          the missing entry.
+        {/if}
       {else}
         No path given for page.
+      {/if}
+      {if $error}
+        <div style="margin-top: 200px">ERROR: {$error}</div>
       {/if}
     {/param}
   {/call}

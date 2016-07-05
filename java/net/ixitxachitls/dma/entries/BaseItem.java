@@ -31,7 +31,6 @@ import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.proto.*;
 import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.AbstractEntryProto;
 import net.ixitxachitls.dma.proto.Entries.BaseArmorProto;
@@ -110,7 +109,7 @@ public class BaseItem extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseItem> TYPE =
-    new BaseType.Builder<>(BaseItem.class).build();
+      new BaseType.Builder<>(BaseItem.class).build();
 
   /** The name used by the player for the item. */
   protected Optional<String> m_playerName = Optional.absent();
