@@ -159,23 +159,38 @@ public class BaseCampaign extends BaseEntry
 
     public String generate(Gender inGender)
     {
+      String first;
       switch(inGender)
       {
         case MALE:
-          return random(m_maleNames) + " " + random(m_surenames);
+          first = random(m_maleNames);
+          break;
 
         case FEMALE:
-          return random(m_femaleNames) + " " + random(m_surenames);
+          first = random(m_femaleNames);
+          break;
 
         case UNKNOWN:
         case OTHER:
         default:
           return "must select a gender to generate a name";
       }
+
+      String last = random(m_surenames);
+      if (first.trim().isEmpty())
+        return last;
+
+      if(last.isEmpty())
+        return first;
+
+      return first + " " + last;
     }
 
     private String random(List<String> inList)
     {
+      if(inList.isEmpty())
+        return "";
+
       return inList.get(RANDOM.nextInt(inList.size()));
     }
   }

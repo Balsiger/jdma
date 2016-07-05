@@ -495,7 +495,7 @@
   {@param names: ?}
 
   {$names.race}
-  {if $names.region} ({$names.region}){/if}:
+  {if $names.region.present} ({$names.region}){/if}:
   {sp}
   <em>Male</em>
   {sp}
@@ -514,6 +514,7 @@
   {foreach $name in $names.surenames}
     {$name}{if not isLast($name)}, {/if}
   {/foreach}
+  <br/>
 {/template}
 
 /** Edit for a names value. */
