@@ -120,6 +120,14 @@
     </servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>current</servlet-name>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.CurrentCampaignServlet
+    </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
   <servlet-mapping>
     <servlet-name>entry</servlet-name>
     <url-pattern>/_entry/*</url-pattern>
@@ -173,6 +181,11 @@
   <servlet-mapping>
     <servlet-name>refresh</servlet-name>
     <url-pattern>/task/refresh</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>current</servlet-name>
+    <url-pattern>/_current/*</url-pattern>
   </servlet-mapping>
 
   <filter>
@@ -244,6 +257,9 @@
 
         ^/campaign/([^/]+)/([^/]+)/monster/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/monster/$3
+
+        ^/campaign/([^/]+)/([^/]+)/current$
+        /_current/base campaign/$1/campaign/$2
 
         ^/user/([^/]+)$
         /_entry/base character/$1
