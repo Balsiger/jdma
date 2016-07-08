@@ -1148,7 +1148,7 @@
       {call dma.edit.value_text}
         {param name: 'encounter' /}
         {param label: 'Encounter' /}
-        {param value: $entry.encounter.present ? $entry.combat : '' /}
+        {param value: $entry.encounter.present ? $entry.encounter : '' /}
         {param validate: 'any' /}
         {param color: '#080' /}
       {/call}
@@ -1162,7 +1162,7 @@
       {call dma.edit.value_text}
         {param name: 'tacticts' /}
         {param label: 'Tactics' /}
-        {param value: $entry.tactics.present ? $entry.combat : '' /}
+        {param value: $entry.tactics.present ? $entry.tactics : '' /}
         {param validate: 'any' /}
         {param color: '#080' /}
       {/call}
