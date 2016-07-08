@@ -90,6 +90,9 @@ public enum MonsterSubtype implements Named,
   /** Good. */
   GOOD("Good", BaseMonsterProto.Subtype.GOOD),
 
+  /** Gnome . */
+  GNOME("Gnome", BaseMonsterProto.Subtype.GNOME),
+
   /** Guardinal. */
   GUARDINAL("Guardinal", BaseMonsterProto.Subtype.GUARDINAL),
 

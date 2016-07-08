@@ -985,6 +985,7 @@ message BaseMonsterProto
     FIRE = 14;
     GOBLINOID = 15;
     GOOD = 16;
+    GNOME = 27;
     GUARDINAL = 17;
     HUMAN = 18;
     INCORPOREAL = 19;
