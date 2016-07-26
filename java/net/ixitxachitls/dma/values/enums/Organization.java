@@ -109,7 +109,13 @@ public enum Organization implements Named,
   TANGLE("Tangle", BaseMonsterProto.Organization.Type.TANGLE),
 
   /** Troupe organization. */
-  TROUPE("Troupe", BaseMonsterProto.Organization.Type.TROUPE);
+  TRIBE("Tribe", BaseMonsterProto.Organization.Type.TRIBE),
+
+  /** Troupe organization. */
+  TROUPE("Troupe", BaseMonsterProto.Organization.Type.TROUPE),
+
+  /** Troupe organization. */
+  WARBAND("Warband", BaseMonsterProto.Organization.Type.WARBAND);
 
   /** The value's name. */
   private String m_name;

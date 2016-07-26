@@ -1135,6 +1135,8 @@ message BaseMonsterProto
       TROUPE = 21;
       COMPANY = 22;
       DOMESTICATED = 23;
+      WARBAND = 24;
+      TRIBE = 25;
     }
     optional Type type = 1;
     optional DiceProto number = 2;
