@@ -1137,6 +1137,9 @@ message BaseMonsterProto
       DOMESTICATED = 23;
       WARBAND = 24;
       TRIBE = 25;
+      HUNTING_PARTY = 26;
+      RAIDING_PARTY = 27;
+      TRADING_PARTY = 28;
     }
     optional Type type = 1;
     optional DiceProto number = 2;

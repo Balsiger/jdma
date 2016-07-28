@@ -21,7 +21,7 @@
   <property name="version" value="animatedobject" />
 
   <!-- Google App Engine -->
-  <property name="gae.version" value="1.9.38" />
+  <property name="gae.version" value="1.9.40" />
   <property name="gae.dir" location="../../../Software/appengine-java-sdk-${gae.version}" />
   <import file="${gae.dir}/config/user/ant-macros.xml" />
 

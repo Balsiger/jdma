@@ -73,6 +73,12 @@ public enum Organization implements Named,
 
   /** Herd organization. */
   HERD("Herd", BaseMonsterProto.Organization.Type.HERD),
+  HUNTING_PRTY("Hunting Party",
+               BaseMonsterProto.Organization.Type.HUNTING_PARTY),
+  TRADING_PARTY("Trading Party",
+                BaseMonsterProto.Organization.Type.RAIDING_PARTY),
+  RAIDING_PARTY("Raiding Party",
+                BaseMonsterProto.Organization.Type.TRADING_PARTY),
 
   /** Infestation organization. */
   INFESTATION("Infestation", BaseMonsterProto.Organization.Type.INFESTATION),

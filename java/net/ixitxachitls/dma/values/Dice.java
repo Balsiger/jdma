@@ -56,7 +56,7 @@ public class Dice extends Value<DiceProto>
 
       String []parts =
         Strings.getPatterns(inValue,
-                            "^\\s*(?:(\\d)+d(\\d+))?\\s*([+-]\\s*\\d+)?\\s*$");
+                            "^\\s*(?:(\\d+)+d(\\d+))?\\s*([+-]\\s*\\d+)?\\s*$");
 
       if(parts.length != 3)
         return Optional.absent();
