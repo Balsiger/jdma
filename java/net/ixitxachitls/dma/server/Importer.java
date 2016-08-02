@@ -483,7 +483,7 @@ public final class Importer
    */
   private void complete(Entry inEntry)
   {
-    inEntry.complete();
+    inEntry.initialize();
 
     // if the entry has a composite, we could have added some new items, which
     // we must properly store

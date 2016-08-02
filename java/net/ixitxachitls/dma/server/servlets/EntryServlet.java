@@ -23,6 +23,7 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -46,6 +47,7 @@ import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.EntryKey;
+import net.ixitxachitls.dma.entries.Type;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.values.Values;
@@ -214,44 +216,37 @@ public class EntryServlet extends PageServlet
       Log.info("creating " + type + " '" + id + "'");
 
       if(type.getBaseType() == type)
-        entry = type.create(id);
+        entry = type.createNew(id);
       else
       {
-        String postfix = "";
-        if(inRequest.hasParam("store"))
-          postfix = "-" + inRequest.getParam("store");
+        List<String> bases = new ArrayList<>();
+        bases.add(id);
+        if(inRequest.hasParam("bases"))
+          for(String base
+              : inRequest.getParam("bases").get().split("\\s*,,\\s*"))
+            if(!base.isEmpty())
+              entry.get().addBase(base);
 
-        entry = type.create(Entry.TEMPORARY + postfix);
-        if(entry.isPresent())
+        Optional<Values> values;
+        if(inRequest.hasParam("values"))
         {
-          entry.get().updateKey(key.get());
-
-          if(inRequest.hasParam("values"))
+          Multimap<String, String> rawValues = ArrayListMultimap.create();
+          for(String value
+              : inRequest.getParam("values").get().split("\\s*,\\s*"))
           {
-            Multimap<String, String> values = ArrayListMultimap.create();
-            for(String value
-                : inRequest.getParam("values").get().split("\\s*,\\s*"))
-            {
-              String[] parts = value.split(":");
-              if(parts.length != 2)
-                continue;
+            String[] parts = value.split(":");
+            if(parts.length != 2)
+              continue;
 
-              values.put(parts[0], parts[1]);
-            }
-
-            entry.get().set(new Values(values));
+            rawValues.put(parts[0], parts[1]);
           }
 
-          // bases are overwritten by values if done before!
-          if(inRequest.hasParam("bases"))
-            for(String base
-                : inRequest.getParam("bases").get().split("\\s*,,\\s*"))
-              if(!base.isEmpty())
-                entry.get().addBase(base);
+          values = Optional.of(new Values(rawValues));
+        } else
+          values = Optional.absent();
 
-          if(entry.get() instanceof Entry)
-            ((Entry) entry.get()).complete();
-        }
+        entry = ((Type)type).createNew(key.get(), bases,
+                                       inRequest.getParam("store"), values);
       }
 
       data.put("entry", entry.orNull());

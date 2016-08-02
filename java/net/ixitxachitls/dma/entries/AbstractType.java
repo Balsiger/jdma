@@ -444,13 +444,13 @@ public class AbstractType<T extends AbstractEntry>
     catch(java.lang.InstantiationException e)
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
-                + m_class + "]: " + e + " / " + e.getCause());
+                    + m_class + "]: " + e + " / " + e.getCause());
       e.printStackTrace(System.err);
     }
     catch(java.lang.IllegalAccessException e)
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
-                + m_class + "]: " + e + " / " + e.getCause());
+                    + m_class + "]: " + e + " / " + e.getCause());
       e.printStackTrace(System.err);
     }
 
@@ -498,6 +498,26 @@ public class AbstractType<T extends AbstractEntry>
     }
 
     return Optional.absent();
+  }
+
+  public Optional<T> create(String inID, byte []inBytes)
+  {
+    Optional<T> entry = create(inID);
+    if(entry.isPresent())
+      entry.get().parseFrom(inBytes);
+
+    return entry;
+  }
+
+  public Optional<T> createNew(String inID)
+  {
+    Optional<T> entry = create(inID);
+    if(!entry.isPresent())
+      return entry;
+
+    entry.get().initialize();
+
+    return entry;
   }
 
   //----------------------------------------------------------------------------

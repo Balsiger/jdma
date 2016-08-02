@@ -1187,7 +1187,8 @@
         {param values: $entry.possessions /}
         {param validate: 'non-empty' /}
         {param color: '#080' /}
-      {/call}    
+        {param autocomplete: 'base item/name' /}
+      {/call}
       {call dma.edit.generic_value}
         {param name: 'good_saves' /}
         {param label: 'Good Saves' /}

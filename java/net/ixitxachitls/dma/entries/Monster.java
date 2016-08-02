@@ -659,6 +659,7 @@ public class Monster extends CampaignEntry
 
   /** The actual number of hit points the monster currently has. */
   protected int m_hp = 0;
+  protected int m_maxHP = 0;
 
   /** The skills, in addition to what we find in base. */
   protected List<Skill> m_skills = new ArrayList<>();
@@ -1852,15 +1853,6 @@ public class Monster extends CampaignEntry
     return m_alignment;
   }
 
-  public int getMaxHP()
-  {
-    int hp = 0;
-    for(BaseEntry base : getBaseEntries())
-      hp += ((BaseMonster)base).getMaxHP();
-
-    return hp;
-  }
-
   /**
    * Get a monster's current hit points.
    *
@@ -1869,6 +1861,11 @@ public class Monster extends CampaignEntry
   public int getHP()
   {
     return m_hp;
+  }
+
+  public int getMaxHP()
+  {
+    return m_maxHP;
   }
 
   public Annotated.Boolean isCombinedQuadruped()
@@ -2940,6 +2937,7 @@ public class Monster extends CampaignEntry
                                     }
                                   });
     m_hp = inValues.use("hp", m_hp, Value.INTEGER_PARSER);
+    m_maxHP = inValues.use("max_hp", m_maxHP, Value.INTEGER_PARSER);
     m_qualities = inValues.useEntries("quality", m_qualities, Quality.CREATOR);
     m_skills = inValues.useEntries("skill", m_skills,
                                    new NestedEntry.Creator<Skill>()
@@ -4985,6 +4983,7 @@ public class Monster extends CampaignEntry
       builder.addQuality(quality.toProto());
 
     builder.setHitPoints(m_hp);
+    builder.setMaxHitPoints(m_maxHP);
 
     for(Skill skill : m_skills)
       builder.addSkill(skill.toProto());
@@ -5058,6 +5057,7 @@ public class Monster extends CampaignEntry
       m_qualities.add(Quality.fromProto(quality));
 
     m_hp = proto.getHitPoints();
+    m_maxHP = proto.getMaxHitPoints();
 
     m_skills.clear();
     for(SkillProto skill : proto.getSkillList())
@@ -5180,5 +5180,21 @@ public class Monster extends CampaignEntry
   public Optional<String> getGivenName()
   {
     return m_givenName;
+  }
+
+  @Override
+  public void initialize()
+  {
+    m_maxHP = randomHp();
+    m_hp = m_maxHP;
+  }
+
+  private int randomHp()
+  {
+    int hp = 0;
+    for(BaseEntry base : getBaseEntries())
+      hp += ((BaseMonster)base).randomHp();
+
+    return hp;
   }
 }

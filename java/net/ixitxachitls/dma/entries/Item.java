@@ -1516,7 +1516,7 @@ public class Item extends CampaignEntry
   }
 
   @Override
-  public void complete()
+  public void initialize()
   {
     if(m_hp == Integer.MIN_VALUE)
     {
@@ -1645,7 +1645,7 @@ public class Item extends CampaignEntry
 
 //     // m_description.set(replaced.toString());
 
-    super.complete();
+    super.initialize();
   }
 
   @Override

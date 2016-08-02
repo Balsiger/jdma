@@ -978,11 +978,13 @@ public abstract class AbstractEntry
     return m_name;
   }
 
-  //........................................................................
+  public void initialize()
+  {
+    // Nothing to do here, but derivations might want to setup some values
+    // specially for newly created entries (e.g. randomly).
+  }
 
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test //extends ValueGroup.Test
@@ -1062,6 +1064,4 @@ public abstract class AbstractEntry
 
     //......................................................................
   }
-
-  //........................................................................
 }

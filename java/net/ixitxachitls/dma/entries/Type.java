@@ -32,6 +32,7 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.values.Values;
 
 /**
  * The type specification for an entry.
@@ -165,5 +166,30 @@ public class Type<T extends Entry> extends AbstractType<T>
   public static Collection<Type<?>> getTypes()
   {
     return Collections.unmodifiableCollection(s_types.values());
+  }
+
+  public Optional<T> createNew(EntryKey inKey, List<String> inBases,
+                               Optional<String> inStore,
+                               Optional<Values> inValues)
+  {
+    String name = Entry.TEMPORARY;
+    if(inStore.isPresent())
+      name += "-" + inStore.get();
+
+    Optional<T> entry = super.createNew(name);
+    if(!entry.isPresent())
+      return entry;
+
+    entry.get().updateKey(inKey);
+    if(inValues.isPresent())
+      entry.get().set(inValues.get());
+
+    // bases are overwritten by values if done before!
+    for(String base : inBases)
+      entry.get().addBase(base);
+
+    entry.get().initialize();
+
+    return entry;
   }
 }

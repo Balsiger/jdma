@@ -813,6 +813,11 @@ public class BaseMonster extends BaseEntry
     return m_naturalArmor;
   }
 
+  public int randomHp()
+  {
+    return totalHitDie().random();
+  }
+
   protected Modifier naturalArmor()
   {
     Optional<Modifier> natural = getCombinedNaturalArmor().get();
@@ -910,8 +915,6 @@ public class BaseMonster extends BaseEntry
 
     return new Modifier();
   }
-
-
 
   public Modifier sizeModifier()
   {
@@ -3824,7 +3827,7 @@ public class BaseMonster extends BaseEntry
     m_tactics = inValues.use("tactics", m_tactics);
     m_character = inValues.use("character", m_character);
     m_reproduction = inValues.use("reproduction", m_reproduction);
-    m_possessions = inValues.use("possessions", m_possessions);
+    m_possessions = inValues.use("possession", m_possessions);
     m_goodSaves = inValues.use("good_saves", m_goodSaves, Save.PARSER);
     m_proficiencies = inValues.use("proficiency", m_proficiencies);
     m_quadruped = inValues.use("quadruped", m_quadruped, Value.BOOLEAN_PARSER);

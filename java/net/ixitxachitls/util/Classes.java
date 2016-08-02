@@ -29,6 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableList;
 
+import com.sun.tools.classfile.Type;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -235,18 +236,7 @@ public final class Classes
     return null;
   }
 
-  //........................................................................
-
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
+  //----------------------------------------------------------------------------
 
   /** The tests. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
@@ -282,6 +272,50 @@ public final class Classes
       // get package name
       assertEquals("package", "net.ixitxachitls.util",
                    Classes.getPackage(Classes.class));
+    }
+
+    private static class BaseClass {
+      public String foo() {
+        return "base foo";
+      }
+
+      public static String bar() {
+        return "base bar";
+      }
+
+      public static String baseBar() {
+        return "base base bar";
+      }
+    }
+
+    private static class DerivedClass extends BaseClass {
+      public String foo() {
+        return "derived foo";
+      }
+
+      public String foobar() {
+        return "foobar";
+      }
+
+      public static String bar() {
+        return "derived bar";
+      }
+    }
+
+    /** Test for invocation. */
+    @org.junit.Test
+    public void callMethod()
+    {
+      assertEquals("base", "base foo",
+                   Classes.callMethod("foo", new BaseClass()));
+      assertEquals("derived", "derived foo",
+                   Classes.callMethod("foo", new DerivedClass()));
+      assertEquals("static base", "base bar",
+                   Classes.callMethod("bar", BaseClass.class));
+      assertEquals("static derived", "derived bar",
+                   Classes.callMethod("bar", DerivedClass.class));
+      assertEquals("static base", "base base bar",
+                   Classes.callMethod("baseBar", DerivedClass.class));
     }
 
     /** Tests to make coverage happy. */

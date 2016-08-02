@@ -565,3 +565,33 @@
   {/call}
 {/template}
 
+/** Formatting a list of entries. */
+{template .list}
+  {@param start: number}
+  {@param pagesize: number}
+  {@param entries: list<?>}
+  {@param label: string|html}
+  {@param path: string}
+
+  {call dma.entry.list}
+    {param title: 'Monsters' /}
+    {param label: $label /}
+    {param path: $path /}
+    {param start: $start /}
+    {param pagesize: $pagesize /}
+    {param size: $entries ? length($entries) : 0 /}
+    {param titles: [ 'Id', 'Race'] /}
+    {param entries kind="html"}
+      {foreach $entry in $entries}
+        <tr onclick="util.link(event, '{$entry.path}')">
+          {call dma.entry.listEntry}
+            {param path: $entry.path /}
+            {param values: [
+              $entry.name, $entry.base_name
+            ] /}
+          {/call}
+        </tr>
+      {/foreach}
+    {/param}
+  {/call}
+{/template}

@@ -40,6 +40,9 @@ import net.ixitxachitls.util.logging.Log;
  */
 public class EntryRefresh extends HttpServlet
 {
+  /** The id for serialization. */
+  private static final long serialVersionUID = 1L;
+
   public static String TYPE_PARAM = "type";
   public static String PARENT_PARAM = "parent";
 

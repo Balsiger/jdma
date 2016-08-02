@@ -473,7 +473,7 @@ public class DMADatastore
     {
       // determine a new, real id to use; this should actually be in a
       // transaction to be safe...
-      ((Entry)inEntry).complete();
+      ((Entry)inEntry).initialize();
     }
 
     return m_data.update(convert(inEntry));
@@ -749,21 +749,21 @@ public class DMADatastore
 
     Log.debug("converting entity " + inID + " to " + inType);
 
-    Optional<T> entry = inType.create(inID);
-    if(!entry.isPresent())
-    {
-      Log.warning("cannot create conversion " + inType + " entity with id "
-                  + inID + ": " + inEntity);
-      tracer.done("cannot create");
-      return entry;
-    }
-
     Tracer parsing = new Tracer("parsing " + inID);
     Blob blob = (Blob)inEntity.getProperty("proto");
     parsing.done("blob property reading");
-    if (blob != null)
-      entry.get().parseFrom(blob.getBytes());
+    if (blob == null)
+      return Optional.absent();
     parsing.done("parsing");
+
+    Optional<T> entry = inType.create(inID, blob.getBytes());
+    if(!entry.isPresent())
+    {
+      Log.warning("cannot create conversion " + inType + " entity with id "
+                      + inID + ": " + inEntity);
+      tracer.done("cannot create");
+      return entry;
+    }
 
     // update any key related value
     Optional<EntryKey> key = convert(inEntity.getKey());

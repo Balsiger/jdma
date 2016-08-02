@@ -180,10 +180,8 @@ public abstract class Entry extends AbstractEntry
     return false;
   }
 
-  /**
-   * Complete the entry and make sure that all values are filled.
-   */
-  public void complete()
+  @Override
+  public void initialize()
   {
     if(m_name.isEmpty())
     {
@@ -222,8 +220,6 @@ public abstract class Entry extends AbstractEntry
     EntryProto proto = (EntryProto)inProto;
 
     super.fromProto(proto.getAbstract());
-
-    complete();
   }
 
   @Override

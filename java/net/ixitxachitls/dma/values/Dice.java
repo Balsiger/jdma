@@ -144,6 +144,15 @@ public class Dice extends Value<DiceProto>
     {
       return Strings.COMMA_JOINER.join(m_die);
     }
+
+    public int random()
+    {
+      int value = 0;
+      for(Dice dice : m_die)
+        value += dice.roll();
+
+      return value;
+    }
   }
 
   /** Create a dice value.
