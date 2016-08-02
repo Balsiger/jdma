@@ -4241,41 +4241,6 @@ public class Monster extends CampaignEntry
 //       }
 
     //......................................................................
-    //----- hit points -----------------------------------------------------
-
-    // the maximal hit points (if not yet set)
-    // if(!m_maxHP.isDefined())
-    //   if(!m_hp.isDefined())
-    //   {
-        //Pair<Integer, Integer> modifier = m_hpMod.getLimits();
-
-        //if(modifier.first() != modifier.second())
-        //  Log.warning("differing modifiers for hit points, will use lower "
-        //              + "only, thus hp might be off!");
-
-        //m_maxHP.set(m_base.rollMaxHP() + modifier.first());
-      // }
-      // else
-      //   m_maxHP.set(m_hp.get());
-
-    // the real current hit points (without modifiers)
-    // if(!m_hp.isDefined())
-    //   m_hp.set(m_maxHP.get());
-
-    // setup the hp modifier
-    //m_hpMod.addModifier(new net.ixitxachitls.dma.values.Modifier
-    //                    (BaseMonster.abilityMod(m_base.m_constitution.get())
-    //                     * m_base.m_hitDice.getNumber(),
-    //                     net.ixitxachitls.dma.values.Modifier.Type.ABILITY,
-    //                    "Con", null));
-
-    // bonus hit points for constructs
-    //if(size.isBigger(BaseItem.Size.TINY)
-    //   && ((Selection)m_base.m_type.get(0).get()).getSelected() == 2)
-    //  m_hpMod.addModifier(new net.ixitxachitls.dma.values.Modifier
-    //    (size.construct(), null, "Construct Bonus", null));
-
-    //......................................................................
     //----- initiative -----------------------------------------------------
 
     // setup the initiative modifier

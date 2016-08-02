@@ -96,7 +96,8 @@ public class SaveEntryAction extends Action
       entry.get().changed();
       entry.get().save();
       return info("Entry " + Encodings.escapeJS(entry.get().getName())
-          + " has been saved.") + " true";
+          + " has been saved.")
+          + " util.link(null, '" + entry.get().getName() + "');";
     }
 
     return info("No changes needed saving");
