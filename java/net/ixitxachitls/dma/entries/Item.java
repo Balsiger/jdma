@@ -1425,8 +1425,20 @@ public class Item extends CampaignEntry
     for(BaseEntry base : getBaseEntries())
     {
       WeaponType type = ((BaseItem)base).getWeaponType();
-        if(type.ordinal() > result.ordinal())
-          result = type;
+      if(type.ordinal() > result.ordinal())
+        result = type;
+    }
+
+    return result;
+  }
+  public WeaponStyle getWeaponStyle()
+  {
+    WeaponStyle result = WeaponStyle.UNKNOWN;
+    for(BaseEntry base : getBaseEntries())
+    {
+      WeaponStyle style = ((BaseItem)base).getWeaponStyle();
+      if(style.ordinal() > result.ordinal())
+        result = style;
     }
 
     return result;

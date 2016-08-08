@@ -40,6 +40,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.logging.Log;
 
@@ -344,6 +345,11 @@ public class AbstractType<T extends AbstractEntry>
     return this;
   }
 
+  public boolean isBase()
+  {
+    return true;
+  }
+
   /**
    * Get the type for the given name.
    *
@@ -509,15 +515,34 @@ public class AbstractType<T extends AbstractEntry>
     return entry;
   }
 
-  public Optional<T> createNew(String inID)
+  public Optional<T> createNew(EntryKey inKey, List<String> inBases,
+                               Optional<String> inStore,
+                               Optional<Values> inValues)
   {
-    Optional<T> entry = create(inID);
+    String name = entryID(inKey);
+    if(inStore.isPresent())
+      name += "-" + inStore.get();
+
+    Optional<T> entry = create(name);
     if(!entry.isPresent())
       return entry;
+
+    entry.get().updateKey(inKey);
+    if(inValues.isPresent())
+      entry.get().set(inValues.get());
+
+    // bases are overwritten by values if done before!
+    for(String base : inBases)
+      entry.get().addBase(base);
 
     entry.get().initialize();
 
     return entry;
+  }
+
+  protected String entryID(EntryKey inKey)
+  {
+    return inKey.getID();
   }
 
   //----------------------------------------------------------------------------

@@ -193,7 +193,7 @@ public final class Classes
 
     String name = Encodings.toCamelCase(inName);
 
-    Class objectClass;
+    Class <?>objectClass;
     if(inObject instanceof Class)
       objectClass = (Class)inObject;
     else

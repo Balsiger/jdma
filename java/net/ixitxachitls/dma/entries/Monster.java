@@ -27,7 +27,11 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import com.google.common.base.Optional;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
 import com.google.protobuf.Message;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -634,6 +638,7 @@ public class Monster extends CampaignEntry
   protected Optional<String> m_givenName = Optional.absent();
 
   /** The possessions value. */
+  private boolean m_createPossessionsOnSave = false;
   protected List<Item> m_possessions = null;
 
   /** The monster's Strength. */
@@ -1068,10 +1073,11 @@ public class Monster extends CampaignEntry
    */
   public List<Item> getPossessions()
   {
+    // zdqj / teae
     if(m_possessions == null)
       m_possessions = DMADataFactory.get().getEntries(
           Item.TYPE, Optional.of(getCampaign().get().getKey()),
-          "index-parent", "monster/" + getName().toLowerCase());
+          "index-parent", getType().getLink() + "/" + getName().toLowerCase());
 
     return Collections.unmodifiableList(m_possessions);
   }
@@ -5150,8 +5156,12 @@ public class Monster extends CampaignEntry
   @Override
   public void initialize()
   {
+    // setup hit points
     m_maxHP = randomHp();
     m_hp = m_maxHP;
+
+    // setup items from base monster possessions
+    m_createPossessionsOnSave = true;
   }
 
   private int randomHp()
@@ -5161,5 +5171,37 @@ public class Monster extends CampaignEntry
       hp += ((BaseMonster)base).randomHp();
 
     return hp;
+  }
+
+  @Override
+  public boolean save()
+  {
+    boolean saved = super.save();
+
+    // This has to be done after saving above to ensure we have a proper name
+    // for the monsters (for parent).
+    if(m_createPossessionsOnSave)
+    {
+      m_createPossessionsOnSave = false;
+      m_possessions = new ArrayList<>();
+      for(BaseEntry base : getBaseEntries())
+        for(String name : ((BaseMonster)base).getPossessions())
+        {
+          Multimap<String, String> values = ArrayListMultimap.create();
+          values.put("parent", getType().getLink() + "/" + getName());
+
+          Optional<Item> item = Item.TYPE.createNew(
+              new EntryKey(Entry.TEMPORARY, Item.TYPE, getKey().getParent()),
+              ImmutableList.of(name), Optional.<String>absent(),
+              Optional.of(new Values(values)));
+
+          if(!item.isPresent())
+            Log.warning("Could not create item " + name + " for " + getKey());
+          else
+            item.get().save();
+        }
+    }
+
+    return saved;
   }
 }

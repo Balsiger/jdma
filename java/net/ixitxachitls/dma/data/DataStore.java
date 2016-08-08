@@ -587,6 +587,7 @@ public class DataStore
     s_cacheEntity.put(inEntity.getKey(), inEntity, s_expiration);
     m_store.put(inEntity);
 
+
     // Clear all the cache key value matches.
     for(Entry<String, Object> entry : inEntity.getProperties().entrySet())
       s_cacheByValue.delete(entry.getKey() + "--" + entry.getValue());

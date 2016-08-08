@@ -168,28 +168,15 @@ public class Type<T extends Entry> extends AbstractType<T>
     return Collections.unmodifiableCollection(s_types.values());
   }
 
-  public Optional<T> createNew(EntryKey inKey, List<String> inBases,
-                               Optional<String> inStore,
-                               Optional<Values> inValues)
+  @Override
+  protected String entryID(EntryKey inKey)
   {
-    String name = Entry.TEMPORARY;
-    if(inStore.isPresent())
-      name += "-" + inStore.get();
+    return Entry.TEMPORARY;
+  }
 
-    Optional<T> entry = super.createNew(name);
-    if(!entry.isPresent())
-      return entry;
-
-    entry.get().updateKey(inKey);
-    if(inValues.isPresent())
-      entry.get().set(inValues.get());
-
-    // bases are overwritten by values if done before!
-    for(String base : inBases)
-      entry.get().addBase(base);
-
-    entry.get().initialize();
-
-    return entry;
+  @Override
+  public boolean isBase()
+  {
+    return false;
   }
 }

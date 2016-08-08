@@ -93,6 +93,36 @@
           {param color: '#080' /}
         {/call}
       {/if}
+      {call dma.entry.value}
+        {param label: 'Possessions' /}
+        {param value kind="html"}
+          {foreach $item in $entry.possessions}
+            {call dma.entries.items.reference}
+              {param entry: $item /}
+            {/call}
+            {if not isLast($item)}, {/if}
+          {/foreach}
+          {if $ij.user}
+            {sp}|{sp}
+            <span class="action"
+                  onclick="edit.show('Edit {$entry.name}',
+                                     '{$entry.campaign.path}/item/CREATE.edit',
+                                     'add-item', '',
+                                     'parent:character/{$entry.name}')">
+              add item
+            </span>
+            {sp}|{sp}
+            <span class="action"
+                  onclick="edit.show('Move items for {$entry.name}',
+                                     '{$entry.path}.move_items',
+                                     'move-items', '',
+                                     'parent:character/{$entry.name}')">
+              move items
+            </span>
+          {/if}
+        {/param}
+        {param color: '#080' /}
+      {/call}
     {/param}
   {/call}
 
@@ -305,6 +335,26 @@
 
       {call dma.sheet.value}
         {param label kind="html"}
+          Armor<br/>
+          Bonus
+        {/param}
+      {param value: $entry.armor_bonus /}
+      {/call}
+
+      <div class="operator" style="padding-top: 13px">+</div>
+
+      {call dma.sheet.value}
+        {param label kind="html"}
+          Shield<br/>
+          Bonus
+        {/param}
+      {param value: $entry.shield_bonus /}
+      {/call}
+
+      <div class="operator" style="padding-top: 13px">+</div>
+
+      {call dma.sheet.value}
+        {param label kind="html"}
           Size<br/>
           Modifier
         {/param}
@@ -378,18 +428,21 @@
         {param title: 'Attacks' /}
       {/call}
       {foreach $attack in $entry.combined_primary_attacks.get}
-        <div class="line">
-          {call .attack}
-            {param name: ($attack.number.one ? '' : $attack.number + ' ')
-                          + $attack.mode /}
-            {param bonus kind="html"}
-              {annotate(call($entry, 'attackBonus', $attack))}
-              {sp}{$attack.style}
-            {/param}
-            {param damage: call($entry, 'damage', $attack) /}
-            {param critical: '20' /}
-          {/call}
-        </div>
+        {if length($entry.weapons) == 0 and
+            $attack.mode != $ij.AttackMode.WEAPON}
+          <div class="line">
+            {call .attack}
+              {param name: ($attack.number.one ? '' : $attack.number + ' ')
+                            + $attack.mode /}
+              {param bonus kind="html"}
+                {annotate(call($entry, 'attackBonus', $attack))}
+                {sp}{$attack.style}
+              {/param}
+              {param damage: call($entry, 'damage', $attack) /}
+              {param critical: '20' /}
+            {/call}
+          </div>
+        {/if}
       {/foreach}
       {foreach $attack in $entry.combined_secondary_attacks.get}
         <div class="line">
@@ -426,6 +479,7 @@
                   {/foreach}
                   {if not isLast($key)}, {/if}
                 {/foreach}
+                {sp}{if $weapon.weapon_style.melee}Melee{else}Ranged{/if}
               {/param}
               {param damage: $weapon.damage /}
               {param critical: $weapon.critical /}

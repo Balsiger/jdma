@@ -215,39 +215,36 @@ public class EntryServlet extends PageServlet
       // create a new entry for filling out
       Log.info("creating " + type + " '" + id + "'");
 
-      if(type.getBaseType() == type)
-        entry = type.createNew(id);
-      else
-      {
-        List<String> bases = new ArrayList<>();
+      List<String> bases = new ArrayList<>();
+      if(!type.isBase())
         bases.add(id);
-        if(inRequest.hasParam("bases"))
-          for(String base
-              : inRequest.getParam("bases").get().split("\\s*,,\\s*"))
-            if(!base.isEmpty())
-              entry.get().addBase(base);
 
-        Optional<Values> values;
-        if(inRequest.hasParam("values"))
+      if(inRequest.hasParam("bases"))
+        for(String base
+            : inRequest.getParam("bases").get().split("\\s*,,\\s*"))
+          if(!base.isEmpty())
+            entry.get().addBase(base);
+
+      Optional<Values> values;
+      if(inRequest.hasParam("values"))
+      {
+        Multimap<String, String> rawValues = ArrayListMultimap.create();
+        for(String value
+            : inRequest.getParam("values").get().split("\\s*,\\s*"))
         {
-          Multimap<String, String> rawValues = ArrayListMultimap.create();
-          for(String value
-              : inRequest.getParam("values").get().split("\\s*,\\s*"))
-          {
-            String[] parts = value.split(":");
-            if(parts.length != 2)
-              continue;
+          String[] parts = value.split(":");
+          if(parts.length != 2)
+            continue;
 
-            rawValues.put(parts[0], parts[1]);
-          }
+          rawValues.put(parts[0], parts[1]);
+        }
 
-          values = Optional.of(new Values(rawValues));
-        } else
-          values = Optional.absent();
+        values = Optional.of(new Values(rawValues));
+      } else
+        values = Optional.absent();
 
-        entry = ((Type)type).createNew(key.get(), bases,
-                                       inRequest.getParam("store"), values);
-      }
+      entry = ((Type)type).createNew(key.get(), bases,
+                                     inRequest.getParam("store"), values);
 
       data.put("entry", entry.orNull());
       if(entry.isPresent())

@@ -24,11 +24,13 @@ package net.ixitxachitls.dma.server.servlets.actions;
 import java.util.List;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.EntryKey;
+import net.ixitxachitls.dma.entries.Type;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Group;
@@ -69,14 +71,17 @@ public class SaveEntryAction extends Action
       return alert("You don't own that entry, thus you can't change it!");
     }
 
+    Values values = new Values(inRequest.getParams());
+
     Optional<AbstractEntry> entry = DMADataFactory.get().getEntry(key.get());
     if(!entry.isPresent())
       if(inRequest.hasParam("_create_"))
       {
         entry = (Optional<AbstractEntry>)
-            key.get().getType().create(key.get().getID());
-        if(entry.isPresent())
-          entry.get().updateKey(key.get());
+            key.get().getType().createNew(key.get(),
+                                          ImmutableList.of(key.get().getID()),
+                                          Optional.<String>absent(),
+                                          Optional.of(values));
       }
       else
         return alert("Cannot find entry for " + key.get());
@@ -84,8 +89,6 @@ public class SaveEntryAction extends Action
     if(!entry.isPresent())
       return alert("could not create entry");
 
-    Values values = new Values(inRequest.getParams());
-    entry.get().set(values);
     List<String> errors = values.obtainMessages();
 
     if(!errors.isEmpty())
