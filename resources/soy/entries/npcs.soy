@@ -536,6 +536,26 @@
 
       {call dma.sheet.value}
         {param label kind="html"}
+          Armor<br/>
+          Bonus
+        {/param}
+      {param value: $entry.armor_bonus /}
+      {/call}
+
+      <div class="operator" style="padding-top: 13px">+</div>
+
+      {call dma.sheet.value}
+        {param label kind="html"}
+          Shield<br/>
+          Bonus
+        {/param}
+      {param value: $entry.shield_bonus /}
+      {/call}
+
+      <div class="operator" style="padding-top: 13px">+</div>
+
+      {call dma.sheet.value}
+        {param label kind="html"}
           Size<br/>
           Modifier
         {/param}
