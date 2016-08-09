@@ -206,6 +206,36 @@
           {param color: '#080' /}
         {/call}
       {/if}
+      {call dma.entry.value}
+        {param label: 'Possessions' /}
+        {param value kind="html"}
+          {foreach $item in $entry.possessions}
+            {call dma.entries.items.reference}
+              {param entry: $item /}
+            {/call}
+            {if not isLast($item)}, {/if}
+          {/foreach}
+          {if $ij.user}
+            {sp}|{sp}
+            <span class="action"
+                  onclick="edit.show('Edit {$entry.name}',
+                                     '{$entry.campaign.path}/item/CREATE.edit',
+                                     'add-item', '',
+                                     'parent:character/{$entry.name}')">
+              add item
+            </span>
+            {sp}|{sp}
+            <span class="action"
+                  onclick="edit.show('Move items for {$entry.name}',
+                                     '{$entry.path}.move_items',
+                                     'move-items', '',
+                                     'parent:character/{$entry.name}')">
+              move items
+            </span>
+          {/if}
+        {/param}
+        {param color: '#080' /}
+      {/call}
     {/param}
   {/call}
 

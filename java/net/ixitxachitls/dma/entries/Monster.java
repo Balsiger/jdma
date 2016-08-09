@@ -1073,7 +1073,6 @@ public class Monster extends CampaignEntry
    */
   public List<Item> getPossessions()
   {
-    // zdqj / teae
     if(m_possessions == null)
       m_possessions = DMADataFactory.get().getEntries(
           Item.TYPE, Optional.of(getCampaign().get().getKey()),

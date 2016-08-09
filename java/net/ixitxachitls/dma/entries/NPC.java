@@ -442,6 +442,9 @@ public class NPC extends Monster
   @Override
   public int getMaxHP()
   {
+    if(m_levels.isEmpty())
+      return super.getMaxHP();
+
     // Use the levels of the character, ignoring a monsters other hps.
     int hp = 0;
     for(Level level : m_levels)
