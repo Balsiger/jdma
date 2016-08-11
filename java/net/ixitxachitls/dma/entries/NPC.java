@@ -138,17 +138,6 @@ public class NPC extends Monster
   /** The possible animal compantion. */
   protected Optional<List<Monster>> m_animalCompanions = Optional.absent();
 
-  /*
-  @Override
-  public String dmName()
-  {
-    if(m_givenName.isPresent())
-      return m_givenName.get() + " - " + super.dmName();
-
-    return super.dmName();
-  }
-  */
-
   /**
    * Get the class levels of the NPC.
    *

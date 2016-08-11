@@ -415,7 +415,13 @@
   <div class="line">
     {call dma.sheet.value}
       {param label: 'Name' /}
-      {param value: $entry.given_name + ' (' + $entry.name + ')' /}
+      {param value kind="html"}
+        {if $entry.given_name.present}
+          {$entry.given_name} ({$entry.name})
+        {else}
+          {$entry.name}
+        {/if}
+      {/param}
     {/call}
     {call dma.sheet.value}
       {param label: 'Creature Type' /}
