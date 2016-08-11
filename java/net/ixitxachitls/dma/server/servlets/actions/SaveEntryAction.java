@@ -85,6 +85,8 @@ public class SaveEntryAction extends Action
       }
       else
         return alert("Cannot find entry for " + key.get());
+    else
+      entry.get().set(values);
 
     if(!entry.isPresent())
       return alert("could not create entry");
