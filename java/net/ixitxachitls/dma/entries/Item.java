@@ -1259,6 +1259,13 @@ public class Item extends CampaignEntry
           if(feat.getQualifier().isPresent()
              && hasBaseName(feat.getQualifier().get()))
           bonus += 1;
+
+        // Add penalties for wrongly sized weapons (PHB 113).
+        Optional<Size> possessorSize =
+            getPossessor().get().getCombinedSize().get();
+        if(possessorSize.isPresent() && getWielderSize() != possessorSize.get())
+          bonus += -2 * Math.abs(
+              possessorSize.get().ordinal() - getWielderSize().ordinal());
       }
 
       Optional<Integer> attack =
@@ -1434,6 +1441,20 @@ public class Item extends CampaignEntry
 
     return result;
   }
+
+  public Size getWielderSize()
+  {
+    Size result = Size.UNKNOWN;
+    for(BaseEntry base : getBaseEntries())
+    {
+      Size size = ((BaseItem)base).getWielderSize();
+      if(size.ordinal() > result.ordinal())
+        result = size;
+    }
+
+    return result;
+  }
+
   public WeaponStyle getWeaponStyle()
   {
     WeaponStyle result = WeaponStyle.UNKNOWN;
