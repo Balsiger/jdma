@@ -221,7 +221,7 @@
                   onclick="edit.show('Edit {$entry.name}',
                                      '{$entry.campaign.path}/item/CREATE.edit',
                                      'add-item', '',
-                                     'parent:character/{$entry.name}')">
+                                     'parent:npc/{$entry.name}')">
               add item
             </span>
             {sp}|{sp}
@@ -229,7 +229,7 @@
                   onclick="edit.show('Move items for {$entry.name}',
                                      '{$entry.path}.move_items',
                                      'move-items', '',
-                                     'parent:character/{$entry.name}')">
+                                     'parent:npc/{$entry.name}')">
               move items
             </span>
           {/if}
@@ -631,66 +631,9 @@
     </div>
 
     <div class="column" style="flex: 2">
-      {call dma.sheet.grouptitle}
-        {param title: 'Attacks' /}
+      {call dma.entries.monsters.attacks}
+        {param entry: $entry /}
       {/call}
-      {foreach $attack in $entry.combined_primary_attacks.get}
-        <div class="line">
-          {call .attack}
-            {param name: ($attack.number.one ? '' : $attack.number + ' ')
-                          + $attack.mode /}
-            {param bonus kind="html"}
-              {annotate(call($entry, 'attackBonus', $attack))}
-              {sp}{$attack.style}
-            {/param}
-            {param damage: call($entry, 'damage', $attack) /}
-            {param critical: '20' /}
-          {/call}
-        </div>
-      {/foreach}
-      {foreach $attack in $entry.combined_secondary_attacks.get}
-        <div class="line">
-          {call .attack}
-            {param name: ($attack.number.one ? '' : $attack.number + ' ')
-                          + $attack.mode /}
-            {param bonus kind="html"}
-              {annotate(call($entry, 'secondaryAttackBonus', $attack))}
-              {sp}{$attack.style}
-            {/param}
-            {param damage: call($entry, 'secondaryDamage', $attack) /}
-            {param critical: '20' /}
-          {/call}
-        </div>
-      {/foreach}
-
-      {foreach $weapon in $entry.weapons}
-        {if index($weapon) < 4}
-          <div class="line">
-            {call .attack}
-              {param name kind="html"}
-                {call dma.entries.items.reference}
-                  {param entry: $weapon /}
-                {/call}
-              {/param}
-              {param bonus kind="html"}
-                {foreach $key in keys($weapon.attack_bonus)}
-                  {if $key}
-                    {sp}{$key}
-                  {/if}
-                  {foreach $attack in $weapon.attack_bonus[$key]}
-                    {bonus($attack)}
-                    {if not isLast($attack)}/{/if}
-                  {/foreach}
-                  {if not isLast($key)}, {/if}
-                {/foreach}
-              {/param}
-              {param damage: $weapon.damage /}
-              {param critical: $weapon.critical /}
-              {param weapon: $weapon /}
-            {/call}
-          </div>
-        {/if}
-      {/foreach}
     </div>
 
     <div class="column" style="flex: 1">

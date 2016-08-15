@@ -1220,7 +1220,7 @@ public class Item extends CampaignEntry
   /**
    * Get the attack bonus for this item.
    *
-   * @return the attack bonus when attacking with this
+   * @return the attack bonus when attacking with this weapon
    */
   public Map<String, List<Integer>> getAttackBonus()
   {
@@ -1242,6 +1242,9 @@ public class Item extends CampaignEntry
         else
           // Add the dexterity bonus of the wielder.
           bonus += getPossessor().get().getDexterityModifier();
+
+        // Size modifier
+        bonus += getPossessor().get().sizeModifier();
 
         Optional<Feat> specialization =
             getPossessor().get().getFeat("weapon specialization");

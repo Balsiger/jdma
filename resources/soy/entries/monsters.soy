@@ -424,70 +424,9 @@
     </div>
 
     <div class="column" style="flex: 2">
-      {call dma.sheet.grouptitle}
-        {param title: 'Attacks' /}
+      {call .attacks}
+        {param entry: $entry /}
       {/call}
-      {foreach $attack in $entry.combined_primary_attacks.get}
-        {if length($entry.weapons) == 0 and
-            $attack.mode != $ij.AttackMode.WEAPON}
-          <div class="line">
-            {call .attack}
-              {param name: ($attack.number.one ? '' : $attack.number + ' ')
-                            + $attack.mode /}
-              {param bonus kind="html"}
-                {annotate(call($entry, 'attackBonus', $attack))}
-                {sp}{$attack.style}
-              {/param}
-              {param damage: call($entry, 'damage', $attack) /}
-              {param critical: '20' /}
-            {/call}
-          </div>
-        {/if}
-      {/foreach}
-      {foreach $attack in $entry.combined_secondary_attacks.get}
-        <div class="line">
-          {call .attack}
-            {param name: ($attack.number.one ? '' : $attack.number + ' ')
-                          + $attack.mode /}
-            {param bonus kind="html"}
-              {annotate(call($entry, 'secondaryAttackBonus', $attack))}
-              {sp}{$attack.style}
-            {/param}
-            {param damage: call($entry, 'secondaryDamage', $attack) /}
-            {param critical: '20' /}
-          {/call}
-        </div>
-      {/foreach}
-
-      {foreach $weapon in $entry.weapons}
-        {if index($weapon) < 4}
-          <div class="line">
-            {call .attack}
-              {param name kind="html"}
-                {call dma.entries.items.reference}
-                  {param entry: $weapon /}
-                {/call}
-              {/param}
-              {param bonus kind="html"}
-                {foreach $key in keys($weapon.attack_bonus)}
-                  {if $key}
-                    {sp}{$key}
-                  {/if}
-                  {foreach $attack in $weapon.attack_bonus[$key]}
-                    {bonus($attack)}
-                    {if not isLast($attack)}/{/if}
-                  {/foreach}
-                  {if not isLast($key)}, {/if}
-                {/foreach}
-                {sp}{if $weapon.weapon_style.melee}Melee{else}Ranged{/if}
-              {/param}
-              {param damage: $weapon.damage /}
-              {param critical: $weapon.critical /}
-              {param weapon: $weapon /}
-            {/call}
-          </div>
-        {/if}
-      {/foreach}
     </div>
 
     <div class="column" style="flex: 1">
@@ -568,6 +507,76 @@
 
     </div>
   </div>
+{/template}
+
+/** All the attacks. */
+{template .attacks}
+  {@param entry: ?}
+
+  {call dma.sheet.grouptitle}
+    {param title: 'Attacks' /}
+  {/call}
+
+  {foreach $attack in $entry.combined_primary_attacks.get}
+    {if length($entry.weapons) == 0 and $attack.mode != $ij.AttackMode.WEAPON}
+      <div class="line">
+        {call .attack}
+          {param name: ($attack.number.one ? '' : $attack.number + ' ')
+                        + $attack.mode /}
+          {param bonus kind="html"}
+            {annotate(call($entry, 'attackBonus', $attack))}{sp}{$attack.style}
+          {/param}
+          {param damage: call($entry, 'damage', $attack) /}
+          {param critical: '20' /}
+        {/call}
+      </div>
+    {/if}
+  {/foreach}
+
+  {foreach $attack in $entry.combined_secondary_attacks.get}
+    <div class="line">
+      {call .attack}
+        {param name: ($attack.number.one ? '' : $attack.number + ' ')
+                      + $attack.mode /}
+        {param bonus kind="html"}
+          {annotate(call($entry, 'secondaryAttackBonus', $attack))}
+          {sp}{$attack.style}
+        {/param}
+        {param damage: call($entry, 'secondaryDamage', $attack) /}
+        {param critical: '20' /}
+      {/call}
+    </div>
+  {/foreach}
+
+  {foreach $weapon in $entry.weapons}
+    {if index($weapon) < 4}
+      <div class="line">
+        {call .attack}
+          {param name kind="html"}
+            {call dma.entries.items.reference}
+              {param entry: $weapon /}
+            {/call}
+          {/param}
+          {param bonus kind="html"}
+            {foreach $key in keys($weapon.attack_bonus)}
+              {if $key}
+                {sp}{$key}
+              {/if}
+              {foreach $attack in $weapon.attack_bonus[$key]}
+                {bonus($attack)}
+                {if not isLast($attack)}/{/if}
+              {/foreach}
+              {if not isLast($key)}, {/if}
+            {/foreach}
+            {sp}{if $weapon.weapon_style.melee}Melee{else}Ranged{/if}
+          {/param}
+          {param damage: $weapon.damage /}
+          {param critical: $weapon.critical /}
+          {param weapon: $weapon /}
+        {/call}
+      </div>
+    {/if}
+  {/foreach}
 {/template}
 
 /** A weapon line. */

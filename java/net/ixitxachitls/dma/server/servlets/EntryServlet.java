@@ -243,8 +243,8 @@ public class EntryServlet extends PageServlet
       } else
         values = Optional.absent();
 
-      entry = ((Type)type).createNew(key.get(), bases,
-                                     inRequest.getParam("store"), values);
+      entry = type.createNew(key.get(), bases, inRequest.getParam("store"),
+                             values);
 
       data.put("entry", entry.orNull());
       if(entry.isPresent())
