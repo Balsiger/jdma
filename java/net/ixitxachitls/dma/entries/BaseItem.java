@@ -186,6 +186,7 @@ public class BaseItem extends BaseEntry
 
   /** The type of the weapon damage. */
   protected WeaponType m_weaponType = WeaponType.UNKNOWN;
+  protected Size m_wielderSize = Size.UNKNOWN;
 
   /** The critical range. */
   protected Optional<Critical> m_critical = Optional.absent();
@@ -1161,6 +1162,23 @@ public class BaseItem extends BaseEntry
     return combined;
   }
 
+  public Size getWielderSize()
+  {
+    return m_wielderSize;
+  }
+
+  public Annotated<Optional<Size>> getCombinedWielderSize()
+  {
+    if(m_wielderSize != Size.UNKNOWN)
+      return new Annotated.Max<Size>(m_wielderSize, getName());
+
+    Annotated.Max<Size> combined = new Annotated.Max<>();
+    for(BaseEntry entry : this.getBaseEntries())
+      combined.add(((BaseItem)entry).getCombinedWielderSize());
+
+    return combined;
+  }
+
   /**
    * Get the weapon proficiency.
    *
@@ -1994,6 +2012,8 @@ public class BaseItem extends BaseEntry
         weaponBuilder.setSplash(m_splash.get().toProto());
       if(m_weaponType != WeaponType.UNKNOWN)
         weaponBuilder.setType(m_weaponType.toProto());
+      if(m_wielderSize != Size.UNKNOWN)
+        weaponBuilder.setWielderSize(m_wielderSize.toProto());
       if(m_critical.isPresent())
         weaponBuilder.setCritical(m_critical.get().toProto());
       if(m_style != WeaponStyle.UNKNOWN)
@@ -2178,6 +2198,8 @@ public class BaseItem extends BaseEntry
     m_critical = inValues.use("weapon.damage.critical", m_critical,
                               Critical.PARSER);
     m_weaponType = inValues.use("weapon.type", m_weaponType, WeaponType.PARSER);
+    m_wielderSize = inValues.use("weapon.wielder_size", m_wielderSize,
+                                 Size.PARSER);
     m_style = inValues.use("weapon.style", m_style, WeaponStyle.PARSER);
     m_proficiency = inValues.use("weapon.proficiency", m_proficiency,
                                  Proficiency.PARSER);
@@ -2307,6 +2329,8 @@ public class BaseItem extends BaseEntry
         m_splash = Optional.of(Damage.fromProto(weaponProto.getSplash()));
       if(weaponProto.hasType())
         m_weaponType = WeaponType.fromProto(weaponProto.getType());
+      if(weaponProto.hasWielderSize())
+        m_wielderSize = Size.fromProto(weaponProto.getWielderSize());
       if(weaponProto.hasCritical())
         m_critical =
         Optional.of(Critical.fromProto(weaponProto.getCritical()));

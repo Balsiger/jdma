@@ -758,6 +758,7 @@ message BaseWeaponProto
   optional bool finesse = 11;
   optional bool ammunition = 12;
   repeated string ammunition_needed = 13;
+  optional BaseItemProto.Size wielder_size = 14 [default=MEDIUM];
 }
 
 message BaseWearableProto

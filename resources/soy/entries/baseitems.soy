@@ -215,6 +215,9 @@
             {if $entry.combined_ammunition_needed.get}
               , ammunition: {annotate($entry.combined_ammunition_needed)}
             {/if}
+            {if $entry.combined_wielder_size.get}
+              , wielder {annotate($entry.combined_wielder_size)}
+            {/if}
           {/param}
           {param color: '#008' /}
         {/call}
@@ -728,9 +731,15 @@
           {call dma.edit.field_input}
             {param name: 'weapon.max_attacks' /}
             {param caption: 'max attacks' /}
-            {param value: $entry.max_attacks.present 
+            {param value: $entry.max_attacks.present
               ? $entry.max_attacks : '' /}
             {param validate: 'number' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_selection}
+            {param name: 'weapon.wielder_size' /}
+            {param value: $entry.wielder_size.string /}
+            {param choices: $entry.wielder_size.names /}
             {param class: 'narrow' /}
           {/call}
         {/param}
