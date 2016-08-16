@@ -1460,9 +1460,11 @@ public class Item extends CampaignEntry
     WeaponStyle result = WeaponStyle.UNKNOWN;
     for(BaseEntry base : getBaseEntries())
     {
-      WeaponStyle style = ((BaseItem)base).getWeaponStyle();
-      if(style.ordinal() > result.ordinal())
-        result = style;
+      Annotated<Optional<WeaponStyle>> style =
+          ((BaseItem)base).getCombinedWeaponStyle();
+      if(style.get().isPresent()
+          && style.get().get().ordinal() > result.ordinal())
+        result = style.get().get();
     }
 
     return result;

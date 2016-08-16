@@ -716,33 +716,6 @@
   </div>
 {/template}
 
-/** A weapon line. */
-{template .attack}
-  {@param name: string|html}
-  {@param bonus: string|html}
-  {@param damage: string|html}
-  {@param critical: string|html}
-  {call dma.sheet.value}
-    {param label: 'Weapon' /}
-    {param value: $name /}
-  {/call}
-
-  {call dma.sheet.value}
-    {param label: 'Attack Bonus' /}
-    {param value: $bonus /}
-  {/call}
-
-  {call dma.sheet.value}
-    {param label: 'Damage' /}
-    {param value: $damage /}
-  {/call}
-
-  {call dma.sheet.value}
-    {param label: 'Critical' /}
-    {param value: $critical /}
-  {/call}
-{/template}
-
 /** A box with an ability score. */
 {template .ability_box}
   {@param total: string|html|number}
