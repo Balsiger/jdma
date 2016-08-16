@@ -1352,20 +1352,22 @@ public class Item extends CampaignEntry
       damage = new Damage(new Dice(0, 0, 0));
 
     // add strength modifier
-    int strengthModifier = getPossessor().get().getStrengthModifier();
-    Optional<WeaponStyle> style = getCombinedWeaponStyle().get();
-    if(style.isPresent() && style.get().isMelee()
-       && getPossessor().isPresent())
-      damage = (Damage)
-        damage.add(new Damage(new Dice(0, 0, strengthModifier)));
-
-    // + additional 1/2 strength bonus for two handed melee weapons
-    if(style.isPresent() && style.get() == WeaponStyle.TWOHANDED_MELEE)
+    if(getPossessor().isPresent())
     {
-      damage = (Damage)
-        damage.add(new Damage(new Dice(0, 0, strengthModifier / 2)));
-    }
+      int strengthModifier = getPossessor().get().getStrengthModifier();
+      Optional<WeaponStyle> style = getCombinedWeaponStyle().get();
+      if(style.isPresent() && style.get().isMelee()
+          && getPossessor().isPresent())
+        damage = (Damage)
+            damage.add(new Damage(new Dice(0, 0, strengthModifier)));
 
+      // + additional 1/2 strength bonus for two handed melee weapons
+      if(style.isPresent() && style.get() == WeaponStyle.TWOHANDED_MELEE)
+      {
+        damage = (Damage)
+            damage.add(new Damage(new Dice(0, 0, strengthModifier / 2)));
+      }
+    }
 
     for(BaseEntry base : getBaseEntries())
       for(Quality quality : ((BaseItem)base).getCombinedQualities().get())
