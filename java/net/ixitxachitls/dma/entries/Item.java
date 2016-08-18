@@ -1263,9 +1263,12 @@ public class Item extends CampaignEntry
         // Add penalties for wrongly sized weapons (PHB 113).
         Optional<Size> possessorSize =
             getPossessor().get().getCombinedSize().get();
-        if(possessorSize.isPresent() && getWielderSize() != possessorSize.get())
+        Size wielderSize = getWielderSize();
+        if(possessorSize.isPresent()
+            && wielderSize != Size.UNKNOWN
+            && wielderSize != possessorSize.get())
           bonus += -2 * Math.abs(
-              possessorSize.get().ordinal() - getWielderSize().ordinal());
+              possessorSize.get().ordinal() - wielderSize.ordinal());
       }
 
       Optional<Integer> attack =
