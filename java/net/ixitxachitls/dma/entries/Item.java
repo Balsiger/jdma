@@ -1360,7 +1360,7 @@ public class Item extends CampaignEntry
     {
       int strengthModifier = getPossessor().get().getStrengthModifier();
       Optional<WeaponStyle> style = getCombinedWeaponStyle().get();
-      if(style.isPresent() && style.get().isMelee()
+      if(style.isPresent() && (style.get().usesStrength())
           && getPossessor().isPresent())
         damage = (Damage)
             damage.add(new Damage(new Dice(0, 0, strengthModifier)));

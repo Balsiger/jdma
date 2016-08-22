@@ -570,7 +570,7 @@
               {/foreach}
               {if not isLast($key)}, {/if}
             {/foreach}
-            {sp}{if $weapon.weapon_style.melee}Melee{else}Ranged{/if}
+            {sp}{$weapon.weapon_style.get_name}
           {/param}
           {param damage: $weapon.damage /}
           {param critical: $weapon.critical /}

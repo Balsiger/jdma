@@ -43,39 +43,39 @@ public enum WeaponStyle implements Named,
     Proto<Values.WeaponStyle>
 {
   /** An unknown style value. */
-  UNKNOWN("Unknown", "U", false, 0, Values.WeaponStyle.UNKNOWN_STYLE),
+  UNKNOWN("Unknown", "U", false, 0, false, Values.WeaponStyle.UNKNOWN_STYLE),
 
   /** A two-handed melee weapon. */
-  TWOHANDED_MELEE("Two-Handed Melee", "Two", true, 0,
+  TWOHANDED_MELEE("Two-Handed Melee", "Two", true, 0, true,
                   Values.WeaponStyle.TWOHANDED_MELEE),
 
   /** A one-handed melee weapon. */
-  ONEANDED_MELEE("One-Handed Melee", "One", true, -1,
+  ONEANDED_MELEE("One-Handed Melee", "One", true, -1, true,
                  Values.WeaponStyle.ONEHANDED_MELEE),
 
   /** A light melee weapon. */
-  LIGHT_MELEE("Light Melee", "Light", true, -2,
+  LIGHT_MELEE("Light Melee", "Light", true, -2, true,
               Values.WeaponStyle.LIGHT_MELEE),
 
   /** An unarmed 'weapon'. */
-  UNARMED("Unarmed", "Unarmed", true, 0, Values.WeaponStyle.UNARMED),
+  UNARMED("Unarmed", "Unarmed", true, 0, true, Values.WeaponStyle.UNARMED),
 
   /** A ranged touch weapon. */
-  RANGED_TOUCH("Ranged Touch", "Touch R", false, 0,
+  RANGED_TOUCH("Ranged Touch", "Touch R", false, 0, false,
                Values.WeaponStyle.RANGED_TOUCH),
 
   /** A ranged weapon. */
-  RANGED("Ranged", "Ranged", false, 0, Values.WeaponStyle.RANGED),
+  RANGED("Ranged", "Ranged", false, 0, false, Values.WeaponStyle.RANGED),
 
   /** A thrown touch weapon. */
-  THROWN_TOUCH("Thrown Touch", "Touch T", false, 0,
+  THROWN_TOUCH("Thrown Touch", "Touch T", false, 0, true,
                Values.WeaponStyle.THROWN_TOUCH),
 
   /** A thrown weapon. */
-  THROWN("Thrown", "Thrown", false, 0, Values.WeaponStyle.THROWN),
+  THROWN("Thrown", "Thrown", false, 0, true, Values.WeaponStyle.THROWN),
 
   /** A touch weapon. */
-  TOUCH("Touch", "Touch", true, 0, Values.WeaponStyle.TOUCH);
+  TOUCH("Touch", "Touch", true, 0, false, Values.WeaponStyle.TOUCH);
 
   /** The value's name. */
   private String m_name;
@@ -89,6 +89,7 @@ public enum WeaponStyle implements Named,
   /** The size difference between a normal item an a weapon. */
   private int m_sizeDifference;
 
+  private boolean m_strength;
   /** The corresponding proto value. */
   private Values.WeaponStyle m_proto;
 
@@ -113,12 +114,14 @@ public enum WeaponStyle implements Named,
    * @param inProto          the corresponding proto value
    */
   private WeaponStyle(String inName, String inShort, boolean inMelee,
-                int inSizeDifference, Values.WeaponStyle inProto)
+                      int inSizeDifference,
+                      boolean inStrength, Values.WeaponStyle inProto)
   {
     m_name = inName;
     m_short = inShort;
     m_melee = inMelee;
     m_sizeDifference = inSizeDifference;
+    m_strength = inStrength;
     m_proto = inProto;
   }
 
@@ -208,5 +211,10 @@ public enum WeaponStyle implements Named,
       names.add(style.getName());
 
     return names;
+  }
+
+  public boolean usesStrength()
+  {
+    return m_strength;
   }
 }
