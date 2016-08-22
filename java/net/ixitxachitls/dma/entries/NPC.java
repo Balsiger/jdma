@@ -790,7 +790,7 @@ public class NPC extends Monster
     if(!m_animalCompanions.isPresent()) {
       m_animalCompanions = Optional.of(DMADataFactory.get().getEntries(
           Monster.TYPE, Optional.of(getCampaign().get().getKey()),
-          "index-parent", "character/" + getName().toLowerCase()));
+          "index-parent", getType().getLink() + "/" + getName().toLowerCase()));
     }
 
     return m_animalCompanions.get();

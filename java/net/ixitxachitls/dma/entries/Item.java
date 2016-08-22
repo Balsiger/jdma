@@ -1179,6 +1179,7 @@ public class Item extends CampaignEntry
       if(m_parentName.isPresent() && getCampaign().isPresent())
       {
         String []parts = m_parentName.get().split("/");
+        Log.important("getting parent for " + m_parentName.get());
         String id = parts[1];
         Optional<? extends AbstractType<? extends AbstractEntry>> type =
             AbstractType.getTyped(parts[0]);

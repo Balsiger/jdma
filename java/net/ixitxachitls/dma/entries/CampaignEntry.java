@@ -387,6 +387,8 @@ public abstract class CampaignEntry extends Entry
     if(proto.hasParent())
       m_parentName = Optional.of(proto.getParent());
 
+    Log.important(getName() + " parent from proto: " + m_parentName);
+
     super.fromProto(proto.getBase());
   }
 

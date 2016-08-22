@@ -108,7 +108,7 @@
                   onclick="edit.show('Edit {$entry.name}',
                                      '{$entry.campaign.path}/item/CREATE.edit',
                                      'add-item', '',
-                                     'parent:character/{$entry.name}')">
+                                     'parent:monster/{$entry.name}')">
               add item
             </span>
             {sp}|{sp}
@@ -116,7 +116,7 @@
                   onclick="edit.show('Move items for {$entry.name}',
                                      '{$entry.path}.move_items',
                                      'move-items', '',
-                                     'parent:character/{$entry.name}')">
+                                     'parent:monster/{$entry.name}')">
               move items
             </span>
           {/if}
@@ -518,7 +518,7 @@
   {/call}
 
   {foreach $attack in $entry.combined_primary_attacks.get}
-    {if length($entry.weapons) == 0 and $attack.mode != $ij.AttackMode.WEAPON}
+    {if length($entry.weapons) == 0 or $attack.mode.name != 'WEAPON'}
       <div class="line">
         {call .attack}
           {param name: ($attack.number.one ? '' : $attack.number + ' ')
@@ -534,17 +534,19 @@
   {/foreach}
 
   {foreach $attack in $entry.combined_secondary_attacks.get}
-    <div class="line">
-      {call .attack}
-        {param name: ($attack.number.one ? '' : $attack.number + ' ')
-                      + $attack.mode /}
-        {param bonus kind="html"}
-          {annotate(call($entry, 'secondaryAttackBonus', $attack))}
-          {sp}{$attack.style}
-        {/param}
-        {param damage: call($entry, 'secondaryDamage', $attack) /}
-        {param critical: '20' /}
-      {/call}
+    {if length($entry.weapons) == 0 or $attack.mode.name != 'WEAPON'}
+      <div class="line">
+        {call .attack}
+          {param name: ($attack.number.one ? '' : $attack.number + ' ')
+                        + $attack.mode /}
+          {param bonus kind="html"}
+            {annotate(call($entry, 'secondaryAttackBonus', $attack))}
+            {sp}{$attack.style}
+          {/param}
+          {param damage: call($entry, 'secondaryDamage', $attack) /}
+          {param critical: '20' /}
+        {/call}
+      {/if}
     </div>
   {/foreach}
 
@@ -585,6 +587,7 @@
   {@param bonus: string|html}
   {@param damage: string|html}
   {@param critical: string|html}
+
   {call dma.sheet.value}
     {param label: 'Weapon' /}
     {param value: $name /}
