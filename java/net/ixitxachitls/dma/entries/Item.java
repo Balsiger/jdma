@@ -979,6 +979,11 @@ public class Item extends CampaignEntry
     return m_multiple;
   }
 
+  public void setMultiple(int inMultiple)
+  {
+    m_multiple = Optional.of(inMultiple);
+  }
+
   /**
    * Get the count for multi use items.
    *

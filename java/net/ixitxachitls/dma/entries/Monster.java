@@ -4672,20 +4672,25 @@ public class Monster extends CampaignEntry
       m_createPossessionsOnSave = false;
       m_possessions = new ArrayList<>();
       for(BaseEntry base : getBaseEntries())
-        for(String name : ((BaseMonster)base).getPossessions())
+        for(BaseMonster.Possession possession
+            : ((BaseMonster)base).getPossessions())
         {
           Multimap<String, String> values = ArrayListMultimap.create();
           values.put("parent", getType().getLink() + "/" + getName());
 
           Optional<Item> item = Item.TYPE.createNew(
               new EntryKey(Entry.TEMPORARY, Item.TYPE, getKey().getParent()),
-              ImmutableList.of(name), Optional.<String>absent(),
-              Optional.of(new Values(values)));
+              ImmutableList.of(possession.getName()),
+              Optional.<String>absent(), Optional.of(new Values(values)));
 
           if(!item.isPresent())
-            Log.warning("Could not create item " + name + " for " + getKey());
+            Log.warning("Could not create item " + possession.getName()
+                            + " for " + getKey());
           else
+          {
+            item.get().setMultiple(possession.getCount().roll());
             item.get().save();
+          }
         }
     }
 

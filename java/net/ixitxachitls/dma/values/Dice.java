@@ -39,6 +39,9 @@ import net.ixitxachitls.util.Strings;
  */
 public class Dice extends Value<DiceProto>
 {
+  public static final Dice ONE = new Dice(0, 0, 1);
+  public static final Dice ZERO = new Dice(0, 0, 0);
+
   /** The parser for dices. */
   public static class DiceParser extends Parser<Dice>
   {

@@ -1113,7 +1113,7 @@
                     'choices': $ij.Language.names
                   ], [
                     'name': 'language.modifier',
-                    'value': $language.modifier.string, 
+                    'value': $language.modifier.string,
                     'type': 'selection',
                     'choices': $ij.LanguageModifier.names
                   ]] /}
@@ -1127,12 +1127,12 @@
                     'choices': $ij.Language.names
                   ], [
                     'name': 'language.modifier',
-                    'value': '', 
+                    'value': '',
                     'type': 'selection',
                     'choices': $ij.LanguageModifier.names
                   ]] /}
                 {/call}
-              {/foreach}          
+              {/foreach}
             {/param}
           {/call}
         {/param}
@@ -1181,13 +1181,43 @@
         {param validate: 'any' /}
         {param color: '#080' /}
       {/call}
-      {call dma.edit.value_list}
+      {call dma.edit.generic_value}
         {param name: 'possession' /}
         {param label: 'Possessions' /}
-        {param values: $entry.possessions /}
-        {param validate: 'non-empty' /}
         {param color: '#080' /}
-        {param autocomplete: 'base item/name' /}
+        {param value kind="html"}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $possession in $entry.possessions}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'possession.count',
+                    'value': $possession.count.string,
+                    'validate': 'dice'
+                  ], [
+                    'name': 'possession.name',
+                    'value': $possession.name,
+                    'validate': 'non-empty',
+                    'autocomplete': 'base item/name'
+                  ]] /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param values: [[
+                    'name': 'possession.count',
+                    'value': '',
+                    'validate': 'dice'
+                  ], [
+                    'name': 'possession.name',
+                    'value': '',
+                    'validate': 'non=empty',
+                    'autocomplete': 'base item/name'
+                  ]] /}
+                {/call}
+              {/foreach}
+            {/param}
+          {/call}
+        {/param}
       {/call}
       {call dma.edit.generic_value}
         {param name: 'good_saves' /}

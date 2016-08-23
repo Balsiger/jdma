@@ -367,25 +367,25 @@ public class BaseMonster extends BaseEntry
 
     /** The parser for the language option. */
     public static final Parser<LanguageOption> PARSER =
-      new Parser<LanguageOption>(2)
-      {
-        @Override
-        public Optional<LanguageOption> doParse(String inLanguage,
-                                                String inModifier)
+        new Parser<LanguageOption>(2)
         {
-          Optional<Language> language = Language.fromString(inLanguage);
-          if(!language.isPresent())
-            return Optional.absent();
+          @Override
+          public Optional<LanguageOption> doParse(String inLanguage,
+                                                  String inModifier)
+          {
+            Optional<Language> language = Language.fromString(inLanguage);
+            if(!language.isPresent())
+              return Optional.absent();
 
-          Optional<LanguageModifier> modifier =
-            LanguageModifier.fromString(inModifier);
-          if(!modifier.isPresent())
-            return Optional.absent();
+            Optional<LanguageModifier> modifier =
+                LanguageModifier.fromString(inModifier);
+            if(!modifier.isPresent())
+              return Optional.absent();
 
-          return
-            Optional.of(new LanguageOption(language.get(), modifier.get()));
-        }
-      };
+            return
+                Optional.of(new LanguageOption(language.get(), modifier.get()));
+          }
+        };
 
     /**
      * Get the language of the language option.
@@ -411,6 +411,59 @@ public class BaseMonster extends BaseEntry
     public String toString()
     {
       return m_modifier + " " + m_language;
+    }
+  }
+
+  /** A possesion description for a monster. */
+  public static class Possession
+  {
+    public Possession(String inName)
+    {
+      this(inName, Dice.ONE);
+    }
+
+    public Possession(String inName, Dice inCount)
+    {
+      m_name = inName;
+      m_count = inCount;
+    }
+
+    /** The parser for the language option. */
+    public static final Parser<Possession> PARSER =
+        new Parser<Possession>(2)
+        {
+          @Override
+          public Optional<Possession> doParse(String inCount,
+                                              String inName)
+          {
+            Optional<Dice> count = Dice.PARSER.parse(inCount);
+            if(!count.isPresent())
+              return Optional.of(new Possession(inName));
+
+            return Optional.of(new Possession(inName, count.get()));
+          }
+        };
+
+    private String m_name;
+    private Dice m_count;
+
+    public Dice getCount()
+    {
+      return m_count;
+    }
+
+    public String getName()
+    {
+      return m_name;
+    }
+
+    @Override
+    public String toString()
+    {
+      if(m_count.isOne())
+        return m_name;
+
+      return m_count + " " + m_name;
     }
   }
 
@@ -565,7 +618,7 @@ public class BaseMonster extends BaseEntry
   protected Optional<String> m_reproduction = Optional.absent();
 
   /** The standard possessions. */
-  protected List<String> m_possessions = new ArrayList<>();
+  protected List<Possession> m_possessions = new ArrayList<>();
   private List<Optional<BaseItem>> m_items = new ArrayList<>();
 
   /** The good saving throws. */
@@ -2067,7 +2120,7 @@ public class BaseMonster extends BaseEntry
    *
    * @return the possesions
    */
-  public List<String> getPossessions()
+  public List<Possession> getPossessions()
   {
     return m_possessions;
   }
@@ -2076,9 +2129,9 @@ public class BaseMonster extends BaseEntry
   {
     if(m_items.isEmpty() && !m_possessions.isEmpty())
     {
-      for(String possession : m_possessions)
+      for(Possession possession : m_possessions)
         m_items.add(DMADataFactory.get().<BaseItem>getEntry(
-            new EntryKey(possession, BaseItem.TYPE)));
+            new EntryKey(possession.getName(), BaseItem.TYPE)));
     }
 
     return m_items;
@@ -2089,12 +2142,12 @@ public class BaseMonster extends BaseEntry
    *
    * @return the possessions
    */
-  public Annotated<List<String>> getCombinedPossessions()
+  public Annotated<List<Possession>> getCombinedPossessions()
   {
     if(!m_possessions.isEmpty())
       return new Annotated.List<>(m_possessions, getName());
 
-    Annotated<List<String>> combined = new Annotated.List<>();
+    Annotated<List<Possession>> combined = new Annotated.List<>();
     for(BaseEntry base : getBaseEntries())
       combined.add(((BaseMonster)base).getCombinedPossessions());
 
@@ -3827,7 +3880,8 @@ public class BaseMonster extends BaseEntry
     m_tactics = inValues.use("tactics", m_tactics);
     m_character = inValues.use("character", m_character);
     m_reproduction = inValues.use("reproduction", m_reproduction);
-    m_possessions = inValues.use("possession", m_possessions);
+    m_possessions = inValues.use("possession", m_possessions,
+                                 Possession.PARSER, "count", "name");
     m_goodSaves = inValues.use("good_saves", m_goodSaves, Save.PARSER);
     m_proficiencies = inValues.use("proficiency", m_proficiencies);
     m_quadruped = inValues.use("quadruped", m_quadruped, Value.BOOLEAN_PARSER);
@@ -4021,10 +4075,11 @@ public class BaseMonster extends BaseEntry
     if(m_reproduction.isPresent())
       builder.setReproduction(m_reproduction.get());
 
-    for(String possession : m_possessions)
+    for(Possession possession : m_possessions)
       builder.addPossession(BaseMonsterProto.Possession.newBuilder()
-                            .setText(possession)
-                            .build());
+                                .setText(possession.getName())
+                                .setCount(possession.getCount().toProto())
+                                .build());
 
     for(Save save : m_goodSaves)
       builder.addGoodSave(save.toProto());
@@ -4210,10 +4265,19 @@ public class BaseMonster extends BaseEntry
       m_reproduction = Optional.of(proto.getReproduction());
 
     for(BaseMonsterProto.Possession possession : proto.getPossessionList())
+    {
+      String name;
       if(possession.hasName())
-        m_possessions.add(possession.getName());
+        name = possession.getName();
       else
-        m_possessions.add(possession.getText());
+        name = possession.getText();
+
+      if(possession.hasCount())
+        m_possessions.add(
+            new Possession(name, Dice.fromProto(possession.getCount())));
+      else
+        m_possessions.add(new Possession(name));
+    }
 
     for(BaseMonsterProto.Save save : proto.getGoodSaveList())
       m_goodSaves.add(Save.fromProto(save));
