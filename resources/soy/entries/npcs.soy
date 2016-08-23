@@ -39,7 +39,12 @@
     {param next: $next /}
     {param last: $last /}
     {param color: '#080' /}
-    {param title: $entry.name /}
+    {param title kind="html"}
+      {call dma.entry.title}
+        {param title: $entry.name /}
+        {param color: '#080' /}
+      {/call}
+    {/param}
     {param values kind="html"}
       {if length($entry.baseNames)}
         {call dma.entry.value}
