@@ -437,7 +437,7 @@ public class BaseMonster extends BaseEntry
                                               String inName)
           {
             Optional<Dice> count = Dice.PARSER.parse(inCount);
-            if(!count.isPresent())
+            if(!count.isPresent() || count.get().isZero())
               return Optional.of(new Possession(inName));
 
             return Optional.of(new Possession(inName, count.get()));
