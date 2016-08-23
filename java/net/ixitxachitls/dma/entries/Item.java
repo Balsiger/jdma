@@ -1366,7 +1366,7 @@ public class Item extends CampaignEntry
             damage.add(new Damage(new Dice(0, 0, strengthModifier)));
 
       // + additional 1/2 strength bonus for two handed melee weapons
-      if(style.isPresent() && style.get() == WeaponStyle.TWOHANDED_MELEE)
+      if(style.isPresent() && style.get().isTwoHanded())
       {
         damage = (Damage)
             damage.add(new Damage(new Dice(0, 0, strengthModifier / 2)));

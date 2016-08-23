@@ -416,6 +416,7 @@ enum WeaponStyle
   THROWN_TOUCH = 7;
   THROWN = 8;
   TOUCH = 9;
+  THROWN_TWO_HANDED = 10;
 }
 
 message NameAndModifierProto
