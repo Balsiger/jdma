@@ -37,6 +37,7 @@ import com.google.template.soy.data.SoyData;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.entries.BaseSkill;
 import net.ixitxachitls.dma.entries.Level;
@@ -295,6 +296,7 @@ public class SoyServlet extends DMAServlet
        new SoyValue("BaseProduct_Part", BaseProduct.Part.class),
        "MiniatureLocationRule",new SoyValue("MiniatureLocationRule",
                                             MiniatureLocationRuleType.class),
+       "RandomType",new SoyValue("RandomType", BaseItem.Random.Type.class),
        "isDev", DMAServlet.isDev() || inRequest.hasParam("dev"));
 
     tracer.done();

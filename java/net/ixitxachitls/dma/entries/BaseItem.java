@@ -55,12 +55,14 @@ import net.ixitxachitls.dma.values.ArmorType;
 import net.ixitxachitls.dma.values.CountUnit;
 import net.ixitxachitls.dma.values.Critical;
 import net.ixitxachitls.dma.values.Damage;
+import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Duration;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.ModifierType;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.NamedModifier;
+import net.ixitxachitls.dma.values.Parser;
 import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.Slot;
@@ -73,7 +75,9 @@ import net.ixitxachitls.dma.values.WeaponType;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Group;
+import net.ixitxachitls.dma.values.enums.Named;
 import net.ixitxachitls.dma.values.enums.Probability;
+import net.ixitxachitls.dma.values.enums.Proto;
 import net.ixitxachitls.dma.values.enums.Size;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -86,6 +90,121 @@ import net.ixitxachitls.util.logging.Log;
  */
 public class BaseItem extends BaseEntry
 {
+  public static class Random {
+    public enum Type implements Named, Proto<BaseItemProto.Random.Type>
+    {
+      UNKNOWN("Unknown", BaseItemProto.Random.Type.UNKNOWN),
+      MUNDANE("Mundane", BaseItemProto.Random.Type.MUNDANE);
+
+      private Type(String inName, BaseItemProto.Random.Type inProto)
+      {
+        m_name = inName;
+        m_proto = inProto;
+      }
+
+      private final String m_name;
+      private final BaseItemProto.Random.Type m_proto;
+
+      @Override
+      public String getName()
+      {
+        return m_name;
+      }
+
+      @Override
+      public BaseItemProto.Random.Type toProto()
+      {
+        return m_proto;
+      }
+
+      public static Type fromProto(BaseItemProto.Random.Type inProto)
+      {
+        for(Type type : values())
+          if(type.m_proto == inProto)
+            return type;
+
+        throw new IllegalArgumentException("cannot convert random type proto: "
+          + inProto);
+      }
+
+      public static Optional<Type> fromString(String inValue)
+      {
+        for(Type type : values())
+          if(type.getName().equalsIgnoreCase(inValue))
+            return Optional.of(type);
+
+        return Optional.absent();
+      }
+
+      /**
+       * Get the possible names of types.
+       *
+       * @return a list of the namees
+       */
+      public static List<String> names()
+      {
+        List<String> names = new ArrayList<>();
+        for(Type type : values())
+          names.add(type.getName());
+
+        return names;
+      }
+    }
+
+    public Random(Type inType, Dice inMultiple)
+    {
+      m_type = inType;
+      m_multiple = inMultiple;
+    }
+
+    public static final Parser<Random> PARSER = new Parser<Random>(2) {
+      @Override
+      public Optional<Random> doParse(String inType, String inMultiple)
+      {
+        Optional<Type> type = Type.fromString(inType);
+        Optional<Dice> multiple = Dice.PARSER.parse(inMultiple);
+
+        if(type.isPresent() && multiple.isPresent())
+          return Optional.of(new Random(type.get(), multiple.get()));
+
+        return Optional.absent();
+      }
+    };
+
+    private final Type m_type;
+    private final Dice m_multiple;
+
+    public Type getType()
+    {
+      return m_type;
+    }
+
+    public Dice getMultiple()
+    {
+      return m_multiple;
+    }
+
+    public BaseItemProto.Random toProto()
+    {
+      return BaseItemProto.Random.newBuilder()
+          .setType(m_type.toProto())
+          .setMultiple(m_multiple.toProto())
+          .build();
+    }
+
+    public static Random fromProto(BaseItemProto.Random inProto)
+    {
+      return new Random(Type.fromProto(inProto.getType()),
+                        Dice.fromProto(inProto.getMultiple()));
+    }
+
+    @Override
+    public String toString()
+    {
+      return m_type.getName() + " " + m_multiple;
+    }
+  }
+
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
@@ -265,6 +384,8 @@ public class BaseItem extends BaseEntry
 
   /** The item's qualities. */
   protected List<Quality> m_qualities = new ArrayList<>();
+
+  protected Optional<Random> m_random = Optional.absent();
 
   /**
    * Check whether this item has weapon properties.
@@ -1822,6 +1943,11 @@ public class BaseItem extends BaseEntry
     return Strings.SPACE_JOINER.join(appearances);
   }
 
+  public Optional<Random> getRandom()
+  {
+    return m_random;
+  }
+
   @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
   {
@@ -1941,6 +2067,9 @@ public class BaseItem extends BaseEntry
     values.put(Index.Path.SLOTS, m_slot.getName());
     if(m_remove.isPresent())
       values.put(Index.Path.REMOVES, m_remove.get().toString());
+
+    if(m_random.isPresent())
+      values.put(Index.Path.RANDOM, m_random.get().getType().getName());
 
     return values;
   }
@@ -2153,6 +2282,9 @@ public class BaseItem extends BaseEntry
     for(Quality quality : m_qualities)
       builder.addQualities(quality.toProto());
 
+    if(m_random.isPresent())
+      builder.setRandom(m_random.get().toProto());
+
     BaseItemProto proto = builder.build();
     return proto;
   }
@@ -2240,6 +2372,8 @@ public class BaseItem extends BaseEntry
                                 Duration.PARSER);
     m_remove = inValues.use("wearable.remove", m_remove, Duration.PARSER);
     m_qualities = inValues.useEntries("quality", m_qualities, Quality.CREATOR);
+    m_random = inValues.use("random", m_random, Random.PARSER,
+                            "type", "multiple");
   }
 
   /**
@@ -2437,6 +2571,9 @@ public class BaseItem extends BaseEntry
 
     for(Entries.QualityProto quality : proto.getQualitiesList())
       m_qualities.add(Quality.fromProto(quality));
+
+    if(proto.hasRandom())
+      m_random = Optional.of(Random.fromProto(proto.getRandom()));
   }
 
   @Override

@@ -316,6 +316,11 @@
         {/call}
       {/if}
       {call dma.entry.value}
+        {param label: 'Random' /}
+        {param value: $entry.random /}
+        {param color: '#008' /}
+      {/call}
+      {call dma.entry.value}
         {param label: 'References' /}
         {param value kind="html"}
           {annotate($entry.combined_references)}
@@ -439,7 +444,7 @@
         {param value: $entry.incomplete /}
         {param validate: 'any' /}
         {param color: '#008' /}
-      {/call}    
+      {/call}
       {call dma.edit.value}
         {param name: 'value' /}
         {param label: 'Value' /}
@@ -569,6 +574,12 @@
         {param name: 'monetary' /}
         {param label: 'Monetary' /}
         {param value: $entry.monetary /}
+        {param color: '#008' /}
+      {/call}
+      {call dma.edit.value_flag}
+        {param name: 'mundane' /}
+        {param label: 'Mundane' /}
+        {param value: $entry.mundane /}
         {param color: '#008' /}
       {/call}
       {call dma.edit.generic_value}
@@ -840,18 +851,18 @@
           {/call}
           {call dma.edit.field_input}
             {param name: 'light.bright' /}
-            {param value: $entry.bright_light.isPresent 
+            {param value: $entry.bright_light.isPresent
               ? $entry.bright_light.get : '' /}
             {param validate: 'distance' /}
-            {param caption: 'bright' /}            
+            {param caption: 'bright' /}
             {param class: 'narrow' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'light.shadowy' /}
-            {param value: $entry.shadowy_light.isPresent 
+            {param value: $entry.shadowy_light.isPresent
               ? $entry.shadowy_light.get : '' /}
             {param validate: 'distance' /}
-            {param caption: 'shadowy' /}            
+            {param caption: 'shadowy' /}
             {param class: 'narrow' /}
           {/call}
         {/param}
@@ -945,6 +956,26 @@
           {/call}
         {/param}      
       {/call}      
+      {call dma.edit.generic_value}
+        {param color: '#008' /}
+        {param label: 'Random'/}
+        {param value kind="html"}
+          {call dma.edit.field_selection}
+            {param name: 'random.type' /}
+            {param value: $entry.random.type.string /}
+            {param choices: $ij.RandomType.names /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'random.multiple' /}
+            {param value: $entry.random.multiple.present
+                ? $entry.random.multiple : '' /}
+            {param validate: 'dice' /}
+            {param caption: 'multiple' /}
+            {param class: 'narrow' /}
+          {/call}
+        {/param}
+      {/call}
       {call dma.edit.generic_value}
         {param name: 'references' /}
         {param color: '#008' /}

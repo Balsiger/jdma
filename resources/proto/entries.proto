@@ -716,6 +716,18 @@ message BaseItemProto
   optional BaseLightProto light = 23;
   optional BaseCompositeProto composite = 24;
   repeated QualityProto qualities = 27;
+
+  message Random
+  {
+    enum Type
+    {
+      UNKNOWN = 0;
+      MUNDANE = 1;
+    }
+    optional Type type = 1;
+    optional DiceProto multiple = 2;
+  }
+  optional Random random = 28;
 }
 
 message BaseWeaponProto
