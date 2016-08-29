@@ -315,11 +315,13 @@
           {/param}
         {/call}
       {/if}
-      {call dma.entry.value}
-        {param label: 'Random' /}
-        {param value: $entry.random /}
-        {param color: '#008' /}
-      {/call}
+      {if $entry.random.present}
+        {call dma.entry.value}
+          {param label: 'Random' /}
+          {param value: $entry.random /}
+          {param color: '#008' /}
+        {/call}
+      {/if}
       {call dma.entry.value}
         {param label: 'References' /}
         {param value kind="html"}
