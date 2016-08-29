@@ -836,8 +836,6 @@ public abstract class AbstractEntry
       DMADataFactory.get().getEntry(createKey(inName, baseType));
     if(!entry.isPresent())
       Log.warning("base " + getType() + " '" + inName + "' not found");
-    // else
-    //   addExtensions(entry.getExtensionNames());
 
     if(m_baseEntries == null)
       m_baseEntries = new ArrayList<BaseEntry>();
@@ -984,13 +982,38 @@ public abstract class AbstractEntry
     // specially for newly created entries (e.g. randomly).
   }
 
+  public int randomChance()
+  {
+    return 1;
+  }
+
+  public static <T extends AbstractEntry> T random(List<T> inEntries)
+  {
+    if(inEntries.isEmpty())
+      throw new IllegalArgumentException("Cannot determine random entry from "
+                                             + "empty list!");
+
+    int total = 0;
+    for(T entry : inEntries)
+      total += entry.randomChance();
+
+    int random = RANDOM.nextInt(total);
+    for(T entry : inEntries)
+    {
+      random -= entry.randomChance();
+      if(random < 0)
+        return entry;
+    }
+
+    Log.warning("Did not find proper random entry!");
+    return inEntries.get(inEntries.size() - 1);
+  }
+
   //----------------------------------------------------------------------------
 
   /** The test. */
   public static class Test //extends ValueGroup.Test
   {
-    //----- init -----------------------------------------------------------
-
     /** Testing init. */
     @org.junit.Test
     public void init()
@@ -1061,7 +1084,5 @@ public abstract class AbstractEntry
  *
  */
     }
-
-    //......................................................................
   }
 }

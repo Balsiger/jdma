@@ -21,6 +21,7 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Optional;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Values;
 
@@ -108,6 +110,7 @@ public class Type<T extends Entry> extends AbstractType<T>
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
+  public static final String RANDOM_NAME = "RANDOM:";
 
   /**
    * Compare this type to another one for sorting.
@@ -178,5 +181,31 @@ public class Type<T extends Entry> extends AbstractType<T>
   public boolean isBase()
   {
     return false;
+  }
+
+  @Override
+  public Optional<T> createNew(EntryKey inKey, List<String> inBases,
+                               Optional<String> inStore,
+                               Optional<Values> inValues)
+  {
+    if(inBases.size() == 1 && inBases.get(0).startsWith(RANDOM_NAME))
+    {
+      // Random item by type.
+      Optional<BaseItem.Random.Type> type = BaseItem.Random.Type.fromString(
+          inBases.get(0).substring(RANDOM_NAME.length()));
+      if(type.isPresent())
+      {
+        List<AbstractEntry> entries = DMADataFactory.get().getIndexEntries(
+            Index.Path.RANDOM.name().toLowerCase(), getBaseType(),
+            Optional.<EntryKey>absent(), type.get().getName(), 0, 1000,
+            Optional.<String>absent());
+        AbstractEntry entry = AbstractEntry.random(entries);
+        // Copy in case given list is not mutable.
+        inBases = new ArrayList<>(inBases);
+        inBases.set(0, entry.getName());
+      }
+    }
+
+    return super.createNew(inKey, inBases, inStore, inValues);
   }
 }

@@ -1578,11 +1578,47 @@ public class Item extends CampaignEntry
       changed();
     }
 
+    if(!m_value.isPresent())
+    {
+      Money value = null;
+      for(BaseEntry base : getBaseEntries())
+      {
+        Optional<Money> random = ((BaseItem)base).randomValue();
+        if(random.isPresent())
+          if(value == null)
+            value = random.get();
+          else
+            value = (Money) value.add(random.get());
+      }
+
+      if(value != null)
+        m_value = Optional.of(value);
+
+      changed();
+    }
+
     if(!m_multiple.isPresent())
     {
       m_multiple = getCombinedMaxMultiple().get();
       if(m_multiple.isPresent())
         changed();
+      else
+      {
+        // Random multiple.
+        int multiple = 0;
+        for(BaseEntry base : getBaseEntries())
+        {
+          Optional<BaseItem.Random> random = ((BaseItem)base).getRandom();
+          if(random.isPresent())
+            multiple += random.get().getMultiple().roll();
+        }
+
+        if(multiple > 0)
+        {
+          m_multiple = Optional.of(multiple);
+          changed();
+        }
+      }
     }
 
     if(!m_multiuse.isPresent())
@@ -1613,8 +1649,13 @@ public class Item extends CampaignEntry
       List<String> appearances = new ArrayList<String>();
       for(BaseEntry base : getBaseEntries())
       {
-        String appearance =
-          ((BaseItem)base).getRandomAppearance(itemValue / baseValue);
+        double factor;
+        if(baseValue > 0)
+          factor = itemValue / baseValue;
+        else
+          factor = 1;
+
+        String appearance = ((BaseItem)base).getRandomAppearance(factor);
 
         if(appearance != null)
           appearances.add(appearance);
@@ -1623,76 +1664,6 @@ public class Item extends CampaignEntry
       m_appearance = Optional.of(Strings.toString(appearances, " ", ""));
       changed();
     }
-
-//     //----- qualities ------------------------------------------------------
-
-//     if(!m_qualities.isDefined())
-//       for(BaseEntry base : m_baseEntries)
-//         if(base != null)
-//           for(SimpleText value : ((BaseItem)base).m_qualities)
-//             addQuality(value.get());
-
-//     // finally, complete all the qualities
-//     for(EntryValue<Quality> value : m_qualities)
-//     {
-//       Quality quality = value.get();
-
-//       // complete the skill with this monster
-//       quality.complete();
-//     }
-
-//     //......................................................................
-
-//   we have to adjust some values that might have been changed by attachments
-
-//     //----- hp -------------------------------------------------------------
-
-//     if(!m_hp.isDefined() || getHP() > getMaxHP())
-//       m_hp.setBaseValue(m_maxHP.getBaseValue());
-
-//     //......................................................................
-
-//     // TODO: check if we still need this and how to adapt it
-//     // now we might have to replace some value dependent patterns (we do that
-//     // after the super.complete() to make sure that all attachment and base
-//     // values are completed
-//     // String text = m_description.get();
-
-//     // Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
-//     // Matcher matcher = pattern.matcher(text);
-
-//     // StringBuffer replaced = new StringBuffer();
-
-//     // while(matcher.find())
-//     // {
-//     // Pair<ValueGroup, Variable> var = getVariable(matcher.group(1));
-
-//     // if(var == null)
-//     // matcher.appendReplacement(replaced, "\\\\color{error}{*no value*}");
-//     // else
-//     // {
-//     // Variable   variable = var.second();
-//     // ValueGroup entry    = var.first();
-
-//     // TODO: this has to change
-//     // if(variable.hasValue(entry))
-//     // matcher.appendReplacement
-//     // (replaced,
-//     // Matcher.quoteReplacement
-//     // (variable.asModifiedCommand
-//     // (null, /*m_file.getCampaign(), */this, entry,
-//     // Value.Convert.PRINT).statify(null, /*m_storage.getCampaign(), */
-//     // this, entry, null,
-//     // Value.Convert.PRINT).toString()));
-//     // else
-//     // matcher.appendReplacement(replaced,
-//     // "\\\\color{error}{\\$undefined\\$}");
-//     // }
-//     // }
-
-//     // matcher.appendTail(replaced);
-
-//     // m_description.set(replaced.toString());
 
     super.initialize();
   }

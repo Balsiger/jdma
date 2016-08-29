@@ -395,7 +395,7 @@
         {param color: '#444' /}
       {/call}
       {call dma.edit.value}
-        {param name: 'short-description' /}
+        {param name: 'short_description' /}
         {param label: 'Short Description' /}
         {param value: $entry.short_description /}
         {param validate: 'any' /}
@@ -458,7 +458,7 @@
         {param value: $entry.weight.present ? $entry.weight : '' /}
         {param validate: 'weight' /}
         {param color: '#008' /}
-      {/call}    
+      {/call}
       {call dma.edit.generic_value}
         {param label: 'Size' /}
         {param color: '#008' /}
@@ -476,6 +476,13 @@
             {param class: 'narrow' /}            
           {/call}
         {/param}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'hp' /}
+        {param label: 'HP' /}
+        {param value: $entry.HP.present ? $entry.HP : '' /}
+        {param validate: 'number' /}
+        {param color: '#008' /}
       {/call}
       {call dma.edit.generic_value}
         {param label: 'Substance' /}
@@ -574,12 +581,6 @@
         {param name: 'monetary' /}
         {param label: 'Monetary' /}
         {param value: $entry.monetary /}
-        {param color: '#008' /}
-      {/call}
-      {call dma.edit.value_flag}
-        {param name: 'mundane' /}
-        {param label: 'Mundane' /}
-        {param value: $entry.mundane /}
         {param color: '#008' /}
       {/call}
       {call dma.edit.generic_value}

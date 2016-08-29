@@ -4678,18 +4678,26 @@ public class Monster extends CampaignEntry
           Multimap<String, String> values = ArrayListMultimap.create();
           values.put("parent", getType().getLink() + "/" + getName());
 
-          Optional<Item> item = Item.TYPE.createNew(
-              new EntryKey(Entry.TEMPORARY, Item.TYPE, getKey().getParent()),
-              ImmutableList.of(possession.getName()),
-              Optional.<String>absent(), Optional.of(new Values(values)));
+          int count = possession.getCount().roll();
+          boolean multiple = possession.getName().startsWith(Type.RANDOM_NAME);
 
-          if(!item.isPresent())
-            Log.warning("Could not create item " + possession.getName()
-                            + " for " + getKey());
-          else
+          for (int i = 0; i < (multiple ? count : 1); i++)
           {
-            item.get().setMultiple(possession.getCount().roll());
-            item.get().save();
+            Optional<Item> item = Item.TYPE.createNew(
+                new EntryKey(Entry.TEMPORARY, Item.TYPE, getKey().getParent()),
+                ImmutableList.of(possession.getName()),
+                Optional.<String>absent(), Optional.of(new Values(values)));
+
+            if(!item.isPresent())
+              Log.warning("Could not create item " + possession.getName()
+                              + " for " + getKey());
+            else
+            {
+              if(!multiple)
+                item.get().setMultiple(count);
+
+              item.get().save();
+            }
           }
         }
     }

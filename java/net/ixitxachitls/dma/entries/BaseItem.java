@@ -205,6 +205,8 @@ public class BaseItem extends BaseEntry
     }
   }
 
+  private static final int VALUE_CHANGE_PERCENTS = 5;
+
   /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
@@ -2576,6 +2578,20 @@ public class BaseItem extends BaseEntry
       m_random = Optional.of(Random.fromProto(proto.getRandom()));
   }
 
+  public Optional<Money> randomValue()
+  {
+    if(!m_value.isPresent())
+      return Optional.absent();
+
+    if(RANDOM.nextInt(100) >= VALUE_CHANGE_PERCENTS)
+      return m_value;
+
+    // We want to randomly adjust the value of the item a bit (+/-50%);
+    int random = RANDOM.nextInt(100) + 50;
+    double value = m_value.get().asGold() * random / 100;
+    return Optional.of(Money.fromGold(value));
+  }
+
   @Override
   protected Message defaultProto()
   {
@@ -2595,6 +2611,12 @@ public class BaseItem extends BaseEntry
       combined.add(((BaseItem)entry).getCombinedQualities());
 
     return combined;
+  }
+
+  @Override
+  public int randomChance()
+  {
+    return m_probability.getProbability();
   }
 
   //---------------------------------------------------------------------------

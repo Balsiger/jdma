@@ -216,14 +216,14 @@ public class EntryServlet extends PageServlet
       Log.info("creating " + type + " '" + id + "'");
 
       List<String> bases = new ArrayList<>();
-      if(!type.isBase())
+      if(!type.isBase() && !"create".equalsIgnoreCase(id))
         bases.add(id);
 
       if(inRequest.hasParam("bases"))
         for(String base
             : inRequest.getParam("bases").get().split("\\s*,,\\s*"))
           if(!base.isEmpty())
-            entry.get().addBase(base);
+            bases.add(base);
 
       Optional<Values> values;
       if(inRequest.hasParam("values"))

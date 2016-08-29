@@ -45,15 +45,16 @@ edit.all = [];
  */
 edit.show = function(inTitle, inPath, inID, inBases, inValues)
 {
+
+  window.console.log("bases", inBases);
+
   inTitle = edit.unescape(inTitle);
   inPath = edit.unescape(inPath);
   inID = edit.unescape(inID);
   inBases = edit.unescape(inBases);
 
-  console.log("show", inTitle, inPath, inID, inBases, inValues);
   var contents = util.ajax(inPath + '?body&id=' + inID
       + '&bases=' + inBases + '&values=' + inValues);
-  window.console.log("show id", inID.replace(/ /g));
   var dialog = $('<div id="dialog-' + inID.replace(/ /g, "_") + '"/>')
     .html(contents)
     .dialog({
@@ -66,6 +67,32 @@ edit.show = function(inTitle, inPath, inID, inBases, inValues)
       dialogClass: 'edit-dialog',
     });
 };
+
+edit.askAutocomplete = function(inAutocomplete, inTitle, inPath, inID, inValues)
+{
+  var dialog = $('<div />')
+    .html('<input '
+      + 'name="base" dma-autocomplete="' + inAutocomplete + '" '
+      + 'style="width:100%;">')
+    .dialog({
+      title: 'Enter base',
+      modal: true,
+      resizable: false,
+      width: $(window).width() / 2,
+      height: 100,
+      closeOnEscape: false,
+      dialogClass: 'ask-autocomplete',
+    });
+
+    edit.setupAutocomplete(dialog.find('input'));
+    dialog.keypress(function(e) {
+      if (e.keyCode == $.ui.keyCode.ENTER) {
+        var base = dialog.find('input').val();
+        dialog.dialog("close");
+        edit.show(inTitle, inPath, inID, base, inValues)
+      }
+    });
+}
 
 edit.unescape = function(inText)
 {

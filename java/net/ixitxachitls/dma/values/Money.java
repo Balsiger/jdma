@@ -237,6 +237,20 @@ public class Money extends Value.Arithmetic<MoneyProto>
       + m_armor * m_armor * 1000 + m_weapon + m_weapon * m_weapon * 2000;
   }
 
+  public static Money fromGold(double inGold)
+  {
+    double value = inGold;
+    int platinum = (int) inGold / 10;
+    value -= platinum * 10;
+    int gold = (int) value;
+    value -= gold;
+    int silver = (int) (value * 10);
+    value -= silver * 1.0 / 10;
+    int copper = (int) (value * 100);
+
+    return new Money(platinum, gold, silver, copper, 0, 0);
+  }
+
   @Override
   public String toString()
   {
@@ -406,11 +420,11 @@ public class Money extends Value.Arithmetic<MoneyProto>
   public Value.Arithmetic<MoneyProto> multiply(int inFactor)
   {
     return new Money(m_platinum * inFactor,
-                        m_gold * inFactor,
-                        m_silver * inFactor,
-                        m_copper * inFactor,
-                        m_armor,
-                        m_weapon);
+                     m_gold * inFactor,
+                     m_silver * inFactor,
+                     m_copper * inFactor,
+                     m_armor,
+                     m_weapon);
   }
 
   //----------------------------------------------------------------------------

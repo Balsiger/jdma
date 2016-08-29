@@ -2625,6 +2625,11 @@ BODY.print
   padding: 0;
 }
 
+.ui-dialog.ask-autocomplete
+{
+  overflow: visible;
+}
+
 .edit-dialog .ui-dialog-title
 {
   font-size: 11px;
