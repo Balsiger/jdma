@@ -642,15 +642,15 @@
           {call dma.edit.field_input}
             {param name: 'armor.max_dex' /}
             {param value: $entry.max_dex.present 
-              ? $entry.armor.max_dex.get : '' /}
+              ? $entry.max_dex.get : '' /}
             {param validate: 'number' /}
             {param class: 'narrow' /}
             {param caption: 'max dexterity' /}
-          {/call}            
+          {/call}
           {call dma.edit.field_input}
             {param name: 'armor.check_penalty' /}
             {param value: $entry.check_penalty.present 
-              ? $entry.armor.check_penalty.get : '' /}
+              ? $entry.check_penalty.get : '' /}
             {param validate: 'number' /}
             {param class: 'narrow' /}
             {param caption: 'check penalty' /}
@@ -662,7 +662,7 @@
             {param validate: 'number' /}
             {param class: 'narrow' /}
             {param caption: 'arcane failure' /}
-          {/call}            
+          {/call}
         {/param}
       {/call}
       {call dma.edit.generic_value}
@@ -972,6 +972,8 @@
           {call dma.edit.field_input}
             {param name: 'random.multiple' /}
             {param value: $entry.random.multiple.present
+                and not $entry.random.multiple.zero
+                and not $entry.random.multiple.one
                 ? $entry.random.multiple : '' /}
             {param validate: 'dice' /}
             {param caption: 'multiple' /}

@@ -290,21 +290,21 @@ public class Dice extends Value<DiceProto>
     String dice = m_number + "d" + m_dice;
 
     if(m_number == 0 || m_dice == 0)
-      return formatModifier();
+      return formatModifier(true);
 
     if(m_modifier == 0)
       return m_number + "d" + m_dice;
 
-    return m_number + "d" + m_dice + " " + formatModifier();
+    return m_number + "d" + m_dice + " " + formatModifier(false);
   }
 
   /** Format the modifier (with +).
    *
    * @return the formatted modifier
    */
-  private String formatModifier()
+  private String formatModifier(boolean inOnly)
   {
-    if(m_modifier >= 0)
+    if(!inOnly && m_modifier >= 0)
       return "+" + m_modifier;
 
     return "" + m_modifier;

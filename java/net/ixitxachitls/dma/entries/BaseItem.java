@@ -201,6 +201,9 @@ public class BaseItem extends BaseEntry
     @Override
     public String toString()
     {
+      if(m_multiple.isZero() || m_multiple.isOne())
+        return m_type.getName();
+
       return m_type.getName() + " " + m_multiple;
     }
   }
