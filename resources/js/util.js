@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------- header
-
 /**
  * This is a set of utility javascript routines.
  *
@@ -29,8 +27,6 @@
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
-
-//..........................................................................
 
 /** The object to store everything in. */
 var util = new Object();

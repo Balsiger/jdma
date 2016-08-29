@@ -45,9 +45,6 @@ edit.all = [];
  */
 edit.show = function(inTitle, inPath, inID, inBases, inValues)
 {
-
-  window.console.log("bases", inBases);
-
   inTitle = edit.unescape(inTitle);
   inPath = edit.unescape(inPath);
   inID = edit.unescape(inID);
@@ -211,7 +208,8 @@ edit.save = function(inKey, inID, inCreate)
   if(eval)
   {
     window.console.log("save id", inID);
-    $('#dialog-' + inID).dialog('close').dialog('destroy').remove();
+    $('#dialog-' + inID).dialog('close');
+    $('#dialog-' + inID).dialog('destroy').remove();
 
     // reload the saved entry
     util.link(null, null, null);
