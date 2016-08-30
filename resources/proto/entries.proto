@@ -726,8 +726,9 @@ message BaseItemProto
     }
     optional Type type = 1;
     optional DiceProto multiple = 2;
+    repeated string item = 3;
   }
-  optional Random random = 28;
+  repeated Random random = 28;
 }
 
 message BaseWeaponProto

@@ -1602,23 +1602,6 @@ public class Item extends CampaignEntry
       m_multiple = getCombinedMaxMultiple().get();
       if(m_multiple.isPresent())
         changed();
-      else
-      {
-        // Random multiple.
-        int multiple = 0;
-        for(BaseEntry base : getBaseEntries())
-        {
-          Optional<BaseItem.Random> random = ((BaseItem)base).getRandom();
-          if(random.isPresent())
-            multiple += random.get().getMultiple().roll();
-        }
-
-        if(multiple > 0)
-        {
-          m_multiple = Optional.of(multiple);
-          changed();
-        }
-      }
     }
 
     if(!m_multiuse.isPresent())

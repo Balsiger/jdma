@@ -222,6 +222,9 @@
           {/foreach}
           {if $ij.user}
             {sp}|{sp}
+            {call dma.entries.monster.add_item_action}
+              {param entry: $entry /}
+            {/call}
             <span class="action"
                   onclick="edit.askAutocomplete(
                              'base item/name', 'Edit {$entry.name}',

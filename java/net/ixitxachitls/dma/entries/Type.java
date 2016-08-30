@@ -203,6 +203,17 @@ public class Type<T extends Entry> extends AbstractType<T>
         // Copy in case given list is not mutable.
         inBases = new ArrayList<>(inBases);
         inBases.set(0, entry.getName());
+
+        Optional<BaseItem.Random> randomChoice = entry.randomChoice();
+        if(randomChoice.isPresent())
+        {
+          inBases.addAll(randomChoice.get().getItems());
+          if(!inValues.isPresent())
+            inValues = Optional.of(new Values());
+
+          inValues.get().put("multiple", String.valueOf(
+              randomChoice.get().getMultiple().roll()));
+        }
       }
     }
 

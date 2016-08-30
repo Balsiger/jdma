@@ -109,13 +109,9 @@
           {/foreach}
           {if $ij.user}
             {sp}|{sp}
-            <span class="action"
-                  onclick="edit.show('Edit {$entry.name}',
-                                     '{$entry.campaign.path}/item/CREATE.edit',
-                                     'add-item', '',
-                                     'parent:monster/{$entry.name}')">
-              add item
-            </span>
+            {call .add_item_action}
+              {param entry: $entry /}
+            {/call}
             {sp}|{sp}
             <span class="action"
                   onclick="edit.show('Move items for {$entry.name}',
@@ -665,4 +661,17 @@
       {/foreach}
     {/param}
   {/call}
+{/template}
+
+/** Action for adding an item. */
+{template .add_item_action}
+  {@param entry: ?}
+
+  <span class="action"
+        onclick="edit.askAutocomplete(
+                  'base item/name', 'Edit {$entry.name}',
+                  '{$entry.campaign.path}/item/CREATE.edit',
+                  'add-item', 'parent:{$entry.type.link}/{$entry.name}')">
+    add item
+  </span>
 {/template}

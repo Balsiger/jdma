@@ -33,6 +33,7 @@ import java.util.TreeMap;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 
@@ -89,6 +90,11 @@ public class Values
   public Values(Multimap<String, String> inValues)
   {
     m_values = inValues;
+  }
+
+  public Values()
+  {
+    this(HashMultimap.<String, String>create());
   }
 
   /** All the values. */
@@ -371,6 +377,11 @@ public class Values
 
     m_changed = true;
     return results;
+  }
+
+  public void put(String inName, String inValue)
+  {
+    m_values.put(inName, inValue);
   }
 
   /**

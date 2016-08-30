@@ -22,6 +22,7 @@
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -151,21 +152,24 @@ public class BaseItem extends BaseEntry
       }
     }
 
-    public Random(Type inType, Dice inMultiple)
+    public Random(Type inType, Dice inMultiple, List<String> inItems)
     {
       m_type = inType;
       m_multiple = inMultiple;
+      m_items = inItems;
     }
 
-    public static final Parser<Random> PARSER = new Parser<Random>(2) {
+    public static final Parser<Random> PARSER = new Parser<Random>(3) {
       @Override
-      public Optional<Random> doParse(String inType, String inMultiple)
+      public Optional<Random> doParse(String inType, String inMultiple,
+                                      String inItems)
       {
         Optional<Type> type = Type.fromString(inType);
         Optional<Dice> multiple = Dice.PARSER.parse(inMultiple);
+        List<String> items = Arrays.asList(inItems.split("\\s*\\|\\s*"));
 
         if(type.isPresent() && multiple.isPresent())
-          return Optional.of(new Random(type.get(), multiple.get()));
+          return Optional.of(new Random(type.get(), multiple.get(), items));
 
         return Optional.absent();
       }
@@ -173,6 +177,7 @@ public class BaseItem extends BaseEntry
 
     private final Type m_type;
     private final Dice m_multiple;
+    private List<String> m_items;
 
     public Type getType()
     {
@@ -184,27 +189,42 @@ public class BaseItem extends BaseEntry
       return m_multiple;
     }
 
+    public List<String> getItems()
+    {
+      return Collections.unmodifiableList(m_items);
+    }
+
     public BaseItemProto.Random toProto()
     {
       return BaseItemProto.Random.newBuilder()
           .setType(m_type.toProto())
           .setMultiple(m_multiple.toProto())
+          .addAllItem(m_items)
           .build();
     }
 
     public static Random fromProto(BaseItemProto.Random inProto)
     {
       return new Random(Type.fromProto(inProto.getType()),
-                        Dice.fromProto(inProto.getMultiple()));
+                        Dice.fromProto(inProto.getMultiple()),
+                        inProto.getItemList());
+    }
+
+    public String getItemsString()
+    {
+      return Strings.PIPE_JOINER.join(m_items);
     }
 
     @Override
     public String toString()
     {
+      String items = getItemsString();
+      if(!items.isEmpty())
+        items = " with " + items;
       if(m_multiple.isZero() || m_multiple.isOne())
-        return m_type.getName();
+        return m_type.getName() + items;
 
-      return m_type.getName() + " " + m_multiple;
+      return m_type.getName() + " " + m_multiple + items;
     }
   }
 
@@ -390,7 +410,7 @@ public class BaseItem extends BaseEntry
   /** The item's qualities. */
   protected List<Quality> m_qualities = new ArrayList<>();
 
-  protected Optional<Random> m_random = Optional.absent();
+  protected List<Random> m_randoms = new ArrayList<>();
 
   /**
    * Check whether this item has weapon properties.
@@ -1948,9 +1968,9 @@ public class BaseItem extends BaseEntry
     return Strings.SPACE_JOINER.join(appearances);
   }
 
-  public Optional<Random> getRandom()
+  public List<Random> getRandoms()
   {
-    return m_random;
+    return m_randoms;
   }
 
   @Override
@@ -2073,8 +2093,8 @@ public class BaseItem extends BaseEntry
     if(m_remove.isPresent())
       values.put(Index.Path.REMOVES, m_remove.get().toString());
 
-    if(m_random.isPresent())
-      values.put(Index.Path.RANDOM, m_random.get().getType().getName());
+    for(Random random : m_randoms)
+      values.put(Index.Path.RANDOM, random.getType().getName());
 
     return values;
   }
@@ -2287,8 +2307,8 @@ public class BaseItem extends BaseEntry
     for(Quality quality : m_qualities)
       builder.addQualities(quality.toProto());
 
-    if(m_random.isPresent())
-      builder.setRandom(m_random.get().toProto());
+    for(Random random : m_randoms)
+      builder.addRandom(random.toProto());
 
     BaseItemProto proto = builder.build();
     return proto;
@@ -2377,8 +2397,8 @@ public class BaseItem extends BaseEntry
                                 Duration.PARSER);
     m_remove = inValues.use("wearable.remove", m_remove, Duration.PARSER);
     m_qualities = inValues.useEntries("quality", m_qualities, Quality.CREATOR);
-    m_random = inValues.use("random", m_random, Random.PARSER,
-                            "type", "multiple");
+    m_randoms = inValues.use("random", m_randoms, Random.PARSER,
+                             "type", "multiple", "items");
   }
 
   /**
@@ -2577,8 +2597,8 @@ public class BaseItem extends BaseEntry
     for(Entries.QualityProto quality : proto.getQualitiesList())
       m_qualities.add(Quality.fromProto(quality));
 
-    if(proto.hasRandom())
-      m_random = Optional.of(Random.fromProto(proto.getRandom()));
+    for(BaseItemProto.Random random : proto.getRandomList())
+      m_randoms.add(Random.fromProto(random));
   }
 
   public Optional<Money> randomValue()
@@ -2620,6 +2640,14 @@ public class BaseItem extends BaseEntry
   public int randomChance()
   {
     return m_probability.getProbability();
+  }
+
+  public Optional<BaseItem.Random> randomChoice()
+  {
+    if(m_randoms.isEmpty())
+      return Optional.absent();
+
+    return Optional.of(m_randoms.get(RANDOM.nextInt(m_randoms.size())));
   }
 
   //---------------------------------------------------------------------------

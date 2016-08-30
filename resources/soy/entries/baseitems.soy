@@ -315,10 +315,14 @@
           {/param}
         {/call}
       {/if}
-      {if $entry.random.present}
+      {if length($entry.randoms) > 0}
         {call dma.entry.value}
           {param label: 'Random' /}
-          {param value: $entry.random /}
+          {param value kind="html"}
+             {foreach $random in $entry.randoms}
+               <div>{$random}</div>
+             {/foreach}
+          {/param}
           {param color: '#008' /}
         {/call}
       {/if}
@@ -963,21 +967,67 @@
         {param color: '#008' /}
         {param label: 'Random'/}
         {param value kind="html"}
-          {call dma.edit.field_selection}
-            {param name: 'random.type' /}
-            {param value: $entry.random.type.string /}
-            {param choices: $ij.RandomType.names /}
-            {param class: 'narrow' /}
-          {/call}
-          {call dma.edit.field_input}
-            {param name: 'random.multiple' /}
-            {param value: $entry.random.multiple.present
-                and not $entry.random.multiple.zero
-                and not $entry.random.multiple.one
-                ? $entry.random.multiple : '' /}
-            {param validate: 'dice' /}
-            {param caption: 'multiple' /}
-            {param class: 'narrow' /}
+          {call dma.edit.field}
+            {param markup kind="html"}
+              {foreach $random in $entry.randoms}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'random' /}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'random.type',
+                      'value': $random.type.string,
+                      'validate': 'non-empty',
+                      'type': 'selection',
+                      'choices': $ij.RandomType.names
+                    ],
+                    [
+                      'name': 'random.multiple',
+                      'value': $random.multiple.present
+                               and not $random.multiple.zero
+                               and not $random.multiple.one
+                                   ? $random.multiple : '',
+                      'validate': 'dice',
+                      'caption': 'multiple',
+                    ],
+                    [
+                      'name': 'random.items',
+                      'value': $random.items_string,
+                      'validate': 'any',
+                      'caption': 'items (| separated)',
+                    ]
+                  ]
+                  /}
+                {/call}
+              {ifempty}
+                {call dma.edit.field_list_multiple}
+                  {param id: 'random' /}
+                  {param class: 'narrow' /}
+                  {param values: [
+                    [
+                      'name': 'random.type',
+                      'value': 'Unknown',
+                      'validate': 'non-empty',
+                      'type': 'selection',
+                      'choices': $ij.RandomType.names
+                    ],
+                    [
+                      'name': 'random.multiple',
+                      'value': '',
+                      'validate': 'dice',
+                      'caption': 'multiple',
+                    ],
+                    [
+                      'name': 'random.items',
+                      'value': '',
+                      'validate': 'any',
+                      'caption': 'items (| separated)',
+                    ]
+                  ]
+                  /}
+                {/call}
+              {/foreach}
+            {/param}
           {/call}
         {/param}
       {/call}

@@ -987,6 +987,11 @@ public abstract class AbstractEntry
     return 1;
   }
 
+  public Optional<BaseItem.Random> randomChoice()
+  {
+    return Optional.absent();
+  }
+
   public static <T extends AbstractEntry> T random(List<T> inEntries)
   {
     if(inEntries.isEmpty())

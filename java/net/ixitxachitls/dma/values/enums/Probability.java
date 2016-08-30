@@ -126,25 +126,6 @@ public enum Probability implements Named
    */
   public static final int FACTOR = 5;
 
-  //                               /
-  //                              /
-  //                             /
-  //     _______________________/
-  //    /
-  //   /
-  //  /
-  //     | VALUE_MOD_RANGE_LOW   | VALUE_MODE_RANGE_HIGH
-
-  /**
-   * The percentage of the random range to use for adjustments (high).
-   */
-  public static final int RANGE_HIGH = 90;
-
-  /**
-   * The percentage of the random range to use for adjustments (high).
-   */
-  public static final int RANGE_LOW = 10;
-
   /**
    * Get the proto value for this value.
    *
