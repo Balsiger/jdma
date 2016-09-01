@@ -1610,9 +1610,9 @@ public class BaseItem extends BaseEntry
   public Annotated<Optional<Integer>> getCombinedCheckPenalty()
   {
     if(m_checkPenalty.isPresent())
-      return new Annotated.MaxBonus<Integer>(m_checkPenalty.get(), getName());
+      return new Annotated.Integer(m_checkPenalty.get(), getName());
 
-    Annotated.MaxBonus<Integer> combined = new Annotated.MaxBonus<>();
+    Annotated.Integer combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedCheckPenalty());
 

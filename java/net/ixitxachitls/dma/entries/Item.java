@@ -966,6 +966,9 @@ public class Item extends CampaignEntry
     if(parts.isEmpty())
       parts.add(getName());
 
+    // Reverse order, to get additions (like magic and material) first.
+    Collections.reverse(parts);
+
     return Strings.SPACE_JOINER.join(parts);
   }
 
@@ -1521,7 +1524,7 @@ public class Item extends CampaignEntry
   }
 
   /**
-   * Get a command to format the name of the item.
+   * Get the full name of the item.
    *
    * @return   the command to format the name
    */

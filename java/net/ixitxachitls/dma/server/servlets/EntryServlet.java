@@ -221,7 +221,7 @@ public class EntryServlet extends PageServlet
 
       if(inRequest.hasParam("bases"))
         for(String base
-            : inRequest.getParam("bases").get().split("\\s*,,\\s*"))
+            : inRequest.getParam("bases").get().split("\\s*\\|\\s*"))
           if(!base.isEmpty())
             bases.add(base);
 

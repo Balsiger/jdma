@@ -331,31 +331,6 @@ public abstract class AbstractEntry
   }
 
   /**
-   * Get the qualified name for this entry.
-   *
-   * The qualified name is the hiearchical name of all the base entry and the
-   * name of this entry. Hierarchies are seperatede by ':', while muliple base
-   * are seperated by '|'.
-   *
-   * @return      A string of form 'base1:base2:entry|base3:base4:entry'
-   */
-  @Deprecated
-  public String getQualifiedName()
-  {
-//     List<String> names = new ArrayList<String>();
-
-//     if(m_baseEntries == null)
-    return getName();
-
-//     for(BaseEntry base : m_baseEntries)
-//       if(base != null)
-//         names.add(base.getQualifiedName());
-
-//     return Strings.toString(names, "::" + getName() + "||", "")
-//       + "::" + getName();
-  }
-
-  /**
    * Get the names of the base entries this entry is based on.
    *
    * @return      the requested base names

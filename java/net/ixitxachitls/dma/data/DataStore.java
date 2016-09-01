@@ -40,6 +40,7 @@ import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSortedSet;
 
+import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.server.servlets.DMAServlet;
 import net.ixitxachitls.util.Tracer;
 import net.ixitxachitls.util.logging.Log;
@@ -146,6 +147,34 @@ public class DataStore
         tracer.done("not found");
         return Optional.absent();
       }
+    }
+    else
+      tracer.done("cached");
+
+    return Optional.fromNullable(entity);
+  }
+
+  public Optional<Entity> getEntityBySyonym(String inType, String inSynonym)
+  {
+    Tracer tracer =
+        new Tracer("getting entity by synonym " + inSynonym + "/" + inType);
+    Entity entity = DMAServlet.isDev()
+        ? null : (Entity)s_cacheEntity.get(inSynonym + "/" + inType);
+
+    if(entity == null)
+    {
+      Log.important("gae: getting entity by synonym for "
+                        + inSynonym + "/" + inType);
+      Query query = new Query(inType);
+      query.setFilter(new Query.FilterPredicate(
+          toPropertyName("index-" + Index.Path.SYNONYMS.toString().toLowerCase()),
+          Query.FilterOperator.EQUAL,
+          inSynonym.toLowerCase()));
+      entity = m_store.prepare(query).asSingleEntity();
+
+      if(!DMAServlet.isDev())
+        s_cacheEntity.put(inSynonym + "/" + inType, entity, s_expiration);
+      tracer.done("uncached");
     }
     else
       tracer.done("cached");

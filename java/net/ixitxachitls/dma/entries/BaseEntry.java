@@ -403,6 +403,9 @@ public class BaseEntry extends AbstractEntry
     for(ProductReference reference : getReferences())
       values.put(Index.Path.REFERENCES, reference.getName());
 
+    for(String synonym : m_synonyms)
+      values.put(Index.Path.SYNONYMS, synonym.toLowerCase());
+
     return values;
   }
 

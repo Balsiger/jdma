@@ -158,6 +158,12 @@ public class DMADatastore
       Log.debug("getting entry for " + inKey);
       Optional<Entity> entity =
           m_data.getEntity(convert(Optional.of(inKey)).get());
+
+      if(!entity.isPresent())
+        // try to get the entry via its synonym
+       entity = m_data.getEntityBySyonym(escapeType(inKey.getType().getName()),
+                                         inKey.getID());
+
       if (entity.isPresent())
         entry = (Optional<T>) convert(inKey.getID(), inKey.getType(),
                                       entity.get());
