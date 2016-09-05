@@ -1568,9 +1568,9 @@ public class Item extends CampaignEntry
   }
 
   @Override
-  public void initialize()
+  public void initialize(boolean inForce)
   {
-    if(m_hp == Integer.MIN_VALUE)
+    if(inForce || m_hp == Integer.MIN_VALUE)
     {
       Optional<Integer> hp = getCombinedMaxHP().get();
       if(hp.isPresent())
@@ -1581,7 +1581,7 @@ public class Item extends CampaignEntry
       changed();
     }
 
-    if(!m_value.isPresent())
+    if(inForce || !m_value.isPresent())
     {
       Money value = null;
       for(BaseEntry base : getBaseEntries())
@@ -1600,28 +1600,28 @@ public class Item extends CampaignEntry
       changed();
     }
 
-    if(!m_multiple.isPresent())
+    if(inForce || !m_multiple.isPresent())
     {
       m_multiple = getCombinedMaxMultiple().get();
       if(m_multiple.isPresent())
         changed();
     }
 
-    if(!m_multiuse.isPresent())
+    if(inForce || !m_multiuse.isPresent())
     {
       m_multiuse = getCombinedMaxMultiuse().get();
       if(m_multiuse.isPresent())
         changed();
     }
 
-    if(!m_timeLeft.isPresent())
+    if(inForce || !m_timeLeft.isPresent())
     {
       m_timeLeft = getCombinedTimed().get();
       if(m_timeLeft.isPresent())
         changed();
     }
 
-    if(!m_appearance.isPresent())
+    if(inForce || !m_appearance.isPresent())
     {
       // correct the random value with the computation from the value in
       // relation to the base value
@@ -1651,7 +1651,7 @@ public class Item extends CampaignEntry
       changed();
     }
 
-    super.initialize();
+    super.initialize(inForce);
   }
 
   @Override

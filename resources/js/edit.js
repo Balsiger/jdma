@@ -517,6 +517,11 @@ edit.updateImage = function(inID, inSrc, inOnclick, inEditID)
   $(image).parents('dmaeditable').each(edit.makeEditable);
 };
 
+edit.reset = function(inKey)
+{
+  util.ajax('/actions/reset', { key: inKey }, null, true);
+};
+
 //..........................................................................
 
 //--------------------------------------------------------------------- Base

@@ -951,7 +951,7 @@ public abstract class AbstractEntry
     return m_name;
   }
 
-  public void initialize()
+  public void initialize(boolean inForce)
   {
     // Nothing to do here, but derivations might want to setup some values
     // specially for newly created entries (e.g. randomly).

@@ -4641,7 +4641,7 @@ public class Monster extends CampaignEntry
   }
 
   @Override
-  public void initialize()
+  public void initialize(boolean inForce)
   {
     // setup hit points
     m_maxHP = randomHp();

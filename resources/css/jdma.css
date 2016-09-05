@@ -2464,6 +2464,7 @@ BODY.print
   margin: 0 30px 10px 15px;
   width: 112px;
   float: left;
+  text-align: center;
 }
 
 .entry .image-link
@@ -3800,4 +3801,11 @@ TD.list > a
   width: 25px !important;
   height: 25px !important;
   margin-bottom: -10px;
+}
+
+.sprite.large.reset
+{
+  background-position: -224px 0;
+  width: 26px !important;
+  margin: 10px auto;
 }

@@ -29,7 +29,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableList;
 
-import com.sun.tools.classfile.Type;
 import net.ixitxachitls.util.logging.Log;
 
 /**

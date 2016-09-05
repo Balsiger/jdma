@@ -181,7 +181,7 @@ public abstract class Entry extends AbstractEntry
   }
 
   @Override
-  public void initialize()
+  public void initialize(boolean inForce)
   {
     if(m_name.isEmpty())
     {

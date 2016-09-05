@@ -535,7 +535,7 @@ public class AbstractType<T extends AbstractEntry>
     for(String base : inBases)
       entry.get().addBase(base);
 
-    entry.get().initialize();
+    entry.get().initialize(false);
 
     return entry;
   }
