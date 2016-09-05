@@ -451,18 +451,9 @@
       </div>
 
       <div class="title">
-        {if $ij.isDM}
-          {$entry.DM_name} 
-          {if $entry.player_name and $entry.DM_name != $entry.player_name}
-            {sp}[{$entry.player_name}]
-          {/if} 
-        {else}
-          {$entry.player_name}
-        {/if}
-        {sp}({$entry.name})
-        {if $ij.isDM and $entry.DM_name != $entry.player_name}
-          <br /><span class="subtitle">{$entry.player_name}&nbsp;</span>
-        {/if}
+        {call .name}
+          {param entry: $entry /}
+        {/call}
       </div>
     </div>
 
@@ -490,12 +481,10 @@
   </div>
 {/template}
 
-/**
- * The item card.
- *
- * @param entry The entry rendered.
- */
+/** The item card. */
 {template .large}
+  {@param entry: ?}
+
   <div class="entry item card">
     <div class="header" style="background-color: #008">
       <div class="actions">
@@ -503,18 +492,9 @@
       </div>
 
       <div class="title">
-        {if $ij.isDM}
-          {$entry.DM_name} 
-          {if $entry.player_name and $entry.DM_name != $entry.player_name}
-            {sp}[{$entry.player_name}]
-          {/if} 
-        {else}
-          {$entry.player_name}
-        {/if}
-        {sp}({$entry.name})
-        {if $ij.isDM and $entry.DM_name != $entry.player_name}
-          <br /><span class="subtitle">{$entry.player_name}&nbsp;</span>
-        {/if}
+        {call .name}
+          {param entry: $entry /}
+        {/call}
       </div>
     </div>
 
@@ -612,7 +592,7 @@
           {param value: 'hp' /}
         {/call}
         {sp}
-        {$entry.HP} (of {annotate($entry.combined_max_HP)}
+        {$entry.HP} (of {annotate($entry.combined_max_HP)})
       </div>
 
       <div class="weight">
@@ -636,6 +616,9 @@
         {/call}
         {annotate($entry.combined_hardness)}
         {sp}
+      </div>
+
+      <div class="break">
         {call dma.value.extension}
           {param value: 'break' /}
         {/call}

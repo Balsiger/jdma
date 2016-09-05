@@ -598,8 +598,32 @@ public class SoyTemplate
     public SoyData computeForTofu(List<SoyData> inArgs)
     {
       return StringData.forValue(inArgs.get(0).toString()
-                                       .replace("'", "\\'")
-                                 .replace("\"",  "\\\""));
+                                     .replace("'", "\\'")
+                                     .replace("\"",  "\\\""));
+    }
+  }
+
+  /** A plugin function to convert a string to html. */
+  public static class HtmlFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "html";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public SoyData computeForTofu(List<SoyData> inArgs)
+    {
+      return UnsafeSanitizedContentOrdainer.ordainAsSafe(
+          inArgs.get(0).toString(),
+           SanitizedContent.ContentKind.HTML);
     }
   }
 
@@ -766,6 +790,7 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(ValFunction.class);
       soyFunctionsSetBinder.addBinding().to(EscapeFunction.class);
       soyFunctionsSetBinder.addBinding().to(JsEscapeFunction.class);
+      soyFunctionsSetBinder.addBinding().to(HtmlFunction.class);
       soyFunctionsSetBinder.addBinding().to(FormatNumberFunction.class);
       soyFunctionsSetBinder.addBinding().to(BonusFunction.class);
       soyFunctionsSetBinder.addBinding().to(AnnotateFunction.class);

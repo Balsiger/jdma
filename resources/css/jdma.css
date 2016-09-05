@@ -694,12 +694,14 @@ DIV.card DIV.header
   padding: 10px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  display: flex;
 }
 
 DIV.card DIV.title
 {
   font-weight: bold;
   text-align: center;
+  flex: 1;
 }
 
 DIV.card DIV.title SPAN.subtitle
@@ -709,10 +711,6 @@ DIV.card DIV.title SPAN.subtitle
 
 DIV.card DIV.actions
 {
-  position: absolute;
-  margin-top: -7px;
-  top: 12px;
-  left: 10px;
 }
 
 DIV.card DIV.extensions
@@ -789,8 +787,9 @@ DIV.card DIV.contents DIV.statistics
 DIV.card DIV.contents DIV.statistics-line,
 DIV.card DIV.contents DIV.statistics-lines
 {
-  clear: both;
   font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 DIV.card DIV.contents DIV.statistics-line > DIV,
@@ -802,9 +801,9 @@ DIV.card DIV.contents DIV.statistics-lines > DIV
 
 DIV.card DIV.contents DIV.statistics-lines > DIV
 {
-  width: 33%;
-  display: inline-block;
-  float: left;
+  flex: 1;
+  white-space: nowrap;
+  padding-right: 10px;
 }
 
 DIV.card DIV.contents TABLE.stat-value
@@ -823,21 +822,6 @@ DIV.card DIV.contents TABLE.stat-value TR
 DIV.card DIV.contents TABLE.stat-value TR TD.stat-label
 {
   width: 25px;
-}
-
-DIV.card DIV.contents DIV.statistics-lines > DIV:nth-child(3n+1)
-{
-  text-align: left;
-}
-
-DIV.card DIV.contents DIV.statistics-lines > DIV:nth-child(3n+2)
-{
-  text-align: center;
-}
-
-DIV.card DIV.contents DIV.statistics-lines > DIV:nth-child(3n)
-{
-  text-align: right;
 }
 
 DIV.card DIV.contents DIV.statistics-line DIV.value
@@ -968,22 +952,7 @@ DIV.small.card DIV.contents IMG.image.main
 DIV.small.card DIV.contents DIV.statistics
 {
   width: 275px;
-  padding-top: 0;
-}
-
-DIV.small.card DIV.contents DIV.statistics-lines > DIV:nth-child(3n+1)
-{
-  text-align: left;
-}
-
-DIV.small.card DIV.contents DIV.statistics-lines > DIV:nth-child(3n+2)
-{
-  text-align: center;
-}
-
-DIV.small.card DIV.contents DIV.statistics-lines > DIV:nth-child(3n)
-{
-  text-align: right;
+  padding-top: 10px;
 }
 
 DIV.small.card DIV.contents
@@ -1035,6 +1004,9 @@ DIV.tiny.card DIV.title
   padding: 5px 0 0 0;
   vertical-align: top;
   line-height: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 DIV.tiny.card DIV.content
@@ -1308,8 +1280,9 @@ TABLE.entrylist TD.short
 
 DIV.extension-symbol
 {
-  font-size: 200%;
+  font-size: 150%;
   line-height: 50%;
+  min-width: 20px;
 }
 
 DIV.extension-symbol,

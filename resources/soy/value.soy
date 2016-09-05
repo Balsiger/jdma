@@ -448,228 +448,200 @@
   {call .extension data="all" /} - {$value}
 {/template}
 
-/**
- * Formatting an extension value.
- *
- * @param value The value rendered.
- */
+/** Formatting an extension value. */
 {template .extension}
+  {@param value: string}
+
   {switch $value}
     {case 'value'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#xa4;' /}
-        {param space: 1 /}
+        {param symbol: html('&#x1f4b0;') /}
       {/call}
     {case 'hp'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x2665;' /}
+        {param symbol: html('&#x1f493;') /}
       {/call}
     {case 'weight'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x10137;' /}
+        {param symbol: html('&#x2696;') /}
       {/call}
     {case 'size'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x21a8;' /}
-        {param size: 100 /}
-        {param space: 2 /}
+        {param symbol: html('&#x2195;') /}
       {/call}
     {case 'hardness'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x1d34d;' /}
-        {param size: 150 /}
-        {param space: 1 /}
+        {param symbol: html('&#x1f528;') /}
       {/call}
     {case 'break'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#xa6;' /}
-        {param size: 150 /}
-        {param space: 2 /}
+        {param symbol: html('&#x26d3;') /}
       {/call}
     {case 'substance'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x269b;' /}
+        {param symbol: html('&#x269b;') /}
       {/call}
     {case 'wearable'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x269c;' /}
-        {param space: 1 /}
+        {param symbol: html('&#x1f455;') /}
       {/call}
     {case 'multiuse'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x2a34;' /}
-        {param size: 150 /}
-        {param space: 1 /}
+        {param symbol: html('&#x1f522;') /}
       {/call}
     {case 'multiple'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x2a35;' /}
-        {param size: 150 /}
-        {param space: 1 /}
+        {param symbol: html('&#x1f4da;') /}
       {/call}
     {case 'counted'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x2736;' /}
-        {param size: 150 /}
-        {param space: 2 /}
+        {param symbol: html('&#x1f3ac;') /}
       {/call}
     {case 'light'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x263c;' /}
-        {param size: 150 /}
-        {param space: 2 /}
+        {param symbol: html('&#1f56f;') /}
       {/call}
     {case 'timed'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x27f3;' /}
-        {param size: 150 /}
+        {param symbol: html('&#x231b;') /}
       {/call}
     {case 'commodity'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x25a4;' /}
-        {param size: 150 /}
-        {param space: 2 /}
+        {param symbol: html('&#x1f4e6;') /}
       {/call}
     {case 'weapon'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x2694;' /}
+        {param symbol: html('&#x1f5e1;') /}
       {/call}
     {case 'armor'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x2602;' /}
-        {param size: 150 /}
+        {param symbol: html('&#x1f6e1;') /}
       {/call}
     {case 'incomplete'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x2639;' /}
-        {param size: 150 /}
+        {param symbol: html('&#x26a0;') /}
       {/call}
     {case 'composite'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x2384;' /}
+        {param symbol: html('&#x1f4ce;') /}
       {/call}
     {case 'container'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x2a4f;' /}
-      {/call}
-    {case 'composite'}
-      {call .extensionsymbol}
-        {param value: $value /}
-        {param symbol: '&#x2295;' /}
+        {param symbol: html('&#x1f6cd;') /}
       {/call}
     {case 'contents'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x25c8;' /}
+        {param symbol: html('&#x1f6cd;') /}
       {/call}
     {case 'magic'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x2734;' /}
+        {param symbol: html('&#x2728;') /}
       {/call}
     {case 'notes'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x270e;' /}
+        {param symbol: html('&#x1f4dd;') /}
       {/call}
     {case 'school'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x1f393;' /}
+        {param symbol: html('&#x1f3eb;') /}
         {param style: 'symbola' /}
       {/call}
     {case 'casting-time'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x23f3;' /}
+        {param symbol: html('&#x23f1;') /}
         {param style: 'symbola' /}
         {param size: 130 /}
       {/call}
     {case 'level'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x1f522;' /}
+        {param symbol: html('&#x1f522;') /}
         {param style: 'symbola' /}
         {param size: 120 /}
         {param space: 2 /}
       {/call}
     {case 'range'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x20d5;' /}
+        {param symbol: html('&#x1f4d0;') /}
         {param space: 5 /}
       {/call}
     {case 'target'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x1f3af;' /}
+        {param symbol: html('&#x1f3af;') /}
         {param style: 'symbola' /}
         {param size: 140 /}
         {param space: 3 /}
       {/call}
     {case 'area'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x1f3af;' /}
+        {param symbol: html('&#x1f5fa;') /}
         {param style: 'symbola' /}
         {param size: 140 /}
       {/call}
     {case 'components'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x2699;' /}
+        {param symbol: html('&#x1f33f;') /}
         {param style: 'symbola' /}
         {param size: 140 /}
         {param space: 3 /}
       {/call}
     {case 'focus'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x1f64f;' /}
+        {param symbol: html('&#x1f64f;') /}
         {param style: 'symbola' /}
       {/call}
     {case 'duration'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x23f3;' /}
+        {param symbol: html('&#x23f3;') /}
         {param style: 'symbola' /}
         {param size: 130 /}
       {/call}
     {case 'saving-throw'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x1f512;' /}
+        {param symbol: html('&#x1f512;') /}
         {param style: 'symbola' /}
         {param size: 150 /}
       {/call}
     {case 'effect'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x29d0;' /}
+        {param symbol: html('&#x29d0;') /}
       {/call}
     {case 'spell-resistance'}
-      {call .extensionsymbol}
+      {call .extension_symbol}
         {param value: $value /}
-        {param symbol: '&#x2602;' /}
+        {param symbol: html('&#x2602;') /}
         {param size: 150 /}
       {/call}
     {default}
@@ -679,16 +651,14 @@
   {/switch}
 {/template}
 
-/**
- * Format the given symbol as an extension symbol.
- *
- * @param value The name of the symbol.
- * @param symbol The symbol to set.
- * @param? space The px to add as top margin.
- * @param? size The size in percent of the symbol.
- * @param? style The style to use for the symbol.
- */
-{template .extensionsymbol}
+/** Format the given symbol as an extension symbol. */
+{template .extension_symbol}
+  {@param value: string}
+  {@param symbol: html}
+  {@param? space: number}
+  {@param? size: number}
+  {@param? style: string}
+
   <div title="{$value}" class="extension-symbol{if $style} {$style}{/if}"
     {if $space or $size} style="
       {if $space}margin-top: {$space}px;{/if}
