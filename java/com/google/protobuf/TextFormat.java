@@ -119,6 +119,21 @@ public final class TextFormat {
   }
 
   /**
+   * Generates a human readable form of the field, useful for debugging
+   * and other purposes, with no newline characters.
+   */
+  public static String shortDebugString(final FieldDescriptor field,
+                                        final Object value) {
+    try {
+      final StringBuilder sb = new StringBuilder();
+      SINGLE_LINE_PRINTER.printField(field, value, new TextGenerator(sb));
+      return sb.toString().trim();
+    } catch (IOException e) {
+        throw new IllegalStateException(e);
+    }
+  }
+
+  /**
    * Generates a human readable form of the unknown fields, useful for debugging
    * and other purposes, with no newline characters.
    */
@@ -409,9 +424,10 @@ public final class TextFormat {
 
         case STRING:
           generator.print("\"");
-          generator.print(escapeNonAscii ?
-              escapeText((String) value) :
-              escapeDoubleQuotesAndBackslashes((String) value));
+          generator.print(escapeNonAscii
+              ? TextFormatEscaper.escapeText((String) value)
+              : escapeDoubleQuotesAndBackslashes((String) value)
+                  .replace("\n", "\\n"));
           generator.print("\"");
           break;
 
@@ -645,6 +661,22 @@ public final class TextFormat {
       nextToken();
     }
 
+    int getPreviousLine() {
+      return previousLine;
+    }
+
+    int getPreviousColumn() {
+      return previousColumn;
+    }
+
+    int getLine() {
+      return line;
+    }
+
+    int getColumn() {
+      return column;
+    }
+
     /** Are we at the end of the input? */
     public boolean atEnd() {
       return currentToken.length() == 0;
@@ -729,8 +761,8 @@ public final class TextFormat {
       }
 
       final char c = currentToken.charAt(0);
-      return ('0' <= c && c <= '9') ||
-             c == '-' || c == '+';
+      return ('0' <= c && c <= '9')
+          || c == '-' || c == '+';
     }
 
     /**
@@ -748,10 +780,10 @@ public final class TextFormat {
     public String consumeIdentifier() throws ParseException {
       for (int i = 0; i < currentToken.length(); i++) {
         final char c = currentToken.charAt(i);
-        if (('a' <= c && c <= 'z') ||
-            ('A' <= c && c <= 'Z') ||
-            ('0' <= c && c <= '9') ||
-            (c == '_') || (c == '.')) {
+        if (('a' <= c && c <= 'z')
+            || ('A' <= c && c <= 'Z')
+            || ('0' <= c && c <= '9')
+            || (c == '_') || (c == '.')) {
           // OK
         } else {
           throw parseException(
@@ -940,14 +972,16 @@ public final class TextFormat {
      * Otherwise, throw a {@link ParseException}.
      */
     public boolean consumeBoolean() throws ParseException {
-      if (currentToken.equals("true") ||
-          currentToken.equals("t") ||
-          currentToken.equals("1")) {
+      if (currentToken.equals("true")
+          || currentToken.equals("True")
+          || currentToken.equals("t")
+          || currentToken.equals("1")) {
         nextToken();
         return true;
-      } else if (currentToken.equals("false") ||
-                 currentToken.equals("f") ||
-                 currentToken.equals("0")) {
+      } else if (currentToken.equals("false")
+          || currentToken.equals("False")
+          || currentToken.equals("f")
+          || currentToken.equals("0")) {
         nextToken();
         return false;
       } else {
@@ -998,14 +1032,15 @@ public final class TextFormat {
      */
     private void consumeByteString(List<ByteString> list)
         throws ParseException {
-      final char quote = currentToken.length() > 0 ? currentToken.charAt(0)
-                                                   : '\0';
+      final char quote = currentToken.length() > 0
+          ? currentToken.charAt(0)
+          : '\0';
       if (quote != '\"' && quote != '\'') {
         throw parseException("Expected string.");
       }
 
-      if (currentToken.length() < 2 ||
-          currentToken.charAt(currentToken.length() - 1) != quote) {
+      if (currentToken.length() < 2
+          || currentToken.charAt(currentToken.length() - 1) != quote) {
         throw parseException("String missing ending quote.");
       }
 
@@ -1057,6 +1092,18 @@ public final class TextFormat {
     private ParseException floatParseException(final NumberFormatException e) {
       return parseException("Couldn't parse number: " + e.getMessage());
     }
+
+    /**
+     * Returns a {@link UnknownFieldParseException} with the line and column
+     * numbers of the previous token in the description, and the unknown field
+     * name, suitable for throwing.
+     */
+    public UnknownFieldParseException unknownFieldParseExceptionPreviousToken(
+        final String unknownField, final String description) {
+      // Note:  People generally prefer one-based line and column numbers.
+      return new UnknownFieldParseException(
+        previousLine + 1, previousColumn + 1, unknownField, description);
+    }
   }
 
   /** Thrown when parsing an invalid text format message. */
@@ -1102,6 +1149,45 @@ public final class TextFormat {
      */
     public int getColumn() {
       return column;
+    }
+  }
+
+  /**
+   * Thrown when encountering an unknown field while parsing
+   * a text format message.
+   */
+  public static class UnknownFieldParseException extends ParseException {
+    private final String unknownField;
+
+    /**
+     * Create a new instance, with -1 as the line and column numbers, and an
+     * empty unknown field name.
+     */
+    public UnknownFieldParseException(final String message) {
+      this(-1, -1, "", message);
+    }
+
+    /**
+     * Create a new instance
+     *
+     * @param line the line number where the parse error occurred,
+     * using 1-offset.
+     * @param column the column number where the parser error occurred,
+     * using 1-offset.
+     * @param unknownField the name of the unknown field found while parsing.
+     */
+    public UnknownFieldParseException(final int line, final int column,
+        final String unknownField, final String message) {
+      super(line, column, message);
+      this.unknownField = unknownField;
+    }
+
+    /**
+     * Return the name of the unknown field encountered while parsing the
+     * protocol buffer string.
+     */
+    public String getUnknownField() {
+      return unknownField;
     }
   }
 
@@ -1173,12 +1259,12 @@ public final class TextFormat {
      * Determines if repeated values for non-repeated fields and
      * oneofs are permitted. For example, given required/optional field "foo"
      * and a oneof containing "baz" and "qux":
-     * <li>
-     * <ul>"foo: 1 foo: 2"
-     * <ul>"baz: 1 qux: 2"
-     * <ul>merging "foo: 2" into a proto in which foo is already set, or
-     * <ul>merging "qux: 2" into a proto in which baz is already set.
-     * </li>
+     * <ul>
+     * <li>"foo: 1 foo: 2"
+     * <li>"baz: 1 qux: 2"
+     * <li>merging "foo: 2" into a proto in which foo is already set, or
+     * <li>merging "qux: 2" into a proto in which baz is already set.
+     * </ul>
      */
     public enum SingularOverwritePolicy {
       /** The last value is retained. */
@@ -1189,11 +1275,14 @@ public final class TextFormat {
 
     private final boolean allowUnknownFields;
     private final SingularOverwritePolicy singularOverwritePolicy;
+    private TextFormatParseInfoTree.Builder parseInfoTreeBuilder;
 
-    private Parser(boolean allowUnknownFields,
-        SingularOverwritePolicy singularOverwritePolicy) {
+    private Parser(
+        boolean allowUnknownFields, SingularOverwritePolicy singularOverwritePolicy,
+        TextFormatParseInfoTree.Builder parseInfoTreeBuilder) {
       this.allowUnknownFields = allowUnknownFields;
       this.singularOverwritePolicy = singularOverwritePolicy;
+      this.parseInfoTreeBuilder = parseInfoTreeBuilder;
     }
 
     /**
@@ -1210,6 +1299,8 @@ public final class TextFormat {
       private boolean allowUnknownFields = false;
       private SingularOverwritePolicy singularOverwritePolicy =
           SingularOverwritePolicy.ALLOW_SINGULAR_OVERWRITES;
+      private TextFormatParseInfoTree.Builder parseInfoTreeBuilder = null;
+
 
       /**
        * Sets parser behavior when a non-repeated field appears more than once.
@@ -1219,8 +1310,15 @@ public final class TextFormat {
         return this;
       }
 
+      public Builder setParseInfoTreeBuilder(
+          TextFormatParseInfoTree.Builder parseInfoTreeBuilder) {
+        this.parseInfoTreeBuilder = parseInfoTreeBuilder;
+        return this;
+      }
+
       public Parser build() {
-        return new Parser(allowUnknownFields, singularOverwritePolicy);
+        return new Parser(
+            allowUnknownFields, singularOverwritePolicy, parseInfoTreeBuilder);
       }
     }
 
@@ -1284,6 +1382,28 @@ public final class TextFormat {
       return text;
     }
 
+    // Check both unknown fields and unknown extensions and log warming messages
+    // or throw exceptions according to the flag.
+    private void checkUnknownFields(final List<String> unknownFields)
+        throws ParseException {
+      if (unknownFields.isEmpty()) {
+        return;
+      }
+
+      StringBuilder msg = new StringBuilder("Input contains unknown fields and/or extensions:");
+      for (String field : unknownFields) {
+        msg.append('\n').append(field);
+      }
+
+      if (allowUnknownFields) {
+          logger.warning(msg.toString());
+      } else {
+        String[] lineColumn = unknownFields.get(0).split(":");
+        throw new ParseException(Integer.valueOf(lineColumn[0]),
+            Integer.valueOf(lineColumn[1]), msg.toString());
+      }
+    }
+
     /**
      * Parse a text-format message from {@code input} and merge the contents
      * into {@code builder}.  Extensions will be recognized if they are
@@ -1297,9 +1417,13 @@ public final class TextFormat {
       MessageReflection.BuilderAdapter target =
           new MessageReflection.BuilderAdapter(builder);
 
+      List<String> unknownFields = new ArrayList<String>();
+
       while (!tokenizer.atEnd()) {
-        mergeField(tokenizer, extensionRegistry, target);
+        mergeField(tokenizer, extensionRegistry, target, unknownFields);
       }
+
+      checkUnknownFields(unknownFields);
     }
 
 
@@ -1309,9 +1433,26 @@ public final class TextFormat {
      */
     private void mergeField(final Tokenizer tokenizer,
                             final ExtensionRegistry extensionRegistry,
-                            final MessageReflection.MergeTarget target)
+                            final MessageReflection.MergeTarget target,
+                            List<String> unknownFields)
+                            throws ParseException {
+      mergeField(tokenizer, extensionRegistry, target, parseInfoTreeBuilder,
+                 unknownFields);
+    }
+
+    /**
+     * Parse a single field from {@code tokenizer} and merge it into
+     * {@code builder}.
+     */
+    private void mergeField(final Tokenizer tokenizer,
+                            final ExtensionRegistry extensionRegistry,
+                            final MessageReflection.MergeTarget target,
+                            TextFormatParseInfoTree.Builder parseTreeBuilder,
+                            List<String> unknownFields)
                             throws ParseException {
       FieldDescriptor field = null;
+      int startLine = tokenizer.getLine();
+      int startColumn = tokenizer.getColumn();
       final Descriptor type = target.getDescriptorForType();
       ExtensionRegistry.ExtensionInfo extension = null;
 
@@ -1328,18 +1469,14 @@ public final class TextFormat {
             extensionRegistry, name.toString());
 
         if (extension == null) {
-          if (!allowUnknownFields) {
-            throw tokenizer.parseExceptionPreviousToken(
-              "Extension \"" + name + "\" not found in the ExtensionRegistry.");
-          } else {
-            logger.warning(
-              "Extension \"" + name + "\" not found in the ExtensionRegistry.");
-          }
+          unknownFields.add((tokenizer.getPreviousLine() + 1) + ":" +
+              (tokenizer.getPreviousColumn() + 1) + ":\t" +
+              type.getFullName() + ".[" + name + "]");
         } else {
           if (extension.descriptor.getContainingType() != type) {
             throw tokenizer.parseExceptionPreviousToken(
-              "Extension \"" + name + "\" does not extend message type \"" +
-              type.getFullName() + "\".");
+              "Extension \"" + name + "\" does not extend message type \""
+              + type.getFullName() + "\".");
           }
           field = extension.descriptor;
         }
@@ -1363,21 +1500,15 @@ public final class TextFormat {
           }
         }
         // Again, special-case group names as described above.
-        if (field != null && field.getType() == FieldDescriptor.Type.GROUP &&
-            !field.getMessageType().getName().equals(name)) {
+        if (field != null && field.getType() == FieldDescriptor.Type.GROUP
+            && !field.getMessageType().getName().equals(name)) {
           field = null;
         }
 
         if (field == null) {
-          if (!allowUnknownFields) {
-            throw tokenizer.parseExceptionPreviousToken(
-              "Message type \"" + type.getFullName() +
-              "\" has no field named \"" + name + "\".");
-          } else {
-            logger.warning(
-              "Message type \"" + type.getFullName() +
-              "\" has no field named \"" + name + "\".");
-          }
+          unknownFields.add((tokenizer.getPreviousLine() + 1) + ":" +
+              (tokenizer.getPreviousColumn() + 1) + ":\t" +
+              type.getFullName() + "." + name);
         }
       }
 
@@ -1386,11 +1517,12 @@ public final class TextFormat {
         // Try to guess the type of this field.
         // If this field is not a message, there should be a ":" between the
         // field name and the field value and also the field value should not
-        // start with "{" or "<" which indicates the begining of a message body.
+        // start with "{" or "<" which indicates the beginning of a message body.
         // If there is no ":" or there is a "{" or "<" after ":", this field has
         // to be a message or the input is ill-formed.
-        if (tokenizer.tryConsume(":") && !tokenizer.lookingAt("{") &&
-            !tokenizer.lookingAt("<")) {
+        if (tokenizer.tryConsume(":")
+            && !tokenizer.lookingAt("{")
+            && !tokenizer.lookingAt("<")) {
           skipFieldValue(tokenizer);
         } else {
           skipFieldMessage(tokenizer);
@@ -1401,14 +1533,52 @@ public final class TextFormat {
       // Handle potential ':'.
       if (field.getJavaType() == FieldDescriptor.JavaType.MESSAGE) {
         tokenizer.tryConsume(":");  // optional
+        if (parseTreeBuilder != null) {
+          TextFormatParseInfoTree.Builder childParseTreeBuilder =
+              parseTreeBuilder.getBuilderForSubMessageField(field);
+          consumeFieldValues(tokenizer, extensionRegistry, target, field, extension,
+              childParseTreeBuilder, unknownFields);
+        } else {
+          consumeFieldValues(tokenizer, extensionRegistry, target, field, extension,
+              parseTreeBuilder, unknownFields);
+        }
       } else {
         tokenizer.consume(":");  // required
+        consumeFieldValues(tokenizer, extensionRegistry, target, field,
+            extension, parseTreeBuilder, unknownFields);
       }
+
+      if (parseTreeBuilder != null) {
+        parseTreeBuilder.setLocation(
+            field, TextFormatParseLocation.create(startLine, startColumn));
+      }
+
+      // For historical reasons, fields may optionally be separated by commas or
+      // semicolons.
+      if (!tokenizer.tryConsume(";")) {
+        tokenizer.tryConsume(",");
+      }
+    }
+
+    /**
+     * Parse a one or more field values from {@code tokenizer} and merge it into
+     * {@code builder}.
+     */
+    private void consumeFieldValues(
+        final Tokenizer tokenizer,
+        final ExtensionRegistry extensionRegistry,
+        final MessageReflection.MergeTarget target,
+        final FieldDescriptor field,
+        final ExtensionRegistry.ExtensionInfo extension,
+        final TextFormatParseInfoTree.Builder parseTreeBuilder,
+        List<String> unknownFields)
+        throws ParseException {
       // Support specifying repeated field values as a comma-separated list.
       // Ex."foo: [1, 2, 3]"
       if (field.isRepeated() && tokenizer.tryConsume("[")) {
         while (true) {
-          consumeFieldValue(tokenizer, extensionRegistry, target, field, extension);
+          consumeFieldValue(tokenizer, extensionRegistry, target, field, extension,
+              parseTreeBuilder, unknownFields);
           if (tokenizer.tryConsume("]")) {
             // End of list.
             break;
@@ -1416,7 +1586,8 @@ public final class TextFormat {
           tokenizer.consume(",");
         }
       } else {
-        consumeFieldValue(tokenizer, extensionRegistry, target, field, extension);
+        consumeFieldValue(tokenizer, extensionRegistry, target, field,
+            extension, parseTreeBuilder, unknownFields);
       }
     }
 
@@ -1429,7 +1600,9 @@ public final class TextFormat {
         final ExtensionRegistry extensionRegistry,
         final MessageReflection.MergeTarget target,
         final FieldDescriptor field,
-        final ExtensionRegistry.ExtensionInfo extension)
+        final ExtensionRegistry.ExtensionInfo extension,
+        final TextFormatParseInfoTree.Builder parseTreeBuilder,
+        List<String> unknownFields)
         throws ParseException {
       Object value = null;
 
@@ -1451,7 +1624,8 @@ public final class TextFormat {
             throw tokenizer.parseException(
               "Expected \"" + endToken + "\".");
           }
-          mergeField(tokenizer, extensionRegistry, subField);
+          mergeField(tokenizer, extensionRegistry, subField, parseTreeBuilder,
+              unknownFields);
         }
 
         value = subField.finish();
@@ -1508,16 +1682,16 @@ public final class TextFormat {
               value = enumType.findValueByNumber(number);
               if (value == null) {
                 throw tokenizer.parseExceptionPreviousToken(
-                  "Enum type \"" + enumType.getFullName() +
-                  "\" has no value with number " + number + '.');
+                  "Enum type \"" + enumType.getFullName()
+                  + "\" has no value with number " + number + '.');
               }
             } else {
               final String id = tokenizer.consumeIdentifier();
               value = enumType.findValueByName(id);
               if (value == null) {
                 throw tokenizer.parseExceptionPreviousToken(
-                  "Enum type \"" + enumType.getFullName() +
-                  "\" has no value named \"" + id + "\".");
+                  "Enum type \"" + enumType.getFullName()
+                  + "\" has no value named \"" + id + "\".");
               }
             }
 
@@ -1567,11 +1741,12 @@ public final class TextFormat {
       // Try to guess the type of this field.
       // If this field is not a message, there should be a ":" between the
       // field name and the field value and also the field value should not
-      // start with "{" or "<" which indicates the begining of a message body.
+      // start with "{" or "<" which indicates the beginning of a message body.
       // If there is no ":" or there is a "{" or "<" after ":", this field has
       // to be a message or the input is ill-formed.
-      if (tokenizer.tryConsume(":") && !tokenizer.lookingAt("<") &&
-          !tokenizer.lookingAt("{")) {
+      if (tokenizer.tryConsume(":")
+          && !tokenizer.lookingAt("<")
+          && !tokenizer.lookingAt("{")) {
         skipFieldValue(tokenizer);
       } else {
         skipFieldMessage(tokenizer);
@@ -1584,8 +1759,8 @@ public final class TextFormat {
     }
 
     /**
-     * Skips the whole body of a message including the beginning delimeter and
-     * the ending delimeter.
+     * Skips the whole body of a message including the beginning delimiter and
+     * the ending delimiter.
      */
     private void skipFieldMessage(Tokenizer tokenizer) throws ParseException {
       final String delimiter;
@@ -1609,11 +1784,11 @@ public final class TextFormat {
         while (tokenizer.tryConsumeString()) {}
         return;
       }
-      if (!tokenizer.tryConsumeIdentifier() &&  // includes enum & boolean
-          !tokenizer.tryConsumeInt64() &&       // includes int32
-          !tokenizer.tryConsumeUInt64() &&      // includes uint32
-          !tokenizer.tryConsumeDouble() &&
-          !tokenizer.tryConsumeFloat()) {
+      if (!tokenizer.tryConsumeIdentifier()   // includes enum & boolean
+          && !tokenizer.tryConsumeInt64()     // includes int32
+          && !tokenizer.tryConsumeUInt64()    // includes uint32
+          && !tokenizer.tryConsumeDouble()
+          && !tokenizer.tryConsumeFloat()) {
         throw tokenizer.parseException(
             "Invalid field value: " + tokenizer.currentToken);
       }
@@ -1626,11 +1801,6 @@ public final class TextFormat {
   // Some of these methods are package-private because Descriptors.java uses
   // them.
 
-  private interface ByteSequence {
-    int size();
-    byte byteAt(int offset);
-  }
-
   /**
    * Escapes bytes in the format used in protocol buffer text format, which
    * is the same as the format used for C string literals.  All bytes
@@ -1639,71 +1809,15 @@ public final class TextFormat {
    * which no defined short-hand escape sequence is defined will be escaped
    * using 3-digit octal sequences.
    */
-  private static String escapeBytes(final ByteSequence input) {
-    final StringBuilder builder = new StringBuilder(input.size());
-    for (int i = 0; i < input.size(); i++) {
-      final byte b = input.byteAt(i);
-      switch (b) {
-        // Java does not recognize \a or \v, apparently.
-        case 0x07: builder.append("\\a" ); break;
-        case '\b': builder.append("\\b" ); break;
-        case '\f': builder.append("\\f" ); break;
-        case '\n': builder.append("\\n" ); break;
-        case '\r': builder.append("\\r" ); break;
-        case '\t': builder.append("\\t" ); break;
-        case 0x0b: builder.append("\\v" ); break;
-        case '\\': builder.append("\\\\"); break;
-        case '\'': builder.append("\\\'"); break;
-        case '"' : builder.append("\\\""); break;
-        default:
-          // Note:  Bytes with the high-order bit set should be escaped.  Since
-          //   bytes are signed, such bytes will compare less than 0x20, hence
-          //   the following line is correct.
-          if (b >= 0x20) {
-            builder.append((char) b);
-          } else {
-            builder.append('\\');
-            builder.append((char) ('0' + ((b >>> 6) & 3)));
-            builder.append((char) ('0' + ((b >>> 3) & 7)));
-            builder.append((char) ('0' + (b & 7)));
-          }
-          break;
-      }
-    }
-    return builder.toString();
-  }
-
-  /**
-   * Escapes bytes in the format used in protocol buffer text format, which
-   * is the same as the format used for C string literals.  All bytes
-   * that are not printable 7-bit ASCII characters are escaped, as well as
-   * backslash, single-quote, and double-quote characters.  Characters for
-   * which no defined short-hand escape sequence is defined will be escaped
-   * using 3-digit octal sequences.
-   */
-  static String escapeBytes(final ByteString input) {
-    return escapeBytes(new ByteSequence() {
-      public int size() {
-        return input.size();
-      }
-      public byte byteAt(int offset) {
-        return input.byteAt(offset);
-      }
-    });
+  public static String escapeBytes(ByteString input) {
+    return TextFormatEscaper.escapeBytes(input);
   }
 
   /**
    * Like {@link #escapeBytes(ByteString)}, but used for byte array.
    */
-  static String escapeBytes(final byte[] input) {
-    return escapeBytes(new ByteSequence() {
-      public int size() {
-        return input.length;
-      }
-      public byte byteAt(int offset) {
-        return input[offset];
-      }
-    });
+  public static String escapeBytes(byte[] input) {
+    return TextFormatEscaper.escapeBytes(input);
   }
 
   /**
@@ -1711,7 +1825,7 @@ public final class TextFormat {
    * {@link #escapeBytes(ByteString)}.  Two-digit hex escapes (starting with
    * "\x") are also recognized.
    */
-  static ByteString unescapeBytes(final CharSequence charString)
+  public static ByteString unescapeBytes(final CharSequence charString)
       throws InvalidEscapeSequenceException {
     // First convert the Java character sequence to UTF-8 bytes.
     ByteString input = ByteString.copyFromUtf8(charString.toString());
@@ -1742,7 +1856,7 @@ public final class TextFormat {
               code = code * 8 + digitValue(input.byteAt(i));
             }
             // TODO: Check that 0 <= code && code <= 0xFF.
-            result[pos++] = (byte)code;
+            result[pos++] = (byte) code;
           } else {
             switch (c) {
               case 'a' : result[pos++] = 0x07; break;
@@ -1770,12 +1884,12 @@ public final class TextFormat {
                   ++i;
                   code = code * 16 + digitValue(input.byteAt(i));
                 }
-                result[pos++] = (byte)code;
+                result[pos++] = (byte) code;
                 break;
 
               default:
                 throw new InvalidEscapeSequenceException(
-                    "Invalid escape sequence: '\\" + (char)c + '\'');
+                    "Invalid escape sequence: '\\" + (char) c + '\'');
             }
           }
         } else {
@@ -1787,14 +1901,16 @@ public final class TextFormat {
       }
     }
 
-    return ByteString.copyFrom(result, 0, pos);
+    return result.length == pos
+        ? ByteString.wrap(result)  // This reference has not been out of our control.
+        : ByteString.copyFrom(result, 0, pos);
   }
 
   /**
    * Thrown by {@link TextFormat#unescapeBytes} and
    * {@link TextFormat#unescapeText} when an invalid escape sequence is seen.
    */
-  static class InvalidEscapeSequenceException extends IOException {
+  public static class InvalidEscapeSequenceException extends IOException {
     private static final long serialVersionUID = -8164033650142593304L;
 
     InvalidEscapeSequenceException(final String description) {
@@ -1815,7 +1931,7 @@ public final class TextFormat {
    * Escape double quotes and backslashes in a String for unicode output of a message.
    */
   public static String escapeDoubleQuotesAndBackslashes(final String input) {
-    return input.replace("\\", "\\\\").replace("\"", "\\\"");
+    return TextFormatEscaper.escapeDoubleQuotesAndBackslashes(input);
   }
 
   /**
@@ -1834,9 +1950,9 @@ public final class TextFormat {
 
   /** Is this a hex digit? */
   private static boolean isHex(final byte c) {
-    return ('0' <= c && c <= '9') ||
-           ('a' <= c && c <= 'f') ||
-           ('A' <= c && c <= 'F');
+    return ('0' <= c && c <= '9')
+        || ('a' <= c && c <= 'f')
+        || ('A' <= c && c <= 'F');
   }
 
   /**

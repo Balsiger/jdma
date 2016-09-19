@@ -169,6 +169,15 @@ public class Critical extends Value.Arithmetic<CriticalProto>
     return this;
   }
 
+  @Override
+  public Value.Arithmetic<CriticalProto> multiply(Rational inFactor)
+  {
+    if(inFactor.asDouble() > 2.0)
+      return doubled();
+
+    return this;
+  }
+
   /**
    * Get a critical with a double threat range than this one.
    *

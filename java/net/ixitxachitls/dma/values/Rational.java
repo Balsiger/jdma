@@ -70,6 +70,44 @@ public class Rational extends Value.Arithmetic<RationalProto>
     }
   }
 
+  private static class Fraction
+  {
+    private final int m_nominator;
+    private final int m_denominator;
+
+    private Fraction(int inNominator, int inDenominator)
+    {
+      if((inNominator > 0 && inDenominator > 0)
+        || (inNominator < 0 && inDenominator < 0))
+      {
+        m_nominator = Math.abs(inNominator);
+        m_denominator = Math.abs(inDenominator);
+      }
+      else
+      {
+        m_nominator = -Math.abs(inNominator);
+        m_denominator = Math.abs(inDenominator);
+      }
+    }
+
+    private Fraction(Rational inRational)
+    {
+      int denominator = inRational.m_denominator == 0
+          ? 1 : Math.abs(inRational.m_denominator);
+      int nominator = Math.abs(inRational.m_leader) * denominator
+          + Math.abs(inRational.m_nominator);
+      if(inRational.m_leader < 0)
+        nominator *= -1;
+      if(inRational.m_denominator < 0)
+        nominator *= -1;
+      if(inRational.m_nominator < 0)
+        nominator *= -1;
+
+      m_nominator = nominator;
+      m_denominator = denominator;
+    }
+  }
+
   /**
    * Create a rational with specific values.
    *
@@ -81,6 +119,18 @@ public class Rational extends Value.Arithmetic<RationalProto>
   {
     if(inDenominator == 0 && inNominator != 0)
       throw new IllegalArgumentException("denominator cannot be 0");
+
+    if(inDenominator < 0)
+    {
+      inNominator *= -1;
+      inDenominator *= -1;
+    }
+
+    if(inNominator < 0 && inLeader != 0)
+    {
+      inNominator *= -1;
+      inLeader *= -1;
+    }
 
     m_leader = inLeader;
     m_nominator = inNominator;
@@ -150,6 +200,13 @@ public class Rational extends Value.Arithmetic<RationalProto>
     return m_denominator;
   }
 
+  public Rational getFraction()
+  {
+    Rational simplified = simplify();
+    return new Rational(0, simplified.getNominator(),
+                        simplified.getDenominator());
+  }
+
   /**
    * Convert the rational into a double value.
    *
@@ -161,6 +218,17 @@ public class Rational extends Value.Arithmetic<RationalProto>
       return m_leader;
 
     return m_leader + m_nominator * 1.0 / m_denominator;
+  }
+
+  public boolean isOne()
+  {
+    return (m_leader == 1 && (m_nominator == 0 || m_denominator == 0))
+        || (m_leader == 0 && m_nominator == m_denominator);
+  }
+
+  public boolean isZero()
+  {
+    return m_leader == 0 && (m_nominator == 0 || m_denominator == 0);
   }
 
   @Override
@@ -211,11 +279,31 @@ public class Rational extends Value.Arithmetic<RationalProto>
     if(!(inValue instanceof Rational))
       throw new IllegalArgumentException("can only add another rational value");
 
-    Rational value = (Rational)inValue;
-    return new Rational(m_leader + value.m_leader,
-                           m_nominator * value.m_denominator
-                           + value.m_nominator * m_denominator,
-                           m_denominator * value.m_denominator).simplify();
+    Fraction first = new Fraction(this);
+    Fraction second = new Fraction((Rational)inValue);
+
+    return new Rational(0, first.m_nominator * second.m_denominator
+        + second.m_nominator * first.m_denominator,
+                        first.m_denominator * second.m_denominator).simplify();
+  }
+
+  @Override
+  public Value.Arithmetic<RationalProto> multiply(Rational inValue)
+  {
+    Fraction first = new Fraction(this);
+    Fraction second = new Fraction(inValue);
+
+    return new Rational(0, first.m_nominator * second.m_nominator,
+                        first.m_denominator * second.m_denominator).simplify();
+  }
+
+  public Rational subtract(int inValue)
+  {
+    Fraction fraction = new Fraction(this);
+    return new Rational(0,
+                        fraction.m_nominator - inValue * fraction.m_denominator,
+                        fraction.m_denominator)
+        .simplify();
   }
 
   /**
@@ -229,7 +317,7 @@ public class Rational extends Value.Arithmetic<RationalProto>
     if(m_nominator == 0 || m_denominator == 0)
       return this;
 
-    int leader = m_leader + m_nominator / m_denominator;
+    int leader = m_leader + Math.abs(m_nominator) / Math.abs(m_denominator);
     int nominator = m_nominator % m_denominator;
     int denominator = m_denominator;
 
@@ -256,8 +344,10 @@ public class Rational extends Value.Arithmetic<RationalProto>
   public Value.Arithmetic<RationalProto> multiply(int inFactor)
   {
     return new Rational(m_leader * inFactor, m_nominator * inFactor,
-                           m_denominator).simplify();
+                        m_denominator).simplify();
   }
+
+
 
   //---------------------------------------------------------------------------
 
@@ -323,7 +413,63 @@ public class Rational extends Value.Arithmetic<RationalProto>
                    .toString());
       assertEquals("add", "2 13/15",
                    new Rational(1, 2, 3).add(new Rational(1, 1, 5))
-                   .toString());
+                       .toString());
+      assertEquals("add", "1/3",
+                   new Rational(1, 2, 3).add(new Rational(-1, 1, 3))
+                       .toString());
+    }
+
+    @org.junit.Test
+    public void negative()
+    {
+      assertEquals("init", "-1/2", new Rational(0, 1, -2).toString());
+      assertEquals("init", "-2 1/2", new Rational(2, -1, 2).toString());
+      assertEquals("init", "-2 1/2", new Rational(-2, 1, 2).toString());
+      assertEquals("init", "-2 1/2", new Rational(2, 1, -2).toString());
+      assertEquals("init", "2 1/2", new Rational(-2, -1, 2).toString());
+      assertEquals("init", "-2 1/2", new Rational(-2, -1, -2).toString());
+      assertEquals("multiply", "-2 1/2",
+                   new Rational(5, 0, 0).multiply(new Rational(0, -1, 2))
+                       .toString());
+      assertEquals("multiply", "2 1/2",
+                   new Rational(-5, 0, 0).multiply(new Rational(0, -1, 2))
+                       .toString());
+      assertEquals("multiply", "6 1/4",
+                   new Rational(-2, 1, 2).multiply(new Rational(2, -1, 2))
+                       .toString());
+    }
+
+    @org.junit.Test
+    public void subtract()
+    {
+      assertEquals("subtract", "5",
+                   new Rational(6, 0, 0).subtract(1).toString());
+      assertEquals("subtract", "5 1/2",
+                   new Rational(6, 1, 2).subtract(1).toString());
+      assertEquals("subtract", "1/2",
+                   new Rational(1, 1, 2).subtract(1).toString());
+      assertEquals("subtract", "-1/2",
+                   new Rational(0, 1, 2).subtract(1).toString());
+      assertEquals("subtract", "-1 1/2",
+                   new Rational(0, -1, 2).subtract(1).toString());
+      assertEquals("subtract", "2 1/2",
+                   new Rational(-3, -1, 2).subtract(1).toString());
+      assertEquals("subtract", "-4 1/2",
+                   new Rational(-3, 1, 2).subtract(1).toString());
+    }
+
+    @org.junit.Test
+    public void multiply()
+    {
+      assertEquals("multiply", "6 1/4",
+                   new Rational(2, 1, 2).multiply(new Rational(2, 1, 2))
+                       .toString());
+      assertEquals("multiply", "12 1/2",
+                   new Rational(5, 0, 0).multiply(new Rational(2, 1, 2))
+                       .toString());
+      assertEquals("multiply", "12 1/2",
+                   new Rational(2, 1, 2).multiply(new Rational(5, 0, 0))
+                       .toString());
     }
   }
 }

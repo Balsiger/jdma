@@ -478,3 +478,4 @@ message OccurrenceProto
   optional LocationProto location = 1;
   optional CampaignDateProto date = 2;
 }
+

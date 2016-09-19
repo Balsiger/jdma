@@ -85,7 +85,6 @@ util.ajax = function(inURL, inValues, inFunction, inEval)
   request.setRequestHeader('Content-Type', 'application/octet-stream');
 
   request.send(data);
-  console.log("response", request.responseText);
   if(!inFunction)
     if(inEval)
       return eval(request.responseText);

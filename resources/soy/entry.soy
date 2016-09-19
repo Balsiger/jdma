@@ -42,6 +42,7 @@
   {@param? title: html}
   {@param? noprint: bool}
   {@param? nodescriptions: bool}
+  {@param? content: html}
 
   <div class="show entry {$type}{if $noprint} no-print{/if}">
 
@@ -145,7 +146,11 @@
       </script>
     {/literal}
 
-    {if true or $ij.isDev}
+    {if $content}
+      {$content}
+    {/if}
+
+    {if $ij.isDev}
       <pre>
         {$entry.toProto.toString}
       </pre>

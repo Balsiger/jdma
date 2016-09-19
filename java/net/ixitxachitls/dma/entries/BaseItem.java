@@ -65,6 +65,7 @@ import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.NamedModifier;
 import net.ixitxachitls.dma.values.Parser;
 import net.ixitxachitls.dma.values.Proficiency;
+import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.Slot;
 import net.ixitxachitls.dma.values.Substance;
@@ -91,7 +92,172 @@ import net.ixitxachitls.util.logging.Log;
  */
 public class BaseItem extends BaseEntry
 {
-  public static class Random {
+  public static class Material
+  {
+    public enum ValueType implements Named,
+        Proto<BaseItemProto.Material.ValueType>
+    {
+      UNKNOWN("unknown", BaseItemProto.Material.ValueType.UNKNOWN),
+      PER_POUND("per pound", BaseItemProto.Material.ValueType.PER_POUND);
+
+      private ValueType(String inName, BaseItemProto.Material.ValueType inProto)
+      {
+        m_name = inName;
+        m_proto = inProto;
+      }
+
+      private final String m_name;
+      private final BaseItemProto.Material.ValueType m_proto;
+
+      @Override
+      public String getName()
+      {
+        return m_name;
+      }
+
+      @Override
+      public BaseItemProto.Material.ValueType toProto()
+      {
+        return m_proto;
+      }
+
+      public static ValueType
+      fromProto(BaseItemProto.Material.ValueType inProto)
+      {
+        for(ValueType type : values())
+          if(type.m_proto == inProto)
+            return type;
+
+        throw new IllegalArgumentException("cannot convert material value "
+                                               + "type proto:" + inProto);
+      }
+
+      public static Optional<ValueType> fromString(String inValue)
+      {
+        for(ValueType type : values())
+          if(type.getName().equalsIgnoreCase(inValue))
+            return Optional.of(type);
+
+        return Optional.absent();
+      }
+
+      public static List<String> names()
+      {
+        List<String> names = new ArrayList<>();
+        for(ValueType type : values())
+          names.add(type.getName());
+
+        return names;
+      }
+
+      @Override
+      public String toString()
+      {
+        return m_name;
+      }
+    }
+
+    public Material(Money inValue, ValueType inValueType, int inHpPerInch,
+                    Rational inWeightMultiplier, Rational hpMultiplier)
+    {
+      m_value = inValue;
+      m_valueType = inValueType;
+      m_hpPerInch = inHpPerInch;
+      m_weightMultiplier = inWeightMultiplier;
+      m_hpMultiplier = hpMultiplier;
+    }
+
+    private final Money m_value;
+    private final ValueType m_valueType;
+    private final int m_hpPerInch;
+    private Rational m_weightMultiplier;
+    private Rational m_hpMultiplier;
+
+    public static final Parser<Material> PARSER = new Parser<Material>(5)
+    {
+      @Override
+      public Optional<Material> doParse(String inValue, String inValueType,
+                                        String inHpPerInch,
+                                        String inWeightMultiplier,
+                                        String inHPMultiplier)
+      {
+        try
+        {
+          Optional<Money> value = Money.PARSER.parse(inValue);
+          Optional<ValueType> valueType = ValueType.fromString(inValueType);
+          int hpPerInch = Integer.parseInt(inHpPerInch);
+          Optional<Rational> weightMultiplier =
+              Rational.PARSER.parse(inWeightMultiplier);
+          Optional<Rational> hpMultiplier =
+              Rational.PARSER.parse(inHPMultiplier);
+
+          if(value.isPresent() && valueType.isPresent()
+              && weightMultiplier.isPresent() && hpMultiplier.isPresent())
+            return Optional.of(new Material(value.get(), valueType.get(),
+                                            hpPerInch,
+                                            weightMultiplier.get(),
+                                            hpMultiplier.get()));
+        }
+        catch(NumberFormatException e) {}
+
+        return Optional.absent();
+      }
+    };
+
+    public Money getValue()
+    {
+      return m_value;
+    }
+
+    public ValueType getValueType()
+    {
+      return m_valueType;
+    }
+
+    public int getHpPerInch()
+    {
+      return m_hpPerInch;
+    }
+
+    public Rational getWeightMultiplier()
+    {
+      return m_weightMultiplier;
+    }
+
+    public Rational getHpMultiplier()
+    {
+      return m_hpMultiplier;
+    }
+
+    public BaseItemProto.Material toProto()
+    {
+      return BaseItemProto.Material.newBuilder()
+          .setValue(m_value.toProto())
+          .setValueType(m_valueType.toProto())
+          .setHpPerInch(m_hpPerInch)
+          .setWeightMultiplier(m_weightMultiplier.toProto())
+          .build();
+    }
+
+    public static Material fromProto(BaseItemProto.Material inProto)
+    {
+      return new Material(Money.fromProto(inProto.getValue()),
+                          ValueType.fromProto(inProto.getValueType()),
+                          inProto.getHpPerInch(),
+                          Rational.fromProto(inProto.getWeightMultiplier()),
+                          Rational.fromProto(inProto.getHpMultiplier()));
+    }
+
+    @Override
+    public String toString()
+    {
+      return m_value + " " + m_valueType.getName() + ", " + m_hpPerInch
+          + " hp per inch, " + m_weightMultiplier + " weight";
+    }
+  }
+
+  public static class Random
+  {
     public enum Type implements Named, Proto<BaseItemProto.Random.Type>
     {
       UNKNOWN("Unknown", BaseItemProto.Random.Type.UNKNOWN),
@@ -159,7 +325,8 @@ public class BaseItem extends BaseEntry
       m_items = inItems;
     }
 
-    public static final Parser<Random> PARSER = new Parser<Random>(3) {
+    public static final Parser<Random> PARSER = new Parser<Random>(3)
+    {
       @Override
       public Optional<Random> doParse(String inType, String inMultiple,
                                       String inItems)
@@ -411,6 +578,8 @@ public class BaseItem extends BaseEntry
   protected List<Quality> m_qualities = new ArrayList<>();
 
   protected List<Random> m_randoms = new ArrayList<>();
+
+  protected Optional<Material> m_material = Optional.absent();
 
   /**
    * Check whether this item has weapon properties.
@@ -1973,6 +2142,11 @@ public class BaseItem extends BaseEntry
     return m_randoms;
   }
 
+  public Optional<Material> getMaterial()
+  {
+    return m_material;
+  }
+
   @Override
   public boolean isDM(Optional<BaseCharacter> inUser)
   {
@@ -2310,6 +2484,9 @@ public class BaseItem extends BaseEntry
     for(Random random : m_randoms)
       builder.addRandom(random.toProto());
 
+    if(m_material.isPresent())
+      builder.setMaterial(m_material.get().toProto());
+
     BaseItemProto proto = builder.build();
     return proto;
   }
@@ -2399,6 +2576,9 @@ public class BaseItem extends BaseEntry
     m_qualities = inValues.useEntries("quality", m_qualities, Quality.CREATOR);
     m_randoms = inValues.use("random", m_randoms, Random.PARSER,
                              "type", "multiple", "items");
+    m_material = inValues.use("material", m_material, Material.PARSER,
+                              "value", "value_type", "hp_per_inch",
+                              "weight_multiplier");
   }
 
   /**
@@ -2599,20 +2779,24 @@ public class BaseItem extends BaseEntry
 
     for(BaseItemProto.Random random : proto.getRandomList())
       m_randoms.add(Random.fromProto(random));
+
+    if(proto.hasMaterial())
+      m_material = Optional.of(Material.fromProto(proto.getMaterial()));
   }
 
   public Optional<Money> randomValue()
   {
-    if(!m_value.isPresent())
+    Optional<Money> value = getCombinedValue().get();
+    if(!value.isPresent())
       return Optional.absent();
 
     if(RANDOM.nextInt(100) >= VALUE_CHANGE_PERCENTS)
-      return m_value;
+      return value;
 
     // We want to randomly adjust the value of the item a bit (+/-50%);
     int random = RANDOM.nextInt(100) + 50;
-    double value = m_value.get().asGold() * random / 100;
-    return Optional.of(Money.fromGold(value));
+    double goldValue = value.get().asGold() * random / 100;
+    return Optional.of(Money.fromGold(goldValue));
   }
 
   @Override
@@ -2632,6 +2816,18 @@ public class BaseItem extends BaseEntry
     combined.add(m_qualities, getName());
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem)entry).getCombinedQualities());
+
+    return combined;
+  }
+
+  public Annotated<List<Material>> getCombinedMaterials()
+  {
+    Annotated.List<Material> combined = new Annotated.List<>();
+    if(m_material.isPresent())
+      combined.addSingle(m_material.get(), getName());
+    else
+      for(BaseEntry entry : getBaseEntries())
+        combined.add(((BaseItem)entry).getCombinedMaterials());
 
     return combined;
   }

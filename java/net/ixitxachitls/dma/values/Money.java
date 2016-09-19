@@ -257,7 +257,7 @@ public class Money extends Value.Arithmetic<MoneyProto>
     List<String> parts = new ArrayList<>();
 
     if(m_platinum > 0)
-      parts.add(m_platinum + " " + CP);
+      parts.add(m_platinum + " " + PP);
     if(m_gold > 0)
       parts.add(m_gold + " " + GP);
     if(m_silver > 0)
@@ -427,6 +427,31 @@ public class Money extends Value.Arithmetic<MoneyProto>
                      m_weapon);
   }
 
+  @Override
+  public Value.Arithmetic<MoneyProto> multiply(Rational inFactor)
+  {
+    if(m_armor > 0 || m_weapon > 0)
+      throw new UnsupportedOperationException(
+          "Cannot multiply armor or weapon values with a rational.");
+
+    Rational platinums = (Rational)inFactor.multiply(m_platinum);
+    int platinum = platinums.simplify().getLeader();
+
+    Rational golds = (Rational)
+        platinums.getFraction().multiply(10).add(inFactor.multiply(m_gold));
+    int gold = golds.simplify().getLeader();
+
+    Rational silvers = (Rational)
+        golds.getFraction().multiply(10).add(inFactor.multiply(m_silver));
+    int silver = silvers.simplify().getLeader();
+
+    Rational coppers = (Rational)
+        silvers.getFraction().multiply(10).add(inFactor.multiply(m_copper));
+    int copper = coppers.simplify().getLeader();
+
+    return new Money(platinum, gold, silver, copper, 0, 0);
+  }
+
   //----------------------------------------------------------------------------
 
   /** The test. */
@@ -452,6 +477,20 @@ public class Money extends Value.Arithmetic<MoneyProto>
                    Arrays.toString(Strings.getAllPatterns
                                    ("42 gp 23 sp 17 cp 5sp",
                                     "\\s*(\\d+)\\s*(pp|gp|sp|cp)").get(3)));
+    }
+
+    @org.junit.Test
+    public void multiply()
+    {
+      assertEquals("multiply", "2 pp 3 gp 4 sp 5 cp",
+                   new Money(2, 3, 4, 5, 0, 0).multiply(Rational.ONE)
+                       .toString());
+      assertEquals("multiply", "20 pp 30 gp 40 sp 50 cp",
+                   new Money(2, 3, 4, 5, 0, 0).multiply(Rational.TEN)
+                       .toString());
+      assertEquals("multiply", "3 pp 8 gp 10 sp 8 cp",
+                   new Money(2, 3, 4, 5, 0, 0).multiply(new Rational(1, 2, 3))
+                       .toString());
     }
   }
 }

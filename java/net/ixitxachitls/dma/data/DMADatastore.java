@@ -479,7 +479,7 @@ public class DMADatastore
     {
       // determine a new, real id to use; this should actually be in a
       // transaction to be safe...
-      ((Entry)inEntry).initialize();
+      ((Entry)inEntry).initialize(false);
     }
 
     return m_data.update(convert(inEntry));

@@ -729,6 +729,22 @@ message BaseItemProto
     repeated string item = 3;
   }
   repeated Random random = 28;
+
+  message Material
+  {
+    optional MoneyProto value = 1;
+    enum ValueType
+    {
+      UNKNOWN = 0;
+      PER_POUND = 1;
+    }
+    optional ValueType value_type = 2;
+    optional int32 hp_per_inch = 3;
+    optional RationalProto weight_multiplier = 4;
+    optional RationalProto hp_multiplier = 5;
+  }
+
+  optional Material material = 29;
 }
 
 message BaseWeaponProto

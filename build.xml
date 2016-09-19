@@ -338,7 +338,7 @@
       </classpath>
 
       <compilerarg line="-Xlint:${warnings.lint}"/>
-      <compilerarg line="-J -Xmx512m"/>
+      <!--<compilerarg line="-J-Xmx512m"/>-->
     </javac>
     <copy todir="${classes.dir}">
       <fileset dir="${source.dir}" excludes="**/*.java" />
@@ -363,7 +363,8 @@
   </target>
 
   <target name="proto" depends="prepare">
-    <apply executable="/Users/balsiger/Software/protobuf-2.6.1/src/protoc" verbose="true">
+    <apply executable="/Users/balsiger/Software/protoc-3.0.2-osx-x86_64/bin/protoc"
+           verbose="true">
       <arg value="--proto_path=${proto.dir}"/>
       <arg value="--java_out=${gen.dir}"/>
       <regexpmapper from="(.*)\.proto"

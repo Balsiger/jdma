@@ -139,6 +139,13 @@ public class NamedModifier extends Value.Arithmetic<BaseMagicProto.Modifier>
   }
 
   @Override
+  public Arithmetic<BaseMagicProto.Modifier> multiply(Rational inFactor)
+  {
+    return new NamedModifier(m_type,
+                             (Modifier)m_modifier.multiply(inFactor));
+  }
+
+  @Override
   public BaseMagicProto.Modifier toProto()
   {
     return BaseMagicProto.Modifier.newBuilder()

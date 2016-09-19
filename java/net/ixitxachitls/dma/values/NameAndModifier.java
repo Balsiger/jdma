@@ -104,6 +104,13 @@ public class NameAndModifier
   }
 
   @Override
+  public Arithmetic<Values.NameAndModifierProto> multiply(Rational inFactor)
+  {
+    return new NameAndModifier(m_name,
+                               (Modifier)m_modifier.multiply(inFactor));
+  }
+
+  @Override
   public Values.NameAndModifierProto toProto()
   {
     return Values.NameAndModifierProto.newBuilder()

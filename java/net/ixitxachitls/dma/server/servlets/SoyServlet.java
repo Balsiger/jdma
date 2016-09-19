@@ -297,6 +297,8 @@ public class SoyServlet extends DMAServlet
        "MiniatureLocationRule",new SoyValue("MiniatureLocationRule",
                                             MiniatureLocationRuleType.class),
        "RandomType",new SoyValue("RandomType", BaseItem.Random.Type.class),
+       "MaterialValueType",new SoyValue("MaterialValueType",
+                                        BaseItem.Material.ValueType.class),
        "isDev", DMAServlet.isDev() || inRequest.hasParam("dev"));
 
     tracer.done();

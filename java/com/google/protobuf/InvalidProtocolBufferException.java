@@ -46,6 +46,10 @@ public class InvalidProtocolBufferException extends IOException {
     super(description);
   }
 
+  public InvalidProtocolBufferException(IOException e) {
+    super(e.getMessage(), e);
+  }
+
   /**
    * Attaches an unfinished message to the exception to support best-effort
    * parsing in {@code Parser} interface.
@@ -66,10 +70,18 @@ public class InvalidProtocolBufferException extends IOException {
     return unfinishedMessage;
   }
 
+  /**
+   * Unwraps the underlying {@link IOException} if this exception was caused by an I/O
+   * problem. Otherwise, returns {@code this}.
+   */
+  public IOException unwrapIOException() {
+    return getCause() instanceof IOException ? (IOException) getCause() : this;
+  }
+
   static InvalidProtocolBufferException truncatedMessage() {
     return new InvalidProtocolBufferException(
       "While parsing a protocol message, the input ended unexpectedly " +
-      "in the middle of a field.  This could mean either than the " +
+      "in the middle of a field.  This could mean either that the " +
       "input has been truncated or that an embedded message " +
       "misreported its own length.");
   }

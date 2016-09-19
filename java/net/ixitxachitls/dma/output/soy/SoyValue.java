@@ -113,15 +113,20 @@ public class SoyValue extends SoyMapData
   private SoyData getSingleUncached(String inName)
   {
     Object value = m_object;
-    if(value instanceof Optional && !inName.equals("get"))
+    if(value instanceof Optional)
     {
+      Optional<?> optional = (Optional<?>)value;
+
       if("isPresent".equals(inName) || "present".equals(inName))
         return BooleanData.forValue(((Optional) value).isPresent());
 
-      if(((Optional)value).isPresent())
-        value = ((Optional)value).get();
-      else
-        return new SoyUndefined(m_name + "." + inName + "(optional)");
+      if(inName.equals("get"))
+        if((optional.isPresent()))
+          return convert(inName, optional.get());
+        else
+          return new SoyUndefined(m_name + "." + inName + "(absent)");
+
+      value = optional.get();
     }
 
     if("integer".equals(inName) && value instanceof Integer)

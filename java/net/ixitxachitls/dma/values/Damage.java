@@ -515,12 +515,24 @@ public class Damage extends Value.Arithmetic<DamageProto>
   public Value.Arithmetic<DamageProto> multiply(int inFactor)
   {
     return new Damage(m_dice.multiply(inFactor),
-                         m_type,
-                         m_other.isPresent()
-                           ? Optional.of((Damage)
-                                         m_other.get().multiply(inFactor))
-                           : m_other,
-                         m_effect);
+                      m_type,
+                      m_other.isPresent()
+                          ? Optional.of((Damage)
+                                            m_other.get().multiply(inFactor))
+                          : m_other,
+                      m_effect);
+  }
+
+  @Override
+  public Value.Arithmetic<DamageProto> multiply(Rational inFactor)
+  {
+    return new Damage(m_dice.multiply(inFactor.simplify().getLeader()),
+                      m_type,
+                      m_other.isPresent()
+                          ? Optional.of((Damage)
+                                            m_other.get().multiply(inFactor))
+                          : m_other,
+                      m_effect);
   }
 
   //----------------------------------------------------------------------------

@@ -182,18 +182,23 @@
        {/call}
       {/if}
     {/param}
-  {/call}
-  
-  {call .tiny}
-    {param entry: $entry /}
-  {/call}
-
-  {call .small}
-    {param entry: $entry /}
-  {/call}
-
-  {call .large}
-    {param entry: $entry /}
+    {param content kind="html"}
+      <div>
+        {call .tiny}
+          {param entry: $entry /}
+        {/call}
+      </div>
+      <div>
+        {call .small}
+          {param entry: $entry /}
+        {/call}
+      </div>
+      <div>
+        {call .large}
+          {param entry: $entry /}
+        {/call}
+      </div>
+    {/param}
   {/call}
 {/template}
 
@@ -765,9 +770,8 @@
           {param value: 'armor' /}
         {/call}
         <div class="value">
+          {annotate($entry.combined_armor_type)}{sp}
           AC {annotate($entry.combined_armor_bonus)}
-          {sp}
-          {annotate($entry.combined_armor_type)}
           , max dex {annotate($entry.combined_max_dex)}
           , check {annotate($entry.combined_check_penalty)}
           , arcane {annotate($entry.combined_arcane_failure)}

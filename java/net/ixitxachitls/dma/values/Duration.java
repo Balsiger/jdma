@@ -411,14 +411,28 @@ public class Duration extends Value.Arithmetic<DurationProto>
   public Value.Arithmetic<DurationProto> multiply(int inFactor)
   {
     return new Duration(multiply(m_days, inFactor),
-                           multiply(m_hours, inFactor),
-                           multiply(m_minutes, inFactor),
-                           multiply(m_seconds, inFactor),
-                           multiply(m_rounds, inFactor),
-                           multiply(m_standardActions, inFactor),
-                           multiply(m_moveActions, inFactor),
-                           multiply(m_swiftActions, inFactor),
-                           multiply(m_freeActions, inFactor));
+                        multiply(m_hours, inFactor),
+                        multiply(m_minutes, inFactor),
+                        multiply(m_seconds, inFactor),
+                        multiply(m_rounds, inFactor),
+                        multiply(m_standardActions, inFactor),
+                        multiply(m_moveActions, inFactor),
+                        multiply(m_swiftActions, inFactor),
+                        multiply(m_freeActions, inFactor));
+  }
+
+  @Override
+  public Value.Arithmetic<DurationProto> multiply(Rational inFactor)
+  {
+    return new Duration(multiply(m_days, inFactor),
+                        multiply(m_hours, inFactor),
+                        multiply(m_minutes, inFactor),
+                        multiply(m_seconds, inFactor),
+                        multiply(m_rounds, inFactor),
+                        multiply(m_standardActions, inFactor),
+                        multiply(m_moveActions, inFactor),
+                        multiply(m_swiftActions, inFactor),
+                        multiply(m_freeActions, inFactor));
   }
 
   /**

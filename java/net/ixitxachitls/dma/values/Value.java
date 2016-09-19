@@ -65,6 +65,8 @@ public abstract class Value<T extends Message>
      * @return a new value representing the multiplied value
      */
     public abstract Arithmetic<V> multiply(int inFactor);
+
+    public abstract Arithmetic<V> multiply(Rational inValue);
   }
 
   /** A parser for parsing integer values. */
@@ -147,6 +149,15 @@ public abstract class Value<T extends Message>
    */
   protected static Optional<Rational> multiply(Optional<Rational> inValue,
                                                int inFactor)
+  {
+    if(!inValue.isPresent())
+      return inValue;
+
+    return Optional.of((Rational)inValue.get().multiply(inFactor));
+  }
+
+  protected static Optional<Rational> multiply(Optional<Rational> inValue,
+                                               Rational inFactor)
   {
     if(!inValue.isPresent())
       return inValue;

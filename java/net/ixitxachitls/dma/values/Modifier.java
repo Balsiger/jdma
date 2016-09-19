@@ -545,10 +545,20 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   public Value.Arithmetic<ModifierProto> multiply(int inFactor)
   {
     return new Modifier(m_modifier * inFactor, m_condition,
-                           m_next.isPresent()
-                             ? Optional.of((Modifier)
-                                           m_next.get().multiply(inFactor))
-                             : m_next, m_type);
+                        m_next.isPresent()
+                            ? Optional.of((Modifier)
+                                              m_next.get().multiply(inFactor))
+                            : m_next, m_type);
+  }
+
+  @Override
+  public Value.Arithmetic<ModifierProto> multiply(Rational inFactor)
+  {
+    return new Modifier(m_modifier * inFactor.getLeader(), m_condition,
+                        m_next.isPresent()
+                            ? Optional.of((Modifier)
+                                              m_next.get().multiply(inFactor))
+                            : m_next, m_type);
   }
 
   /**

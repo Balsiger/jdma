@@ -225,4 +225,12 @@ public class Speed extends Value.Arithmetic<SpeedProto>
                      (Distance)m_speed.multiply(inFactor),
                      m_maneuverability);
   }
+
+  @Override
+  public Value.Arithmetic<SpeedProto> multiply(Rational inFactor)
+  {
+    return new Speed(m_mode,
+                     (Distance)m_speed.multiply(inFactor),
+                     m_maneuverability);
+  }
 }

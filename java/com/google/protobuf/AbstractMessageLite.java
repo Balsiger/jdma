@@ -31,8 +31,8 @@
 package com.google.protobuf;
 
 import java.io.FilterInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 
@@ -43,9 +43,13 @@ import java.util.Collection;
  *
  * @author kenton@google.com Kenton Varda
  */
-public abstract class AbstractMessageLite implements MessageLite {
+public abstract class AbstractMessageLite<
+    MessageType extends AbstractMessageLite<MessageType, BuilderType>,
+    BuilderType extends AbstractMessageLite.Builder<MessageType, BuilderType>>
+        implements MessageLite {
   protected int memoizedHashCode = 0;
 
+  @Override
   public ByteString toByteString() {
     try {
       final ByteString.CodedBuilder out =
@@ -53,12 +57,11 @@ public abstract class AbstractMessageLite implements MessageLite {
       writeTo(out.getCodedOutput());
       return out.build();
     } catch (IOException e) {
-      throw new RuntimeException(
-        "Serializing to a ByteString threw an IOException (should " +
-        "never happen).", e);
+      throw new RuntimeException(getSerializingExceptionMessage("ByteString"), e);
     }
   }
 
+  @Override
   public byte[] toByteArray() {
     try {
       final byte[] result = new byte[getSerializedSize()];
@@ -67,12 +70,11 @@ public abstract class AbstractMessageLite implements MessageLite {
       output.checkNoSpaceLeft();
       return result;
     } catch (IOException e) {
-      throw new RuntimeException(
-        "Serializing to a byte array threw an IOException " +
-        "(should never happen).", e);
+      throw new RuntimeException(getSerializingExceptionMessage("byte array"), e);
     }
   }
 
+  @Override
   public void writeTo(final OutputStream output) throws IOException {
     final int bufferSize =
         CodedOutputStream.computePreferredBufferSize(getSerializedSize());
@@ -82,6 +84,7 @@ public abstract class AbstractMessageLite implements MessageLite {
     codedOutput.flush();
   }
 
+  @Override
   public void writeDelimitedTo(final OutputStream output) throws IOException {
     final int serialized = getSerializedSize();
     final int bufferSize = CodedOutputStream.computePreferredBufferSize(
@@ -102,11 +105,21 @@ public abstract class AbstractMessageLite implements MessageLite {
     return new UninitializedMessageException(this);
   }
 
+  private String getSerializingExceptionMessage(String target) {
+    return "Serializing " + getClass().getName() + " to a " + target
+        + " threw an IOException (should never happen).";
+  }
+
   protected static void checkByteStringIsUtf8(ByteString byteString)
       throws IllegalArgumentException {
     if (!byteString.isValidUtf8()) {
       throw new IllegalArgumentException("Byte string is not UTF-8.");
     }
+  }
+
+  protected static <T> void addAll(final Iterable<T> values,
+      final Collection<? super T> list) {
+    Builder.addAll(values, list);
   }
 
   /**
@@ -115,25 +128,27 @@ public abstract class AbstractMessageLite implements MessageLite {
    * other methods.
    */
   @SuppressWarnings("unchecked")
-  public static abstract class Builder<BuilderType extends Builder>
+  public abstract static class Builder<
+      MessageType extends AbstractMessageLite<MessageType, BuilderType>,
+      BuilderType extends Builder<MessageType, BuilderType>>
       implements MessageLite.Builder {
     // The compiler produces an error if this is not declared explicitly.
     @Override
     public abstract BuilderType clone();
 
-    public BuilderType mergeFrom(final CodedInputStream input)
-                                 throws IOException {
+    @Override
+    public BuilderType mergeFrom(final CodedInputStream input) throws IOException {
       return mergeFrom(input, ExtensionRegistryLite.getEmptyRegistry());
     }
 
     // Re-defined here for return type covariance.
+    @Override
     public abstract BuilderType mergeFrom(
-        final CodedInputStream input,
-        final ExtensionRegistryLite extensionRegistry)
+        final CodedInputStream input, final ExtensionRegistryLite extensionRegistry)
         throws IOException;
 
-    public BuilderType mergeFrom(final ByteString data)
-        throws InvalidProtocolBufferException {
+    @Override
+    public BuilderType mergeFrom(final ByteString data) throws InvalidProtocolBufferException {
       try {
         final CodedInputStream input = data.newCodedInput();
         mergeFrom(input);
@@ -142,15 +157,13 @@ public abstract class AbstractMessageLite implements MessageLite {
       } catch (InvalidProtocolBufferException e) {
         throw e;
       } catch (IOException e) {
-        throw new RuntimeException(
-          "Reading from a ByteString threw an IOException (should " +
-          "never happen).", e);
+        throw new RuntimeException(getReadingExceptionMessage("ByteString"), e);
       }
     }
 
+    @Override
     public BuilderType mergeFrom(
-        final ByteString data,
-        final ExtensionRegistryLite extensionRegistry)
+        final ByteString data, final ExtensionRegistryLite extensionRegistry)
         throws InvalidProtocolBufferException {
       try {
         final CodedInputStream input = data.newCodedInput();
@@ -160,20 +173,18 @@ public abstract class AbstractMessageLite implements MessageLite {
       } catch (InvalidProtocolBufferException e) {
         throw e;
       } catch (IOException e) {
-        throw new RuntimeException(
-          "Reading from a ByteString threw an IOException (should " +
-          "never happen).", e);
+        throw new RuntimeException(getReadingExceptionMessage("ByteString"), e);
       }
     }
 
-    public BuilderType mergeFrom(final byte[] data)
-        throws InvalidProtocolBufferException {
+    @Override
+    public BuilderType mergeFrom(final byte[] data) throws InvalidProtocolBufferException {
       return mergeFrom(data, 0, data.length);
     }
 
-    public BuilderType mergeFrom(final byte[] data, final int off,
-                                 final int len)
-                                 throws InvalidProtocolBufferException {
+    @Override
+    public BuilderType mergeFrom(final byte[] data, final int off, final int len)
+        throws InvalidProtocolBufferException {
       try {
         final CodedInputStream input =
             CodedInputStream.newInstance(data, off, len);
@@ -183,21 +194,21 @@ public abstract class AbstractMessageLite implements MessageLite {
       } catch (InvalidProtocolBufferException e) {
         throw e;
       } catch (IOException e) {
-        throw new RuntimeException(
-          "Reading from a byte array threw an IOException (should " +
-          "never happen).", e);
+        throw new RuntimeException(getReadingExceptionMessage("byte array"), e);
       }
     }
 
-    public BuilderType mergeFrom(
-        final byte[] data,
-        final ExtensionRegistryLite extensionRegistry)
+    @Override
+    public BuilderType mergeFrom(final byte[] data, final ExtensionRegistryLite extensionRegistry)
         throws InvalidProtocolBufferException {
       return mergeFrom(data, 0, data.length, extensionRegistry);
     }
 
+    @Override
     public BuilderType mergeFrom(
-        final byte[] data, final int off, final int len,
+        final byte[] data,
+        final int off,
+        final int len,
         final ExtensionRegistryLite extensionRegistry)
         throws InvalidProtocolBufferException {
       try {
@@ -209,12 +220,11 @@ public abstract class AbstractMessageLite implements MessageLite {
       } catch (InvalidProtocolBufferException e) {
         throw e;
       } catch (IOException e) {
-        throw new RuntimeException(
-          "Reading from a byte array threw an IOException (should " +
-          "never happen).", e);
+        throw new RuntimeException(getReadingExceptionMessage("byte array"), e);
       }
     }
 
+    @Override
     public BuilderType mergeFrom(final InputStream input) throws IOException {
       final CodedInputStream codedInput = CodedInputStream.newInstance(input);
       mergeFrom(codedInput);
@@ -222,10 +232,9 @@ public abstract class AbstractMessageLite implements MessageLite {
       return (BuilderType) this;
     }
 
+    @Override
     public BuilderType mergeFrom(
-        final InputStream input,
-        final ExtensionRegistryLite extensionRegistry)
-        throws IOException {
+        final InputStream input, final ExtensionRegistryLite extensionRegistry) throws IOException {
       final CodedInputStream codedInput = CodedInputStream.newInstance(input);
       mergeFrom(codedInput, extensionRegistry);
       codedInput.checkLastTagWas(0);
@@ -287,10 +296,9 @@ public abstract class AbstractMessageLite implements MessageLite {
       }
     }
 
+    @Override
     public boolean mergeDelimitedFrom(
-        final InputStream input,
-        final ExtensionRegistryLite extensionRegistry)
-        throws IOException {
+        final InputStream input, final ExtensionRegistryLite extensionRegistry) throws IOException {
       final int firstByte = input.read();
       if (firstByte == -1) {
         return false;
@@ -301,10 +309,28 @@ public abstract class AbstractMessageLite implements MessageLite {
       return true;
     }
 
-    public boolean mergeDelimitedFrom(final InputStream input)
-        throws IOException {
+    @Override
+    public boolean mergeDelimitedFrom(final InputStream input) throws IOException {
       return mergeDelimitedFrom(input,
           ExtensionRegistryLite.getEmptyRegistry());
+    }
+
+    @Override
+    @SuppressWarnings("unchecked") // isInstance takes care of this
+    public BuilderType mergeFrom(final MessageLite other) {
+      if (!getDefaultInstanceForType().getClass().isInstance(other)) {
+        throw new IllegalArgumentException(
+            "mergeFrom(MessageLite) can only merge messages of the same type.");
+      }
+
+      return internalMergeFrom((MessageType) other);
+    }
+
+    protected abstract BuilderType internalMergeFrom(MessageType message);
+
+    private String getReadingExceptionMessage(String target) {
+      return "Reading " + getClass().getName() + " from a " + target
+          + " threw an IOException (should never happen).";
     }
 
     /**
@@ -320,12 +346,15 @@ public abstract class AbstractMessageLite implements MessageLite {
      * Adds the {@code values} to the {@code list}.  This is a helper method
      * used by generated code.  Users should ignore it.
      *
-     * @throws NullPointerException if any of the elements of {@code values} is
-     * null. When that happens, some elements of {@code values} may have already
-     * been added to the result {@code list}.
+     * @throws NullPointerException if {@code values} or any of the elements of
+     * {@code values} is null. When that happens, some elements of
+     * {@code values} may have already been added to the result {@code list}.
      */
     protected static <T> void addAll(final Iterable<T> values,
                                      final Collection<? super T> list) {
+      if (values == null) {
+        throw new NullPointerException();
+      }
       if (values instanceof LazyStringList) {
         // For StringOrByteStringLists, check the underlying elements to avoid
         // forcing conversions of ByteStrings to Strings.

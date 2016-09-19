@@ -343,6 +343,17 @@ public class Area extends Value.Arithmetic<AreaProto>
                     multiply(m_sqCentiMeters, inFactor));
   }
 
+  @Override
+  public Value.Arithmetic<AreaProto> multiply(Rational inFactor)
+  {
+    return new Area(multiply(m_sqYards, inFactor),
+                    multiply(m_sqFeet, inFactor),
+                    multiply(m_sqInches, inFactor),
+                    multiply(m_sqMeters, inFactor),
+                    multiply(m_sqDeciMeters, inFactor),
+                    multiply(m_sqCentiMeters, inFactor));
+  }
+
   //---------------------------------------------------------------------------
 
   /** The Test. */

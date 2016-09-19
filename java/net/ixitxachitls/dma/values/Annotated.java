@@ -407,6 +407,70 @@ public abstract class Annotated<V>
     }
   }
 
+  /** An annotaged integer value with limits. */
+  public static class LimitedInteger extends Annotated.Integer  {
+    /** Create an undefined annotated integer. */
+    public LimitedInteger(Optional<java.lang.Integer> inMin,
+                          Optional<java.lang.Integer> inMax)
+    {
+      m_min = inMin;
+      m_max = inMax;
+    }
+
+    /**
+     * Create the annotated integer with an initial value.
+     *
+     * @param inValue the initial value
+     * @param inSource the source of the value
+     */
+    public LimitedInteger(Optional<java.lang.Integer> inMin,
+                          Optional<java.lang.Integer> inMax,
+                          int inValue, java.lang.String inSource)
+    {
+      super(inValue, inSource);
+
+      m_min = inMin;
+      m_max = inMax;
+    }
+
+    /**
+     * Create an annotated integer from existing sourced values.
+     *
+     * @param inValue the final value
+     * @param inSources the values and source that contributed the final value
+     */
+    public LimitedInteger(Optional<java.lang.Integer> inMin,
+                          Optional<java.lang.Integer> inMax,
+                          int inValue,
+                          ValueSources<Optional<java.lang.Integer>> inSources)
+    {
+      super(inValue, inSources);
+
+      m_min = inMin;
+      m_max = inMax;
+    }
+
+    /** The annotated value, if any. */
+    private final Optional<java.lang.Integer> m_min;
+    private final Optional<java.lang.Integer> m_max;
+
+    @Override
+    public Optional<java.lang.Integer> get()
+    {
+      Optional<java.lang.Integer> value = super.get();
+      if(!value.isPresent())
+        return value;
+
+      if(m_min.isPresent() && value.get() < m_min.get())
+        return m_min;
+
+      if(m_max.isPresent() && value.get() > m_max.get())
+        return m_max;
+
+      return value;
+    }
+  }
+
   /** An annotated bonus (with + sign). */
   public static class Bonus extends Integer
   {
@@ -570,6 +634,18 @@ public abstract class Annotated<V>
       if(value.isPresent())
       {
         value = Optional.of((V)value.get().multiply(inValue - 1));
+        add(value);
+      }
+
+      super.add(value, inSource);
+    }
+
+    public void multiply(Rational inValue, java.lang.String inSource)
+    {
+      Optional<V> value = get();
+      if(value.isPresent())
+      {
+        value = Optional.of((V)value.get().multiply(inValue.subtract(1)));
         add(value);
       }
 

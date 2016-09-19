@@ -313,8 +313,17 @@ public class Distance extends Value.Arithmetic<DistanceProto>
   public Value.Arithmetic<DistanceProto> multiply(int inFactor)
   {
     return new Distance(multiply(m_miles, inFactor),
-                           multiply(m_feet, inFactor),
-                           multiply(m_inches, inFactor));
+                        multiply(m_feet, inFactor),
+                        multiply(m_inches, inFactor));
+
+  }
+
+  @Override
+  public Value.Arithmetic<DistanceProto> multiply(Rational inFactor)
+  {
+    return new Distance(multiply(m_miles, inFactor),
+                        multiply(m_feet, inFactor),
+                        multiply(m_inches, inFactor));
 
   }
 

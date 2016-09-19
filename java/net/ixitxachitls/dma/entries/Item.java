@@ -55,9 +55,11 @@ import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Occurrence;
 import net.ixitxachitls.dma.values.Proficiency;
+import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Slot;
 import net.ixitxachitls.dma.values.Substance;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.ValueSources;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.Volume;
 import net.ixitxachitls.dma.values.WeaponStyle;
@@ -214,6 +216,15 @@ public class Item extends CampaignEntry
     return combined;
   }
 
+  public Annotated<List<BaseItem.Material>> getCombinedMaterials()
+  {
+    Annotated.List<BaseItem.Material> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseItem)entry).getCombinedMaterials());
+
+    return combined;
+  }
+
   /**
    * Get the combined value of the item, including values of base items.
    *
@@ -228,6 +239,14 @@ public class Item extends CampaignEntry
     if(isContainer())
       for(Item item : getContents())
         combined.add(item.getCombinedWeight());
+
+    for(ValueSources.ValueSource<List<BaseItem.Material>> materials
+        : getCombinedMaterials().getSources().getSources())
+      for(BaseItem.Material material : materials.getValue())
+        if(!material.getWeightMultiplier().isOne()
+            && !material.getWeightMultiplier().isZero())
+          combined.multiply(material.getWeightMultiplier(),
+                            materials.getSource());
 
     if(m_multiple.isPresent())
       combined.multiply(m_multiple.get(),
@@ -808,7 +827,9 @@ public class Item extends CampaignEntry
    */
   public Annotated<Optional<Integer>> getCombinedCheckPenalty()
   {
-    Annotated<Optional<Integer>> combined = new Annotated.MaxBonus<Integer>();
+    Annotated<Optional<Integer>> combined =
+        new Annotated.LimitedInteger(Optional.<Integer>absent(),
+                                     Optional.of(0));
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedCheckPenalty());
 
@@ -1592,6 +1613,23 @@ public class Item extends CampaignEntry
             value = random.get();
           else
             value = (Money) value.add(random.get());
+      }
+
+      // Add value per material.
+      Optional<Weight> weight = getCombinedWeight().get();
+      if(weight.isPresent())
+      {
+        List<BaseItem.Material> materials = getCombinedMaterials().get();
+        for(BaseItem.Material material : materials)
+          if(material.getValueType() == BaseItem.Material.ValueType.PER_POUND)
+          {
+            Money materialValue = (Money)
+                material.getValue().multiply((int)weight.get().asPounds());
+            if(value == null)
+              value = materialValue;
+            else
+              value = (Money)value.add(materialValue);
+          }
       }
 
       if(value != null)

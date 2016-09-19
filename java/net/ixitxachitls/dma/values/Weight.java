@@ -239,14 +239,20 @@ public class Weight extends Value.Arithmetic<WeightProto>
 
     Weight value = (Weight)inValue;
     return new Weight(add(m_pounds, value.m_pounds),
-                         add(m_ounces, value.m_ounces));
+                      add(m_ounces, value.m_ounces));
   }
 
   @Override
   public Value.Arithmetic<WeightProto> multiply(int inFactor)
   {
     return new Weight(multiply(m_pounds, inFactor),
-                         multiply(m_ounces, inFactor));
+                      multiply(m_ounces, inFactor));
+  }
+  @Override
+  public Value.Arithmetic<WeightProto> multiply(Rational inFactor)
+  {
+    return new Weight(multiply(m_pounds, inFactor),
+                      multiply(m_ounces, inFactor));
   }
 
   @Override

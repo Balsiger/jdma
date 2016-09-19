@@ -51,6 +51,7 @@ import java.util.Map;
 public interface Message extends MessageLite, MessageOrBuilder {
 
   // (From MessageLite, re-declared here only for return type covariance.)
+  @Override
   Parser<? extends Message> getParserForType();
 
 
@@ -97,7 +98,10 @@ public interface Message extends MessageLite, MessageOrBuilder {
   // Builders
 
   // (From MessageLite, re-declared here only for return type covariance.)
+  @Override
   Builder newBuilderForType();
+
+  @Override
   Builder toBuilder();
 
   /**
@@ -106,6 +110,7 @@ public interface Message extends MessageLite, MessageOrBuilder {
   interface Builder extends MessageLite.Builder, MessageOrBuilder {
     // (From MessageLite.Builder, re-declared here only for return type
     // covariance.)
+    @Override
     Builder clear();
 
     /**
@@ -121,6 +126,9 @@ public interface Message extends MessageLite, MessageOrBuilder {
      *   using the same merging rules.<br>
      * * For repeated fields, the elements in {@code other} are concatenated
      *   with the elements in this message.
+     * * For oneof groups, if the other message has one of the fields set,
+     *   the group of this message is cleared and replaced by the field
+     *   of the other message, so that the oneof constraint is preserved.
      *
      * This is equivalent to the {@code Message::MergeFrom} method in C++.
      */
@@ -128,18 +136,27 @@ public interface Message extends MessageLite, MessageOrBuilder {
 
     // (From MessageLite.Builder, re-declared here only for return type
     // covariance.)
+    @Override
     Message build();
+
+    @Override
     Message buildPartial();
+
+    @Override
     Builder clone();
+
+    @Override
     Builder mergeFrom(CodedInputStream input) throws IOException;
-    Builder mergeFrom(CodedInputStream input,
-                      ExtensionRegistryLite extensionRegistry)
-                      throws IOException;
+
+    @Override
+    Builder mergeFrom(CodedInputStream input, ExtensionRegistryLite extensionRegistry)
+        throws IOException;
 
     /**
      * Get the message's type's descriptor.
      * See {@link Message#getDescriptorForType()}.
      */
+    @Override
     Descriptors.Descriptor getDescriptorForType();
 
     /**
@@ -163,9 +180,28 @@ public interface Message extends MessageLite, MessageOrBuilder {
      * field builder, which will then be nested into its parent builder.
      * <p>
      * NOTE: implementations that do not support nested builders will throw
-     * <code>UnsupportedException</code>.
+     * <code>UnsupportedOperationException</code>.
      */
     Builder getFieldBuilder(Descriptors.FieldDescriptor field);
+
+    /**
+     * Get a nested builder instance for the given repeated field instance.
+     * <p>
+     * Normally, we hold a reference to the immutable message object for the
+     * message type field. Some implementations(the generated message builders),
+     * however, can also hold a reference to the builder object (a nested
+     * builder) for the field.
+     * <p>
+     * If the field is already backed up by a nested builder, the nested builder
+     * will be returned. Otherwise, a new field builder will be created and
+     * returned. The original message field (if exist) will be merged into the
+     * field builder, which will then be nested into its parent builder.
+     * <p>
+     * NOTE: implementations that do not support nested builders will throw
+     * <code>UnsupportedOperationException</code>.
+     */
+    Builder getRepeatedFieldBuilder(Descriptors.FieldDescriptor field,
+                                    int index);
 
     /**
      * Sets a field to the given value.  The value must be of the correct type
@@ -218,27 +254,39 @@ public interface Message extends MessageLite, MessageOrBuilder {
 
     // (From MessageLite.Builder, re-declared here only for return type
     // covariance.)
+    @Override
     Builder mergeFrom(ByteString data) throws InvalidProtocolBufferException;
-    Builder mergeFrom(ByteString data,
-                      ExtensionRegistryLite extensionRegistry)
-                      throws InvalidProtocolBufferException;
+
+    @Override
+    Builder mergeFrom(ByteString data, ExtensionRegistryLite extensionRegistry)
+        throws InvalidProtocolBufferException;
+
+    @Override
     Builder mergeFrom(byte[] data) throws InvalidProtocolBufferException;
-    Builder mergeFrom(byte[] data, int off, int len)
-                      throws InvalidProtocolBufferException;
-    Builder mergeFrom(byte[] data,
-                      ExtensionRegistryLite extensionRegistry)
-                      throws InvalidProtocolBufferException;
-    Builder mergeFrom(byte[] data, int off, int len,
-                      ExtensionRegistryLite extensionRegistry)
-                      throws InvalidProtocolBufferException;
+
+    @Override
+    Builder mergeFrom(byte[] data, int off, int len) throws InvalidProtocolBufferException;
+
+    @Override
+    Builder mergeFrom(byte[] data, ExtensionRegistryLite extensionRegistry)
+        throws InvalidProtocolBufferException;
+
+    @Override
+    Builder mergeFrom(byte[] data, int off, int len, ExtensionRegistryLite extensionRegistry)
+        throws InvalidProtocolBufferException;
+
+    @Override
     Builder mergeFrom(InputStream input) throws IOException;
-    Builder mergeFrom(InputStream input,
-                      ExtensionRegistryLite extensionRegistry)
-                      throws IOException;
-    boolean mergeDelimitedFrom(InputStream input)
-                               throws IOException;
-    boolean mergeDelimitedFrom(InputStream input,
-                               ExtensionRegistryLite extensionRegistry)
-                               throws IOException;
+
+    @Override
+    Builder mergeFrom(InputStream input, ExtensionRegistryLite extensionRegistry)
+        throws IOException;
+
+    @Override
+    boolean mergeDelimitedFrom(InputStream input) throws IOException;
+
+    @Override
+    boolean mergeDelimitedFrom(InputStream input, ExtensionRegistryLite extensionRegistry)
+        throws IOException;
   }
 }

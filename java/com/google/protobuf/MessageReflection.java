@@ -45,13 +45,14 @@ import java.util.TreeMap;
  */
 class MessageReflection {
 
-  static void writeMessageTo(Message message, CodedOutputStream output,
+  static void writeMessageTo(
+      Message message,
+      Map<FieldDescriptor, Object> fields,
+      CodedOutputStream output,
       boolean alwaysWriteRequiredFields)
       throws IOException {
     final boolean isMessageSet =
         message.getDescriptorForType().getOptions().getMessageSetWireFormat();
-
-    Map<FieldDescriptor, Object> fields = message.getAllFields();
     if (alwaysWriteRequiredFields) {
       fields = new TreeMap<FieldDescriptor, Object>(fields);
       for (final FieldDescriptor field :
@@ -82,13 +83,15 @@ class MessageReflection {
     }
   }
 
-  static int getSerializedSize(Message message) {
+  static int getSerializedSize(
+      Message message,
+      Map<FieldDescriptor, Object> fields) {
     int size = 0;
     final boolean isMessageSet =
         message.getDescriptorForType().getOptions().getMessageSetWireFormat();
 
     for (final Map.Entry<Descriptors.FieldDescriptor, Object> entry :
-        message.getAllFields().entrySet()) {
+        fields.entrySet()) {
       final Descriptors.FieldDescriptor field = entry.getKey();
       final Object value = entry.getValue();
       if (isMessageSet && field.isExtension() &&
@@ -340,14 +343,12 @@ class MessageReflection {
         ByteString bytes, ExtensionRegistryLite registry,
         Descriptors.FieldDescriptor descriptor, Message defaultInstance)
         throws IOException;
-    
+
     /**
-     * Read a primitive field from input. Note that builders and mutable
-     * messages may use different Java types to represent a primtive field.
+     * Returns the UTF8 validation level for the field.
      */
-    Object readPrimitiveField(
-        CodedInputStream input, WireFormat.FieldType type,
-        boolean checkUtf8) throws IOException;
+    WireFormat.Utf8Validation getUtf8Validation(Descriptors.FieldDescriptor
+        descriptor);
 
     /**
      * Returns a new merge target for a sub-field. When defaultInstance is
@@ -369,6 +370,7 @@ class MessageReflection {
 
     private final Message.Builder builder;
 
+    @Override
     public Descriptors.Descriptor getDescriptorForType() {
       return builder.getDescriptorForType();
     }
@@ -377,6 +379,7 @@ class MessageReflection {
       this.builder = builder;
     }
 
+    @Override
     public Object getField(Descriptors.FieldDescriptor field) {
       return builder.getField(field);
     }
@@ -386,25 +389,27 @@ class MessageReflection {
       return builder.hasField(field);
     }
 
-    public MergeTarget setField(Descriptors.FieldDescriptor field,
-        Object value) {
+    @Override
+    public MergeTarget setField(Descriptors.FieldDescriptor field, Object value) {
       builder.setField(field, value);
       return this;
     }
 
+    @Override
     public MergeTarget clearField(Descriptors.FieldDescriptor field) {
       builder.clearField(field);
       return this;
     }
 
+    @Override
     public MergeTarget setRepeatedField(
         Descriptors.FieldDescriptor field, int index, Object value) {
       builder.setRepeatedField(field, index, value);
       return this;
     }
 
-    public MergeTarget addRepeatedField(
-        Descriptors.FieldDescriptor field, Object value) {
+    @Override
+    public MergeTarget addRepeatedField(Descriptors.FieldDescriptor field, Object value) {
       builder.addRepeatedField(field, value);
       return this;
     }
@@ -425,25 +430,30 @@ class MessageReflection {
       return builder.getOneofFieldDescriptor(oneof);
     }
 
+    @Override
     public ContainerType getContainerType() {
       return ContainerType.MESSAGE;
     }
 
+    @Override
     public ExtensionRegistry.ExtensionInfo findExtensionByName(
         ExtensionRegistry registry, String name) {
       return registry.findImmutableExtensionByName(name);
     }
 
+    @Override
     public ExtensionRegistry.ExtensionInfo findExtensionByNumber(
-        ExtensionRegistry registry, Descriptors.Descriptor containingType,
-        int fieldNumber) {
+        ExtensionRegistry registry, Descriptors.Descriptor containingType, int fieldNumber) {
       return registry.findImmutableExtensionByNumber(containingType,
           fieldNumber);
     }
 
-    public Object parseGroup(CodedInputStream input,
+    @Override
+    public Object parseGroup(
+        CodedInputStream input,
         ExtensionRegistryLite extensionRegistry,
-        Descriptors.FieldDescriptor field, Message defaultInstance)
+        Descriptors.FieldDescriptor field,
+        Message defaultInstance)
         throws IOException {
       Message.Builder subBuilder;
       // When default instance is not null. The field is an extension field.
@@ -462,9 +472,12 @@ class MessageReflection {
       return subBuilder.buildPartial();
     }
 
-    public Object parseMessage(CodedInputStream input,
+    @Override
+    public Object parseMessage(
+        CodedInputStream input,
         ExtensionRegistryLite extensionRegistry,
-        Descriptors.FieldDescriptor field, Message defaultInstance)
+        Descriptors.FieldDescriptor field,
+        Message defaultInstance)
         throws IOException {
       Message.Builder subBuilder;
       // When default instance is not null. The field is an extension field.
@@ -483,9 +496,12 @@ class MessageReflection {
       return subBuilder.buildPartial();
     }
 
-    public Object parseMessageFromBytes(ByteString bytes,
+    @Override
+    public Object parseMessageFromBytes(
+        ByteString bytes,
         ExtensionRegistryLite extensionRegistry,
-        Descriptors.FieldDescriptor field, Message defaultInstance)
+        Descriptors.FieldDescriptor field,
+        Message defaultInstance)
         throws IOException {
       Message.Builder subBuilder;
       // When default instance is not null. The field is an extension field.
@@ -504,8 +520,9 @@ class MessageReflection {
       return subBuilder.buildPartial();
     }
 
-    public MergeTarget newMergeTargetForField(Descriptors.FieldDescriptor field,
-        Message defaultInstance) {
+    @Override
+    public MergeTarget newMergeTargetForField(
+        Descriptors.FieldDescriptor field, Message defaultInstance) {
       if (defaultInstance != null) {
         return new BuilderAdapter(
             defaultInstance.newBuilderForType());
@@ -513,13 +530,21 @@ class MessageReflection {
         return new BuilderAdapter(builder.newBuilderForField(field));
       }
     }
-    
-    public Object readPrimitiveField(
-        CodedInputStream input, WireFormat.FieldType type,
-        boolean checkUtf8) throws IOException {
-      return FieldSet.readPrimitiveField(input, type, checkUtf8);
+
+    @Override
+    public WireFormat.Utf8Validation getUtf8Validation(Descriptors.FieldDescriptor descriptor) {
+      if (descriptor.needsUtf8Check()) {
+        return WireFormat.Utf8Validation.STRICT;
+      }
+      // TODO(liujisi): support lazy strings for repeated fields.
+      if (!descriptor.isRepeated()
+          && builder instanceof GeneratedMessage.Builder) {
+        return WireFormat.Utf8Validation.LAZY;
+      }
+      return WireFormat.Utf8Validation.LOOSE;
     }
 
+    @Override
     public Object finish() {
       return builder.buildPartial();
     }
@@ -534,38 +559,43 @@ class MessageReflection {
       this.extensions = extensions;
     }
 
+    @Override
     public Descriptors.Descriptor getDescriptorForType() {
       throw new UnsupportedOperationException(
           "getDescriptorForType() called on FieldSet object");
     }
 
+    @Override
     public Object getField(Descriptors.FieldDescriptor field) {
       return extensions.getField(field);
     }
 
+    @Override
     public boolean hasField(Descriptors.FieldDescriptor field) {
       return extensions.hasField(field);
     }
 
-    public MergeTarget setField(Descriptors.FieldDescriptor field,
-        Object value) {
+    @Override
+    public MergeTarget setField(Descriptors.FieldDescriptor field, Object value) {
       extensions.setField(field, value);
       return this;
     }
 
+    @Override
     public MergeTarget clearField(Descriptors.FieldDescriptor field) {
       extensions.clearField(field);
       return this;
     }
 
+    @Override
     public MergeTarget setRepeatedField(
         Descriptors.FieldDescriptor field, int index, Object value) {
       extensions.setRepeatedField(field, index, value);
       return this;
     }
 
-    public MergeTarget addRepeatedField(
-        Descriptors.FieldDescriptor field, Object value) {
+    @Override
+    public MergeTarget addRepeatedField(Descriptors.FieldDescriptor field, Object value) {
       extensions.addRepeatedField(field, value);
       return this;
     }
@@ -586,25 +616,31 @@ class MessageReflection {
       return null;
     }
 
+    @Override
     public ContainerType getContainerType() {
       return ContainerType.EXTENSION_SET;
     }
 
+    @Override
     public ExtensionRegistry.ExtensionInfo findExtensionByName(
         ExtensionRegistry registry, String name) {
       return registry.findImmutableExtensionByName(name);
     }
 
+    @Override
     public ExtensionRegistry.ExtensionInfo findExtensionByNumber(
-        ExtensionRegistry registry, Descriptors.Descriptor containingType,
-        int fieldNumber) {
+        ExtensionRegistry registry, Descriptors.Descriptor containingType, int fieldNumber) {
       return registry.findImmutableExtensionByNumber(containingType,
           fieldNumber);
     }
 
-    public Object parseGroup(CodedInputStream input,
-        ExtensionRegistryLite registry, Descriptors.FieldDescriptor field,
-        Message defaultInstance) throws IOException {
+    @Override
+    public Object parseGroup(
+        CodedInputStream input,
+        ExtensionRegistryLite registry,
+        Descriptors.FieldDescriptor field,
+        Message defaultInstance)
+        throws IOException {
       Message.Builder subBuilder =
           defaultInstance.newBuilderForType();
       if (!field.isRepeated()) {
@@ -617,9 +653,13 @@ class MessageReflection {
       return subBuilder.buildPartial();
     }
 
-    public Object parseMessage(CodedInputStream input,
-        ExtensionRegistryLite registry, Descriptors.FieldDescriptor field,
-        Message defaultInstance) throws IOException {
+    @Override
+    public Object parseMessage(
+        CodedInputStream input,
+        ExtensionRegistryLite registry,
+        Descriptors.FieldDescriptor field,
+        Message defaultInstance)
+        throws IOException {
       Message.Builder subBuilder =
           defaultInstance.newBuilderForType();
       if (!field.isRepeated()) {
@@ -632,9 +672,13 @@ class MessageReflection {
       return subBuilder.buildPartial();
     }
 
-    public Object parseMessageFromBytes(ByteString bytes,
-        ExtensionRegistryLite registry, Descriptors.FieldDescriptor field,
-        Message defaultInstance) throws IOException {
+    @Override
+    public Object parseMessageFromBytes(
+        ByteString bytes,
+        ExtensionRegistryLite registry,
+        Descriptors.FieldDescriptor field,
+        Message defaultInstance)
+        throws IOException {
       Message.Builder subBuilder =  defaultInstance.newBuilderForType();
       if (!field.isRepeated()) {
         Message originalMessage = (Message) getField(field);
@@ -646,18 +690,23 @@ class MessageReflection {
       return subBuilder.buildPartial();
     }
 
+    @Override
     public MergeTarget newMergeTargetForField(
         Descriptors.FieldDescriptor descriptor, Message defaultInstance) {
       throw new UnsupportedOperationException(
           "newMergeTargetForField() called on FieldSet object");
     }
-    
-    public Object readPrimitiveField(
-        CodedInputStream input, WireFormat.FieldType type,
-        boolean checkUtf8) throws IOException {
-      return FieldSet.readPrimitiveField(input, type, checkUtf8);
+
+    @Override
+    public WireFormat.Utf8Validation getUtf8Validation(Descriptors.FieldDescriptor descriptor) {
+      if (descriptor.needsUtf8Check()) {
+        return WireFormat.Utf8Validation.STRICT;
+      }
+      // TODO(liujisi): support lazy strings for ExtesnsionSet.
+      return WireFormat.Utf8Validation.LOOSE;
     }
 
+    @Override
     public Object finish() {
       throw new UnsupportedOperationException(
           "finish() called on FieldSet object");
@@ -752,18 +801,23 @@ class MessageReflection {
       if (field.getLiteType() == WireFormat.FieldType.ENUM) {
         while (input.getBytesUntilLimit() > 0) {
           final int rawValue = input.readEnum();
-          final Object value = field.getEnumType().findValueByNumber(rawValue);
-          if (value == null) {
-            // If the number isn't recognized as a valid value for this
-            // enum, drop it (don't even add it to unknownFields).
-            return true;
+          if (field.getFile().supportsUnknownEnumValue()) {
+            target.addRepeatedField(field,
+                field.getEnumType().findValueByNumberCreatingIfUnknown(rawValue));
+          } else {
+            final Object value = field.getEnumType().findValueByNumber(rawValue);
+            if (value == null) {
+              // If the number isn't recognized as a valid value for this
+              // enum, drop it (don't even add it to unknownFields).
+              return true;
+            }
+            target.addRepeatedField(field, value);
           }
-          target.addRepeatedField(field, value);
         }
       } else {
         while (input.getBytesUntilLimit() > 0) {
-          final Object value =
-              target.readPrimitiveField(input, field.getLiteType(), field.needsUtf8Check());
+          final Object value = WireFormat.readPrimitiveField(
+              input, field.getLiteType(), target.getUtf8Validation(field));
           target.addRepeatedField(field, value);
         }
       }
@@ -783,16 +837,21 @@ class MessageReflection {
         }
         case ENUM:
           final int rawValue = input.readEnum();
-          value = field.getEnumType().findValueByNumber(rawValue);
-          // If the number isn't recognized as a valid value for this enum,
-          // drop it.
-          if (value == null) {
-            unknownFields.mergeVarintField(fieldNumber, rawValue);
-            return true;
+          if (field.getFile().supportsUnknownEnumValue()) {
+            value = field.getEnumType().findValueByNumberCreatingIfUnknown(rawValue);
+          } else {
+            value = field.getEnumType().findValueByNumber(rawValue);
+            // If the number isn't recognized as a valid value for this enum,
+            // drop it.
+            if (value == null) {
+              unknownFields.mergeVarintField(fieldNumber, rawValue);
+              return true;
+            }
           }
           break;
         default:
-          value = target.readPrimitiveField(input, field.getLiteType(), field.needsUtf8Check());
+          value = WireFormat.readPrimitiveField(
+              input, field.getLiteType(), target.getUtf8Validation(field));
           break;
       }
 

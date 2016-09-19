@@ -37,9 +37,20 @@ import java.io.InputStream;
  *
  * The implementation should be stateless and thread-safe.
  *
+ * <p>All methods may throw {@link InvalidProtocolBufferException}. In the event of invalid data,
+ * like an encoding error, the cause of the thrown exception will be {@code null}. However, if an
+ * I/O problem occurs, an exception is thrown with an {@link java.io.IOException} cause.
+ *
  * @author liujisi@google.com (Pherl Liu)
  */
 public interface Parser<MessageType> {
+
+  // NB(jh): Other parts of the protobuf API that parse messages distinguish between an I/O problem
+  // (like failure reading bytes from a socket) and invalid data (encoding error) via the type of
+  // thrown exception. But it would be source-incompatible to make the methods in this interface do
+  // so since they were originally spec'ed to only throw InvalidProtocolBufferException. So callers
+  // must inspect the cause of the exception to distinguish these two cases.
+
   /**
    * Parses a message of {@code MessageType} from the input.
    *
@@ -227,8 +238,8 @@ public interface Parser<MessageType> {
    * {@link MessageLite#writeDelimitedTo(java.io.OutputStream)} to write
    * messages in this format.
    *
-   * @return True if successful, or false if the stream is at EOF when the
-   *         method starts. Any other error (including reaching EOF during
+   * @return Parsed message if successful, or null if the stream is at EOF when
+   *         the method starts. Any other error (including reaching EOF during
    *         parsing) will cause an exception to be thrown.
    */
   public MessageType parseDelimitedFrom(InputStream input)

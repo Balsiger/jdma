@@ -418,6 +418,12 @@ public class Condition extends Value.Arithmetic<Values.ConditionProto>
     return this;
   }
 
+  @Override
+  public Arithmetic<Values.ConditionProto> multiply(Rational inFactor)
+  {
+    return this;
+  }
+
   public static Condition fromProto(Values.ConditionProto inProto)
   {
     if(inProto.hasWeaponStyle())

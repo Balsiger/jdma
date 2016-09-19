@@ -173,11 +173,9 @@ edit.save = function(inKey, inID, inCreate)
   inKey = edit.unescape(inKey);
   inID = edit.unescape(inID);
 
-  window.console.log("save", inKey, inID, inCreate);
   var values = { '_key_': inKey };
   $('#' + inID + " :input").each(function ()
     {
-      console.log("name", this.name)
       if(this.name)
       {
         if(this.name in values)
@@ -207,7 +205,6 @@ edit.save = function(inKey, inID, inCreate)
   // close the dialog
   if(eval)
   {
-    window.console.log("save id", inID);
     $('#dialog-' + inID).dialog('close');
     $('#dialog-' + inID).dialog('destroy').remove();
 
@@ -219,7 +216,6 @@ edit.save = function(inKey, inID, inCreate)
 edit.moveItems = function(inList, inParent)
 {
   var names = edit.collectMoveItems(inList, inParent);
-  window.console.log("moving", names);
   var eval = util.ajax('/actions/move', { 'names': names }, null, true);
 };
 
@@ -270,14 +266,12 @@ edit.maybeInsertLine = function(inID, inEvent, inElement)
 
 edit.insertLine = function(inID, inElement)
 {
-  console.log("insert", inID, inElement)
   var element = $(inElement);
   var clone = element.clone(false);
   element.parent().append(clone);
   clone.find(":input").val("");
   clone.find(":input")[0].focus();
   clone.find("[name*='" + inID + "@']").each(function(inIndex, inElement) {
-    console.log("before", inElement.name);
     inElement.name =
       inElement.name.replace(new RegExp("(" + inID + "@\\d+)"), "$10");
   });

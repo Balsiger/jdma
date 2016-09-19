@@ -326,6 +326,13 @@
           {param color: '#008' /}
         {/call}
       {/if}
+      {if $entry.material.present}
+        {call dma.entry.value}
+          {param label: 'Material' /}
+          {param value: $entry.material /}
+          {param color: '#008' /}
+        {/call}
+      {/if}
       {call dma.entry.value}
         {param label: 'References' /}
         {param value kind="html"}
@@ -502,7 +509,7 @@
           {/call}
           {call dma.edit.field_input}
             {param name: 'thickness' /}
-            {param value: 
+            {param value:
               $entry.thickness.present ? $entry.thickness : '' /}
             {param validate: 'distance' /}
             {param caption: 'thickness' /}
@@ -514,14 +521,14 @@
             {param validate: 'number' /}
             {param caption: 'hardness' /}
             {param class: 'narrow' /}
-          {/call}    
+          {/call}
           {call dma.edit.field_input}
             {param name: 'break' /}
             {param value: $entry.break_DC.present ? $entry.break_DC.get : '' /}
             {param validate: 'number' /}
             {param caption: 'break dc' /}
             {param class: 'narrow' /}
-          {/call}    
+          {/call}
         {/param}
       {/call}
       {call dma.edit.value_selection}
@@ -710,7 +717,7 @@
       {/call}
       {call dma.edit.generic_value}
         {param color: '#008' /}
-        {param label: 'Weappon' /}
+        {param label: 'Weapon' /}
         {param value kind="html"}
           {call dma.edit.field_selection}
             {param name: 'weapon.type' /}
@@ -1030,6 +1037,42 @@
                 {/call}
               {/foreach}
             {/param}
+          {/call}
+        {/param}
+      {/call}
+      {call dma.edit.generic_value}
+        {param label: 'Material' /}
+        {param color: '#008' /}
+        {param value kind="html"}
+          {call dma.edit.field_input}
+            {param name: 'material.value' /}
+            {param value:
+              $entry.material.present ? $entry.material.get.value : '' /}
+            {param validate: 'money' /}
+            {param caption: 'value' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_selection}
+            {param name: 'material.value_type' /}
+            {param value: $entry.material.get.value_type.get_name /}
+            {param choices: $ij.MaterialValueType.names /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'material.hp_per_inch' /}
+            {param value: $entry.material.present
+                ? $entry.material.get.hp_per_inch : ''/}
+            {param validate: 'number' /}
+            {param caption: 'hp per inch' /}
+            {param class: 'narrow' /}
+          {/call}
+          {call dma.edit.field_input}
+            {param name: 'material.weight_multiplier' /}
+            {param value: $entry.material.present
+                ? $entry.material.get.weight_multiplier : ''/}
+            {param validate: 'rational' /}
+            {param caption: 'weight multiplier' /}
+            {param class: 'narrow' /}
           {/call}
         {/param}
       {/call}

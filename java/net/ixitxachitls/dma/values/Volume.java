@@ -573,6 +573,23 @@ public class Volume extends Value.Arithmetic<VolumeProto>
   }
 
   @Override
+  public Arithmetic<VolumeProto> multiply(Rational inFactor)
+  {
+    return new Volume(multiply(m_feet, inFactor),
+                      multiply(m_inches, inFactor),
+                      multiply(m_meters, inFactor),
+                      multiply(m_decimeters, inFactor),
+                      multiply(m_centimeters, inFactor),
+                      multiply(m_gallons, inFactor),
+                      multiply(m_quarts, inFactor),
+                      multiply(m_pints, inFactor),
+                      multiply(m_cups, inFactor),
+                      multiply(m_liters, inFactor),
+                      multiply(m_deciliters, inFactor),
+                      multiply(m_centiliters, inFactor));
+  }
+
+  @Override
   public boolean canAdd(Value.Arithmetic<VolumeProto> inValue)
   {
     return inValue instanceof Volume;
