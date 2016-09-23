@@ -282,8 +282,8 @@ public class Values
     Optional<T> value = inParser.parse(values.get(0));
     if(!value.isPresent())
     {
-      m_messages.add("Cannot properly parse " + inKey + " '"
-                     + Arrays.toString(values.get(0)) + "'");
+      m_messages.add("Cannot properly parse " + inKey + " "
+                     + Arrays.toString(values.get(0)));
       return inDefault;
     }
 
@@ -327,8 +327,8 @@ public class Values
     Optional<T> value = inParser.parse(values.get(0));
     if(!value.isPresent())
     {
-      m_messages.add("Cannot properly parse " + inKey + " '"
-                     + Arrays.toString(values.get(0)) + "'");
+      m_messages.add("Cannot properly parse " + inKey + " "
+                     + Arrays.toString(values.get(0)));
       return inDefault;
     }
 

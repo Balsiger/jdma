@@ -183,13 +183,37 @@ public class BaseItem extends BaseEntry
       {
         try
         {
-          Optional<Money> value = Money.PARSER.parse(inValue);
-          Optional<ValueType> valueType = ValueType.fromString(inValueType);
-          int hpPerInch = Integer.parseInt(inHpPerInch);
-          Optional<Rational> weightMultiplier =
-              Rational.PARSER.parse(inWeightMultiplier);
-          Optional<Rational> hpMultiplier =
-              Rational.PARSER.parse(inHPMultiplier);
+          Optional<Money> value;
+          Optional<ValueType> valueType;
+          if(inValue.isEmpty())
+          {
+            value = Optional.of(Money.ZERO);
+            valueType = Optional.of(ValueType.UNKNOWN);
+          }
+          else
+          {
+            value = Money.PARSER.parse(inValue);
+            valueType = ValueType.fromString(inValueType);
+          }
+
+          int hpPerInch;
+          if(inHpPerInch.isEmpty())
+            hpPerInch = 0;
+          else
+            hpPerInch = Integer.parseInt(inHpPerInch);
+
+          Optional<Rational> weightMultiplier;
+          if(inWeightMultiplier.isEmpty())
+            weightMultiplier = Optional.of(Rational.ONE);
+          else
+            weightMultiplier = Rational.PARSER.parse(inWeightMultiplier);
+
+
+          Optional<Rational> hpMultiplier;
+          if(inHPMultiplier.isEmpty())
+            hpMultiplier = Optional.of(Rational.ONE);
+          else
+            hpMultiplier = Rational.PARSER.parse(inHPMultiplier);
 
           if(value.isPresent() && valueType.isPresent()
               && weightMultiplier.isPresent() && hpMultiplier.isPresent())

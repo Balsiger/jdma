@@ -166,6 +166,8 @@ public class Money extends Value.Arithmetic<MoneyProto>
   /** The number of weapon + values. */
   private final int m_weapon;
 
+  public static final Money ZERO = new Money(0, 0, 0, 0, 0, 0);
+
   /**
    * Get the number of platinum pieces.
    *
