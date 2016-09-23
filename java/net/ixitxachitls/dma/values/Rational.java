@@ -317,9 +317,10 @@ public class Rational extends Value.Arithmetic<RationalProto>
     if(m_nominator == 0 || m_denominator == 0)
       return this;
 
-    int leader = m_leader + Math.abs(m_nominator) / Math.abs(m_denominator);
-    int nominator = m_nominator % m_denominator;
-    int denominator = m_denominator;
+    int leader =
+        Math.abs(m_leader) + Math.abs(m_nominator) / Math.abs(m_denominator);
+    int nominator = Math.abs(m_nominator) % Math.abs(m_denominator);
+    int denominator = Math.abs(m_denominator);
 
     int common = BigInteger.valueOf(nominator)
         .gcd(BigInteger.valueOf(m_denominator))
@@ -327,6 +328,22 @@ public class Rational extends Value.Arithmetic<RationalProto>
 
     nominator /= common;
     denominator /= common;
+
+    if(m_leader < 0)
+      if(leader == 0)
+        nominator *= -1;
+      else
+        leader *= -1;
+    if(m_nominator < 0)
+      if(leader == 0)
+        nominator *= -1;
+      else
+        leader *= -1;
+    if(m_denominator < 0)
+      if(leader == 0)
+        nominator *= -1;
+      else
+        leader *= -1;
 
     if(denominator == 1)
       return new Rational(leader + nominator, 0, 0);
@@ -399,6 +416,14 @@ public class Rational extends Value.Arithmetic<RationalProto>
                    new Rational(1, 7, 49).simplify().toString());
       assertEquals("simplify", "4",
                    new Rational(2, 26, 13).simplify().toString());
+      assertEquals("-simplify", "-21",
+                   new Rational(0, -42, 2).simplify().toString());
+      assertEquals("-simplify", "-21",
+                   new Rational(-20, 1, 1).simplify().toString());
+      assertEquals("-simplify", "-21",
+                   new Rational(-21, -0, 0).simplify().toString());
+      assertEquals("-simplify", "-21",
+                   new Rational(-1, -40, -2).simplify().toString());
     }
 
     /** Tests for addition. */

@@ -83,6 +83,7 @@ public class SoyTemplate
    */
   public SoyTemplate(String ... inFiles)
   {
+    m_injector = createInjector();
     m_files.addAll(Arrays.asList(inFiles));
   }
 
@@ -830,7 +831,7 @@ public class SoyTemplate
     Config.get("project.version", "Allip");
 
   /** The injector with our own plugins. */
-  private Injector m_injector = createInjector();
+  private Injector m_injector;
 
   /** The renderer for rendering commands. */
   public static final SoyRenderer COMMAND_RENDERER =

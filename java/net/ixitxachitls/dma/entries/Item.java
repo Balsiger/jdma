@@ -209,9 +209,17 @@ public class Item extends CampaignEntry
    */
   public Annotated<Optional<Integer>> getCombinedMaxHP()
   {
-    Annotated<Optional<Integer>> combined = new Annotated.Integer();
+    Annotated.Integer combined = new Annotated.Integer();
     for(BaseEntry entry : getBaseEntries())
       combined.add(((BaseItem) entry).getCombinedHP());
+
+    for(ValueSources.ValueSource<List<BaseItem.Material>> materials
+        : getCombinedMaterials().getSources().getSources())
+      for(BaseItem.Material material : materials.getValue())
+        if(!material.getHpMultiplier().isOne()
+            && !material.getHpMultiplier().isZero())
+          combined.multiply(material.getHpMultiplier(),
+                            materials.getSource());
 
     return combined;
   }

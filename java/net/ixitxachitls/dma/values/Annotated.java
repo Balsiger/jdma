@@ -405,6 +405,31 @@ public abstract class Annotated<V>
     {
       return m_value;
     }
+
+    public void multiply(int inValue, java.lang.String inSource)
+    {
+      Optional<java.lang.Integer> value = get();
+      if(value.isPresent())
+      {
+        value = Optional.of(value.get() * (inValue - 1));
+        add(value);
+      }
+
+      super.add(value, inSource);
+    }
+
+    public void multiply(Rational inValue, java.lang.String inSource)
+    {
+      Optional<java.lang.Integer> value = get();
+      if(value.isPresent())
+      {
+        value = Optional.of((int)
+            ((Rational)inValue.subtract(1).multiply(value.get())).asDouble());
+        add(value);
+      }
+
+      super.add(value, inSource);
+    }
   }
 
   /** An annotaged integer value with limits. */

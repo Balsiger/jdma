@@ -236,6 +236,7 @@ public class BaseItem extends BaseEntry
           .setValueType(m_valueType.toProto())
           .setHpPerInch(m_hpPerInch)
           .setWeightMultiplier(m_weightMultiplier.toProto())
+          .setHpMultiplier(m_hpMultiplier.toProto())
           .build();
     }
 
@@ -252,7 +253,8 @@ public class BaseItem extends BaseEntry
     public String toString()
     {
       return m_value + " " + m_valueType.getName() + ", " + m_hpPerInch
-          + " hp per inch, " + m_weightMultiplier + " weight";
+          + " hp per inch, " + m_weightMultiplier + " weight, "
+          + m_hpMultiplier + " hp";
     }
   }
 
@@ -2578,7 +2580,7 @@ public class BaseItem extends BaseEntry
                              "type", "multiple", "items");
     m_material = inValues.use("material", m_material, Material.PARSER,
                               "value", "value_type", "hp_per_inch",
-                              "weight_multiplier");
+                              "weight_multiplier", "hp_multiplier");
   }
 
   /**

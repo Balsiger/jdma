@@ -1074,6 +1074,14 @@
             {param caption: 'weight multiplier' /}
             {param class: 'narrow' /}
           {/call}
+          {call dma.edit.field_input}
+            {param name: 'material.hp_multiplier' /}
+            {param value: $entry.material.present
+                ? $entry.material.get.hp_multiplier : ''/}
+            {param validate: 'rational' /}
+            {param caption: 'hp multiplier' /}
+            {param class: 'narrow' /}
+          {/call}
         {/param}
       {/call}
       {call dma.edit.generic_value}
