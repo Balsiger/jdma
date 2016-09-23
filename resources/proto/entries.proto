@@ -694,8 +694,8 @@ message BaseItemProto
       ADAMANTINE = 14;
       BONE = 15;
     }
-    required Material material = 1;
-    required DistanceProto thickness = 2;
+    optional Material material = 1;
+    optional DistanceProto thickness = 2;
   }
   optional Substance substance = 9;
   optional int32 break_dc = 10;
