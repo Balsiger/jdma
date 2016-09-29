@@ -94,18 +94,21 @@ public class Volume extends Value.Arithmetic<VolumeProto>
         switch(part[1].toLowerCase())
         {
           case "cu ft":
+          case "cu feet":
           case "cubic foot":
           case "cubic feet":
             feet = add(feet, number);
             break;
 
           case "cu in":
+          case "cu inch":
           case "cubic inch":
           case "cubic inches":
             inches = add(inches, number);
             break;
 
           case "cu m":
+          case "cu meter":
           case "cubic meter":
           case "cubic meters":
             meters = add(meters, number);
@@ -118,6 +121,7 @@ public class Volume extends Value.Arithmetic<VolumeProto>
             break;
 
           case "cu cm":
+          case "cu centimeter":
           case "cubic centimeter":
           case "cubic centimeters":
             centimeters = add(centimeters, number);
