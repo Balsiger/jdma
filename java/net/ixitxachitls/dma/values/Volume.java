@@ -50,22 +50,22 @@ public class Volume extends Value.Arithmetic<VolumeProto>
       if(inValue.trim().isEmpty())
         return Optional.absent();
 
-      List<String []>parts =
-        Strings.getAllPatterns(inValue,
-                               "^(?:\\s*(.*?)"
-                                 + "\\s*(cu ft|cubit foot|cubit feet"
-                                 + "|cu in|cubic inch|cubic inches"
-                                 + "|cu m|cubic meter|cubic meters"
-                                 + "|cu dm|cubic decimeter|cubic decimeters"
-                                 + "|cu cm|cubic centimeter|cubic centimeter"
-                                 + "|gallon|gallons"
-                                 + "|quart|quart"
-                                 + "|pint|pints"
-                                 + "|cup|cups"
-                                 + "|ounce|ounces|oz"
-                                 + "|liter|liters"
-                                 + "|deciliter|deciliters"
-                                 + "|centiliter|centiliters))\\s*$");
+      List<String []>parts = Strings.getAllPatterns(
+          inValue,
+          "^(?:\\s*(.*?)"
+              + "\\s*(cu ft|cu feet|cubit foot|cubit feet"
+              + "|cu in|cu inch|cubic inch|cubic inches"
+              + "|cu m|cu meter|cubic meter|cubic meters"
+              + "|cu dm|cu decimeter|cubic decimeter|cubic decimeters"
+              + "|cu cm|cu centimeter|cubic centimeter|cubic centimeter"
+              + "|gallon|gallons"
+              + "|quart|quart"
+              + "|pint|pints"
+              + "|cup|cups"
+              + "|ounce|ounces|oz"
+              + "|liter|liters"
+              + "|deciliter|deciliters"
+              + "|centiliter|centiliters))\\s*$");
       if(parts.isEmpty())
         return Optional.absent();
 
