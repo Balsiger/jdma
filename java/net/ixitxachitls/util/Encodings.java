@@ -368,8 +368,10 @@ public final class Encodings
    */
   public static String escapeJS(String inText)
   {
-    return inText.replaceAll("'", "\\'").replaceAll("\"", "\\\"")
-      .replaceAll("\n", "\\\\n");
+    return inText
+        .replaceAll("(?<!\\\\)'", "\\\\'")
+        .replaceAll("(?<!\\\\)\"", "\\\\\"")
+        .replaceAll("\n", "\\\\n");
   }
 
   //........................................................................
