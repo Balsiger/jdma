@@ -357,7 +357,6 @@ public final class Encodings
   }
 
   //........................................................................
-  //------------------------------- escapeJS -------------------------------
 
   /**
    * Escape characters in the given text to make it save to include in a
@@ -366,15 +365,12 @@ public final class Encodings
    * @param    inText the text to escape
    *
    * @return   the escaped text
-   *
    */
   public static String escapeJS(String inText)
   {
-    return inText.replaceAll("'", "\\\\'").replaceAll("\"", "\\\\\"")
+    return inText.replaceAll("'", "\\'").replaceAll("\"", "\\\"")
       .replaceAll("\n", "\\\\n");
   }
-
-  //........................................................................
 
   //........................................................................
 
