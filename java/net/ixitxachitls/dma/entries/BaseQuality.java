@@ -126,6 +126,8 @@ public class BaseQuality extends BaseEntry
   /** The bonus feats (or-ed). */
   private List<String> m_bonusFeats = new ArrayList<>();
 
+  private Optional<String> m_nameFormat = Optional.absent();
+
   /**
    * Get the type of the quality.
    *
@@ -236,6 +238,11 @@ public class BaseQuality extends BaseEntry
     return Collections.unmodifiableList(m_bonusFeats);
   }
 
+  public Optional<String> getNameFormat()
+  {
+    return m_nameFormat;
+  }
+
   @Deprecated
   public List<Effect> getEffects()
   {
@@ -270,6 +277,7 @@ public class BaseQuality extends BaseEntry
     m_damageModifier = inValues.use("damage_modifier", m_damageModifier,
                                     Modifier.PARSER);
     m_bonusFeats = inValues.use("bonus_feat", m_bonusFeats);
+    m_nameFormat = inValues.use("name_format", m_nameFormat);
 
     m_effects = inValues.use("effect", m_effects, Effect.PARSER,
                              "affects", "name", "modifier", "text");
@@ -479,6 +487,9 @@ public class BaseQuality extends BaseEntry
     for(String feat : m_bonusFeats)
       builder.addBonusFeat(feat);
 
+    if(m_nameFormat.isPresent())
+      builder.setNameFormat(m_nameFormat.get());
+
     BaseQualityProto proto = builder.build();
     return proto;
   }
@@ -560,6 +571,9 @@ public class BaseQuality extends BaseEntry
 
     for(String feat : proto.getBonusFeatList())
       m_bonusFeats.add(feat);
+
+    if(proto.hasNameFormat())
+      m_nameFormat = Optional.of(proto.getNameFormat());
   }
 
   @Override

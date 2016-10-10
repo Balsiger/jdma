@@ -111,6 +111,24 @@ public class Quality extends NestedEntry
     return Collections.unmodifiableMap(m_parameters);
   }
 
+  public Map<String, String> getNonFormattedParameters()
+  {
+    if(!getBase().isPresent())
+      return getParameters();
+
+    BaseQuality base = getBase().get();
+    if(!base.getNameFormat().isPresent())
+      return getParameters();
+
+    String format = base.getNameFormat().get();
+    Map<String, String> parameters = new HashMap<>();
+    for(Map.Entry<String, String> entry : m_parameters.entrySet())
+      if(!format.contains("$" + entry.getKey()))
+        parameters.put(entry.getKey(), entry.getValue());
+
+    return parameters;
+  }
+
   public String baseName()
   {
     if(getBase().isPresent())
@@ -122,7 +140,7 @@ public class Quality extends NestedEntry
   public String getShortDescription()
   {
     if(getBase().isPresent())
-      return getBase().get().getShortDescription();
+      return parametrizeText(getBase().get().getShortDescription());
 
     return "";
   }
@@ -384,5 +402,18 @@ public class Quality extends NestedEntry
       text = text.replace("$" + entry.getKey(), entry.getValue());
 
     return text;
+  }
+
+  public String getFormattedName()
+  {
+    if(!getBase().isPresent())
+      return getName();
+
+    BaseQuality base = getBase().get();
+    if(!base.getNameFormat().isPresent())
+      return base.getName();
+
+    return parametrizeText(
+        base.getNameFormat().get().replaceAll("<name>", base.getName()));
   }
 }

@@ -229,6 +229,13 @@
           {param color: '#808' /}
         {/call}
       {/if}
+      {if $entry.name_format.present}
+        {call dma.entry.value}
+          {param label: 'Name Format' /}
+          {param value: $entry.name_format /}
+          {param color: '#808' /}
+        {/call}
+      {/if}
       {call dma.entry.value}
         {param label: 'References' /}
         {param value: annotate($entry.combined_references) /}
@@ -638,6 +645,14 @@
         {param autocomplete: 'base feat/name' /}
         {param color: '#808' /}
       {/call}    
+      {call dma.edit.value}
+        {param name: 'name_format' /}
+        {param label: 'Name Format' /}
+        {param value: $entry.name_format.present
+          ? $entry.name_format : '' /}
+        {param validate: 'any' /}
+        {param color: '#808' /}
+      {/call}
       {call dma.edit.generic_value}
         {param name: 'references' /}
         {param color: '#808' /}

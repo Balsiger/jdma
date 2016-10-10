@@ -290,19 +290,19 @@
   {@param entry: ?}
   {call dma.value.link}
     {param text kind="html"}
-      <i>{$entry.base_name}</i>
+      <i>{$entry.formatted_name}</i>
     {/param}
     {param url: '/quality/' + $entry.base_name /}
   {/call}
   , {$entry.short_description}
-  {if length(keys($entry.parameters)) > 0}
+  {if length(keys($entry.non_formatted_parameters)) > 0}
     {sp}(
-    {if length(keys($entry.parameters)) == 1}
-      {foreach $key in keys($entry.parameters)}
+    {if length(keys($entry.non_formatted_parameters)) == 1}
+      {foreach $key in keys($entry.non_formatted_parameters)}
         {$entry.parameters[$key]}
       {/foreach}
     {else}
-      {foreach $key in keys($entry.parameters)}
+      {foreach $key in keys($entry.non_formatted_parameters)}
         {$key}: {$entry.parameters[$key]}
       {/foreach}
     {/if}

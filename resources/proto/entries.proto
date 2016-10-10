@@ -528,6 +528,7 @@ message BaseQualityProto
   optional ModifierProto attack_modifier = 13;
   optional ModifierProto damage_modifier = 14;
   repeated string bonus_feat = 15;
+  optional string name_format = 16;
 }
 
 message BaseFeatProto
