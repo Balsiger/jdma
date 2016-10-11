@@ -36,6 +36,7 @@ import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.values.AbilityModifier;
 import net.ixitxachitls.dma.values.Condition;
+import net.ixitxachitls.dma.values.Evaluator;
 import net.ixitxachitls.dma.values.ExpressionValue;
 import net.ixitxachitls.dma.values.KeyedModifier;
 import net.ixitxachitls.dma.values.Modifier;
@@ -397,11 +398,8 @@ public class Quality extends NestedEntry
   }
 
   private String parametrizeText(String inText) {
-    String text = inText;
-    for(Map.Entry<String, String> entry : m_parameters.entrySet())
-      text = text.replace("$" + entry.getKey(), entry.getValue());
-
-    return text;
+    Evaluator evaluator = new Evaluator(m_parameters);
+    return evaluator.evaluate(inText);
   }
 
   public String getFormattedName()

@@ -38,24 +38,20 @@ import net.ixitxachitls.util.logging.Log;
  */
 public class Evaluator
 {
-  public Evaluator(Map<String, Object> inValues)
+  public Evaluator(Map<String, ?> inValues)
   {
     m_values = inValues;
   }
 
-  /**
-   * The pattern to replace values in expressions.
-   */
-  protected static final Pattern PATTERN_VAR =
+  /** The pattern to replace values in expressions. */
+  private static final Pattern PATTERN_VAR =
       Pattern.compile("\\$(\\w+)");
 
-  /**
-   * The pattern for expressions.
-   */
+  /** The pattern for expressions. */
   protected static final Pattern PATTERN_EXPR =
       Pattern.compile("\\[\\[(.*?)\\]\\]");
 
-  private final Map<String, Object> m_values;
+  private final Map<String, ?> m_values;
 
   public String evaluate(String inText)
   {
@@ -109,7 +105,7 @@ public class Evaluator
     StringTokenizer tokens =
         new StringTokenizer(expression, "()+-*/,^", true);
 
-    return evaluateExpression(expression, tokens);
+    return evaluateExpression(expression, tokens).replaceAll("_", " ");
   }
 
   private String evaluateExpression(String inExpression,
@@ -328,12 +324,15 @@ public class Evaluator
       {
         case "(":
           value = evaluateExpression(inExpression, inTokens);
+          break;
 
         case "-":
           value = "-" + evaluateExpression(inExpression, inTokens);
+          break;
 
         case "+":
           value = "+" + evaluateExpression(inExpression, inTokens);
+          break;
 
         default:
           value = inToken;
