@@ -290,14 +290,14 @@
   {@param entry: ?}
   {call dma.value.link}
     {param text kind="html"}
-      <span class="windowed">
+      <div class="windowed">
         <i>{commands($entry.formatted_name)}</i>
         <div class="window">
           <div><b>{commands($entry.formatted_name)}</b></div>
           <p>{commands($entry.short_description)}</p>
           {commands($entry.description)}
         </div>
-      </span>
+      </div>
     {/param}
     {param url: '/quality/' + $entry.base_name /}
   {/call}

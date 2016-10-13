@@ -974,7 +974,7 @@
   {if $url}
     <a href="{$url}" class="navigation-link{if $class} {$class}{/if}"
       {if $tooltip} title="{$tooltip}"{/if}
-        onclick="util.link(event, '{$url}')">
+       {sp}onclick="util.link(event, '{$url}')">
       {if $text}{$text}{else}{$url}{/if}
     </a>
   {elseif $js}

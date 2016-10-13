@@ -1939,12 +1939,13 @@ A.icon-link:hover {
  *****************************************************************************/
 
 /* windows that are activated by mouse-over */
-SPAN.windowed
+.windowed
 {
   position: relative;
+  display: inline-block;
 }
 
-SPAN.windowed:hover .window
+.windowed:hover .window
 {
   display: block;
 }
@@ -1952,6 +1953,7 @@ SPAN.windowed:hover .window
 .window
 {
   display:      none;
+  width:        60vw;
   position:     absolute;
   top:          100%;
   background:   #eee;
@@ -1960,8 +1962,7 @@ SPAN.windowed:hover .window
   padding:      5px 10px;
   color:        #221;
   font-weight:  normal;
-  font-size:    x-small;
-  white-space:  nowrap;
+  font-size:    small;
   box-shadow:   0 1px 3px #777;
 }
 
