@@ -1193,12 +1193,14 @@
                   {param values: [[
                     'name': 'possession.count',
                     'value': $possession.count.string,
-                    'validate': 'dice'
+                    'validate': 'dice',
+                    'caption': 'count'
                   ], [
                     'name': 'possession.name',
                     'value': $possession.name,
                     'validate': 'non-empty',
-                    'autocomplete': 'base item/name'
+                    'autocomplete': 'base item/name',
+                    'caption': 'item'
                   ]] /}
                 {/call}
               {ifempty}

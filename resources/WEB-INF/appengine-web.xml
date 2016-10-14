@@ -14,6 +14,8 @@
     <property name="appengine.api.urlfetch.defaultDeadline" value="30"/>
   </system-properties>
 
+  <async-session-persistence enabled="true" />
+
   <static-error-handlers>
     <handler file="static/quota.htm" error-code="over_quota" />
   </static-error-handlers>

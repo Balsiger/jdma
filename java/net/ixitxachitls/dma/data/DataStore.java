@@ -109,6 +109,10 @@ public class DataStore
   private static Expiration s_expiration =
       Expiration.byDeltaSeconds(60 * 60 * 24);
 
+  /** The expiration time in the cache for entities not found. */
+  private static Expiration s_notFoundExpiration =
+      Expiration.byDeltaSeconds(60);
+
   /** Long expiration time for the cache. */
   private static Expiration s_longExpiration =
     Expiration.byDeltaSeconds(60 * 60 * 24 * 7);
@@ -127,11 +131,13 @@ public class DataStore
   public Optional<Entity> getEntity(Key inKey)
   {
     Tracer tracer = new Tracer("getting entity " + inKey);
-    Entity entity = DMAServlet.isDev()
-        ? null : (Entity)s_cacheEntity.get(inKey);
 
-    if(entity == null)
+    Entity entity = null;
+    if(s_cacheEntity.contains(inKey))
     {
+      entity = (Entity)s_cacheEntity.get(inKey);
+      tracer.done("cached");
+    } else {
       try
       {
         Log.important("gae: getting entity for " + inKey);
@@ -139,17 +145,16 @@ public class DataStore
         if(!DMAServlet.isDev())
           s_cacheEntity.put(inKey, entity, s_expiration);
         tracer.done("uncached");
-      }
-      catch(com.google.appengine.api.datastore.EntityNotFoundException e)
+      } catch(com.google.appengine.api.datastore.EntityNotFoundException e)
       {
         Log.warning("could not get entity for " + inKey + ": " + e);
 
         tracer.done("not found");
+        s_cacheEntity.put(inKey, null, s_notFoundExpiration);
+
         return Optional.absent();
       }
     }
-    else
-      tracer.done("cached");
 
     return Optional.fromNullable(entity);
   }
@@ -158,11 +163,14 @@ public class DataStore
   {
     Tracer tracer =
         new Tracer("getting entity by synonym " + inSynonym + "/" + inType);
-    Entity entity = DMAServlet.isDev()
-        ? null : (Entity)s_cacheEntity.get(inSynonym + "/" + inType);
 
-    if(entity == null)
+    String key = inSynonym + "/" + inType;
+    Entity entity = null;
+    if(s_cacheEntity.contains(key))
     {
+      entity = (Entity)s_cacheEntity.get(inSynonym + "/" + inType);
+      tracer.done("cached");
+    } else {
       Log.important("gae: getting entity by synonym for "
                         + inSynonym + "/" + inType);
       Query query = new Query(inType);
@@ -172,12 +180,9 @@ public class DataStore
           inSynonym.toLowerCase()));
       entity = m_store.prepare(query).asSingleEntity();
 
-      if(!DMAServlet.isDev())
-        s_cacheEntity.put(inSynonym + "/" + inType, entity, s_expiration);
+      s_cacheEntity.put(inSynonym + "/" + inType, entity, s_expiration);
       tracer.done("uncached");
     }
-    else
-      tracer.done("cached");
 
     return Optional.fromNullable(entity);
   }

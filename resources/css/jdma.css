@@ -1953,7 +1953,7 @@ A.icon-link:hover {
 .window
 {
   display:      none;
-  width:        60vw;
+  width:        300px;
   position:     absolute;
   top:          100%;
   background:   #eee;
