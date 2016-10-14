@@ -528,7 +528,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
 
       if(m_type.stacks())
         return new Modifier(m_modifier + value.m_modifier, m_condition,
-                            Optional.<Modifier>absent(), m_type);
+                            next, m_type);
       else
         return new Modifier(Math.max(m_modifier, value.m_modifier),
                             m_condition, next, m_type);
