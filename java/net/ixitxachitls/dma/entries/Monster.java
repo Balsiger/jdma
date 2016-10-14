@@ -4649,6 +4649,8 @@ public class Monster extends CampaignEntry
 
     // setup items from base monster possessions
     m_createPossessionsOnSave = true;
+
+    changed();
   }
 
   private int randomHp()

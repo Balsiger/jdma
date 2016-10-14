@@ -760,7 +760,7 @@ public class BaseMonster extends BaseEntry
         return new Dice.List(m_hitDice.get())
             .addPerDice(Monsters.abilityModifier(constitution.get()));
       else
-      return new Dice.List(m_hitDice.get());
+        return new Dice.List(m_hitDice.get());
 
     Dice.List die = new Dice.List();
     for (BaseEntry base : getBaseEntries())
