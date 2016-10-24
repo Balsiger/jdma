@@ -751,6 +751,14 @@ public class BaseMonster extends BaseEntry
     return m_hitDice;
   }
 
+  /*
+  public Annotated<Dice> getCombinedHitDice()
+  {
+    if(m_hitDice.isPresent())
+      return new Annotated.
+  }
+  */
+
   public Dice.List totalHitDie()
   {
     Optional<Integer> constitution = getCombinedConstitution().get();
@@ -848,7 +856,7 @@ public class BaseMonster extends BaseEntry
     for(MovementMode mode : MovementMode.values())
     {
       Optional<Annotated.Arithmetic<Speed>> speed =
-        getSpeedAnnotated(mode);
+          getSpeedAnnotated(mode);
       if(speed.isPresent())
         speeds.add(speed.get());
     }

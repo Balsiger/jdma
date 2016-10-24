@@ -64,322 +64,44 @@
         {param color: '#080' /}
       {/call}
     {/param}
-    {param values kind="html"}
+    {param stats kind="html"}
+      {call .size_and_type}{param entry: $entry /}{/call}
+      {call .hit_die}{param entry: $entry /}{/call}
+      {call .initiative}{param entry: $entry /}{/call}
+      {call .speed}{param entry: $entry /}{/call}
+      {call .armor_class}{param entry: $entry /}{/call}
+      {call .base_attack_grapple}{param entry: $entry /}{/call}
+      {call .attack}{param entry: $entry /}{/call}
+      {call .full_attack}{param entry: $entry /}{/call}
+      {call .space_reach}{param entry: $entry /}{/call}
+      {call .qualities}{param entry: $entry /}{/call}
+      {call .saves}{param entry: $entry /}{/call}
+      {call .abilities}{param entry: $entry /}{/call}
+      {call .skills}{param entry: $entry /}{/call}
+      {call .feats}{param entry: $entry /}{/call}
+      {call .proficiencies}{param entry: $entry /}{/call}
+      {call .languages}{param entry: $entry /}{/call}
+      {call .environment}{param entry: $entry /}{/call}
+      {call .organization}{param entry: $entry /}{/call}
+      {call .challenge_rating}{param entry: $entry /}{/call}
+      {call .treasure}{param entry: $entry /}{/call}
+      {call .possessions}{param entry: $entry /}{/call}
+      {call .alignment}{param entry: $entry /}{/call}
+      {call .advancement}{param entry: $entry /}{/call}
+      {call .level_adjustment}{param entry: $entry /}{/call}
+      {call .synonyms}{param entry: $entry /}{/call}
+      {call .categories}{param entry: $entry /}{/call}
+      {call .worlds}{param entry: $entry /}{/call}
+      {call .incomplete}{param entry: $entry /}{/call}
+      {call .reference}{param entry: $entry /}{/call}
 
-       <div class="stats">
-
-         // size and type
-         <div class="line bold">
-           {annotate($entry.combined_size)}{sp}
-           {annotate($entry.combined_monster_type)}{sp}
-           {if length($entry.combined_monster_subtypes.get) > 0}
-             ({foreach $type in $entry.combined_monster_subtypes.get}
-               {$type}{if not isLast($type)}, {/if}
-             {/foreach})
-           {/if}
-         </div>
-
-         // hit dice
-         <div class="line">
-           <span class="bold">Hit Dice:</span>{sp}
-           {$entry.total_hit_die}
-         </div>
-
-         // initiative
-         <div class="line">
-           <span class="bold">Initiative:</span>{sp}
-           {bonus($entry.initiative)}
-         </div>
-
-         // speed
-         <div class="line">
-           <span class="bold">Speed:</span>{sp}
-             {foreach $speed in $entry.combined_speeds}
-               {annotate($speed)} ({$speed.get.squares} squares)
-               {if not isLast($speed)}, {/if}
-             {/foreach}
-         </div>
-
-         // Armor class
-         <div class="line">
-           <span class="bold">Armor Class:</span>{sp}
-           {$entry.armor_class.total_modifier} ({$entry.armor_class}),
-           touch {$entry.armor_class_touch.total_modifier},
-           flat-footed {$entry.armor_class_flatfooted.total_modifier}
-         </div>
-
-         // base attack/grapple
-         <div class="line">
-           <span class="bold">Base Attack/Grapple:</span>{sp}
-           {bonus($entry.combined_base_attack.get)}/
-           {bonus($entry.grapple_bonus)}
-         </div>
-
-         // attack
-         <div class="line">
-           <span class="bold">Attack:</span>{sp}
-           {if length($entry.combined_primary_attacks.get) > 0}
-             {call .attacks}
-               {param entry: $entry /}
-               {param attacks: $entry.combined_primary_attacks.get /}
-             {/call}
-           {else}
-             {call .attacks}
-               {param entry: $entry /}
-               {param attacks: $entry.combined_secondary_attacks.get /}
-               {param secondary: true /}
-             {/call}
-           {/if}
-         </div>
-
-         // full attack
-         <div class="line">
-           <span class="bold">Full Attack:</span>{sp}
-           {call .attacks}
-             {param entry: $entry /}
-             {param attacks: $entry.combined_primary_attacks.get /}
-             {param full: true /}
-           {/call}
-           {if length($entry.combined_secondary_attacks.get) > 0
-               and length($entry.combined_primary_attacks.get) > 0}
-             {sp}and{sp}
-           {/if}
-           {call .attacks}
-             {param entry: $entry /}
-             {param attacks: $entry.combined_secondary_attacks.get /}
-             {param secondary: true /}
-             {param full: true /}
-           {/call}
-         </div>
-
-         // space/reach
-         <div class="line">
-           <span class="bold">Space/Reach:</span>{sp}
-           {annotate($entry.combined_space)}/{annotate($entry.combined_reach)}
-         </div>
-
-         // qualities
-         <div class="line">
-           <span class="bold">Qualities:</span>{sp}
-           {foreach $quality in $entry.combined_qualities.get}
-             {call dma.entries.qualities.summary}
-               {param entry: $quality /}
-             {/call}
-             ;{sp}
-           {/foreach}
-         </div>
-
-         // saves
-         <div class="line">
-           <span class="bold">Saves:</span>{sp}
-           Fort {bonus($entry.combined_fortitude_save.get)},{sp}
-           Ref {bonus($entry.combined_reflex_save.get)},{sp}
-           Will {bonus($entry.combined_will_save.get)}
-         </div>
-
-         // abilities
-         <div class="line">
-           <span class="bold">Abilities:</span>{sp}
-           Str {annotate($entry.combined_strength)}{sp}
-           ({bonus($entry.strength_bonus)}),{sp}
-           Dex {annotate($entry.combined_dexterity)}{sp}
-           ({bonus($entry.dexterity_bonus)}),{sp}
-           Con {annotate($entry.combined_constitution)}{sp}
-           ({bonus($entry.constitution_bonus)}),{sp}
-           Int {annotate($entry.combined_intelligence)}{sp}
-           ({bonus($entry.intelligence_bonus)}),{sp}
-           Wis {annotate($entry.combined_wisdom)}{sp}
-           ({bonus($entry.wisdom_bonus)}),{sp}
-           Cha {annotate($entry.combined_charisma)}{sp}
-           ({bonus($entry.charisma_bonus)}),{sp}
-         </div>
-
-         // skills
-         <div class="line">
-           <span class="bold">Skills:</span>{sp}
-           {foreach $skill in $entry.combined_skills.get}
-             {call dma.entries.skills.show}
-               {param entry: $skill /}
-               {param monster: $entry /}
-             {/call}
-             {if not isLast($skill)}, {/if}
-           {/foreach}
-           {if $entry.skill_points != $entry.skill_points_used}
-           <span class="warning">
-             {sp}(used {$entry.skill_points_used} of {$entry.skill_points})
-           </span>
-           {/if}
-         </div>
-
-         // feats
-         <div class="line">
-           <span class="bold">Feats:</span>{sp}
-           {foreach $feat in $entry.combined_feats.get}
-             {call dma.entries.feats.summary}
-               {param entry: $feat /}
-               {param monster: $entry /}
-             {/call}
-             {if not isLast($feat)}, {/if}
-           {/foreach}
-         </div>
-
-         // environment
-         <div class="line">
-           <span class="bold">Environment:</span>{sp}
-           {annotate($entry.combined_terrain)},
-           {annotate($entry.combined_climate)}
-         </div>
-
-         // organization
-         <div class="line">
-           <span class="bold">Organization:</span>{sp}
-           {foreach $organization in $entry.combined_organizations.get}
-             {$organization.organization}
-             {if not $organization.number.zero
-                 and not $organization.number.one}
-               {sp}(
-                {if $organization.number.random}
-                  {$organization.number.min} - {$organization.number.max}
-                {else}
-                  {$organization.number}
-                {/if}
-                {if $organization.plus.present} plus {$organization.plus}{/if}
-               )
-             {/if}
-             {if not isLast($organization)}, {/if}
-           {/foreach}
-         </div>
-
-         // challenge rating
-         <div class="line">
-           <span class="bold">Challenge Rating:</span>{sp}
-           {annotate($entry.combined_cr)}
-         </div>
-
-         // treasure
-         <div class="line">
-           <span class="bold">Treasure:</span>{sp}
-           {annotate($entry.combined_treasure)}
-         </div>
-
-         // alignment
-         <div class="line">
-           <span class="bold">Alignment:</span>{sp}
-           {annotate($entry.combined_alignment_status)}{sp}
-           {annotate($entry.combined_alignment)}
-         </div>
-
-         // advancement
-         <div class="line">
-           <span class="bold">Advancement:</span>{sp}
-           {annotate($entry.combined_advancements)}
-         </div>
-
-         // level adjustment
-         <div class="line">
-           <span class="bold">Level Adjustment:</span>{sp}
-           {annotate($entry.combined_level_adjustment)}
-         </div>
-
-         // synonyms
-         {if length($entry.synonyms)}
-           <div class="line">
-             <span class="bold">Synonyms:</span>{sp}
-             {foreach $synonym in $entry.synonyms}
-               {$synonym}
-               {if not isLast($synonym)}; {/if}
-             {/foreach}
-           </div>
-         {/if}
-
-         // categories
-         {if length($entry.categories) or
-             length($entry.combined_categories.get)}
-           <div class="line">
-             <span class="bold">Categories:</span>{sp}
-             {if length($entry.categories)}
-               {foreach $category in $entry.categories}
-                 {$category}
-                 {if not isLast($category)}, {/if}
-               {/foreach}
-             {/if}
-             {if length($entry.combined_categories.get)}
-               {if length($entry.categories)},{sp}{/if}
-               {annotate($entry.combined_categories)}
-             {/if}
-           </div>
-         {/if}
-
-         // worlds
-         <div class="line">
-           <span class="bold">Worlds:</span>{sp}
-           {annotate($entry.combined_worlds)}
-         </div>
-
-         // incomplete
-         {if $entry.incomplete}
-           <div class="line">
-             <span class="bold">Incomplete:</span>{sp}
-             {annotate($entry.combined_incomplete)}
-           </div>
-         {/if}
-
-         // languages
-         <div class="line">
-           <span class="bold">Languages:</span>{sp}
-           {annotate($entry.combined_languages)}
-         </div>
-
-         // proficiencies
-         <div class="line">
-           <span class="bold">Proficiencies:</span>{sp}
-           {annotate($entry.combined_proficiencies)}
-         </div>
-
-         // possessions
-         <div class="line">
-           <span class="bold">Possessions:</span>{sp}
-           {annotate($entry.combined_possessions)}
-         </div>
-
-         // references
-         <div class="line">
-           <span class="bold">References:</span>{sp}
-           {annotate($entry.combined_references)}
-         </div>
-
-       </div>
-
-       <div class="paragraph">
-         <i>{commands(annotate($entry.combined_encounter))}</i>
-       </div>
-
-       <div class="paragraph">
-         {commands(annotate($entry.combined_description))}
-       </div>
-
-       <div class="subtitle">Combat</div>
-
-       <div class="paragraph">{commands(annotate($entry.combined_combat))}</div>
-
-       {if $entry.combined_tactics}
-         <div class="paragraph">
-           {commands(annotate($entry.combined_tactics))}
-         </div>
-       {/if}
-
-       {if $entry.combined_character}
-         <div class="paragraph">
-           {commands(annotate($entry.combined_character))}
-         </div>
-       {/if}
-
-       {if $entry.combined_reproduction}
-         <div class="paragraph">
-           {commands(annotate($entry.combined_reproduction))}
-         </div>
-       {/if}
-    {/param}
+      {call .encounter}{param entry: $entry /}{/call}
+      {call .description}{param entry: $entry /}{/call}
+      {call .combat}{param entry: $entry /}{/call}
+      {call .tactics}{param entry: $entry /}{/call}
+      {call .character}{param entry: $entry /}{/call}
+      {call .reproduction}{param entry: $entry /}{/call}
+   {/param}
   {/call}
 {/template}
 
@@ -1303,3 +1025,554 @@
   {/call}
 {/template}
 
+/** A monsters size and type. */
+{template .size_and_type}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param content kind="html"}
+      <b>
+        {annotate($entry.combined_size)}{sp}
+        {annotate($entry.combined_monster_type)}
+        {if length($entry.combined_monster_subtypes.get) > 0}
+          ({foreach $type in $entry.combined_monster_subtypes.get}
+            {$type}{if not isLast($type)}, {/if}
+          {/foreach})
+        {/if}
+      </b>
+    {/param}
+  {/call}
+{/template}
+
+/** A monsters hit dice. */
+{template .hit_die}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Hit Dice' /}
+    {param content kind="html"}
+      {$entry.total_hit_die}
+      {if not $entry.base}
+        {sp}({$entry.HP} of {$entry.max_HP} hp)
+      {/if}
+    {/param}
+  {/call}
+
+{/template}
+
+/** A monsters initiative. */
+{template .initiative}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Initiative' /}
+    {param content kind="html"}
+      {if $entry.initiative >= 0}+{/if}{$entry.initiative}
+    {/param}
+  {/call}
+{/template}
+
+/** A monsters speed. */
+{template .speed}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Speed' /}
+    {param content kind="html"}
+      {foreach $speed in $entry.combined_speeds}
+        {annotate($speed)} ({$speed.get.squares} squares)
+        {if not isLast($speed)}, {/if}
+      {/foreach}
+    {/param}
+  {/call}
+{/template}
+
+/** A monsters armor class. */
+{template .armor_class}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Armor Class' /}
+    {param content kind="html"}
+      {$entry.armor_class.total_modifier} ({$entry.armor_class}),
+      touch {$entry.armor_class_touch.total_modifier},
+      flat-footed {$entry.armor_class_flatfooted.total_modifier}
+    {/param}
+  {/call}
+{/template}
+
+/** A monsters base attack and grapple values. */
+{template .base_attack_grapple}
+  {@param entry: ?}
+ 
+  {call dma.entry.stat_line}
+    {param label: 'Base Attack/Grapple' /}
+    {param content kind="html"}
+      {bonus($entry.combined_base_attack.get)}/
+      {bonus($entry.grapple_bonus)}
+    {/param}
+  {/call}
+{/template}
+
+/** A monsters attack values. */
+{template .attack}
+  {@param entry: ?}
+ 
+  {call dma.entry.stat_line}
+    {param label: 'Attack' /}
+    {param content kind="html"}
+      {if length($entry.combined_primary_attacks.get) > 0}
+        {call .attacks}
+          {param entry: $entry /}
+          {param attacks: $entry.combined_primary_attacks.get /}
+        {/call}
+      {else}
+        {call .attacks}
+          {param entry: $entry /}
+            {param attacks: $entry.combined_secondary_attacks.get /}
+            {param secondary: true /}
+        {/call}
+      {/if}
+    {/param}
+  {/call}
+{/template}
+
+/** A monsters full attack values. */
+{template .full_attack}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Full Attack' /}
+    {param content kind="html"}
+      {call .attacks}
+        {param entry: $entry /}
+        {param attacks: $entry.combined_primary_attacks.get /}
+        {param full: true /}
+      {/call}
+      {if length($entry.combined_secondary_attacks.get) > 0
+          and length($entry.combined_primary_attacks.get) > 0}
+        {sp}and{sp}
+      {/if}
+      {call .attacks}
+        {param entry: $entry /}
+        {param attacks: $entry.combined_secondary_attacks.get /}
+        {param secondary: true /}
+        {param full: true /}
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's qualities. */
+{template .qualities}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Qualities' /}
+    {param content kind="html"}
+      {foreach $quality in $entry.combined_qualities.get}
+        {call dma.entries.qualities.summary}
+          {param entry: $quality /}
+        {/call}
+        ;{sp}
+      {/foreach}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for space and reach. */
+{template .space_reach}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Space/Reach' /}
+    {param content kind="html"}
+      {annotate($entry.combined_space)}/{annotate($entry.combined_reach)}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's saves. */
+{template .saves}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Saves' /}
+    {param content kind="html"}
+       Fort {bonus($entry.combined_fortitude_save.get)},{sp}
+       Ref {bonus($entry.combined_reflex_save.get)},{sp}
+       Will {bonus($entry.combined_will_save.get)}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's abilities. */
+{template .abilities}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Abilities' /}
+    {param content kind="html"}
+      Str {annotate($entry.combined_strength)}{sp}
+      ({bonus($entry.strength_bonus)}),{sp}
+      Dex {annotate($entry.combined_dexterity)}{sp}
+      ({bonus($entry.dexterity_bonus)}),{sp}
+      Con {annotate($entry.combined_constitution)}{sp}
+      ({bonus($entry.constitution_bonus)}),{sp}
+      Int {annotate($entry.combined_intelligence)}{sp}
+      ({bonus($entry.intelligence_bonus)}),{sp}
+      Wis {annotate($entry.combined_wisdom)}{sp}
+      ({bonus($entry.wisdom_bonus)}),{sp}
+      Cha {annotate($entry.combined_charisma)}{sp}
+      ({bonus($entry.charisma_bonus)}),{sp}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's skills. */
+{template .skills}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Skills' /}
+    {param content kind="html"}
+      {foreach $skill in $entry.combined_skills.get}
+        {call dma.entries.skills.show}
+          {param entry: $skill /}
+          {param monster: $entry /}
+        {/call}
+        {if not isLast($skill)}, {/if}
+      {/foreach}
+      {if $entry.skill_points != $entry.skill_points_used}
+        <span class="warning">
+          {sp}(used {$entry.skill_points_used} of {$entry.skill_points})
+        </span>
+      {/if}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's feats. */
+{template .feats}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Feats' /}
+    {param content kind="html"}
+      {foreach $feat in $entry.combined_feats.get}
+        {call dma.entries.feats.summary}
+          {param entry: $feat /}
+          {param monster: $entry /}
+        {/call}
+             {if not isLast($feat)}, {/if}
+           {/foreach}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's environment. */
+{template .environment}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Environment' /}
+    {param content kind="html"}
+      {annotate($entry.combined_terrain)},
+      {annotate($entry.combined_climate)}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's organization. */
+{template .organization}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Organization' /}
+    {param content kind="html"}
+      {foreach $organization in $entry.combined_organizations.get}
+        {$organization.organization}
+        {if not $organization.number.zero
+            and not $organization.number.one}
+          {sp}(
+           {if $organization.number.random}
+             {$organization.number.min} - {$organization.number.max}
+           {else}
+             {$organization.number}
+           {/if}
+           {if $organization.plus.present} plus {$organization.plus}{/if}
+          )
+        {/if}
+        {if not isLast($organization)}, {/if}
+      {/foreach}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's challenge rating. */
+{template .challenge_rating}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Challenge Rating' /}
+    {param content kind="html"}
+      {annotate($entry.combined_cr)}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's treasure. */
+{template .treasure}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Treasure' /}
+    {param content kind="html"}
+      {annotate($entry.combined_treasure)}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's alignment. */
+{template .alignment}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Alignment' /}
+    {param content kind="html"}
+      {annotate($entry.combined_alignment_status)}{sp}
+      {annotate($entry.combined_alignment)}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's advancement. */
+{template .advancement}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Advancement' /}
+    {param content kind="html"}
+      {annotate($entry.combined_advancements)}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's level adjustment. */
+{template .level_adjustment}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Level Adjustment' /}
+    {param content kind="html"}
+      {annotate($entry.combined_level_adjustment)}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's synonyms. */
+{template .synonyms}
+  {@param entry: ?}
+
+  {if length($entry.synonyms)}
+    {call dma.entry.stat_line}
+      {param label: 'Synonyms' /}
+      {param content kind="html"}
+        {foreach $synonym in $entry.synonyms}
+          {$synonym}
+          {if not isLast($synonym)}; {/if}
+        {/foreach}
+      {/param}
+    {/call}
+  {/if}
+{/template}
+
+/** A template for a monster's categories. */
+{template .categories}
+  {@param entry: ?}
+
+  {if length($entry.categories) or length($entry.combined_categories.get)}
+    {call dma.entry.stat_line}
+      {param label: 'Categories' /}
+      {param content kind="html"}
+        {if length($entry.categories)}
+          {foreach $category in $entry.categories}
+            {$category}
+            {if not isLast($category)}, {/if}
+          {/foreach}
+        {/if}
+        {if length($entry.combined_categories.get)}
+          {if length($entry.categories)},{sp}{/if}
+          {annotate($entry.combined_categories)}
+        {/if}
+      {/param}
+    {/call}
+  {/if}
+{/template}
+
+/** A template for a monster's worlds. */
+{template .worlds}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Worlds' /}
+    {param content kind="html"}
+      {annotate($entry.combined_worlds)}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's incomplete value. */
+{template .incomplete}
+  {@param entry: ?}
+
+  {if $entry.incomplete}
+    {call dma.entry.stat_line}
+      {param label: 'Incomplete' /}
+      {param content kind="html"}
+        {annotate($entry.combined_incomplete)}
+      {/param}
+    {/call}
+  {/if}
+{/template}
+
+/** A template for a monster's languages. */
+{template .languages}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Languages' /}
+    {param content kind="html"}
+      {annotate($entry.combined_languages)}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's proficiencies. */
+{template .proficiencies}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Proficiencies' /}
+    {param content kind="html"}
+      {annotate($entry.combined_proficiencies)}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's possesions. */
+{template .possessions}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Possesions' /}
+    {param content kind="html"}
+      {annotate($entry.combined_possessions)}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's reference. */
+{template .reference}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Reference' /}
+    {param content kind="html"}
+      {annotate($entry.combined_references)}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's encounter description. */
+{template .encounter}
+  {@param entry: ?}
+
+  {call dma.entry.stat_paragraph}
+    {param content kind="html"}
+      <i>{commands(annotate($entry.combined_encounter))}</i>
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's description. */
+{template .description}
+  {@param entry: ?}
+
+  {call dma.entry.stat_paragraph}
+    {param content kind="html"}
+      {commands(annotate($entry.combined_description))}
+    {/param}
+  {/call}
+{/template}
+
+/** A template for a monster's combat description. */
+{template .combat}
+  {@param entry: ?}
+
+  {if $entry.combined_combat.get.present}
+    {call dma.entry.stat_paragraph}
+      {param title: 'Combat' /}
+      {param content kind="html"}
+         {commands(annotate($entry.combined_combat))}
+      {/param}
+    {/call}
+  {/if}
+{/template}
+
+/** A template for a monster's tactics description. */
+{template .tactics}
+  {@param entry: ?}
+
+  {if $entry.combined_tactics.get.present}
+    {call dma.entry.stat_paragraph}
+      {param title: 'Tactics' /}
+      {param content kind="html"}
+        {commands(annotate($entry.combined_tactics))}
+      {/param}
+    {/call}
+  {/if}
+{/template}
+
+/** A template for a monster's character description. */
+{template .character}
+  {@param entry: ?}
+
+  {if $entry.combined_character.get.present}
+    {call dma.entry.stat_paragraph}
+      {param title: 'Character' /}
+      {param content kind="html"}
+        {commands(annotate($entry.combined_character))}
+      {/param}
+    {/call}
+  {/if}
+{/template}
+
+/** A template for a monster's reproduction description. */
+{template .reproduction}
+  {@param entry: ?}
+
+  {if $entry.combined_reproduction.get.present}
+    {call dma.entry.stat_paragraph}
+      {param title: 'Reproduction' /}
+      {param content kind="html"}
+        {commands(annotate($entry.combined_reproduction))}
+      {/param}
+    {/call}
+  {/if}
+{/template}
+
+
+/*
+/** A template for a monster's . *
+{template .}
+  {@param? title: string|html}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: '' /}
+    {param content kind="html"}
+    {/param}
+  {/call}
+{/template}
+*/

@@ -322,6 +322,7 @@
           description="compile all the source files of the project">
     <javac srcdir="${source.dir}:${gen.dir}" destdir="${classes.dir}"
            includes="net/ixitxachitls/dma/proto/*.java,com/google/**/*.java"
+           excludes="net/ixitxachitls/util/TarifKonverter.java"
            debug="on" optimize="on" encoding="utf-8" target="1.7"
            debuglevel="lines,vars,source" source="1.7">
       <classpath>

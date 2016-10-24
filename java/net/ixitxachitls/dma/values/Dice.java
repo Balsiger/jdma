@@ -35,7 +35,6 @@ import net.ixitxachitls.util.Strings;
  *
  * @file   NewDice.java
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 public class Dice extends Value<DiceProto>
 {
@@ -102,26 +101,29 @@ public class Dice extends Value<DiceProto>
     public List add(Dice inValue)
     {
       java.util.List<Dice> die = new ArrayList<>();
+      boolean added = false;
       for(Dice dice : m_die)
         if(dice.canAdd(inValue))
+        {
+          added = true;
           die.add(dice.add(inValue));
+        }
         else
           die.add(dice);
+
+      if(!added)
+        die.add(inValue);
 
       return new List(die);
     }
 
     public List add(List inValues)
     {
-      java.util.List<Dice> die = new ArrayList<>();
+      List die = new List();
       for(Dice value : inValues.m_die)
-        for(Dice dice : m_die)
-          if(die.add(value))
-            die.add(dice.add(value));
-          else
-            die.add(dice);
+        die = add(value);
 
-      return new List(die);
+      return die;
     }
 
     public List add(int inModifier)

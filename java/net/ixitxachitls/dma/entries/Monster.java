@@ -55,14 +55,7 @@ import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueSources;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.Weight;
-import net.ixitxachitls.dma.values.enums.Ability;
-import net.ixitxachitls.dma.values.enums.Alignment;
-import net.ixitxachitls.dma.values.enums.AttackStyle;
-import net.ixitxachitls.dma.values.enums.Language;
-import net.ixitxachitls.dma.values.enums.LanguageModifier;
-import net.ixitxachitls.dma.values.enums.MonsterType;
-import net.ixitxachitls.dma.values.enums.MovementMode;
-import net.ixitxachitls.dma.values.enums.Size;
+import net.ixitxachitls.dma.values.enums.*;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -1139,6 +1132,17 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  public Annotated.List<Quality> getCombinedQualities()
+  {
+    Annotated.List<Quality> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseMonster)entry).getCombinedQualities());
+
+    combined.add(getQualities(), getName());
+
+    return combined;
+  }
+
   protected Set<Feat> allFeats()
   {
     Set<Feat> feats = new HashSet<>(getFeats());
@@ -1777,6 +1781,68 @@ public class Monster extends CampaignEntry
     return modifier;
   }
 
+  public int strengthBonus()
+  {
+    return Monsters.abilityModifier(getCombinedStrength().get());
+  }
+
+  public int dexterityBonus()
+  {
+    return Monsters.abilityModifier(getCombinedDexterity().get());
+  }
+
+  public int constitutionBonus()
+  {
+    return Monsters.abilityModifier(getCombinedConstitution().get());
+  }
+
+  public int intelligenceBonus()
+  {
+    return Monsters.abilityModifier(getCombinedIntelligence().get());
+  }
+
+  public int wisdomBonus()
+  {
+    return Monsters.abilityModifier(getCombinedWisdom().get());
+  }
+
+  public int charismaBonus()
+  {
+    return Monsters.abilityModifier(getCombinedCharisma().get());
+  }
+
+  public Annotated<List<Skill>> getCombinedSkills()
+  {
+    Annotated<List<Skill>> combined =
+        new Annotated.List<Skill>(m_skills, getName());
+
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedSkills());
+
+    return combined;
+  }
+
+  public int skillPointsUsed()
+  {
+    int used = 0;
+    for(BaseEntry base : getBaseEntries())
+      used += ((BaseMonster)base).skillPointsUsed();
+
+    for(Skill skill : m_skills)
+      used += skill.getRanks();
+
+    return used;
+  }
+
+  public int skillPoints()
+  {
+    int points = 0;
+    for(BaseEntry base : getBaseEntries())
+      points += ((BaseMonster)base).skillPoints();
+
+    return points;
+  }
+
   /**
    * Get a monster's annotated and combined level adjustment.
    *
@@ -2008,7 +2074,7 @@ public class Monster extends CampaignEntry
    *
    * @return a list of all the available speeds
    */
-  public List<Annotated.Arithmetic<Speed>> getSpeedsAnnotated()
+  public List<Annotated.Arithmetic<Speed>> getCombinedSpeeds()
   {
     List<Annotated.Arithmetic<Speed>> speeds = new ArrayList<>();
 
@@ -2030,7 +2096,18 @@ public class Monster extends CampaignEntry
    */
   public int getInitiative()
   {
-    return getDexterityModifier();
+    int initiative = 0;
+    for(BaseEntry base : getBaseEntries())
+    {
+      int baseInitiative = ((BaseMonster)base).initiative();
+      if (baseInitiative != 0)
+        if(initiative == 0)
+          initiative = baseInitiative;
+        else
+          initiative = Math.max(initiative, baseInitiative);
+    }
+
+    return initiative;
   }
 
   /**
@@ -2040,11 +2117,18 @@ public class Monster extends CampaignEntry
    */
   public int getGrappleBonus()
   {
-    Optional<Integer> base = getCombinedBaseAttack().get();
-    if(!base.isPresent())
-      return getStrengthModifier();
+    int grapple = 0;
+    for (BaseEntry base : getBaseEntries())
+    {
+      int baseGrapple = ((BaseMonster)base).grappleBonus();
+      if(baseGrapple != 0)
+        if(grapple == 0)
+          grapple = baseGrapple;
+        else
+        grapple = Math.max(grapple, baseGrapple);
+    }
 
-    return base.get() + getStrengthModifier();
+    return grapple;
   }
 
   /**
@@ -2308,6 +2392,15 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  public Annotated<List<MonsterSubtype>> getCombinedMonsterSubtypes()
+  {
+    Annotated.List<MonsterSubtype> combined = new Annotated.List<>();
+    for(BaseEntry entry : getBaseEntries())
+      combined.add(((BaseMonster)entry).getCombinedMonsterSubtypes());
+
+    return combined;
+  }
+
   public Annotated.Integer getCombinedHitDie()
   {
     Annotated.Integer combined = new Annotated.Integer();
@@ -2315,6 +2408,15 @@ public class Monster extends CampaignEntry
       combined.add(((BaseMonster)entry).getCombinedHitDie());
 
     return combined;
+  }
+
+  public Dice.List totalHitDie()
+  {
+    Dice.List dice = new Dice.List();
+    for (BaseEntry base : getBaseEntries())
+      dice = dice.add(((BaseMonster)base).totalHitDie());
+
+    return dice;
   }
 
   /**
@@ -2444,6 +2546,33 @@ public class Monster extends CampaignEntry
                                              Optional.<Modifier>absent()));
 
     return armor.totalModifier();
+  }
+
+  public Modifier armorClass()
+  {
+    Modifier armor = new Modifier();
+    for (BaseEntry base : getBaseEntries())
+      armor = (Modifier)armor.add(((BaseMonster)base).armorClass());
+
+    return armor;
+  }
+
+  public Modifier armorClassTouch()
+  {
+    Modifier armor = new Modifier();
+    for (BaseEntry base : getBaseEntries())
+      armor = (Modifier)armor.add(((BaseMonster)base).armorClassTouch());
+
+    return armor;
+  }
+
+  public Modifier armorClassFlatfooted()
+  {
+    Modifier armor = new Modifier();
+    for (BaseEntry base : getBaseEntries())
+      armor = (Modifier)armor.add(((BaseMonster)base).armorClassFlatfooted());
+
+    return armor;
   }
 
   /**
@@ -2742,6 +2871,27 @@ public class Monster extends CampaignEntry
       ranks += skill.getRanks();
 
     return ranks;
+  }
+
+  public Modifier skillModifier(String inName)
+  {
+    Modifier modifier = new Modifier();
+    for(Feat feat : allFeats())
+      modifier = (Modifier)modifier.add(feat.skillModifier(inName));
+
+    for(Quality quality : allQualities())
+      modifier = (Modifier)modifier.add(quality.skillModifier(inName));
+
+    return modifier;
+  }
+
+  public Annotated<List<BaseMonster.Group>> getCombinedOrganizations()
+  {
+    Annotated<List<BaseMonster.Group>> combined = new Annotated.List<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedOrganizations());
+
+    return combined;
   }
 
   public Annotated<List<String>> getCombinedProficiencies()

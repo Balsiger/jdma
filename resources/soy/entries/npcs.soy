@@ -30,6 +30,7 @@
   {@param list: ?}
   {@param next: ?}
   {@param last: ?}
+
   {call dma.entry.show}
     {param entry: $entry /}
     {param type: 'npc' /}
@@ -40,46 +41,41 @@
     {param last: $last /}
     {param color: '#080' /}
     {param title kind="html"}
-      {call dma.entry.title}
+      {call dma.entry.titleWithBase}
         {param title: $entry.name /}
+        {param bases: $entry.baseNames /}
+        {param baseLink: 'monster' /}
         {param color: '#080' /}
       {/call}
     {/param}
+    {param stats kind="html"}
+      {call dma.entries.basemonsters.size_and_type}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.hit_die}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.initiative}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.speed}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.armor_class}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.base_attack_grapple}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.attack}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.full_attack}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.space_reach}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.qualities}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.saves}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.abilities}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.skills}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.feats}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.proficiencies}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.languages}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.environment}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.organization}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.challenge_rating}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.treasure}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.alignment}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.advancement}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.level_adjustment}{param entry: $entry /}{/call}
+      {call dma.entries.basemonsters.incomplete}{param entry: $entry /}{/call}
+
+    {/param}
     {param values kind="html"}
-      {if length($entry.baseNames)}
-        {call dma.entry.value}
-          {param label: 'Base' /}
-          {param value kind="html"}
-            {foreach $base in $entry.baseNames}
-              {call dma.page.link}
-                {param text: $base /}
-                {param url: '/monster/'  + $base /}
-              {/call}
-              {if not isLast($base)}; {/if}
-            {/foreach}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
-      {if $entry.parent.present}
-        {call dma.entry.value}
-          {param label: 'Parent' /}
-          {param value kind="html"}
-            {call dma.page.link}
-              {param url: $entry.campaign.path + '/' + $entry.parent /}
-              {param text: $entry.parent /}
-            {/call}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
-      {call dma.entry.value}
-        {param label: 'HP' /}
-        {param value kind="html"}
-          {$entry.HP} (max {$entry.max_HP})
-        {/param}
-        {param color: '#080' /}
-      {/call}
       {call dma.entry.value}
         {param label: 'Gender' /}
         {param value kind="html"}
@@ -776,3 +772,4 @@
     {/param}
   {/call}
 {/template}
+

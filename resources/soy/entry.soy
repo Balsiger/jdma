@@ -32,7 +32,8 @@
 {template .show}
   {@param entry: ?}
   {@param type: string}
-  {@param values: html}
+  {@param? values: html}
+  {@param? stats: html}
   {@param first: ?}
   {@param previous: ?}
   {@param list: ?}
@@ -52,23 +53,18 @@
 
     {if not $ij.params.card}
       {call .navigation}
+        {param entry: $entry /}
         {param first: $first /}
         {param previous: $previous /}
         {param list: $list /}
         {param next: $next /}
         {param last: $last /}
-      {/call}
-      {call dma.navigation.navigation}
-        {param entries:
-            [
-              [ 'label': $entry.type.link, 'url': '/' + $entry.type.multilink ],
-              [ 'label': $entry.name, 'url': $entry.path ]
-            ] /}
+        {param setup: true /}
       {/call}
     {/if}
 
-    <div class="_new_ images">
-      {call dma.entry.mainImage}
+    <div class="images">
+      {call .mainImage}
         {param entry: $entry /}
       {/call}
         
@@ -89,8 +85,10 @@
            href="https://www.google.com/search?tbm=isch&q={$entry.image_search_query}">
           image search
         </a>
-        <div class="sprite large reset" title="Reset values"
-             onclick="edit.reset('{$entry.key}')"></div>
+        <a href="#" class="image-storage-link"
+           onclick="edit.reset('{$entry.key}')">
+           reset
+        </a>
       {/if}
     </div>
 
@@ -119,15 +117,22 @@
         {/if}
       {/if}
 
-       <div class="_new_values">
-         {$values} 
-       </div>
+      {if $stats}
+        {$stats}
+      {/if}
+
+      {if $values}
+        <div class="_new_values">
+          {$values}
+        </div>
+      {/if}
        
       <div class="clear"></div>
     </div>
     
     {if not $ij.params.card}
       {call dma.entry.navigation}
+        {param entry: $entry /}
         {param first: $first /}
         {param previous: $previous /}
         {param list: $list /}
@@ -167,19 +172,20 @@
 /** Show the toolbar with the avaialable actions. */
 {template .toolbar}
   {@param entry: ?}
+
   <div class="toolbar">
     <div class="actions">
       <div class="action sprite large edit"
            onclick="edit.show('{$entry.name}',
                               '{$entry.path}.edit',
-                   'edit-{escape($entry.type)}-{escape($entry.name)}')">
+                              'edit-{escape($entry.type)}-{escape($entry.name)}')">
       </div>
       <div class="action sprite large delete"
            onclick="if(confirm('Do you really want to delete this?'))
-                      util.ajax('/actions/remove',
-                                {lb} key: '{escape($entry.key)}' {rb},
-                                null, true);">
-      </div> 
+                       util.ajax('/actions/remove',
+                                 {lb} key: '{escape($entry.key)}' {rb},
+                                 null, true);">
+      </div>
     </div>
   </div>
 {/template}
@@ -188,20 +194,49 @@
 {template .title}
   {@param title: html|string}
   {@param color: string}
+
   <div class="title-container">
-  <span class="title" style="color: {$color}">
-    {$title}
-   <div class="decoration"
-        style="background: -webkit-linear-gradient(right, transparent 0%,
+    <span class="title" style="color: {$color}">
+      {$title}
+      <div class="decoration"
+           style="background: -webkit-linear-gradient(right, transparent 0%,
                {$color} 100%);">
-    </div>
-  </span>
+      </div>
+    </span>
   </div>
+{/template}
+
+/** The main title with a base entry. */
+{template .titleWithBase}
+  {@param title: html|string}
+  {@param bases: list<string>}
+  {@param baseLink: string}
+  {@param color: string}
+
+  <div class="title-container">
+    <div class="title" style="color: {$color}">
+      {$title}{sp}
+      (
+        {foreach $base in $bases}
+          <a href="/{$baseLink}/{$base}" target="_blank" style="color: {$color}">
+            {$base}
+          </a>
+          {if not isLast($base)}, {/if}
+        {/foreach}
+      )
+      <div class="decoration"
+           style="background: -webkit-linear-gradient(right, transparent 0%,
+               {$color} 100%);">
+      </div>
+    </div>
+  </div>
+
 {/template}
 
 /** The sub title. */
 {template .subtitle}
   {@param title: html|string}
+
   <div class="subtitle">
     {$title}
   </div>
@@ -324,7 +359,7 @@
       {param class: 'image-link' /}
       {param text kind="html"}
         <img src="{$entry.main_file.icon}" alt="Main" 
-          class="_new_ _new_image _new_main" />
+          class="image main" />
       {/param}
     {/call}
   {else}
@@ -479,11 +514,13 @@
 
 /** The entry navigation. */
 {template .navigation}
+  {@param entry: ?}
   {@param first: ?}
   {@param previous: ?}
   {@param list: ?}
   {@param next: ?}
   {@param last: ?}
+  {@param? setup: bool}
   <div class="entry-nav">
     {call .navigationEntry}
       {param url: $first /}
@@ -511,6 +548,15 @@
       {param tooltip: 'Last' /}
     {/call}
   </div>
+  {if $setup}
+    {call dma.navigation.navigation}
+      {param entries:
+          [
+            [ 'label': $entry.type.link, 'url': '/' + $entry.type.multilink ],
+            [ 'label': $entry.name, 'url': $entry.path ]
+          ] /}
+    {/call}
+  {/if}
 {/template}
 
 /** A single navigation entry. */
@@ -781,3 +827,28 @@
     </div>
   </div>
 {/template}
+
+/** A line in a stat block. */
+{template .stat_line}
+  {@param? label: html|string}
+  {@param content: html}
+
+  <div class="stat-line">
+    {if $label}<b>{$label}:</b> {/if}
+    {$content}
+  </div>
+{/template}
+
+/** A paragraph in a stat block. */
+{template .stat_paragraph}
+  {@param? title: string|html}
+  {@param content: html}
+
+  {if $title}
+    <div class="subtitle">{$title}</div>
+  {/if}
+  <div class="paragraph">
+    {$content}
+  </div>
+{/template}
+

@@ -171,6 +171,12 @@ public class Skill extends NestedEntry
     return inMonster.skillModifier(getName(), getAbility());
   }
 
+  // Needed to call() it in soy (as Classes.getMethod() cannot handle derived
+  // types).
+  public int modifier(NPC inMonster) {
+    return modifier((Monster)inMonster);
+  }
+
   // Needed to be available in soy.
   public int modifier(Character inCharacter) {
     return modifier((Monster)inCharacter);

@@ -178,6 +178,10 @@ public class TarifKonverter
     out.close();
   }
 
+  private static String convert(String text) {
+    return text.replaceAll("\n+", " ");
+  }
+
   private static void printEntries(String name, List<Entry> groups)
       throws IOException
   {
@@ -205,8 +209,8 @@ public class TarifKonverter
     public Group(String id, String title, String text, String parent)
     {
       m_id = id;
-      m_title = title;
-      m_text = text;
+      m_title = convert(title);
+      m_text = convert(text);
       m_parent = parent;
     }
 
@@ -242,8 +246,8 @@ public class TarifKonverter
                  String points, String pointText, String relative)
     {
       m_id = id;
-      m_title = title;
-      m_text = text;
+      m_title = convert(title);
+      m_text = convert(text);
       m_subgroup = subgroup;
       m_points = points;
       m_pointText = pointText;

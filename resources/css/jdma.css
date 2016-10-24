@@ -2460,7 +2460,7 @@ BODY.print
    position: absolute;  
 }
 
-.entry ._new_.images
+.entry .images
 {
   margin: 0 30px 10px 15px;
   width: 112px;
@@ -2483,8 +2483,8 @@ BODY.print
   box-shadow: 0 0 3px #eee;
 }
 
-.entry ._new_._new_main._new_image,
-.entry ._new_.other._new_image
+.entry .main.image,
+.entry .other.image
 {
   vertical-align: middle;
   max-width: 100px;
@@ -3809,4 +3809,9 @@ TD.list > a
   background-position: -224px 0;
   width: 26px !important;
   margin: 10px auto;
+}
+
+.stat-line
+{
+  margin-bottom: 5px;
 }
