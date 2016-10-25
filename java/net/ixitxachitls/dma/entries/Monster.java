@@ -2401,6 +2401,15 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  public boolean hasSubtype()
+  {
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseMonster)base).hasSubtype())
+        return true;
+
+    return false;
+  }
+
   public Annotated.Integer getCombinedHitDie()
   {
     Annotated.Integer combined = new Annotated.Integer();
@@ -2473,13 +2482,12 @@ public class Monster extends CampaignEntry
     return bonus;
   }
 
-  /**
-   * Get a monster's total armor class.
-   *
-   * @return the armor class value
-   */
-  public int getArmorClass()
+  public int totalArmorClass()
   {
+    return armorClass().totalModifier();
+  }
+
+  public Modifier armorClass() {
     Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
                                   Optional.<String>absent(),
                                   Optional.<Modifier>absent());
@@ -2498,7 +2506,7 @@ public class Monster extends CampaignEntry
                                              Optional.<String>absent(),
                                              Optional.<Modifier>absent()));
 
-    return armor.totalModifier();
+    return armor;
   }
 
   /**
@@ -2506,7 +2514,13 @@ public class Monster extends CampaignEntry
    *
    * @return the monster's touch AC
    */
-  public int getTouchArmorClass()
+
+  public int totalArmorClassTouch()
+  {
+    return armorClassTouch().totalModifier();
+  }
+
+  public Modifier armorClassTouch()
   {
     Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
                                   Optional.<String>absent(),
@@ -2521,7 +2535,7 @@ public class Monster extends CampaignEntry
                                              Optional.<String>absent(),
                                              Optional.<Modifier>absent()));
 
-    return armor.totalModifier();
+    return armor;
   }
 
   /**
@@ -2529,7 +2543,12 @@ public class Monster extends CampaignEntry
    *
    * @return the flat footed AC
    */
-  public int getFlatFootedArmorClass()
+  public int totalArmorClassFlatfooted()
+  {
+    return armorClassFlatfooted().totalModifier();
+  }
+
+  public Modifier armorClassFlatfooted()
   {
     Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
                                   Optional.<String>absent(),
@@ -2545,35 +2564,9 @@ public class Monster extends CampaignEntry
                                              Optional.<String>absent(),
                                              Optional.<Modifier>absent()));
 
-    return armor.totalModifier();
-  }
-
-  public Modifier armorClass()
-  {
-    Modifier armor = new Modifier();
-    for (BaseEntry base : getBaseEntries())
-      armor = (Modifier)armor.add(((BaseMonster)base).armorClass());
-
     return armor;
   }
 
-  public Modifier armorClassTouch()
-  {
-    Modifier armor = new Modifier();
-    for (BaseEntry base : getBaseEntries())
-      armor = (Modifier)armor.add(((BaseMonster)base).armorClassTouch());
-
-    return armor;
-  }
-
-  public Modifier armorClassFlatfooted()
-  {
-    Modifier armor = new Modifier();
-    for (BaseEntry base : getBaseEntries())
-      armor = (Modifier)armor.add(((BaseMonster)base).armorClassFlatfooted());
-
-    return armor;
-  }
 
   /**
    * Get all the armor items a monster is wearing.
@@ -3108,181 +3101,6 @@ public class Monster extends CampaignEntry
   }
 
   /**
-   * Get the initiative of the monster.
-   *
-   * @return      the initiative as a combination
-   */
-  /*
-  public ModifiedNumber getInitiative()
-  {
-    ModifiedNumber initiative = collect("initiative").modifier();
-
-    int dexterity = ability(Ability.DEXTERITY).getMaxValue();
-    initiative.withModifier
-      (new Modifier(abilityModifier(dexterity), Modifier.Type.ABILITY),
-       "Dex of " + dexterity);
-
-    return initiative;
-  }
-  */
-
-  /**
-   * Get the armor class for touch attacks of the monster.
-   *
-   * @return      the armor class
-   */
-  /*
-  public ModifiedNumber armorClassTouch()
-  {
-    return armorClass().modifier().ignore(Modifier.Type.ARMOR,
-                                          Modifier.Type.NATURAL_ARMOR,
-                                          Modifier.Type.SHIELD,
-                                          Modifier.Type.ENHANCEMENT);
-  }
-  */
-
-  /**
-   * Get the armor class of the monster.
-   *
-   * @return      the armor class
-   */
-  /*
-  public Combined<Modifier> armorClass()
-  {
-    Combined<Modifier> armor = collect("armor class");
-    armor.addModifier(new Modifier(10), this, "base");
-    Combined<Modifier> naturalArmor = collect("natural armor");
-    armor.add(naturalArmor, "natural armor");
-
-    return armor;
-  }
-  */
-
-  /**
-   * Get the armor class of the monster when its flat-footed.
-   *
-   * @return      the armor class when flat-footed
-   */
-  /*
-  public ModifiedNumber armorClassFlatFooted()
-  {
-    ModifiedNumber armor = armorClass().modifier();
-
-    if(hasQuality("uncanny dodge"))
-      return armor;
-
-    return armor.ignore(Modifier.Type.ABILITY);
-  }
-  */
-
-  /**
-   * Get the current modifier from dexterity. This is capped by the armor's
-   * maximum dexterity.
-   *
-   * @return      the current dexterity modifier
-   */
-  /*
-  public int dexterityModifierForAC()
-  {
-    int dex =
-      abilityModifier(ability(Ability.DEXTERITY).getMaxValue());
-
-    // TODO: we should actually only consider worn items.
-    if(getCampaign().isPresent())
-      for(Name name : m_possessions)
-      {
-        Item item = getCampaign().get().getItem(name.get());
-        if(item == null)
-          continue;
-
-        Combined<Number> combinedMaxDex = item.collect("max dexterity");
-        Number maxDex = combinedMaxDex.min();
-        if(maxDex != null && maxDex.isDefined() && maxDex.get() < dex)
-          dex = (int)maxDex.get();
-      }
-
-    return dex;
-  }
-  */
-
-  /**
-   * Compute the values to render for attacks.
-   *
-   * @return  a map with the following values:
-   *   base attacks - a list with the base attack values
-   */
-  /*
-  public Map<String, Object> attacks()
-  {
-    Combined<Number> baseAttack = collect("base attack");
-    ModifiedNumber baseAttackNumber = baseAttack.modifier();
-    if(baseAttackNumber.hasConditions())
-      throw new UnsupportedOperationException
-        ("conditions in base attack are not supported");
-
-    List<Long> baseAttacks = Lists.newArrayList();
-    if (baseAttackNumber.getMinValue() == 0)
-      baseAttacks.add(0L);
-    else
-      for(long attack = baseAttackNumber.getMinValue(); attack > 0; attack -= 5)
-        baseAttacks.add(attack);
-
-    List<Map<String, Object>> weaponAttacks =
-      new ArrayList<Map<String, Object>>();
-    if(getCampaign().isPresent())
-      for(Name name : m_possessions)
-      {
-        Item item = getCampaign().get().getItem(name.get());
-        if(item == null)
-          continue;
-
-        //if(!item.hasExtension(Weapon.class))
-        //  continue;
-
-        Combined<EnumSelection<WeaponStyle>> style =
-          item.collect("weapon style");
-        List<Long> baseAtks = new ArrayList<Long>(baseAttacks);
-        if(hasFeat("Rapid Shot"))
-          for(Value<?> styleValue : style.valuesOnly())
-            if(styleValue instanceof EnumSelection
-               && ((EnumSelection)styleValue).getSelected()
-               == WeaponStyle.RANGED)
-            {
-              baseAtks.add(0, baseAtks.get(0));
-              break;
-            }
-
-        Map<String, Object> weapon = new HashMap<String, Object>();
-        long maxAttacks = item.collect("max attacks").modifier().getMinValue();
-
-        if(maxAttacks <= 0)
-          maxAttacks = Long.MAX_VALUE;
-
-        List<ModifiedNumber> attacks = new ArrayList<ModifiedNumber>();
-        for(int i = 0; i < maxAttacks && i < baseAtks.size(); i++)
-          attacks.add(weaponAttack(item, baseAtks.get(i)));
-
-        weapon.put("attacks", attacks);
-        weapon.put("style", style);
-        weapon.put("name", item.getDMName());
-        weapon.put("damage", collect("damage"));
-        weapon.put("critical", critical(item));
-
-        weaponAttacks.add(weapon);
-      }
-
-    return new ImmutableMap.Builder<String, Object>()
-      .put("base", baseAttacks)
-      .put("bases", baseAttack.valuesWithDescriptions())
-      .put("primary", attacks("primary attacks", false, baseAttacks))
-      .put("secondary", attacks("secondary attacks", true, baseAttacks))
-      .put("weapons", weaponAttacks)
-      .put("grapple", grapple())
-      .build();
-  }
-  */
-
-  /**
    * Compute the attacks the monster can do.
    *
    * @param       inName         the name of the attack made
@@ -3720,23 +3538,6 @@ public class Monster extends CampaignEntry
   //   }
 
   //   return penalty;
-  // }
-
-  /**
-   * Get the sub entries that are part of this entry only (without
-   * attachments).
-   *
-   * @return      an Iterator with all the sub entries
-   *
-   */
-  // public List<Entry> getEntrySubEntries()
-  // {
-  //   List<Entry> list = new ArrayList<Entry>();
-
-  //   for(EntryValue<Item> value : m_possessions)
-  //     list.add(value.get());
-
-  //   return list;
   // }
 
   /**

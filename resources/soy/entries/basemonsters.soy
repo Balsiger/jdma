@@ -1034,8 +1034,8 @@
       <b>
         {annotate($entry.combined_size)}{sp}
         {annotate($entry.combined_monster_type)}
-        {if length($entry.combined_monster_subtypes.get) > 0}
-          ({foreach $type in $entry.combined_monster_subtypes.get}
+        {if $entry.has_subtype}
+          {sp}({foreach $type in $entry.combined_monster_subtypes.get}
             {$type}{if not isLast($type)}, {/if}
           {/foreach})
         {/if}

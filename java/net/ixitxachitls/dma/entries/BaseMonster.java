@@ -741,6 +741,23 @@ public class BaseMonster extends BaseEntry
     return combined;
   }
 
+  public boolean hasSubtype()
+  {
+    if(!m_monsterSubtypes.isEmpty())
+      for(MonsterSubtype subtype : m_monsterSubtypes)
+        if(subtype != MonsterSubtype.NONE && subtype != MonsterSubtype.UNKNOWN)
+          return true;
+
+    if(!m_monsterSubtypes.isEmpty())
+      return false;
+
+    for(BaseEntry base : getBaseEntries())
+      if(((BaseMonster)base).hasSubtype())
+        return true;
+
+    return false;
+  }
+
   /**
    * Get the monster's hit dice.
    *
@@ -1013,35 +1030,6 @@ public class BaseMonster extends BaseEntry
   }
 
   /**
-   * Get the monster's armor bonus.
-   *
-   * @return the armor bonus
-   */
-  /*
-  public Modifier armorBonus()
-  {
-    Modifier bonus = null;
-    for(Item armor : getArmor())
-    {
-      if(armor.getArmorType().isShield())
-        continue;
-
-      Optional<Modifier> modifier = armor.getArmorClass();
-      if(modifier.isPresent())
-        if(bonus == null)
-          bonus = modifier.get();
-        else
-          bonus = (Modifier) bonus.add(modifier.get());
-    }
-
-    if(bonus == null)
-      return new Modifier();
-
-    return bonus;
-  }*/
-
-
-  /**
    * Get the combined natural armor.
    *
    * @return the combined natural armor
@@ -1050,7 +1038,7 @@ public class BaseMonster extends BaseEntry
   {
     if(m_naturalArmor.isPresent())
       return new Annotated.Arithmetic<Modifier>(m_naturalArmor.get(),
-                                                   getName());
+                                                getName());
 
     Annotated.Arithmetic<Modifier> combined = new Annotated.Arithmetic<>();
     for(BaseEntry base : getBaseEntries())
