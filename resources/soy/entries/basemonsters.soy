@@ -148,23 +148,74 @@
   {@param? full: bool}
 
   {foreach $attack in $attacks}
-    {if $full}
-      {if not $attack.number.isOne}
-        {if $attack.number.is_random}
-          {$attack.number}
-        {else}
-          {$attack.number.modifier}
-        {/if}
-        {sp}
+    {if $attack.mode.name != 'WEAPON' or
+        $entry.is_base or length($entry.weapons == 0)}
+      {call .attacks_single}
+        {param number kind="html"}
+          {if $full and not $attack.number.isOne}
+            {if $attack.number.is_random}
+              {$attack.number}
+            {else}
+              {$attack.number.modifier}
+            {/if}
+          {/if}
+        {/param}
+        {param mode: $attack.mode /}
+        {param style: $attack.style /}
+        {param bonus kind="html"}
+          {annotate(call($entry, $secondary
+                                 ? 'secondaryAttackBonus' : 'attackBonus',
+                         $attack))}
+          {sp}
+        {/param}
+        {param damage kind="html"}
+          {call($entry, $secondary ? 'secondaryDamage' : 'damage', $attack)}
+        {/param}
+        {param full: $full /}
+      {/call}
+      {if not isLast($attack)} and {/if}
+    {else}
+      {if not $entry.is_base}
+        {foreach $weapon in $entry.weapons}
+          {call .attacks_single}
+            {param number: null /}
+            {param mode kind="html"}
+              {call dma.entries.items.reference}
+                {param entry: $weapon /}
+              {/call}
+            {/param}
+            {param style: $weapon.weapon_style.get_name /}
+            {param bonus kind="html"}
+              {foreach $key in keys($weapon.attack_bonus)}
+                {if $key}
+                  {sp}{$key}
+                {/if}
+                {foreach $weapon_attack in $weapon.attack_bonus[$key]}
+                  {bonus($weapon_attack)}
+                  {if not isLast($weapon_attack)}/{/if}
+                {/foreach}
+                {if not isLast($key)}, {/if}
+              {/foreach}
+            {/param}
+            {param damage: $weapon.damage + '/' + $weapon.critical /}
+          {/call}
+          {if not isLast($weapon)} or {/if}
+        {/foreach}
+        {if not isLast($attack)} and {/if}
       {/if}
     {/if}
-    {$attack.mode} {annotate(call($entry, $secondary
-                                    ? 'secondaryAttackBonus' : 'attackBonus',
-                                    $attack))}{sp}
-    {$attack.style} ({call($entry, $secondary ? 'secondaryDamage' : 'damage',
-                           $attack)})
-    {if not isLast($attack)} and {/if}
   {/foreach}
+{/template}
+
+/** A single formatted attack. */
+{template .attacks_single}
+  {@param number: ?}
+  {@param style: ?}
+  {@param mode: ?}
+  {@param bonus: ?}
+  {@param damage: ?}
+
+  {if $number}{$number} {/if} {$mode} {$bonus} {$style} ({$damage})
 {/template}
 
 /**
