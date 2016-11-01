@@ -313,7 +313,7 @@
            Total <br/>
            &nbsp;
          {/param}
-         {param value: $entry.armor_class /}
+         {param value: $entry.total_armor_class /}
       {/call}
 
       <div class="operator" style="padding-top: 13px">=</div>
@@ -385,12 +385,12 @@
 
     {call dma.sheet.value}
       {param label: 'Touch AC' /}
-      {param value: $entry.touch_armor_class /}
+      {param value: $entry.total_armor_class_touch /}
     {/call}
 
     {call dma.sheet.value}
       {param label: 'Flat-Footed AC' /}
-      {param value: $entry.flat_footed_armor_class /}
+      {param value: $entry.total_armor_class_flatfooted /}
     {/call}
 
   </div>

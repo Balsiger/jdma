@@ -129,7 +129,7 @@ public class SoyValue extends SoyMapData
       if(optional.isPresent())
         value = optional.get();
       else
-        return new SoyUndefined(m_name + "." + inName + "(absend)");
+        return new SoyUndefined(m_name + "." + inName + "(absent)");
     }
 
     if("integer".equals(inName) && value instanceof Integer)

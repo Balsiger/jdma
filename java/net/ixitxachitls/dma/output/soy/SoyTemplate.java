@@ -42,7 +42,6 @@ import com.google.inject.multibindings.Multibinder;
 import com.google.template.soy.SoyFileSet;
 import com.google.template.soy.SoyModule;
 import com.google.template.soy.data.SanitizedContent;
-import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
 import com.google.template.soy.data.UnsafeSanitizedContentOrdainer;
@@ -50,12 +49,10 @@ import com.google.template.soy.data.restricted.BooleanData;
 import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
 import com.google.template.soy.shared.restricted.SoyFunction;
+import com.google.template.soy.shared.restricted.SoyJavaFunction;
+import com.google.template.soy.shared.restricted.SoyJavaPrintDirective;
 import com.google.template.soy.shared.restricted.SoyPrintDirective;
-import com.google.template.soy.soytree.TemplateRegistry;
 import com.google.template.soy.tofu.SoyTofu;
-import com.google.template.soy.tofu.restricted.SoyAbstractTofuFunction;
-import com.google.template.soy.tofu.restricted.SoyAbstractTofuPrintDirective;
-import com.google.template.soy.tofu.restricted.SoyTofuFunction;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -88,7 +85,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to return an entry for a given key. */
-  public static class EntryFunction extends SoyAbstractTofuFunction
+  public static class EntryFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -103,7 +100,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData compute(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       Optional<EntryKey> key = EntryKey.fromString(inArgs.get(0).toString());
 
@@ -126,7 +124,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to return an entry for a given key. */
-  public static class CallFunction extends SoyAbstractTofuFunction
+  public static class CallFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -141,7 +139,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData compute(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       if(!(inArgs.get(0) instanceof SoyValue)
           || !(inArgs.get(1) instanceof StringData))
@@ -164,7 +163,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to convert the argument into an integer. */
-  public static class IntegerFunction implements SoyTofuFunction
+  public static class IntegerFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -179,14 +178,15 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       return IntegerData.forValue(Integer.valueOf(inArgs.get(0).toString()));
     }
   }
 
   /** A plugin function to convert the argument into an integer. */
-  public static class DefFunction implements SoyTofuFunction
+  public static class DefFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -201,7 +201,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       if(inArgs.get(0) == null
           || inArgs.get(0) instanceof SoyUndefined)
@@ -212,7 +213,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to convert the argument into an integer. */
-  public static class ValFunction implements SoyTofuFunction
+  public static class ValFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -227,7 +228,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       if(inArgs.get(0) == null || !(inArgs.get(0) instanceof SoyValue))
         return BooleanData.forValue(false);
@@ -237,7 +239,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to convert the argument into an integer. */
-  public static class LengthFunction implements SoyTofuFunction
+  public static class LengthFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -252,7 +254,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       if(inArgs.get(0) instanceof SoyListData)
         return IntegerData.forValue(((SoyListData)inArgs.get(0)).length());
@@ -267,7 +270,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to format numbers or printing. */
-  public static class CamelFunction implements SoyTofuFunction
+  public static class CamelFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -282,7 +285,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       return StringData.forValue
         (Encodings.toWordUpperCase(inArgs.get(0).toString()));
@@ -290,7 +294,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to format strings lowercase. */
-  public static class LowerFunction implements SoyTofuFunction
+  public static class LowerFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -305,14 +309,15 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       return StringData.forValue(inArgs.get(0).toString().toLowerCase());
     }
   }
 
     /** A plugin function to format strings lowercase. */
-  public static class MatchesFunction implements SoyTofuFunction
+  public static class MatchesFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -327,7 +332,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       return BooleanData.forValue
           (inArgs.get(0).toString().matches(inArgs.get(1).toString()));
@@ -335,7 +341,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to format numbers or printing. */
-  public static class CommandsFunction implements SoyTofuFunction
+  public static class CommandsFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -350,7 +356,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       return UnsafeSanitizedContentOrdainer.ordainAsSafe
           (COMMAND_RENDERER.renderCommands(inArgs.get(0).toString()),
@@ -359,7 +366,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to format numbers or printing. */
-  public static class FormatNumberFunction implements SoyTofuFunction
+  public static class FormatNumberFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -374,7 +381,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       if(inArgs.get(0) instanceof IntegerData)
         return StringData.forValue
@@ -386,7 +394,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to format numbers or printing. */
-  public static class BonusFunction implements SoyTofuFunction
+  public static class BonusFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -401,7 +409,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       if(inArgs.get(0) instanceof IntegerData)
       {
@@ -429,7 +438,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to format numbers or printing. */
-  public static class AnnotateFunction implements SoyTofuFunction
+  public static class AnnotateFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -444,7 +453,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       if(inArgs.get(0) instanceof SoyMapData)
       {
@@ -463,7 +473,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to format values or printing. */
-  public static class ValueFunction implements SoyTofuFunction
+  public static class ValueFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -478,7 +488,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       // Values are similar to SoyMapDate to access their values.
       if(inArgs.get(0) instanceof SoyValue)
@@ -508,7 +519,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to check if a value is a list. */
-  public static class IsListFunction implements SoyTofuFunction
+  public static class IsListFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -523,14 +534,15 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       return BooleanData.forValue(inArgs.get(0) instanceof SoyListData);
     }
   }
 
   /** A plugin function to check if a value starts with a given string. */
-  public static class StatsWithFunction implements SoyTofuFunction
+  public static class StatsWithFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -545,7 +557,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       return BooleanData.forValue(inArgs.get(0).coerceToString().startsWith(
           inArgs.get(1).coerceToString()));
@@ -553,7 +566,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to check if a value is a list. */
-  public static class EscapeFunction implements SoyTofuFunction
+  public static class EscapeFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -568,7 +581,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       return StringData.forValue(inArgs.get(0).toString()
                                  .replace("+", "_")
@@ -581,7 +595,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to check if a value is a list. */
-  public static class JsEscapeFunction implements SoyTofuFunction
+  public static class JsEscapeFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -596,7 +610,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       return StringData.forValue(inArgs.get(0).toString()
                                      .replace("'", "\\'")
@@ -605,7 +620,7 @@ public class SoyTemplate
   }
 
   /** A plugin function to convert a string to html. */
-  public static class HtmlFunction implements SoyTofuFunction
+  public static class HtmlFunction implements SoyJavaFunction
   {
     @Override
     public String getName()
@@ -620,7 +635,8 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue computeForJava(
+        List<com.google.template.soy.data.SoyValue> inArgs)
     {
       return UnsafeSanitizedContentOrdainer.ordainAsSafe(
           inArgs.get(0).toString(),
@@ -629,7 +645,7 @@ public class SoyTemplate
   }
 
   /** A directive to nicely format a number. */
-  public static class NumberDirective extends SoyAbstractTofuPrintDirective
+  public static class NumberDirective implements SoyJavaPrintDirective
   {
     @Override
     public String getName()
@@ -653,22 +669,18 @@ public class SoyTemplate
 
 
     @Override
-    public SoyData applyForTofu(SoyData inValue, List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue applyForJava(
+        com.google.template.soy.data.SoyValue inValue,
+        List<com.google.template.soy.data.SoyValue> inList)
     {
       return StringData.forValue
         (NumberFormat.getIntegerInstance(new Locale("de", "ch"))
          .format(Integer.valueOf(inValue.toString())));
     }
-
-    @Override
-    public SoyData apply(SoyData inValue, List<SoyData> inArgs)
-    {
-      return applyForTofu(inValue, inArgs);
-    }
   }
 
   /** A directive to parse and render comands embedded in a string. */
-  public static class CommandsDirective extends SoyAbstractTofuPrintDirective
+  public static class CommandsDirective implements SoyJavaPrintDirective
   {
     @Override
     public String getName()
@@ -692,7 +704,9 @@ public class SoyTemplate
 
 
     @Override
-    public SoyData apply(SoyData inValue, List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue applyForJava(
+        com.google.template.soy.data.SoyValue inValue,
+        List<com.google.template.soy.data.SoyValue> inList)
     {
       return StringData.forValue
           (COMMAND_RENDERER.renderCommands(inValue.toString()));
@@ -700,7 +714,7 @@ public class SoyTemplate
   }
 
   /** A directive to parse and render comands embedded in a string. */
-  public static class FirstLineDirective extends SoyAbstractTofuPrintDirective
+  public static class FirstLineDirective implements SoyJavaPrintDirective
   {
     @Override
     public String getName()
@@ -738,14 +752,16 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData apply(SoyData inValue, List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue applyForJava(
+        com.google.template.soy.data.SoyValue inValue,
+        List<com.google.template.soy.data.SoyValue> inList)
     {
       return StringData.forValue(firstLine(inValue.toString()));
     }
   }
 
   /** A direactive to format a string as a css id. */
-  public static class CSSDirective extends SoyAbstractTofuPrintDirective
+  public static class CSSDirective implements SoyJavaPrintDirective
   {
     @Override
     public String getName()
@@ -768,7 +784,9 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData apply(SoyData inValue, List<SoyData> inArgs)
+    public com.google.template.soy.data.SoyValue applyForJava(
+        com.google.template.soy.data.SoyValue inValue,
+        List<com.google.template.soy.data.SoyValue> inList)
     {
       return StringData.forValue(inValue.toString().replace(" ", "-"));
     }
