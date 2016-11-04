@@ -3420,150 +3420,23 @@ public class Monster extends CampaignEntry
     return inLevel / 2 + 2;
   }
 
-  /**
-   * Get the number of skill ranks for all skills with ranks.
-   *
-   * @return      the number of skill ranks per skill name
-   */
-  /*
-  @SuppressWarnings("unchecked")
-  public Map<String, Map<Value<?>, ModifiedNumber>> skillRanks()
+  public Annotated<Optional<Terrain>> getCombinedTerrain()
   {
-    Combined<ValueList<Multiple>> skills = collect("class skills");
-
-    Map<String, Map<Value<?>, ModifiedNumber>> ranks = Maps.newHashMap();
-
-    for(Pair<ValueList<Multiple>, List<Pair<ValueList<Multiple>, String>>> pair
-          : skills.valuesWithDescriptions())
-    {
-      String group = "";
-      for(Pair<ValueList<Multiple>, String> groupValue : pair.second())
-        if(group.isEmpty())
-          group = groupValue.second();
-        else
-          group += ", " + groupValue.second();
-
-      for(Multiple skill : pair.first())
-      {
-        Reference<BaseSkill> ref = ((Reference<BaseSkill>)skill.get(0));
-        String name = ref.getName();
-        Value<?> type = ref.getParameters().getValue("subtype");
-        Map<Value<?>, ModifiedNumber> perName = ranks.get(name);
-        if(perName == null)
-        {
-          perName = Maps.newHashMap();
-          ranks.put(name, perName);
-        }
-
-        ModifiedNumber number = perName.get(type);
-        if(number == null)
-          number = new ModifiedNumber(0, true);
-
-        number.withModifier((Modifier)skill.get(1), group);
-
-        perName.put(type, number);
-      }
-    }
-
-    for(Multiple skill : m_skills)
-    {
-      Reference<BaseSkill> ref = ((Reference<BaseSkill>)skill.get(0));
-      String name = ref.getName();
-      Value<?> type = ref.getParameters().getValue("subtype");
-
-      Map<Value<?>, ModifiedNumber> perName = ranks.get(name);
-      if(perName == null)
-      {
-        perName = Maps.newHashMap();
-        ranks.put(name, perName);
-      }
-
-      ModifiedNumber number = perName.get(type);
-      if(number == null)
-        number = new ModifiedNumber(0, true);
-
-      number.withModifier(new Modifier((int)((Number)skill.get(1)).get()),
-                          this.getName());
-      perName.put(type, number);
-    }
-
-    return ranks;
-  }
-  */
-
-  /**
-   * Get the size of the monster.
-   *
-   * @return      the index in the size table.
-   */
-  /*
-  @SuppressWarnings("unchecked")
-  public Size getSize()
-  {
-    Combined<Multiple> combined = collect("size");
-    Multiple size = combined.min();
-    if(size == null)
-      return Size.MEDIUM;
-
-    return ((EnumSelection<Size>)size.get(0)).getSelected();
-  }
-  */
-
-  /**
-   * Get the name a dm may see for this entry.
-   *
-   * @return      the name
-   */
-  /*
-  public String dmName()
-  {
-    List<String> parts = new ArrayList<String>();
-
+    Annotated<Optional<Terrain>> combined = new Annotated.Max<>();
     for(BaseEntry base : getBaseEntries())
-    {
-      if(base == null)
-        continue;
+      combined.add(((BaseMonster)base).getCombinedTerrain());
 
-      String name = base.getName();
-      List<String> synonyms = base.getSynonyms();
-      // if the first synonym does not contain a ',', we use that name as it
-      // might be better readable than the restricted real name
-      if(!synonyms.isEmpty() && synonyms.get(0).indexOf(',') < 0)
-        name = synonyms.get(0);
-
-      parts.add(name);
-    }
-
-    if(parts.isEmpty())
-      parts.add(getName());
-
-    return Strings.COMMA_JOINER.join(parts);
+    return combined;
   }
-  */
 
-  /**
-   * Get the skill check penalty for armor this monster is wearing.
-   *
-   * @return      the penalty, or 0 for none
-   */
-  // public int getArmorCheckPenalty()
-  // {
-  //   int penalty = 0;
+  public Annotated<Optional<Climate>> getCombinedClimate()
+  {
+    Annotated<Optional<Climate>> combined = new Annotated.Max<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedClimate());
 
-  //   // add up all the armor check penalties
-  //   for(EntryValue<Item> value : m_possessions)
-  //   {
-  //     Item armor = value.get();
-
-  //     if(!armor.hasAttachment(Armor.class))
-  //       continue;
-
-  //     penalty +=
-  //       (int)((Number)armor.getValue("check penalty")).get();
-  //   }
-
-  //   return penalty;
-  // }
+    return combined;
+  }
 
   /**
    * Check the entry for possible problems.
@@ -4240,33 +4113,6 @@ public class Monster extends CampaignEntry
     // }
 
   // }
-
-  /**
-   * Add the given entry to the campaign entry.
-   *
-   * @param       inEntry the entry to add
-   *
-   * @return      true if added, false if not
-   */
-  /*
-  @Override
-  public boolean add(CampaignEntry inEntry)
-  {
-    String name = inEntry.getName();
-    List<Name> names = new ArrayList<Name>();
-    for(Name item : m_possessions)
-      if(name.equals(item.get()))
-        return true;
-      else
-        names.add(item);
-
-    names.add(m_possessions.newElement().as(name));
-    m_possessions = m_possessions.as(names);
-
-    save();
-    return true;
-  }
-  */
 
   /**
    * Add a random treasure horde to this monster.
