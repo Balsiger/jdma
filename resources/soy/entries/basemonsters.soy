@@ -1083,16 +1083,23 @@
   {call dma.entry.stat_line}
     {param content kind="html"}
       <b>
-        {annotate($entry.combined_size)}{sp}
-        {annotate($entry.combined_monster_type)}
-        {if $entry.has_subtype}
-          {sp}({foreach $type in $entry.combined_monster_subtypes.get}
-            {$type}{if not isLast($type)}, {/if}
-          {/foreach})
-        {/if}
+        {call .size_and_type_content}{param entry: $entry /}{/call}
       </b>
     {/param}
   {/call}
+{/template}
+
+/** Content only part of size and type. */
+{template .size_and_type_content}
+  {@param entry: ?}
+
+  {annotate($entry.combined_size)}{sp}
+  {annotate($entry.combined_monster_type)}
+  {if $entry.has_subtype}
+    {sp}({foreach $type in $entry.combined_monster_subtypes.get}
+      {$type}{if not isLast($type)}, {/if}
+    {/foreach})
+  {/if}
 {/template}
 
 /** A monsters hit dice. */
@@ -1478,7 +1485,7 @@
 {template .incomplete}
   {@param entry: ?}
 
-  {if $entry.incomplete}
+  {if $entry.incomplete.present}
     {call dma.entry.stat_line}
       {param label: 'Incomplete' /}
       {param content kind="html"}

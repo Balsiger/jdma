@@ -49,7 +49,7 @@
       {/call}
     {/param}
     {param stats kind="html"}
-      {call dma.entries.basemonsters.size_and_type}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.size_type_and_gender}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.hit_die}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.initiative}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.speed}{param entry: $entry /}{/call}
@@ -70,8 +70,6 @@
       {call dma.entries.basemonsters.challenge_rating}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.treasure}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.alignment}{param entry: $entry /}{/call}
-      {call dma.entries.basemonsters.advancement}{param entry: $entry /}{/call}
-      {call dma.entries.basemonsters.level_adjustment}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.incomplete}{param entry: $entry /}{/call}
 
     {/param}

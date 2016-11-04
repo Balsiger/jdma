@@ -1144,6 +1144,18 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  public Annotated<Optional<Alignment>> getCombinedAlignment()
+  {
+    if(m_alignment != Alignment.UNKNOWN)
+      return new Annotated.Max<>(m_alignment, getName());
+
+    Annotated<Optional<Alignment>> combined = new Annotated.Max<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedAlignment());
+
+    return combined;
+  }
+
   protected Set<Feat> allFeats()
   {
     Set<Feat> feats = new HashSet<>(getFeats());

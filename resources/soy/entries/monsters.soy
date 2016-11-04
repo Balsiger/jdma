@@ -675,3 +675,21 @@
     add item
   </span>
 {/template}
+
+/** A template for the size, type and gender line. */
+{template .size_type_and_gender}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param content kind="html"}
+      <b>
+      {if $entry.gender}
+        {$entry.gender}{sp}
+      {/if}
+      {call dma.entries.basemonsters.size_and_type_content}
+        {param entry: $entry /}
+      {/call}
+      </b>
+    {/param}
+  {/call}
+{/template}
