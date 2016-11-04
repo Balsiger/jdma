@@ -3447,6 +3447,17 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  public Annotated<Optional<net.ixitxachitls.dma.values.enums.Treasure>>
+  getCombinedTreasure()
+  {
+    Annotated<Optional<net.ixitxachitls.dma.values.enums.Treasure>> combined =
+        new Annotated.Max<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedTreasure());
+
+    return combined;
+  }
+
   /**
    * Check the entry for possible problems.
    *
