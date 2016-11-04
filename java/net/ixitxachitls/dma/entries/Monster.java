@@ -3438,6 +3438,15 @@ public class Monster extends CampaignEntry
     return combined;
   }
 
+  public Annotated<Optional<Rational>> getCombinedCr()
+  {
+    Annotated<Optional<Rational>> combined = new Annotated.Arithmetic<>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedCr());
+
+    return combined;
+  }
+
   /**
    * Check the entry for possible problems.
    *
