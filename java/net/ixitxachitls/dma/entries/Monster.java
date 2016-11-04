@@ -47,6 +47,7 @@ import net.ixitxachitls.dma.rules.Monsters;
 import net.ixitxachitls.dma.values.Annotated;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
+import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Slot;
@@ -2089,6 +2090,26 @@ public class Monster extends CampaignEntry
 
   }
 
+  public Annotated<Optional<Distance>> getCombinedSpace()
+  {
+    Annotated<Optional<Distance>> combined =
+      new Annotated.Max<Distance>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedSpace());
+
+    return combined;
+  }
+
+  public Annotated<Optional<Distance>> getCombinedReach()
+  {
+    Annotated<Optional<Distance>> combined =
+      new Annotated.Max<Distance>();
+    for(BaseEntry base : getBaseEntries())
+      combined.add(((BaseMonster)base).getCombinedReach());
+
+    return combined;
+  }
+
   /**
    * Get a monster's initiative value.
    *
@@ -2783,7 +2804,11 @@ public class Monster extends CampaignEntry
       if(skill.getName().equalsIgnoreCase(inSkill))
         return skill.getRanks();
 
-    return 0;
+    int ranks = 0;
+    for (BaseEntry base : getBaseEntries())
+      ranks += ((BaseMonster)base).skillRanks(inSkill);
+
+    return ranks;
   }
 
   public int skillModifier(String inSkill, Ability inAbility)

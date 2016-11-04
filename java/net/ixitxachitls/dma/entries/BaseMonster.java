@@ -1601,10 +1601,9 @@ public class BaseMonster extends BaseEntry
 
   public int skillRanks(String inName)
   {
-    Optional<BaseSkill> skill =
-        DMADataFactory.get().getEntry(new EntryKey(inName, BaseSkill.TYPE));
-    if(skill.isPresent())
-      return abilityModifier(skill.get().getAbility());
+    for(Skill skill : getCombinedSkills().get())
+      if(skill.getName().equalsIgnoreCase(inName))
+        return skill.getRanks();
 
     return 0;
   }

@@ -168,7 +168,10 @@ public class Skill extends NestedEntry
   }
 
   public int modifier(Monster inMonster) {
-    return inMonster.skillModifier(getName(), getAbility());
+    int ranks1 = getRanks();
+    int ranks2 = inMonster.skillModifier(getName(), getAbility());
+    return getRanks() + inMonster.abilityModifier(getAbility())
+        + inMonster.skillModifier(getName()).totalModifier();
   }
 
   // Needed to call() it in soy (as Classes.getMethod() cannot handle derived

@@ -149,7 +149,7 @@
 
   {foreach $attack in $attacks}
     {if $attack.mode.name != 'WEAPON' or
-        $entry.is_base or length($entry.weapons == 0)}
+        $entry.is_base or length($entry.weapons) == 0}
       {call .attacks_single}
         {param number kind="html"}
           {if $full and not $attack.number.isOne}
@@ -1314,9 +1314,10 @@
         {call dma.entries.feats.summary}
           {param entry: $feat /}
           {param monster: $entry /}
+          {param windowed: true /}
         {/call}
-             {if not isLast($feat)}, {/if}
-           {/foreach}
+        {if not isLast($feat)}, {/if}
+      {/foreach}
     {/param}
   {/call}
 {/template}

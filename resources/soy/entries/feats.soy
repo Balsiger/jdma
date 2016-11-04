@@ -418,21 +418,32 @@
 /** Feat summary. */
 {template .summary}
   {@param entry: ?}
+  {@param? windowed: bool}
+
+  {if $windowed}
+    <span class="windowed">
+  {/if}
   {call dma.value.link}
     {param text kind="html"}
       <i>{$entry.base_name}</i>
     {/param}
     {param url: '/feat/' + $entry.base_name /}
   {/call}
-  {if $entry.qualifier.present}
-    {sp}({$entry.qualifier})
+  {if $windowed}
+     <span class="window">
   {/if}
-  , {$entry.short_description}
-  , {$entry.type}
+  {if $entry.qualifier.present}
+    {sp}({$entry.qualifier}),{sp}
+  {/if}
+  {$entry.short_description} ({$entry.type})
   {if $entry.attack_modifier.value}
     , attack {$entry.attack_modifier}
   {/if}
   {if $entry.damage_modifier.value}
     , damage {$entry.damage_modifier}
+  {/if}
+  {if $windowed}
+      </span>
+    </span>
   {/if}
 {/template}
