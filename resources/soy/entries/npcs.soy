@@ -71,16 +71,8 @@
       {call dma.entries.basemonsters.treasure}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.alignment}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.incomplete}{param entry: $entry /}{/call}
-
     {/param}
     {param values kind="html"}
-      {call dma.entry.value}
-        {param label: 'Gender' /}
-        {param value kind="html"}
-          {$entry.gender}
-        {/param}
-        {param color: '#080' /}
-      {/call}
       {if $entry.personality.present}
         {call dma.entry.value}
           {param label: 'Personality' /}

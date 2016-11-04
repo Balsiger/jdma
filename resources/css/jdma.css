@@ -3814,4 +3814,6 @@ TD.list > a
 .stat-line
 {
   margin-bottom: 5px;
+  text-indent: -25px;
+  padding-left: 25px;
 }
