@@ -66,6 +66,9 @@ public enum MonsterSubtype implements Named,
   /** Cold. */
   COLD("Cold", BaseMonsterProto.Subtype.COLD),
 
+  /** Dwarf. */
+  DWARF("Dwarf", BaseMonsterProto.Subtype.DWARF),
+
   /** Earth. */
   EARTH("Earth", BaseMonsterProto.Subtype.EARTH),
 

@@ -1008,6 +1008,7 @@ message BaseMonsterProto
     BAATEZU = 6;
     CHAOTIC = 7;
     COLD = 8;
+    DWARF = 28;
     EARTH = 9;
     ELADRIN = 10;
     ELF = 11;
