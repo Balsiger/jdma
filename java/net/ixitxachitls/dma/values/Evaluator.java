@@ -65,9 +65,9 @@ public class Evaluator
     Matcher matcher = PATTERN_VAR.matcher(inText);
     while(matcher.find())
     {
-      String value = m_values.get(matcher.group(1)).toString();
+      Object value = m_values.get(matcher.group(1));
       if(value != null)
-        matcher.appendReplacement(result, value.replace('$', '_'));
+        matcher.appendReplacement(result, value.toString().replace('$', '_'));
       else
       {
         Log.warning("Cannot find value " + matcher.group(1) + " to replace in"

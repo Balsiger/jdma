@@ -59,6 +59,8 @@
       {call dma.entries.monsters.location}{param entry: $entry /}{/call}
       {call dma.entries.monsters.origin}{param entry: $entry /}{/call}
       {call dma.entries.monsters.secret}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.quest}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.interaction}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.hit_die}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.initiative}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.speed}{param entry: $entry /}{/call}
@@ -80,74 +82,7 @@
       {call dma.entries.basemonsters.treasure}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.alignment}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.incomplete}{param entry: $entry /}{/call}
-    {/param}
-    {param values kind="html"}
-      {if length($entry.secrets) > 0}
-        {call dma.entry.value}
-          {param label: 'Secret' /}
-          {param value kind="html"}
-            {foreach $secret in $entry.secrets}
-              {commands($secret)}{if not isLast($secret)}, {/if}
-            {/foreach}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
-      {if length($entry.quests) > 0}
-        {call dma.entry.value}
-          {param label: 'Quest' /}
-          {param value kind="html"}
-            {foreach $quest in $entry.quests}
-              {commands($quest)}{if not isLast($quest)}, {/if}
-            {/foreach}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
-      {if length($entry.interactions) > 0}
-        {call dma.entry.value}
-          {param label: 'Interaction' /}
-          {param value kind="html"}
-            {foreach $interaction in $entry.interactions}
-              {commands($interaction)}{if not isLast($interaction)}, {/if}
-            {/foreach}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
-      {call dma.entry.value}
-        {param label: 'Possessions' /}
-        {param value kind="html"}
-          {foreach $item in $entry.possessions}
-            {call dma.entries.items.reference}
-              {param entry: $item /}
-            {/call}
-            {if not isLast($item)}, {/if}
-          {/foreach}
-          {if $ij.user}
-            {sp}|{sp}
-            {call dma.entries.monsters.add_item_action}
-              {param entry: $entry /}
-            {/call}
-            <span class="action"
-                  onclick="edit.askAutocomplete(
-                             'base item/name', 'Edit {$entry.name}',
-                             '{$entry.campaign.path}/item/CREATE.edit',
-                             'add-item', 'parent:npc/{$entry.name}')">
-              add item
-            </span>
-            {sp}|{sp}
-            <span class="action"
-                  onclick="edit.show('Move items for {$entry.name}',
-                                     '{$entry.path}.move_items',
-                                     'move-items', '',
-                                     'parent:npc/{$entry.name}')">
-              move items
-            </span>
-          {/if}
-        {/param}
-        {param color: '#080' /}
-      {/call}
+      {call dma.entries.monsters.possessions}{param entry: $entry /}{/call}
     {/param}
   {/call}
 

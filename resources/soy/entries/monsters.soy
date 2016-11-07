@@ -807,3 +807,69 @@
   {/call}
 {/template}
 
+/** The monster's personality value. */
+{template .quest}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Quest' /}
+    {param content kind="html"}
+      {foreach $quest in $entry.quests}
+        {commands($quest)}{if not isLast($quest)}, {/if}
+      {/foreach}
+    {/param}
+  {/call}
+{/template}
+
+/** The monster's personality value. */
+{template .interaction}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Interaction' /}
+    {param content kind="html"}
+      {foreach $interaction in $entry.interactions}
+        {commands($interaction)}{if not isLast($interaction)}, {/if}
+      {/foreach}
+    {/param}
+  {/call}
+{/template}
+
+/** The monster's posseions. */
+{template .possessions}
+  {@param entry: ?}
+
+  {call dma.entry.stat_line}
+    {param label: 'Possessions' /}
+    {param content kind="html"}
+      {foreach $item in $entry.possessions}
+        {call dma.entries.items.reference}
+          {param entry: $item /}
+        {/call}
+        {if not isLast($item)}, {/if}
+      {/foreach}
+      {if $ij.user}
+        {sp}|{sp}
+        {call dma.entries.monsters.add_item_action}
+          {param entry: $entry /}
+        {/call}
+        <span class="action"
+              onclick="edit.askAutocomplete(
+                         'base item/name', 'Edit {$entry.name}',
+                         '{$entry.campaign.path}/item/CREATE.edit',
+                         'add-item', 'parent:npc/{$entry.name}')">
+          add item
+        </span>
+        {sp}|{sp}
+        <span class="action"
+              onclick="edit.show('Move items for {$entry.name}',
+                                 '{$entry.path}.move_items',
+                                 'move-items', '',
+                                 'parent:npc/{$entry.name}')">
+          move items
+        </span>
+      {/if}
+    {/param}
+  {/call}
+{/template}
+
