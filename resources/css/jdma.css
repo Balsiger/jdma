@@ -3818,7 +3818,8 @@ TD.list > a
   padding-left: 25px;
 }
 
-.stat-line .windowed {
+.stat-line .windowed,
+.stat-line .annotated {
   padding: 0;
   text-indent: 0;
 }

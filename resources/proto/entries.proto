@@ -1,3 +1,4 @@
+syntax = "proto2";
 package net.ixitxachitls.dma.proto;
 
 import "values.proto";
@@ -1172,6 +1173,8 @@ message BaseMonsterProto
       HUNTING_PARTY = 26;
       RAIDING_PARTY = 27;
       TRADING_PARTY = 28;
+      TEAM = 29;
+      CLAN = 30;
     }
     optional Type type = 1;
     optional DiceProto number = 2;

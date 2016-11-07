@@ -49,6 +49,7 @@ public enum Organization implements Named,
 
   /** Brood organization. */
   BROOD("Brood", BaseMonsterProto.Organization.Type.BROOD),
+  CLAN("Clan", BaseMonsterProto.Organization.Type.CLAN),
 
   /** Colony organization. */
   COLONY("Colony", BaseMonsterProto.Organization.Type.COLONY),
@@ -113,6 +114,7 @@ public enum Organization implements Named,
 
   /** Tangle organization. */
   TANGLE("Tangle", BaseMonsterProto.Organization.Type.TANGLE),
+  TEAM("Team", BaseMonsterProto.Organization.Type.TEAM),
 
   /** Troupe organization. */
   TRIBE("Tribe", BaseMonsterProto.Organization.Type.TRIBE),
