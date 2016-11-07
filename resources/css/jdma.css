@@ -3817,3 +3817,8 @@ TD.list > a
   text-indent: -25px;
   padding-left: 25px;
 }
+
+.stat-line span.windowed {
+  padding: 0;
+  text-indent: 0;
+}

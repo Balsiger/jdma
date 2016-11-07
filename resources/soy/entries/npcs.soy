@@ -49,7 +49,16 @@
       {/call}
     {/param}
     {param stats kind="html"}
-      {call dma.entries.monsters.size_type_and_gender}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.size_and_type}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.title}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.family}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.faction}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.appearance}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.personality}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.mannerism}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.location}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.origin}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.secret}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.hit_die}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.initiative}{param entry: $entry /}{/call}
       {call dma.entries.basemonsters.speed}{param entry: $entry /}{/call}
@@ -73,97 +82,6 @@
       {call dma.entries.basemonsters.incomplete}{param entry: $entry /}{/call}
     {/param}
     {param values kind="html"}
-      {if $entry.personality.present}
-        {call dma.entry.value}
-          {param label: 'Personality' /}
-          {param value kind="html"}
-            {$entry.personality}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
-      {if length($entry.occupations) > 0}
-        {call dma.entry.value}
-          {param label: 'Occupation' /}
-          {param value kind="html"}
-            {foreach $occupation in $entry.occupations}
-              {commands($occupation)}{if not isLast($occupation)}, {/if}
-            {/foreach}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
-      {if $entry.family_name.present}
-        {call dma.entry.value}
-          {param label: 'Family Name' /}
-          {param value kind="html"}
-            {$entry.family_name}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
-      {if $entry.origin_region.present}
-        {call dma.entry.value}
-          {param label: 'Origin Region' /}
-          {param value kind="html"}
-            {$entry.origin_region}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
-      {if $entry.looks.present}
-        {call dma.entry.value}
-          {param label: 'Appearance' /}
-          {param value kind="html"}
-            {$entry.looks}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
-      {if length($entry.titles) > 0}
-        {call dma.entry.value}
-          {param label: 'Title' /}
-          {param value kind="html"}
-            {foreach $title in $entry.titles}
-              {commands($title)}{if not isLast($title)}, {/if}
-            {/foreach}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
-      {if length($entry.locations) > 0}
-        {call dma.entry.value}
-          {param label: 'Location' /}
-          {param value kind="html"}
-            {foreach $location in $entry.locations}
-              {commands($location)}{if not isLast($location)}, {/if}
-            {/foreach}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
-      {if length($entry.factions) > 0}
-        {call dma.entry.value}
-          {param label: 'Faction' /}
-          {param value kind="html"}
-            {foreach $faction in $entry.factions}
-              {commands($faction)}{if not isLast($faction)}, {/if}
-            {/foreach}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
-      {if length($entry.mannerisms) > 0}
-        {call dma.entry.value}
-          {param label: 'Mannerism' /}
-          {param value kind="html"}
-            {foreach $mannerism in $entry.mannerisms}
-              {commands($mannerism)}{if not isLast($mannerism)}, {/if}
-            {/foreach}
-          {/param}
-          {param color: '#080' /}
-        {/call}
-      {/if}
       {if length($entry.secrets) > 0}
         {call dma.entry.value}
           {param label: 'Secret' /}
