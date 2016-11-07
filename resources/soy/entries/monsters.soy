@@ -701,138 +701,160 @@
 {template .personality}
   {@param entry: ?}
 
-  {call dma.entry.stat_line}
-    {param label: 'Personality' /}
-    {param content: $entry.personality /}
-  {/call}
+  {if $entry.personality.present}
+    {call dma.entry.stat_line}
+      {param label: 'Personality' /}
+      {param content: $entry.personality /}
+    {/call}
+  {/if}
 {/template}
 
 /** The monster's personality value. */
 {template .family}
   {@param entry: ?}
 
-  {call dma.entry.stat_line}
-    {param label: 'Family' /}
-    {param content: $entry.family_name /}
-  {/call}
+  {if $entry.family_name.present}
+    {call dma.entry.stat_line}
+      {param label: 'Family' /}
+      {param content: $entry.family_name /}
+    {/call}
+  {/if}
 {/template}
 
 /** The monster's personality value. */
 {template .origin}
   {@param entry: ?}
 
-  {call dma.entry.stat_line}
-    {param label: 'Origin' /}
-    {param content: $entry.origin_region /}
-  {/call}
+  {if $entry.origin.present}
+    {call dma.entry.stat_line}
+      {param label: 'Origin' /}
+      {param content: $entry.origin_region /}
+    {/call}
+  {/if}
 {/template}
 
 /** The monster's personality value. */
 {template .appearance}
   {@param entry: ?}
 
-  {call dma.entry.stat_line}
-    {param label: 'Appearance' /}
-    {param content: $entry.looks /}
-  {/call}
+  {if $entry.looks.present}
+    {call dma.entry.stat_line}
+      {param label: 'Appearance' /}
+      {param content: $entry.looks /}
+    {/call}
+  {/if}
 {/template}
 
 /** The monster's personality value. */
 {template .title}
   {@param entry: ?}
 
-  {call dma.entry.stat_line}
-    {param label: 'Title' /}
-    {param content kind="html"}
-      {foreach $title in $entry.titles}
-        {commands($title)}{if not isLast($title)}, {/if}
-      {/foreach}
-    {/param}
-  {/call}
+  {if length($entry.titles) > 0}
+    {call dma.entry.stat_line}
+      {param label: 'Title' /}
+      {param content kind="html"}
+        {foreach $title in $entry.titles}
+          {commands($title)}{if not isLast($title)}, {/if}
+        {/foreach}
+      {/param}
+    {/call}
+  {/if}
 {/template}
 
 /** The monster's personality value. */
 {template .location}
   {@param entry: ?}
 
-  {call dma.entry.stat_line}
-    {param label: 'Location' /}
-    {param content kind="html"}
-      {foreach $location in $entry.locations}
-        {commands($location)}{if not isLast($location)}, {/if}
-      {/foreach}
-    {/param}
-  {/call}
+  {if length($entry.locations) > 0}
+    {call dma.entry.stat_line}
+      {param label: 'Location' /}
+      {param content kind="html"}
+        {foreach $location in $entry.locations}
+          {commands($location)}{if not isLast($location)}, {/if}
+        {/foreach}
+      {/param}
+    {/call}
+  {/if}
 {/template}
 
 /** The monster's personality value. */
 {template .faction}
   {@param entry: ?}
 
-  {call dma.entry.stat_line}
-    {param label: 'Faction' /}
-    {param content kind="html"}
-      {foreach $faction in $entry.factions}
-        {commands($faction)}{if not isLast($faction)}, {/if}
-      {/foreach}
-    {/param}
-  {/call}
+  {if length($entry.factions) > 0}
+    {call dma.entry.stat_line}
+      {param label: 'Faction' /}
+      {param content kind="html"}
+        {foreach $faction in $entry.factions}
+          {commands($faction)}{if not isLast($faction)}, {/if}
+        {/foreach}
+      {/param}
+    {/call}
+  {/if}
 {/template}
 
 /** The monster's personality value. */
 {template .mannerism}
   {@param entry: ?}
 
-  {call dma.entry.stat_line}
-    {param label: 'Mannerism' /}
-    {param content kind="html"}
-      {foreach $mannerism in $entry.mannerisms}
-        {commands($mannerism)}{if not isLast($mannerism)}, {/if}
-      {/foreach}
-    {/param}
-  {/call}
+  {if length($entry.mannerisms) > 0}
+    {call dma.entry.stat_line}
+      {param label: 'Mannerism' /}
+      {param content kind="html"}
+        {foreach $mannerism in $entry.mannerisms}
+          {commands($mannerism)}{if not isLast($mannerism)}, {/if}
+        {/foreach}
+      {/param}
+    {/call}
+  {/if}
 {/template}
 
 /** The monster's personality value. */
 {template .secret}
   {@param entry: ?}
 
-  {call dma.entry.stat_line}
-    {param label: 'Secret' /}
-    {param content kind="html"}
-      {foreach $secret in $entry.secrets}
-        {commands($secret)}{if not isLast($secret)}, {/if}
-      {/foreach}
-    {/param}
-  {/call}
+  {if length($entry.secrets) > 0}
+    {call dma.entry.stat_line}
+      {param label: 'Secret' /}
+      {param content kind="html"}
+        {foreach $secret in $entry.secrets}
+          {commands($secret)}{if not isLast($secret)}, {/if}
+        {/foreach}
+      {/param}
+    {/call}
+  {/if}
 {/template}
 
 /** The monster's personality value. */
 {template .quest}
   {@param entry: ?}
 
-  {call dma.entry.stat_line}
-    {param label: 'Quest' /}
-    {param content kind="html"}
-      {foreach $quest in $entry.quests}
-        {commands($quest)}{if not isLast($quest)}, {/if}
-      {/foreach}
-    {/param}
-  {/call}
+  {if length($entry.quests) > 0}
+    {call dma.entry.stat_line}
+      {param label: 'Quest' /}
+      {param content kind="html"}
+        {foreach $quest in $entry.quests}
+          {commands($quest)}{if not isLast($quest)}, {/if}
+        {/foreach}
+      {/param}
+    {/call}
+  {/if}
 {/template}
 
 /** The monster's personality value. */
 {template .interaction}
   {@param entry: ?}
 
-  {call dma.entry.stat_line}
-    {param label: 'Interaction' /}
-    {param content kind="html"}
-      {foreach $interaction in $entry.interactions}
-        {commands($interaction)}{if not isLast($interaction)}, {/if}
-      {/foreach}
-    {/param}
-  {/call}
+  {if length($entry.interactions) > 0}
+    {call dma.entry.stat_line}
+      {param label: 'Interaction' /}
+      {param content kind="html"}
+        {foreach $interaction in $entry.interactions}
+          {commands($interaction)}{if not isLast($interaction)}, {/if}
+        {/foreach}
+      {/param}
+    {/call}
+  {/if}
 {/template}
 
 /** The monster's posseions. */
