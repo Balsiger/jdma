@@ -425,15 +425,14 @@
   {/if}
   {call dma.value.link}
     {param text kind="html"}
-      <i>{$entry.base_name}</i>
+      <i>
+        {$entry.base_name}{if $entry.qualifier.present} ({$entry.qualifier}){/if}
+      </i>
     {/param}
     {param url: '/feat/' + $entry.base_name /}
   {/call}
   {if $windowed}
      <span class="window">
-  {/if}
-  {if $entry.qualifier.present}
-    {sp}({$entry.qualifier}),{sp}
   {/if}
   {$entry.short_description} ({$entry.type})
   {if $entry.attack_modifier.value}

@@ -23,10 +23,12 @@
 package net.ixitxachitls.dma.entries;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.FeatProto;
 import net.ixitxachitls.dma.values.Condition;
+import net.ixitxachitls.dma.values.Evaluator;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.NameAndModifier;
 import net.ixitxachitls.dma.values.Values;
