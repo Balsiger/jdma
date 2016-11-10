@@ -19,8 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-//------------------------------------------------------------------ imports
-
 package net.ixitxachitls.util;
 
 import java.net.URLEncoder;
@@ -34,44 +32,22 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.util.logging.Log;
 
-//..........................................................................
-
-//------------------------------------------------------------------- header
-
 /**
  * Static encoding utility functions.
  *
  * @file          Encodings.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
-//..........................................................................
-
-//__________________________________________________________________________
-
-@ParametersAreNonnullByDefault
 public final class Encodings
 {
-  //--------------------------------------------------------- constructor(s)
-
-  //------------------------------ Encodings -------------------------------
-
   /**
    * Private constructor to prevent instantiations.
-   *
    */
   private Encodings()
   {
     // nothing to do
   }
-
-  //........................................................................
-
-  //........................................................................
-
-  //-------------------------------------------------------------- variables
 
   /** The special escape characters that cannot be saved in a preferences
    *  file. */
@@ -80,12 +56,6 @@ public final class Encodings
   /** Marker used for replacements (should not otherwise appear in the text. */
   private static final String s_marker  = "@#@";
 
-  //........................................................................
-
-  //-------------------------------------------------------------- accessors
-
-  //----------------------------- encodeEscapes ----------------------------
-
   /**
     * Encode the given string in such a way, that no more escape characters
     * remain and the text can safely be stored in a preferences file.
@@ -93,7 +63,6 @@ public final class Encodings
     * @param       inString the String to encode
     *
     * @return      the encoded String
-    *
     */
   public static String encodeEscapes(@Nullable String inString)
   {
@@ -116,9 +85,6 @@ public final class Encodings
     return result.toString();
   }
 
-  //........................................................................
-  //----------------------------- decodeEscapes ----------------------------
-
   /**
     * Decode the given encoded string in such a way, that it is the same
     * as before encoding.
@@ -126,7 +92,6 @@ public final class Encodings
     * @param       inString the String to decode
     *
     * @return      the decoded String
-    *
     */
   public static String decodeEscapes(String inString)
   {
@@ -147,26 +112,18 @@ public final class Encodings
     return result.toString();
   }
 
-  //........................................................................
-
-  //------------------------------ markSpaces ------------------------------
-
   /**
    * Mark all whitespace in the text to make it obvious.
    *
    * @param       inText the text to mark
    *
    * @return      the marked text
-   *
    */
   public static String markSpaces(String inText)
   {
     return inText.replaceAll("\n", "\\\\n").replaceAll("\r", "\\\\r")
       .replaceAll("\t", "\\\\t").replaceAll("\f", "\\\\f").replaceAll(" ", "_");
   }
-
-  //........................................................................
-  //------------------------------- tokenize -------------------------------
 
   /**
    * Extract all tokens from the given string. Ordinary string parts are
@@ -177,7 +134,6 @@ public final class Encodings
    * @param       inPattern  the pattern for the tokens to recognize
    *
    * @return      a list with all parsed tokens
-   *
    */
   public static List<String> tokenize(String inTemplate, String inPattern)
   {
@@ -210,17 +166,12 @@ public final class Encodings
     return result;
   }
 
-  //........................................................................
-
-  //------------------------------ urlEncode -------------------------------
-
   /**
    * Encode the string for an url.
    *
    * @param       inText the text to encode
    *
    * @return      the url encoded text
-   *
    */
   public static String urlEncode(String inText)
   {
@@ -236,9 +187,6 @@ public final class Encodings
     }
   }
 
-  //........................................................................
-  //------------------------- encodeHTMLAttribute --------------------------
-
   /**
     *
     * Encode the given string in a way that it can safely be used as an
@@ -253,16 +201,12 @@ public final class Encodings
     return inText.replaceAll("\"", "&#34;").replaceAll("\'", "&#39;");
   }
 
-  //........................................................................
-  //------------------------------ toJSString ------------------------------
-
   /**
    * Convert the given String into a javascript string.
    *
    * @param       inText the text to convert
    *
    * @return      the converted text
-   *
    */
   public static String toJSString(String inText)
   {
@@ -272,24 +216,17 @@ public final class Encodings
     return "'" + escapeJS(inText) + "'";
   }
 
-  //........................................................................
-  //------------------------------ toCSSString ------------------------------
-
   /**
    * Convert the given String into a CSS string.
    *
    * @param       inText the text to convert
    *
    * @return      the converted text
-   *
    */
   public static String toCSSString(String inText)
   {
     return inText.replaceAll("\\W", "");
   }
-
-  //........................................................................
-  //----------------------------- toCamelCase ------------------------------
 
   /**
     * Remove all '_' and ' ' and replace subsequene characters with upper case
@@ -298,7 +235,6 @@ public final class Encodings
     * @param       inText the text to convert
     *
     * @return      the converted text
-    *
     */
   public static String toCamelCase(String inText)
   {
@@ -322,9 +258,6 @@ public final class Encodings
     return result.toString();
   }
 
-  //........................................................................
-  //--------------------------- toWordUpperCase ----------------------------
-
   /**
     * Convert the String by making sure that each word beginning starts
     * with an uppercase letter.
@@ -332,7 +265,6 @@ public final class Encodings
     * @param       inText the text to convert
     *
     * @return      the converted text
-    *
     */
   public static String toWordUpperCase(String inText)
   {
@@ -356,8 +288,6 @@ public final class Encodings
     return result.toString();
   }
 
-  //........................................................................
-
   /**
    * Escape characters in the given text to make it save to include in a
    * javascript string.
@@ -373,16 +303,6 @@ public final class Encodings
         .replaceAll("(?<!\\\\)\"", "\\\\\"")
         .replaceAll("\n", "\\\\n");
   }
-
-  //........................................................................
-
-  //----------------------------------------------------------- manipulators
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //........................................................................
 
   //------------------------------------------------------------------- test
 
@@ -525,6 +445,4 @@ public final class Encodings
 
     //......................................................................
   }
-
-  //........................................................................
 }
