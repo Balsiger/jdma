@@ -3829,15 +3829,20 @@ TD.list > a
   color: #aaa;
 }
 
-.search
+.search-result
 {
   cursor: pointer;
   padding: 10px;
   display: block;
 }
 
-.search:hover
+.search-result:hover
 {
   text-decoration: none !important;
   background-color: #eee;
+}
+
+.search-result .snippet
+{
+  padding: 10px 0 0 10px;
 }

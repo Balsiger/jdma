@@ -473,7 +473,7 @@
   {foreach $entry in $entries}
     {call .link}
       {param url: $entry.link /}
-      {param class: 'search' /}
+      {param class: 'search-result' /}
       {param text kind="html"}
         {$entry.type}:{sp}{$entry.name}
         <div class="snippet">{html($entry.snippet)}</div>
