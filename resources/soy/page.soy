@@ -471,15 +471,14 @@
   <h1>Search results for: {$search}</h1>
 
   {foreach $entry in $entries}
-    <div class="search">
-      {$entry.type}:{sp}
-      {call .link}
-        {param url: $entry.link /}
-        {param text: $entry.name /}
-        {param class: $entry.type /}
-      {/call}
-      <div class="snippet">{html($entry.snippet)}</div>
-    </div>
+    {call .link}
+      {param url: $entry.link /}
+      {param class: 'search' /}
+      {param text kind="html"}
+        {$entry.type}:{sp}{$entry.name}
+        <div class="snippet">{html($entry.snippet)}</div>
+      {/param}
+    {/call}
   {ifempty}
      Nothing found, sorry.
   {/foreach}

@@ -3831,5 +3831,13 @@ TD.list > a
 
 .search
 {
-  margin: 5px 0;
+  cursor: pointer;
+  padding: 10px;
+  display: block;
+}
+
+.search:hover
+{
+  text-decoration: none !important;
+  background-color: #eee;
 }
