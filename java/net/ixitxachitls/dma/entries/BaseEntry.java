@@ -27,6 +27,10 @@ import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.appengine.api.search.Document;
+import com.google.appengine.api.search.Field;
+import com.google.appengine.api.search.IndexSpec;
+import com.google.appengine.api.search.SearchServiceFactory;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
@@ -144,6 +148,14 @@ public class BaseEntry extends AbstractEntry
     new BaseType.Builder<BaseEntry>(BaseEntry.class)
         .multiple("Base Entries")
         .build();
+
+  public static final com.google.appengine.api.search.Index INDEX_ENTRIES =
+      SearchServiceFactory.getSearchService().getIndex(
+              IndexSpec.newBuilder().setName("entries").build());
+  public static final String FIELD_DESCRIPTION = "description";
+  public static final String FIELD_NAME = "name";
+  public static final String FIELD_TYPE = "type";
+  public static final String FIELD_LINK = "link";
 
   /** The world. */
   protected List<String> m_worlds = new ArrayList<>();
@@ -488,6 +500,46 @@ public class BaseEntry extends AbstractEntry
   protected Message defaultProto()
   {
     return BaseEntryProto.getDefaultInstance();
+  }
+
+  @Override
+  public boolean save()
+  {
+    if(super.save())
+    {
+      INDEX_ENTRIES.put(createSearchDocument());
+
+      return true;
+    }
+
+    return false;
+  }
+
+  private Document createSearchDocument()
+  {
+    return Document.newBuilder()
+        .setId(getType().getLink() + "_"
+                   + getName().replaceAll("[^a-zA-Z0-9]", "_"))
+        .addField(Field.newBuilder()
+                      .setName(FIELD_DESCRIPTION)
+                      .setText(m_description)
+                      .build())
+        .addField(Field.newBuilder()
+                      .setName(FIELD_DESCRIPTION)
+                      .setText(m_short))
+        .addField(Field.newBuilder()
+                      .setName(FIELD_NAME)
+                      .setText(getName())
+                      .build())
+        .addField(Field.newBuilder()
+                      .setName(FIELD_TYPE)
+                      .setText(getType().getLink())
+                      .build())
+        .addField(Field.newBuilder()
+                      .setName(FIELD_LINK)
+                      .setText(getPath())
+                      .build())
+        .build();
   }
 }
 

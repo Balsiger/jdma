@@ -21,6 +21,8 @@
 
 package net.ixitxachitls.dma.server.servlets.actions;
 
+import com.google.appengine.api.search.SearchService;
+import com.google.appengine.api.search.SearchServiceFactory;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;

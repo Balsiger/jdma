@@ -462,3 +462,24 @@
     </body>
   </html>
 {/template}
+
+/** The search result page. */
+{template .search}
+  {@param search: string|html}
+  {@param entries: list<?>}
+
+  <h1>Search results for: {$search}</h1>
+
+  {foreach $entry in $entries}
+    {$entry.type}:{sp}
+    {call .link}
+      {param url: $entry.link /}
+      {param text: $entry.name /}
+      {param class: $entry.type /}
+    {/call}
+    <div class="snippet">{html($entry.snippet)}</div>
+  {ifempty}
+     Nothing found, sorry.
+  {/foreach}
+
+{/template}

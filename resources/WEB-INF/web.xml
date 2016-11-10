@@ -72,6 +72,14 @@
   </servlet>
 
   <servlet>
+    <servlet-name>search</servlet-name>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.SearchServlet
+    </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet>
     <servlet-name>entries</servlet-name>
     <servlet-class>
       net.ixitxachitls.dma.server.servlets.EntryListServlet
@@ -151,6 +159,11 @@
   <servlet-mapping>
     <servlet-name>action</servlet-name>
     <url-pattern>/actions/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>search</servlet-name>
+    <url-pattern>/search/*</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

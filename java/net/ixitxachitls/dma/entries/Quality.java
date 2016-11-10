@@ -31,8 +31,6 @@ import java.util.Map;
 import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.proto.*;
-import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.QualityProto;
 import net.ixitxachitls.dma.values.AbilityModifier;
 import net.ixitxachitls.dma.values.Condition;

@@ -168,7 +168,7 @@ public class AdminServlet extends SoyServlet
 
       Log.event(user.get().getName(), "admin index reset",
                 "index " + reset + " was reset for " + size + " entries");
-      return null;
+      return Optional.absent();
     }
 
     Optional<String> cache = request.getParam("cache");

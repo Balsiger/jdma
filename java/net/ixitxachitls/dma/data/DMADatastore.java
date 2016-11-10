@@ -514,7 +514,7 @@ public class DMADatastore
     Log.debug("rebuilding data for " + inType);
 
     int count = 0;
-    for(Entity entity : m_data.getEntities(inType.toString(),
+    for(Entity entity : m_data.getEntities(escapeType(inType.toString()),
                                            Optional.<Key>absent(),
                                            Optional.<String>absent(),
                                            0, 10000))
