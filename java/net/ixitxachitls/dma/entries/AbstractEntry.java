@@ -66,6 +66,7 @@ import net.ixitxachitls.dma.values.enums.Group;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * This is the base class for all entries.
@@ -862,6 +863,12 @@ public abstract class AbstractEntry
       return false;
 
     return DMADataFactory.get().update(this);
+  }
+
+  public void storeSearch()
+  {
+    throw new UnsupportedOperationException(
+        "storing searches not implemented for" + getType());
   }
 
   /**

@@ -507,12 +507,17 @@ public class BaseEntry extends AbstractEntry
   {
     if(super.save())
     {
-      INDEX_ENTRIES.put(createSearchDocument());
-
+      storeSearch();
       return true;
     }
 
     return false;
+  }
+
+  @Override
+  public void storeSearch()
+  {
+    INDEX_ENTRIES.put(createSearchDocument());
   }
 
   private Document createSearchDocument()

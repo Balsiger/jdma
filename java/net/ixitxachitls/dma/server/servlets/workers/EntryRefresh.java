@@ -21,6 +21,9 @@
 
 package net.ixitxachitls.dma.server.servlets.workers;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +34,9 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.EntryKey;
+import net.ixitxachitls.dma.server.servlets.DMARequest;
+import net.ixitxachitls.dma.server.servlets.DMAServlet;
+import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.logging.Log;
 
 /**
@@ -38,7 +44,7 @@ import net.ixitxachitls.util.logging.Log;
  *
  * @author balsiger@ixitxachitls.net (Peter Balsiger)
  */
-public class EntryRefresh extends HttpServlet
+public class EntryRefresh extends DMAServlet
 {
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -46,22 +52,35 @@ public class EntryRefresh extends HttpServlet
   public static String TYPE_PARAM = "type";
   public static String PARENT_PARAM = "parent";
 
-  protected void doPost(HttpServletRequest inRequest,
-                        HttpServletResponse inResponse)
+  @Override
+  protected Optional<? extends SpecialResult> handle(DMARequest inRequest,
+                                                     HttpServletResponse inResponse)
+      throws ServletException, IOException
   {
-    String typeParam = inRequest.getParameter(TYPE_PARAM);
-    String parentParam = inRequest.getParameter(PARENT_PARAM);
+    Optional<String> typeParam = inRequest.getParam(TYPE_PARAM);
+    Optional<String> parentParam = inRequest.getParam(PARENT_PARAM);
+
+    if(!typeParam.isPresent())
+      return Optional.of(new TextError(200,
+                                       "A type parameter has to be given"));
 
     Optional<? extends AbstractType<? extends AbstractEntry>> type =
-        AbstractType.getTyped(typeParam);
+        AbstractType.getTyped(typeParam.get());
     if(!type.isPresent())
-      return;
+      return Optional.of(new TextError(200, "Cannot parse given type '"
+          + typeParam + "'"));
 
-    Optional<EntryKey> parent = EntryKey.fromString(parentParam);
+    Optional<EntryKey> parent;
+    if(parentParam.isPresent())
+      parent = EntryKey.fromString(parentParam.get());
+    else
+      parent = Optional.absent();
 
     Log.important("Refreshing type " + type + " for parent " + parent);
     DMADataFactory.get().refresh(type.get(), parent);
     Log.important("Refreshing of type " + type + " for parent " + parent
                   + " is done");
+
+    return Optional.absent();
   }
 }

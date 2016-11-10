@@ -247,7 +247,7 @@ admin.clearCache = function()
 
 admin.refresh = function(inType)
 {
-  util.ajax('/admin', { 'refresh': inType }, null, true);
+  util.ajax('/task/refresh', { 'parent': '', 'type': inType }, null, true);
 };
 
 

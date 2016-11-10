@@ -605,6 +605,8 @@ public class DMADatastore
         if(!entry.isPresent())
           continue;
 
+        entry.get().storeSearch();
+
         Entity converted  = convert(entry.get());
         if (equals(entity, converted))
           continue;
