@@ -2,6 +2,8 @@ User-agent: *
 Disallow: /products/
 Disallow: /user/
 Disallow: /users/
+Disallow: /actions/
+Disallow: /task/
 Disallow: *.dma
 Disallow: *.pdf
 Disallow: *.print
