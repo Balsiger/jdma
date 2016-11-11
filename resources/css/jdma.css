@@ -3824,9 +3824,14 @@ TD.list > a
   text-indent: 0;
 }
 
-.snippet
+.search-result .snippet
 {
-  color: #aaa;
+  color: #888;
+}
+
+.search-result .snippet b
+{
+  color: #444;
 }
 
 .search-result
@@ -3845,4 +3850,15 @@ TD.list > a
 .search-result .snippet
 {
   padding: 10px 0 0 10px;
+}
+
+.search-result-type
+{
+  color: #444;
+}
+
+.search-result-name
+{
+  font-weight: bold;
+  font-size: 20px;
 }

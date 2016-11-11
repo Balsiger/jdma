@@ -475,7 +475,8 @@
       {param url: $entry.link /}
       {param class: 'search-result' /}
       {param text kind="html"}
-        {$entry.type}:{sp}{$entry.name}
+        <span class="search-result-type">{$entry.type}:</span>{sp}
+        <span class="search-result-name">{$entry.name}</span>
         <div class="snippet">{html($entry.snippet)}</div>
       {/param}
     {/call}
