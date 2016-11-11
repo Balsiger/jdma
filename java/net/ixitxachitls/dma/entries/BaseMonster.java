@@ -2643,6 +2643,9 @@ public class BaseMonster extends BaseEntry
     for(LanguageOption language : m_languages)
       values.put(Index.Path.LANGUAGES, language.getLanguage().toString());
 
+    for(Quality quality : m_qualities)
+      values.put(Index.Path.QUALITIES, quality.getName());
+
     return values;
   }
 
