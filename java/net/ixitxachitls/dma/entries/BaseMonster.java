@@ -1330,6 +1330,32 @@ public class BaseMonster extends BaseEntry
     return m_willSave;
   }
 
+  public Annotated.Modifier willSave()
+  {
+    Annotated.Modifier save = new Annotated.Modifier();
+
+    // Racial values.
+    for (ValueSources.ValueSource<Optional<Integer>> bonus
+        : getCombinedWillSave().getSources().getSources())
+      if (bonus.getValue().isPresent())
+        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
+
+    // Qualities.
+    for (Quality quality : getQualities())
+      if(quality.willModifier().hasValue())
+        save.add(quality.willModifier(), quality.getName());
+
+    for(Feat feat : getFeats())
+    {
+      Modifier modifier = feat.willModifier();
+      if(modifier.hasValue())
+        save.add(modifier, feat.getName() + " feat");
+    }
+
+    return save;
+  }
+
+
   /**
    * Get the combined and annotated will save.
    *
@@ -1355,6 +1381,31 @@ public class BaseMonster extends BaseEntry
   public Optional<Integer> getReflexSave()
   {
     return m_reflexSave;
+  }
+
+  public Annotated.Modifier reflexSave()
+  {
+    Annotated.Modifier save = new Annotated.Modifier();
+
+    // Racial values.
+    for (ValueSources.ValueSource<Optional<Integer>> bonus
+        : getCombinedReflexSave().getSources().getSources())
+      if (bonus.getValue().isPresent())
+        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
+
+    // Qualities.
+    for (Quality quality : getQualities())
+      if(quality.reflexModifier().hasValue())
+        save.add(quality.reflexModifier(), quality.getName());
+
+    for(Feat feat : getFeats())
+    {
+      Modifier modifier = feat.reflexModifier();
+      if(modifier.hasValue())
+        save.add(modifier, feat.getName() + " feat");
+    }
+
+    return save;
   }
 
   /**
