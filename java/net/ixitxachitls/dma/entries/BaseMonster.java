@@ -50,6 +50,7 @@ import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.SizeModifier;
 import net.ixitxachitls.dma.values.Speed;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.ValueSources;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Alignment;
@@ -1275,6 +1276,31 @@ public class BaseMonster extends BaseEntry
   public Optional<Integer> getFortitudeSave()
   {
     return m_fortitudeSave;
+  }
+
+  public Annotated.Modifier fortitudeSave()
+  {
+    Annotated.Modifier save = new Annotated.Modifier();
+
+    // Racial values.
+    for (ValueSources.ValueSource<Optional<Integer>> bonus
+        : getCombinedFortitudeSave().getSources().getSources())
+      if (bonus.getValue().isPresent())
+        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
+
+    // Qualities.
+    for (Quality quality : getQualities())
+      if(quality.fortitudeModifier().hasValue())
+        save.add(quality.fortitudeModifier(), quality.getName());
+
+    for(Feat feat : getFeats())
+    {
+      Modifier modifier = feat.fortitudeModifier();
+      if(modifier.hasValue())
+        save.add(modifier, feat.getName() + " feat");
+    }
+
+    return save;
   }
 
   /**

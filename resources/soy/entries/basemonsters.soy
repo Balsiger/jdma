@@ -474,23 +474,24 @@
         {param value kind="html"}
           {call dma.edit.field_input}
             {param name: 'fortitude_save' /}
-            {param value: $entry.fortitude_save.present
-              ? $entry.fortitude_save : '' /}
+            {param value: $entry.get_fortitude_save.present
+              ? $entry.get_fortitude_save : '' /}
             {param validate: 'number' /}
             {param caption: 'Fortitude' /}
             {param class: 'field3' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'reflex_save' /}
-            {param value: $entry.reflex_save.present 
-              ? $entry.reflex_save : '' /}
+            {param value: $entry.get_reflex_save.present
+              ? $entry.get_reflex_save : '' /}
             {param validate: 'number' /}
             {param caption: 'Reflex' /}
             {param class: 'field3' /}
           {/call}
           {call dma.edit.field_input}
             {param name: 'will_save' /}
-            {param value: $entry.will_save.present ? $entry.will_save : '' /}
+            {param value: $entry.get_will_save.present
+              ? $entry.get_will_save : '' /}
             {param validate: 'number' /}
             {param caption: 'Will' /}
             {param class: 'field3' /}
@@ -1257,9 +1258,9 @@
   {call dma.entry.stat_line}
     {param label: 'Saves' /}
     {param content kind="html"}
-       Fort {bonus($entry.combined_fortitude_save.get)},{sp}
-       Ref {bonus($entry.combined_reflex_save.get)},{sp}
-       Will {bonus($entry.combined_will_save.get)}
+       Fort {annotate($entry.fortitude_save)},{sp}
+       Ref {annotate($entry.reflex_save)},{sp}
+       Will {annotate($entry.will_save)}
     {/param}
   {/call}
 {/template}

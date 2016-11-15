@@ -767,6 +767,7 @@
   {@param modifier: ?}
   {@param? hide_condition: bool}
   {@param? only_conditionals: bool}
+
   {if $modifier.has_condition}
     {if $hide_condition}
       <span class="modifier-hide-condition">
@@ -940,7 +941,7 @@
         {if not isLast($single)}, {/if}
       {/foreach}
     {elseif $value.get.present}
-      {if $value.show_sign and $value.get.present}
+      {if $value.show_sign}
         {bonus($value.get.integer)}
       {else}
         {$value.get.formatted}

@@ -551,6 +551,13 @@ public abstract class Annotated<V>
       m_value = new net.ixitxachitls.dma.values.Modifier();
     }
 
+    public Modifier(net.ixitxachitls.dma.values.Modifier inValue,
+                    java.lang.String inSource) {
+      m_value = inValue;
+
+      super.add(inValue, inSource);
+    }
+
     private net.ixitxachitls.dma.values.Modifier m_value;
 
     @Override
@@ -560,7 +567,8 @@ public abstract class Annotated<V>
     }
 
     public void add(net.ixitxachitls.dma.values.Modifier inValue,
-                    java.lang.String inSource){
+                    java.lang.String inSource)
+    {
       add(inValue);
 
       super.add(inValue, inSource);
