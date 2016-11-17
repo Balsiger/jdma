@@ -275,12 +275,12 @@ public class Condition extends Value.Arithmetic<Values.ConditionProto>
   }
 
   private Condition(Optional<String> inGeneric, WeaponStyle inStyle,
-                    Ability inAbilitty,
+                    Ability inAbility,
                     Optional<Limit> inLimit)
   {
     m_generic = inGeneric;
     m_style = inStyle;
-    m_ability = inAbilitty;
+    m_ability = inAbility;
     m_limit = inLimit;
   }
 

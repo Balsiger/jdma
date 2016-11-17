@@ -1473,6 +1473,14 @@ public class BaseMonster extends BaseEntry
           bonus.add(modifier.totalModifier(), feat.getName());
       }
 
+    for(Quality quality : getQualities())
+      if(quality.attackModifier().hasValue())
+        if(quality.attackModifier().hasCondition())
+          bonus.add(0, quality.getName() + ", " + quality.attackModifier());
+        else
+          bonus.add(quality.attackModifier().totalModifier(),
+                    quality.getName());
+
     return bonus;
   }
 

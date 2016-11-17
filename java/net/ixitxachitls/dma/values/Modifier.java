@@ -253,7 +253,9 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
           else
             type = Type.fromString(parts[1]).get();
 
-          Optional<String> condition = Optional.fromNullable(parts[2]);
+          // Replace \$ to $.
+          Optional<String> condition =
+              Optional.fromNullable(parts[2].replaceAll("\\\\\\$", "\\$"));
 
           result =
             Optional.of(new Modifier(modifier, type, condition, result));
