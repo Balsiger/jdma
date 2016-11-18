@@ -122,6 +122,7 @@ public class BaseQuality extends BaseEntry
 
   /** The modifier for damage. */
   private Optional<Modifier> m_damageModifier = Optional.absent();
+  private Optional<Modifier> m_acModifier = Optional.absent();
 
   /** The bonus feats (or-ed). */
   private List<String> m_bonusFeats = new ArrayList<>();
@@ -218,6 +219,11 @@ public class BaseQuality extends BaseEntry
     return m_attackModifier;
   }
 
+  public Optional<Modifier> getAcModifier()
+  {
+    return m_acModifier;
+  }
+
   /**
    * Get the damage modifier provided by this quality.
    *
@@ -276,6 +282,7 @@ public class BaseQuality extends BaseEntry
                                     Modifier.PARSER);
     m_damageModifier = inValues.use("damage_modifier", m_damageModifier,
                                     Modifier.PARSER);
+    m_acModifier = inValues.use("ac_modifier", m_acModifier, Modifier.PARSER);
     m_bonusFeats = inValues.use("bonus_feat", m_bonusFeats);
     m_nameFormat = inValues.use("name_format", m_nameFormat);
 
@@ -300,115 +307,6 @@ public class BaseQuality extends BaseEntry
 
     return values;
   }
-
-  /**
-   * Get a modifier for a skill.
-   *
-   * @param       inName the name of the skill to modify
-   * @param       inParameters the parameters for the skill
-   *
-   * @return      the modifier, if any
-   *
-   */
-  /*
-  @SuppressWarnings("unchecked")
-  public @Nullable Modifier computeSkillModifier
-    (String inName, Parameters inParameters)
-  {
-    Modifier result = null;
-
-    for(Multiple effect : m_effects)
-      if(((EnumSelection<Affects>)effect.get(0)).getSelected() == Affects.SKILL
-         && inName.equalsIgnoreCase(effect.get(1).toString()))
-        result =
-          computeModifierExpression((Modifier)effect.get(2), inParameters)
-          .as(result);
-
-    return result;
-  }
-  */
-
-  /**
-   * Collect a name value.
-   *
-   * @param       inName          the name of the value to collect
-   * @param       ioCombined      the value collected so far (to add to)
-   * @param       inDescription   the description why collecting the value
-   * @param       inParameters    the parameters for collecting values
-   * @param       inCondition     the condition for collecting
-   * @param       <T>             the type of value collected
-   */
-  /*
-  @SuppressWarnings("unchecked")
-  protected <T extends Value<T>> void
-               collect(String inName, Combined<T> ioCombined,
-                       String inDescription,
-                       Parameters inParameters,
-                       @Nullable Condition<?> inCondition)
-  {
-    super.collect(inName, ioCombined);
-
-    for(Multiple multiple : m_effects)
-    {
-      Affects affects = ((EnumSelection<Affects>)multiple.get(0)).getSelected();
-      if(("fortitude save".equals(inName) && affects == Affects.FORTITUDE_SAVE)
-         || ("reflex save".equals(inName) && affects == Affects.REFLEX_SAVE)
-         || ("will save".equals(inName) && affects == Affects.WILL_SAVE)
-         || ("strength".equals(inName) && affects == Affects.STRENGTH)
-         || ("dexterity".equals(inName) && affects == Affects.DEXTERITY)
-         || ("constitution".equals(inName) && affects == Affects.CONSTITUTION)
-         || ("widsom".equals(inName) && affects == Affects.WISDOM)
-         || ("intelligence".equals(inName) && affects == Affects.INTELLIGENCE)
-         || ("charisma".equals(inName) && affects == Affects.CHARISMA)
-         || (affects == Affects.SKILL
-             && inName.equals(computeExpressions(multiple.get(1).toString(),
-                                                 inParameters)))
-         || (affects == Affects.DAMAGE && "damage".equals(inName))
-         || (affects == Affects.AC && "armor class".equals(inName))
-         || (affects == Affects.SPEED && "speed".equals(inName))
-         || (affects == Affects.ATTACK && "attack".equals(inName)))
-      {
-        Modifier modifier = (Modifier)multiple.get(2);
-        if(modifier.isDefined())
-        {
-          modifier.withCondition(inCondition);
-          if(modifier.getExpression() instanceof Expression.Expr)
-          {
-            String expression =
-              computeExpressions(((Expression.Expr)modifier.getExpression())
-                                 .getText(), inParameters);
-
-            Modifier computed = modifier.read(expression);
-            if(computed != null)
-            {
-              computed.withCondition(inCondition);
-              computed.withCondition(modifier.getCondition());
-              ioCombined.addModifier(computed, this, inDescription);
-            }
-            else
-              ioCombined.addModifier
-                (modifier.as(Integer.valueOf(expression.replace('+', '0')),
-                             modifier.getType(), modifier.getCondition(), null),
-                  this, null);
-          }
-          else
-            ioCombined.addModifier(modifier, this, null);
-        }
-
-        Text valueText = (Text)multiple.get(3);
-        if(valueText.isDefined())
-        {
-          List<T> values = ioCombined.valuesOnly();
-          if(!values.isEmpty())
-          {
-            String text = computeExpressions(valueText.get(), inParameters);
-            ioCombined.addValue(values.get(0).read(text), this, inDescription);
-          }
-        }
-      }
-    }
-  }
-  */
 
   /**
    * Check whether the given user is the DM for this entry.
@@ -483,6 +381,9 @@ public class BaseQuality extends BaseEntry
 
     if(m_damageModifier.isPresent())
       builder.setDamageModifier(m_damageModifier.get().toProto());
+
+    if(m_acModifier.isPresent())
+      builder.setAcModifier(m_acModifier.get().toProto());
 
     for(String feat : m_bonusFeats)
       builder.addBonusFeat(feat);
@@ -564,6 +465,9 @@ public class BaseQuality extends BaseEntry
     if(proto.hasDamageModifier())
       m_damageModifier =
           Optional.of(Modifier.fromProto(proto.getDamageModifier()));
+
+    if(proto.hasAcModifier())
+      m_acModifier = Optional.of(Modifier.fromProto(proto.getAcModifier()));
 
     for(BaseQualityProto.KeyedModifier skillModifeir
           : proto.getSkillModifierList())

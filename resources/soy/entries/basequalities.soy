@@ -217,6 +217,13 @@
           {param color: '#808' /}
         {/call}
       {/if}
+      {if $entry.ac_modifier.present}
+        {call dma.entry.value}
+          {param label: 'Armor Class' /}
+          {param value: $entry.ac_modifier /}
+          {param color: '#808' /}
+        {/call}
+      {/if}
       {if $entry.bonus_feats}
         {call dma.entry.value}
           {param label: 'Bonus Feats' /}
@@ -634,6 +641,14 @@
         {param label: 'Damage' /}
         {param value: $entry.damage_modifier.present
           ? $entry.damage_modifier : '' /}
+        {param validate: 'modifier' /}
+        {param color: '#808' /}
+      {/call}
+      {call dma.edit.value}
+        {param name: 'ac_modifier' /}
+        {param label: 'Armor Class' /}
+        {param value: $entry.ac_modifier.present
+          ? $entry.ac_modifier : '' /}
         {param validate: 'modifier' /}
         {param color: '#808' /}
       {/call}

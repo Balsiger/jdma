@@ -921,6 +921,13 @@ public class BaseMonster extends BaseEntry
     armor = (Modifier)armor.add(dexterityModifier());
     armor = (Modifier)armor.add(sizeModifier());
 
+    for(Quality quality : getQualities())
+    {
+      Modifier modifier = quality.acModifier();
+      if(modifier.hasValue())
+        armor = (Modifier)armor.add(modifier);
+    }
+
     return armor;
   }
 
@@ -1015,6 +1022,13 @@ public class BaseMonster extends BaseEntry
     armor = (Modifier)armor.add(naturalArmor());
     armor = (Modifier)armor.add(sizeModifier());
 
+    for(Quality quality : getQualities())
+    {
+      Modifier modifier = quality.acModifier().without(Modifier.Type.DODGE);
+      if(modifier.hasValue())
+        armor = (Modifier)armor.add(modifier);
+    }
+
     return armor;
   }
 
@@ -1026,6 +1040,15 @@ public class BaseMonster extends BaseEntry
 
     armor = (Modifier)armor.add(dexterityModifier());
     armor = (Modifier)armor.add(sizeModifier());
+
+    for(Quality quality : getQualities())
+    {
+      Modifier modifier = quality.acModifier().without(Modifier.Type.ARMOR)
+          .without(Modifier.Type.SHIELD);
+
+      if(modifier.hasValue())
+        armor = (Modifier)armor.add(modifier);
+    }
 
     return armor;
   }

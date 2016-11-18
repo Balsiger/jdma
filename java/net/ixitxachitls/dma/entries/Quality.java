@@ -364,6 +364,13 @@ public class Quality extends NestedEntry
     return new Modifier();
   }
 
+  public Modifier acModifier() {
+    if(getBase().isPresent() && getBase().get().getAcModifier().isPresent())
+      return parametrize(getBase().get().getAcModifier().get());
+
+    return new Modifier();
+  }
+
   private Modifier parametrize(Modifier inModifier) {
     if(!inModifier.hasAnyCondition())
       return inModifier;

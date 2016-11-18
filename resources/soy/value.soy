@@ -767,36 +767,47 @@
   {@param modifier: ?}
   {@param? hide_condition: bool}
   {@param? only_conditionals: bool}
+  {@param? ranged: bool}
 
-  {if $modifier.has_condition}
-    {if $hide_condition}
-      <span class="modifier-hide-condition">
-        ({bonus($modifier.modifier)}
+  {if $ranged}
+    {if $modifier.has_any_condition}
+      {bonus($modifier.unconditional_modifier)}
+      &ndash;
+      {bonus($modifier.total_modifier)}
+    {else}
+      {bonus($modifier.total_modifier)}
+    {/if}
+  {else}
+    {if $modifier.has_condition}
+      {if $hide_condition}
+        <span class="modifier-hide-condition">
+          ({bonus($modifier.modifier)}
+          {if not $modifier.type.general}
+            {sp}{$modifier.type}
+          {/if})
+        </span>
+      {else}
+        {bonus($modifier.modifier)}
         {if not $modifier.type.general}
           {sp}{$modifier.type}
-        {/if})
-      </span>
-    {else}
+        {/if}
+        {if $modifier.condition.present}
+          <span class="modifier-condition"> {$modifier.condition}</span>
+        {/if}
+      {/if}
+    {elseif not $only_conditionals}
       {bonus($modifier.modifier)}
       {if not $modifier.type.general}
-        {sp}{$modifier.type}
-      {/if}
-      {if $modifier.condition.present}
-        <span class="modifier-condition"> {$modifier.condition}</span>
-      {/if}
-    {/if}
-  {elseif not $only_conditionals}
-    {bonus($modifier.modifier)}
-    {if not $modifier.type.general}
       {sp}{$modifier.type}
+      {/if}
     {/if}
-  {/if}
-  {if $modifier.next.present}
-    {sp}
-    {call .modifier}
-      {param modifier: $modifier.next /}
-      {param only_conditionals: $only_conditionals /}
-    {/call}
+    {if $modifier.next.present}
+      {sp}
+      {call .modifier}
+        {param modifier: $modifier.next /}
+        {param only_conditionals: $only_conditionals /}
+      {/call}
+    {/if}
   {/if}
 {/template}
 

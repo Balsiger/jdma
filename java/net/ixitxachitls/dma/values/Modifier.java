@@ -388,6 +388,26 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     return false;
   }
 
+  public Modifier without(Type inType)
+  {
+    if(m_type == inType) {
+      if (m_next.isPresent())
+        return m_next.get().without(inType);
+
+      // Nothing left.
+      return new Modifier();
+    }
+
+    Optional<Modifier> next = m_next.isPresent()
+        ? Optional.of(m_next.get().without(inType))
+        : Optional.<Modifier>absent();
+
+    if(next.equals(m_next))
+      return this;
+
+    return new Modifier(m_modifier, m_condition, next, m_type);
+  }
+
   /**
    * Get the type of the modifier.
    *

@@ -1153,9 +1153,20 @@
   {call dma.entry.stat_line}
     {param label: 'Armor Class' /}
     {param content kind="html"}
-      {$entry.armor_class.total_modifier} ({$entry.armor_class}),
-      touch {$entry.armor_class_touch.total_modifier},
-      flat-footed {$entry.armor_class_flatfooted.total_modifier}
+      {call dma.value.modifier}
+        {param modifier: $entry.armor_class /}
+        {param ranged: true /}
+      {/call}{sp}
+      ({$entry.armor_class}),
+      touch{sp}
+      {call dma.value.modifier}
+        {param modifier: $entry.armor_class_touch /}
+        {param ranged: true /}
+      {/call}, flat-footed{sp}
+      {call dma.value.modifier}
+        {param modifier: $entry.armor_class_flatfooted /}
+        {param ranged: true /}
+      {/call}
     {/param}
   {/call}
 {/template}
