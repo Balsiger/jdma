@@ -335,6 +335,18 @@ public class Quality extends NestedEntry
     return new Modifier();
   }
 
+  public boolean hasSkillModifier(String inName)
+  {
+    if(!getBase().isPresent())
+      return false;
+
+    for(KeyedModifier modifier : getBase().get().getSkillModifiers())
+      if(modifier.getKey().equalsIgnoreCase(inName))
+        return true;
+
+    return false;
+  }
+
   public Modifier skillModifier(String inSkill)
   {
     Modifier result = new Modifier();

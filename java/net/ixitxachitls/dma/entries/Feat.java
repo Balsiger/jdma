@@ -180,6 +180,11 @@ public class Feat extends NestedEntry
     return new Modifier();
   }
 
+  public boolean hasSkillModifier(String inName)
+  {
+    return getBase().isPresent() && getBase().get().hasSkillModifier(inName);
+  }
+
   public Modifier skillModifier(String inSkill)
   {
     if(getBase().isPresent())

@@ -392,6 +392,15 @@
     </appcfg>
   </target>
 
+  <target name="gae-rollback" depends=""
+          description="Rollback an App Engine update.">
+    <appcfg action="rollback" war="${war.dir}">
+      <options>
+        <arg value="--oauth2" />
+      </options>
+    </appcfg>
+  </target>
+
   <target name="gae-update-dev" depends="compile"
           description="Uploads the application to App Engine.">
     <replace file="${war.dir}/WEB-INF/appengine-web.xml"
@@ -406,11 +415,6 @@
   <target name="gae-update_indexes" depends="compile"
           description="Uploads the datastore index config to App Engine.">
     <appcfg action="update_indexes" war="${war.dir}" />
-  </target>
-
-  <target name="gae-rollback" depends="compile"
-      description="Rolls back an interrupted application update.">
-    <appcfg action="rollback" war="${war.dir}" />
   </target>
 
   <target name="gae-logs"

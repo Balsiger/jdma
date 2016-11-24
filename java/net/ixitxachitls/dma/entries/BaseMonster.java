@@ -1774,10 +1774,25 @@ public class BaseMonster extends BaseEntry
   {
     Modifier modifier = new Modifier();
     for(Feat feat : m_feats)
-      modifier = (Modifier)modifier.add(feat.skillModifier(inName));
+      if(feat.hasSkillModifier(inName))
+        modifier = (Modifier)modifier.add(feat.skillModifier(inName));
 
     for(Quality quality : m_qualities)
-      modifier = (Modifier)modifier.add(quality.skillModifier(inName));
+      if(quality.hasSkillModifier(inName))
+        modifier = (Modifier)modifier.add(quality.skillModifier(inName));
+
+    return modifier;
+  }
+
+  public Annotated.Modifier aSkillModifier(String inName) {
+    Annotated.Modifier modifier = new Annotated.Modifier();
+    for(Feat feat : m_feats)
+      if(feat.hasSkillModifier(inName))
+        modifier.add(feat.skillModifier(inName), feat.getName());
+
+    for(Quality quality : m_qualities)
+      if(quality.hasSkillModifier(inName))
+        modifier.add(quality.skillModifier(inName), quality.getName());
 
     return modifier;
   }

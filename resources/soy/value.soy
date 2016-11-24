@@ -939,6 +939,7 @@
 {template .annotated}
   {@param value: ?}
   {@param? link: string}
+  {@param? type: string}
   <span class="annotated">
     {if isList($value.get)}
       {foreach $single in $value.get}
@@ -953,9 +954,17 @@
       {/foreach}
     {elseif $value.get.present}
       {if $value.show_sign}
-        {bonus($value.get.integer)}
+        {if $type == 'ranged' and $value.get.low != $value.get.high}
+          {bonus($value.get.low)}&ndash;{bonus($value.get.high)}
+        {else}
+          {bonus($value.get.integer)}
+        {/if}
       {else}
-        {$value.get.formatted}
+        {if $type == 'ranged' and $value.get.low != $value.get.high}
+          {$value.get.low}&ndash;{$value.get.high}
+        {else}
+          {$value.get.formatted}
+        {/if}
       {/if}
     {/if}
     <div class="annotations">

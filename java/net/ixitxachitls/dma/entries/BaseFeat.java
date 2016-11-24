@@ -557,6 +557,15 @@ public class BaseFeat extends BaseEntry
     return m_skillModifiers;
   }
 
+  public boolean hasSkillModifier(String inName)
+  {
+    for(NameAndModifier skill : m_skillModifiers)
+      if(skill.hasName(inName))
+        return true;
+
+    return false;
+  }
+
   public Modifier getSkillModifier(String inSkill)
   {
     for(NameAndModifier skill : m_skillModifiers)

@@ -28,6 +28,8 @@ import com.google.common.base.Optional;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries.SkillProto;
+import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Ability;
 
@@ -159,6 +161,17 @@ public class Skill extends NestedEntry
     builder.setRanks(m_ranks);
 
     return builder.build();
+  }
+
+  public Annotated.Modifier aModifier(BaseMonster inMonster) {
+    Annotated.Modifier modifier =
+        new Annotated.Modifier(new Modifier(getRanks()), "ranks");
+
+    modifier.add(new Modifier(inMonster.abilityModifier(getAbility()),
+                              Modifier.Type.ABILITY), getAbility().getShort());
+    modifier.add(inMonster.aSkillModifier(getName()));
+
+    return modifier;
   }
 
   public int modifier(BaseMonster inMonster)

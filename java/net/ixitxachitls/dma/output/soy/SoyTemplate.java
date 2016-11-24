@@ -449,7 +449,7 @@ public class SoyTemplate
     @Override
     public Set<Integer> getValidArgsSizes()
     {
-      return ImmutableSet.of(1, 2);
+      return ImmutableSet.of(1, 3);
     }
 
     @Override
@@ -464,7 +464,8 @@ public class SoyTemplate
                  ("dma.value.annotated",
                   Optional.of(map(
                       "value", data,
-                      "link", inArgs.size() > 1 ? inArgs.get(1) : ""))),
+                      "link", inArgs.size() > 1 ? inArgs.get(1) : "",
+                      "type", inArgs.size() > 2 ? inArgs.get(2) : ""))),
              SanitizedContent.ContentKind.HTML);
       }
 

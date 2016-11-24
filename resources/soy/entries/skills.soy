@@ -26,7 +26,8 @@
 {template .show}
   {@param entry: ?}
   {@param monster: ?}
-  {$entry.name} {bonus(call($entry, 'modifier', $monster))}
+
+  {$entry.name} {annotate(call($entry, 'aModifier', $monster), '', 'ranged')}
 {/template}
 
 /** Editing the skill. */

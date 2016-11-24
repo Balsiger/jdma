@@ -254,8 +254,9 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
             type = Type.fromString(parts[1]).get();
 
           // Replace \$ to $.
-          Optional<String> condition =
-              Optional.fromNullable(parts[2].replaceAll("\\\\\\$", "\\$"));
+          if (parts[2] != null)
+            parts[2] = parts[2].replaceAll("\\\\\\$", "\\$");
+          Optional<String> condition = Optional.fromNullable(parts[2]);
 
           result =
             Optional.of(new Modifier(modifier, type, condition, result));
@@ -324,9 +325,6 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   /** The type of the modifier. */
   private final Type m_type;
 
-  /** The default type, if any. */
-  private final Type m_defaultType = Type.GENERAL;
-
   /** The condition for the modifier, if any. */
   private final Optional<Condition> m_condition;
 
@@ -359,6 +357,16 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
       modifier += m_next.get().unconditionalModifier();
 
     return modifier;
+  }
+
+  public int low()
+  {
+    return unconditionalModifier();
+  }
+
+  public int high()
+  {
+    return totalModifier();
   }
 
   public int total(Monster inMonster)
@@ -517,6 +525,10 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     if(m_next.isPresent())
       m_next.get().addToProto(inBuilder);
    }
+
+  public Modifier add(int inModifier, Type inType) {
+    return (Modifier) add(new Modifier(inModifier, inType));
+  }
 
   @Override
   public Value.Arithmetic<ModifierProto>
