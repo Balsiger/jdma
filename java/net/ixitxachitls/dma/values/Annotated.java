@@ -546,14 +546,28 @@ public abstract class Annotated<V>
   public static class Modifier
       extends Annotated<net.ixitxachitls.dma.values.Modifier>
   {
+    private final boolean m_showSign;
+
     public Modifier()
     {
-      m_value = new net.ixitxachitls.dma.values.Modifier();
+      this(false);
     }
 
     public Modifier(net.ixitxachitls.dma.values.Modifier inValue,
                     java.lang.String inSource) {
+      this(inValue, inSource, false);
+    }
+
+    public Modifier(boolean inShowSign)
+    {
+      m_value = new net.ixitxachitls.dma.values.Modifier();
+      m_showSign = inShowSign;
+    }
+
+    public Modifier(net.ixitxachitls.dma.values.Modifier inValue,
+                    java.lang.String inSource, boolean inShowSign) {
       m_value = inValue;
+      m_showSign = inShowSign;
 
       super.add(inValue, inSource);
     }
@@ -578,6 +592,12 @@ public abstract class Annotated<V>
     public net.ixitxachitls.dma.values.Modifier get()
     {
       return m_value;
+    }
+
+    @Override
+    public boolean showSign()
+    {
+      return m_showSign;
     }
   }
 

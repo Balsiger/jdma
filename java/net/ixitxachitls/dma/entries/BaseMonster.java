@@ -1747,17 +1747,17 @@ public class BaseMonster extends BaseEntry
       case PLANT:
       case VERMIN:
       default:
-        return Math.max(1, 2 + intelligenceBonus()) * (hd + 3);
+        return Math.max(1, 2 + Math.max(1, intelligenceBonus())) * (hd + 3);
 
       case UNDEAD:
-        return Math.max(1, 4 + intelligenceBonus()) * (hd + 3);
+        return Math.max(1, 4 + Math.max(1, intelligenceBonus())) * (hd + 3);
 
       case DRAGON:
       case FEY:
-        return Math.max(1, 6 + intelligenceBonus()) * (hd + 3);
+        return Math.max(1, 6 + Math.max(1, intelligenceBonus())) * (hd + 3);
 
       case OUTSIDER:
-        return Math.max(1, 8 + intelligenceBonus()) * (hd + 3);
+        return Math.max(1, 8 + Math.max(1, intelligenceBonus())) * (hd + 3);
     }
   }
 

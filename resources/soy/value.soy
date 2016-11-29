@@ -957,7 +957,7 @@
         {if $type == 'ranged' and $value.get.low != $value.get.high}
           {bonus($value.get.low)}&ndash;{bonus($value.get.high)}
         {else}
-          {bonus($value.get.integer)}
+          {bonus($value.get)}
         {/if}
       {else}
         {if $type == 'ranged' and $value.get.low != $value.get.high}

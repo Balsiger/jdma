@@ -27,7 +27,8 @@
   {@param entry: ?}
   {@param monster: ?}
 
-  {$entry.name} {annotate(call($entry, 'aModifier', $monster), '', 'ranged')}
+  {$entry.name}{sp}
+  {annotate(call($entry, 'annotatedModifier', $monster), '', 'ranged')}
 {/template}
 
 /** Editing the skill. */

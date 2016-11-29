@@ -50,6 +50,7 @@ public enum Organization implements Named,
   /** Brood organization. */
   BROOD("Brood", BaseMonsterProto.Organization.Type.BROOD),
   CLAN("Clan", BaseMonsterProto.Organization.Type.CLAN),
+  CLUTCH("Clutch", BaseMonsterProto.Organization.Type.CLUTCH),
 
   /** Colony organization. */
   COLONY("Colony", BaseMonsterProto.Organization.Type.COLONY),
