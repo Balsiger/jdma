@@ -953,15 +953,17 @@
         {if not isLast($single)}, {/if}
       {/foreach}
     {elseif $value.get.present}
-      {if $value.show_sign}
-        {if $type == 'ranged' and $value.get.low != $value.get.high}
-          {bonus($value.get.low)}&ndash;{bonus($value.get.high)}
-        {else}
-          {bonus($value.get)}
+      {if $type == 'ranged'}
+        {if $value.show_sign}
+          {if $value.get.low != $value.get.high}
+            {bonus($value.get.low)}&ndash;{bonus($value.get.high)}
+          {else}
+            {bonus($value.get.low)}
+          {/if}
         {/if}
       {else}
-        {if $type == 'ranged' and $value.get.low != $value.get.high}
-          {$value.get.low}&ndash;{$value.get.high}
+        {if $value.show_sign}
+          {bonus($value.get)}
         {else}
           {$value.get.formatted}
         {/if}
