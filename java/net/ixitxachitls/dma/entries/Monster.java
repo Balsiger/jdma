@@ -1856,6 +1856,20 @@ public class Monster extends CampaignEntry
     return points;
   }
 
+  public int featsAvailable()
+  {
+    Optional<Integer> hitDie = getCombinedHitDie().get();
+    if(hitDie.isPresent())
+      return 1 + (hitDie.get() / 3);
+
+    return 1;
+  }
+
+  public int featsUsed()
+  {
+    return getCombinedFeats().get().size();
+  }
+
   /**
    * Get a monster's annotated and combined level adjustment.
    *

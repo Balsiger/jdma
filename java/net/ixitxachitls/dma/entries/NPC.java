@@ -183,7 +183,7 @@ public class NPC extends Monster
 
   /**
    * Get the effective character level. This is the total of all character
-   * levels plus the monster's level adjustments,jv if any.
+   * levels plus the monster's level adjustments, if any.
    *
    * @return the effective character leve.
    */
@@ -503,6 +503,15 @@ public class NPC extends Monster
         points += level.getSkillPoints() + intModifier;
 
     return points;
+  }
+
+  public int featsAvailable() {
+    int levels = getEffectiveCharacterLevel();
+
+    if(levels > 0)
+      return 1 + (levels / 3);
+
+    return super.featsAvailable();
   }
 
   @Override
