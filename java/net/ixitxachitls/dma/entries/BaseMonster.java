@@ -1770,6 +1770,19 @@ public class BaseMonster extends BaseEntry
     return used;
   }
 
+  public int featsAvailable()
+  {
+    if(m_hitDice.isPresent())
+      return 1 + (m_hitDice.get().getNumber() / 3);
+
+    return 1;
+  }
+
+  public int featsUsed()
+  {
+    return getCombinedFeats().get().size();
+  }
+
   public Modifier skillModifier(String inName)
   {
     Modifier modifier = new Modifier();

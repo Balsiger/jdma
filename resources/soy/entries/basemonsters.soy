@@ -1337,6 +1337,11 @@
         {/call}
         {if not isLast($feat)}, {/if}
       {/foreach}
+      {if $entry.feats_available != $entry.feats_used}
+        <span class="warning">
+          {sp}(used {$entry.feats_used} of {$entry.feats_available})
+        </span>
+      {/if}
     {/param}
   {/call}
 {/template}
