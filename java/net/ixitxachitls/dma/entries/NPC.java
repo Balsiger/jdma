@@ -505,13 +505,12 @@ public class NPC extends Monster
     return points;
   }
 
+  @Override
   public int featsAvailable() {
-    int levels = getEffectiveCharacterLevel();
+    if(m_levels.isEmpty())
+      return super.featsAvailable();
 
-    if(levels > 0)
-      return 1 + (levels / 3);
-
-    return super.featsAvailable();
+    return 1 + (getEffectiveCharacterLevel() / 3);
   }
 
   @Override
