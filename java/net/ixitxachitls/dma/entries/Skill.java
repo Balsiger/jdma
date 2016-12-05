@@ -169,9 +169,24 @@ public class Skill extends NestedEntry
 
     modifier.add(new Modifier(inMonster.abilityModifier(getAbility()),
                               Modifier.Type.ABILITY), getAbility().getShort());
-    modifier.add(inMonster.aSkillModifier(getName()));
+    modifier.add(inMonster.annotatedSkillModifier(getName()));
 
     return modifier;
+  }
+
+  public Annotated.Modifier annotatedModifier(Monster inMonster) {
+    Annotated.Modifier modifier =
+        new Annotated.Modifier(new Modifier(getRanks()), "ranks", true);
+
+    modifier.add(new Modifier(inMonster.abilityModifier(getAbility()),
+                              Modifier.Type.ABILITY), getAbility().getShort());
+    modifier.add(inMonster.annotatedSkillModifier(getName()));
+
+    return modifier;
+  }
+
+  public Annotated.Modifier annotatedModifier(NPC inNPC) {
+    return annotatedModifier((Monster) inNPC);
   }
 
   public int modifier(BaseMonster inMonster)

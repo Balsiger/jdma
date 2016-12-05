@@ -2843,6 +2843,20 @@ public class Monster extends CampaignEntry
         + miscModifier(inSkill).unconditionalModifier();
   }
 
+  public Annotated.Modifier annotatedSkillModifier(String inName)
+  {
+    Annotated.Modifier modifier = new Annotated.Modifier();
+    for(Feat feat : getFeats())
+      if(feat.hasSkillModifier(inName))
+        modifier.add(feat.skillModifier(inName), feat.getName());
+
+    for(Quality quality : getQualities())
+      if(quality.hasSkillModifier(inName))
+        modifier.add(quality.skillModifier(inName), quality.getName());
+
+    return modifier;
+  }
+
   public Modifier miscModifier(String inSkill)
   {
     Optional<BaseSkill> skill = BaseSkill.get(inSkill);

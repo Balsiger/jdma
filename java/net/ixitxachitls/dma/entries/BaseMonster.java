@@ -1797,7 +1797,7 @@ public class BaseMonster extends BaseEntry
     return modifier;
   }
 
-  public Annotated.Modifier aSkillModifier(String inName) {
+  public Annotated.Modifier annotatedSkillModifier(String inName) {
     Annotated.Modifier modifier = new Annotated.Modifier();
     for(Feat feat : m_feats)
       if(feat.hasSkillModifier(inName))
