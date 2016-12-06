@@ -102,6 +102,9 @@ public enum MonsterSubtype implements Named,
   /** Guardinal. */
   GUARDINAL("Guardinal", BaseMonsterProto.Subtype.GUARDINAL),
 
+  /** Halfling. */
+  HALFLING("Halfling", BaseMonsterProto.Subtype.HALFLING),
+
   /** Human. */
   HUMAN("Human", BaseMonsterProto.Subtype.HUMAN),
 
