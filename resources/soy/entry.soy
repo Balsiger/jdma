@@ -70,7 +70,7 @@
         
       {foreach $file in $entry.all_files}
         {if not matches($file.name, 'main($|\\..*)') }
-          {call dma.entry.file}
+          {call .file}
             {param file: $file /}
           {/call}
         {/if}

@@ -46,7 +46,7 @@ public class FileResource extends Resource
    * @param    inName the name of the file this resource represents
    * @param    inURL  the url to the resource
    */
-  FileResource(String inName, Optional<URL> inURL)
+  public FileResource(String inName, Optional<URL> inURL)
   {
     super(inName, inURL);
   }

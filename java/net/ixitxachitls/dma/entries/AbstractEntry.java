@@ -63,9 +63,12 @@ import net.ixitxachitls.dma.server.servlets.DMAServlet;
 import net.ixitxachitls.dma.values.File;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Group;
+import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.util.resources.FileResource;
+import net.ixitxachitls.util.resources.Resource;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -450,8 +453,20 @@ public abstract class AbstractEntry
    */
   public List<File> getFiles()
   {
-    // TODO: figure out why this does not work inside unit tests...
-    if(m_files.isEmpty() && !DMAServlet.isTesting())
+    if (DMAServlet.isDev())
+    {
+      m_files.clear();
+
+      // Read files from local storage.
+      Resource resource = Resource.get("storage/" + getFilePath());
+      for (String file : resource.files())
+      {
+        String path = "/storage/" + getPath() + "/" + file;
+        System.out.println(path);
+        m_files.add(new File(Files.file(file), path, "image/png", path));
+      }
+    } else if(m_files.isEmpty() && !DMAServlet.isTesting())
+      // TODO: figure out why this does not work inside unit tests...
       try
       {
         String bucket = m_appIdentity.getDefaultGcsBucketName();

@@ -34,6 +34,7 @@
   <property name="war.dir"        location="${build.dir}/war"                />
   <property name="webinf.dir"     location="${war.dir}/WEB-INF"              />
   <property name="classes.dir"    location="${build.dir}/classes"            />
+  <property name="storage.dir"    location="${webinf.dir}/storage"           />
   <property name="dist.dir"       location="dist"                            />
   <property name="doc.dir"        location="doc"                             />
   <property name="api.dir"        location="${doc.dir}/api"                  />
