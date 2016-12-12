@@ -458,7 +458,7 @@ public abstract class AbstractEntry
       m_files.clear();
 
       // Read files from local storage.
-      Resource resource = Resource.get("storage/" + getFilePath());
+      Resource resource = Resource.get("storage/" + getPath());
       for (String file : resource.files())
       {
         String path = "/storage/" + getPath() + "/" + file;
@@ -526,6 +526,13 @@ public abstract class AbstractEntry
    */
   public @Nullable File getMainFile()
   {
+    for(File file : getFiles())
+      if("main".equals(file.getName()) || file.getName().startsWith("main."))
+        return file;
+
+    if(!getFiles().isEmpty())
+      return getFiles().get(0);
+
     for(File file : getAllFiles())
       if("main".equals(file.getName()) || file.getName().startsWith("main."))
         return file;

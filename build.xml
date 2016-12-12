@@ -174,6 +174,7 @@
     <mkdir dir="${webinf.dir}" />
     <mkdir dir="${dist.dir}" />
     <mkdir dir="${coverage.dir}" />
+    <mkdir dir="${resources.dir}/storage" />
     <property name="plugin.destination" value="${dist.dir}" />
     <property name="project.stem"
               value="${project.name}-${project.version}-${today.file}" />
@@ -239,6 +240,8 @@
     <symlink link="${war.dir}/css" resource="${resources.dir}/css"
              overwrite="Yes" />
     <symlink link="${war.dir}/soy" resource="${resources.dir}/soy"
+             overwrite="Yes" />
+    <symlink link="${classes.dir}/storage" resource="${resources.dir}/storage"
              overwrite="Yes" />
   </target>
 

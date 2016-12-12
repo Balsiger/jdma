@@ -69,7 +69,7 @@
       {/call}
         
       {foreach $file in $entry.all_files}
-        {if not matches($file.name, 'main($|\\..*)') }
+        {if not matches($file.name, $entry.main_file.name) }
           {call .file}
             {param file: $file /}
           {/call}
