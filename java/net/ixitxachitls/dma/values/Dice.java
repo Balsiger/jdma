@@ -173,6 +173,14 @@ public class Dice extends Value<DiceProto>
     m_modifier = inModifier;
   }
 
+  public Dice(int inNumber, int inDice) {
+    this(inNumber, inDice, 0);
+  }
+
+  public Dice(int inModifier) {
+    this(0, 0, inModifier);
+  }
+
     /** The number of dice to roll. */
   private final int m_number;
 

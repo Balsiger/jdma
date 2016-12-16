@@ -224,19 +224,21 @@ util.link = function(inEvent, inTarget, inFunction)
     busy.done('loading page');
     delete busy;
 
-    // Adding something to the innerHTML will not execute any javascript in it.
-    try
-    {
-      inText.replace(/<script.*?>((\n|.)*?)<\/script>/g,
-                     function(match, group) { eval(group); });
-    }
-    catch(e)
-    {
-      gui.alert('Error when replaying javascript: ' + e);
-    }
-
     if(inFunction)
       inFunction();
+    else
+    {
+      // Adding something to the innerHTML will not execute any javascript in it.
+      try
+      {
+        inText.replace(/<script.*?>((\n|.)*?)<\/script>/g,
+                       function(match, group) { eval(group); });
+      }
+      catch(e)
+      {
+        gui.alert('Error when replaying javascript: ' + e);
+      }
+    }
 
     if(!inEvent || !inEvent.state)
       window.history.pushState(target, document.title, target);

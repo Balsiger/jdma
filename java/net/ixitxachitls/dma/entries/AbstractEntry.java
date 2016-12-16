@@ -40,6 +40,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.appengine.api.appidentity.AppIdentityService;
 import com.google.appengine.api.appidentity.AppIdentityServiceFactory;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.tools.cloudstorage.GcsFileMetadata;
 import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.google.appengine.tools.cloudstorage.GcsService;
@@ -67,9 +70,7 @@ import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
-import net.ixitxachitls.util.resources.FileResource;
 import net.ixitxachitls.util.resources.Resource;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * This is the base class for all entries.
@@ -189,6 +190,9 @@ public abstract class AbstractEntry
   public static final AbstractType<AbstractEntry> TYPE =
     new AbstractType.Builder<>
         (AbstractEntry.class).build();
+
+  private static final ImagesService s_imageService =
+      ImagesServiceFactory.getImagesService();
 
   /** The entry type. */
   protected AbstractType<?> m_type;
@@ -481,15 +485,20 @@ public abstract class AbstractEntry
             continue;
 
           String name = item.getName().replaceAll(".*/", "");
-          String path =
-            "https://storage.cloud.google.com/" + bucket + "/" + item.getName();
+          String gcsName = bucket + "/" + item.getName();
+          String path = "https://storage.cloud.google.com/" + gcsName;
 
           GcsFileMetadata meta =
             m_gcs.getMetadata(new GcsFilename(bucket, item.getName()));
           String mime = meta.getOptions().getMimeType();
           String icon = icon(mime);
           if(icon.isEmpty())
-            icon = path; // TODO: should be a smaller file.
+          {
+            icon = s_imageService.getServingUrl(
+                ServingUrlOptions.Builder.withGoogleStorageFileName(
+                    "/gs/" + gcsName).imageSize(100));
+            //icon = path; // TODO: should be a smaller file.
+          }
           m_files.add(new File(name, mime, path, icon));
         }
       }

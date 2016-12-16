@@ -483,5 +483,54 @@
   {ifempty}
      Nothing found, sorry.
   {/foreach}
+{/template}
+
+/** Simple treasure generation. */
+{template .treasure}
+  {@param factor: number}
+  {@param level: number}
+  {@param treasures: list<?>}
+
+  <h1>Treasure Generation</h1>
+
+  <button onclick="link(event, 1)">Standard</button>
+  <button onclick="link(event, 2)">Double Standard</button>
+  <button onclick="link(event, 3)">Triple Standard</button>
+  <button onclick="link(event, 4)">Quadruple Standard</button>
+
+  <p>
+    Level <input name="l" value="1">
+    Number <input name="n" value="1">
+  </p>
+
+  <h2>{$factor}x treasure, level {$level}</h2>
+
+  {foreach $treasure in $treasures}
+    <p>
+      Coins: {$treasure.coins}<br/>
+      Goods: {$treasure.goods}<br/>
+      Items: {$treasure.items}<br/>
+    </p>
+  {/foreach}
+
+  <script>
+    function link(inEvent, inType)
+    {lb}
+      var search = '?x=' + inType + '&l=' + $(':input[name=l]').val()
+          + '&n=' + $(':input[name=n]').val();
+      util.link(inEvent, search, function() {lb} updateFields(search) {rb});
+    {rb}
+
+    function updateFields(inSearch)
+    {lb}
+       if(inSearch)
+       {lb}
+         $(':input[name=l]').val(inSearch.match(/l=(\d+)/)[1]);
+         $(':input[name=n]').val(inSearch.match(/n=(\d+)/)[1]);
+       {rb}
+    {rb}
+
+    updateFields(window.location.search);
+  </script>
 
 {/template}

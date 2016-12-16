@@ -136,6 +136,13 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
 
+  <servlet>
+    <servlet-name>treasure</servlet-name>
+    <servlet-class>
+      net.ixitxachitls.dma.server.servlets.TreasureServlet
+    </servlet-class>
+  </servlet>
+
   <servlet-mapping>
     <servlet-name>entry</servlet-name>
     <url-pattern>/_entry/*</url-pattern>
@@ -199,6 +206,11 @@
   <servlet-mapping>
     <servlet-name>current</servlet-name>
     <url-pattern>/_current/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>treasure</servlet-name>
+    <url-pattern>/treasure</url-pattern>
   </servlet-mapping>
 
   <filter>
