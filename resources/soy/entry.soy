@@ -67,14 +67,16 @@
       {call .mainImage}
         {param entry: $entry /}
       {/call}
-        
-      {foreach $file in $entry.all_files}
-        {if not matches($file.name, $entry.main_file.name) }
-          {call .file}
-            {param file: $file /}
-          {/call}
-        {/if}
-      {/foreach}
+
+      {if def($entry.all_files)}
+        {foreach $file in $entry.all_files}
+          {if not matches($file.name, $entry.main_file.name) }
+            {call .file}
+              {param file: $file /}
+            {/call}
+          {/if}
+        {/foreach}
+      {/if}
 
       {if $ij.hasDMAccess}
         <a target="_gcsimage" class="image-storage-link"

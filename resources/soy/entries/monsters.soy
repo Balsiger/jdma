@@ -875,13 +875,6 @@
         {call dma.entries.monsters.add_item_action}
           {param entry: $entry /}
         {/call}
-        <span class="action"
-              onclick="edit.askAutocomplete(
-                         'base item/name', 'Edit {$entry.name}',
-                         '{$entry.campaign.path}/item/CREATE.edit',
-                         'add-item', 'parent:npc/{$entry.name}')">
-          add item
-        </span>
         {sp}|{sp}
         <span class="action"
               onclick="edit.show('Move items for {$entry.name}',

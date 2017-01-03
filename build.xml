@@ -243,6 +243,8 @@
              overwrite="Yes" />
     <symlink link="${classes.dir}/storage" resource="${resources.dir}/storage"
              overwrite="Yes" />
+    <symlink link="${war.dir}/storage" resource="${resources.dir}/storage"
+             overwrite="Yes" />
   </target>
 
   <target name="prepare-windows" depends="prepare-general"

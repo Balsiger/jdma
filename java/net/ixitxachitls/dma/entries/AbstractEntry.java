@@ -457,20 +457,18 @@ public abstract class AbstractEntry
    */
   public List<File> getFiles()
   {
-    if (DMAServlet.isDev())
+    if(DMAServlet.isDev() || DMAServlet.isTesting())
     {
       m_files.clear();
 
       // Read files from local storage.
-      Resource resource = Resource.get("storage/" + getPath());
+      Resource resource = Resource.get("storage" + getPath());
       for (String file : resource.files())
       {
-        String path = "/storage/" + getPath() + "/" + file;
-        System.out.println(path);
+        String path = "/storage" + getPath() + "/" + file;
         m_files.add(new File(Files.file(file), path, "image/png", path));
       }
-    } else if(m_files.isEmpty() && !DMAServlet.isTesting())
-      // TODO: figure out why this does not work inside unit tests...
+    } else if(m_files.isEmpty())
       try
       {
         String bucket = m_appIdentity.getDefaultGcsBucketName();
@@ -478,6 +476,7 @@ public abstract class AbstractEntry
           .setRecursive(false)
           .setPrefix(getFilePath())
           .build();
+        Log.warning("getting files for bucket " + bucket + " and path " + getFilePath());
         for(Iterator<ListItem> i = m_gcs.list(bucket, options); i.hasNext(); )
         {
           ListItem item = i.next();
@@ -494,10 +493,16 @@ public abstract class AbstractEntry
           String icon = icon(mime);
           if(icon.isEmpty())
           {
-            icon = s_imageService.getServingUrl(
-                ServingUrlOptions.Builder.withGoogleStorageFileName(
-                    "/gs/" + gcsName).imageSize(100));
-            //icon = path; // TODO: should be a smaller file.
+            try
+            {
+              icon = s_imageService.getServingUrl(
+                  ServingUrlOptions.Builder.withGoogleStorageFileName(
+                      "/gs/" + gcsName).imageSize(100));
+            }
+            catch(IllegalArgumentException e)
+            {
+              icon = path;
+            }
           }
           m_files.add(new File(name, mime, path, icon));
         }
