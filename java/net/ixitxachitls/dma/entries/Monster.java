@@ -1054,7 +1054,7 @@ public class Monster extends CampaignEntry
   {
     List<Item> armor = new ArrayList<>();
     for(Item item : getPossessions())
-      if(item != null && item.isArmor() && !item.getArmorType().isShield())
+      if(item != null && item.isArmor())
         armor.add(item);
 
     return armor;
