@@ -198,7 +198,7 @@
       {/if}
       {if $entry.hit_die.present}
         {call dma.entry.value}
-          {param label: 'Hide Die' /}
+          {param label: 'Hit Die' /}
           {param value: $entry.hit_die /}
           {param color: '#aaf' /}
         {/call}
@@ -230,6 +230,11 @@
               {$proficiency}
               {if not isLast($proficiency)}, {/if}
             {/foreach}
+            {if length($entry.individual_weapon_proficiencies) > 0}
+              {sp}({foreach $weapon in $entry.individual_weapon_proficiencies}
+                {$weapon}{if not isLast($weapon)}, {/if}
+              {/foreach})
+            {/if}
           {/param}
           {param color: '#aaf' /}
         {/call}
@@ -752,6 +757,7 @@
         {param label: 'Weapon Prof.' /}
         {param value kind="html"}
           {call dma.edit.field}
+            {param class: 'narrow' /}
             {param markup kind="html"}
               {foreach $proficiency in $entry.weapon_proficiencies}
                 {call dma.edit.field_list_multiple}
@@ -777,6 +783,14 @@
                 {/call}
               {/foreach}
             {/param}
+          {/call}
+          {call dma.edit.field_list}
+            {param name: 'weapon_proficiency_individual' /}
+            {param values: $entry.individual_weapon_proficiencies /}
+            {param validate: 'non-null' /}
+            {param caption: 'invidiual weapons' /}
+            {param autocomplete: 'base item/name' /}
+            {param class: 'narrow' /}
           {/call}
         {/param}
         {param validate: 'non-empty' /}

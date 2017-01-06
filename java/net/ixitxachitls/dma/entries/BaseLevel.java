@@ -235,6 +235,7 @@ public class BaseLevel extends BaseEntry
 
   /** The weapon proficiencies. */
   protected List<Proficiency> m_weaponProficiencies = new ArrayList<>();
+  protected List<String> m_individualWeaponProficiencies = new ArrayList<>();
 
   /** The armor proficiencies. */
   protected List<ArmorType> m_armorProficiencies = new ArrayList<>();
@@ -494,6 +495,11 @@ public class BaseLevel extends BaseEntry
     return Collections.unmodifiableList(m_weaponProficiencies);
   }
 
+  public List<String> getIndividualWeaponProficiencies()
+  {
+    return Collections.unmodifiableList(m_individualWeaponProficiencies);
+  }
+
   /**
    * Get the list of armor proficiencies this class grants.
    *
@@ -737,6 +743,9 @@ public class BaseLevel extends BaseEntry
     m_weaponProficiencies =
       inValues.use("weapon_proficiency", m_weaponProficiencies,
                    Proficiency.PARSER);
+    m_individualWeaponProficiencies =
+        inValues.use("weapon_proficiency_individual",
+                     m_individualWeaponProficiencies);
     m_armorProficiencies =
       inValues.use("armor_proficiency", m_armorProficiencies,
                    ArmorType.PARSER);
@@ -853,6 +862,8 @@ public class BaseLevel extends BaseEntry
 
     for(Proficiency proficiency : m_weaponProficiencies)
       builder.addWeaponProficiency(proficiency.toProto());
+
+    builder.addAllIndividualWeaponProficiency(m_individualWeaponProficiencies);
 
     for(ArmorType proficiency : m_armorProficiencies)
         builder.addArmorProficiency(proficiency.toProto());
@@ -1019,6 +1030,9 @@ public class BaseLevel extends BaseEntry
     for(BaseWeaponProto.Proficiency proficiency
       : proto.getWeaponProficiencyList())
       m_weaponProficiencies.add(Proficiency.fromProto(proficiency));
+
+    m_individualWeaponProficiencies.addAll(
+        proto.getIndividualWeaponProficiencyList());
 
     for(BaseArmorProto.Type proficiency : proto.getArmorProficiencyList())
       m_armorProficiencies.add(ArmorType.fromProto(proficiency));

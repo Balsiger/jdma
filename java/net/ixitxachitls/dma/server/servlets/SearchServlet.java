@@ -23,23 +23,18 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.google.appengine.api.search.Field;
-import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.Query;
 import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.Results;
 import com.google.appengine.api.search.ScoredDocument;
-import com.google.appengine.api.search.SearchServiceFactory;
-import com.google.appengine.labs.repackaged.com.google.common.collect.ImmutableMap;
 import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableMap;
 import com.google.template.soy.data.SoyData;
-import com.google.template.soy.shared.restricted.SoyJavaPrintDirective;
 
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;

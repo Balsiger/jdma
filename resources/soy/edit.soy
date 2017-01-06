@@ -301,7 +301,9 @@
   {@param validate: string}
   {@param? caption: string}
   {@param? autocomplete: string}
+  {@param? class: string}
   {call .field}
+    {param class: $class /}
     {param markup kind="html"}
       {foreach $value in $values}
         {call .field_list_input_line}
@@ -348,6 +350,7 @@
   {@param validate: string}
   {@param? caption: string}
   {@param? autocomplete: string}
+  {@param? class: string}
   {call .field_list_line}
     {param id: $name /}
     {param field kind="html"}
@@ -358,6 +361,7 @@
         {param inList: true /}
         {param autocomplete: $autocomplete /}
         {param caption: $caption /}
+        {param class: $class /}
       {/call}
     {/param}
   {/call}
