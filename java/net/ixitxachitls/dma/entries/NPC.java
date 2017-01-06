@@ -157,10 +157,7 @@ public class NPC extends Monster
   {
     SortedMultiset<String> levels = TreeMultiset.create();
     for(Level level : m_levels)
-      if(level.getBase().isPresent())
-        levels.add(level.getBase().get().getName());
-      else
-        levels.add(level.getAbbreviation());
+      levels.add(level.getAbbreviation());
 
     return levels;
   }
@@ -176,7 +173,7 @@ public class NPC extends Monster
 
     List<String> results = new ArrayList<>();
     for(Multiset.Entry<String> entry : levels.entrySet())
-      results.add(entry.getElement() + " " + entry.getCount());
+      results.add(entry.getElement() + entry.getCount());
 
     return results;
   }

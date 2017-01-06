@@ -49,7 +49,11 @@
       {/call}
     {/param}
     {param stats kind="html"}
-      {call dma.entries.monsters.size_and_type}{param entry: $entry /}{/call}
+      {call dma.entries.monsters.size_and_type}{param entry: $entry /}
+        {param additional kind="html"}
+          {call .showLevels}{param entry: $entry /}{/call}
+        {/param}
+      {/call}
       {call dma.entries.monsters.title}{param entry: $entry /}{/call}
       {call dma.entries.monsters.family}{param entry: $entry /}{/call}
       {call dma.entries.monsters.faction}{param entry: $entry /}{/call}
@@ -141,6 +145,10 @@
         {param label: 'Gender' /}
         {param value: $entry.gender /}
         {param choices: $ij.Gender.names /}
+        {param color: '#080' /}
+      {/call}
+      {call .editLevels}
+        {param entry: $entry /}
         {param color: '#080' /}
       {/call}
       {call dma.edit.value}
@@ -613,6 +621,50 @@
         </tr>
       {/foreach}
     {/param}
+  {/call}
+{/template}
+
+/** Show level values. */
+{template .showLevels}
+  {@param entry: ?}
+
+  {foreach $level in $entry.get_cumulated_levels}
+    {$level}
+    {if not isLast($level)}/{/if}
+  {/foreach}
+
+{/template}
+
+/** Edit level values. */
+{template .editLevels}
+  {@param entry: ?}
+  {@param color: string}
+
+  {call dma.edit.generic_value}
+    {param label: 'Levels' /}
+    {param value kind="html"}
+      {foreach $level in $entry.levels}
+        {call dma.edit.field_list_line}
+          {param id: 'level' /}
+          {param field kind="html"}
+            {call dma.entries.levels.edit}
+              {param entry: $level /}
+              {param index: index($level) /}
+            {/call}
+          {/param}
+        {/call}
+      {ifempty}
+        {call dma.edit.field_list_line}
+          {param id: 'level' /}
+          {param field kind="html"}
+            {call dma.entries.levels.edit}
+              {param index: 0 /}
+            {/call}
+          {/param}
+        {/call}
+      {/foreach}
+    {/param}
+    {param color: $color /}
   {/call}
 {/template}
 

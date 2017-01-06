@@ -679,19 +679,21 @@
 /** A template for the size, type and gender line. */
 {template .size_and_type}
   {@param entry: ?}
+  {@param? additional: html|string}
 
   {call dma.entry.stat_line}
     {param content kind="html"}
       <b>
-      {if $entry.gender}
-        {$entry.gender}{sp}
-      {/if}
-      {call dma.entries.basemonsters.size_and_type_content}
-        {param entry: $entry /}
-      {/call}
-      {foreach $occupation in $entry.occupations}
-        , {commands($occupation)}
-      {/foreach}
+        {if $entry.gender}
+          {$entry.gender}{sp}
+        {/if}
+        {call dma.entries.basemonsters.size_and_type_content}
+          {param entry: $entry /}
+        {/call}
+        {foreach $occupation in $entry.occupations}
+          , {commands($occupation)}
+        {/foreach}
+        {if $additional}, {$additional}{/if}
       </b>
     {/param}
   {/call}

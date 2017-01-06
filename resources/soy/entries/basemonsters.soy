@@ -1082,11 +1082,13 @@
 /** A monsters size and type. */
 {template .size_and_type}
   {@param entry: ?}
+  {@param? additional: html|string}
 
   {call dma.entry.stat_line}
     {param content kind="html"}
       <b>
         {call .size_and_type_content}{param entry: $entry /}{/call}
+        {if $additional}, {$additional}{/if}
       </b>
     {/param}
   {/call}
