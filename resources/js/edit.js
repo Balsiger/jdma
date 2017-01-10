@@ -285,6 +285,20 @@ edit.removeLine = function(inElement)
     element.remove();
 };
 
+edit.roll = function(inNumber, inDice, inModifier)
+{
+  var result = inModifier;
+  for(var i = 0; i < inNumber; i++)
+    result += edit.random(inDice);
+
+  return result;
+};
+
+edit.random = function(inMax)
+{
+  return Math.floor(Math.random() * inMax) + 1;
+};
+
 //----------------------------- makeEditable -------------------------------
 
 /**

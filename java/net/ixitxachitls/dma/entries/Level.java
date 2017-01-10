@@ -32,6 +32,7 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.proto.Entries;
 import net.ixitxachitls.dma.proto.Entries.LevelProto;
 import net.ixitxachitls.dma.values.ArmorType;
+import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Proficiency;
 import net.ixitxachitls.dma.values.Values;
 import net.ixitxachitls.dma.values.enums.Ability;
@@ -75,6 +76,19 @@ public class Level extends NestedEntry
   public int getHP()
   {
     return m_hp;
+  }
+
+  public int getHitDice()
+  {
+    Optional<BaseLevel> base = getBase();
+    if(!base.isPresent())
+      return 0;
+
+    Optional<Dice> die = base.get().getHitDie();
+    if(!die.isPresent())
+      return 0;
+
+    return die.get().getDice();
   }
 
   public int getSkillPoints()
@@ -147,6 +161,30 @@ public class Level extends NestedEntry
   {
     return DMADataFactory.get().getIDs(BaseLevel.TYPE,
                                        Optional.<EntryKey>absent());
+  }
+
+  public static List<String> getAvailableLevelHitDice()
+  {
+    ArrayList<String> hitDice = new ArrayList<>();
+
+    for(String level : getAvailableLevels())
+      hitDice.add(String.valueOf(hitDice(level)));
+
+    return hitDice;
+  }
+
+  public static int hitDice(String inName)
+  {
+    Optional<BaseLevel> level =
+        DMADataFactory.get().getEntry(new EntryKey(inName, BaseLevel.TYPE));
+    if(!level.isPresent())
+      return 0;
+
+    Optional<Dice> dice = level.get().getHitDie();
+    if(!dice.isPresent())
+      return 0;
+
+    return dice.get().getDice();
   }
 
   public List<Quality> getQualities()

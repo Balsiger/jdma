@@ -650,6 +650,8 @@
             {call dma.entries.levels.edit}
               {param entry: $level /}
               {param index: index($level) /}
+              {param hitDice: $level.hit_dice /}
+              {param constitutionModifier: $entry.constitution_modifier /}
             {/call}
           {/param}
         {/call}
@@ -659,6 +661,7 @@
           {param field kind="html"}
             {call dma.entries.levels.edit}
               {param index: 0 /}
+              {param constitutionModifier: $entry.constitution_modifier /}
             {/call}
           {/param}
         {/call}

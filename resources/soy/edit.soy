@@ -256,6 +256,8 @@
   {@param choices: list<string>}
   {@param? class: string}
   {@param? width: string}
+  {@param? secondaries: list<string>}
+
   {call .field}
     {param class: $class /}
     {param width: $width /}
@@ -264,6 +266,7 @@
         {if isList($choices)}
           {foreach $choice in $choices}
             <option value="{$choice}"
+              {if $secondaries} secondary="{$secondaries[index($choice)]}"{/if}
               {if lower($choice) == lower($value)}
                 {sp}selected
               {/if}>

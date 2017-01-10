@@ -27,12 +27,14 @@ u/* ****************************************************************************
 /** Editing the base level. */
 {template .edit}
   {@param? entry: ?}
+  {@param constitutionModifier: number}
   {@param index: number}
   {call dma.edit.field_selection}
     {param name: 'level@' + $index + '.name' /}
     {param caption: 'Name' /}
     {param value: $entry ? $entry.name : '' /}
     {param choices: $ij.Level.available_levels /}
+    {param secondaries: $ij.Level.available_level_hit_dice /}
     {param class: 'narrow' /}
   {/call}
   {call dma.edit.field_input}
@@ -42,6 +44,13 @@ u/* ****************************************************************************
     {param validate: 'number' /}
     {param width: '25%' /}
   {/call}
+  <div class="sprite large random" tooltip="random name"
+       onclick="$('input[name=level\\@{$index}\\.hp]').val(
+         edit.roll(1,
+                   $('select[name=level\\@{$index}\\.name]').find(':selected')
+                     .attr('secondary'),
+                  {$constitutionModifier}));">
+  </div>
   {if $entry and length($entry.qualities)}
     {foreach $quality in $entry.qualities}
       {call dma.edit.field_list_line}
