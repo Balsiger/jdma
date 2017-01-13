@@ -272,9 +272,10 @@ edit.insertLine = function(inID, inElement)
   clone.find(":input").val("");
   clone.find(":input")[0].focus();
   clone.find("[name*='" + inID + "@']").each(function(inIndex, inElement) {
-    inElement.name =
-      inElement.name.replace(new RegExp("(" + inID + "@\\d+)"), "$10");
+    $(inElement).attr('name', $(inElement).attr('name')
+      .replace(new RegExp("(" + inID + "@\\d+)"), "$10"));
   });
+
 
   edit.setupAutocomplete(clone.find(":input[dma-autocomplete]"));
 };
@@ -292,6 +293,18 @@ edit.roll = function(inNumber, inDice, inModifier)
     result += edit.random(inDice);
 
   return result;
+};
+
+edit.setValue = function(inType, inName, inValue)
+{
+  $(inType + '[name="' + inName + '"]').val(inValue);
+};
+
+edit.getSecondary = function(inType, inName)
+{
+  return $(inType + '[name="' + inName + '"]')
+    .find(':selected')
+    .attr('secondary');
 };
 
 edit.random = function(inMax)

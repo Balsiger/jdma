@@ -45,11 +45,11 @@ u/* ****************************************************************************
     {param width: '25%' /}
   {/call}
   <div class="sprite large random" tooltip="random name"
-       onclick="$('input[name=level\\@{$index}\\.hp]').val(
-         edit.roll(1,
-                   $('select[name=level\\@{$index}\\.name]').find(':selected')
-                     .attr('secondary'),
-                  {$constitutionModifier}));">
+       name="level@{$index}"
+       onclick="edit.setValue('input', $(this).attr('name') + '.hp',
+                  edit.roll(1, edit.getSecondary('select',
+                    $(this).attr('name') + '.name'),
+                    {$constitutionModifier}));">
   </div>
   {if $entry and length($entry.qualities)}
     {foreach $quality in $entry.qualities}
