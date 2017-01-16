@@ -627,6 +627,19 @@ public class NPC extends Monster
     return proficiencies;
   }
 
+  @Override
+  public Modifier armorClass()
+  {
+    Modifier armor = super.armorClass();
+
+    for(int i = 0; i < m_levels.size(); i++)
+      for(Quality quality : m_levels.get(i).getAllQualities(i + 1))
+        if(quality.acModifier().hasValue())
+          armor = (Modifier)armor.add(quality.acModifier());
+
+    return armor;
+  }
+
   public Annotated<List<Feat>> getCombinedFeats()
   {
     Annotated.List<Feat> feats = (Annotated.List<Feat>)super.getCombinedFeats();

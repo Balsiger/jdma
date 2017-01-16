@@ -192,6 +192,19 @@ public class Level extends NestedEntry
     return Collections.unmodifiableList(m_qualities);
   }
 
+  public List<Quality> getAllQualities(int inLevel)
+  {
+    List<Quality> qualities = new ArrayList<>(getQualities());
+
+    if(getBase().isPresent())
+      for(BaseLevel.QualityReference quality
+          : getBase().get().getSpecialQualities())
+        if(quality.getLevel() <= inLevel)
+          qualities.add(new Quality(quality.getName()));
+
+    return qualities;
+  }
+
   public List<Feat> getFeats()
   {
     return Collections.unmodifiableList(m_feats);

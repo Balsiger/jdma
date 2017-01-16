@@ -2553,6 +2553,10 @@ public class Monster extends CampaignEntry
                                              Optional.<String>absent(),
                                              Optional.<Modifier>absent()));
 
+    for(Quality quality : getQualities())
+      if(quality.acModifier().hasValue())
+        armor = (Modifier)armor.add(quality.acModifier());
+
     return armor;
   }
 

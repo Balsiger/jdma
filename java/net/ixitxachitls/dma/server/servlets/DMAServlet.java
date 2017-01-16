@@ -55,7 +55,7 @@ import net.ixitxachitls.util.logging.Log;
 @Immutable
 public abstract class DMAServlet extends BaseServlet
 {
-  public enum ActionType { show, print, summary, card, create, edit, };
+  public enum ActionType { show, print, summary, card, create, edit, proto };
 
   public static final String ACTION_REGEXP;
   static

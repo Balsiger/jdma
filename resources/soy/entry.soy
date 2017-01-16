@@ -854,3 +854,13 @@
   </div>
 {/template}
 
+/** Print a proto version of the entry. */
+{template .proto}
+  {@param entry: ?}
+
+  <pre>{\n}
+
+    {html($entry.to_proto.to_string)}
+
+  {\n}</pre>
+{/template}

@@ -57,6 +57,12 @@ public class Quality extends NestedEntry
   {
   }
 
+  public Quality(String inName)
+  {
+    m_name = Optional.of(inName);
+  }
+
+
   /** The parameters defined for this quality to parameterize the base value. */
   private final Map<String, String> m_parameters = new HashMap<>();
 

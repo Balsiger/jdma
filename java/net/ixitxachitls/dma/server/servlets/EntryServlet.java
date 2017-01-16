@@ -141,6 +141,9 @@ public class EntryServlet extends PageServlet
         return "dma.entries."
             + key.getType().getMultipleDir().toLowerCase() + ".edit";
 
+      case proto:
+        return "dma.entry.proto";
+
       case show:
       default:
         return "dma.entries."
