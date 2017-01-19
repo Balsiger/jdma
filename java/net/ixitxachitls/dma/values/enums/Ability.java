@@ -169,6 +169,19 @@ public enum Ability implements Named, Short
     return names;
   }
 
+  public static List<String> allNames()
+  {
+    List<String> names = new ArrayList<>();
+
+    for(Ability ability : values())
+    {
+      names.add(ability.getName());
+      names.add(ability.getShort());
+    }
+
+    return names;
+  }
+
   /**
    * Get the layout matching the given text.
    *
@@ -178,7 +191,8 @@ public enum Ability implements Named, Short
   public static Optional<Ability> fromString(String inText)
   {
     for(Ability ability : values())
-      if(ability.m_name.equalsIgnoreCase(inText))
+      if(ability.m_name.equalsIgnoreCase(inText)
+         || ability.m_short.equalsIgnoreCase(inText))
         return Optional.of(ability);
 
     return Optional.absent();

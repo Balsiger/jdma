@@ -334,7 +334,7 @@ public class NPC extends Monster
 
       if(level.getAbilityIncrease().isPresent()
           && level.getAbilityIncrease().get() == Ability.STRENGTH)
-        annotated.add(new Modifier(1),
+        annotated.add(Modifier.ONE,
                       level.getName() + " " + levels.count(level.getName()));
     }
 
@@ -630,14 +630,16 @@ public class NPC extends Monster
   @Override
   public Modifier armorClass()
   {
-    Modifier armor = super.armorClass();
+    Modifier.Builder armor = super.armorClass().toBuilder();
 
     for(int i = 0; i < m_levels.size(); i++)
       for(Quality quality : m_levels.get(i).getAllQualities(i + 1))
         if(quality.acModifier().hasValue())
-          armor = (Modifier)armor.add(quality.acModifier());
+          armor.add(quality.acModifier());
 
-    return armor;
+    armor.with(this);
+
+    return armor.build();
   }
 
   public Annotated<List<Feat>> getCombinedFeats()

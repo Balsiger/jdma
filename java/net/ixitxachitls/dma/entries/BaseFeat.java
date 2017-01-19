@@ -572,7 +572,7 @@ public class BaseFeat extends BaseEntry
       if(skill.hasName(inSkill))
         return skill.getModifier();
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   @Override

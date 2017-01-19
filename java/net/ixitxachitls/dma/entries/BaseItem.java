@@ -1724,7 +1724,7 @@ public class BaseItem extends BaseEntry
   {
     if(m_armorBonus.isPresent())
       return new Annotated.Arithmetic<Modifier>(m_armorBonus.get(),
-                                                   getName());
+                                                getName());
 
     Annotated.Arithmetic<Modifier> combined = new Annotated.Arithmetic<>();
     for(BaseEntry entry : getBaseEntries())

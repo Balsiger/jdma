@@ -165,10 +165,13 @@ public class Skill extends NestedEntry
 
   public Annotated.Modifier annotatedModifier(BaseMonster inMonster) {
     Annotated.Modifier modifier =
-        new Annotated.Modifier(new Modifier(getRanks()), "ranks", true);
+        new Annotated.Modifier(Modifier.newBuilder().add(getRanks()).build(),
+                               "ranks", true);
 
-    modifier.add(new Modifier(inMonster.abilityModifier(getAbility()),
-                              Modifier.Type.ABILITY), getAbility().getShort());
+    modifier.add(Modifier.newBuilder()
+                     .add(Modifier.Type.ABILITY,
+                          inMonster.abilityModifier(getAbility()))
+                     .build(), getAbility().getShort());
     modifier.add(inMonster.annotatedSkillModifier(getName()));
 
     return modifier;
@@ -176,10 +179,13 @@ public class Skill extends NestedEntry
 
   public Annotated.Modifier annotatedModifier(Monster inMonster) {
     Annotated.Modifier modifier =
-        new Annotated.Modifier(new Modifier(getRanks()), "ranks", true);
+        new Annotated.Modifier(Modifier.newBuilder().add(getRanks()).build(),
+                               "ranks", true);
 
-    modifier.add(new Modifier(inMonster.abilityModifier(getAbility()),
-                              Modifier.Type.ABILITY), getAbility().getShort());
+    modifier.add(Modifier.newBuilder()
+                     .add(Modifier.Type.ABILITY,
+                          inMonster.abilityModifier(getAbility()))
+                     .build(), getAbility().getShort());
     modifier.add(inMonster.annotatedSkillModifier(getName()));
 
     return modifier;

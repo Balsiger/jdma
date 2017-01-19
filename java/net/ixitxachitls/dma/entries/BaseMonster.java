@@ -804,11 +804,12 @@ public class BaseMonster extends BaseEntry
     if (!dex.isPresent())
       return 0;
 
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
     for (Feat feat : m_feats)
-      modifier = (Modifier)modifier.add(feat.initiativeModifier());
+      modifier.add(feat.initiativeModifier());
 
-    return Monsters.abilityModifier(dex.get()) + modifier.totalModifier();
+    return Monsters.abilityModifier(
+        dex.get()) + modifier.build().totalModifier();
   }
 
   public Annotated.Integer getCombinedHitDie()
@@ -903,7 +904,7 @@ public class BaseMonster extends BaseEntry
     if(natural.isPresent())
       return natural.get();
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   /**
@@ -913,22 +914,21 @@ public class BaseMonster extends BaseEntry
    */
   public Modifier armorClass()
   {
-    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
-                                  Optional.<String>absent(),
-                                  Optional.<Modifier>absent());
+    Modifier.Builder armor = Modifier.newBuilder();
+    armor.add(Modifier.Type.GENERAL, 10);
 
-    armor = (Modifier)armor.add(naturalArmor());
-    armor = (Modifier)armor.add(dexterityModifier());
-    armor = (Modifier)armor.add(sizeModifier());
+    armor.add(naturalArmor());
+    armor.add(dexterityModifier());
+    armor.add(sizeModifier());
 
     for(Quality quality : getQualities())
     {
       Modifier modifier = quality.acModifier();
       if(modifier.hasValue())
-        armor = (Modifier)armor.add(modifier);
+        armor.add(modifier);
     }
 
-    return armor;
+    return armor.build();
   }
 
   public int abilityModifier(Ability inAbility)
@@ -995,62 +995,63 @@ public class BaseMonster extends BaseEntry
   {
     Optional<Integer> dex = getCombinedDexterity().get();
     if (dex.isPresent())
-      return new Modifier(Monsters.abilityModifier(dex.get()),
-                          Modifier.Type.ABILITY, Optional.<String>absent(),
-                          Optional.<Modifier>absent());
+      return Modifier.newBuilder()
+          .add(Modifier.Type.ABILITY, Monsters.abilityModifier(dex.get()))
+          .build();
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   public Modifier sizeModifier()
   {
     Optional<Size> size = getCombinedSize().get();
     if(size.isPresent())
-      return new Modifier(size.get().modifier(), Modifier.Type.SIZE,
-                          Optional.<String>absent(),
-                          Optional.<Modifier>absent());
+      return Modifier.newBuilder()
+          .add(Modifier.Type.SIZE, size.get().modifier())
+          .build();
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   public Modifier armorClassFlatfooted()
   {
-    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
-                                  Optional.<String>absent(),
-                                  Optional.<Modifier>absent());
+    Modifier.Builder armor = Modifier.newBuilder();
+    armor.add(Modifier.Type.GENERAL, 10);
 
-    armor = (Modifier)armor.add(naturalArmor());
-    armor = (Modifier)armor.add(sizeModifier());
+    armor.add(naturalArmor());
+    armor.add(sizeModifier());
 
     for(Quality quality : getQualities())
     {
-      Modifier modifier = quality.acModifier().without(Modifier.Type.DODGE);
+      Modifier modifier =
+          quality.acModifier().toBuilder().without(Modifier.Type.DODGE).build();
       if(modifier.hasValue())
-        armor = (Modifier)armor.add(modifier);
+        armor.add(modifier);
     }
 
-    return armor;
+    return armor.build();
   }
 
   public Modifier armorClassTouch()
   {
-    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
-                                  Optional.<String>absent(),
-                                  Optional.<Modifier>absent());
+    Modifier.Builder armor = Modifier.newBuilder();
+    armor.add(Modifier.Type.GENERAL, 10);
 
-    armor = (Modifier)armor.add(dexterityModifier());
-    armor = (Modifier)armor.add(sizeModifier());
+    armor.add(dexterityModifier());
+    armor.add(sizeModifier());
 
     for(Quality quality : getQualities())
     {
-      Modifier modifier = quality.acModifier().without(Modifier.Type.ARMOR)
-          .without(Modifier.Type.SHIELD);
+      Modifier modifier = quality.acModifier().toBuilder()
+          .without(Modifier.Type.ARMOR)
+          .without(Modifier.Type.SHIELD)
+          .build();
 
       if(modifier.hasValue())
-        armor = (Modifier)armor.add(modifier);
+        armor.add(modifier);
     }
 
-    return armor;
+    return armor.build();
   }
 
   /**
@@ -1309,7 +1310,9 @@ public class BaseMonster extends BaseEntry
     for (ValueSources.ValueSource<Optional<Integer>> bonus
         : getCombinedFortitudeSave().getSources().getSources())
       if (bonus.getValue().isPresent())
-        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
+        save.add(Modifier.newBuilder().add(Modifier.Type.GENERAL,
+                                           bonus.getValue().get())
+                     .build(), bonus.getSource());
 
     // Qualities.
     for (Quality quality : getQualities())
@@ -1361,7 +1364,9 @@ public class BaseMonster extends BaseEntry
     for (ValueSources.ValueSource<Optional<Integer>> bonus
         : getCombinedWillSave().getSources().getSources())
       if (bonus.getValue().isPresent())
-        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
+        save.add(Modifier.newBuilder().add(Modifier.Type.GENERAL,
+                                           bonus.getValue().get()).build(),
+                 bonus.getSource());
 
     // Qualities.
     for (Quality quality : getQualities())
@@ -1414,7 +1419,9 @@ public class BaseMonster extends BaseEntry
     for (ValueSources.ValueSource<Optional<Integer>> bonus
         : getCombinedReflexSave().getSources().getSources())
       if (bonus.getValue().isPresent())
-        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
+        save.add(Modifier.newBuilder().add(Modifier.Type.GENERAL,
+                                           bonus.getValue().get()).build(),
+                 bonus.getSource());
 
     // Qualities.
     for (Quality quality : getQualities())
@@ -1498,7 +1505,7 @@ public class BaseMonster extends BaseEntry
 
     for(Quality quality : getQualities())
       if(quality.attackModifier().hasValue())
-        if(quality.attackModifier().hasCondition())
+        if(quality.attackModifier().hasAnyCondition())
           bonus.add(0, quality.getName() + ", " + quality.attackModifier());
         else
           bonus.add(quality.attackModifier().totalModifier(),
@@ -1785,16 +1792,16 @@ public class BaseMonster extends BaseEntry
 
   public Modifier skillModifier(String inName)
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
     for(Feat feat : m_feats)
       if(feat.hasSkillModifier(inName))
-        modifier = (Modifier)modifier.add(feat.skillModifier(inName));
+        modifier.add(feat.skillModifier(inName));
 
     for(Quality quality : m_qualities)
       if(quality.hasSkillModifier(inName))
-        modifier = (Modifier)modifier.add(quality.skillModifier(inName));
+        modifier.add(quality.skillModifier(inName));
 
-    return modifier;
+    return modifier.build();
   }
 
   public Annotated.Modifier annotatedSkillModifier(String inName) {

@@ -560,7 +560,7 @@ public abstract class Annotated<V>
 
     public Modifier(boolean inShowSign)
     {
-      m_value = new net.ixitxachitls.dma.values.Modifier();
+      m_value = net.ixitxachitls.dma.values.Modifier.EMPTY;
       m_showSign = inShowSign;
     }
 

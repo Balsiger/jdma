@@ -302,16 +302,16 @@ public class Quality extends NestedEntry
 
   public Modifier abilityModifier(Ability inAbility)
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     if(!getBase().isPresent())
-      return modifier;
+      return modifier.build();
 
     for(AbilityModifier abilityMod : getBase().get().getAbilityModifiers())
       if(abilityMod.getAbility() == inAbility)
-        modifier = (Modifier)modifier.add(abilityMod.getModifier());
+        modifier.add(abilityMod.getModifier());
 
-    return parametrize(modifier);
+    return parametrize(modifier.build());
   }
 
   public Modifier reflexModifier()
@@ -320,7 +320,7 @@ public class Quality extends NestedEntry
       if(getBase().get().getReflexModifier().isPresent())
         return parametrize(getBase().get().getReflexModifier().get());
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   public Modifier willModifier()
@@ -329,7 +329,7 @@ public class Quality extends NestedEntry
       if(getBase().get().getWillModifier().isPresent())
         return parametrize(getBase().get().getWillModifier().get());
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   public Modifier fortitudeModifier()
@@ -338,7 +338,7 @@ public class Quality extends NestedEntry
       if(getBase().get().getFortitudeModifier().isPresent())
         return parametrize(getBase().get().getFortitudeModifier().get());
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   public boolean hasSkillModifier(String inName)
@@ -355,15 +355,16 @@ public class Quality extends NestedEntry
 
   public Modifier skillModifier(String inSkill)
   {
-    Modifier result = new Modifier();
+    Modifier.Builder result = Modifier.newBuilder();
 
     if(getBase().isPresent())
       for(KeyedModifier modifier
           : getBase().get().getSkillModifiers())
         if(modifier.getKey().equalsIgnoreCase(inSkill))
-          result = (Modifier)result.add(parametrize(modifier.getModifier()));
+          result.add(parametrize(modifier.getModifier()));
 
-    return parametrize(result);
+    result.parametrize(m_parameters);
+    return result.build();
   }
 
   public Modifier attackModifier()
@@ -371,7 +372,7 @@ public class Quality extends NestedEntry
     if(getBase().isPresent() && getBase().get().getAttackModifier().isPresent())
       return parametrize(getBase().get().getAttackModifier().get());
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   public Modifier damageModifier()
@@ -379,24 +380,21 @@ public class Quality extends NestedEntry
     if(getBase().isPresent() && getBase().get().getDamageModifier().isPresent())
       return parametrize(getBase().get().getDamageModifier().get());
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   public Modifier acModifier() {
     if(getBase().isPresent() && getBase().get().getAcModifier().isPresent())
       return parametrize(getBase().get().getAcModifier().get());
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   private Modifier parametrize(Modifier inModifier) {
     if(!inModifier.hasAnyCondition())
       return inModifier;
 
-    return new Modifier(inModifier.getModifier(),
-                        inModifier.getType(),
-                        parametrizeText(inModifier.getCondition()),
-                        parametrize(inModifier.getNext()));
+    return inModifier.toBuilder().parametrize(m_parameters).build();
   }
 
   private AbilityModifier parametrize(AbilityModifier inModifier) {
@@ -408,24 +406,6 @@ public class Quality extends NestedEntry
   {
     return new KeyedModifier(inModifier.getKey(),
                              parametrize(inModifier.getModifier()));
-  }
-
-  private Optional<Modifier> parametrize(Optional<Modifier> inModifier) {
-    if(!inModifier.isPresent())
-      return inModifier;
-
-    if(!inModifier.get().hasAnyCondition())
-      return inModifier;
-
-    return Optional.of(parametrize(inModifier.get()));
-  }
-
-  private Optional<String> parametrizeText(Optional<String> inText)
-  {
-    if(inText.isPresent())
-      return Optional.of(parametrizeText(inText.get()));
-
-    return inText;
   }
 
   private String parametrizeText(String inText) {

@@ -22,14 +22,19 @@
 
 package net.ixitxachitls.dma.values;
 
-import java.io.FileNotFoundException;
-import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.data.UnsafeSanitizedContentOrdainer;
 
@@ -37,10 +42,7 @@ import net.ixitxachitls.dma.entries.Monster;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.proto.Values.ModifierProto;
-import net.ixitxachitls.dma.values.enums.Ability;
 import net.ixitxachitls.dma.values.enums.Named;
-import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.input.ReadException;
 import net.ixitxachitls.util.Strings;
 
 /**
@@ -54,58 +56,24 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   /** The modifiers type. */
   public enum Type implements Named
   {
-    /** Dodging stuff. */
     DODGE("dodge", true, ModifierProto.Type.DODGE),
-
-    /** Better armor. */
     ARMOR("armor", false, ModifierProto.Type.ARMOR),
-
-    /** Some equipment benefit. */
     EQUIPMENT("equipment", false, ModifierProto.Type.EQUIPMENT),
-
-    /** A shield helping out. */
     SHIELD("shield", false, ModifierProto.Type.SHIELD),
-
-    /** The general or standard type. */
     GENERAL("general", true, ModifierProto.Type.GENERAL),
-
-    /** Modifier for natural armor. */
     NATURAL_ARMOR("natural armor", false, ModifierProto.Type.NATURAL_ARMOR),
-
-    /** A modifier from an ability. */
     ABILITY("ability", true, ModifierProto.Type.ABILITY),
-
-    /** A modifier according to size. */
     SIZE("size", false, ModifierProto.Type.SIZE),
-
-    /** A racial modifier. */
     RACIAL("racial", false, ModifierProto.Type.RACIAL),
-
-    /** Circumstances giving a modifier. */
     CIRCUMSTANCE("circumstance", true, ModifierProto.Type.CIRCUMSTANCE),
-
-    /** A magical enhancement modifier. */
     ENHANCEMENT("enhancement", false, ModifierProto.Type.ENHANCEMENT),
-
-    /** A deflection modifier against attacks. */
     DEFLECTION("deflection", false, ModifierProto.Type.DEFLECTION),
-
-    /** A rage modifier. */
     RAGE("rage", false, ModifierProto.Type.RAGE),
-
-    /** A competence modifier against attacks. */
     COMPETENCE("competence", false, ModifierProto.Type.COMPETENCE),
-
-    /** A synergy bonus. */
     SYNERGY("synergy", false, ModifierProto.Type.SYNERGY);
 
-    /** The value's name. */
     private final String m_name;
-
-    /** Flag if the value stacks with others of its kind. */
     private final boolean m_stacks;
-
-    /** The proto enum value. */
     private final ModifierProto.Type m_proto;
 
     /** Create the name.
@@ -122,22 +90,12 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
       m_proto = inProto;
     }
 
-    /** Get the name of the value.
-     *
-     * @return the name of the value
-     *
-     */
     @Override
     public String getName()
     {
       return m_name;
     }
 
-    /** Convert to a human readable string.
-     *
-     * @return the converted string
-     *
-     */
     @Override
     public String toString()
     {
@@ -164,7 +122,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
      *
      * @return the proto enum value
      */
-    public ModifierProto.Type getProto()
+    public ModifierProto.Type toProto()
     {
       return m_proto;
     }
@@ -234,7 +192,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     {
       List<String> values = new ArrayList<>(inValues);
       Collections.reverse(values);
-      Optional<Modifier> result = Optional.absent();
+      Modifier.Builder builder = Modifier.newBuilder();
       for(String value : values)
       {
         String []parts =
@@ -258,8 +216,11 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
             parts[2] = parts[2].replaceAll("\\\\\\$", "\\$");
           Optional<String> condition = Optional.fromNullable(parts[2]);
 
-          result =
-            Optional.of(new Modifier(modifier, type, condition, result));
+          if(condition.isPresent())
+            builder.add(type, modifier);
+          else
+            builder.add(type, modifier,
+                        Condition.PARSER.parse(condition.get()));
         }
         catch(NumberFormatException e)
         {
@@ -267,96 +228,343 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
         }
       }
 
-      return result;
+      if(builder.isEmpty())
+        return Optional.absent();
+
+      return Optional.of(builder.build());
     }
   };
 
+  private static class Part
+  {
+    private Part(Type inType, int inModifier)
+    {
+      this(inType, inModifier, Optional.<Condition>absent());
+    }
+
+    private Part(Type inType, int inModifier, Condition inCondition)
+    {
+      this(inType, inModifier, Optional.of(inCondition));
+    }
+
+    private Part(Type inType, int inModifier, Optional<Condition> inCondition)
+    {
+      m_type = inType;
+      m_modifier = inModifier;
+      m_condition = inCondition;
+    }
+
+    private final Type m_type;
+    private final int m_modifier;
+    private final Optional<Condition> m_condition;
+
+    public boolean canAdd(Part inOther)
+    {
+      if(m_type != inOther.m_type)
+        return false;
+
+      if(!m_condition.equals(inOther.m_condition))
+        return false;
+
+      return true;
+    }
+
+    public Part add(Part inOther)
+    {
+      if(!canAdd(inOther))
+        throw new IllegalArgumentException(
+            "cannot add value " + inOther + " to " + this);
+
+      if(m_type.stacks())
+        return new Part(m_type, m_modifier + inOther.m_modifier, m_condition);
+
+      if(m_modifier >= inOther.m_modifier)
+        return this;
+
+      return inOther;
+    }
+
+    public ModifierProto.Modifier toProto()
+    {
+      ModifierProto.Modifier.Builder builder =
+          ModifierProto.Modifier.newBuilder()
+              .setBaseValue(m_modifier)
+              .setType(m_type.toProto());
+
+      if(m_condition.isPresent())
+        builder.setCondition(m_condition.get().toString());
+
+      return builder.build();
+    }
+
+    public static Part fromProto(ModifierProto.Modifier proto)
+    {
+      return new Part(Type.fromProto(proto.getType()),
+                      proto.getBaseValue(),
+                      proto.hasCondition()
+                          ? Condition.PARSER.parse(proto.getCondition())
+                          : Optional.<Condition>absent());
+    }
+
+    @Override
+    public String toString()
+    {
+      StringBuilder result = new StringBuilder();
+      if(m_modifier >= 0)
+        result.append("+");
+
+      result.append(m_modifier);
+
+      if(m_type != Type.GENERAL)
+        result.append(" " + m_type);
+
+      if(m_condition.isPresent())
+        result.append(" if " + m_condition.get());
+
+      return result.toString();
+    }
+
+
+    @Override
+    public boolean equals(Object inOther)
+    {
+      if(this == inOther)
+        return true;
+
+      if(inOther == null || getClass() != inOther.getClass())
+        return false;
+
+      final Part part = (Part)inOther;
+
+      if(m_modifier != part.m_modifier)
+        return false;
+      if(m_type != part.m_type)
+        return false;
+
+      return m_condition.equals(part.m_condition);
+    }
+
+    @Override
+    public int hashCode()
+    {
+      int result = m_type.hashCode();
+      result = 31 * result + m_modifier;
+      result = 31 * result + m_condition.hashCode();
+
+      return result;
+    }
+  }
+
+  public static class Builder
+  {
+    private Builder() {}
+
+    private Builder(Collection<Part> inParts)
+    {
+      m_parts.addAll(inParts);
+    }
+
+    private List<Part> m_parts = new ArrayList<>();
+
+    public Builder add(int inModifier)
+    {
+      return add(Type.GENERAL, inModifier);
+    }
+
+    public Builder add(Type inType, int inModifier)
+    {
+      m_parts.add(new Part(inType, inModifier));
+
+      return this;
+    }
+
+    public Builder add(Type inType, int inModifier, Condition inCondition)
+    {
+      m_parts.add(new Part(inType, inModifier, inCondition));
+
+      return this;
+    }
+
+    public Builder add(Type inType, int inModifier,
+                       Optional<Condition> inCondition)
+    {
+      m_parts.add(new Part(inType, inModifier, inCondition));
+
+      return this;
+    }
+
+    public Builder parametrize(Map<String, String> inParameters)
+    {
+      Evaluator evaluator = new Evaluator(inParameters);
+      List<Part> parts = new ArrayList<>();
+      for(Part part : m_parts)
+        if(part.m_condition.isPresent())
+          parts.add(new Part(part.m_type, part.m_modifier,
+                             Condition.PARSER.parse(evaluator.evaluate(
+                                 part.m_condition.get().toString()))));
+        else
+          parts.add(part);
+
+      m_parts = parts;
+
+      return this;
+    }
+
+    public Builder add(Modifier inModifier)
+    {
+      m_parts.addAll(inModifier.m_parts);
+
+      return this;
+    }
+
+    public Builder multiply(int inFactor)
+    {
+      List<Part> multiplied = new ArrayList<>(m_parts.size());
+      for(Part part : m_parts)
+        multiplied.add(new Part(part.m_type, part.m_modifier * inFactor,
+                                part.m_condition));
+
+      m_parts = multiplied;
+
+      return this;
+    }
+
+    public boolean isEmpty()
+    {
+      return m_parts.isEmpty();
+    }
+
+    public Builder with(Monster inMonster)
+    {
+      List<Part> parts = new ArrayList<>(m_parts.size());
+      for(Part part : m_parts)
+      {
+        if(part.m_condition.isPresent())
+        {
+          Optional<Boolean> check = part.m_condition.get().check(inMonster);
+          if(!check.isPresent() || check.get())
+            parts.add(new Part(part.m_type, part.m_modifier));
+        }
+        else
+          parts.add(part);
+      }
+
+      m_parts = parts;
+
+      return this;
+    }
+
+    public Builder without(Type inType)
+    {
+      for(Iterator<Part> i = m_parts.iterator(); i.hasNext(); )
+      {
+        Part part = i.next();
+        if(part.m_type == inType)
+          i.remove();
+      }
+
+      return this;
+    }
+
+    public Builder fromProto(ModifierProto inProto)
+    {
+      for(ModifierProto.Modifier modifier : inProto.getModifierList())
+        m_parts.add(Part.fromProto(modifier));
+
+      return this;
+    }
+
+    public Modifier build()
+    {
+      return new Modifier(simplify(m_parts));
+    }
+
+    private static List<Part> simplify(List<Part> inParts)
+    {
+      Multimap<Type, Part> partsByType = ArrayListMultimap.create();
+      for(Part part : inParts)
+        if(part.m_modifier != 0)
+          partsByType.put(part.m_type, part);
+
+      List<Part> parts = new ArrayList<>();
+      for(Type type : partsByType.keySet())
+        parts.addAll(simplifySingleType(partsByType.get(type)));
+
+      return parts;
+    }
+
+    private static Collection<Part> simplifySingleType(Collection<Part> inParts)
+    {
+      if(inParts.size() <= 1)
+        return inParts;
+
+      List<Part> parts = new ArrayList<>();
+      for(Part part : inParts)
+        addSimplified(parts, part);
+
+      return parts;
+    }
+
+    private static void addSimplified(List<Part> ioParts, Part inPart)
+    {
+      if(ioParts.isEmpty())
+      {
+        ioParts.add(inPart);
+        return;
+      }
+
+      for(int i = 0; i < ioParts.size(); i++)
+        if(ioParts.get(i).canAdd(inPart))
+        {
+          ioParts.set(i, ioParts.get(i).add(inPart));
+          return;
+        }
+
+      ioParts.add(inPart);
+    }
+  }
+
   /** Create a default modifier. */
-  public Modifier()
+  private Modifier(Collection<Part> inParts)
   {
-    this(0, Type.GENERAL, Optional.<String>absent(),
-         Optional.<Modifier>absent());
-  }
-
-  public Modifier(int inModifier)
-  {
-    this(inModifier, Type.GENERAL, Optional.<String>absent(),
-         Optional.<Modifier>absent());
-  }
-
-  public Modifier(int inModifier, Type inType)
-  {
-    this(inModifier, inType, Optional.<String>absent(),
-         Optional.<Modifier>absent());
-  }
-
-  /**
-   * Create a modifier with a value.
-   *
-   * @param inModifier the base modifier
-   * @param inType the type of modifier
-   * @param inCondition the condition, if any
-   * @param inNext the next modifier in chain, if any
-   */
-  public Modifier(int inModifier, Type inType, Optional<String> inCondition,
-                  Optional<Modifier> inNext)
-  {
-    this(inModifier,
-         inCondition.isPresent()
-             ? Condition.PARSER.parse(inCondition.get())
-             : Optional.<Condition>absent(), inNext, inType);
-  }
-
-  private Modifier(int inModifier, Optional<Condition> inCondition,
-                   Optional<Modifier> inNext, Type inType)
-  {
-    m_modifier = inModifier;
-    m_type = inType;
-    m_condition = inCondition;
-    m_next = inNext;
+    m_parts.addAll(inParts);
   }
 
   /** The types of modifiers available. */
   private static final String TYPES = Strings.PIPE_JOINER.join(Type.names());
+  public static final Modifier EMPTY = Modifier.newBuilder().build();
+  public static final Modifier ONE =
+      Modifier.newBuilder().add(Type.GENERAL, 1).build();
 
-  /** The modifier value itself. */
-  private final int m_modifier;
-
-  /** The type of the modifier. */
-  private final Type m_type;
-
-  /** The condition for the modifier, if any. */
-  private final Optional<Condition> m_condition;
-
-  /** A next modifier, if any. */
-  private final Optional<Modifier> m_next;
+  private final List<Part> m_parts = new ArrayList<>();
 
   /**
    * Get the value of the modifier, ignoring additional modifiers.
    *
    * @return      the requested valu
    */
-  public int getModifier()
+  /*public int getModifier()
   {
     return m_modifier;
-  }
+  }*/
 
   public int totalModifier()
   {
-    return m_modifier
-        + (m_next.isPresent() ? m_next.get().totalModifier() : 0);
+    int total = 0;
+    for(Part part : m_parts)
+      total += part.m_modifier;
+
+    return total;
   }
 
   public int unconditionalModifier()
   {
-    int modifier = 0;
-    if (!m_condition.isPresent())
-      modifier += m_modifier;
+    int total = 0;
+    for(Part part : m_parts)
+      if(!part.m_condition.isPresent())
+        total += part.m_modifier;
 
-    if (m_next.isPresent())
-      modifier += m_next.get().unconditionalModifier();
-
-    return modifier;
+    return total;
   }
 
   public int low()
@@ -369,6 +577,7 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     return totalModifier();
   }
 
+  /*
   public int total(Monster inMonster)
   {
     int modifier = 0;
@@ -384,18 +593,62 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
 
     return modifier;
   }
+  */
+
+  /*
+  public Modifier with(Monster inMonster)
+  {
+    Optional<Modifier> modifier = with(Optional.of(this), inMonster);
+    if(modifier.isPresent())
+      return modifier.get();
+
+    return new Modifier();
+  }
+  */
+
+  /*
+  private static Optional<Modifier> with(Optional<Modifier> inModifier,
+                                         Monster inMonster)
+  {
+    if(!inModifier.isPresent())
+      return Optional.absent();
+
+    Optional<Modifier> next = with(inModifier.get().m_next, inMonster);
+    if(inModifier.get().m_condition.isPresent())
+    {
+      Optional<Boolean> checked =
+          inModifier.get().m_condition.get().check(inMonster);
+      if(checked.isPresent())
+      {
+        if(checked.get())
+          return Optional.of(new Modifier(inModifier.get().m_modifier,
+                                          Optional.<Condition>absent(), next,
+                                          inModifier.get().m_type));
+        else
+          return next;
+      }
+    }
+
+    // Current modifier does not change, but maybe mext does.
+    if(inModifier.get().m_next.equals(next))
+      return Optional.of(inModifier.get());
+    else
+      return Optional.of(new Modifier(inModifier.get().m_modifier,
+                                      inModifier.get().m_condition, next,
+                                      inModifier.get().m_type));
+  }
+  */
 
   public boolean hasValue()
   {
-    if(m_modifier != 0)
-      return true;
-
-    if(m_next.isPresent())
-      return m_next.get().hasValue();
+    for(Part part : m_parts)
+      if(part.m_modifier != 0)
+        return true;
 
     return false;
   }
 
+  /*
   public Modifier without(Type inType)
   {
     if(m_type == inType) {
@@ -415,41 +668,46 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
 
     return new Modifier(m_modifier, m_condition, next, m_type);
   }
+  */
 
   /**
    * Get the type of the modifier.
    *
    * @return the modifier type
    */
+  /*
   public Type getType()
   {
     return m_type;
   }
+  */
 
   /**
    * Get the condition of the modifier, if any.
    *
    * @return the condition
    */
+  /*
   public Optional<String> getCondition()
   {
     return m_condition.isPresent()
         ? Optional.of(m_condition.get().toString())
         : Optional.<String>absent();
   }
+  */
 
+  /*
   public boolean hasCondition()
   {
     return m_condition.isPresent();
   }
+  */
 
   public boolean hasAnyCondition()
   {
-    if(hasCondition())
-      return true;
-
-    if(m_next.isPresent())
-      return m_next.get().hasAnyCondition();
+    for(Part part : m_parts)
+      if(part.m_condition.isPresent())
+        return true;
 
     return false;
   }
@@ -459,10 +717,12 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
    *
    * @return the next modifier
    */
+  /*
   public Optional<Modifier> getNext()
   {
     return m_next;
   }
+  */
 
   public SanitizedContent formatted()
   {
@@ -478,57 +738,24 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
   @Override
   public String toString()
   {
-    StringBuilder result = new StringBuilder();
-    if(m_modifier >= 0)
-      result.append("+");
-
-    result.append(m_modifier);
-
-    if(m_type != Type.GENERAL)
-      result.append(" " + m_type);
-
-    if(m_condition.isPresent())
-      result.append(" if " + m_condition.get());
-
-    if(m_next.isPresent())
-      result.append(", " + m_next.get());
-
-    return result.toString();
+    return Strings.COMMA_JOINER.join(m_parts);
   }
 
   @Override
   public ModifierProto toProto()
   {
     ModifierProto.Builder builder = ModifierProto.newBuilder();
-    addToProto(builder);
+    for(Part part : m_parts)
+      builder.addModifier(part.toProto());
 
     return builder.build();
   }
 
-  /**
-   * Add the values of this modifier to the given proto.
-   *
-   * @param inBuilder the builder to fill
-   */
-  private void addToProto(ModifierProto.Builder inBuilder)
-  {
-    ModifierProto.Modifier.Builder modifier =
-      ModifierProto.Modifier.newBuilder();
-
-    modifier.setBaseValue(m_modifier);
-    modifier.setType(m_type.getProto());
-    if (m_condition.isPresent())
-      modifier.setCondition(m_condition.get().toString());
-
-    inBuilder.addModifier(modifier.build());
-
-    if(m_next.isPresent())
-      m_next.get().addToProto(inBuilder);
-   }
-
+  /*
   public Modifier add(int inModifier, Type inType) {
     return (Modifier) add(new Modifier(inModifier, inType));
   }
+  */
 
   @Override
   public Value.Arithmetic<ModifierProto>
@@ -537,62 +764,19 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
     if(!(inValue instanceof Modifier))
       return this;
 
-    if(m_modifier == 0)
-      if(m_next.isPresent())
-        return m_next.get().add(inValue);
-      else
-        return inValue;
-
-    if(((Modifier) inValue).m_modifier == 0)
-      if(((Modifier) inValue).m_next.isPresent())
-        return ((Modifier) inValue).m_next.get().add(this);
-      else
-        return this;
-
-    Modifier value = (Modifier)inValue;
-    if(m_type == value.m_type && m_condition.equals(value.m_condition))
-    {
-      Optional<Modifier> next;
-      if(!m_next.isPresent())
-        next = value.m_next;
-      else if(!value.m_next.isPresent())
-        next = m_next;
-      else
-        next = Optional.of((Modifier)m_next.get().add(value.m_next.get()));
-
-      if(m_type.stacks())
-        return new Modifier(m_modifier + value.m_modifier, m_condition,
-                            next, m_type);
-      else
-        return new Modifier(Math.max(m_modifier, value.m_modifier),
-                            m_condition, next, m_type);
-    }
-
-    if(!m_next.isPresent())
-      return new Modifier(m_modifier, m_condition, Optional.of(value), m_type);
-
-    return new Modifier(m_modifier, m_condition,
-                        Optional.of((Modifier)m_next.get().add(value)), m_type);
+    return toBuilder().add((Modifier)inValue).build();
   }
 
   @Override
   public Value.Arithmetic<ModifierProto> multiply(int inFactor)
   {
-    return new Modifier(m_modifier * inFactor, m_condition,
-                        m_next.isPresent()
-                            ? Optional.of((Modifier)
-                                              m_next.get().multiply(inFactor))
-                            : m_next, m_type);
+    return toBuilder().multiply(inFactor).build();
   }
 
   @Override
   public Value.Arithmetic<ModifierProto> multiply(Rational inFactor)
   {
-    return new Modifier(m_modifier * inFactor.getLeader(), m_condition,
-                        m_next.isPresent()
-                            ? Optional.of((Modifier)
-                                              m_next.get().multiply(inFactor))
-                            : m_next, m_type);
+    throw new UnsupportedOperationException("not implemented");
   }
 
   /**
@@ -603,27 +787,23 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
    */
   public static Modifier fromProto(ModifierProto inProto)
   {
-    Modifier result = null;
-    List<ModifierProto.Modifier> modifiers =
-        new ArrayList<>(inProto.getModifierList());
-    Collections.reverse(modifiers);
-    for(ModifierProto.Modifier modifier : modifiers)
-    {
-      result = new Modifier(modifier.getBaseValue(),
-                            Type.fromProto(modifier.getType()),
-                            modifier.hasCondition()
-                                ? Optional.of(modifier.getCondition())
-                                : Optional.<String>absent(),
-                            Optional.fromNullable(result));
-    }
-
-    return result;
+    return Modifier.newBuilder().fromProto(inProto).build();
   }
 
   @Override
   public boolean canAdd(Value.Arithmetic<ModifierProto> inValue)
   {
     return inValue instanceof Modifier;
+  }
+
+  public static Builder newBuilder()
+  {
+    return new Builder();
+  }
+
+  public Builder toBuilder()
+  {
+    return new Builder(m_parts);
   }
 
   //----------------------------------------------------------------------------
@@ -668,38 +848,106 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
 
       assertEquals("from proto", "+42 rage if condition", modifier.toString());
       assertEquals("to proto", proto, modifier.toProto());
-      assertEquals("modifier", 42, modifier.getModifier());
-      assertEquals("condition", "condition", modifier.getCondition().get());
-      assertEquals("type", Type.RAGE, modifier.getType());
     }
 
     /** Test adding. */
     @org.junit.Test
     public void add()
     {
-      Modifier modifier = new Modifier(23, Type.ARMOR,
-                                       Optional.<String>absent(),
-                                       Optional.<Modifier>absent());
-      modifier = (Modifier)
-          modifier.add(new Modifier(42, Type.GENERAL, Optional.<String>absent(),
-                                    Optional.<Modifier>absent()));
-      modifier = (Modifier)
-          modifier.add(new Modifier(1, Type.ARMOR, Optional.<String>absent(),
-                                    Optional.of
-                                        (new Modifier
-                                             (1, Type.GENERAL,
-                                              Optional.<String>absent(),
-                                              Optional.<Modifier>absent()))));
-      modifier = (Modifier)
-          modifier.add(new Modifier(1, Type.ARMOR, Optional.of("maybe"),
-                                    Optional.of(
-                                        new Modifier
-                                            (1, Type.GENERAL,
-                                             Optional.of("maybe"),
-                                             Optional.<Modifier>absent()))));
+      Modifier.Builder builder = Modifier.newBuilder();
+      builder.add(Type.ARMOR, 23);
+      builder.add(Type.GENERAL, 42);
+      builder.add(Type.ARMOR, 1);
+      builder.add(Type.GENERAL, 1);
+      builder.add(Type.ARMOR, 1, Condition.PARSER.parse("maybe"));
+      builder.add(Type.GENERAL, 1, Condition.PARSER.parse("maybe"));
 
       assertEquals("modifier", "+23 armor, +43, +1 armor if maybe, +1 if maybe",
-                   modifier.toString());
+                   builder.build().toString());
+    }
+
+    @org.junit.Test
+    public void simplify()
+    {
+      assertTrue("empty", Modifier.Builder.simplify(
+          Collections.<Part>emptyList()).isEmpty());
+
+      assertEquals("single", ImmutableList.of(new Part(Type.GENERAL, 10)),
+                   Modifier.Builder.simplify(
+                       ImmutableList.of(new Part(Type.GENERAL, 10))));
+      assertEquals("multiple", "[+30, +3 armor, +5 dodge]",
+                   Modifier.Builder.simplify(
+                       ImmutableList.of(new Part(Type.GENERAL, 10),
+                                        new Part(Type.ARMOR, 3),
+                                        new Part(Type.GENERAL, 20),
+                                        new Part(Type.ARMOR, 3),
+                                        new Part(Type.DODGE, 5))).toString());
+    }
+
+    @org.junit.Test
+    public void addSimplified()
+    {
+      List<Part> parts = new ArrayList<>();
+      Modifier.Builder.addSimplified(parts,new Part(Type.GENERAL, 10));
+      assertEquals("single", "[+10]", parts.toString());
+
+      Modifier.Builder.addSimplified(parts,new Part(Type.GENERAL, 13));
+      assertEquals("non stacking", "[+23]", parts.toString());
+
+      Modifier.Builder.addSimplified(parts,new Part(Type.ARMOR, 1));
+      assertEquals("other type", "[+23, +1 armor]", parts.toString());
+
+      Modifier.Builder.addSimplified(parts,new Part(Type.ARMOR, 2));
+      assertEquals("non stacking higher", "[+23, +2 armor]", parts.toString());
+
+      Modifier.Builder.addSimplified(parts,new Part(Type.ARMOR, 1));
+      assertEquals("non stacking lower", "[+23, +2 armor]", parts.toString());
+    }
+
+    @org.junit.Test
+    public void partCanAdd()
+    {
+      assertTrue("simple", new Part(Type.GENERAL, 10).canAdd(
+          new Part(Type.GENERAL, 42)));
+
+      assertFalse("wrong type", new Part(Type.GENERAL, 10).canAdd(
+          new Part(Type.ABILITY, 10)));
+      assertFalse("mismatched conditionals",
+                  new Part(Type.GENERAL, 10, new Condition("first")).canAdd(
+                      new Part(Type.GENERAL, 10)));
+      assertFalse("mismatched conditionals",
+                  new Part(Type.GENERAL, 10).canAdd(
+                      new Part(Type.GENERAL, 10, new Condition("first"))));
+      assertTrue("mismatched conditionals",
+                 new Part(Type.GENERAL, 10, new Condition("first")).canAdd(
+                      new Part(Type.GENERAL, 10, new Condition("first"))));
+    }
+
+    @org.junit.Test
+    public void partAdd()
+    {
+      try
+      {
+        new Part(Type.GENERAL, 10).add(new Part(Type.ABILITY, 10));
+        fail("expeted exception to be thrown");
+      }
+      catch(IllegalArgumentException e)
+      {
+        // this is expected
+      }
+
+      assertEquals("simple", "+42",
+                   new Part(Type.GENERAL, 10).add(new Part(Type.GENERAL, 32))
+                       .toString());
+      assertEquals("stacks", "+23 armor",
+                   new Part(Type.ARMOR, 10).add(new Part(Type.ARMOR, 23))
+                       .toString());
+      assertEquals("stacks", "+23 shield",
+                   new Part(Type.SHIELD, 23).add(new Part(Type.SHIELD, 10))
+                       .toString());
+      assertEquals("stacks", "+23 shield",
+                   new Part(Type.SHIELD, 23).add(new Part(Type.SHIELD, 23))
+                       .toString());
     }
   }
 }

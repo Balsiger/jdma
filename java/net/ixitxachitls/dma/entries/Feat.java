@@ -155,7 +155,7 @@ public class Feat extends NestedEntry
     if(getBase().isPresent() && getBase().get().getAttackModifier().isPresent())
       return getBase().get().getAttackModifier().get();
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   public Modifier initiativeModifier()
@@ -164,7 +164,7 @@ public class Feat extends NestedEntry
         && getBase().get().getInitiativeModifier().isPresent())
       return getBase().get().getInitiativeModifier().get();
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   /**
@@ -177,7 +177,7 @@ public class Feat extends NestedEntry
     if(getBase().isPresent() && getBase().get().getDamageModifier().isPresent())
       return getBase().get().getDamageModifier().get();
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   public boolean hasSkillModifier(String inName)
@@ -190,7 +190,7 @@ public class Feat extends NestedEntry
     if(getBase().isPresent())
       return getBase().get().getSkillModifier(inSkill);
 
-    return new Modifier();
+    return Modifier.EMPTY;
   }
 
   public int additionalAttacks()
@@ -214,7 +214,7 @@ public class Feat extends NestedEntry
   {
     if(!getBase().isPresent()
         || !getBase().get().getStrengthModifier().isPresent())
-      return new Modifier();
+      return Modifier.EMPTY;
 
     return getBase().get().getStrengthModifier().get();
   }
@@ -223,7 +223,7 @@ public class Feat extends NestedEntry
   {
     if(!getBase().isPresent()
         || !getBase().get().getDexterityModifier().isPresent())
-      return new Modifier();
+      return Modifier.EMPTY;
 
     return getBase().get().getDexterityModifier().get();
   }
@@ -232,7 +232,7 @@ public class Feat extends NestedEntry
   {
     if(!getBase().isPresent()
         || !getBase().get().getConstitutionModifier().isPresent())
-      return new Modifier();
+      return Modifier.EMPTY;
 
     return getBase().get().getConstitutionModifier().get();
   }
@@ -241,7 +241,7 @@ public class Feat extends NestedEntry
   {
     if(!getBase().isPresent()
         || !getBase().get().getIntelligenceModifier().isPresent())
-      return new Modifier();
+      return Modifier.EMPTY;
 
     return getBase().get().getIntelligenceModifier().get();
   }
@@ -250,7 +250,7 @@ public class Feat extends NestedEntry
   {
     if(!getBase().isPresent()
         || !getBase().get().getWisdomModifier().isPresent())
-      return new Modifier();
+      return Modifier.EMPTY;
 
     return getBase().get().getWisdomModifier().get();
   }
@@ -259,7 +259,7 @@ public class Feat extends NestedEntry
   {
     if(!getBase().isPresent()
         || !getBase().get().getCharismaModifier().isPresent())
-      return new Modifier();
+      return Modifier.EMPTY;
 
     return getBase().get().getCharismaModifier().get();
   }
@@ -268,7 +268,7 @@ public class Feat extends NestedEntry
   {
     if(!getBase().isPresent()
         || !getBase().get().getFortitudeModifier().isPresent())
-      return new Modifier();
+      return Modifier.EMPTY;
 
     return getBase().get().getFortitudeModifier().get();
   }
@@ -277,7 +277,7 @@ public class Feat extends NestedEntry
   {
     if(!getBase().isPresent()
         || !getBase().get().getWillModifier().isPresent())
-      return new Modifier();
+      return Modifier.EMPTY;
 
     return getBase().get().getFortitudeModifier().get();
   }
@@ -286,7 +286,7 @@ public class Feat extends NestedEntry
   {
     if(!getBase().isPresent()
         || !getBase().get().getReflexModifier().isPresent())
-      return new Modifier();
+      return Modifier.EMPTY;
 
     return getBase().get().getReflexModifier().get();
   }

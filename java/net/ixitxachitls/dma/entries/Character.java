@@ -464,7 +464,8 @@ public class Character extends NPC
   @Override
   public Modifier abilityModifierFromQualities(Ability inAbility)
   {
-    Modifier modifier = super.abilityModifierFromQualities(inAbility);
+    Modifier.Builder modifier =
+        super.abilityModifierFromQualities(inAbility).toBuilder();
 
     int value = 0;
     for(Level level : m_levels)
@@ -473,11 +474,8 @@ public class Character extends NPC
         value++;
 
     if(value > 0)
-      modifier = (Modifier)modifier.add
-          (new Modifier(value, Modifier.Type.GENERAL,
-                        Optional.<String>absent(),
-                        Optional.<Modifier>absent()));
+      modifier.add(Modifier.Type.GENERAL, value);
 
-    return modifier;
+    return modifier.build();
   }
 }

@@ -298,7 +298,8 @@ public class Condition extends Value.Arithmetic<Values.ConditionProto>
         {
           ParseReader reader =
               new ParseReader(new StringReader(inText), "condition");
-          Optional<String> ability = reader.expectCase(Ability.names(), false);
+          Optional<String> ability =
+              reader.expectCase(Ability.allNames(), true);
           if(ability.isPresent())
             return Optional.of(parseAbility(ability.get(), reader));
 
@@ -456,6 +457,40 @@ public class Condition extends Value.Arithmetic<Values.ConditionProto>
     return proto.build();
   }
 
+  @Override
+  public boolean equals(Object inOther)
+  {
+    if(this == inOther)
+      return true;
+
+    if(inOther == null || getClass() != inOther.getClass())
+      return false;
+
+    final Condition condition = (Condition)inOther;
+
+    if(!m_generic.equals(condition.m_generic))
+      return false;
+
+    if(m_style != condition.m_style)
+      return false;
+
+    if(m_ability != condition.m_ability)
+      return false;
+
+    return m_limit.equals(condition.m_limit);
+  }
+
+  @Override
+  public int hashCode()
+  {
+    int result = m_generic.hashCode();
+    result = 31 * result + m_style.hashCode();
+    result = 31 * result + m_ability.hashCode();
+    result = 31 * result + m_limit.hashCode();
+
+    return result;
+  }
+
   private Optional<String> addStrings(Optional<String> inFirst,
                                       Optional<String> inSecond)
   {
@@ -523,5 +558,18 @@ public class Condition extends Value.Arithmetic<Values.ConditionProto>
       return m_ability + " " + m_limit.get();
 
     return "";
+  }
+
+  public static Optional<Condition> parse(Optional<String> inText)
+  {
+    if(inText.isPresent())
+      return parse(inText.get());
+
+    return Optional.absent();
+  }
+
+  public static Optional<Condition> parse(String inText)
+  {
+    return PARSER.parse(inText);
   }
 }

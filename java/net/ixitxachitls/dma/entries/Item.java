@@ -1320,12 +1320,14 @@ public class Item extends CampaignEntry
       // Add attack modifiers from qualities.
       for(Quality quality : getPossessor().get().allQualities())
         attacks = adjustEach(
-            attacks, quality.attackModifier().total(getPossessor().get()));
+            attacks, quality.attackModifier().toBuilder()
+                .with(getPossessor().get()).build().totalModifier());
 
       for(BaseEntry base : getBaseEntries())
         for(Quality quality : ((BaseItem)base).getCombinedQualities().get())
           attacks = adjustEach(
-              attacks, quality.attackModifier().total(getPossessor().get()));
+              attacks, quality.attackModifier().toBuilder()
+                  .with(getPossessor().get()).build().totalModifier());
 
       boni.put("", attacks);
 
@@ -1413,7 +1415,8 @@ public class Item extends CampaignEntry
     for(BaseEntry base : getBaseEntries())
       for(Quality quality : ((BaseItem)base).getCombinedQualities().get())
       {
-        int modifier = quality.damageModifier().total(getPossessor().get());
+        int modifier = quality.damageModifier().toBuilder()
+            .with(getPossessor().get()).build().totalModifier();
         if(modifier != 0)
           damage = (Damage)damage.add(new Damage(new Dice(0, 0, modifier)));
       }

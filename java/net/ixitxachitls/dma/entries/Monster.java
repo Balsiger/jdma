@@ -45,6 +45,7 @@ import net.ixitxachitls.dma.rules.CarryingCapacity;
 import net.ixitxachitls.dma.rules.Combat;
 import net.ixitxachitls.dma.rules.Monsters;
 import net.ixitxachitls.dma.values.Annotated;
+import net.ixitxachitls.dma.values.Condition;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Distance;
@@ -1168,11 +1169,12 @@ public class Monster extends CampaignEntry
 
   protected Modifier abilityModifierFromQualities(Ability inAbility)
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     for(Quality quality : allQualities())
-      modifier = (Modifier)modifier.add(quality.abilityModifier(inAbility));
-    return modifier;
+      modifier.add(quality.abilityModifier(inAbility));
+
+    return modifier.build();
   }
 
   protected List<Quality> allQualities()
@@ -1236,14 +1238,20 @@ public class Monster extends CampaignEntry
     Annotated.Modifier annotated = new Annotated.Modifier();
 
     if(m_strength.isPresent())
-      annotated.add(new Modifier(m_strength.get()), getName());
+      annotated.add(Modifier.newBuilder().add(Modifier.Type.GENERAL,
+                                              m_strength.get()).build(),
+                    getName());
     else
       for(BaseEntry base : getBaseEntries())
         for(ValueSources.ValueSource<Optional<Integer>> bonus
             : ((BaseMonster)base)
             .getCombinedStrength().getSources().getSources())
           if(bonus.getValue().isPresent())
-            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+            annotated.add(Modifier.newBuilder()
+                              .add(Modifier.Type.GENERAL,
+                                   bonus.getValue().get())
+                              .build(),
+                          base.getName());
 
     // Qualities
     for(Quality quality : allQualities())
@@ -1269,14 +1277,19 @@ public class Monster extends CampaignEntry
     Annotated.Modifier annotated = new Annotated.Modifier();
 
     if(m_dexterity.isPresent())
-      annotated.add(new Modifier(m_dexterity.get()), getName());
+      annotated.add(Modifier.newBuilder().add(Modifier.Type.GENERAL,
+                                              m_dexterity.get()).build(),
+                    getName());
     else
       for(BaseEntry base : getBaseEntries())
         for(ValueSources.ValueSource<Optional<Integer>> bonus
             : ((BaseMonster)base)
             .getCombinedDexterity().getSources().getSources())
           if(bonus.getValue().isPresent())
-            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+            annotated.add(Modifier.newBuilder()
+                              .add(Modifier.Type.GENERAL,
+                                   bonus.getValue().get())
+                              .build(), base.getName());
 
     // Qualities
     for(Quality quality : allQualities())
@@ -1302,14 +1315,19 @@ public class Monster extends CampaignEntry
     Annotated.Modifier annotated = new Annotated.Modifier();
 
     if(m_constitution.isPresent())
-      annotated.add(new Modifier(m_constitution.get()), getName());
+      annotated.add(Modifier.newBuilder().add(Modifier.Type.GENERAL,
+                                              m_constitution.get()).build(),
+                    getName());
     else
       for(BaseEntry base : getBaseEntries())
         for(ValueSources.ValueSource<Optional<Integer>> bonus
             : ((BaseMonster)base)
             .getCombinedConstitution().getSources().getSources())
           if(bonus.getValue().isPresent())
-            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+            annotated.add(Modifier.newBuilder()
+                              .add(Modifier.Type.GENERAL,
+                                   bonus.getValue().get())
+                              .build(), base.getName());
 
     // Qualities
     for(Quality quality : allQualities())
@@ -1335,14 +1353,18 @@ public class Monster extends CampaignEntry
     Annotated.Modifier annotated = new Annotated.Modifier();
 
     if(m_intelligence.isPresent())
-      annotated.add(new Modifier(m_intelligence.get()), getName());
+      annotated.add(Modifier.newBuilder().add(Modifier.Type.GENERAL,
+                                              m_intelligence.get())
+                        .build(), getName());
     else
       for(BaseEntry base : getBaseEntries())
         for(ValueSources.ValueSource<Optional<Integer>> bonus
             : ((BaseMonster)base)
             .getCombinedIntelligence().getSources().getSources())
           if(bonus.getValue().isPresent())
-            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+            annotated.add(Modifier.newBuilder().add(Modifier.Type.GENERAL,
+                                                    bonus.getValue().get())
+                              .build(), base.getName());
 
     // Qualities
     for(Quality quality : allQualities())
@@ -1368,14 +1390,19 @@ public class Monster extends CampaignEntry
     Annotated.Modifier annotated = new Annotated.Modifier();
 
     if(m_wisdom.isPresent())
-      annotated.add(new Modifier(m_wisdom.get()), getName());
+      annotated.add(Modifier.newBuilder()
+                        .add(Modifier.Type.GENERAL, m_wisdom.get())
+                        .build(), getName());
     else
       for(BaseEntry base : getBaseEntries())
         for(ValueSources.ValueSource<Optional<Integer>> bonus
             : ((BaseMonster)base)
             .getCombinedWisdom().getSources().getSources())
           if(bonus.getValue().isPresent())
-            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+            annotated.add(Modifier.newBuilder()
+                              .add(Modifier.Type.GENERAL,
+                                   bonus.getValue().get())
+                              .build(), base.getName());
 
     // Qualities
     for(Quality quality : allQualities())
@@ -1401,14 +1428,19 @@ public class Monster extends CampaignEntry
     Annotated.Modifier annotated = new Annotated.Modifier();
 
     if(m_charisma.isPresent())
-      annotated.add(new Modifier(m_charisma.get()), getName());
+      annotated.add(Modifier.newBuilder()
+                        .add(Modifier.Type.GENERAL, m_charisma.get())
+                        .build(), getName());
     else
       for(BaseEntry base : getBaseEntries())
         for(ValueSources.ValueSource<Optional<Integer>> bonus
             : ((BaseMonster)base)
             .getCombinedCharisma().getSources().getSources())
           if(bonus.getValue().isPresent())
-            annotated.add(new Modifier(bonus.getValue().get()), base.getName());
+            annotated.add(Modifier.newBuilder()
+                              .add(Modifier.Type.GENERAL,
+                                   bonus.getValue().get()).build(),
+                          base.getName());
 
     // Qualities
     for(Quality quality : allQualities())
@@ -1447,12 +1479,12 @@ public class Monster extends CampaignEntry
 
   public Modifier getStrengthMiscModifier()
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     for(Feat feat : allFeats())
-      modifier = (Modifier)modifier.add(feat.getStrengthModifier());
+      modifier.add(feat.getStrengthModifier());
 
-    return modifier;
+    return modifier.build();
   }
 
   /**
@@ -1514,12 +1546,12 @@ public class Monster extends CampaignEntry
 
   public Modifier getConstitutionMiscModifier()
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     for(Feat feat : allFeats())
-      modifier = (Modifier)modifier.add(feat.getConstitutionModifier());
+      modifier.add(feat.getConstitutionModifier());
 
-    return modifier;
+    return modifier.build();
   }
 
   /**
@@ -1584,12 +1616,12 @@ public class Monster extends CampaignEntry
 
   public Modifier getDexterityMiscModifier()
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     for(Feat feat : allFeats())
-      modifier = (Modifier)modifier.add(feat.getDexterityModifier());
+      modifier.add(feat.getDexterityModifier());
 
-    return modifier;
+    return modifier.build();
   }
 
   /**
@@ -1652,12 +1684,12 @@ public class Monster extends CampaignEntry
 
   public Modifier getIntelligenceMiscModifier()
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     for(Feat feat : allFeats())
-      modifier = (Modifier)modifier.add(feat.getIntelligenceModifier());
+      modifier.add(feat.getIntelligenceModifier());
 
-    return modifier;
+    return modifier.build();
   }
 
   /**
@@ -1719,12 +1751,12 @@ public class Monster extends CampaignEntry
 
   public Modifier getWisdomMiscModifier()
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     for(Feat feat : allFeats())
-      modifier = (Modifier)modifier.add(feat.getWisdomModifier());
+      modifier.add(feat.getWisdomModifier());
 
-    return modifier;
+    return modifier.build();
   }
 
   /**
@@ -1786,12 +1818,12 @@ public class Monster extends CampaignEntry
 
   public Modifier getCharismaMiscModifier()
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     for(Feat feat : allFeats())
-      modifier = (Modifier)modifier.add(feat.getCharismaModifier());
+      modifier.add(feat.getCharismaModifier());
 
-    return modifier;
+    return modifier.build();
   }
 
   public int strengthBonus()
@@ -2207,32 +2239,32 @@ public class Monster extends CampaignEntry
 
   public Modifier miscFortitudeModifier()
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     for(Feat feat : allFeats())
-      modifier = (Modifier)modifier.add(feat.fortitudeModifier());
+      modifier.add(feat.fortitudeModifier());
 
-    return modifier;
+    return modifier.build();
   }
 
   public Modifier miscWillModifier()
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     for(Feat feat : allFeats())
-      modifier = (Modifier)modifier.add(feat.willModifier());
+      modifier.add(feat.willModifier());
 
-    return modifier;
+    return modifier.build();
   }
 
   public Modifier miscReflexModifier()
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     for(Feat feat : allFeats())
-      modifier = (Modifier)modifier.add(feat.reflexModifier());
+      modifier.add(feat.reflexModifier());
 
-    return modifier;
+    return modifier.build();
   }
 
   /**
@@ -2256,7 +2288,8 @@ public class Monster extends CampaignEntry
     for (ValueSources.ValueSource<Optional<Integer>> bonus
         : getCombinedFortitudeSave().getSources().getSources())
       if (bonus.getValue().isPresent())
-        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
+        save.add(Modifier.newBuilder().add(bonus.getValue().get()).build(),
+                 bonus.getSource());
 
     // Qualities.
     for (Quality quality : allQualities())
@@ -2281,7 +2314,8 @@ public class Monster extends CampaignEntry
     for (ValueSources.ValueSource<Optional<Integer>> bonus
         : getCombinedReflexSave().getSources().getSources())
       if (bonus.getValue().isPresent())
-        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
+        save.add(Modifier.newBuilder().add(bonus.getValue().get()).build(),
+                 bonus.getSource());
 
     // Qualities.
     for(Quality quality : allQualities())
@@ -2306,7 +2340,8 @@ public class Monster extends CampaignEntry
     for (ValueSources.ValueSource<Optional<Integer>> bonus
         : getCombinedWillSave().getSources().getSources())
       if (bonus.getValue().isPresent())
-        save.add(new Modifier(bonus.getValue().get()), bonus.getSource());
+        save.add(Modifier.newBuilder().add(bonus.getValue().get()).build(),
+                 bonus.getSource());
 
     // Qualities.
     for (Quality quality : allQualities())
@@ -2325,12 +2360,12 @@ public class Monster extends CampaignEntry
 
   public Modifier racialFortitudeModifier()
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     for(Quality quality : allQualities())
       modifier.add(quality.fortitudeModifier());
 
-    return modifier;
+    return modifier.build();
   }
 
   /**
@@ -2366,12 +2401,12 @@ public class Monster extends CampaignEntry
 
   public Modifier racialReflexModifier()
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     for(Quality quality : allQualities())
       modifier.add(quality.reflexModifier());
 
-    return modifier;
+    return modifier.build();
   }
 
   /**
@@ -2407,12 +2442,12 @@ public class Monster extends CampaignEntry
 
   public Modifier racialWillModifier()
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
 
     for(Quality quality : allQualities())
-      modifier = (Modifier)modifier.add(quality.willModifier());
+      modifier.add(quality.willModifier());
 
-    return modifier;
+    return modifier.build();
   }
 
   /**
@@ -2497,7 +2532,7 @@ public class Monster extends CampaignEntry
     }
 
     if(bonus == null)
-      return new Modifier();
+      return Modifier.EMPTY;
 
     return bonus;
   }
@@ -2524,7 +2559,7 @@ public class Monster extends CampaignEntry
     }
 
     if(bonus == null)
-      return new Modifier();
+      return Modifier.EMPTY;
 
     return bonus;
   }
@@ -2535,29 +2570,22 @@ public class Monster extends CampaignEntry
   }
 
   public Modifier armorClass() {
-    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
-                                  Optional.<String>absent(),
-                                  Optional.<Modifier>absent());
-    armor = (Modifier)armor.add(getArmorBonus());
-    armor = (Modifier)armor.add(getShieldBonus());
+    Modifier.Builder armor = Modifier.newBuilder();
+    armor.add(10);
+    armor.add(getArmorBonus());
+    armor.add(getShieldBonus());
     Optional<Modifier> natural = getCombinedNaturalArmor().get();
     if(natural.isPresent())
-      armor = (Modifier)armor.add(natural.get());
+      armor.add(natural.get());
 
-    armor = (Modifier)armor.add(new Modifier(getDexterityModifier(),
-                                             Modifier.Type.ABILITY,
-                                             Optional.<String>absent(),
-                                             Optional.<Modifier>absent()));
-    armor = (Modifier)armor.add(new Modifier(sizeModifier(),
-                                             Modifier.Type.SIZE,
-                                             Optional.<String>absent(),
-                                             Optional.<Modifier>absent()));
+    armor.add(Modifier.Type.ABILITY, getDexterityModifier());
+    armor.add(Modifier.Type.SIZE, sizeModifier());
 
     for(Quality quality : getQualities())
       if(quality.acModifier().hasValue())
-        armor = (Modifier)armor.add(quality.acModifier());
+        armor.add(quality.acModifier());
 
-    return armor;
+    return armor.build();
   }
 
   /**
@@ -2573,20 +2601,13 @@ public class Monster extends CampaignEntry
 
   public Modifier armorClassTouch()
   {
-    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
-                                  Optional.<String>absent(),
-                                  Optional.<Modifier>absent());
+    Modifier.Builder armor = Modifier.newBuilder();
+    armor.add(10);
 
-    armor = (Modifier)armor.add(new Modifier(getDexterityModifier(),
-                                             Modifier.Type.ABILITY,
-                                             Optional.<String>absent(),
-                                             Optional.<Modifier>absent()));
-    armor = (Modifier)armor.add(new Modifier(sizeModifier(),
-                                             Modifier.Type.SIZE,
-                                             Optional.<String>absent(),
-                                             Optional.<Modifier>absent()));
+    armor.add(Modifier.Type.ABILITY, getDexterityModifier());
+    armor.add(Modifier.Type.SIZE, sizeModifier());
 
-    return armor;
+    return armor.build();
   }
 
   /**
@@ -2601,21 +2622,17 @@ public class Monster extends CampaignEntry
 
   public Modifier armorClassFlatfooted()
   {
-    Modifier armor = new Modifier(10, Modifier.Type.GENERAL,
-                                  Optional.<String>absent(),
-                                  Optional.<Modifier>absent());
-    armor = (Modifier)armor.add(getArmorBonus());
-    armor = (Modifier)armor.add(getShieldBonus());
+    Modifier.Builder armor = Modifier.newBuilder();
+    armor.add(10);
+    armor.add(getArmorBonus());
+    armor.add(getShieldBonus());
     Optional<Modifier> natural = getCombinedNaturalArmor().get();
     if(natural.isPresent())
-      armor = (Modifier)armor.add(natural.get());
+      armor.add(natural.get());
 
-    armor = (Modifier)armor.add(new Modifier(sizeModifier(),
-                                             Modifier.Type.SIZE,
-                                             Optional.<String>absent(),
-                                             Optional.<Modifier>absent()));
+    armor.add(Modifier.Type.SIZE, sizeModifier());
 
-    return armor;
+    return armor.build();
   }
 
 
@@ -2864,7 +2881,7 @@ public class Monster extends CampaignEntry
   public Modifier miscModifier(String inSkill)
   {
     Optional<BaseSkill> skill = BaseSkill.get(inSkill);
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
     if(skill.isPresent())
     {
       // Armor check penalty, if relevant.
@@ -2881,30 +2898,25 @@ public class Monster extends CampaignEntry
         if(skill.get().hasDoubleArmorCheckPenalty())
           penalty *= 2;
 
-        modifier = (Modifier)
-            modifier.add(new Modifier(penalty, Modifier.Type.ARMOR,
-                                      Optional.<String>absent(),
-                                      Optional.<Modifier>absent()));
+        modifier.add(Modifier.Type.ARMOR, penalty);
       }
 
       // Synergies, if any
       for(BaseSkill.Synergy synergy : skill.get().getCombinedSynergies().get())
         if(skillRanks(synergy.getName()) >= MIN_SYNERGY_RANKS)
-          modifier = (Modifier)
-              modifier.add(new Modifier(SYNERGY_BONUS, Modifier.Type.SYNERGY,
-                                        synergy.getCondition(),
-                                        Optional.<Modifier>absent()));
+          modifier.add(Modifier.Type.SYNERGY, SYNERGY_BONUS,
+                       Condition.parse(synergy.getCondition()));
 
       // Qualities
       for(Quality quality : allQualities())
-        modifier = (Modifier)modifier.add(quality.skillModifier(inSkill));
+        modifier.add(quality.skillModifier(inSkill));
 
       // Feats
       for(Feat feat : allFeats())
-        modifier = (Modifier)modifier.add(feat.skillModifier(inSkill));
+        modifier.add(feat.skillModifier(inSkill));
     }
 
-    return modifier;
+    return modifier.build();
   }
 
   public int totalSkillPoints()
@@ -2937,14 +2949,14 @@ public class Monster extends CampaignEntry
 
   public Modifier skillModifier(String inName)
   {
-    Modifier modifier = new Modifier();
+    Modifier.Builder modifier = Modifier.newBuilder();
     for(Feat feat : allFeats())
-      modifier = (Modifier)modifier.add(feat.skillModifier(inName));
+      modifier.add(feat.skillModifier(inName));
 
     for(Quality quality : allQualities())
-      modifier = (Modifier)modifier.add(quality.skillModifier(inName));
+      modifier.add(quality.skillModifier(inName));
 
-    return modifier;
+    return modifier.build();
   }
 
   public Annotated<List<BaseMonster.Group>> getCombinedOrganizations()
