@@ -217,10 +217,10 @@ public class Modifier extends Value.Arithmetic<ModifierProto>
           Optional<String> condition = Optional.fromNullable(parts[2]);
 
           if(condition.isPresent())
-            builder.add(type, modifier);
-          else
             builder.add(type, modifier,
                         Condition.PARSER.parse(condition.get()));
+          else
+            builder.add(type, modifier);
         }
         catch(NumberFormatException e)
         {
