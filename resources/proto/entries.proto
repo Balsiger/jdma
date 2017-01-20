@@ -1351,6 +1351,7 @@ message BaseLevelProto
   optional DiceProto hit_dice = 13;
   optional int32 skill_points = 14;
   repeated string class_skill = 15;
+  optional int32 class_skills_any = 29;
   repeated BaseWeaponProto.Proficiency weapon_proficiency = 16;
   repeated string individual_weapon_proficiency = 28;
   repeated BaseArmorProto.Type armor_proficiency = 17;

@@ -218,6 +218,9 @@
               {$skill}
               {if not isLast($skill)}, {/if}
             {/foreach}
+            {if $entry.class_skills_any.present}
+              any {$entry.class_skills_any}
+            {/if}
           {/param}
           {param color: '#aaf' /}
         {/call}
@@ -750,7 +753,15 @@
         {param validate: 'non-empty' /}
         {param autocomplete: 'base skill/name' /}
         {param color: '#aaf' /}
-      {/call}    
+      {/call}
+      {call dma.edit.value}
+        {param name: 'class_skills_any' /}
+        {param label: 'Any Class Skills' /}
+        {param value: $entry.class_skills_any.present
+            ? $entry.class_skills_any : '' /}
+        {param validate: 'number' /}
+        {param color: '#aaf' /}
+      {/call}
       {call dma.edit.generic_value}
         {param name: 'weapon_proficiency' /}
         {param color: '#aaf' /}

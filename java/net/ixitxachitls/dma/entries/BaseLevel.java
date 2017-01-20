@@ -232,6 +232,7 @@ public class BaseLevel extends BaseEntry
 
   /** The class skills. */
   protected List<Reference<BaseSkill>> m_classSkills = new ArrayList<>();
+  protected Optional<Integer> m_classSkillsAny = Optional.absent();
 
   /** The weapon proficiencies. */
   protected List<Proficiency> m_weaponProficiencies = new ArrayList<>();
@@ -483,6 +484,11 @@ public class BaseLevel extends BaseEntry
   public List<Reference<BaseSkill>> getClassSkills()
   {
     return Collections.unmodifiableList(m_classSkills);
+  }
+
+  public Optional<Integer> getClassSkillsAny()
+  {
+    return m_classSkillsAny;
   }
 
   /**
@@ -740,6 +746,8 @@ public class BaseLevel extends BaseEntry
     m_classSkills =
       inValues.use("class_skill", m_classSkills,
                    new Reference.ReferenceParser<>(BaseSkill.TYPE));
+    m_classSkillsAny = inValues.use("class_skills_any", m_classSkillsAny,
+                                    Value.INTEGER_PARSER);
     m_weaponProficiencies =
       inValues.use("weapon_proficiency", m_weaponProficiencies,
                    Proficiency.PARSER);
@@ -859,6 +867,9 @@ public class BaseLevel extends BaseEntry
 
     for(Reference<BaseSkill> reference : m_classSkills)
       builder.addClassSkill(reference.getName());
+
+    if(m_classSkillsAny.isPresent())
+      builder.setClassSkillsAny(m_classSkillsAny.get());
 
     for(Proficiency proficiency : m_weaponProficiencies)
       builder.addWeaponProficiency(proficiency.toProto());
@@ -1026,6 +1037,9 @@ public class BaseLevel extends BaseEntry
 
     for(String ref : proto.getClassSkillList())
       m_classSkills.add(new Reference<BaseSkill>(BaseSkill.TYPE, ref));
+
+    if(proto.hasClassSkillsAny())
+      m_classSkillsAny = Optional.of(proto.getClassSkillsAny());
 
     for(BaseWeaponProto.Proficiency proficiency
       : proto.getWeaponProficiencyList())
